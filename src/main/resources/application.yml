@@ -1,0 +1,15 @@
+dam:
+  base-url: http://localhost:3000/
+  client-id: local-dam-client-id
+  client-secret: local-dam-client-secret
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - predicates:
+            - Path=/dam/**
+          filters:
+            - AddRequestParameter=clientId,${dam.client-id}
+            - AddRequestParameter=clientSecret,${dam.client-secret}
+          uri: ${dam.base-url}
