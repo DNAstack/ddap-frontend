@@ -4,7 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
-  MatSidenavModule
+  MatSidenavModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatInputModule
 } from '@angular/material';
 
 @NgModule({
@@ -14,14 +17,20 @@ import {
     FormsModule,
     BrowserAnimationsModule,
 
-    MatSidenavModule
+    MatSidenavModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   exports: [
     CommonModule,
     FormsModule,
     BrowserAnimationsModule,
 
-    MatSidenavModule
+    MatSidenavModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class SharedModule { }
