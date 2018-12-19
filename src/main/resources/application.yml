@@ -3,6 +3,11 @@ dam:
   client-id: local-dam-client-id
   client-secret: local-dam-client-secret
 
+ddap:
+  cors:
+    origins:
+      - "http://localhost:4200"
+
 spring:
   cloud:
     gateway:
