@@ -6,8 +6,16 @@ service for the rest of the DDAP components.
 
 ## User Interface
 
-The user interface is an Angular 6 app served at `/` from static files found
+The user interface is an Angular 6 app served at `/index.html` from static files found
 under `src/main/resources/static/**`.
+
+
+### Building full app with Maven
+
+To build both the Spring Boot backend and Angular frontend, simply do `mvn clean install`.
+
+This project is configured with the maven-frontend-plugin and maven-spring-boot-plugin to produce a single
+fat jar containing all angular assets.
 
 ### Building the Angular App
 
