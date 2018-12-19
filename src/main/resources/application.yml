@@ -5,8 +5,7 @@ dam:
 
 ddap:
   cors:
-    origins:
-      - "http://localhost:4200"
+    origins: "http://localhost:4200"
 
 spring:
   cloud:
