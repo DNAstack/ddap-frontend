@@ -17,16 +17,16 @@ public class STSHeaderTest extends BaseE2eTest {
         Assume.assumeTrue("Cannot test strict transport security without https", baseURI.startsWith("https"));
     }
 
-    @Ignore("STS header support not yet implemented.")
     @Test
+    @Ignore("STS header support not yet implemented.")
     public void strictTransportSecurityHeaderShouldBeInResponseWhenRequestUsesHttps() {
         given()
                 .log().method()
                 .log().uri()
                 .when()
-                .get("/")
+                .get("/index.html")
                 .then()
                 .log().ifValidationFails()
-                .header("Strict-Transport-Security", Matchers.anything());
+                .header("Strict-Transport-Security", Matchers.notNullValue());
     }
 }

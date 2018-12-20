@@ -8,6 +8,10 @@ ddap:
     origins: "http://localhost:4200"
 
 spring:
+  security:
+    user:
+      name: "dev"
+      password: "dev"
   cloud:
     gateway:
       routes:

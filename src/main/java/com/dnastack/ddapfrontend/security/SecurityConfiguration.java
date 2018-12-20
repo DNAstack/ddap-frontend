@@ -1,6 +1,7 @@
 package com.dnastack.ddapfrontend.security;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,12 +28,11 @@ public class SecurityConfiguration {
     };
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(
-            ServerHttpSecurity http) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
-                .httpBasic()
+                .authorizeExchange().anyExchange().authenticated()
                 .and()
-                .authorizeExchange().pathMatchers("/**").permitAll()
+                .httpBasic()
                 .and()
                 .cors()
                 .and()
