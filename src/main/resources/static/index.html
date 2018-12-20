@@ -1,22 +1,6 @@
 <!DOCTYPE html>
-
-<script type="application/javascript">
-    function fetchResources() {
-        let persona = document.querySelector("#persona").value;
-        fetch("/dam/v1/resources?persona=" + persona)
-            .then(response => {
-                let resourcesTextArea = document.querySelector("#resources-ta");
-                response.text().then(text => resourcesTextArea.value = text);
-            })
-    }
-</script>
-<form action="#">
-    <label for="persona">As persona:</label><br>
-    <input id="persona" name="persona" value="nci_researcher"><br>
-    <button onclick="fetchResources(); return false">Fetch Resources</button>
-    <br>
-    <textarea id="resources-ta" rows="60" cols="120">
-Resources will appear here when fetched.
-</textarea>
-
-</form>
+<html>
+<head>
+  <meta http-equiv="refresh" content="0; URL='/app.html'">
+</head>
+</html>
