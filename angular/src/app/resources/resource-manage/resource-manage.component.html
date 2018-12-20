@@ -1,0 +1,12 @@
+<h2>Add Resource</h2>
+
+<form #resourceForm="ngForm" (ngSubmit)="onSubmit(resourceForm.value)">
+  <mat-form-field>
+    <textarea matInput placeholder="Resource JSON" rows="10" name="body" ngModel required></textarea>
+  </mat-form-field>
+  <div>
+    <button type="submit" mat-flat-button color="primary" [disabled]="!resourceForm.form.valid">
+      Add Resource
+    </button>
+  </div>
+</form>
