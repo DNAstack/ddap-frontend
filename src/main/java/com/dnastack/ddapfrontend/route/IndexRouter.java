@@ -12,9 +12,10 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
 public class IndexRouter {
-    @Value("classpath:/static/index.html")
+    @Value("classpath:/static/redirect.html")
     private Resource indexHtml;
 
+    // FIXME should route to index.html but can't because we need to rename/move main page in angular app
     @Bean
     RouterFunction<ServerResponse> index() {
         return RouterFunctions.route(RequestPredicates.GET("/"),
