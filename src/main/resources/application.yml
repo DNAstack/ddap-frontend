@@ -20,4 +20,5 @@ spring:
           filters:
             - AddRequestParameter=clientId,${dam.client-id}
             - AddRequestParameter=clientSecret,${dam.client-secret}
+            - Logging
           uri: ${dam.base-url}
