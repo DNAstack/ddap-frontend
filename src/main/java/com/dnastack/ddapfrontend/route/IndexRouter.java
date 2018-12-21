@@ -13,14 +13,14 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 @Configuration
 public class IndexRouter {
     @Value("classpath:/static/redirect.html")
-    private Resource indexHtml;
+    private Resource redirectHtml;
 
-    // FIXME should route to index.html but can't because we need to rename/move main page in angular app
+    // FIXME should serve angular app but we need proper login first
     @Bean
     RouterFunction<ServerResponse> index() {
         return RouterFunctions.route(RequestPredicates.GET("/"),
                                      request -> ServerResponse.ok()
                                                               .contentType(MediaType.TEXT_HTML)
-                                                              .syncBody(indexHtml));
+                                                              .syncBody(redirectHtml));
     }
 }

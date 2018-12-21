@@ -8,7 +8,7 @@ import static org.junit.Assert.fail;
 public class BaseE2eTest {
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         RestAssured.baseURI = requiredEnv("E2E_BASE_URI");
     }
 
