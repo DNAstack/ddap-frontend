@@ -33,7 +33,7 @@ public class ConfigE2eTest extends BaseE2eTest {
     }
 
     @Test
-    public void mustRequireSomeCredentials() {
+    public void requireSomeCredentials() {
         given()
                 .log().method()
                 .log().uri()
@@ -45,7 +45,7 @@ public class ConfigE2eTest extends BaseE2eTest {
     }
 
     @Test
-    public void canAccessRootWithoutCredentials() {
+    public void accessRootWithoutCredentials() {
         given()
                 .log().method()
                 .log().uri()
@@ -57,7 +57,7 @@ public class ConfigE2eTest extends BaseE2eTest {
     }
 
     @Test
-    public void canAccessAngularIndexPage() {
+    public void accessAngularIndexPage() {
         given()
                 .log().method()
                 .log().uri()
@@ -70,15 +70,80 @@ public class ConfigE2eTest extends BaseE2eTest {
     }
 
     @Test
-    public void canAccessDamEndpointPage() {
+    public void accessDamEndpointPage() {
         given()
                 .log().method()
                 .log().uri()
                 .auth().preemptive().basic(basicUsername, basicPassword)
-                .when()
+        .when()
                 .get("/dam/v1/resources?persona=nci_researcher")
-                .then()
+        .then()
                 .log().ifValidationFails()
                 .statusCode(200);
+    }
+
+    @Test
+    public void serveAngularRoutes() {
+        given()
+                .log().method()
+                .log().uri()
+                .auth().preemptive().basic(basicUsername, basicPassword)
+        .when()
+                .get("/resources")
+        .then()
+                .log().ifValidationFails()
+                .statusCode(200);
+    }
+
+    @Test
+    public void angularRoutesDoNotWorkForJavaScriptFiles() {
+        given()
+                .log().method()
+                .log().uri()
+                .auth().preemptive().basic(basicUsername, basicPassword)
+        .when()
+                .get("/made-up-resource-name.js")
+        .then()
+                .log().ifValidationFails()
+                .statusCode(404);
+    }
+
+    @Test
+    public void noAngularRoutesForMapFiles() {
+        given()
+                .log().method()
+                .log().uri()
+                .auth().preemptive().basic(basicUsername, basicPassword)
+        .when()
+                .get("/made-up-resource-name.js.map")
+        .then()
+                .log().ifValidationFails()
+                .statusCode(404);
+    }
+
+    @Test
+    public void noAngularRoutesForHtmlFiles() {
+        given()
+                .log().method()
+                .log().uri()
+                .auth().preemptive().basic(basicUsername, basicPassword)
+        .when()
+                .get("/made-up-resource-name.html")
+        .then()
+                .log().ifValidationFails()
+                .statusCode(404);
+    }
+
+    @Test
+    public void noAngularRoutesForFileWithArbitraryExtension() {
+        given()
+                .log().method()
+                .log().uri()
+                .auth().preemptive().basic(basicUsername, basicPassword)
+        .when()
+                .get("/made-up-resource-name.foobar")
+        .then()
+                .log().ifValidationFails()
+                .statusCode(404);
     }
 }
