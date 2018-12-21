@@ -10,7 +10,7 @@ import { ResourceService } from '../resource.service';
 })
 export class ResourceListComponent implements OnInit {
 
-  resources$: Observable<any>;
+  resources$: Observable<any[]>;
 
   constructor(private resourceService: ResourceService) { }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { pluck, first, mergeMap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
@@ -24,6 +24,16 @@ export class ResourceService {
       );
   }
 
+  getResource(resourceName: string, params?): Observable<any> {
+    params = params || {};
+    params.persona = 'nci_researcher';
+
+    return this.getResources(params).pipe(
+      mergeMap(resources => resources),
+      first(resource => resource.name === resourceName)
+    );
+  }
+
   addResource(resource: any): Observable<any> {
     const params = {
       persona: 'nci_researcher'
@@ -33,7 +43,7 @@ export class ResourceService {
     return this.http.post(
       environment.ddapApiUrl + '/config/resources/' + resourceName,
       resource,
-      { params , headers }
+      { params, headers }
     );
   }
 }

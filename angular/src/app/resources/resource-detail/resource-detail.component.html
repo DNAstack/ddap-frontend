@@ -1,0 +1,9 @@
+<h2>{{ (resource$ | async)?.ui.displayAs }}</h2>
+
+<p>{{ (resource$ | async)?.ui.desc }}</p>
+
+<mat-form-field>
+  <textarea matInput placeholder="Resource JSON" rows="10" disabled>
+    {{ (resource$ | async) | json }}
+  </textarea>
+</mat-form-field>
