@@ -121,7 +121,7 @@
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
-                    <!-- It will execute command "npm build" inside "/angular" directory
+                    <!-- It will execute command "npm run build:prod" inside "/angular" directory
                         to clean and create "/dist" directory -->
                     <execution>
                         <id>npm build</id>
@@ -130,7 +130,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>run build</arguments>
+                            <arguments>run build:prod</arguments>
                         </configuration>
                     </execution>
                 </executions>

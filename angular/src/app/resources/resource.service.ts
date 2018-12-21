@@ -18,7 +18,7 @@ export class ResourceService {
     params = params || {};
     params.persona = 'nci_researcher';
 
-    return this.http.get<any[]>(environment.apiBaseUrl + '/resources', { params })
+    return this.http.get<any[]>(environment.ddapApiUrl + '/resources', { params })
       .pipe(
         pluck('resources')
       );
@@ -31,7 +31,7 @@ export class ResourceService {
     const resourceName = resource.item.name;
 
     return this.http.post(
-      environment.apiBaseUrl + '/config/resources/' + resourceName,
+      environment.ddapApiUrl + '/config/resources/' + resourceName,
       resource,
       { params , headers }
     );
