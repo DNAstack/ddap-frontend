@@ -3,7 +3,14 @@
 <p>{{ (resource$ | async)?.ui.desc }}</p>
 
 <mat-form-field>
-  <textarea matInput placeholder="Resource JSON" rows="10" disabled>
+  <textarea #textArea matInput placeholder="Resource JSON" rows="10" [disabled]="disableTextArea()">
     {{ (resource$ | async) | json }}
   </textarea>
+  <mat-action-row *ngIf="showEditControls()">
+    <button mat-button (click)="submit(textArea.value)" [disabled]="isSubmitting()">Submit</button>
+    <button mat-button (click)="cancel()" [disabled]="isSubmitting()">Cancel</button>
+  </mat-action-row>
+  <mat-action-row *ngIf="!showEditControls()">
+    <button mat-button (click)="edit()">Edit</button>
+  </mat-action-row>
 </mat-form-field>

@@ -34,15 +34,31 @@ export class ResourceService {
     );
   }
 
-  addResource(resource: any): Observable<any> {
+  addResource(resourceChange: any): Observable<any> {
     const params = {
       persona: 'nci_researcher'
     };
-    const resourceName = resource.item.name;
+    const resourceName = resourceChange.item.name;
 
     return this.http.post(
       environment.ddapApiUrl + '/config/resources/' + resourceName,
-      resource,
+      resourceChange,
+      { params, headers }
+    );
+  }
+
+  modifyResource(resource: any): Observable<any> {
+    const params = {
+      persona: 'nci_researcher'
+    };
+    const resourceName = resource.name;
+    const resourceChange = {
+      item: resource
+    };
+
+    return this.http.patch(
+      environment.ddapApiUrl + '/config/resources/' + resourceName,
+      resourceChange,
       { params, headers }
     );
   }
