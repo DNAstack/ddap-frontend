@@ -22,6 +22,9 @@
           {{ resource | json }}
         </textarea>
       </mat-form-field>
+      <mat-action-row>
+        <button mat-button [routerLink]="['/resources/', resource.name]">View</button>
+      </mat-action-row>
     </mat-expansion-panel>
   </ng-container>
 </mat-accordion>
