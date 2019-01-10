@@ -1,6 +1,69 @@
 <mat-sidenav-container fullscreen>
   <mat-sidenav #sidenav mode="side" [opened]="true">
-    <h1>DDAP Frontend</h1>
+    <h1 class="mat-display-1"><mat-icon mat-list-icon>fingerprint</mat-icon> DDAP</h1>
+
+    <mat-nav-list>
+      <mat-list-item>
+        <mat-icon mat-list-icon>account_circle</mat-icon>
+        <h4 mat-line>John Doe</h4>
+        <a mat-line href="">logout</a>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>search</mat-icon>
+        <h4 mat-line>Explore Data</h4>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>collections_bookmark</mat-icon>
+        <h4 mat-line>My Collections</h4>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>person</mat-icon>
+        <h4 mat-line>My Identity</h4>
+      </mat-list-item>
+    </mat-nav-list>
+
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Autism Repository
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <mat-nav-list>
+          <mat-list-item>
+            <mat-icon mat-list-icon>work</mat-icon>
+            <h4 mat-line routerLink="/resources">Resources</h4>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>group</mat-icon>
+            <h4 mat-line>Identities</h4>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>settings_input_component</mat-icon>
+            <h4 mat-line>Clients</h4>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>lock</mat-icon>
+            <h4 mat-line>Claims</h4>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>view_quilt</mat-icon>
+            <h4 mat-line>Views</h4>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>tune</mat-icon>
+            <h4 mat-line>Rules</h4>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>build</mat-icon>
+            <h4 mat-line>Tests</h4>
+          </mat-list-item>
+        </mat-nav-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <button mat-button>Show more repositories...</button>
   </mat-sidenav>
 
   <mat-sidenav-content>
