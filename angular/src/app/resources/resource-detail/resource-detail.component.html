@@ -1,11 +1,26 @@
-<h2>{{ resource?.ui.displayAs }}</h2>
+<h2>
+  <mat-icon mat-list-icon>insert_drive_file</mat-icon>{{resource?.ui.displayAs}}</h2>
 
 <p>{{ resource?.ui.desc }}</p>
 
-<mat-form-field>
-  <textarea #textArea matInput placeholder="Resource JSON" rows="10" [disabled]="disableTextArea()">
-    {{ resource | json }}
-  </textarea>
+
+<mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{resource?.ui.displayAs}} JSON
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <ngx-json-viewer *ngIf="disableTextArea()"
+                   [json]="resource"></ngx-json-viewer>
+
+  <mat-form-field *ngIf="!disableTextArea()">
+    <textarea matInput
+              placeholder="Resource JSON"
+              rows="10">
+      {{resource | json}}
+    </textarea>
+  </mat-form-field>
+
   <mat-action-row *ngIf="showEditControls()">
     <button mat-button (click)="submit(textArea.value)" [disabled]="isSubmitting()">Submit</button>
     <button mat-button (click)="cancel()" [disabled]="isSubmitting()">Cancel</button>
@@ -13,7 +28,7 @@
   <mat-action-row *ngIf="!showEditControls()">
     <button mat-button (click)="edit()">Edit</button>
   </mat-action-row>
-</mat-form-field>
+</mat-expansion-panel>
 
 <mat-list>
   <h3 mat-subheader>Views</h3>
@@ -39,13 +54,12 @@
               aria-label="Copy to clipboard">
         <mat-icon>file_copy</mat-icon>
       </button>
-
-
     </mat-form-field>
 
-    <button *ngIf="!resource.views[view.name].url"
+    <button *ngIf="!resource.views[view.name].url && !resource.views[view.name].token"
             mat-raised-button
-            (click)="getAccess(view.name)">Get Access</button>
+            (click)="getAccess(view.name)">Get Access
+    </button>
 
     <a *ngIf="resource.views[view.name].url"
        mat-raised-button
@@ -55,4 +69,3 @@
     <mat-divider></mat-divider>
   </mat-list-item>
 </mat-list>
-
