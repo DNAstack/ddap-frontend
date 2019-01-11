@@ -12,10 +12,12 @@ import {
   MatIconModule,
   MatListModule,
 } from '@angular/material';
+import {ClipboardModule} from "ngx-clipboard";
 
 @NgModule({
   declarations: [],
   imports: [
+    ClipboardModule,
     CommonModule,
     FormsModule,
     BrowserAnimationsModule,
@@ -29,6 +31,7 @@ import {
     MatListModule
   ],
   exports: [
+    ClipboardModule,
     CommonModule,
     FormsModule,
     BrowserAnimationsModule,

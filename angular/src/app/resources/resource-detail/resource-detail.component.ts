@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import {from, Observable, of} from 'rxjs';
 
 import {ResourceService} from '../resource.service';
 import {catchError, flatMap} from "rxjs/operators";
@@ -18,7 +18,8 @@ enum ViewState {
 })
 export class ResourceDetailComponent implements OnInit {
 
-  resource$: Observable<any>;
+  resource: any;
+  views: any;
   state: ViewState = ViewState.Viewing;
 
   constructor(
@@ -27,10 +28,18 @@ export class ResourceDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.resource$ = this.route.params.pipe(
+    this.route.params.pipe(
       flatMap(params => this.resourceService.getResource(params['resourceName']))
-    );
-    this.resource$.subscribe();
+    ).subscribe((resourceDto) => {
+      this.resource = resourceDto;
+      this.views = Object
+        .keys(resourceDto.views)
+        .map((key) => {
+          return {
+            ...resourceDto.views[key]
+          }
+        });
+    });
   }
 
   submit(value: string) {
@@ -68,6 +77,19 @@ export class ResourceDetailComponent implements OnInit {
         return;
       }
     }
+  }
+
+  getAccess(viewName) {
+    this.resourceService.getAccessRequestToken(this.resource.name, viewName)
+      .subscribe((accessToken) => {
+        this.resource.views[viewName].token = accessToken;
+
+        const view = this.resource.views[viewName];
+        const viewAccessUrl = view!.interfaces['http:gcp:gs'];
+        if (viewAccessUrl) {
+          this.resource.views[viewName].url = `${viewAccessUrl}/o?access_token=${accessToken}`;
+        }
+      });
   }
 
   cancel(): void {

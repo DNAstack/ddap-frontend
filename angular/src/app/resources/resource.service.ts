@@ -14,6 +14,17 @@ export class ResourceService {
 
   constructor(private http: HttpClient) { }
 
+  getAccessRequestToken(resource, view): Observable<any[]> {
+    const params = {
+      persona: 'nci_researcher'
+    };
+
+    return this.http.get<any[]>(`${environment.ddapApiUrl}/resources/${resource}/views/${view}`, { params })
+      .pipe(
+        pluck('token')
+      );
+  }
+
   getResources(params?): Observable<any[]> {
     params = params || {};
     params.persona = 'nci_researcher';

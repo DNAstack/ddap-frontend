@@ -1,10 +1,10 @@
-<h2>{{ (resource$ | async)?.ui.displayAs }}</h2>
+<h2>{{ resource?.ui.displayAs }}</h2>
 
-<p>{{ (resource$ | async)?.ui.desc }}</p>
+<p>{{ resource?.ui.desc }}</p>
 
 <mat-form-field>
   <textarea #textArea matInput placeholder="Resource JSON" rows="10" [disabled]="disableTextArea()">
-    {{ (resource$ | async) | json }}
+    {{ resource | json }}
   </textarea>
   <mat-action-row *ngIf="showEditControls()">
     <button mat-button (click)="submit(textArea.value)" [disabled]="isSubmitting()">Submit</button>
@@ -14,3 +14,45 @@
     <button mat-button (click)="edit()">Edit</button>
   </mat-action-row>
 </mat-form-field>
+
+<mat-list>
+  <h3 mat-subheader>Views</h3>
+  <mat-list-item *ngFor="let view of views">
+    <mat-icon mat-list-icon>view_quilt</mat-icon>
+    <h4 mat-line>{{view.name}}</h4>
+
+
+    <mat-form-field *ngIf="resource.views[view.name].token"
+                    mat-line
+                    class="example-form-field">
+      <input matInput
+             disabled
+             type="text"
+             placeholder="Access Token"
+             [(ngModel)]="resource.views[view.name].token">
+
+      <button mat-button
+              matSuffix
+              mat-icon-button
+              ngxClipboard
+              [cbContent]="resource.views[view.name].token"
+              aria-label="Copy to clipboard">
+        <mat-icon>file_copy</mat-icon>
+      </button>
+
+
+    </mat-form-field>
+
+    <button *ngIf="!resource.views[view.name].url"
+            mat-raised-button
+            (click)="getAccess(view.name)">Get Access</button>
+
+    <a *ngIf="resource.views[view.name].url"
+       mat-raised-button
+       color="accent"
+       href="{{resource.views[view.name].url}}">Access</a>
+
+    <mat-divider></mat-divider>
+  </mat-list-item>
+</mat-list>
+
