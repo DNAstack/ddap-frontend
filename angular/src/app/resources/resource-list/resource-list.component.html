@@ -17,11 +17,8 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <mat-form-field>
-        <textarea matInput placeholder="Resource JSON" rows="10">
-          {{ resource | json }}
-        </textarea>
-      </mat-form-field>
+      <ngx-json-viewer [json]="resource"></ngx-json-viewer>
+
       <mat-action-row>
         <button mat-button [routerLink]="['/resources/', resource.name]">View</button>
       </mat-action-row>

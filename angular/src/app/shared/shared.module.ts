@@ -13,6 +13,7 @@ import {
   MatListModule,
 } from '@angular/material';
 import {ClipboardModule} from "ngx-clipboard";
+import {NgxJsonViewerModule} from "ngx-json-viewer";
 
 @NgModule({
   declarations: [],
@@ -28,7 +29,9 @@ import {ClipboardModule} from "ngx-clipboard";
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+
+    NgxJsonViewerModule
   ],
   exports: [
     ClipboardModule,
@@ -42,7 +45,9 @@ import {ClipboardModule} from "ngx-clipboard";
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+
+    NgxJsonViewerModule
   ]
 })
 export class SharedModule { }
