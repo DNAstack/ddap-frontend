@@ -74,7 +74,7 @@ export class ClientDetailComponent implements OnInit {
     });
   }
 
-  updateResourceDto(event : any) {
+  updateClientDto(event : any) {
     this.clientDto = event;
   }
 

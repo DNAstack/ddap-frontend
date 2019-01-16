@@ -12,7 +12,7 @@
   </mat-expansion-panel-header>
   <json-editor [options]="editorOptions"
                [data]="client"
-               (change)="updateResourceDto($event)"></json-editor>
+               (change)="updateClientDto($event)"></json-editor>
 
   <mat-error *ngIf="error">{{error}}</mat-error>
 

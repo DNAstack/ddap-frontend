@@ -9,15 +9,15 @@ import { ClientService } from '../client.service';
 })
 export class ClientManageComponent implements OnInit {
 
-  resource: any = {};
+  client: any = {};
 
-  constructor(private resourceService: ClientService) { }
+  constructor(private clientService: ClientService) { }
 
   ngOnInit() {
   }
 
   onSubmit(value: any) {
-    this.resourceService.save(JSON.parse(value.body))
-      .subscribe(() => this.resource = {});
+    this.clientService.save(JSON.parse(value.body))
+      .subscribe(() => this.client = {});
   }
 }

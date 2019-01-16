@@ -24,31 +24,31 @@ export class ClientService {
       );
   }
 
-  save(resourceChange: any): Observable<any> {
+  save(clientChange: any): Observable<any> {
     const params = {
       persona: 'nci_researcher'
     };
-    const resourceName = resourceChange.item.name;
+    const clientName = clientChange.item.name;
 
     return this.http.post(
-      environment.ddapApiUrl + '/config/' + resourceName,
-      resourceChange,
+      environment.ddapApiUrl + '/config/' + clientName,
+      clientChange,
       { params, headers }
     );
   }
 
-  update(resource: any): Observable<any> {
+  update(client: any): Observable<any> {
     const params = {
       persona: 'nci_researcher'
     };
-    const resourceName = resource.name;
-    const resourceChange = {
-      item: resource
+    const clientName = client.name;
+    const clientChange = {
+      item: client
     };
 
     return this.http.patch(
-      environment.ddapApiUrl + '/config/' + resourceName,
-      resourceChange,
+      environment.ddapApiUrl + '/config/' + clientName,
+      clientChange,
       { params, headers }
     );
   }
