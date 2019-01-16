@@ -13,7 +13,6 @@ import {
   MatListModule,
 } from '@angular/material';
 import {ClipboardModule} from "ngx-clipboard";
-import {NgxJsonViewerModule} from "ngx-json-viewer";
 import {NgJsonEditorModule} from "ang-jsoneditor";
 
 @NgModule({
