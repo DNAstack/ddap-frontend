@@ -1,0 +1,29 @@
+<h2>Clients</h2>
+
+<div>
+  <a mat-mini-fab routerLink="/clients/manage/add">
+    <mat-icon aria-label="Add client">add</mat-icon>
+  </a>
+</div>
+<mat-accordion>
+  <ng-container *ngFor="let client of clients$ | async">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ client.name }}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ client.clientId }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <json-editor [options]="editorOptions"
+                   [data]="client"></json-editor>
+
+      <mat-action-row>
+        <button mat-button [routerLink]="['/clients/', client.name]">View</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </ng-container>
+
+</mat-accordion>
