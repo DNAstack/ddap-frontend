@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {from, Observable, of} from 'rxjs';
 
 import {ResourceService} from '../resource.service';
-import {catchError, flatMap} from "rxjs/operators";
+import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults'
+import {flatMap} from "rxjs/operators";
 import {JsonEditorComponent, JsonEditorOptions} from "ang-jsoneditor";
 
 enum ViewState {
@@ -33,12 +33,7 @@ export class ResourceDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private resourceService: ResourceService
   ) {
-    this.editorOptions = new JsonEditorOptions();
-    this.editorOptions.modes = ['code', 'view'];
-    this.editorOptions.mode = 'view';
-    this.editorOptions.mainMenuBar = false;
-    this.editorOptions.navigationBar = false;
-    this.editorOptions.statusBar = false;
+    this.editorOptions = new JsonEditorDefaults();
   }
 
   ngOnInit() {

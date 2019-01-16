@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 
 import { ResourceService } from '../resource.service';
 import {JsonEditorComponent, JsonEditorOptions} from "ang-jsoneditor";
+import {JsonEditorDefaults} from "../../shared/jsonEditorDefaults";
 
 @Component({
   selector: 'app-resource-list',
@@ -16,12 +17,7 @@ export class ResourceListComponent implements OnInit {
   editorOptions: JsonEditorOptions | any;
 
   constructor(private resourceService: ResourceService) {
-    this.editorOptions = new JsonEditorOptions();
-    this.editorOptions.modes = ['code', 'view'];
-    this.editorOptions.mode = 'view';
-    this.editorOptions.mainMenuBar = false;
-    this.editorOptions.navigationBar = false;
-    this.editorOptions.statusBar = false;
+    this.editorOptions = new JsonEditorDefaults();
   }
 
   ngOnInit() {
