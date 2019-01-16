@@ -17,7 +17,8 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <ngx-json-viewer [json]="resource"></ngx-json-viewer>
+      <json-editor [options]="editorOptions"
+                   [data]="resource"></json-editor>
 
       <mat-action-row>
         <button mat-button [routerLink]="['/resources/', resource.name]">View</button>

@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {from, Observable, of} from 'rxjs';
 
 import {ResourceService} from '../resource.service';
 import {catchError, flatMap} from "rxjs/operators";
+import {JsonEditorComponent, JsonEditorOptions} from "ang-jsoneditor";
 
 enum ViewState {
   Editing,
@@ -18,20 +19,34 @@ enum ViewState {
 })
 export class ResourceDetailComponent implements OnInit {
 
+  error: string = null;
+  // An actual resource from the server
   resource: any;
+  // A (possible edited) resource from the json editor.
+  resourceDto: any;
   views: any;
   state: ViewState = ViewState.Viewing;
+  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
+  editorOptions: JsonEditorOptions | any;
 
   constructor(
     private route: ActivatedRoute,
     private resourceService: ResourceService
-  ) {}
+  ) {
+    this.editorOptions = new JsonEditorOptions();
+    this.editorOptions.modes = ['code', 'view'];
+    this.editorOptions.mode = 'view';
+    this.editorOptions.mainMenuBar = false;
+    this.editorOptions.navigationBar = false;
+    this.editorOptions.statusBar = false;
+  }
 
   ngOnInit() {
     this.route.params.pipe(
       flatMap(params => this.resourceService.getResource(params['resourceName']))
     ).subscribe((resourceDto) => {
       this.resource = resourceDto;
+      this.resourceDto = resourceDto;
       this.views = Object
         .keys(resourceDto.views)
         .map((key) => {
@@ -42,41 +57,35 @@ export class ResourceDetailComponent implements OnInit {
     });
   }
 
-  submit(value: string) {
-    switch (this.state) {
-      case ViewState.Editing: {
-        this.doSubmit(value);
-      }
-    }
+  private setEditorMode(mode) {
+    this.editorOptions.mode = mode;
+    this.editor.setOptions(this.editorOptions);
   }
 
-  private doSubmit(value: string): void {
+  private save(): void {
     this.state = ViewState.Submitting;
-    this.resourceService.modifyResource(JSON.parse(value)).pipe(
-      catchError(err => {
-        console.log("Unexpected error.", err);
-        return of();
-      })
-    ).subscribe(_ => {
+    this.resourceService.modifyResource(this.resourceDto)
+    .subscribe(_ => {
+      this.setEditorMode('view');
       this.state = ViewState.Viewing;
+      this.error = null;
+    }, e => {
+      this.error = e.error;
+      this.state = ViewState.Editing;
     });
   }
 
-  showEditControls(): boolean {
+  updateResourceDto(event : any) {
+    this.resourceDto = event;
+  }
+
+  isStateView(): boolean {
     return this.state !== ViewState.Viewing;
   }
 
-  disableTextArea(): boolean {
-    return this.state !== ViewState.Editing;
-  }
-
   edit(): void {
-    switch (this.state) {
-      case ViewState.Viewing: {
-        this.state = ViewState.Editing;
-        return;
-      }
-    }
+    this.state = ViewState.Editing;
+    this.setEditorMode('code');
   }
 
   getAccess(viewName) {
@@ -93,6 +102,9 @@ export class ResourceDetailComponent implements OnInit {
   }
 
   cancel(): void {
+    this.setEditorMode('view');
+    this.error = null;
+
     switch (this.state) {
       case ViewState.Editing: {
         this.state = ViewState.Viewing;
@@ -101,7 +113,7 @@ export class ResourceDetailComponent implements OnInit {
     }
   }
 
-  isSubmitting(): boolean {
+  isStateSubmit(): boolean {
     return this.state === ViewState.Submitting;
   }
 }

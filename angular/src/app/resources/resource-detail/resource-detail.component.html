@@ -1,8 +1,8 @@
 <h2>
-  <mat-icon mat-list-icon>insert_drive_file</mat-icon>{{resource?.ui.displayAs}}</h2>
+  <mat-icon mat-list-icon>insert_drive_file</mat-icon>
+  {{resource?.ui.displayAs}}</h2>
 
 <p>{{ resource?.ui.desc }}</p>
-
 
 <mat-expansion-panel [expanded]="true">
   <mat-expansion-panel-header>
@@ -10,23 +10,29 @@
       {{resource?.ui.displayAs}} JSON
     </mat-panel-title>
   </mat-expansion-panel-header>
-  <ngx-json-viewer *ngIf="disableTextArea()"
-                   [json]="resource"></ngx-json-viewer>
+  <json-editor [options]="editorOptions"
+               [data]="resource"
+               (change)="updateResourceDto($event)"></json-editor>
 
-  <mat-form-field *ngIf="!disableTextArea()">
-    <textarea matInput
-              placeholder="Resource JSON"
-              rows="10">
-      {{resource | json}}
-    </textarea>
-  </mat-form-field>
+  <mat-error *ngIf="error">{{error}}</mat-error>
 
-  <mat-action-row *ngIf="showEditControls()">
-    <button mat-button (click)="submit(textArea.value)" [disabled]="isSubmitting()">Submit</button>
-    <button mat-button (click)="cancel()" [disabled]="isSubmitting()">Cancel</button>
+  <mat-action-row *ngIf="isStateView()">
+    <button mat-flat-button
+            color="primary"
+            (click)="save()"
+            [disabled]="isStateSubmit()">Submit
+    </button>
+
+    <button mat-flat-button
+            (click)="cancel()"
+            [disabled]="isStateSubmit()">Cancel
+    </button>
   </mat-action-row>
-  <mat-action-row *ngIf="!showEditControls()">
-    <button mat-button (click)="edit()">Edit</button>
+  <mat-action-row *ngIf="!isStateView()">
+    <button mat-flat-button
+            color="primary"
+            (click)="edit()">Edit
+    </button>
   </mat-action-row>
 </mat-expansion-panel>
 
@@ -35,7 +41,6 @@
   <mat-list-item *ngFor="let view of views">
     <mat-icon mat-list-icon>view_quilt</mat-icon>
     <h4 mat-line>{{view.name}}</h4>
-
 
     <mat-form-field *ngIf="resource.views[view.name].token"
                     mat-line
@@ -46,7 +51,7 @@
              placeholder="Access Token"
              [(ngModel)]="resource.views[view.name].token">
 
-      <button mat-button
+      <button mat-mat-flat-button
               matSuffix
               mat-icon-button
               ngxClipboard
@@ -57,7 +62,8 @@
     </mat-form-field>
 
     <button *ngIf="!resource.views[view.name].url && !resource.views[view.name].token"
-            mat-raised-button
+            mat-flat-button
+            color="primary"
             (click)="getAccess(view.name)">Get Access
     </button>
 
