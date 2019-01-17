@@ -6,7 +6,8 @@ import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ResourcesModule } from './resources/resources.module';
-import {ClientsModule} from "./clients/clients.module";
+import { ClientsModule } from './clients/clients.module';
+import { RulesModule } from './rules/rules.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import {ClientsModule} from "./clients/clients.module";
     SharedModule,
     AppRoutingModule,
     ResourcesModule,
-    ClientsModule
+    ClientsModule,
+    RulesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
