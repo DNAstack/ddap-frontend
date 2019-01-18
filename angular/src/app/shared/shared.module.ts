@@ -14,13 +14,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NgJsonEditorModule} from 'ang-jsoneditor';
 import {ClipboardModule} from 'ngx-clipboard';
 
+import {AppRoutingModule} from '../app-routing.module';
+
+import {EntityListComponent} from './entityList/entityList.component';
 import {JsonPanelComponent} from './jsonPanel/jsonPanel.component';
 
 @NgModule({
   declarations: [
     JsonPanelComponent,
+    EntityListComponent,
   ],
   imports: [
+    AppRoutingModule,
+
     ClipboardModule,
     CommonModule,
     FormsModule,
@@ -52,6 +58,7 @@ import {JsonPanelComponent} from './jsonPanel/jsonPanel.component';
 
     NgJsonEditorModule,
     JsonPanelComponent,
+    EntityListComponent,
   ],
 })
 export class SharedModule { }

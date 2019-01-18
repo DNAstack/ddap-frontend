@@ -5,21 +5,6 @@
     <mat-icon aria-label="Add rule">add</mat-icon>
   </a>
 </div>
-<mat-accordion>
-  <ng-container *ngFor="let rule of rules$ | async">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{ rule.name }}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
 
-      <json-editor [options]="editorOptions"
-                   [data]="rule"></json-editor>
-
-      <mat-action-row>
-        <button mat-button [routerLink]="['/rules/', rule.name]">View</button>
-      </mat-action-row>
-    </mat-expansion-panel>
-  </ng-container>
-</mat-accordion>
+<app-entity-list [routePrefix]="'/rules/'"
+             [entityList]="rules$"></app-entity-list>

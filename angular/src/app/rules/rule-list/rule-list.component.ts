@@ -1,11 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
-import { Observable } from 'rxjs/Observable';
+import {JsonEditorComponent} from 'ang-jsoneditor';
+import {Observable} from 'rxjs/Observable';
 import {map} from 'rxjs/operators';
 
-import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
 import {objectToArray} from '../../shared/util';
-import { RuleService } from '../rule.service';
+import {RuleService} from '../rule.service';
 
 @Component({
   selector: 'app-rule-list',
@@ -16,10 +15,8 @@ export class RuleListComponent implements OnInit {
 
   rules$: Observable<any[]>;
   @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
-  editorOptions: JsonEditorOptions | any;
 
   constructor(private ruleService: RuleService) {
-    this.editorOptions = new JsonEditorDefaults();
   }
 
   ngOnInit() {

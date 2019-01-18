@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
-import { Observable } from 'rxjs/Observable';
+import {JsonEditorComponent} from 'ang-jsoneditor';
+import {Observable} from 'rxjs/Observable';
+import {map} from 'rxjs/operators';
 
-import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
-import { ResourceService } from '../resource.service';
+import {ResourceService} from '../resource.service';
 
 @Component({
   selector: 'app-resource-list',
@@ -14,14 +14,19 @@ export class ResourceListComponent implements OnInit {
 
   resources$: Observable<any[]>;
   @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
-  editorOptions: JsonEditorOptions | any;
 
   constructor(private resourceService: ResourceService) {
-    this.editorOptions = new JsonEditorDefaults();
   }
 
   ngOnInit() {
-    this.resources$ = this.resourceService.getResources();
+    this.resources$ = this.resourceService.getResources().pipe(
+      map((resourceList: any[]) => {
+        return resourceList.map((resource) => {
+          resource.description = resource.ui.desc;
+          return resource;
+        });
+      })
+    );
   }
 
 }
