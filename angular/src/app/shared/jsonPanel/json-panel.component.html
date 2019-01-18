@@ -1,0 +1,31 @@
+<mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{entity?.name}} JSON
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <json-editor [options]="editorOptions"
+               [data]="entity"
+               (change)="updateResourceDto($event)"></json-editor>
+
+  <mat-error *ngIf="error">{{error}}</mat-error>
+
+  <mat-action-row *ngIf="state !== ViewState.Viewing">
+    <button mat-flat-button
+            color="primary"
+            (click)="save()"
+            [disabled]="state === ViewState.Submitting">Submit
+    </button>
+
+    <button mat-flat-button
+            (click)="cancel()"
+            [disabled]="state === ViewState.Submitting">Cancel
+    </button>
+  </mat-action-row>
+  <mat-action-row *ngIf="state === ViewState.Viewing">
+    <button mat-flat-button
+            color="primary"
+            (click)="edit()">Edit
+    </button>
+  </mat-action-row>
+</mat-expansion-panel>
