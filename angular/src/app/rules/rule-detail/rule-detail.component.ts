@@ -40,8 +40,6 @@ export class RuleDetailComponent implements OnInit {
     this.route.params.pipe(
       flatMap(params => this.getRule(params['ruleName']))
     ).subscribe((ruleDto) => {
-     console.log('this.route.params[\'ruleName\']', this.route.params);
-     console.log('ruleDto', ruleDto);
       this.rule = ruleDto;
       this.ruleDto = ruleDto;
     });
@@ -77,7 +75,6 @@ export class RuleDetailComponent implements OnInit {
   }
 
   private getRule(ruleName) {
-    console.log('ruleName', ruleName);
     return this.ruleService
       .get()
       .pipe(
