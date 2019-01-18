@@ -5,24 +5,6 @@
     <mat-icon aria-label="Add resource">add</mat-icon>
   </a>
 </div>
-<mat-accordion>
-  <ng-container *ngFor="let resource of resources$ | async">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{ resource.ui.displayAs }}
-        </mat-panel-title>
-        <mat-panel-description>
-          {{ resource.ui.desc }}
-        </mat-panel-description>
-      </mat-expansion-panel-header>
 
-      <json-editor [options]="editorOptions"
-                   [data]="resource"></json-editor>
-
-      <mat-action-row>
-        <button mat-button [routerLink]="['/resources/', resource.name]">View</button>
-      </mat-action-row>
-    </mat-expansion-panel>
-  </ng-container>
-</mat-accordion>
+<app-entity-list [routePrefix]="'/resources/'"
+             [entityList]="resources$"></app-entity-list>

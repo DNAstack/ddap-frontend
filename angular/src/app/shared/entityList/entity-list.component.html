@@ -1,0 +1,22 @@
+<mat-accordion>
+  <ng-container *ngFor="let entity of entityList | async">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ entity.name }}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ entity.description }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <json-editor [options]="editorOptions"
+                   [data]="entity"></json-editor>
+
+      <mat-action-row>
+        <button mat-button [routerLink]="[routePrefix, entity.name]">View</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </ng-container>
+
+</mat-accordion>
