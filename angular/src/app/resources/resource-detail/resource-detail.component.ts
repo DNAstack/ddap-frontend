@@ -6,12 +6,6 @@ import {flatMap} from 'rxjs/operators';
 import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
 import {ResourceService} from '../resource.service';
 
-enum ViewState {
-  Editing,
-  Submitting,
-  Viewing,
-}
-
 @Component({
   selector: 'app-resource-detail',
   templateUrl: './resource-detail.component.html',
@@ -25,13 +19,13 @@ export class ResourceDetailComponent implements OnInit {
   // A (possible edited) resource from the json editor.
   resourceDto: any;
   views: any;
-  state: ViewState = ViewState.Viewing;
+
   @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
   editorOptions: JsonEditorOptions | any;
 
   constructor(
     private route: ActivatedRoute,
-    private resourceService: ResourceService
+    public resourceService: ResourceService
   ) {
     this.editorOptions = new JsonEditorDefaults();
   }
@@ -52,19 +46,6 @@ export class ResourceDetailComponent implements OnInit {
     });
   }
 
-  updateResourceDto(event: any) {
-    this.resourceDto = event;
-  }
-
-  isStateView(): boolean {
-    return this.state !== ViewState.Viewing;
-  }
-
-  edit(): void {
-    this.state = ViewState.Editing;
-    this.setEditorMode('code');
-  }
-
   getAccess(viewName) {
     this.resourceService.getAccessRequestToken(this.resource.name, viewName)
       .subscribe((accessToken) => {
@@ -77,39 +58,5 @@ export class ResourceDetailComponent implements OnInit {
           this.resource.views[viewName].url = `${viewAccessUrl}/o?access_token=${accessToken}`;
         }
       });
-  }
-
-  cancel(): void {
-    this.setEditorMode('view');
-    this.error = null;
-
-    switch (this.state) {
-      case ViewState.Editing: {
-        this.state = ViewState.Viewing;
-        return;
-      }
-    }
-  }
-
-  isStateSubmit(): boolean {
-    return this.state === ViewState.Submitting;
-  }
-
-  private setEditorMode(mode) {
-    this.editorOptions.mode = mode;
-    this.editor.setOptions(this.editorOptions);
-  }
-
-  private save(): void {
-    this.state = ViewState.Submitting;
-    this.resourceService.modifyResource(this.resourceDto)
-    .subscribe(_ => {
-      this.setEditorMode('view');
-      this.state = ViewState.Viewing;
-      this.error = null;
-    }, e => {
-      this.error = e.error;
-      this.state = ViewState.Editing;
-    });
   }
 }

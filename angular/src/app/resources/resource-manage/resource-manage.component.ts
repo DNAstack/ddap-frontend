@@ -17,7 +17,7 @@ export class ResourceManageComponent implements OnInit {
   }
 
   onSubmit(value: any) {
-    this.resourceService.addResource(JSON.parse(value.body))
+    this.resourceService.save(JSON.parse(value.body))
       .subscribe(() => this.resource = {});
   }
 }
