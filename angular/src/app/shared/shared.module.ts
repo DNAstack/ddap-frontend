@@ -1,24 +1,24 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import {
-  MatSidenavModule,
+  MatButtonModule,
   MatExpansionModule,
   MatFormFieldModule,
-  MatInputModule,
-  MatButtonModule,
   MatIconModule,
+  MatInputModule,
   MatListModule,
+  MatSidenavModule,
 } from '@angular/material';
-import {ClipboardModule} from "ngx-clipboard";
-import {NgJsonEditorModule} from "ang-jsoneditor";
-import {JsonPanelComponent} from "./jsonPanel/jsonPanel.component";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {NgJsonEditorModule} from 'ang-jsoneditor';
+import {ClipboardModule} from 'ngx-clipboard';
+
+import {JsonPanelComponent} from './jsonPanel/jsonPanel.component';
 
 @NgModule({
   declarations: [
-    JsonPanelComponent
+    JsonPanelComponent,
   ],
   imports: [
     ClipboardModule,
@@ -34,7 +34,7 @@ import {JsonPanelComponent} from "./jsonPanel/jsonPanel.component";
     MatIconModule,
     MatListModule,
 
-    NgJsonEditorModule
+    NgJsonEditorModule,
   ],
   exports: [
     ClipboardModule,
@@ -51,7 +51,7 @@ import {JsonPanelComponent} from "./jsonPanel/jsonPanel.component";
     MatListModule,
 
     NgJsonEditorModule,
-    JsonPanelComponent
-  ]
+    JsonPanelComponent,
+  ],
 })
 export class SharedModule { }

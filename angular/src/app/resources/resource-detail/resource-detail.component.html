@@ -1,20 +1,20 @@
 <h2>
   <mat-icon mat-list-icon>insert_drive_file</mat-icon>
-  {{resource?.ui.displayAs}}</h2>
+  {{ resource?.ui.displayAs }}</h2>
 
 <p>{{ resource?.ui.desc }}</p>
 
 <mat-expansion-panel [expanded]="true">
   <mat-expansion-panel-header>
     <mat-panel-title>
-      {{resource?.ui.displayAs}} JSON
+      {{ resource?.ui.displayAs }} JSON
     </mat-panel-title>
   </mat-expansion-panel-header>
   <json-editor [options]="editorOptions"
                [data]="resource"
                (change)="updateResourceDto($event)"></json-editor>
 
-  <mat-error *ngIf="error">{{error}}</mat-error>
+  <mat-error *ngIf="error">{{ error }}</mat-error>
 
   <mat-action-row *ngIf="isStateView()">
     <button mat-flat-button
@@ -40,7 +40,7 @@
   <h3 mat-subheader>Views</h3>
   <mat-list-item *ngFor="let view of views">
     <mat-icon mat-list-icon>view_quilt</mat-icon>
-    <h4 mat-line>{{view.name}}</h4>
+    <h4 mat-line>{{ view.name }}</h4>
 
     <mat-form-field *ngIf="resource.views[view.name].token"
                     mat-line

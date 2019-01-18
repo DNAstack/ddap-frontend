@@ -5,7 +5,7 @@ import { RuleService } from '../rule.service';
 @Component({
   selector: 'app-rule-manage',
   templateUrl: './rule-manage.component.html',
-  styleUrls: ['./rule-manage.component.scss']
+  styleUrls: ['./rule-manage.component.scss'],
 })
 export class RuleManageComponent implements OnInit {
 

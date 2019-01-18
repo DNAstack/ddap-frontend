@@ -1,14 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { Observable } from 'rxjs';
+import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
+import { Observable } from 'rxjs/Observable';
 
+import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
 import { ResourceService } from '../resource.service';
-import {JsonEditorComponent, JsonEditorOptions} from "ang-jsoneditor";
-import {JsonEditorDefaults} from "../../shared/jsonEditorDefaults";
 
 @Component({
   selector: 'app-resource-list',
   templateUrl: './resource-list.component.html',
-  styleUrls: ['./resource-list.component.scss']
+  styleUrls: ['./resource-list.component.scss'],
 })
 export class ResourceListComponent implements OnInit {
 

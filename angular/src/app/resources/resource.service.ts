@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { pluck, first, mergeMap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { first, mergeMap, pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ResourceService {
 
@@ -16,7 +16,7 @@ export class ResourceService {
 
   getAccessRequestToken(resource, view): Observable<any[]> {
     const params = {
-      persona: 'nci_researcher'
+      persona: 'nci_researcher',
     };
 
     return this.http.get<any[]>(`${environment.ddapApiUrl}/resources/${resource}/views/${view}`, { params })
@@ -47,7 +47,7 @@ export class ResourceService {
 
   addResource(resourceChange: any): Observable<any> {
     const params = {
-      persona: 'nci_researcher'
+      persona: 'nci_researcher',
     };
     const resourceName = resourceChange.item.name;
 
@@ -60,11 +60,11 @@ export class ResourceService {
 
   modifyResource(resource: any): Observable<any> {
     const params = {
-      persona: 'nci_researcher'
+      persona: 'nci_researcher',
     };
     const resourceName = resource.name;
     const resourceChange = {
-      item: resource
+      item: resource,
     };
 
     return this.http.patch(

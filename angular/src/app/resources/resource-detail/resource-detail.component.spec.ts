@@ -8,7 +8,7 @@ describe('ResourceDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ResourceDetailComponent ]
+      declarations: [ ResourceDetailComponent ],
     })
     .compileComponents();
   }));

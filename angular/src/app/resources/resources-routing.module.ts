@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
+import { ResourceDetailComponent } from './resource-detail/resource-detail.component';
 import { ResourceListComponent } from './resource-list/resource-list.component';
 import { ResourceManageComponent } from './resource-manage/resource-manage.component';
-import { ResourceDetailComponent } from './resource-detail/resource-detail.component';
 
 const routes: Routes = [
   { path: 'resources', component: ResourceListComponent },
@@ -13,6 +13,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class ResourcesRoutingModule { }

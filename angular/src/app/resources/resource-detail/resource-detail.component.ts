@@ -1,21 +1,21 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
+import {flatMap} from 'rxjs/operators';
 
+import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
 import {ResourceService} from '../resource.service';
-import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults'
-import {flatMap} from "rxjs/operators";
-import {JsonEditorComponent, JsonEditorOptions} from "ang-jsoneditor";
 
 enum ViewState {
   Editing,
   Submitting,
-  Viewing
+  Viewing,
 }
 
 @Component({
   selector: 'app-resource-detail',
   templateUrl: './resource-detail.component.html',
-  styleUrls: ['./resource-detail.component.scss']
+  styleUrls: ['./resource-detail.component.scss'],
 })
 export class ResourceDetailComponent implements OnInit {
 
@@ -46,31 +46,13 @@ export class ResourceDetailComponent implements OnInit {
         .keys(resourceDto.views)
         .map((key) => {
           return {
-            ...resourceDto.views[key]
-          }
+            ...resourceDto.views[key],
+          };
         });
     });
   }
 
-  private setEditorMode(mode) {
-    this.editorOptions.mode = mode;
-    this.editor.setOptions(this.editorOptions);
-  }
-
-  private save(): void {
-    this.state = ViewState.Submitting;
-    this.resourceService.modifyResource(this.resourceDto)
-    .subscribe(_ => {
-      this.setEditorMode('view');
-      this.state = ViewState.Viewing;
-      this.error = null;
-    }, e => {
-      this.error = e.error;
-      this.state = ViewState.Editing;
-    });
-  }
-
-  updateResourceDto(event : any) {
+  updateResourceDto(event: any) {
     this.resourceDto = event;
   }
 
@@ -89,6 +71,7 @@ export class ResourceDetailComponent implements OnInit {
         this.resource.views[viewName].token = accessToken;
 
         const view = this.resource.views[viewName];
+        // tslint:disable-next-line
         const viewAccessUrl = view!.interfaces['http:gcp:gs'];
         if (viewAccessUrl) {
           this.resource.views[viewName].url = `${viewAccessUrl}/o?access_token=${accessToken}`;
@@ -110,5 +93,23 @@ export class ResourceDetailComponent implements OnInit {
 
   isStateSubmit(): boolean {
     return this.state === ViewState.Submitting;
+  }
+
+  private setEditorMode(mode) {
+    this.editorOptions.mode = mode;
+    this.editor.setOptions(this.editorOptions);
+  }
+
+  private save(): void {
+    this.state = ViewState.Submitting;
+    this.resourceService.modifyResource(this.resourceDto)
+    .subscribe(_ => {
+      this.setEditorMode('view');
+      this.state = ViewState.Viewing;
+      this.error = null;
+    }, e => {
+      this.error = e.error;
+      this.state = ViewState.Editing;
+    });
   }
 }

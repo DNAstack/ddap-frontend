@@ -8,7 +8,7 @@ describe('RuleListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RuleListComponent ]
+      declarations: [ RuleListComponent ],
     })
     .compileComponents();
   }));

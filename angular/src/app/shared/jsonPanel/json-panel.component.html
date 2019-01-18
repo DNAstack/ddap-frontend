@@ -1,14 +1,14 @@
 <mat-expansion-panel [expanded]="true">
   <mat-expansion-panel-header>
     <mat-panel-title>
-      {{entity?.name}} JSON
+      {{ entity?.name }} JSON
     </mat-panel-title>
   </mat-expansion-panel-header>
   <json-editor [options]="editorOptions"
                [data]="entity"
                (change)="updateResourceDto($event)"></json-editor>
 
-  <mat-error *ngIf="error">{{error}}</mat-error>
+  <mat-error *ngIf="error">{{ error }}</mat-error>
 
   <mat-action-row *ngIf="state !== ViewState.Viewing">
     <button mat-flat-button
