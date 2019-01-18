@@ -4,34 +4,5 @@
 
 <p>{{ client?.clientId }}</p>
 
-<mat-expansion-panel [expanded]="true">
-  <mat-expansion-panel-header>
-    <mat-panel-title>
-      {{client?.name}} JSON
-    </mat-panel-title>
-  </mat-expansion-panel-header>
-  <json-editor [options]="editorOptions"
-               [data]="client"
-               (change)="updateClientDto($event)"></json-editor>
-
-  <mat-error *ngIf="error">{{error}}</mat-error>
-
-  <mat-action-row *ngIf="isStateView()">
-    <button mat-flat-button
-            color="primary"
-            (click)="save()"
-            [disabled]="isStateSubmit()">Submit
-    </button>
-
-    <button mat-flat-button
-            (click)="cancel()"
-            [disabled]="isStateSubmit()">Cancel
-    </button>
-  </mat-action-row>
-  <mat-action-row *ngIf="!isStateView()">
-    <button mat-flat-button
-            color="primary"
-            (click)="edit()">Edit
-    </button>
-  </mat-action-row>
-</mat-expansion-panel>
+<json-panel [entityService]="clientService"
+            [entity]="client"></json-panel>

@@ -10,7 +10,7 @@ const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'charset':
 @Injectable({
   providedIn: 'root'
 })
-export class ClientService {
+export class ClientService implements EntityService{
 
   constructor(private http: HttpClient) { }
 

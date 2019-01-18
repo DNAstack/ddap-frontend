@@ -14,9 +14,12 @@ import {
 } from '@angular/material';
 import {ClipboardModule} from "ngx-clipboard";
 import {NgJsonEditorModule} from "ang-jsoneditor";
+import {JsonPanelComponent} from "./jsonPanel/jsonPanel.component";
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    JsonPanelComponent
+  ],
   imports: [
     ClipboardModule,
     CommonModule,
@@ -47,7 +50,8 @@ import {NgJsonEditorModule} from "ang-jsoneditor";
     MatIconModule,
     MatListModule,
 
-    NgJsonEditorModule
+    NgJsonEditorModule,
+    JsonPanelComponent
   ]
 })
 export class SharedModule { }
