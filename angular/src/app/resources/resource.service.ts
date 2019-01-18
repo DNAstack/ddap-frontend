@@ -66,8 +66,6 @@ export class ResourceService implements EntityService {
   }
 
   update(resource: any): Observable<any> {
-    console.log('resource', resource);
-
     const params = {
       persona: 'nci_researcher',
     };

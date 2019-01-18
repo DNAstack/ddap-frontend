@@ -33,15 +33,12 @@ export class ClientDetailComponent implements OnInit {
     this.route.params.pipe(
       flatMap(params => this.getClient(params['clientName']))
     ).subscribe((clientDto) => {
-     console.log('this.route.params[\'clientName\']', this.route.params);
-     console.log('clientDto', clientDto);
       this.client = clientDto;
       this.clientDto = clientDto;
     });
   }
 
   private getClient(clientName) {
-    console.log('clientName', clientName);
     return this.clientService
       .get()
       .pipe(
