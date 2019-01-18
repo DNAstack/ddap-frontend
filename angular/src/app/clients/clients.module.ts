@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { SharedModule } from '../shared/shared.module';
-import { ClientsRoutingModule } from './clients-routing.module';
+
+import { ClientDetailComponent } from './client-detail/client-detail.component';
 import { ClientListComponent } from './client-list/client-list.component';
 import { ClientManageComponent } from './client-manage/client-manage.component';
-import { ClientDetailComponent } from './client-detail/client-detail.component';
+import { ClientsRoutingModule } from './clients-routing.module';
 
 @NgModule({
   declarations: [ClientListComponent, ClientManageComponent, ClientDetailComponent],
@@ -13,7 +14,7 @@ import { ClientDetailComponent } from './client-detail/client-detail.component';
     CommonModule,
 
     SharedModule,
-    ClientsRoutingModule
-  ]
+    ClientsRoutingModule,
+  ],
 })
 export class ClientsModule { }

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
@@ -8,9 +8,9 @@ import { environment } from '../../environments/environment';
 const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class ClientService implements EntityService{
+export class ClientService implements EntityService {
 
   constructor(private http: HttpClient) { }
 
@@ -26,7 +26,7 @@ export class ClientService implements EntityService{
 
   save(clientChange: any): Observable<any> {
     const params = {
-      persona: 'nci_researcher'
+      persona: 'nci_researcher',
     };
     const clientName = clientChange.item.name;
 
@@ -39,11 +39,11 @@ export class ClientService implements EntityService{
 
   update(client: any): Observable<any> {
     const params = {
-      persona: 'nci_researcher'
+      persona: 'nci_researcher',
     };
     const clientName = client.name;
     const clientChange = {
-      item: client
+      item: client,
     };
 
     return this.http.patch(

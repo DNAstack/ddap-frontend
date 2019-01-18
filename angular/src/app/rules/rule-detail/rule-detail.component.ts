@@ -1,21 +1,21 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-
-import {RuleService} from '../rule.service';
-import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
-import {flatMap, pluck} from 'rxjs/operators';
 import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
+import {flatMap, pluck} from 'rxjs/operators';
+
+import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
+import {RuleService} from '../rule.service';
 
 enum ViewState {
   Editing,
   Submitting,
-  Viewing
+  Viewing,
 }
 
 @Component({
   selector: 'app-rule-detail',
   templateUrl: './rule-detail.component.html',
-  styleUrls: ['./rule-detail.component.scss']
+  styleUrls: ['./rule-detail.component.scss'],
 })
 export class RuleDetailComponent implements OnInit {
 
@@ -36,15 +36,6 @@ export class RuleDetailComponent implements OnInit {
     this.editorOptions = new JsonEditorDefaults();
   }
 
-  private getRule(ruleName) {
-    console.log('ruleName', ruleName);
-    return this.ruleService
-      .get()
-      .pipe(
-        pluck(ruleName)
-      );
-  }
-
   ngOnInit() {
     this.route.params.pipe(
       flatMap(params => this.getRule(params['ruleName']))
@@ -53,24 +44,6 @@ export class RuleDetailComponent implements OnInit {
      console.log('ruleDto', ruleDto);
       this.rule = ruleDto;
       this.ruleDto = ruleDto;
-    });
-  }
-
-  private setEditorMode(mode) {
-    this.editorOptions.mode = mode;
-    this.editor.setOptions(this.editorOptions);
-  }
-
-  private save(): void {
-    this.state = ViewState.Submitting;
-    this.ruleService.update(this.ruleDto)
-    .subscribe(_ => {
-      this.setEditorMode('view');
-      this.state = ViewState.Viewing;
-      this.error = null;
-    }, e => {
-      this.error = e.error;
-      this.state = ViewState.Editing;
     });
   }
 
@@ -101,5 +74,32 @@ export class RuleDetailComponent implements OnInit {
 
   isStateSubmit(): boolean {
     return this.state === ViewState.Submitting;
+  }
+
+  private getRule(ruleName) {
+    console.log('ruleName', ruleName);
+    return this.ruleService
+      .get()
+      .pipe(
+        pluck(ruleName)
+      );
+  }
+
+  private setEditorMode(mode) {
+    this.editorOptions.mode = mode;
+    this.editor.setOptions(this.editorOptions);
+  }
+
+  private save(): void {
+    this.state = ViewState.Submitting;
+    this.ruleService.update(this.ruleDto)
+    .subscribe(_ => {
+      this.setEditorMode('view');
+      this.state = ViewState.Viewing;
+      this.error = null;
+    }, e => {
+      this.error = e.error;
+      this.state = ViewState.Editing;
+    });
   }
 }

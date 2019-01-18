@@ -5,7 +5,7 @@ import { ResourceService } from '../resource.service';
 @Component({
   selector: 'app-resource-manage',
   templateUrl: './resource-manage.component.html',
-  styleUrls: ['./resource-manage.component.scss']
+  styleUrls: ['./resource-manage.component.scss'],
 })
 export class ResourceManageComponent implements OnInit {
 

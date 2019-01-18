@@ -1,15 +1,15 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
+import {flatMap, pluck} from 'rxjs/operators';
 
-import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults'
-import {flatMap, pluck} from "rxjs/operators";
-import {JsonEditorComponent, JsonEditorOptions} from "ang-jsoneditor";
-import {ClientService} from "../client.service";
+import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
+import {ClientService} from '../client.service';
 
 @Component({
   selector: 'app-client-detail',
   templateUrl: './client-detail.component.html',
-  styleUrls: ['./client-detail.component.scss']
+  styleUrls: ['./client-detail.component.scss'],
 })
 export class ClientDetailComponent implements OnInit {
 
@@ -29,15 +29,6 @@ export class ClientDetailComponent implements OnInit {
     this.editorOptions = new JsonEditorDefaults();
   }
 
-  private getClient(clientName) {
-    console.log('clientName', clientName);
-    return this.clientService
-      .get()
-      .pipe(
-        pluck(clientName)
-      )
-  }
-
   ngOnInit() {
     this.route.params.pipe(
       flatMap(params => this.getClient(params['clientName']))
@@ -47,5 +38,14 @@ export class ClientDetailComponent implements OnInit {
       this.client = clientDto;
       this.clientDto = clientDto;
     });
+  }
+
+  private getClient(clientName) {
+    console.log('clientName', clientName);
+    return this.clientService
+      .get()
+      .pipe(
+        pluck(clientName)
+      );
   }
 }

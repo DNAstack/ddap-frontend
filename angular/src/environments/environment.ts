@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  ddapApiUrl: 'http://localhost:8080/dam/v1'
+  ddapApiUrl: 'http://localhost:8080/dam/v1',
 };
 
 /*

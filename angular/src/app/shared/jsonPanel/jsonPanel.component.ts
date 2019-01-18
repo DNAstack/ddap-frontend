@@ -1,17 +1,18 @@
-import {Component, Input, OnInit, ViewChild} from "@angular/core";
-import {JsonEditorComponent, JsonEditorOptions} from "ang-jsoneditor";
-import {JsonEditorDefaults} from "../jsonEditorDefaults";
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
+
+import {JsonEditorDefaults} from '../jsonEditorDefaults';
 
 enum ViewState {
   Editing,
   Submitting,
-  Viewing
+  Viewing,
 }
 
 @Component({
-  selector: 'json-panel',
+  selector: 'app-json-panel',
   templateUrl: './json-panel.component.html',
-  styleUrls: ['./json-panel.component.scss']
+  styleUrls: ['./json-panel.component.scss'],
 })
 export class JsonPanelComponent implements OnInit {
   error: string = null;
@@ -36,7 +37,7 @@ export class JsonPanelComponent implements OnInit {
   ngOnInit() {
   }
 
-  updateResourceDto(event : any) {
+  updateResourceDto(event: any) {
     this.entityDto = event;
   }
 

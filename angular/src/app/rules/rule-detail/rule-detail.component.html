@@ -1,20 +1,20 @@
 <h2>
   <mat-icon mat-list-icon>settings_input_component</mat-icon>
-  {{rule?.name}}</h2>
+  {{ rule?.name }}</h2>
 
 <p>{{ rule?.ruleId }}</p>
 
 <mat-expansion-panel [expanded]="true">
   <mat-expansion-panel-header>
     <mat-panel-title>
-      {{rule?.name}} JSON
+      {{ rule?.name }} JSON
     </mat-panel-title>
   </mat-expansion-panel-header>
   <json-editor [options]="editorOptions"
                [data]="rule"
                (change)="updateRuleDto($event)"></json-editor>
 
-  <mat-error *ngIf="error">{{error}}</mat-error>
+  <mat-error *ngIf="error">{{ error }}</mat-error>
 
   <mat-action-row *ngIf="isStateView()">
     <button mat-flat-button
