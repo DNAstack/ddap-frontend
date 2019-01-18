@@ -10,7 +10,7 @@ const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'charset':
 @Injectable({
   providedIn: 'root',
 })
-export class ResourceService {
+export class ResourceService implements EntityService {
 
   constructor(private http: HttpClient) { }
 
@@ -22,6 +22,13 @@ export class ResourceService {
     return this.http.get<any[]>(`${environment.ddapApiUrl}/resources/${resource}/views/${view}`, { params })
       .pipe(
         pluck('token')
+      );
+  }
+
+  get(): Observable<any[]> {
+    return this.http.get<any[]>(environment.ddapApiUrl + '/resources')
+      .pipe(
+        pluck('resources')
       );
   }
 
@@ -45,7 +52,7 @@ export class ResourceService {
     );
   }
 
-  addResource(resourceChange: any): Observable<any> {
+  save(resourceChange: any): Observable<any> {
     const params = {
       persona: 'nci_researcher',
     };
@@ -58,7 +65,9 @@ export class ResourceService {
     );
   }
 
-  modifyResource(resource: any): Observable<any> {
+  update(resource: any): Observable<any> {
+    console.log('resource', resource);
+
     const params = {
       persona: 'nci_researcher',
     };
