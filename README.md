@@ -26,6 +26,7 @@ From the `angular/` directory run `npm run build:prod` for a production build, o
 _Note_: Order is important.
 
 1. Run frontend build command: `npm run build:dev` (starts a build server that writes changed files to `target/classes/static`)
+or `npm run build:watch` (same functionality, but includes a linter).
 2. Run the spring boot backend in dev mode: `mvn spring-boot:run -P-dev` (`-P-dev` stops maven from running the full frontend build)
 
 ## API Gateway
