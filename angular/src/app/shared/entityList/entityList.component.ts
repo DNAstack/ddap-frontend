@@ -1,5 +1,6 @@
 import {Component, Input, ViewChild} from '@angular/core';
 import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
+import _get from 'lodash.get';
 
 import {JsonEditorDefaults} from '../jsonEditorDefaults';
 
@@ -14,6 +15,9 @@ export class EntityListComponent {
   @Input()
   entityList: any;
 
+  @Input()
+  descriptionProperty: string;
+
   @ViewChild(JsonEditorComponent)
   editor: JsonEditorComponent;
 
@@ -25,5 +29,9 @@ export class EntityListComponent {
 
   constructor() {
     this.editorOptions = new JsonEditorDefaults();
+  }
+
+  getDescription(entity: object) {
+    return _get(entity, this.descriptionProperty);
   }
 }
