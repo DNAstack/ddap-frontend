@@ -1,0 +1,9 @@
+<h2>Claims</h2>
+
+<div>
+  <a mat-mini-fab routerLink="/claims/manage/add">
+    <mat-icon aria-label="Add claim">add</mat-icon>
+  </a>
+</div>
+
+<app-entity-list [routePrefix]="'/claims/'" [entityList]="claims$" [descriptionProperty]="'source'"></app-entity-list>
