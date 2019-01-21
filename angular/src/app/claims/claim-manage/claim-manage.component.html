@@ -1,0 +1,12 @@
+<h2>Add Claim</h2>
+
+<form #claimForm="ngForm" (ngSubmit)="onSubmit(claimForm.value)">
+  <mat-form-field>
+    <textarea matInput placeholder="Claim JSON" rows="10" name="body" ngModel required></textarea>
+  </mat-form-field>
+  <div>
+    <button type="submit" mat-flat-button color="primary" [disabled]="!claimForm.form.valid">
+      Add Claim
+    </button>
+  </div>
+</form>

@@ -1,0 +1,8 @@
+<h2>
+  <mat-icon mat-list-icon>lock</mat-icon>
+  {{ claim?.name }}</h2>
+
+<p>{{ claim?.claimId }}</p>
+
+<app-json-panel [entityService]="claimService"
+            [entity]="claim"></app-json-panel>

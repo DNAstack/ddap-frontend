@@ -1,4 +1,4 @@
-<mat-progress-bar mode="determinate" [value]="loader.progress$|async"></mat-progress-bar>
+<mat-progress-bar mode="determinate" [value]="loader.progress$ | async"></mat-progress-bar>
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="side" [opened]="true">
     <h1><mat-icon mat-list-icon>fingerprint</mat-icon> DDAP</h1>
@@ -44,7 +44,7 @@
             <mat-icon mat-list-icon>settings_input_component</mat-icon>
             <h4 mat-line>Clients</h4>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item [routerLink]="['/claims']">
             <mat-icon mat-list-icon>lock</mat-icon>
             <h4 mat-line>Claims</h4>
           </mat-list-item>
