@@ -3,6 +3,7 @@ import {JsonEditorComponent} from 'ang-jsoneditor';
 import {Observable} from 'rxjs/Observable';
 import {map} from 'rxjs/operators';
 
+import {objectToArray} from '../../shared/util';
 import {ResourceService} from '../resource.service';
 
 @Component({
@@ -19,14 +20,9 @@ export class ResourceListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.resources$ = this.resourceService.getResources().pipe(
-      map((resourceList: any[]) => {
-        return resourceList.map((resource) => {
-          resource.description = resource.ui.desc;
-          return resource;
-        });
-      })
-    );
+    this.resources$ = this.resourceService.getResources()
+      .pipe(
+        map(objectToArray));
   }
 
 }

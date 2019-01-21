@@ -20,14 +20,9 @@ export class ClientListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.clients$ = this.clientService
-      .get()
+    this.clients$ = this.clientService.get()
       .pipe(
-        map(objectToArray),
-        map((client: any) => {
-          client.description = client.clientId;
-          return client;
-        }));
+        map(objectToArray));
   }
 
 }
