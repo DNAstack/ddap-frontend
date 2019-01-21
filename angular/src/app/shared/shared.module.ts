@@ -8,7 +8,8 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatSidenavModule,
+  MatProgressBarModule,
+  MatSidenavModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NgJsonEditorModule} from 'ang-jsoneditor';
@@ -32,6 +33,7 @@ import {JsonPanelComponent} from './jsonPanel/jsonPanel.component';
     FormsModule,
     BrowserAnimationsModule,
 
+    MatProgressBarModule,
     MatSidenavModule,
     MatExpansionModule,
     MatFormFieldModule,
@@ -48,6 +50,7 @@ import {JsonPanelComponent} from './jsonPanel/jsonPanel.component';
     FormsModule,
     BrowserAnimationsModule,
 
+    MatProgressBarModule,
     MatSidenavModule,
     MatExpansionModule,
     MatFormFieldModule,
