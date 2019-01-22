@@ -36,6 +36,7 @@ public class Router {
     RouterFunction<ServerResponse> angularRoutes() {
         return RouterFunctions.route(GET("/**")
                                              .and(path("/dam/**").negate())
+                                             .and(path("/identity/**").negate())
                                              .and(pathExtension(StringUtils::isEmpty)),
                                      request -> ok()
                                              .contentType(TEXT_HTML)

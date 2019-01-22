@@ -70,7 +70,7 @@ public class ConfigE2eTest extends BaseE2eTest {
     }
 
     @Test
-    public void accessDamEndpointPage() {
+    public void accessDamEndpoint() {
         given()
                 .log().method()
                 .log().uri()
@@ -79,6 +79,21 @@ public class ConfigE2eTest extends BaseE2eTest {
                 .get("/dam/v1/resources?persona=nci_researcher")
         .then()
                 .log().ifValidationFails()
+                .contentType("application/json")
+                .statusCode(200);
+    }
+
+    @Test
+    public void accessIdpEndpoint() {
+        given()
+                .log().method()
+                .log().uri()
+                .auth().preemptive().basic(basicUsername, basicPassword)
+                .when()
+                .get("/identity/v1/config?persona=nci_researcher")
+                .then()
+                .log().ifValidationFails()
+                .contentType("application/json")
                 .statusCode(200);
     }
 

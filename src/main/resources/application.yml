@@ -2,6 +2,10 @@ dam:
   base-url: http://localhost:3000/
   client-id: local-dam-client-id
   client-secret: local-dam-client-secret
+idp:
+  base-url: http://localhost:3001/
+  client-id: local-dam-client-id
+  client-secret: local-dam-client-secret
 
 ddap:
   cors:
@@ -22,3 +26,10 @@ spring:
             - AddRequestParameter=clientSecret,${dam.client-secret}
             - Logging
           uri: ${dam.base-url}
+        - predicates:
+            - Path=/identity/**
+          filters:
+            - AddRequestParameter=clientId,${idp.client-id}
+            - AddRequestParameter=clientSecret,${idp.client-secret}
+            - Logging
+          uri: ${idp.base-url}
