@@ -3,6 +3,8 @@ import { mergeMap, pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
+import { EntityService } from './EntityService';
+
 const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
 
 export class ConfigEntityService implements EntityService {
