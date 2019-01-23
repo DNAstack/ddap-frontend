@@ -1,7 +1,9 @@
-import {Component, Input, OnChanges, ViewChild} from '@angular/core';
-import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
+import { Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { Observable } from 'rxjs/Observable';
 
-import {JsonEditorDefaults} from '../jsonEditorDefaults';
+import { EntityService } from '../EntityService';
+import { JsonEditorDefaults } from '../jsonEditorDefaults';
 
 enum ViewState {
   Editing,
@@ -18,12 +20,22 @@ export class JsonPanelComponent implements OnChanges {
   error: string = null;
 
   @Input()
+  useTests = false;
+
+  @Input()
   entity: any;
 
   entityDto: any;
+  testDto: any = {};
   ViewState = ViewState;
   state: ViewState = ViewState.Viewing;
-  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
+
+  @ViewChild('entityEditor')
+  entityEditor: JsonEditorComponent;
+
+  @ViewChild('testEditor')
+  testEditor: JsonEditorComponent;
+
   editorOptions: JsonEditorOptions | any;
 
   @Input()
@@ -42,9 +54,21 @@ export class JsonPanelComponent implements OnChanges {
     this.entityDto = event;
   }
 
+  updateTestDto(event: any) {
+    this.testDto = event;
+  }
+
   save() {
     this.state = ViewState.Submitting;
-    this.entityService.update(this.entityDto)
+    let updateAction: Observable<any>;
+
+    if (this.useTests) {
+      updateAction = this.entityService.update(this.entityDto, this.testDto);
+    } else {
+      updateAction = this.entityService.update(this.entityDto);
+    }
+
+    updateAction
       .subscribe(() => {
         this.state = ViewState.Viewing;
         this.setEditorMode('view');
@@ -68,6 +92,9 @@ export class JsonPanelComponent implements OnChanges {
 
   private setEditorMode(mode) {
     this.editorOptions.mode = mode;
-    this.editor.setOptions(this.editorOptions);
+    this.entityEditor.setOptions(this.editorOptions);
+    if (this.ViewState.Editing) {
+      this.testEditor.setOptions(this.editorOptions);
+    }
   }
 }

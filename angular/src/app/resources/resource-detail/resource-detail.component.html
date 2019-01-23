@@ -4,7 +4,8 @@
 
 <p>{{ resource?.ui.desc }}</p>
 
-<app-json-panel [entityService]="resourceService"
+<app-json-panel [useTests]="true"
+                [entityService]="resourceService"
                 [entity]="resource"></app-json-panel>
 
 <mat-list>
