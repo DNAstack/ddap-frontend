@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ClaimsModule } from './claims/claims.module';
 import { ClientsModule } from './clients/clients.module';
+import { PersonasModule } from './personas/personas.module';
 import { ResourcesModule } from './resources/resources.module';
 import { RulesModule } from './rules/rules.module';
 import { SharedModule } from './shared/shared.module';
@@ -25,6 +26,7 @@ import { SharedModule } from './shared/shared.module';
     ResourcesModule,
     ClaimsModule,
     ClientsModule,
+    PersonasModule,
     RulesModule,
   ],
   providers: [],
