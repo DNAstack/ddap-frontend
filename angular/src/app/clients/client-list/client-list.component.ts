@@ -7,7 +7,7 @@ import { objectToArray } from '../../shared/util';
 import { ClientService } from '../client.service';
 
 @Component({
-  selector: 'app-client-list',
+  selector: 'ddap-client-list',
   templateUrl: './client-list.component.html',
   styleUrls: ['./client-list.component.scss'],
 })

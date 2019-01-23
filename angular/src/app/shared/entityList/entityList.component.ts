@@ -5,7 +5,7 @@ import _get from 'lodash.get';
 import { JsonEditorDefaults } from '../jsonEditorDefaults';
 
 @Component({
-  selector: 'app-entity-list',
+  selector: 'ddap-entity-list',
   templateUrl: './entity-list.component.html',
   styleUrls: ['./entity-list.component.scss'],
 })

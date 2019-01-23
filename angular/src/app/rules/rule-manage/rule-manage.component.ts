@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { RuleService } from '../rule.service';
 
 @Component({
-  selector: 'app-rule-manage',
+  selector: 'ddap-rule-manage',
   templateUrl: './rule-manage.component.html',
   styleUrls: ['./rule-manage.component.scss'],
 })

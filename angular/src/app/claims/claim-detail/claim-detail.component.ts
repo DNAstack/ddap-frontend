@@ -7,7 +7,7 @@ import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 import { ClaimService } from '../claims.service';
 
 @Component({
-  selector: 'app-claim-detail',
+  selector: 'ddap-claim-detail',
   templateUrl: './claim-detail.component.html',
   styleUrls: ['./claim-detail.component.scss'],
 })

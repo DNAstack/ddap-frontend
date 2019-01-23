@@ -7,7 +7,7 @@ import { objectToArray } from '../../shared/util';
 import { ResourceService } from '../resource.service';
 
 @Component({
-  selector: 'app-resource-list',
+  selector: 'ddap-resource-list',
   templateUrl: './resource-list.component.html',
   styleUrls: ['./resource-list.component.scss'],
 })

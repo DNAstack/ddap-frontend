@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ClaimService } from '../claims.service';
 
 @Component({
-  selector: 'app-claim-manage',
+  selector: 'ddap-claim-manage',
   templateUrl: './claim-manage.component.html',
   styleUrls: ['./claim-manage.component.scss'],
 })

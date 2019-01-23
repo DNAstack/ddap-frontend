@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ClientService } from '../client.service';
 
 @Component({
-  selector: 'app-client-manage',
+  selector: 'ddap-client-manage',
   templateUrl: './client-manage.component.html',
   styleUrls: ['./client-manage.component.scss'],
 })

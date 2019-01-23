@@ -7,7 +7,7 @@ import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 import { ResourceService } from '../resource.service';
 
 @Component({
-  selector: 'app-resource-detail',
+  selector: 'ddap-resource-detail',
   templateUrl: './resource-detail.component.html',
   styleUrls: ['./resource-detail.component.scss'],
 })
