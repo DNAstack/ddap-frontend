@@ -5,7 +5,7 @@
     <textarea matInput placeholder="Resource JSON" rows="10" name="body" ngModel required></textarea>
   </mat-form-field>
   <div>
-    <button type="submit" mat-flat-button color="primary" [disabled]="!resourceForm.form.valid">
+    <button type="submit" mat-flat-button color="primary" [disabled]="!resourceForm.form.valid || resourceForm.submitted">
       Add Resource
     </button>
   </div>

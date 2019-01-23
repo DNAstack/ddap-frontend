@@ -5,7 +5,7 @@
     <textarea matInput placeholder="Client JSON" rows="10" name="body" ngModel required></textarea>
   </mat-form-field>
   <div>
-    <button type="submit" mat-flat-button color="primary" [disabled]="!clientForm.form.valid">
+    <button type="submit" mat-flat-button color="primary" [disabled]="!clientForm.form.valid || clientForm.submitted">
       Add Client
     </button>
   </div>
