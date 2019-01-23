@@ -36,8 +36,12 @@ export class JsonPanelComponent implements OnChanges {
   @ViewChild('testEditor')
   testEditor: JsonEditorComponent;
 
-  entityEditorOptions: JsonEditorOptions | any;
-  testEditorOptions: JsonEditorOptions | any;
+  @ViewChild('errorEditor')
+  errorEditor: JsonEditorComponent;
+
+  entityEditorOptions: JsonEditorOptions;
+  testEditorOptions: JsonEditorOptions;
+  errorEditorOptions: JsonEditorOptions;
 
   @Input()
   entityService: EntityService;
@@ -46,7 +50,10 @@ export class JsonPanelComponent implements OnChanges {
   ) {
     this.entityEditorOptions = new JsonEditorDefaults();
     this.testEditorOptions = new JsonEditorDefaults();
+    this.errorEditorOptions = new JsonEditorDefaults();
     this.testEditorOptions.mode = 'code';
+    this.errorEditorOptions.mode = 'code';
+    this.errorEditorOptions.onEditable = () => false;
   }
 
   ngOnChanges () {

@@ -13,13 +13,21 @@
                    class="ddap-test-title">
     {{ entity?.name }} Test
   </mat-panel-title>
-  <json-editor *ngIf="useTests &&  state === ViewState.Editing"
+  <json-editor *ngIf="useTests && state === ViewState.Editing"
                #testEditor
                [options]="testEditorOptions"
                [data]="testDto"
                (change)="updateTestDto($event)"></json-editor>
 
-  <mat-error *ngIf="error">{{ error }}</mat-error>
+  <mat-error *ngIf="error">
+    <span *ngIf="!error.apply">{{ error }}</span>
+    <span *ngIf="error.apply">Cannot save, please consider using following dtos:</span>
+  </mat-error>
+
+  <json-editor *ngIf="error && error.apply && useTests && state === ViewState.Editing"
+               #errorEditor
+               [options]="errorEditorOptions"
+               [data]="error"></json-editor>
 
   <mat-action-row *ngIf="state !== ViewState.Viewing">
     <button mat-flat-button
