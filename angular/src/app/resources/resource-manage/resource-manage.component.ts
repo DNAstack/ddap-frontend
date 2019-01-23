@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { ResourceService } from '../resource.service';
 
@@ -11,13 +12,13 @@ export class ResourceManageComponent implements OnInit {
 
   resource: any = {};
 
-  constructor(private resourceService: ResourceService) { }
+  constructor(private resourceService: ResourceService, private router: Router) { }
 
   ngOnInit() {
   }
 
   onSubmit(value: any) {
     this.resourceService.save(JSON.parse(value.body))
-      .subscribe(() => this.resource = {});
+      .subscribe(() => this.router.navigate(['/resources']));
   }
 }
