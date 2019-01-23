@@ -1,0 +1,9 @@
+<h2>Personas</h2>
+
+<div>
+  <a mat-mini-fab routerLink="/personas/manage/add">
+    <mat-icon aria-label="Add persona">add</mat-icon>
+  </a>
+</div>
+
+<ddap-entity-list [routePrefix]="'/personas/'" [entityList]="personas$" [descriptionProperty]="'state'"></ddap-entity-list>
