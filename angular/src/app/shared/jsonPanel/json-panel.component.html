@@ -35,7 +35,6 @@
             (click)="save()"
             [disabled]="state === ViewState.Submitting">Submit
     </button>
-
     <button mat-flat-button
             (click)="cancel()"
             [disabled]="state === ViewState.Submitting">Cancel
@@ -45,6 +44,11 @@
     <button mat-flat-button
             color="primary"
             (click)="edit()">Edit
+    </button>
+    <button mat-flat-button
+            color="accent"
+            (click)="remove()"
+            [disabled]="state === ViewState.Submitting">Remove
     </button>
   </mat-action-row>
 </mat-expansion-panel>

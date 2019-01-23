@@ -85,4 +85,9 @@ export class ResourceService implements EntityService {
       { params, headers }
     );
   }
+
+  remove(id: string): Observable<any> {
+    // TODO:
+    return undefined;
+  }
 }
