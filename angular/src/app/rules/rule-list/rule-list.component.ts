@@ -7,7 +7,7 @@ import { objectToArray } from '../../shared/util';
 import { RuleService } from '../rule.service';
 
 @Component({
-  selector: 'app-rule-list',
+  selector: 'ddap-rule-list',
   templateUrl: './rule-list.component.html',
   styleUrls: ['./rule-list.component.scss'],
 })

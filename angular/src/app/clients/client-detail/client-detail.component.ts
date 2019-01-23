@@ -7,7 +7,7 @@ import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 import { ClientService } from '../client.service';
 
 @Component({
-  selector: 'app-client-detail',
+  selector: 'ddap-client-detail',
   templateUrl: './client-detail.component.html',
   styleUrls: ['./client-detail.component.scss'],
 })

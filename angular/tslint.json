@@ -120,8 +120,8 @@
       "check-type",
       "check-module"
     ],
-    "directive-selector": [true, "attribute", "app", "camelCase"],
-    "component-selector": [true, "element", "app", "kebab-case"],
+    "directive-selector": [true, "attribute", "ddap", "camelCase"],
+    "component-selector": [true, "element", "ddap", "kebab-case"],
     "angular-whitespace": [true, "check-interpolation"],
     "no-output-on-prefix": true,
     "use-input-property-decorator": true,

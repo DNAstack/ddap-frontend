@@ -13,7 +13,7 @@ enum ViewState {
 }
 
 @Component({
-  selector: 'app-rule-detail',
+  selector: 'ddap-rule-detail',
   templateUrl: './rule-detail.component.html',
   styleUrls: ['./rule-detail.component.scss'],
 })

@@ -7,7 +7,7 @@ import { objectToArray } from '../../shared/util';
 import { ClaimService } from '../claims.service';
 
 @Component({
-  selector: 'app-claim-list',
+  selector: 'ddap-claim-list',
   templateUrl: './claim-list.component.html',
   styleUrls: ['./claim-list.component.scss'],
 })

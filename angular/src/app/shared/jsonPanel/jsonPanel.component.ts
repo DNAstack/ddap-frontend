@@ -12,7 +12,7 @@ enum ViewState {
 }
 
 @Component({
-  selector: 'app-json-panel',
+  selector: 'ddap-json-panel',
   templateUrl: './json-panel.component.html',
   styleUrls: ['./json-panel.component.scss'],
 })
