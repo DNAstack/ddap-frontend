@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Observable } from 'rxjs/Observable';
 
@@ -46,8 +47,7 @@ export class JsonPanelComponent implements OnChanges {
   @Input()
   entityService: EntityService;
 
-  constructor(
-  ) {
+  constructor(private router: Router) {
     this.entityEditorOptions = new JsonEditorDefaults();
     this.testEditorOptions = new JsonEditorDefaults();
     this.errorEditorOptions = new JsonEditorDefaults();
@@ -98,6 +98,18 @@ export class JsonPanelComponent implements OnChanges {
   edit() {
     this.state = ViewState.Editing;
     this.setEditorMode('code');
+  }
+
+  remove() {
+    this.state = ViewState.Submitting;
+    this.entityService.remove(this.entity.name)
+      .subscribe(() => {
+      const routeToListView = this.router.url.substring(0, this.router.url.lastIndexOf('/'));
+        this.router.navigate([routeToListView]);
+      }, e => {
+        this.state = ViewState.Viewing;
+        this.error = e.error;
+      });
   }
 
   private setEditorMode(mode) {
