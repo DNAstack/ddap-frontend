@@ -5,7 +5,7 @@
     </mat-panel-title>
   </mat-expansion-panel-header>
   <json-editor #entityEditor
-               [options]="editorOptions"
+               [options]="entityEditorOptions"
                [data]="entity"
                (change)="updateResourceDto($event)"></json-editor>
 
@@ -15,7 +15,7 @@
   </mat-panel-title>
   <json-editor *ngIf="useTests &&  state === ViewState.Editing"
                #testEditor
-               [options]="editorOptions"
+               [options]="testEditorOptions"
                [data]="testDto"
                (change)="updateTestDto($event)"></json-editor>
 
