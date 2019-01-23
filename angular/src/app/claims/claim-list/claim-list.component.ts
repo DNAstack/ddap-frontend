@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {JsonEditorComponent} from 'ang-jsoneditor';
-import {Observable} from 'rxjs/Observable';
-import {map} from 'rxjs/operators';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { JsonEditorComponent } from 'ang-jsoneditor';
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 
-import {objectToArray} from '../../shared/util';
-import {ClaimService} from '../claims.service';
+import { objectToArray } from '../../shared/util';
+import { ClaimService } from '../claims.service';
 
 @Component({
   selector: 'app-claim-list',

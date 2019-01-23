@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
-import {flatMap} from 'rxjs/operators';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { flatMap } from 'rxjs/operators';
 
-import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
-import {ResourceService} from '../resource.service';
+import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
+import { ResourceService } from '../resource.service';
 
 @Component({
   selector: 'app-resource-detail',
