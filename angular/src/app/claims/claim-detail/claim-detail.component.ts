@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
-import {flatMap, pluck} from 'rxjs/operators';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { flatMap, pluck } from 'rxjs/operators';
 
-import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
-import {ClaimService} from '../claims.service';
+import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
+import { ClaimService } from '../claims.service';
 
 @Component({
   selector: 'app-claim-detail',

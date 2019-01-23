@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
-import {flatMap, pluck} from 'rxjs/operators';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { flatMap, pluck } from 'rxjs/operators';
 
-import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
-import {ClientService} from '../client.service';
+import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
+import { ClientService } from '../client.service';
 
 @Component({
   selector: 'app-client-detail',

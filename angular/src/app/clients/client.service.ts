@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import {ConfigEntityService} from '../shared/ConfigEntityService';
+import { ConfigEntityService } from '../shared/ConfigEntityService';
 
 @Injectable({
   providedIn: 'root',

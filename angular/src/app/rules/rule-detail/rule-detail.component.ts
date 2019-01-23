@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
-import {flatMap, pluck} from 'rxjs/operators';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { flatMap, pluck } from 'rxjs/operators';
 
-import {JsonEditorDefaults} from '../../shared/jsonEditorDefaults';
-import {RuleService} from '../rule.service';
+import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
+import { RuleService } from '../rule.service';
 
 enum ViewState {
   Editing,

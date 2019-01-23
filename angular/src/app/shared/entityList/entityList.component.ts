@@ -1,8 +1,8 @@
-import {Component, Input, ViewChild} from '@angular/core';
-import {JsonEditorComponent, JsonEditorOptions} from 'ang-jsoneditor';
+import { Component, Input, ViewChild } from '@angular/core';
+import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import _get from 'lodash.get';
 
-import {JsonEditorDefaults} from '../jsonEditorDefaults';
+import { JsonEditorDefaults } from '../jsonEditorDefaults';
 
 @Component({
   selector: 'app-entity-list',

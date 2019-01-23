@@ -1,4 +1,4 @@
-import {JsonEditorOptions} from 'ang-jsoneditor';
+import { JsonEditorOptions } from 'ang-jsoneditor';
 
 export class JsonEditorDefaults extends JsonEditorOptions {
 

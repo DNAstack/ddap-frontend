@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {JsonEditorComponent} from 'ang-jsoneditor';
-import {Observable} from 'rxjs/Observable';
-import {map} from 'rxjs/operators';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { JsonEditorComponent } from 'ang-jsoneditor';
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 
-import {objectToArray} from '../../shared/util';
-import {RuleService} from '../rule.service';
+import { objectToArray } from '../../shared/util';
+import { RuleService } from '../rule.service';
 
 @Component({
   selector: 'app-rule-list',
