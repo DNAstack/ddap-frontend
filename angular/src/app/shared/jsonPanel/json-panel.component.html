@@ -4,9 +4,20 @@
       {{ entity?.name }} JSON
     </mat-panel-title>
   </mat-expansion-panel-header>
-  <json-editor [options]="editorOptions"
+  <json-editor #entityEditor
+               [options]="editorOptions"
                [data]="entity"
                (change)="updateResourceDto($event)"></json-editor>
+
+  <mat-panel-title *ngIf="useTests && state === ViewState.Editing"
+                   class="ddap-test-title">
+    {{ entity?.name }} Test
+  </mat-panel-title>
+  <json-editor *ngIf="useTests &&  state === ViewState.Editing"
+               #testEditor
+               [options]="editorOptions"
+               [data]="testDto"
+               (change)="updateTestDto($event)"></json-editor>
 
   <mat-error *ngIf="error">{{ error }}</mat-error>
 

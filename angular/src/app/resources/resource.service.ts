@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { first, mergeMap, pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
+import { EntityService } from '../shared/EntityService';
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
 
@@ -65,14 +66,18 @@ export class ResourceService implements EntityService {
     );
   }
 
-  update(resource: any): Observable<any> {
+  update(resource: any, test?: any): Observable<any> {
     const params = {
       persona: 'nci_researcher',
     };
     const resourceName = resource.name;
-    const resourceChange = {
+    const resourceChange: any = {
       item: resource,
     };
+
+    if (test) {
+      resourceChange.apply = test;
+    }
 
     return this.http.patch(
       environment.ddapApiUrl + '/config/resources/' + resourceName,
