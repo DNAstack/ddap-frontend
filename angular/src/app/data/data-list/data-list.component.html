@@ -1,0 +1,20 @@
+<h2>Explore Data</h2>
+
+<mat-card class="ddap-card" *ngFor="let resource of (resources$ | async); let i = index">
+  <mat-card-header>
+    <mat-icon mat-list-icon>tune</mat-icon>
+    <mat-card-title>{{ resource.name }}</mat-card-title>
+  </mat-card-header>
+  <img mat-card-image src="http://lorempixel.com/400/400/business/{{ i }}" alt="Random photo">
+  <mat-card-content>
+    <p>{{ resource.ui.desc }}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-flat-button
+            color="primary"
+            [routerLink]="['/data/', resource.name]">Details</button>
+  </mat-card-actions>
+</mat-card>
+
+
+
