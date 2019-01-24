@@ -1,0 +1,10 @@
+@import '~jsoneditor/dist/jsoneditor.min.css';
+
+div.jsoneditor {
+  border: none;
+
+  div.jsoneditor-tree div.jsoneditor-tree-inner {
+    padding-bottom: 0;
+  }
+}
+
