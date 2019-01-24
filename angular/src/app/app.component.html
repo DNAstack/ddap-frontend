@@ -48,9 +48,9 @@
             <mat-icon mat-list-icon>lock</mat-icon>
             <h4 mat-line>Claims</h4>
           </mat-list-item>
-          <mat-list-item>
-            <mat-icon mat-list-icon>view_quilt</mat-icon>
-            <h4 mat-line>Views</h4>
+          <mat-list-item [routerLink]="['/grants']">
+            <mat-icon mat-list-icon>lock_open</mat-icon>
+            <h4 mat-line>Grants</h4>
           </mat-list-item>
           <mat-list-item [routerLink]="['/rules']">
             <mat-icon mat-list-icon>tune</mat-icon>

@@ -1,0 +1,12 @@
+<h2>Add Grant</h2>
+
+<form #grantForm="ngForm" (ngSubmit)="onSubmit(grantForm.value)">
+  <mat-form-field>
+    <textarea matInput placeholder="Grant JSON" rows="10" name="body" ngModel required></textarea>
+  </mat-form-field>
+  <div>
+    <button type="submit" mat-flat-button color="primary" [disabled]="!grantForm.form.valid || grantForm.submitted">
+      Add Grant
+    </button>
+  </div>
+</form>
