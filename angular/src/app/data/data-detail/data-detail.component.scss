@@ -1,0 +1,28 @@
+.ddap-container {
+  display: flex;
+  flex-flow: row wrap;
+
+  > * {
+    padding: 1rem;
+    flex: 1 100%;
+  }
+
+  .ddap-resource-header {
+  }
+
+  .ddap-resource-image {
+
+    flex-basis: auto;
+    order: 1;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .ddap-resource-info {
+
+    flex-basis: auto;
+    order: 2;
+  }
+}

@@ -1,0 +1,56 @@
+<h2>
+  <mat-icon mat-list-icon>tune</mat-icon>
+  {{ resource?.ui.displayAs }}</h2>
+
+<div class="ddap-container">
+  <header class="ddap-resource-header">
+    <button mat-button [routerLink]="['/data']">&lt; BACK</button>
+  </header>
+  <div class="ddap-resource-image">
+
+    <img src="http://lorempixel.com/400/400/business/" alt="Random photo">
+  </div>
+  <div class="ddap-resource-info">
+    <p>{{ resource?.ui.desc }}</p>
+    <mat-list>
+      <mat-list-item *ngFor="let view of views">
+        <mat-icon mat-list-icon>view_quilt</mat-icon>
+        <h4 mat-line>{{ view.name }}</h4>
+
+        <mat-form-field *ngIf="resource.views[view.name].token"
+                        mat-line
+                        class="example-form-field">
+          <input matInput
+                 disabled
+                 type="text"
+                 placeholder="Access Token"
+                 [(ngModel)]="resource.views[view.name].token">
+
+          <button mat-mat-flat-button
+                  matSuffix
+                  mat-icon-button
+                  ngxClipboard
+                  [cbContent]="resource.views[view.name].token"
+                  aria-label="Copy to clipboard">
+            <mat-icon>file_copy</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <button *ngIf="!resource.views[view.name].url && !resource.views[view.name].token"
+                mat-flat-button
+                color="primary"
+                (click)="getAccess(view.name)">Get Access
+        </button>
+
+        <a *ngIf="resource.views[view.name].url"
+           mat-raised-button
+           color="accent"
+           href="{{resource.views[view.name].url}}">Access</a>
+
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>
+
+
