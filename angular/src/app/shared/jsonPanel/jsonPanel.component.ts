@@ -18,7 +18,7 @@ enum ViewState {
   styleUrls: ['./json-panel.component.scss'],
 })
 export class JsonPanelComponent implements OnChanges {
-  error: string = null;
+  error: any = null;
 
   @Input()
   useTests = false;
