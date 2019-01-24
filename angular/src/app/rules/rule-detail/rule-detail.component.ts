@@ -31,7 +31,7 @@ export class RuleDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private ruleService: RuleService
+    public ruleService: RuleService
   ) {
     this.editorOptions = new JsonEditorDefaults();
   }
