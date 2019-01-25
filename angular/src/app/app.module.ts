@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { ClaimsModule } from './claims/claims.module';
 import { ClientsModule } from './clients/clients.module';
 import { DataModule } from './data/data.module';
+import { DefinitionsModule } from './definitions/definitions.module';
 import { GrantsModule } from './grants/grants.module';
 import { PassportsModule } from './passports/passports.module';
 import { PersonasModule } from './personas/personas.module';
@@ -30,6 +31,7 @@ import { SharedModule } from './shared/shared.module';
     ClaimsModule,
     ClientsModule,
     PassportsModule,
+    DefinitionsModule,
     PersonasModule,
     GrantsModule,
     RulesModule,

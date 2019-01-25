@@ -1,0 +1,12 @@
+<h2>Add Claim Definition</h2>
+
+<form #definitionForm="ngForm" (ngSubmit)="onSubmit(definitionForm.value)">
+  <mat-form-field>
+    <textarea matInput placeholder="Claim Definition JSON" rows="10" name="body" ngModel required></textarea>
+  </mat-form-field>
+  <div>
+    <button type="submit" mat-flat-button color="primary" [disabled]="!definitionForm.form.valid || definitionForm.submitted">
+      Add Claim Definition
+    </button>
+  </div>
+</form>

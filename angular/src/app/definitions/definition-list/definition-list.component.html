@@ -1,0 +1,9 @@
+<h2>Claim Definitions</h2>
+
+<div>
+  <a mat-mini-fab routerLink="/definitions/manage/add">
+    <mat-icon aria-label="Add claim definition">add</mat-icon>
+  </a>
+</div>
+
+<ddap-entity-list [routePrefix]="'/definitions/'" [entityList]="definitions$" [descriptionProperty]="'type'"></ddap-entity-list>
