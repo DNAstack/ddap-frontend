@@ -1,0 +1,9 @@
+<h2>Passports</h2>
+
+<div>
+  <a mat-mini-fab routerLink="/passports/manage/add">
+    <mat-icon aria-label="Add passport">add</mat-icon>
+  </a>
+</div>
+
+<ddap-entity-list [routePrefix]="'/passports/'" [entityList]="passports$" [descriptionProperty]="'source'"></ddap-entity-list>

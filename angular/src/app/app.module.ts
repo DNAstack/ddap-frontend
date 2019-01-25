@@ -9,6 +9,7 @@ import { ClaimsModule } from './claims/claims.module';
 import { ClientsModule } from './clients/clients.module';
 import { DataModule } from './data/data.module';
 import { GrantsModule } from './grants/grants.module';
+import { PassportsModule } from './passports/passports.module';
 import { PersonasModule } from './personas/personas.module';
 import { ResourcesModule } from './resources/resources.module';
 import { RulesModule } from './rules/rules.module';
@@ -28,6 +29,7 @@ import { SharedModule } from './shared/shared.module';
     ResourcesModule,
     ClaimsModule,
     ClientsModule,
+    PassportsModule,
     PersonasModule,
     GrantsModule,
     RulesModule,
