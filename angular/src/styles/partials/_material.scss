@@ -2,11 +2,15 @@ mat-form-field {
   width: 100%;
 }
 
-mat-nav-list .mat-list-item-content {
-  text-align: center !important;
-  flex-direction: row-reverse !important;
-}
+ddap-root {
+  .mat-list-base .mat-list-item,
+  .mat-list-base .mat-list-option {
+    .mat-list-item-content {
+      flex-direction: row-reverse;
+    }
 
-mat-nav-list .icon {
-  width: 4rem;
+    .icon {
+      width: 4rem;
+    }
+  }
 }
