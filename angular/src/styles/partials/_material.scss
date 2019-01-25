@@ -14,5 +14,11 @@ ddap-root {
         width: 4rem;
       }
     }
+
+    mat-expansion-panel {
+      .mat-expansion-panel-body {
+        padding: 0;
+      }
+    }
   }
 }
