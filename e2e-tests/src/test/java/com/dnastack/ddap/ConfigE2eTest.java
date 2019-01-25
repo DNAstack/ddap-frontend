@@ -76,7 +76,7 @@ public class ConfigE2eTest extends BaseE2eTest {
                 .log().uri()
                 .auth().preemptive().basic(basicUsername, basicPassword)
         .when()
-                .get("/dam/v1alpha/resources?persona=nci_researcher")
+                .get("/dam/v1alpha/resources")
         .then()
                 .log().ifValidationFails()
                 .contentType("application/json")

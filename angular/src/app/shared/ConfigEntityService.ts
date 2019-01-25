@@ -14,7 +14,6 @@ export class ConfigEntityService implements EntityService {
 
   get(params?): Observable<any> {
     params = params || {};
-    params.persona = 'nci_researcher';
 
     return this.http.get<any[]>(environment.ddapApiUrl + '/config', { params })
       .pipe(
@@ -24,7 +23,6 @@ export class ConfigEntityService implements EntityService {
 
   save(dto: any): Observable<any> {
     const params = {
-      persona: 'nci_researcher',
     };
     const id = dto.name;
 
@@ -43,7 +41,6 @@ export class ConfigEntityService implements EntityService {
 
   remove(id: string): Observable<any> {
     const params = {
-      persona: 'nci_researcher',
     };
 
     return this.http.get<any[]>(environment.ddapApiUrl + '/config', { params })
@@ -57,7 +54,6 @@ export class ConfigEntityService implements EntityService {
 
   private updateConfig(config: object): Observable<any> {
     const params = {
-      persona: 'nci_researcher',
     };
 
     return this.http.put(

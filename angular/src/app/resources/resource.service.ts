@@ -17,7 +17,6 @@ export class ResourceService implements EntityService {
 
   getAccessRequestToken(resource, view): Observable<any[]> {
     const params = {
-      persona: 'nci_researcher',
     };
 
     return this.http.get<any[]>(`${environment.ddapApiUrl}/resources/${resource}/views/${view}`, { params })
@@ -35,7 +34,6 @@ export class ResourceService implements EntityService {
 
   getResources(params?): Observable<any[]> {
     params = params || {};
-    params.persona = 'nci_researcher';
 
     return this.http.get<any[]>(environment.ddapApiUrl + '/resources', { params })
       .pipe(
@@ -45,7 +43,6 @@ export class ResourceService implements EntityService {
 
   getResource(resourceName: string, params?): Observable<any> {
     params = params || {};
-    params.persona = 'nci_researcher';
 
     return this.getResources(params).pipe(
       mergeMap(resources => resources),
@@ -55,7 +52,6 @@ export class ResourceService implements EntityService {
 
   save(resourceChange: any): Observable<any> {
     const params = {
-      persona: 'nci_researcher',
     };
     const resourceName = resourceChange.item.name;
 
@@ -68,7 +64,6 @@ export class ResourceService implements EntityService {
 
   update(resource: any, test?: any): Observable<any> {
     const params = {
-      persona: 'nci_researcher',
     };
     const resourceName = resource.name;
     const resourceChange: any = {
