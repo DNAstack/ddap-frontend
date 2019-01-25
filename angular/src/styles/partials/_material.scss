@@ -21,4 +21,11 @@ ddap-root {
       }
     }
   }
+
+  mat-sidenav-content {
+    .mat-expansion-panel-header-description,
+    .mat-expansion-panel-header-title {
+      flex-basis: 100%;
+    }
+  }
 }

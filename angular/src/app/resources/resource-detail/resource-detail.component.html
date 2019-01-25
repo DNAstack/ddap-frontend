@@ -2,6 +2,8 @@
 
 <p>{{ resource?.ui.desc }}</p>
 
+<ddap-nav-back navigateTo="/resources"></ddap-nav-back>
+
 <ddap-json-panel [useTests]="true"
                 [entityService]="resourceService"
                 [entity]="resource"></ddap-json-panel>
