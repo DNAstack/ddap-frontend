@@ -19,11 +19,13 @@ import { AppRoutingModule } from '../app-routing.module';
 
 import { EntityListComponent } from './entityList/entityList.component';
 import { JsonPanelComponent } from './jsonPanel/jsonPanel.component';
+import { NavBackComponent } from './navBack/navBack.component';
 
 @NgModule({
   declarations: [
     JsonPanelComponent,
     EntityListComponent,
+    NavBackComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -60,6 +62,7 @@ import { JsonPanelComponent } from './jsonPanel/jsonPanel.component';
     MatListModule,
 
     NgJsonEditorModule,
+    NavBackComponent,
     JsonPanelComponent,
     EntityListComponent,
   ],
