@@ -3,14 +3,16 @@ mat-form-field {
 }
 
 ddap-root {
-  .mat-list-base .mat-list-item,
-  .mat-list-base .mat-list-option {
-    .mat-list-item-content {
-      flex-direction: row-reverse;
-    }
+  mat-sidenav {
+    .mat-list-base .mat-list-item,
+    .mat-list-base .mat-list-option {
+      .mat-list-item-content {
+        flex-direction: row-reverse;
+      }
 
-    .icon {
-      width: 4rem;
+      .icon {
+        width: 4rem;
+      }
     }
   }
 }

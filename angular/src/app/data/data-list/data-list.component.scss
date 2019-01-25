@@ -1,5 +1,10 @@
 .ddap-card {
-  max-width: 30rem;
+  max-width: 20rem;
   display: inline-block;
   margin-right: 1rem;
+  margin-bottom: 1rem;
+
+  mat-card-title {
+    word-break: break-all;
+  }
 }
