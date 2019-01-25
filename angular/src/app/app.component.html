@@ -5,20 +5,19 @@
 
     <mat-nav-list>
       <mat-list-item>
-        <mat-icon mat-list-icon>account_circle</mat-icon>
-        <h4 mat-line>John Doe</h4>
+        <h4 mat-line class="text--bold">John Doe</h4>
         <a mat-line href="">logout</a>
       </mat-list-item>
       <mat-list-item [routerLink]="['/data']">
-        <mat-icon mat-list-icon>search</mat-icon>
+        <mat-icon class="icon icon-explore"></mat-icon>
         <h4 mat-line>Explore Data</h4>
       </mat-list-item>
       <mat-list-item>
-        <mat-icon mat-list-icon>collections_bookmark</mat-icon>
+        <mat-icon class="icon icon-collections"></mat-icon>
         <h4 mat-line>My Collections</h4>
       </mat-list-item>
       <mat-list-item>
-        <mat-icon mat-list-icon>person</mat-icon>
+        <mat-icon class="icon icon-identity"></mat-icon>
         <h4 mat-line>My Identity</h4>
       </mat-list-item>
     </mat-nav-list>
@@ -33,31 +32,31 @@
 
         <mat-nav-list>
           <mat-list-item [routerLink]="['/resources']">
-            <mat-icon mat-list-icon>insert_drive_file</mat-icon>
+            <mat-icon class="icon icon-resources"></mat-icon>
             <h4 mat-line>Resources</h4>
           </mat-list-item>
           <mat-list-item [routerLink]="['/personas']">
-            <mat-icon mat-list-icon>group</mat-icon>
+            <mat-icon class="icon icon-identities"></mat-icon>
             <h4 mat-line>Identities</h4>
           </mat-list-item>
           <mat-list-item [routerLink]="['/clients']">
-            <mat-icon mat-list-icon>settings_input_component</mat-icon>
+            <mat-icon class="icon icon-clients"></mat-icon>
             <h4 mat-line>Clients</h4>
           </mat-list-item>
           <mat-list-item [routerLink]="['/claims']">
-            <mat-icon mat-list-icon>lock</mat-icon>
+            <mat-icon class="icon icon-claims"></mat-icon>
             <h4 mat-line>Claims</h4>
           </mat-list-item>
           <mat-list-item [routerLink]="['/grants']">
-            <mat-icon mat-list-icon>lock_open</mat-icon>
+            <mat-icon class="icon icon-views"></mat-icon>
             <h4 mat-line>Grants</h4>
           </mat-list-item>
           <mat-list-item [routerLink]="['/rules']">
-            <mat-icon mat-list-icon>tune</mat-icon>
+            <mat-icon class="icon icon-rules"></mat-icon>
             <h4 mat-line>Rules</h4>
           </mat-list-item>
           <mat-list-item>
-            <mat-icon mat-list-icon>build</mat-icon>
+            <mat-icon class="icon icon-tests"></mat-icon>
             <h4 mat-line>Tests</h4>
           </mat-list-item>
         </mat-nav-list>

@@ -1,8 +1,3 @@
-<h2>
-  <mat-icon mat-list-icon>lock</mat-icon>
-  {{ claim?.name }}</h2>
+<h2>{{ claim?.name }}</h2>
 
-<p>{{ claim?.claimId }}</p>
-
-<ddap-json-panel [entityService]="claimService"
-            [entity]="claim"></ddap-json-panel>
+<ddap-json-panel [entityService]="claimService" [entity]="claim"></ddap-json-panel>

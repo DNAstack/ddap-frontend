@@ -1,8 +1,3 @@
-<h2>
-  <mat-icon mat-list-icon>settings_input_component</mat-icon>
-  {{ client?.name }}</h2>
+<h2>{{ client?.name }}</h2>
 
-<p>{{ client?.clientId }}</p>
-
-<ddap-json-panel [entityService]="clientService"
-            [entity]="client"></ddap-json-panel>
+<ddap-json-panel [entityService]="clientService" [entity]="client"></ddap-json-panel>
