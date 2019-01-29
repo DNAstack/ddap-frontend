@@ -11,7 +11,21 @@ ddap-root {
       }
 
       .icon {
+        margin-left: 1rem;
         width: 4rem;
+      }
+    }
+
+    mat-list-item.active-nav-link {
+      .mat-list-item-content {
+        background: #dadada;
+      }
+    }
+
+    .sub-nav {
+      .mat-list-item-ripple,
+      .mat-ripple {
+        margin-left: -1rem;
       }
     }
 
