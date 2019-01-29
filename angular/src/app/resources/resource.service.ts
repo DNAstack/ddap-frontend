@@ -79,7 +79,7 @@ export class ResourceService implements EntityService {
       resourceChange.apply = test;
     }
 
-    return this.http.patch(
+    return this.http.put(
       environment.ddapApiUrl + '/config/resources/' + resourceName,
       resourceChange,
       { params, headers }
