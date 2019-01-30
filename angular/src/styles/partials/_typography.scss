@@ -77,8 +77,14 @@
   content: "\6f";
 }
 
-// -------------------------------
+.text-color--subtle {
+  color: $navbar-font-subtle-color;
+}
 
-.text--bold {
-  font-weight: bold !important;
+.text-size--small {
+  font-size: 0.65rem;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }

@@ -1,0 +1,15 @@
+// Navigation
+
+$navbar-main-background: #2b2b2b;
+$navbar-expanded-background: #222322;
+$navbar-selected-background: #000;
+$navbar-font-main-color: #e2e2e2;
+$navbar-font-subtle-color: #585859;
+$navbar-font-accent-color: #00bdd4;
+$navbar-icon-font-main-color: #888888;
+$navbar-border: 1px solid $navbar-font-subtle-color;
+
+// Progress bar
+
+$progressbar-background: $navbar-font-main-color;
+$progressbar-fill-background: $navbar-font-accent-color;
