@@ -57,7 +57,7 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory {
 		Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
 		URI routeUri = route == null ? UNKNOWN_ROUTE_PLACEHOLDER : route.getUri();
 
-		String requestPathAndQuery = requestUri.getPath() + requestUri.getQuery();
+		String requestPathAndQuery = requestUri.getPath() + "?" + requestUri.getQuery();
 		URI calculatedRoute = routeUri.resolve(requestPathAndQuery);
 		log.info(">>> {} {}", request.getMethodValue(), calculatedRoute);
 	}
