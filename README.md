@@ -58,7 +58,7 @@ java -jar target/ddap-frontend-0.0.1-SNAPSHOT.jar
 (You will want to set the above DAM_* environment variables to point to a DAM
 server if you don't have one running locally)
 
-Then visit http://localhost:8080/index.html
+Then visit http://localhost:8085/index.html
 
 TODO: figure out how to get Spring Webflux to serve the static
 `index.html` at `/`.

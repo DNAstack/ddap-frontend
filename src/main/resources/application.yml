@@ -1,3 +1,6 @@
+server:
+  port: 8085
+
 dam:
   base-url: http://localhost:3000/
   client-id: local-dam-client-id
@@ -8,6 +11,7 @@ idp:
   client-secret: local-dam-client-secret
 
 ddap:
+  public-uri: http://localhost:8085
   cors:
     origins: "http://localhost:4200"
 
