@@ -2,23 +2,87 @@ mat-form-field {
   width: 100%;
 }
 
+.mat-progress-bar-fill::after {
+  background-color: $progressbar-fill-background;
+}
+
+.mat-progress-bar-buffer {
+  background-color: $progressbar-background;
+}
+
 ddap-root {
   mat-sidenav {
-    .mat-list-base .mat-list-item,
-    .mat-list-base .mat-list-option {
-      .mat-list-item-content {
-        flex-direction: row-reverse;
-      }
+    width: 15rem;
 
-      .icon {
-        margin-left: 1rem;
-        width: 4rem;
+    h1 {
+      color: #fff;
+      font-size: 3rem;
+      margin: 0;
+      padding: 1rem 1rem 1rem 1.5rem;
+      border-bottom: $navbar-border
+    }
+
+    h4 {
+      color: $navbar-font-main-color;
+    }
+
+    button:last-child {
+      padding-left: 1.5rem;
+      letter-spacing: 0.07rem;
+    }
+
+    .credentials-username {
+      a {
+        color: $navbar-font-subtle-color;
+        font-size: 0.9rem;
+      }
+    }
+
+    .credentials-initials {
+      border-radius: 50%;
+      background: $navbar-icon-font-main-color;
+      padding: 0.5rem;
+      margin-left: 0.5rem;
+      margin-right: 1rem;
+      color: $navbar-font-main-color;
+    }
+
+    .mat-drawer-inner-container,
+    .mat-expansion-panel {
+      background: $navbar-main-background;
+    }
+
+    .mat-list-base {
+      padding-top: 0;
+
+      .mat-list-item {
+        height: 3.5rem;
+
+        .mat-list-item-content {
+          flex-direction: row-reverse;
+        }
       }
     }
 
     mat-list-item.active-nav-link {
       .mat-list-item-content {
-        background: #dadada;
+        margin-left: 0.5rem;
+        border-top-left-radius: 0.5rem;
+        border-bottom-left-radius: 0.5rem;
+        background: $navbar-selected-background;
+      }
+
+      .icon {
+        margin-left: 0;
+        color: $navbar-font-accent-color;
+      }
+    }
+
+    mat-list-item {
+      .icon {
+        color: $navbar-icon-font-main-color;
+        margin-left: 0.5rem;
+        width: 3.2rem;
       }
     }
 
@@ -27,12 +91,66 @@ ddap-root {
       .mat-ripple {
         margin-left: -1rem;
       }
+
+      .icon {
+        color: $navbar-font-subtle-color;
+      }
     }
 
-    mat-expansion-panel {
-      .mat-expansion-panel-body {
-        padding: 0;
+    .mat-accordion {
+      .mat-expansion-panel:first-of-type,
+      .mat-expansion-panel:last-of-type {
+        border-radius: 0;
       }
+    }
+
+    .accordion-wrapper {
+      border-top: $navbar-border;
+    }
+
+    .mat-expansion-panel-header-title {
+      flex-direction: column;
+    }
+
+    .mat-expansion-panel-header-title,
+    span.mat-expansion-indicator::after {
+      color: $navbar-font-main-color;
+    }
+
+    .mat-expansion-panel-body {
+      padding: 0;
+    }
+
+    .mat-expansion-panel-header {
+      padding: 1rem 1rem 0.5rem 1.5rem;
+    }
+
+    .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled='true']).cdk-keyboard-focused,
+    .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled='true']).cdk-program-focused,
+    .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled='true']):hover,
+    .mat-expansion-panel-header:focus,
+    .mat-expansion-panel-header:hover,
+    .mat-expansion-panel:not(.mat-expanded):focus,
+    .mat-expansion-panel:not(.mat-expanded):hover,
+    .mat-expansion-panel-header.mat-expanded:focus,
+    .mat-expansion-panel-header.mat-expanded:hover {
+      background: $navbar-expanded-background;
+    }
+
+    .mat-expansion-panel:not([class*='mat-elevation-z']) {
+      box-shadow: none;
+    }
+
+    .mat-expansion-panel.mat-expanded {
+      background: $navbar-expanded-background;
+    }
+
+    .mat-expansion-panel-header.mat-expanded ~ .mat-expansion-panel-content .mat-expansion-panel-body {
+      border-bottom: $navbar-border;
+    }
+
+    .mat-expansion-panel-spacing {
+      margin: 0;
     }
   }
 

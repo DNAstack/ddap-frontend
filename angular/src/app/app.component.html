@@ -1,73 +1,86 @@
 <mat-progress-bar mode="determinate" [value]="loader.progress$ | async"></mat-progress-bar>
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="side" [opened]="true">
-    <h1><mat-icon mat-list-icon>fingerprint</mat-icon> DDAP</h1>
+    <h1>DDAP</h1>
 
     <mat-nav-list>
-      <mat-list-item>
-        <h4 mat-line class="text--bold">John Doe</h4>
-        <a mat-line href="">logout</a>
+      <mat-list-item class="credentials-username">
+        <h4 mat-line>John Doe</h4>
+        <a mat-line href="">Log out</a>
+        <div class="credentials-initials">JD</div>
       </mat-list-item>
       <mat-list-item [routerLink]="['/data']" [routerLinkActive]="['active-nav-link']">
         <mat-icon class="icon icon-explore"></mat-icon>
-        <h4 mat-line>Explore Data</h4>
+        <h4 mat-line>Explore data</h4>
       </mat-list-item>
       <mat-list-item>
         <mat-icon class="icon icon-collections"></mat-icon>
-        <h4 mat-line>My Collections</h4>
+        <h4 mat-line>My collections</h4>
       </mat-list-item>
       <mat-list-item>
         <mat-icon class="icon icon-identity"></mat-icon>
-        <h4 mat-line>My Identity</h4>
+        <h4 mat-line>My identity</h4>
       </mat-list-item>
     </mat-nav-list>
 
-    <mat-accordion>
-      <mat-expansion-panel [expanded]="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Autism Repository
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+    <div class="accordion-wrapper">
+      <mat-accordion [multi]="false">
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span>Mount Sinai Hospital</span>
+              <span>Autism Repository</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-        <mat-nav-list class="sub-nav">
-          <mat-list-item [routerLink]="['/resources']" [routerLinkActive]="['active-nav-link']">
-            <mat-icon class="icon icon-resources"></mat-icon>
-            <h4 mat-line>Resources</h4>
-          </mat-list-item>
-          <mat-list-item [routerLink]="['/personas']" [routerLinkActive]="['active-nav-link']">
-            <mat-icon class="icon icon-identities"></mat-icon>
-            <h4 mat-line>Identities</h4>
-          </mat-list-item>
-          <mat-list-item [routerLink]="['/clients']" [routerLinkActive]="['active-nav-link']">
-            <mat-icon class="icon icon-clients"></mat-icon>
-            <h4 mat-line>Clients</h4>
-          </mat-list-item>
-          <mat-list-item [routerLink]="['/claims']" [routerLinkActive]="['active-nav-link']">
-            <mat-icon class="icon icon-claims"></mat-icon>
-            <h4 mat-line>Claims</h4>
-          </mat-list-item>
-          <mat-list-item [routerLink]="['/definitions']" [routerLinkActive]="['active-nav-link']">
-            <mat-icon class="icon icon-access"></mat-icon>
-            <h4 mat-line>Definitions</h4>
-          </mat-list-item>
-          <mat-list-item [routerLink]="['/grants']" [routerLinkActive]="['active-nav-link']">
-            <mat-icon class="icon icon-views"></mat-icon>
-            <h4 mat-line>Grants</h4>
-          </mat-list-item>
-          <mat-list-item [routerLink]="['/rules']" [routerLinkActive]="['active-nav-link']">
-            <mat-icon class="icon icon-rules"></mat-icon>
-            <h4 mat-line>Rules</h4>
-          </mat-list-item>
-          <mat-list-item [routerLink]="['/passports']" [routerLinkActive]="['active-nav-link']">
-            <mat-icon class="icon icon-tests"></mat-icon>
-            <h4 mat-line>Passports</h4>
-          </mat-list-item>
-        </mat-nav-list>
-      </mat-expansion-panel>
-    </mat-accordion>
+          <mat-nav-list class="sub-nav">
+            <mat-list-item [routerLink]="['/resources']" [routerLinkActive]="['active-nav-link']">
+              <mat-icon class="icon icon-resources"></mat-icon>
+              <h4 mat-line>Resources</h4>
+            </mat-list-item>
+            <mat-list-item [routerLink]="['/personas']" [routerLinkActive]="['active-nav-link']">
+              <mat-icon class="icon icon-identities"></mat-icon>
+              <h4 mat-line>Identities</h4>
+            </mat-list-item>
+            <mat-list-item [routerLink]="['/clients']" [routerLinkActive]="['active-nav-link']">
+              <mat-icon class="icon icon-clients"></mat-icon>
+              <h4 mat-line>Clients</h4>
+            </mat-list-item>
+            <mat-list-item [routerLink]="['/claims']" [routerLinkActive]="['active-nav-link']">
+              <mat-icon class="icon icon-claims"></mat-icon>
+              <h4 mat-line>Claims</h4>
+            </mat-list-item>
+            <mat-list-item [routerLink]="['/definitions']" [routerLinkActive]="['active-nav-link']">
+              <mat-icon class="icon icon-access"></mat-icon>
+              <h4 mat-line>Definitions</h4>
+            </mat-list-item>
+            <mat-list-item [routerLink]="['/grants']" [routerLinkActive]="['active-nav-link']">
+              <mat-icon class="icon icon-views"></mat-icon>
+              <h4 mat-line>Grants</h4>
+            </mat-list-item>
+            <mat-list-item [routerLink]="['/rules']" [routerLinkActive]="['active-nav-link']">
+              <mat-icon class="icon icon-rules"></mat-icon>
+              <h4 mat-line>Rules</h4>
+            </mat-list-item>
+            <mat-list-item [routerLink]="['/passports']" [routerLinkActive]="['active-nav-link']">
+              <mat-icon class="icon icon-tests"></mat-icon>
+              <h4 mat-line>Passports</h4>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
 
-    <button mat-button>Show more repositories...</button>
+        <mat-expansion-panel [expanded]="false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span>Human Cell Atlas</span>
+              <span>Sequence Repository</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <button mat-button class="text-color--subtle text-size--small uppercase">+5 more repositories</button>
   </mat-sidenav>
 
   <mat-sidenav-content>
