@@ -28,8 +28,16 @@ spring:
           filters:
             - AddRequestParameter=clientId,${dam.client-id}
             - AddRequestParameter=clientSecret,${dam.client-secret}
+            - SetBearerTokenFromCookie
             - Logging
           uri: ${dam.base-url}
+        - predicates:
+            - Path=/identity/v1alpha/passport
+          filters:
+            - AddRequestParameter=clientId,${idp.client-id}
+            - AddRequestParameter=clientSecret,${idp.client-secret}
+            - Logging
+          uri: ${idp.base-url}
         - predicates:
             - Path=/identity/**
           filters:
