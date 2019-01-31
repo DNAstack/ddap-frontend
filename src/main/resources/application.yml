@@ -23,6 +23,8 @@ spring:
   cloud:
     gateway:
       routes:
+        # NB: If you add a new route here,
+        # you may also need to modify com.dnastack.ddapfrontend.route.Router#angluarRoutes
         - predicates:
             - Path=/api/cafevariome/**
           filters:
