@@ -24,6 +24,12 @@ spring:
     gateway:
       routes:
         - predicates:
+            - Path=/api/cafevariome/**
+          filters:
+            - StripPrefix=2
+            - Logging
+          uri: https://beacon.cafevariome.org
+        - predicates:
             - Path=/dam/**
           filters:
             - AddRequestParameter=clientId,${dam.client-id}
