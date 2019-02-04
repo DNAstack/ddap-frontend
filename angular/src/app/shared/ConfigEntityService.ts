@@ -15,7 +15,7 @@ export class ConfigEntityService implements EntityService {
   get(params?): Observable<any> {
     params = params || {};
 
-    return this.http.get<any[]>(environment.ddapApiUrl + '/config', { params })
+    return this.http.get<any[]>(environment.damApiUrl + '/config', { params })
       .pipe(
         pluck(this.entityName)
       );
@@ -26,7 +26,7 @@ export class ConfigEntityService implements EntityService {
     };
     const id = dto.name;
 
-    return this.http.get<any[]>(environment.ddapApiUrl + '/config', { params })
+    return this.http.get<any[]>(environment.damApiUrl + '/config', { params })
       .pipe(
         mergeMap((config: any) => {
           config[this.entityName][id] = dto;
@@ -43,7 +43,7 @@ export class ConfigEntityService implements EntityService {
     const params = {
     };
 
-    return this.http.get<any[]>(environment.ddapApiUrl + '/config', { params })
+    return this.http.get<any[]>(environment.damApiUrl + '/config', { params })
       .pipe(
         mergeMap((config: any) => {
           delete config[this.entityName][id];
@@ -57,7 +57,7 @@ export class ConfigEntityService implements EntityService {
     };
 
     return this.http.put(
-      environment.ddapApiUrl + '/config',
+      environment.damApiUrl + '/config',
       { item: config },
       { params, headers }
     );

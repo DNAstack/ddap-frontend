@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatCardModule,
   MatExpansionModule,
   MatFormFieldModule,
   MatIconModule,
@@ -17,11 +18,13 @@ import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppRoutingModule } from '../app-routing.module';
 
+import { BeaconResultComponent } from './beaconResult/beaconResult.component';
 import { EntityListComponent } from './entityList/entityList.component';
 import { EntityListHeaderComponent } from './entityListHeader/entityListHeader.component';
 import { JsonPanelComponent } from './jsonPanel/jsonPanel.component';
 import { NavBackComponent } from './navBack/navBack.component';
 import { ResourceLogoComponent } from './resourceLogo/resource-logo.component';
+import { SearchBarComponent } from './searchBar/searchBar.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,8 @@ import { ResourceLogoComponent } from './resourceLogo/resource-logo.component';
     EntityListHeaderComponent,
     NavBackComponent,
     ResourceLogoComponent,
+    SearchBarComponent,
+    BeaconResultComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -39,6 +44,7 @@ import { ResourceLogoComponent } from './resourceLogo/resource-logo.component';
     FormsModule,
     BrowserAnimationsModule,
 
+    MatCardModule,
     MatProgressBarModule,
     MatSidenavModule,
     MatExpansionModule,
@@ -56,6 +62,7 @@ import { ResourceLogoComponent } from './resourceLogo/resource-logo.component';
     FormsModule,
     BrowserAnimationsModule,
 
+    MatCardModule,
     MatProgressBarModule,
     MatSidenavModule,
     MatExpansionModule,
@@ -67,6 +74,8 @@ import { ResourceLogoComponent } from './resourceLogo/resource-logo.component';
 
     NgJsonEditorModule,
     NavBackComponent,
+    SearchBarComponent,
+    BeaconResultComponent,
     JsonPanelComponent,
     EntityListComponent,
     EntityListHeaderComponent,

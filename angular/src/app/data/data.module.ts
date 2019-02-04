@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatCardModule, MatGridListModule } from '@angular/material';
+import { MatGridListModule } from '@angular/material';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -19,7 +19,6 @@ import { DataRoutingModule } from './data-routing.module';
 
     SharedModule,
     DataRoutingModule,
-    MatCardModule,
     MatGridListModule,
   ],
 })

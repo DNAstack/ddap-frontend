@@ -1,0 +1,5 @@
+<mat-form-field>
+  <input #searchBar matInput type="search"
+         [placeholder]="placeholder" [disabled]="disabled"
+         (keyup)="onKeyUp(searchBar.value)">
+</mat-form-field>
