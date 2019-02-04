@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  ddapApiUrl: '/dam/v1alpha',
+  ddapApiUrl: '/api',
+  damApiUrl: '/dam/v1alpha',
 };

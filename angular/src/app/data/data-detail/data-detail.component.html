@@ -2,6 +2,10 @@
   <mat-icon class="icon icon-back"
             [routerLink]="['/data']"></mat-icon>
   <h2>{{ resource?.ui.label || 'Unknown' }}</h2>
+  <ddap-search-bar
+    [placeholder]="['1 : 156105028 T > C']"
+    (valueChanged)="beaconService.queryBeaconIfAvailable($event, resource)">
+  </ddap-search-bar>
 </header>
 
 <ddap-resource-logo [imageUrl]="resource?.ui.imageUrl"></ddap-resource-logo>

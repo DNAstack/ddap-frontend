@@ -19,14 +19,14 @@ export class ResourceService implements EntityService {
     const params = {
     };
 
-    return this.http.get<any[]>(`${environment.ddapApiUrl}/resources/${resource}/views/${view}`, { params })
+    return this.http.get<any[]>(`${environment.damApiUrl}/resources/${resource}/views/${view}`, { params })
       .pipe(
         pluck('token')
       );
   }
 
   get(): Observable<any[]> {
-    return this.http.get<any[]>(environment.ddapApiUrl + '/resources')
+    return this.http.get<any[]>(environment.damApiUrl + '/resources')
       .pipe(
         pluck('resources')
       );
@@ -35,7 +35,7 @@ export class ResourceService implements EntityService {
   getResources(params?): Observable<any[]> {
     params = params || {};
 
-    return this.http.get<any[]>(environment.ddapApiUrl + '/resources', { params })
+    return this.http.get<any[]>(environment.damApiUrl + '/resources', { params })
       .pipe(
         pluck('resources')
       );
@@ -56,7 +56,7 @@ export class ResourceService implements EntityService {
     const resourceName = resourceChange.item.name;
 
     return this.http.post(
-      environment.ddapApiUrl + '/config/resources/' + resourceName,
+      environment.damApiUrl + '/config/resources/' + resourceName,
       resourceChange,
       { params, headers }
     );
@@ -75,7 +75,7 @@ export class ResourceService implements EntityService {
     }
 
     return this.http.put(
-      environment.ddapApiUrl + '/config/resources/' + resourceName,
+      environment.damApiUrl + '/config/resources/' + resourceName,
       resourceChange,
       { params, headers }
     );
