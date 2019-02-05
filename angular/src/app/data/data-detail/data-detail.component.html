@@ -1,11 +1,11 @@
 <h2>
   <mat-icon mat-list-icon>tune</mat-icon>
-  {{ resource?.ui.label }}</h2>
+  {{ resource?.ui.label || 'Unknown' }}</h2>
 
 <div class="ddap-container">
   <ddap-nav-back navigateTo="/data"></ddap-nav-back>
   <div class="ddap-resource-image">
-    <img [src]="resource?.ui.imageUrl" alt="Photo">
+    <img [src]="[resource?.ui.imageUrl || randomImageRetriever.getPathToFixedRandomImage(resource?.ui.label)]" alt="Photo">
   </div>
   <div class="ddap-resource-info">
     <p>{{ resource?.ui.description }}</p>
