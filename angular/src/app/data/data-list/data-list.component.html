@@ -2,13 +2,13 @@
 
 <mat-card class="ddap-card" *ngFor="let resource of (resources$ | async)">
   <mat-card-header>
-    <mat-card-title>{{ resource.name }}</mat-card-title>
+    <mat-card-title>{{ resource.ui.label }}</mat-card-title>
   </mat-card-header>
   <img mat-card-image
-       [src]="resource.ui.img"
+       [src]="resource.ui.imageUrl"
        alt="Photo">
   <mat-card-content>
-    <p>{{ resource.ui.desc }}</p>
+    <p>{{ resource.ui.description }}</p>
   </mat-card-content>
   <mat-card-actions>
     <button mat-flat-button

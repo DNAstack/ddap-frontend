@@ -1,15 +1,14 @@
 <h2>
   <mat-icon mat-list-icon>tune</mat-icon>
-  {{ resource?.ui.displayAs }}</h2>
+  {{ resource?.ui.label }}</h2>
 
 <div class="ddap-container">
   <ddap-nav-back navigateTo="/data"></ddap-nav-back>
   <div class="ddap-resource-image">
-
-    <img src="http://lorempixel.com/400/400/business/" alt="Random photo">
+    <img [src]="resource?.ui.imageUrl" alt="Photo">
   </div>
   <div class="ddap-resource-info">
-    <p>{{ resource?.ui.desc }}</p>
+    <p>{{ resource?.ui.description }}</p>
     <mat-list>
       <mat-list-item *ngFor="let view of views">
         <mat-icon mat-list-icon>view_quilt</mat-icon>
