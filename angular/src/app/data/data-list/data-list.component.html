@@ -2,10 +2,10 @@
 
 <mat-card class="ddap-card" *ngFor="let resource of (resources$ | async)">
   <mat-card-header>
-    <mat-card-title>{{ resource.ui.label }}</mat-card-title>
+    <mat-card-title>{{ resource.ui.label || 'Unknown' }}</mat-card-title>
   </mat-card-header>
   <img mat-card-image
-       [src]="resource.ui.imageUrl"
+       [src]="[resource.ui.imageUrl || randomImageRetriever.getPathToFixedRandomImage(resource.ui.label)]"
        alt="Photo">
   <mat-card-content>
     <p>{{ resource.ui.description }}</p>
@@ -16,6 +16,3 @@
             [routerLink]="['/data/', resource.name]">Details</button>
   </mat-card-actions>
 </mat-card>
-
-
-

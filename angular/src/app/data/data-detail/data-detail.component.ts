@@ -5,11 +5,13 @@ import { flatMap } from 'rxjs/operators';
 
 import { ResourceService } from '../../resources/resource.service';
 import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
+import { ImagePlaceholderRetriever } from '../../shared/RandomImageRetriever';
 
 @Component({
   selector: 'ddap-resource-detail',
   templateUrl: './data-detail.component.html',
   styleUrls: ['./data-detail.component.scss'],
+  providers: [ImagePlaceholderRetriever],
 })
 export class DataDetailComponent implements OnInit {
 
@@ -25,7 +27,8 @@ export class DataDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    public resourceService: ResourceService
+    public resourceService: ResourceService,
+    public randomImageRetriever: ImagePlaceholderRetriever
   ) {
     this.editorOptions = new JsonEditorDefaults();
   }
