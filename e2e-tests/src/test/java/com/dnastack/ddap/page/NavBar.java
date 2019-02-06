@@ -11,37 +11,37 @@ import static java.lang.String.format;
 
 public class NavBar {
     private WebDriver driver;
-    private Map<NavItem, String> navSelector = new HashMap() {{
-        put(NavItem.Resources, "nav-resources");
-        put(NavItem.Identities, "nav-personas");
-        put(NavItem.Clients, "nav-clients");
-        put(NavItem.Claims, "nav-claims");
-        put(NavItem.Definitions, "nav-definitions");
-        put(NavItem.Grants, "nav-grants");
-        put(NavItem.Rules, "nav-rules");
-        put(NavItem.Passports, "nav-passports");
+    private Map<NavItem, String> NAV_SELECTOR = new HashMap() {{
+        put(NavItem.RESOURCES, "nav-resources");
+        put(NavItem.IDENTITIES, "nav-personas");
+        put(NavItem.CLIENTS, "nav-clients");
+        put(NavItem.CLAIMS, "nav-claims");
+        put(NavItem.DEFINITIONS, "nav-definitions");
+        put(NavItem.GRANTS, "nav-grants");
+        put(NavItem.RULES, "nav-rules");
+        put(NavItem.PASSPORTS, "nav-passports");
     }};
 
-    private Map<NavItem, String> pageTitle = new HashMap() {{
-        put(NavItem.Resources, "Resource");
-        put(NavItem.Identities, "Personas");
-        put(NavItem.Clients, "Clients");
-        put(NavItem.Claims, "Claims");
-        put(NavItem.Definitions, "Definitions");
-        put(NavItem.Grants, "Grants");
-        put(NavItem.Rules, "Rules");
-        put(NavItem.Passports, "Passports");
+    private Map<NavItem, String> PAGE_TITLE = new HashMap() {{
+        put(NavItem.RESOURCES, "Resource");
+        put(NavItem.IDENTITIES, "Personas");
+        put(NavItem.CLIENTS, "Clients");
+        put(NavItem.CLAIMS, "Claims");
+        put(NavItem.DEFINITIONS, "Definitions");
+        put(NavItem.GRANTS, "Grants");
+        put(NavItem.RULES, "Rules");
+        put(NavItem.PASSPORTS, "Passports");
     }};
 
     public enum NavItem {
-        Resources,
-        Identities,
-        Clients,
-        Claims,
-        Definitions,
-        Grants,
-        Rules,
-        Passports
+        RESOURCES,
+        IDENTITIES,
+        CLIENTS,
+        CLAIMS,
+        DEFINITIONS,
+        GRANTS,
+        RULES,
+        PASSPORTS
     }
 
     public NavBar(WebDriver driver) {
@@ -52,8 +52,8 @@ public class NavBar {
     }
 
     public NavBar goTo(NavItem pageId) {
-        driver.findElement(By.xpath("//*[@data-se=\"" + navSelector.get(pageId) + "\"]")).click();
-        driver.findElement(By.xpath("//h2[contains(text(), '" + pageTitle.get(pageId) + "')]"));
+        driver.findElement(By.xpath("//*[@data-se=\"" + NAV_SELECTOR.get(pageId) + "\"]")).click();
+        driver.findElement(By.xpath("//h2[contains(text(), '" + PAGE_TITLE.get(pageId) + "')]"));
 
         return new NavBar(driver);
     }

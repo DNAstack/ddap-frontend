@@ -12,54 +12,51 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static org.junit.Assert.fail;
 
 public class SmokeTest {
     private static WebDriver driver;
-    private static String ddapUsername;
-    private static String ddapPassword;
-    private static String ddapBaseUrl;
+    private final static String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
+    private final static String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
+    private final static String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
+    private final static boolean HEADLESS = Boolean.parseBoolean(optionalEnv("HEADLESS", "true"));
     private final static Pattern URL_PARSE_PATTERN = Pattern.compile("^(https?)://(.*)$");
     private final static String NAV_ITEM_FORMAT = "//mat-panel-title[contains(text(), '%s')]";
 
     private HasNavBar ddapPage;
-    private final static Map<NavBar.NavItem, Stream<String>> DEFAULT_PAGE_ITEMS = new HashMap() {{
-        put(NavBar.NavItem.Resources,
-                Stream.of("bar", "ga4gh-apis"));
-        put(NavBar.NavItem.Identities,
-                Stream.of("dr_joe", "nci_researcher", "john"));
-        put(NavBar.NavItem.Clients,
-                Stream.of("craig_test", "dnastack_fe", "test_client", "test_page"));
-        put(NavBar.NavItem.Claims,
-                Stream.of("elixir", "ncbi", "ustanford"));
-        put(NavBar.NavItem.Definitions,
-                Stream.of("ga4gh.AcademicInstitutionAffiliations", "ga4gh.ControlledDatasetsAccess"));
-        put(NavBar.NavItem.Grants,
-                Stream.of("bq_read", "gcs_read"));
-        put(NavBar.NavItem.Rules,
-                Stream.of("GRU", "bona_fide", "ethics"));
-        put(NavBar.NavItem.Passports,
-                Stream.of("NIH", "elixir"));
+    private final static Map<NavBar.NavItem, List<String>> DEFAULT_PAGE_ITEMS = new HashMap() {{
+        put(NavBar.NavItem.RESOURCES,
+                Arrays.asList("allOfUs", "ga4gh-apis"));
+        put(NavBar.NavItem.IDENTITIES,
+                Arrays.asList("dr_joe", "nci_researcher", "john"));
+        put(NavBar.NavItem.CLIENTS,
+                Arrays.asList("craig_test", "dnastack_fe", "test_client", "test_page"));
+        put(NavBar.NavItem.CLAIMS,
+                Arrays.asList("elixir", "nci", "ustanford"));
+        put(NavBar.NavItem.DEFINITIONS,
+                Arrays.asList("ga4gh.AcademicInstitutionAffiliations", "ga4gh.ControlledDatasetsAccess"));
+        put(NavBar.NavItem.GRANTS,
+                Arrays.asList("bq_read", "gcs_read"));
+        put(NavBar.NavItem.RULES,
+                Arrays.asList("GRU", "bona_fide", "ethics"));
+        put(NavBar.NavItem.PASSPORTS,
+                Arrays.asList("dbGaP", "elixir", "playgroundIC"));
     }};
 
     @Before
     public void setUp() {
-        ddapBaseUrl = requiredEnv("E2E_BASE_URI");
-        ddapUsername = requiredEnv("E2E_BASIC_USERNAME");
-        ddapPassword = requiredEnv("E2E_BASIC_PASSWORD");
-        final boolean headless = Boolean.parseBoolean(optionalEnv("HEADLESS", "true"));
-
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        if (headless) {
+        if (HEADLESS) {
             options.addArguments("headless");
         }
         options.addArguments("--disable-gpu");
@@ -82,91 +79,100 @@ public class SmokeTest {
 
     @Test
     public void getDefaultResources() {
-        NavBar.NavItem pageId = NavBar.NavItem.Resources;
+        NavBar.NavItem pageId = NavBar.NavItem.RESOURCES;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
+                .stream()
                 .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
     }
 
     @Test
     public void getDefaultIdentities() {
-        NavBar.NavItem pageId = NavBar.NavItem.Identities;
+        NavBar.NavItem pageId = NavBar.NavItem.IDENTITIES;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
+                .stream()
                 .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
     }
 
     @Test
     public void getDefaultClients() {
-        NavBar.NavItem pageId = NavBar.NavItem.Clients;
+        NavBar.NavItem pageId = NavBar.NavItem.CLIENTS;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
+                .stream()
                 .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
     }
 
     @Test
     public void getDefaultClaims() {
-        NavBar.NavItem pageId = NavBar.NavItem.Claims;
+        NavBar.NavItem pageId = NavBar.NavItem.CLAIMS;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
+                .stream()
                 .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
     }
 
     @Test
     public void getDefaultDefinitions() {
-        NavBar.NavItem pageId = NavBar.NavItem.Definitions;
+        NavBar.NavItem pageId = NavBar.NavItem.DEFINITIONS;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
+                .stream()
                 .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
     }
 
     @Test
     public void getDefaultGrants() {
-        NavBar.NavItem pageId = NavBar.NavItem.Grants;
+        NavBar.NavItem pageId = NavBar.NavItem.GRANTS;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
+                .stream()
                 .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
     }
 
     @Test
     public void getDefaultRules() {
-        NavBar.NavItem pageId = NavBar.NavItem.Rules;
+        NavBar.NavItem pageId = NavBar.NavItem.RULES;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
+                .stream()
                 .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
     }
 
     @Test
     public void getDefaultPassports() {
-        NavBar.NavItem pageId = NavBar.NavItem.Passports;
+        NavBar.NavItem pageId = NavBar.NavItem.PASSPORTS;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
+                .stream()
                 .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
     }
 
     private ICLoginPage startLogin() {
-        driver.get(getUrlWithBasicCredentials(ddapBaseUrl + "/api/identity/login"));
+        driver.get(getUrlWithBasicCredentials(DDAP_BASE_URL + "/api/identity/login"));
         return new ICLoginPage(driver);
     }
 
     private String getUrlWithBasicCredentials(String original) {
         final Matcher matcher = URL_PARSE_PATTERN.matcher(original);
         if (matcher.find()) {
-            return format("%s://%s:%s@%s", matcher.group(1), ddapUsername, ddapPassword, matcher.group(2));
+            return format("%s://%s:%s@%s", matcher.group(1), DDAP_USERNAME, DDAP_PASSWORD, matcher.group(2));
         } else {
             throw new IllegalArgumentException("Could not parse url: " + original);
         }
     }
 
     private static String optionalEnv(String name, String defaultValue) {
+        System.out.println(name + " " + defaultValue);
         String val = System.getenv(name);
         if (val == null) {
             return defaultValue;
@@ -176,6 +182,7 @@ public class SmokeTest {
 
     private static String requiredEnv(String name) {
         String val = System.getenv(name);
+        System.out.println(name + " " + val);
         if (val == null) {
             fail("Environment variable `" + name + "` is required");
         }
