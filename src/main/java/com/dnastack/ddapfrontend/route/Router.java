@@ -23,6 +23,7 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 import java.util.Optional;
 
+import static com.dnastack.ddapfrontend.header.XForwardUtil.getExternalPath;
 import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.MediaType.*;
@@ -37,9 +38,6 @@ public class Router {
     // Added during maven build from angular-cli project
     @Value("classpath:/static/index.html")
     private Resource angularIndex;
-
-    @Value("${ddap.public-uri}")
-    private URI publicUri;
 
     @Value("${idp.base-url}")
     private URI idpBaseUrl;
@@ -56,21 +54,21 @@ public class Router {
         return RouterFunctions.route(GET("/"),
                                      request -> ok()
                                              .contentType(TEXT_HTML)
-                                             .syncBody(redirectPageContent()));
+                                             .syncBody(redirectPageContent(request)));
     }
 
-    private String redirectPageContent() {
+    private String redirectPageContent(ServerRequest request) {
         return format("<!DOCTYPE html>\n" +
                               "<html>\n" +
                               "<head>\n" +
                               "  <meta http-equiv=\"refresh\" content=\"0; URL='%s'\">\n" +
                               "</head>\n" +
                               "</html>\n",
-                      redirectUrl());
+                      redirectUrl(request));
     }
 
-    private URI redirectUrl() {
-        return publicUri.resolve("/api/identity/login");
+    private URI redirectUrl(ServerRequest request) {
+        return URI.create(getExternalPath(request, "/api/identity/login"));
     }
 
     @Bean
@@ -99,7 +97,7 @@ public class Router {
                     .contentType(TEXT_HTML)
                     .syncBody(angularIndex);
         } else {
-            return temporaryRedirect(redirectUrl()).build();
+            return temporaryRedirect(redirectUrl(request)).build();
         }
     }
 
@@ -116,16 +114,18 @@ public class Router {
 
     private Mono<ServerResponse> handleTokenRequest(ServerRequest request) {
         final Optional<String> foundCode = request.queryParam("code");
-        return foundCode.map(code -> idpTokenRequest(code).flatMap(this::downstreamTokenResponse))
+        return foundCode.map(code ->
+                                     idpTokenRequest(request, code).flatMap(response -> downstreamTokenResponse(request,
+                                                                                                       response)))
                         .orElseGet(() -> badRequest().contentType(TEXT_PLAIN)
                                                      .syncBody("Token request requires 'code' parameter."));
     }
 
-    private Mono<ServerResponse> downstreamTokenResponse(ClientResponse response) {
+    private Mono<ServerResponse> downstreamTokenResponse(ServerRequest request, ClientResponse response) {
         if (response.statusCode().is2xxSuccessful() && contentTypeIsApplicationJson(response)) {
             return response.bodyToMono(String.class)
                            .map(this::extractToken)
-                           .flatMap(oToken -> oToken.map(this::successfulUserTokenResponse)
+                           .flatMap(oToken -> oToken.map(token -> successfulUserTokenResponse(request, token))
                                                     .orElseGet(() -> failedUserTokenResponse(response)));
         } else {
             logTokenFailureInDetail(response);
@@ -144,7 +144,7 @@ public class Router {
         }
     }
 
-    private Mono<ClientResponse> idpTokenRequest(String code) {
+    private Mono<ClientResponse> idpTokenRequest(ServerRequest request, String code) {
         return WebClient.create(format(idpBaseUrl.toString() + "identity/v1alpha/token" +
                                                "?grant_type=authorization_code" +
                                                "&code=%s" +
@@ -152,7 +152,7 @@ public class Router {
                                                "&clientId=%s" +
                                                "&clientSecret=%s",
                                        code,
-                                       redirectUrl(),
+                                       redirectUrl(request),
                                        idpClientId,
                                        idpClientSecret))
                         .post()
@@ -164,13 +164,15 @@ public class Router {
         return status(INTERNAL_SERVER_ERROR).syncBody("Failed to parse token.");
     }
 
-    private Mono<ServerResponse> successfulUserTokenResponse(String token) {
-        return temporaryRedirect(publicUri.resolve("/data")).cookie(
+    private Mono<ServerResponse> successfulUserTokenResponse(ServerRequest request, String token) {
+        final URI redirectUri = URI.create(getExternalPath(request, "/data"));
+        final String publicHost = redirectUri.getHost();
+        return temporaryRedirect(redirectUri).cookie(
                 ResponseCookie.from("user_token", token)
-                              .domain(publicUri.getHost())
+                              .domain(publicHost)
                               .path("/")
                               .build())
-                   .build();
+                                             .build();
     }
 
     private boolean contentTypeIsApplicationJson(ClientResponse response) {
@@ -201,7 +203,7 @@ public class Router {
 
     private Mono<ServerResponse> handleApiLogin(ServerRequest request) {
         final Optional<String> foundRedirectUri = request.queryParam("redirect_uri");
-        final String redirectUri = foundRedirectUri.orElseGet(() -> publicUri + "/api/identity/token");
+        final String redirectUri = foundRedirectUri.orElseGet(() -> getExternalPath(request, "/api/identity/token"));
 
         return temporaryRedirect(authorizeUrl(redirectUri)).build();
     }
