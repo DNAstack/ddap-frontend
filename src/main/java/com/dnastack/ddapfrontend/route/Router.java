@@ -106,7 +106,7 @@ public class Router {
     @Bean
     RouterFunction<ServerResponse> apiLogin() {
         return RouterFunctions.route(GET("/api/identity/login"),
-                                     request -> temporaryRedirect(authorizeUrl()).build());
+                                     this::handleApiLogin);
     }
 
     @Bean
@@ -192,10 +192,17 @@ public class Router {
         }
     }
 
-    private URI authorizeUrl() {
+    private URI authorizeUrl(String redirectUri) {
         return URI.create(format(
                 idpBaseUrl.toString() + "identity/v1alpha/authorize?response_type=code&clientId=%s&redirect_uri=%s",
                 idpClientId,
-                publicUri + "/api/identity/token"));
+                redirectUri));
+    }
+
+    private Mono<ServerResponse> handleApiLogin(ServerRequest request) {
+        final Optional<String> foundRedirectUri = request.queryParam("redirect_uri");
+        final String redirectUri = foundRedirectUri.orElseGet(() -> publicUri + "/api/identity/token");
+
+        return temporaryRedirect(authorizeUrl(redirectUri)).build();
     }
 }
