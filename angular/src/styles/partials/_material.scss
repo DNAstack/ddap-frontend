@@ -11,6 +11,11 @@ mat-form-field {
 }
 
 ddap-root {
+  mat-progress-bar.mat-progress-bar {
+    position: fixed;
+    z-index: 100;
+  }
+
   mat-sidenav {
     width: 15rem;
 
