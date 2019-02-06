@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -158,7 +159,7 @@ public class SmokeTest {
     }
 
     private ICLoginPage startLogin() {
-        driver.get(getUrlWithBasicCredentials(DDAP_BASE_URL + "/api/identity/login"));
+        driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve("/api/identity/login").toString()));
         return new ICLoginPage(driver);
     }
 
