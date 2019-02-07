@@ -13,6 +13,9 @@ export class EntityListComponent {
   error: string = null;
 
   @Input()
+  configName: string;
+
+  @Input()
   entityList: any;
 
   @Input()
@@ -23,9 +26,6 @@ export class EntityListComponent {
 
   @Input()
   editorOptions: JsonEditorOptions | any;
-
-  @Input()
-  routePrefix: string;
 
   constructor() {
     this.editorOptions = new JsonEditorDefaults();

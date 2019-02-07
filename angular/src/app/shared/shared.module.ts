@@ -18,6 +18,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { AppRoutingModule } from '../app-routing.module';
 
 import { EntityListComponent } from './entityList/entityList.component';
+import { EntityListHeaderComponent } from './entityListHeader/entityListHeader.component';
 import { JsonPanelComponent } from './jsonPanel/jsonPanel.component';
 import { NavBackComponent } from './navBack/navBack.component';
 
@@ -25,6 +26,7 @@ import { NavBackComponent } from './navBack/navBack.component';
   declarations: [
     JsonPanelComponent,
     EntityListComponent,
+    EntityListHeaderComponent,
     NavBackComponent,
   ],
   imports: [
@@ -65,6 +67,7 @@ import { NavBackComponent } from './navBack/navBack.component';
     NavBackComponent,
     JsonPanelComponent,
     EntityListComponent,
+    EntityListHeaderComponent,
   ],
 })
 export class SharedModule { }

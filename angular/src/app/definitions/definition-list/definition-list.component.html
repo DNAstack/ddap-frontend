@@ -1,9 +1,9 @@
-<h2>Claim Definitions</h2>
+<ddap-entity-list-header
+  [configName]="'definitions'">
+</ddap-entity-list-header>
 
-<div class="margin-bottom--1">
-  <a mat-mini-fab routerLink="/definitions/manage/add">
-    <mat-icon aria-label="Add claim definition">add</mat-icon>
-  </a>
-</div>
-
-<ddap-entity-list [routePrefix]="'/definitions/'" [entityList]="definitions$" [descriptionProperty]="'type'"></ddap-entity-list>
+<ddap-entity-list
+  [configName]="'definitions'"
+  [descriptionProperty]="'type'"
+  [entityList]="definitions$">
+</ddap-entity-list>

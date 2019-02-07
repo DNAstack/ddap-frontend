@@ -1,9 +1,8 @@
-<h2>Rules</h2>
+<ddap-entity-list-header
+  [configName]="'rules'">
+</ddap-entity-list-header>
 
-<div class="margin-bottom--1">
-  <a mat-mini-fab routerLink="/rules/manage/add">
-    <mat-icon aria-label="Add rule">add</mat-icon>
-  </a>
-</div>
-
-<ddap-entity-list [routePrefix]="'/rules/'" [entityList]="rules$"></ddap-entity-list>
+<ddap-entity-list
+  [configName]="'rules'"
+  [entityList]="rules$">
+</ddap-entity-list>

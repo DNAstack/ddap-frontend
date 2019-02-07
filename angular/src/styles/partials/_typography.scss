@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+h2 {
+  font-weight: normal;
+}
+
 @font-face {
   font-family: $dnastack-icons-font-family;
   src:url($dnastack-icons-eot-font-path);
@@ -49,7 +53,7 @@
 .icon-explore:before {
   content: "\65";
 }
-.icon-identities:before {
+.icon-personas:before {
   content: "\66";
 }
 .icon-identity:before {

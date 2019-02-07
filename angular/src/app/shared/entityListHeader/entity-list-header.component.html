@@ -1,0 +1,12 @@
+<div class="list-header flex vertical-center">
+  <h2 class="flex vertical-center stretch">
+    <mat-icon [ngClass]="['icon', 'icon-' + configName]"></mat-icon>
+    {{ configName }}
+  </h2>
+  <div>
+    <a [routerLink]="['/' + configName + '/manage/add']">
+      <button mat-flat-button class="background--accent uppercase">{{ getButtonText() }}</button>
+    </a>
+  </div>
+</div>
+
