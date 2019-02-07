@@ -149,9 +149,23 @@ public class Router {
                                 foundRefBases.get(),
                                 foundAlternateBases.get()))
                         .exchange()
-                        .flatMap(clientResponse -> clientResponse.bodyToMono(String.class)
-                                                                 .flatMap(body -> ok().syncBody(body)));
+                        .flatMap(clientResponse -> clientResponse.bodyToMono(JSONObject.class)
+                                                                 .flatMap(this::formatBeaconResponse));
 
+    }
+
+    private Mono<ServerResponse> formatBeaconResponse(JSONObject clientResponse) {
+        final JSONObject serverResponse = new JSONObject();
+        serverResponse.put("name", "Cafe Variome");
+        serverResponse.put("organization", "University of Leicester");
+        serverResponse.put("exists", clientResponse.get("exists"));
+        final JSONObject metadata = new JSONObject();
+        serverResponse.put("metadata", metadata);
+        metadata.put("alleleRequest", clientResponse.get("alleleRequest"));
+        metadata.put("datasetAlleleResponses", clientResponse.get("datasetAlleleResponses"));
+        metadata.put("error", clientResponse.get("error"));
+
+        return ok().syncBody(serverResponse);
     }
 
     private Mono<ServerResponse> handleTokenRequest(ServerRequest request) {
