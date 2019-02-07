@@ -1,9 +1,9 @@
-<h2>Claims</h2>
+<ddap-entity-list-header
+  [configName]="'claims'">
+</ddap-entity-list-header>
 
-<div class="margin-bottom--1">
-  <a mat-mini-fab routerLink="/claims/manage/add">
-    <mat-icon aria-label="Add claim">add</mat-icon>
-  </a>
-</div>
-
-<ddap-entity-list [routePrefix]="'/claims/'" [entityList]="claims$" [descriptionProperty]="'source'"></ddap-entity-list>
+<ddap-entity-list
+  [configName]="'claims'"
+  [descriptionProperty]="'source'"
+  [entityList]="claims$">
+</ddap-entity-list>

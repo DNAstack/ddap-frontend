@@ -11,3 +11,23 @@ body {
 .margin-bottom--1 {
   margin-bottom: 1rem;
 }
+
+.flex {
+  display: flex;
+}
+
+.flex--row {
+  flex-direction: row;
+}
+
+.vertical-center {
+  align-items: center;
+}
+
+.stretch {
+  flex-grow: 1;
+}
+
+.background--accent {
+  background-color: $accent-color;
+}

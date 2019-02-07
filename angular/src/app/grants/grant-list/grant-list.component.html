@@ -1,9 +1,9 @@
-<h2>Grants</h2>
+<ddap-entity-list-header
+  [configName]="'grants'">
+</ddap-entity-list-header>
 
-<div class="margin-bottom--1">
-  <a mat-mini-fab routerLink="/grants/manage/add">
-    <mat-icon aria-label="Add grant">add</mat-icon>
-  </a>
-</div>
-
-<ddap-entity-list [routePrefix]="'/grants/'" [entityList]="grants$" [descriptionProperty]="'namespace'"></ddap-entity-list>
+<ddap-entity-list
+  [configName]="'grants'"
+  [descriptionProperty]="'action'"
+  [entityList]="grants$">
+</ddap-entity-list>
