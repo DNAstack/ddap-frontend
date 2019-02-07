@@ -112,6 +112,48 @@ public class Router {
         return RouterFunctions.route(GET("/api/identity/token"), this::handleTokenRequest);
     }
 
+    @Bean
+    RouterFunction<ServerResponse> searchQuery() {
+        return RouterFunctions.route(GET("/api/resources/{resourceId}/search"), this::handleSearchQuery);
+    }
+
+    private Mono<ServerResponse> handleSearchQuery(ServerRequest request) {
+        final Optional<String> foundType = request.queryParam("type");
+        return foundType.map(type -> handleBeaconQuery(request))
+                        .orElseGet(() -> badRequest().syncBody(format("Invalid search type [%s]",
+                                                                      foundType.orElse(""))));
+
+    }
+
+    private Mono<ServerResponse> handleBeaconQuery(ServerRequest request) {
+        final Optional<String> assemblyId = request.queryParam("assemblyId");
+        final Optional<String> foundRefName = request.queryParam("referenceName");
+        final Optional<String> foundStart = request.queryParam("start");
+        final Optional<String> foundRefBases = request.queryParam("referenceBases");
+        final Optional<String> foundAlternateBases = request.queryParam("alternateBases");
+
+        final String queryTemplate = "https://beacon.cafevariome.org/query" +
+                "?assemblyId=%s" +
+                "&referenceName=%s" +
+                "&start=%s" +
+                "&referenceBases=%s" +
+                "&alternateBases=%s";
+
+        return WebClient.create()
+                        .get()
+                        .uri(format(
+                                queryTemplate,
+                                assemblyId.get(),
+                                foundRefName.get(),
+                                foundStart.get(),
+                                foundRefBases.get(),
+                                foundAlternateBases.get()))
+                        .exchange()
+                        .flatMap(clientResponse -> clientResponse.bodyToMono(String.class)
+                                                                 .flatMap(body -> ok().syncBody(body)));
+
+    }
+
     private Mono<ServerResponse> handleTokenRequest(ServerRequest request) {
         final Optional<String> foundCode = request.queryParam("code");
         return foundCode.map(code ->
