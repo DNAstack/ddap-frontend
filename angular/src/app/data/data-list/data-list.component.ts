@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -17,15 +16,17 @@ import { objectToArray } from '../../shared/util';
 export class DataListComponent implements OnInit {
 
   resources$: Observable<any[]>;
-  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 
-  constructor(private resourceService: ResourceService, public randomImageRetriever: ImagePlaceholderRetriever) {
-  }
+  constructor(
+    private resourceService: ResourceService,
+    public randomImageRetriever: ImagePlaceholderRetriever
+  ) {}
 
   ngOnInit() {
     this.resources$ = this.resourceService.getResources()
       .pipe(
-        map(objectToArray));
+        map(objectToArray)
+      );
   }
 
 }

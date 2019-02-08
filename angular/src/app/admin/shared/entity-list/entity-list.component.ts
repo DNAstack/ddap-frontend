@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import _get from 'lodash.get';
+import { Observable } from 'rxjs/Observable';
 
 import { JsonEditorDefaults } from '../jsonEditorDefaults';
 
@@ -16,7 +17,7 @@ export class EntityListComponent {
   configName: string;
 
   @Input()
-  entityList: any;
+  entityList: Observable<any[]>;
 
   @Input()
   descriptionProperty: string;

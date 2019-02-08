@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -14,7 +13,6 @@ import { ClientService } from '../clients.service';
 export class ClientListComponent implements OnInit {
 
   clients$: Observable<any[]>;
-  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 
   constructor(private clientService: ClientService) {
   }
@@ -22,7 +20,8 @@ export class ClientListComponent implements OnInit {
   ngOnInit() {
     this.clients$ = this.clientService.get()
       .pipe(
-        map(objectToArray));
+        map(objectToArray)
+      );
   }
 
 }

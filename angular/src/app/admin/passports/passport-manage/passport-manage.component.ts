@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PassportService } from '../passports.service';
@@ -8,14 +8,11 @@ import { PassportService } from '../passports.service';
   templateUrl: './passport-manage.component.html',
   styleUrls: ['./passport-manage.component.scss'],
 })
-export class PassportManageComponent implements OnInit {
+export class PassportManageComponent {
 
   passport: any = {};
 
   constructor(private passportService: PassportService, private router: Router) { }
-
-  ngOnInit() {
-  }
 
   onSubmit(value: any) {
     this.passportService.save(JSON.parse(value.body))

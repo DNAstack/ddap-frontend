@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { DefinitionService } from '../definitions.service';
@@ -8,14 +8,11 @@ import { DefinitionService } from '../definitions.service';
   templateUrl: './definition-manage.component.html',
   styleUrls: ['./definition-manage.component.scss'],
 })
-export class DefinitionManageComponent implements OnInit {
+export class DefinitionManageComponent {
 
   definition: any = {};
 
   constructor(private definitionService: DefinitionService, private router: Router) { }
-
-  ngOnInit() {
-  }
 
   onSubmit(value: any) {
     this.definitionService.save(JSON.parse(value.body))

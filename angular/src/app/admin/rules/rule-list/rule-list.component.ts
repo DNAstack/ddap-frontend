@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -14,15 +13,15 @@ import { RuleService } from '../rules.service';
 export class RuleListComponent implements OnInit {
 
   rules$: Observable<any[]>;
-  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 
   constructor(private ruleService: RuleService) {
   }
 
   ngOnInit() {
-    this.rules$ = this.ruleService
-      .get()
-      .pipe(map(objectToArray));
+    this.rules$ = this.ruleService.get()
+      .pipe(
+        map(objectToArray)
+      );
   }
 
 }

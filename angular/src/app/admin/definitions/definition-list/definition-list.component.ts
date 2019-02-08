@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -14,7 +13,6 @@ import { DefinitionService } from '../definitions.service';
 export class DefinitionListComponent implements OnInit {
 
   definitions$: Observable<any[]>;
-  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 
   constructor(private definitionService: DefinitionService) {
   }
@@ -22,7 +20,8 @@ export class DefinitionListComponent implements OnInit {
   ngOnInit() {
     this.definitions$ = this.definitionService.get()
       .pipe(
-        map(objectToArray));
+        map(objectToArray)
+      );
   }
 
 }

@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -14,7 +13,6 @@ import { GrantService } from '../grants.service';
 export class GrantListComponent implements OnInit {
 
   grants$: Observable<any[]>;
-  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 
   constructor(private grantService: GrantService) {
   }
@@ -22,7 +20,8 @@ export class GrantListComponent implements OnInit {
   ngOnInit() {
     this.grants$ = this.grantService.get()
       .pipe(
-        map(objectToArray));
+        map(objectToArray)
+      );
   }
 
 }

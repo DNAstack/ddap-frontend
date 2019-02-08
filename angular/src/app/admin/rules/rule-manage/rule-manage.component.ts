@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { RuleService } from '../rules.service';
@@ -8,14 +8,11 @@ import { RuleService } from '../rules.service';
   templateUrl: './rule-manage.component.html',
   styleUrls: ['./rule-manage.component.scss'],
 })
-export class RuleManageComponent implements OnInit {
+export class RuleManageComponent {
 
   rule: any = {};
 
   constructor(private ruleService: RuleService, private router: Router) { }
-
-  ngOnInit() {
-  }
 
   onSubmit(value: any) {
     this.ruleService.save(JSON.parse(value.body))

@@ -16,8 +16,7 @@ import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.servic
 })
 export class DataDetailComponent implements OnInit {
 
-  beaconResponse$: any = null;
-  error: string = null;
+  beaconResponse: any = null;
   resource: any;
   views: any;
 
@@ -52,7 +51,7 @@ export class DataDetailComponent implements OnInit {
 
   queryBeacons(query, resource) {
     this.beaconService.queryResourceBeacons(query, resource)
-      .subscribe(response => this.beaconResponse$ = response);
+      .subscribe(response => this.beaconResponse = response);
   }
 
   private getViews(resource) {
