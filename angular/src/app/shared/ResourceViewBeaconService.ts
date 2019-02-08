@@ -1,66 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 
+import { environment } from '../../environments/environment';
 
 import { DnaChangeQueryParser } from './DnaChangeQueryParser';
 
 @Injectable()
-export class ResourceViewBeaconService {
+export class ResourceBeaconService {
 
   constructor(private http: HttpClient) {
   }
 
-  queryBeaconIfAvailable(query, resource): any {
+  queryResourceBeacons(query, resource): Observable<any> {
     if (!DnaChangeQueryParser.validate(query)) {
-      return;
+      return new EmptyObservable();
     }
 
-    const beaconUrls = this.getBeaconUrls(this.getViews(resource));
-    if (beaconUrls.length < 1) {
-      return;
-    }
+    const params = DnaChangeQueryParser.parseParams(query);
+    params.type = 'beacon';
 
-    return beaconUrls.map(url => this.queryBeacon(url, DnaChangeQueryParser.parseParams(query)));
+    return this.queryBeacon(resource.name, params);
   }
 
-  private queryBeacon(url, params?) {
-    this.http.get<any>(`${url}`, { params })
-      .pipe(
-        map(this.buildBeaconResponse)
-      )
-      .subscribe();
-  }
-
-  // TODO: beaconName, orgName
-  private buildBeaconResponse(response) {
-    return {
-      name: '%Beacon Name%',
-      organization: '%Organization Name%',
-      query: {
-        result: response.exists ? 'Found' : 'Not found',
-      },
-    };
-  }
-
-  private getViews(resource) {
-    return Object
-      .keys(resource.views)
-      .map((key) => {
-        return {
-          ...resource.views[key],
-        };
-      });
-  }
-
-  private hasBeaconView(view) {
-    return 'http:beacon' in view.interfaces;
-  }
-
-  private getBeaconUrls(views) {
-    return views
-      .filter(this.hasBeaconView)
-      .map(view => view.interfaces['http:beacon']);
+  private queryBeacon(resourceId, params?): Observable<any> {
+    return this.http.get<any>(`${environment.ddapApiUrl}/resources/${resourceId}/search`, { params });
   }
 
 }

@@ -4,7 +4,7 @@
   <h2>{{ resource?.ui.label || 'Unknown' }}</h2>
   <ddap-search-bar
     [placeholder]="['1 : 156105028 T > C']"
-    (valueChanged)="beaconService.queryBeaconIfAvailable($event, resource)">
+    (valueChanged)="queryBeacons($event, resource)">
   </ddap-search-bar>
 </header>
 
@@ -16,6 +16,8 @@
   </p>
 
   <mat-divider class="ddap-main-divider"></mat-divider>
+
+  <ddap-beacon-result *ngIf="beaconResponse$" [beacon]="beaconResponse$"></ddap-beacon-result>
 
   <div class="ddap-column-panel">
     <div class="ddap-column">
