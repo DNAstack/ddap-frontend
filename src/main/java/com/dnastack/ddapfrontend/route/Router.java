@@ -1,5 +1,6 @@
 package com.dnastack.ddapfrontend.route;
 
+import lombok.Builder;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -22,6 +23,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.dnastack.ddapfrontend.header.XForwardUtil.getExternalPath;
 import static java.lang.String.format;
@@ -125,13 +127,49 @@ public class Router {
 
     }
 
-    private Mono<ServerResponse> handleBeaconQuery(ServerRequest request) {
-        final Optional<String> assemblyId = request.queryParam("assemblyId");
-        final Optional<String> foundRefName = request.queryParam("referenceName");
-        final Optional<String> foundStart = request.queryParam("start");
-        final Optional<String> foundRefBases = request.queryParam("referenceBases");
-        final Optional<String> foundAlternateBases = request.queryParam("alternateBases");
+    @lombok.Value
+    @Builder
+    private static class BeaconQueryParams {
+        private String assemblyId, referenceName, start, referenceBases, alternateBases;
+    }
 
+    private Mono<ServerResponse> handleBeaconQuery(ServerRequest request) {
+        final Optional<BeaconQueryParams> foundQueryParams = Optional.of(BeaconQueryParams.builder())
+                                                                     .flatMap(b -> request
+                                                                             .queryParam(
+                                                                                     "assemblyId")
+                                                                             .map(b::assemblyId))
+                                                                     .flatMap(b -> request
+                                                                             .queryParam(
+                                                                                     "referenceName")
+                                                                             .map(b::referenceName))
+                                                                     .flatMap(b -> request
+                                                                             .queryParam(
+                                                                                     "start")
+                                                                             .map(b::start))
+                                                                     .flatMap(b -> request
+                                                                             .queryParam(
+                                                                                     "referenceBases")
+                                                                             .map(b::referenceBases))
+                                                                     .flatMap(b -> request
+                                                                             .queryParam(
+                                                                                     "alternateBases")
+                                                                             .map(b::alternateBases))
+                                                                     .map(b -> b.build());
+
+        return foundQueryParams.map(this::handleBeaconQuery)
+                               .orElseGet(() -> handleMissingBeaconQueryParams(request));
+    }
+
+    private Mono<ServerResponse> handleMissingBeaconQueryParams(ServerRequest request) {
+        String missingQueryParams = Stream.of("assemblyId", "referenceName", "start", "referenceBases", "alternateBases")
+                                          .filter(param -> !request.queryParam(param).isPresent())
+                                          .reduce((s1, s2) -> s1 + ", " + s2)
+                                          .orElse("");
+        return badRequest().contentType(TEXT_PLAIN).syncBody(format("Missing query parameters: [%s]", missingQueryParams));
+    }
+
+    private Mono<ServerResponse> handleBeaconQuery(BeaconQueryParams queryParams) {
         final String queryTemplate = "https://beacon.cafevariome.org/query" +
                 "?assemblyId=%s" +
                 "&referenceName=%s" +
@@ -143,15 +181,14 @@ public class Router {
                         .get()
                         .uri(format(
                                 queryTemplate,
-                                assemblyId.get(),
-                                foundRefName.get(),
-                                foundStart.get(),
-                                foundRefBases.get(),
-                                foundAlternateBases.get()))
+                                queryParams.getAssemblyId(),
+                                queryParams.getReferenceName(),
+                                queryParams.getStart(),
+                                queryParams.getReferenceBases(),
+                                queryParams.getAlternateBases()))
                         .exchange()
                         .flatMap(clientResponse -> clientResponse.bodyToMono(JSONObject.class)
                                                                  .flatMap(this::formatBeaconResponse));
-
     }
 
     private Mono<ServerResponse> formatBeaconResponse(JSONObject clientResponse) {
