@@ -41,6 +41,10 @@ h2 {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-back:before {
+  content: "q";
+}
+
 .icon-claims:before {
   content: "\61";
 }
@@ -51,7 +55,7 @@ h2 {
   content: "\63";
 }
 .icon-explore:before {
-  content: "\65";
+  content: "p";
 }
 .icon-personas:before {
   content: "\66";
@@ -80,7 +84,6 @@ h2 {
 .icon-locked:before {
   content: "\6f";
 }
-
 .text-color--subtle {
   color: $navbar-font-subtle-color;
 }

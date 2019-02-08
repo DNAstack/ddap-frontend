@@ -21,6 +21,7 @@ import { EntityListComponent } from './entityList/entityList.component';
 import { EntityListHeaderComponent } from './entityListHeader/entityListHeader.component';
 import { JsonPanelComponent } from './jsonPanel/jsonPanel.component';
 import { NavBackComponent } from './navBack/navBack.component';
+import { ResourceLogoComponent } from './resourceLogo/resource-logo.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { NavBackComponent } from './navBack/navBack.component';
     EntityListComponent,
     EntityListHeaderComponent,
     NavBackComponent,
+    ResourceLogoComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -68,6 +70,7 @@ import { NavBackComponent } from './navBack/navBack.component';
     JsonPanelComponent,
     EntityListComponent,
     EntityListHeaderComponent,
+    ResourceLogoComponent,
   ],
 })
 export class SharedModule { }
