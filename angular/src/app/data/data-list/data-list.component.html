@@ -1,18 +1,26 @@
-<h2>Explore Data</h2>
+<header>
+  <mat-icon class="icon icon-explore"></mat-icon>
+  <h2>Explore Data</h2>
+</header>
 
+<div class="ddap-data-pane">
 <mat-card class="ddap-card" *ngFor="let resource of (resources$ | async)">
   <mat-card-header>
     <mat-card-title>{{ resource.ui.label || 'Unknown' }}</mat-card-title>
+    <mat-card-subtitle>{{ resource.ui.description || 'Unknown' }}</mat-card-subtitle>
   </mat-card-header>
   <img mat-card-image
        [src]="[resource.ui.imageUrl || randomImageRetriever.getPathToFixedRandomImage(resource.ui.label)]"
        alt="Photo">
   <mat-card-content>
-    <p>{{ resource.ui.description }}</p>
+    <p>{{ resource.ui.description || 'Unknown'}}</p>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-flat-button
+    <button mat-button
             color="primary"
-            [routerLink]="['/data/', resource.name]">Details</button>
+            [routerLink]="['/data/', resource.name]">VIEW SET</button>
+    <span flex></span>
+    <mat-icon class="icon icon-foo"></mat-icon>
   </mat-card-actions>
 </mat-card>
+</div>

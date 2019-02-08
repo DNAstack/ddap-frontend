@@ -1,10 +1,47 @@
+@import "~src/styles/modules/colors";
+@import "~@angular/material/theming";
+
 .ddap-card {
-  max-width: 20rem;
+  min-width: 20rem;
+  max-width: 30rem;
+  height: 20rem;
   display: inline-block;
   margin-right: 1rem;
   margin-bottom: 1rem;
 
   mat-card-title {
     word-break: break-all;
+  }
+
+  img {
+    min-width: 20rem;
+    height: 10rem;
+    object-fit: cover;
+  }
+}
+
+header {
+  margin: 0 -2rem;
+  padding: 0 2rem;
+  min-height: 5.5rem;
+
+  h2 {
+    margin: 0;
+    font-weight: 300;
+    padding: 1rem 0 1rem 1rem;
+    display: inline-block;
+    font-size: 3rem;
+    color: $navbar-main-background;
+  }
+
+  border-bottom: 1px solid $color-faded-grey;
+}
+
+.ddap-data-pane {
+  margin-top: 2rem;
+
+  mat-icon {
+    float: right;
+    margin-right: 0.5rem;
   }
 }
