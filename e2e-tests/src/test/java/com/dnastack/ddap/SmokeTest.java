@@ -4,9 +4,7 @@ import com.dnastack.ddap.page.HasNavBar;
 import com.dnastack.ddap.page.ICLoginPage;
 import com.dnastack.ddap.page.NavBar;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -26,6 +24,8 @@ import static org.junit.Assert.fail;
 
 public class SmokeTest {
     private static WebDriver driver;
+    private static String screenshotDir;
+
     private final static String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
     private final static String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
     private final static String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
@@ -53,8 +53,9 @@ public class SmokeTest {
                 Arrays.asList("dbGaP", "elixir", "playgroundIC"));
     }};
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void driverSetup() {
+        screenshotDir = optionalEnv("E2E_SCREENSHOT_DIR", "target");
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         if (HEADLESS) {
@@ -66,16 +67,29 @@ public class SmokeTest {
 
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
 
+    @Before
+    public void testSetup() {
+        if (driver != null) {
+            // Ensure that tests with login work independently of eachother.
+            driver.manage().deleteAllCookies();
+        }
         ICLoginPage icLoginPage = startLogin();
         ddapPage = icLoginPage.loginAsNciResearcher();
     }
 
     @AfterClass
-    public static void tearDown() {
+    public static void quitDriver() {
         if (driver != null) {
             driver.quit();
+            driver = null;
         }
+    }
+
+    @Rule
+    public ScreenShotRule screenShotRule() {
+        return new ScreenShotRule(driver, screenshotDir);
     }
 
     @Test
