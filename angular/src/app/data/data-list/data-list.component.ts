@@ -3,8 +3,8 @@ import { JsonEditorComponent } from 'ang-jsoneditor';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
-import { ResourceService } from '../../resources/resource.service';
-import { ImagePlaceholderRetriever } from '../../shared/RandomImageRetriever';
+import { ResourceService } from '../../admin/resources/resources.service';
+import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 import { objectToArray } from '../../shared/util';
 
 

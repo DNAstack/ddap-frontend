@@ -13,24 +13,17 @@ import {
   MatSidenavModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppRoutingModule } from '../app-routing.module';
 
-import { BeaconResultComponent } from './beaconResult/beaconResult.component';
-import { EntityListComponent } from './entityList/entityList.component';
-import { EntityListHeaderComponent } from './entityListHeader/entityListHeader.component';
-import { JsonPanelComponent } from './jsonPanel/jsonPanel.component';
-import { NavBackComponent } from './navBack/navBack.component';
-import { ResourceLogoComponent } from './resourceLogo/resource-logo.component';
-import { SearchBarComponent } from './searchBar/searchBar.component';
+import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
+import { NavBackComponent } from './nav-back/nav-back.component';
+import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
+import { SearchBarComponent } from './search-bar/search-bar.component';
 
 @NgModule({
   declarations: [
-    JsonPanelComponent,
-    EntityListComponent,
-    EntityListHeaderComponent,
     NavBackComponent,
     ResourceLogoComponent,
     SearchBarComponent,
@@ -39,7 +32,6 @@ import { SearchBarComponent } from './searchBar/searchBar.component';
   imports: [
     AppRoutingModule,
 
-    ClipboardModule,
     CommonModule,
     FormsModule,
     BrowserAnimationsModule,
@@ -53,14 +45,14 @@ import { SearchBarComponent } from './searchBar/searchBar.component';
     MatButtonModule,
     MatIconModule,
     MatListModule,
-
-    NgJsonEditorModule,
   ],
   exports: [
-    ClipboardModule,
+    AppRoutingModule,
+
     CommonModule,
     FormsModule,
     BrowserAnimationsModule,
+    ClipboardModule,
 
     MatCardModule,
     MatProgressBarModule,
@@ -72,13 +64,9 @@ import { SearchBarComponent } from './searchBar/searchBar.component';
     MatIconModule,
     MatListModule,
 
-    NgJsonEditorModule,
     NavBackComponent,
     SearchBarComponent,
     BeaconResultComponent,
-    JsonPanelComponent,
-    EntityListComponent,
-    EntityListHeaderComponent,
     ResourceLogoComponent,
   ],
 })

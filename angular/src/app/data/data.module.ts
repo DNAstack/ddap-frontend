@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatGridListModule } from '@angular/material';
 
@@ -15,8 +14,6 @@ import { DataRoutingModule } from './data-routing.module';
     DataDetailComponent,
   ],
   imports: [
-    CommonModule,
-
     SharedModule,
     DataRoutingModule,
     MatGridListModule,

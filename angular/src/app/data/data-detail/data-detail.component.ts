@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { flatMap } from 'rxjs/operators';
 
-import { ResourceService } from '../../resources/resource.service';
-import { ImagePlaceholderRetriever } from '../../shared/RandomImageRetriever';
-import { ResourceBeaconService } from '../../shared/ResourceViewBeaconService';
+import { ResourceService } from '../../admin/resources/resources.service';
+import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
+import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 
 @Component({
   selector: 'ddap-resource-detail',
