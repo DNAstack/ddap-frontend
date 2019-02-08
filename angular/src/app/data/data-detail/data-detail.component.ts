@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { flatMap } from 'rxjs/operators';
@@ -12,6 +12,8 @@ import { ImagePlaceholderRetriever } from '../../shared/RandomImageRetriever';
   templateUrl: './data-detail.component.html',
   styleUrls: ['./data-detail.component.scss'],
   providers: [ImagePlaceholderRetriever],
+  // Easiest way to override inner component styles; https://stackoverflow.com/a/36225709
+  encapsulation: ViewEncapsulation.None,
 })
 export class DataDetailComponent implements OnInit {
 

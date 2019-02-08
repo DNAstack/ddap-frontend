@@ -1,53 +1,83 @@
-<h2>
-  <mat-icon mat-list-icon>tune</mat-icon>
-  {{ resource?.ui.label || 'Unknown' }}</h2>
+<header>
+  <mat-icon class="icon icon-back"
+            [routerLink]="['/data']"></mat-icon>
+  <h2>{{ resource?.ui.label || 'Unknown' }}</h2>
+</header>
 
-<div class="ddap-container">
-  <ddap-nav-back navigateTo="/data"></ddap-nav-back>
-  <div class="ddap-resource-image">
-    <img [src]="[resource?.ui.imageUrl || randomImageRetriever.getPathToFixedRandomImage(resource?.ui.label)]" alt="Photo">
-  </div>
-  <div class="ddap-resource-info">
-    <p>{{ resource?.ui.description }}</p>
-    <mat-list>
-      <mat-list-item *ngFor="let view of views">
-        <mat-icon mat-list-icon>view_quilt</mat-icon>
-        <h4 mat-line>{{ view.name }}</h4>
+<ddap-resource-logo [imageUrl]="resource?.ui.imageUrl"></ddap-resource-logo>
 
-        <mat-form-field *ngIf="resource.views[view.name].token"
-                        mat-line
-                        class="example-form-field">
-          <input matInput
-                 disabled
-                 type="text"
-                 placeholder="Access Token"
-                 [(ngModel)]="resource.views[view.name].token">
+<div>
+  <p class="ddap-resource-title">
+    {{ resource?.ui.description }}
+  </p>
 
-          <button mat-mat-flat-button
-                  matSuffix
-                  mat-icon-button
-                  ngxClipboard
-                  [cbContent]="resource.views[view.name].token"
-                  aria-label="Copy to clipboard">
-            <mat-icon>file_copy</mat-icon>
+  <mat-divider class="ddap-main-divider"></mat-divider>
+
+  <div class="ddap-column-panel">
+    <div class="ddap-column">
+      <p>
+        Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Integer posuere erat a
+        ante venenatis dapibus posuere velit aliquet. Maecenas faucibus mollis interdum. Maecenas faucibus interdum.
+      </p>
+
+      <table>
+        <tr>
+          <td>Year</td>
+          <td>2016</td>
+        </tr>
+        <tr>
+          <td>Access</td>
+          <td>Public</td>
+        </tr>
+        <tr>
+          <td>Tags</td>
+          <td>Autism, Infants, Research, Teaching Hospital</td>
+        </tr>
+        <tr>
+          <td>Size</td>
+          <td>56 MB</td>
+        </tr>
+      </table>
+    </div>
+    <div class="ddap-column">
+      <mat-list>
+        <mat-list-item *ngFor="let view of views">
+          <h4 mat-line>{{ view.name }}</h4>
+
+          <mat-form-field *ngIf="resource.views[view.name].token"
+                          mat-line
+                          class="example-form-field">
+            <input matInput
+                   disabled
+                   type="text"
+                   placeholder="Access Token"
+                   [(ngModel)]="resource.views[view.name].token">
+
+            <button mat-mat-flat-button
+                    matSuffix
+                    mat-icon-button
+                    ngxClipboard
+                    [cbContent]="resource.views[view.name].token"
+                    aria-label="Copy to clipboard">
+              <mat-icon>file_copy</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <button *ngIf="!resource.views[view.name].url && !resource.views[view.name].token"
+                  mat-flat-button
+                  color="primary"
+                  (click)="getAccess(view.name)">GET ACCESS
           </button>
-        </mat-form-field>
 
-        <button *ngIf="!resource.views[view.name].url && !resource.views[view.name].token"
-                mat-flat-button
-                color="primary"
-                (click)="getAccess(view.name)">Get Access
-        </button>
+          <a *ngIf="resource.views[view.name].url"
+             mat-raised-button
+             color="accent"
+             href="{{resource.views[view.name].url}}">ACCESS</a>
 
-        <a *ngIf="resource.views[view.name].url"
-           mat-raised-button
-           color="accent"
-           href="{{resource.views[view.name].url}}">Access</a>
-
-        <mat-divider></mat-divider>
-      </mat-list-item>
-    </mat-list>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+      </mat-list>
+    </div>
   </div>
 </div>
-
 
