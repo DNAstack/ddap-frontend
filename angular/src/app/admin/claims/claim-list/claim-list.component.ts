@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -14,7 +13,6 @@ import { ClaimService } from '../claims.service';
 export class ClaimListComponent implements OnInit {
 
   claims$: Observable<any[]>;
-  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 
   constructor(private claimService: ClaimService) {
   }
@@ -22,7 +20,8 @@ export class ClaimListComponent implements OnInit {
   ngOnInit() {
     this.claims$ = this.claimService.get()
       .pipe(
-        map(objectToArray));
+        map(objectToArray)
+      );
   }
 
 }

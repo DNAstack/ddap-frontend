@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -14,7 +13,6 @@ import { PersonaService } from '../personas.service';
 export class PersonaListComponent implements OnInit {
 
   personas$: Observable<any[]>;
-  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 
   constructor(private personaService: PersonaService) {
   }
@@ -22,7 +20,8 @@ export class PersonaListComponent implements OnInit {
   ngOnInit() {
     this.personas$ = this.personaService.get()
       .pipe(
-        map(objectToArray));
+        map(objectToArray)
+      );
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PersonaService } from '../personas.service';
@@ -8,14 +8,11 @@ import { PersonaService } from '../personas.service';
   templateUrl: './persona-manage.component.html',
   styleUrls: ['./persona-manage.component.scss'],
 })
-export class PersonaManageComponent implements OnInit {
+export class PersonaManageComponent {
 
   persona: any = {};
 
   constructor(private personaService: PersonaService, private router: Router) { }
-
-  ngOnInit() {
-  }
 
   onSubmit(value: any) {
     this.personaService.save(JSON.parse(value.body))
