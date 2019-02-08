@@ -1,6 +1,6 @@
 package com.dnastack.ddapfrontend.route;
 
-import lombok.Builder;
+import com.dnastack.ddapfrontend.beacon.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -13,6 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.ResponseCookie;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -112,97 +113,6 @@ public class Router {
     @Bean
     RouterFunction<ServerResponse> apiToken() {
         return RouterFunctions.route(GET("/api/identity/token"), this::handleTokenRequest);
-    }
-
-    @Bean
-    RouterFunction<ServerResponse> searchQuery() {
-        return RouterFunctions.route(GET("/api/resources/{resourceId}/search"), this::handleSearchQuery);
-    }
-
-    private Mono<ServerResponse> handleSearchQuery(ServerRequest request) {
-        final Optional<String> foundType = request.queryParam("type");
-        return foundType.map(type -> handleBeaconQuery(request))
-                        .orElseGet(() -> badRequest().syncBody(format("Invalid search type [%s]",
-                                                                      foundType.orElse(""))));
-
-    }
-
-    @lombok.Value
-    @Builder
-    private static class BeaconQueryParams {
-        private String assemblyId, referenceName, start, referenceBases, alternateBases;
-    }
-
-    private Mono<ServerResponse> handleBeaconQuery(ServerRequest request) {
-        final Optional<BeaconQueryParams> foundQueryParams = Optional.of(BeaconQueryParams.builder())
-                                                                     .flatMap(b -> request
-                                                                             .queryParam(
-                                                                                     "assemblyId")
-                                                                             .map(b::assemblyId))
-                                                                     .flatMap(b -> request
-                                                                             .queryParam(
-                                                                                     "referenceName")
-                                                                             .map(b::referenceName))
-                                                                     .flatMap(b -> request
-                                                                             .queryParam(
-                                                                                     "start")
-                                                                             .map(b::start))
-                                                                     .flatMap(b -> request
-                                                                             .queryParam(
-                                                                                     "referenceBases")
-                                                                             .map(b::referenceBases))
-                                                                     .flatMap(b -> request
-                                                                             .queryParam(
-                                                                                     "alternateBases")
-                                                                             .map(b::alternateBases))
-                                                                     .map(b -> b.build());
-
-        return foundQueryParams.map(this::handleBeaconQuery)
-                               .orElseGet(() -> handleMissingBeaconQueryParams(request));
-    }
-
-    private Mono<ServerResponse> handleMissingBeaconQueryParams(ServerRequest request) {
-        String missingQueryParams = Stream.of("assemblyId", "referenceName", "start", "referenceBases", "alternateBases")
-                                          .filter(param -> !request.queryParam(param).isPresent())
-                                          .reduce((s1, s2) -> s1 + ", " + s2)
-                                          .orElse("");
-        return badRequest().contentType(TEXT_PLAIN).syncBody(format("Missing query parameters: [%s]", missingQueryParams));
-    }
-
-    private Mono<ServerResponse> handleBeaconQuery(BeaconQueryParams queryParams) {
-        final String queryTemplate = "https://beacon.cafevariome.org/query" +
-                "?assemblyId=%s" +
-                "&referenceName=%s" +
-                "&start=%s" +
-                "&referenceBases=%s" +
-                "&alternateBases=%s";
-
-        return WebClient.create()
-                        .get()
-                        .uri(format(
-                                queryTemplate,
-                                queryParams.getAssemblyId(),
-                                queryParams.getReferenceName(),
-                                queryParams.getStart(),
-                                queryParams.getReferenceBases(),
-                                queryParams.getAlternateBases()))
-                        .exchange()
-                        .flatMap(clientResponse -> clientResponse.bodyToMono(JSONObject.class)
-                                                                 .flatMap(this::formatBeaconResponse));
-    }
-
-    private Mono<ServerResponse> formatBeaconResponse(JSONObject clientResponse) {
-        final JSONObject serverResponse = new JSONObject();
-        serverResponse.put("name", "Cafe Variome");
-        serverResponse.put("organization", "University of Leicester");
-        serverResponse.put("exists", clientResponse.get("exists"));
-        final JSONObject metadata = new JSONObject();
-        serverResponse.put("metadata", metadata);
-        metadata.put("alleleRequest", clientResponse.get("alleleRequest"));
-        metadata.put("datasetAlleleResponses", clientResponse.get("datasetAlleleResponses"));
-        metadata.put("error", clientResponse.get("error"));
-
-        return ok().syncBody(serverResponse);
     }
 
     private Mono<ServerResponse> handleTokenRequest(ServerRequest request) {
