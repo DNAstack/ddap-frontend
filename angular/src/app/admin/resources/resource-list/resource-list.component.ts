@@ -20,7 +20,7 @@ export class ResourceListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.resources$ = this.resourceService.getResources()
+    this.resources$ = this.resourceService.get()
       .pipe(
         map(objectToArray));
   }

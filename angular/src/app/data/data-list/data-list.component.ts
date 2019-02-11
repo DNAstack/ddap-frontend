@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
 
-import { ResourceService } from '../../admin/resources/resources.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
-import { objectToArray } from '../../shared/util';
+import { DataService } from '../data.service';
 
 
 @Component({
@@ -18,15 +16,12 @@ export class DataListComponent implements OnInit {
   resources$: Observable<any[]>;
 
   constructor(
-    private resourceService: ResourceService,
+    private dataService: DataService,
     public randomImageRetriever: ImagePlaceholderRetriever
   ) {}
 
   ngOnInit() {
-    this.resources$ = this.resourceService.getResources()
-      .pipe(
-        map(objectToArray)
-      );
+    this.resources$ = this.dataService.get();
   }
 
 }
