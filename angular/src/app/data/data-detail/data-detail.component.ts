@@ -2,9 +2,9 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { flatMap } from 'rxjs/operators';
 
-import { ResourceService } from '../../admin/resources/resources.service';
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'ddap-resource-detail',
@@ -22,13 +22,12 @@ export class DataDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private resourceService: ResourceService,
-    public randomImageRetriever: ImagePlaceholderRetriever,
+    private dataService: DataService,
     private beaconService: ResourceBeaconService) {}
 
   ngOnInit() {
     this.route.params.pipe(
-      flatMap(params => this.resourceService.getResource(params['resourceName']))
+      flatMap(params => this.dataService.getResource(params['resourceName']))
     ).subscribe((resource) => {
       this.resource = resource;
       this.views = this.getViews(resource);
@@ -36,7 +35,7 @@ export class DataDetailComponent implements OnInit {
   }
 
   getAccess(viewName) {
-    this.resourceService.getAccessRequestToken(this.resource.name, viewName)
+    this.dataService.getAccessRequestToken(this.resource.name, viewName)
       .subscribe((accessToken) => {
         this.resource.views[viewName].token = accessToken;
 
