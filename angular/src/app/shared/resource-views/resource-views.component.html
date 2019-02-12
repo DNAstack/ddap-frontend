@@ -1,0 +1,23 @@
+<div class="flex vertical-center">
+  <h4 *ngIf="!isTokenGranted()" class="stretch">{{ view.ui?.label || view.name }}</h4>
+  <mat-form-field *ngIf="isTokenGranted()" [class]="isTokenGranted() ? 'stretch' : ''">
+    <input matInput readonly type="text" [placeholder]="view.ui?.label || view.name" [value]="view.url || view.token">
+  </mat-form-field>
+  <button *ngIf="isTokenGranted()"
+          mat-flat-button matSuffix mat-icon-button ngxClipboard
+          [cbContent]="view.url || view.token"
+          aria-label="Copy to clipboard">
+    <mat-icon class="icon icon-copy"></mat-icon>
+  </button>
+  <div *ngIf="!isTokenGranted()">
+    <button mat-flat-button class="background--accent uppercase" (click)="getAccess()">
+      Get access
+    </button>
+  </div>
+  <a *ngIf="view.url" href="{{view.url}}"
+     target='_blank' rel='noopener noreferrer'>
+    <button mat-flat-button class="background--accent uppercase">
+      Access
+    </button>
+  </a>
+</div>

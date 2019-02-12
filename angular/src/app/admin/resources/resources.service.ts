@@ -16,14 +16,17 @@ export class ResourceService implements EntityService {
   constructor(private http: HttpClient) { }
 
   getAccessRequestToken(resource, view): Observable<any[]> {
-    return this.getResource(resource)
+    const params = {
+    };
+
+    return this.http.get<any[]>(`${environment.damApiUrl}/resources/${resource}/views/${view}`, { params })
       .pipe(
-        pluck('views', view, 'token')
+        pluck('token')
       );
   }
 
   get(): Observable<any[]> {
-    return this.http.get<any[]>(environment.damApiUrl + '/config')
+    return this.http.get<any[]>(`${environment.damApiUrl}/config`)
       .pipe(
         pluck('resources')
       );
@@ -40,8 +43,7 @@ export class ResourceService implements EntityService {
     };
     const resourceName = resourceChange.item.name;
 
-    return this.http.post(
-      environment.damApiUrl + '/config/resources/' + resourceName,
+    return this.http.post(`${environment.damApiUrl}/config/resources/${resourceName}`,
       resourceChange,
       { params, headers }
     );
@@ -59,8 +61,7 @@ export class ResourceService implements EntityService {
       resourceChange.apply = test;
     }
 
-    return this.http.put(
-      environment.damApiUrl + '/config/resources/' + resourceName,
+    return this.http.put(`${environment.damApiUrl}/config/resources/${resourceName}`,
       resourceChange,
       { params, headers }
     );

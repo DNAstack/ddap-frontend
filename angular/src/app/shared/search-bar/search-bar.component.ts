@@ -15,7 +15,7 @@ export class SearchBarComponent {
   disabled: boolean;
 
   @Output()
-  valueChanged = new EventEmitter<string>();
+  valueChanged: EventEmitter<string> = new EventEmitter<string>();
 
   private valueUpdated: Subject<string> = new Subject();
 

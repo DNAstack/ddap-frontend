@@ -1,9 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { flatMap } from 'rxjs/operators';
 
-import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 import { ResourceService } from '../resources.service';
 
 @Component({
@@ -13,36 +11,19 @@ import { ResourceService } from '../resources.service';
 })
 export class ResourceDetailComponent implements OnInit {
 
-  error: string = null;
-  // An actual resource from the server
   resource: any;
-  // A (possible edited) resource from the json editor.
-  resourceDto: any;
   views: any;
 
-  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
-  editorOptions: JsonEditorOptions | any;
+  constructor(private route: ActivatedRoute, public resourceService: ResourceService) {
 
-  constructor(
-    private route: ActivatedRoute,
-    public resourceService: ResourceService
-  ) {
-    this.editorOptions = new JsonEditorDefaults();
   }
 
   ngOnInit() {
     this.route.params.pipe(
       flatMap(params => this.resourceService.getResource(params['resourceName']))
-    ).subscribe((resourceDto) => {
-      this.resource = resourceDto;
-      this.resourceDto = resourceDto;
-      this.views = Object
-        .keys(resourceDto.views)
-        .map((key) => {
-          return {
-            ...resourceDto.views[key],
-          };
-        });
+    ).subscribe((resource) => {
+      this.resource = resource;
+      this.views = this.getViews(resource);
     });
   }
 
@@ -57,6 +38,16 @@ export class ResourceDetailComponent implements OnInit {
         if (viewAccessUrl) {
           this.resource.views[viewName].url = `${viewAccessUrl}/o?access_token=${accessToken}`;
         }
+      });
+  }
+
+  private getViews(resource) {
+    return Object
+      .keys(resource.views)
+      .map((key) => {
+        return {
+          ...resource.views[key],
+        };
       });
   }
 }
