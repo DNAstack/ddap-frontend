@@ -45,39 +45,9 @@
     <div class="ddap-column">
       <mat-list>
         <mat-list-item *ngFor="let view of views">
-          <h4 mat-line>{{ view.name }}</h4>
-
-          <mat-form-field *ngIf="resource.views[view.name].token"
-                          mat-line
-                          class="example-form-field">
-            <input matInput
-                   disabled
-                   type="text"
-                   placeholder="Access Token"
-                   [(ngModel)]="resource.views[view.name].token">
-
-            <button mat-mat-flat-button
-                    matSuffix
-                    mat-icon-button
-                    ngxClipboard
-                    [cbContent]="resource.views[view.name].token"
-                    aria-label="Copy to clipboard">
-              <mat-icon>file_copy</mat-icon>
-            </button>
-          </mat-form-field>
-
-          <button *ngIf="!resource.views[view.name].url && !resource.views[view.name].token"
-                  mat-flat-button
-                  color="primary"
-                  (click)="getAccess(view.name)">GET ACCESS
-          </button>
-
-          <a *ngIf="resource.views[view.name].url"
-             mat-raised-button
-             color="accent"
-             href="{{resource.views[view.name].url}}">ACCESS</a>
-
-          <mat-divider></mat-divider>
+          <ddap-resource-views [view]="resource.views[view.name]"
+                               (accessRequested)="getAccess(view.name)">
+          </ddap-resource-views>
         </mat-list-item>
       </mat-list>
     </div>

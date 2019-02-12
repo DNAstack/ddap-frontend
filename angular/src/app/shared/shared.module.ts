@@ -22,6 +22,7 @@ import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
+import { ResourceViewsComponent } from './resource-views/resource-views.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 
 @NgModule({
@@ -30,6 +31,7 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
     MainComponent,
     NavBackComponent,
     ResourceLogoComponent,
+    ResourceViewsComponent,
     SearchBarComponent,
     BeaconResultComponent,
   ],
@@ -39,6 +41,7 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
     CommonModule,
     FormsModule,
     BrowserAnimationsModule,
+    ClipboardModule,
 
     MatCardModule,
     MatProgressBarModule,
@@ -74,6 +77,7 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
     SearchBarComponent,
     BeaconResultComponent,
     ResourceLogoComponent,
+    ResourceViewsComponent,
   ],
 })
 export class SharedModule { }
