@@ -1,5 +1,6 @@
-<h2>{{ passport?.name }}</h2>
+<ddap-header [backLink]="['/passports']" [label]="passport?.name">
+</ddap-header>
 
-<ddap-nav-back navigateTo="/passports"></ddap-nav-back>
-
-<ddap-json-panel [entityService]="passportService" [entity]="passport"></ddap-json-panel>
+<ddap-main>
+  <ddap-json-panel [entityService]="passportService" [entity]="passport"></ddap-json-panel>
+</ddap-main>

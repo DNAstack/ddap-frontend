@@ -20,22 +20,6 @@
   }
 }
 
-header {
-  margin: 0 -2rem;
-  padding: 0 2rem;
-  min-height: 5.5rem;
-
-  h2 {
-    margin: 0;
-    font-weight: 300;
-    padding: 1rem 0 1rem 1rem;
-    display: inline-block;
-    font-size: 3rem;
-    color: $navbar-main-background;
-  }
-
-  border-bottom: 1px solid $color-faded-grey;
-}
 
 .ddap-data-pane {
   margin-top: 2rem;

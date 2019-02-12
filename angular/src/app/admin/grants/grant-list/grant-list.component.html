@@ -1,9 +1,13 @@
-<ddap-entity-list-header
-  [configName]="'grants'">
-</ddap-entity-list-header>
+<ddap-header icon="views" label="Grants">
+  <ddap-entity-add
+    [configName]="'grants'">
+  </ddap-entity-add>
+</ddap-header>
 
-<ddap-entity-list
-  [configName]="'grants'"
-  [descriptionProperty]="'action'"
-  [entityList]="grants$">
-</ddap-entity-list>
+<ddap-main>
+  <ddap-entity-list
+    [configName]="'grants'"
+    [descriptionProperty]="'action'"
+    [entityList]="grants$">
+  </ddap-entity-list>
+</ddap-main>

@@ -1,12 +1,16 @@
-<h2>Add persona</h2>
+<ddap-header [backLink]="['/personas']" label="Add Persona">
+</ddap-header>
 
-<form #personaForm="ngForm" (ngSubmit)="onSubmit(personaForm.value)">
-  <mat-form-field>
-    <textarea matInput placeholder="persona JSON" rows="10" name="body" ngModel required></textarea>
-  </mat-form-field>
-  <div>
-    <button type="submit" mat-flat-button color="primary" [disabled]="!personaForm.form.valid || personaForm.submitted">
-      Add persona
-    </button>
-  </div>
-</form>
+<ddap-main>
+  <form #personaForm="ngForm" (ngSubmit)="onSubmit(personaForm.value)">
+    <mat-form-field>
+      <textarea matInput placeholder="persona JSON" rows="10" name="body" ngModel required></textarea>
+    </mat-form-field>
+    <div>
+      <button type="submit" mat-flat-button color="primary"
+              [disabled]="!personaForm.form.valid || personaForm.submitted">
+        Add persona
+      </button>
+    </div>
+  </form>
+</ddap-main>

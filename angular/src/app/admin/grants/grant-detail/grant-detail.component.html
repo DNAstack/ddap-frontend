@@ -1,5 +1,6 @@
-<h2>{{ grant?.name }}</h2>
+<ddap-header [backLink]="['/grants']" [label]="grant?.name">
+</ddap-header>
 
-<ddap-nav-back navigateTo="/grants"></ddap-nav-back>
-
-<ddap-json-panel [entityService]="grantService" [entity]="grant"></ddap-json-panel>
+<ddap-main>
+  <ddap-json-panel [entityService]="grantService" [entity]="grant"></ddap-json-panel>
+</ddap-main>

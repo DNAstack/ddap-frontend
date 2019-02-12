@@ -1,5 +1,6 @@
-<h2>{{ persona?.name }}</h2>
+<ddap-header [backLink]="['/personas']" [label]="persona?.name">
+</ddap-header>
 
-<ddap-nav-back navigateTo="/personas"></ddap-nav-back>
-
-<ddap-json-panel [entityService]="personaService" [entity]="persona"></ddap-json-panel>
+<ddap-main>
+  <ddap-json-panel [entityService]="personaService" [entity]="persona"></ddap-json-panel>
+</ddap-main>

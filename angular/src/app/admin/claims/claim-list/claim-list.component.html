@@ -1,9 +1,13 @@
-<ddap-entity-list-header
-  [configName]="'claims'">
-</ddap-entity-list-header>
+<ddap-header icon="claims" label="Claims">
+  <ddap-entity-add
+    [configName]="'claims'">
+  </ddap-entity-add>
+</ddap-header>
 
-<ddap-entity-list
-  [configName]="'claims'"
-  [descriptionProperty]="'source'"
-  [entityList]="claims$">
-</ddap-entity-list>
+<ddap-main>
+  <ddap-entity-list
+    [configName]="'claims'"
+    [descriptionProperty]="'source'"
+    [entityList]="claims$">
+  </ddap-entity-list>
+</ddap-main>

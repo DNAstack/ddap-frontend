@@ -1,12 +1,16 @@
-<h2>Add Resource</h2>
+<ddap-header [backLink]="['/resources']" label="Add Resource">
+</ddap-header>
 
-<form #resourceForm="ngForm" (ngSubmit)="onSubmit(resourceForm.value)">
-  <mat-form-field>
-    <textarea matInput placeholder="Resource JSON" rows="10" name="body" ngModel required></textarea>
-  </mat-form-field>
-  <div>
-    <button type="submit" mat-flat-button color="primary" [disabled]="!resourceForm.form.valid || resourceForm.submitted">
-      Add Resource
-    </button>
-  </div>
-</form>
+<ddap-main>
+  <form #resourceForm="ngForm" (ngSubmit)="onSubmit(resourceForm.value)">
+    <mat-form-field>
+      <textarea matInput placeholder="Resource JSON" rows="10" name="body" ngModel required></textarea>
+    </mat-form-field>
+    <div>
+      <button type="submit" mat-flat-button color="primary"
+              [disabled]="!resourceForm.form.valid || resourceForm.submitted">
+        Add Resource
+      </button>
+    </div>
+  </form>
+</ddap-main>

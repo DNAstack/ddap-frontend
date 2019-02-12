@@ -1,9 +1,13 @@
-<ddap-entity-list-header
-  [configName]="'personas'">
-</ddap-entity-list-header>
+<ddap-header icon="personas" label="Personas">
+  <ddap-entity-add
+    [configName]="'personas'">
+  </ddap-entity-add>
+</ddap-header>
 
-<ddap-entity-list
-  [configName]="'personas'"
-  [descriptionProperty]="'state'"
-  [entityList]="personas$">
-</ddap-entity-list>
+<ddap-main>
+  <ddap-entity-list
+    [configName]="'personas'"
+    [descriptionProperty]="'state'"
+    [entityList]="personas$">
+  </ddap-entity-list>
+</ddap-main>

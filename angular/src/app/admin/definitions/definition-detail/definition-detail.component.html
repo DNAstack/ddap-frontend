@@ -1,5 +1,6 @@
-<h2>{{ definition?.name }}</h2>
+<ddap-header [backLink]="['/definitions']" [label]="definition?.name">
+</ddap-header>
 
-<ddap-nav-back navigateTo="/definitions"></ddap-nav-back>
-
-<ddap-json-panel [entityService]="definitionService" [entity]="definition"></ddap-json-panel>
+<ddap-main>
+  <ddap-json-panel [entityService]="definitionService" [entity]="definition"></ddap-json-panel>
+</ddap-main>
