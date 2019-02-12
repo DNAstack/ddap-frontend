@@ -1,12 +1,15 @@
-<h2>Add Claim</h2>
+<ddap-header [backLink]="['/claims']" label="Add Claim">
+</ddap-header>
 
-<form #claimForm="ngForm" (ngSubmit)="onSubmit(claimForm.value)">
-  <mat-form-field>
-    <textarea matInput placeholder="Claim JSON" rows="10" name="body" ngModel required></textarea>
-  </mat-form-field>
-  <div>
-    <button type="submit" mat-flat-button color="primary" [disabled]="!claimForm.form.valid || claimForm.submitted">
-      Add Claim
-    </button>
-  </div>
-</form>
+<ddap-main>
+  <form #claimForm="ngForm" (ngSubmit)="onSubmit(claimForm.value)">
+    <mat-form-field>
+      <textarea matInput placeholder="Claim JSON" rows="10" name="body" ngModel required></textarea>
+    </mat-form-field>
+    <div>
+      <button type="submit" mat-flat-button color="primary" [disabled]="!claimForm.form.valid || claimForm.submitted">
+        Add Claim
+      </button>
+    </div>
+  </form>
+</ddap-main>

@@ -33,7 +33,6 @@
     "jsoneditor": "^5.27.0",
     "lodash.get": "^4.4.2",
     "ngx-clipboard": "^11.1.9",
-    "pluralize": "^7.0.0",
     "rxjs": "~6.3.3",
     "rxjs-compat": "^6.3.3",
     "tslib": "^1.9.0",

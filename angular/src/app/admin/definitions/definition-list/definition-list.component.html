@@ -1,9 +1,13 @@
-<ddap-entity-list-header
-  [configName]="'definitions'">
-</ddap-entity-list-header>
+<ddap-header icon="copy" label="Definitions">
+  <ddap-entity-add
+    [configName]="'definitions'">
+  </ddap-entity-add>
+</ddap-header>
 
-<ddap-entity-list
-  [configName]="'definitions'"
-  [descriptionProperty]="'type'"
-  [entityList]="definitions$">
-</ddap-entity-list>
+<ddap-main>
+  <ddap-entity-list
+    [configName]="'definitions'"
+    [descriptionProperty]="'type'"
+    [entityList]="definitions$">
+  </ddap-entity-list>
+</ddap-main>

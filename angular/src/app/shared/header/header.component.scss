@@ -1,0 +1,25 @@
+@import "../../../styles/modules/colors";
+@import "../../../../node_modules/@angular/material/theming";
+
+header {
+  margin: 0 -2rem;
+  padding: 0 2rem;
+  min-height: 5.5rem;
+  border-bottom: 1px solid $color-faded-grey;
+
+  h2 {
+    margin: 0;
+    font-weight: 300;
+    padding: 1rem 0 1rem 1rem;
+    display: inline-block;
+    font-size: 3rem;
+    color: $navbar-main-background;
+    vertical-align: middle;
+  }
+
+  > mat-icon {
+    font-size: 2rem;
+    padding-bottom: 0.5rem;
+    vertical-align: middle;
+  }
+}

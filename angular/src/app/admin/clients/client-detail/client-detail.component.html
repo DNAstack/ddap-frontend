@@ -1,5 +1,6 @@
-<h2>{{ client?.name }}</h2>
+<ddap-header [backLink]="['/clients']" [label]="client?.name">
+</ddap-header>
 
-<ddap-nav-back navigateTo="/clients"></ddap-nav-back>
-
-<ddap-json-panel [entityService]="clientService" [entity]="client"></ddap-json-panel>
+<ddap-main>
+  <ddap-json-panel [entityService]="clientService" [entity]="client"></ddap-json-panel>
+</ddap-main>

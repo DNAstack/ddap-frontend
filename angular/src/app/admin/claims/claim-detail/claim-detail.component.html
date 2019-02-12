@@ -1,5 +1,6 @@
-<h2>{{ claim?.name }}</h2>
+<ddap-header [backLink]="['/claims']" [label]="claim?.name">
+</ddap-header>
 
-<ddap-nav-back navigateTo="/claims"></ddap-nav-back>
-
-<ddap-json-panel [entityService]="claimService" [entity]="claim"></ddap-json-panel>
+<ddap-main>
+  <ddap-json-panel [entityService]="claimService" [entity]="claim"></ddap-json-panel>
+</ddap-main>

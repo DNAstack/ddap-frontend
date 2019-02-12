@@ -1,8 +1,12 @@
-<ddap-entity-list-header
-  [configName]="'rules'">
-</ddap-entity-list-header>
+<ddap-header icon="rules" label="Rules">
+  <ddap-entity-add
+    [configName]="'rules'">
+  </ddap-entity-add>
+</ddap-header>
 
-<ddap-entity-list
-  [configName]="'rules'"
-  [entityList]="rules$">
-</ddap-entity-list>
+<ddap-main>
+  <ddap-entity-list
+    [configName]="'rules'"
+    [entityList]="rules$">
+  </ddap-entity-list>
+</ddap-main>

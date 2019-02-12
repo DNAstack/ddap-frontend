@@ -3,7 +3,7 @@ import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 import { SharedModule } from '../../shared/shared.module';
 
-import { EntityListHeaderComponent } from './entity-list-header/entity-list-header.component';
+import { EntityAddComponent } from './entity-add/entity-add.component';
 import { EntityListComponent } from './entity-list/entity-list.component';
 import { JsonPanelComponent } from './json-panel/json-panel.component';
 
@@ -11,7 +11,7 @@ import { JsonPanelComponent } from './json-panel/json-panel.component';
   declarations: [
     JsonPanelComponent,
     EntityListComponent,
-    EntityListHeaderComponent,
+    EntityAddComponent,
   ],
   imports: [
     SharedModule,
@@ -25,7 +25,7 @@ import { JsonPanelComponent } from './json-panel/json-panel.component';
 
     JsonPanelComponent,
     EntityListComponent,
-    EntityListHeaderComponent,
+    EntityAddComponent,
   ],
 })
 export class AdminSharedModule { }

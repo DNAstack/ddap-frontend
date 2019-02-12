@@ -18,12 +18,16 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { AppRoutingModule } from '../app-routing.module';
 
 import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
+import { HeaderComponent } from './header/header.component';
+import { MainComponent } from './main/main.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 
 @NgModule({
   declarations: [
+    HeaderComponent,
+    MainComponent,
     NavBackComponent,
     ResourceLogoComponent,
     SearchBarComponent,
@@ -64,6 +68,8 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
     MatIconModule,
     MatListModule,
 
+    HeaderComponent,
+    MainComponent,
     NavBackComponent,
     SearchBarComponent,
     BeaconResultComponent,

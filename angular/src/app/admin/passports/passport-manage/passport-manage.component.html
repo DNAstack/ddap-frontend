@@ -1,12 +1,16 @@
-<h2>Add Passport</h2>
+<ddap-header [backLink]="['/passports']" label="Add Passport">
+</ddap-header>
 
-<form #passportForm="ngForm" (ngSubmit)="onSubmit(passportForm.value)">
-  <mat-form-field>
-    <textarea matInput placeholder="Passport JSON" rows="10" name="body" ngModel required></textarea>
-  </mat-form-field>
-  <div>
-    <button type="submit" mat-flat-button color="primary" [disabled]="!passportForm.form.valid || passportForm.submitted">
-      Add Passport
-    </button>
-  </div>
-</form>
+<ddap-main>
+  <form #passportForm="ngForm" (ngSubmit)="onSubmit(passportForm.value)">
+    <mat-form-field>
+      <textarea matInput placeholder="Passport JSON" rows="10" name="body" ngModel required></textarea>
+    </mat-form-field>
+    <div>
+      <button type="submit" mat-flat-button color="primary"
+              [disabled]="!passportForm.form.valid || passportForm.submitted">
+        Add Passport
+      </button>
+    </div>
+  </form>
+</ddap-main>

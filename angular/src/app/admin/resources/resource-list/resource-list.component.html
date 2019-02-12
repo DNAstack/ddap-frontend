@@ -1,9 +1,13 @@
-<ddap-entity-list-header
-  [configName]="'resources'">
-</ddap-entity-list-header>
+<ddap-header icon="resources" label="Resources">
+  <ddap-entity-add
+    [configName]="'resources'">
+  </ddap-entity-add>
+</ddap-header>
 
-<ddap-entity-list
-  [configName]="'resources'"
-  [descriptionProperty]="'ui.description'"
-  [entityList]="resources$">
-</ddap-entity-list>
+<ddap-main>
+  <ddap-entity-list
+    [configName]="'resources'"
+    [descriptionProperty]="'ui.description'"
+    [entityList]="resources$">
+  </ddap-entity-list>
+</ddap-main>
