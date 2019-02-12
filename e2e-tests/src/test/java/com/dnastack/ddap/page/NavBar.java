@@ -23,14 +23,14 @@ public class NavBar {
     }};
 
     private Map<NavItem, String> PAGE_TITLE = new HashMap() {{
-        put(NavItem.RESOURCES, "resource");
-        put(NavItem.IDENTITIES, "personas");
-        put(NavItem.CLIENTS, "clients");
-        put(NavItem.CLAIMS, "claims");
-        put(NavItem.DEFINITIONS, "definitions");
-        put(NavItem.GRANTS, "grants");
-        put(NavItem.RULES, "rules");
-        put(NavItem.PASSPORTS, "passports");
+        put(NavItem.RESOURCES, "Resource");
+        put(NavItem.IDENTITIES, "Personas");
+        put(NavItem.CLIENTS, "Clients");
+        put(NavItem.CLAIMS, "Claims");
+        put(NavItem.DEFINITIONS, "Definitions");
+        put(NavItem.GRANTS, "Grants");
+        put(NavItem.RULES, "Rules");
+        put(NavItem.PASSPORTS, "Passports");
     }};
 
     public enum NavItem {
