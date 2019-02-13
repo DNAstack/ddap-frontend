@@ -45,11 +45,13 @@ mat-list.mat-list-base .mat-list-item .mat-list-item-content {
 
 .ddap-resource-title {
   padding-top: 1rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
 }
 
 mat-divider.ddap-main-divider {
-  border-top-width: 0.15rem;
+  border-top-width: 1px;
+  background-color: $color-grey;
+  margin-bottom: 1rem;
 }
 
 ddap-resource-views {

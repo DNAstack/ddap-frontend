@@ -8,12 +8,4 @@
                    [entityService]="resourceService"
                    [entity]="resource">
   </ddap-json-panel>
-  <mat-list>
-    <h3 mat-subheader>Views</h3>
-    <mat-list-item *ngFor="let view of views">
-      <ddap-resource-views [view]="resource.views[view.name]"
-                           (accessRequested)="getAccess(view.name)">
-      </ddap-resource-views>
-    </mat-list-item>
-  </mat-list>
 </ddap-main>
