@@ -1,14 +1,14 @@
 <header>
   <button *ngIf="backLink"
           mat-icon-button>
-    <mat-icon class="icon icon-back"
+    <mat-icon class="icon icon-arrow"
               [routerLink]="backLink"></mat-icon>
   </button>
 
   <mat-icon *ngIf="icon"
             class="icon"
             [ngClass]="'icon-' + icon"></mat-icon>
-  <h2>{{ label || 'Unknown' }}</h2>
+  <h2 class="stretch">{{ label || 'Unknown' }}</h2>
 
   <ng-content></ng-content>
 </header>

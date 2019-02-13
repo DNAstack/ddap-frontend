@@ -1,10 +1,10 @@
 <ddap-header class="no-border"
              [backLink]="['/data']"
              [label]="resource?.ui.label">
-  <ddap-search-bar
+  <ddap-beacon-search-bar
     [placeholder]="['1 : 156105028 T > C']"
     (valueChanged)="queryBeacons($event, resource)">
-  </ddap-search-bar>
+  </ddap-beacon-search-bar>
 </ddap-header>
 
 <ddap-resource-logo [imageUrl]="resource?.ui.imageUrl"></ddap-resource-logo>

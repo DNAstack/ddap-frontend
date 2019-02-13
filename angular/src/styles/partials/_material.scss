@@ -164,10 +164,50 @@ ddap-root {
     }
   }
 
+  .mat-form-field.mat-focused .mat-form-field-label,
+  .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+    color: $accent-color;
+  }
+
   mat-sidenav-content {
     .mat-expansion-panel-header-description,
     .mat-expansion-panel-header-title {
       flex-basis: 100%;
+    }
+  }
+
+  ddap-beacon-search-bar {
+    .mat-form-field-appearance-legacy {
+      .mat-form-field-underline,
+      .mat-form-field-subscript-wrapper {
+        display: none;
+      }
+
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+
+      .mat-form-field-infix {
+        padding: 0;
+        border-top: none;
+      }
+    }
+
+    .mat-form-field-label-wrapper {
+      top: -0.5rem;
+      padding: 0;
+    }
+
+    .mat-form-field-label {
+      position: relative;
+    }
+
+    .mat-form-field.mat-focused .mat-form-field-label {
+      display: none;
+    }
+
+    mat-form-field:not(:last-child) {
+      margin-right: 1.5rem;
     }
   }
 }

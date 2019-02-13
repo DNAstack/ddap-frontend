@@ -12,8 +12,6 @@ export class DnaChangeQueryParser {
     const params = this.regex.exec(query);
 
     return {
-      type: 'beacon',
-      assemblyId: 'GRCh37',
       referenceName: params[1],
       start: params[2],
       referenceBases: params[3],

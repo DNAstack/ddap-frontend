@@ -1,0 +1,15 @@
+<div class="flex vertical-center mat-elevation-z2">
+  <mat-icon class="icon icon-search"></mat-icon>
+  <mat-form-field class="input-select">
+    <mat-select #assemblySelect [(value)]="selectedAssemblyId" (selectionChange)="emitChange()">
+      <mat-option *ngFor="let assemblyId of assemblyIds" [value]="assemblyId">
+        {{ assemblyId }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="stretch">
+    <input #searchBar matInput type="search"
+           [placeholder]="searchBar.value ? '' : placeholder" [disabled]="disabled"
+           (keyup)="emitChange(searchBar.value)">
+  </mat-form-field>
+</div>

@@ -41,12 +41,6 @@ h2 {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-back:before {
-  content: "q";
-}
-.icon-foo:before {
-  content: "m";
-}
 .icon-claims:before {
   content: "\61";
 }
@@ -56,10 +50,10 @@ h2 {
 .icon-clients:before {
   content: "\63";
 }
-.icon-explore:before {
-  content: "p";
+.icon-search:before {
+  content: "\65";
 }
-.icon-personas:before {
+.icon-identities:before {
   content: "\66";
 }
 .icon-identity:before {
@@ -86,6 +80,19 @@ h2 {
 .icon-locked:before {
   content: "\6f";
 }
+.icon-add:before {
+  content: "\6d";
+}
+.icon-edit:before {
+  content: "\64";
+}
+.icon-explore:before {
+  content: "\70";
+}
+.icon-arrow:before {
+  content: "\71";
+}
+
 .text-color--subtle {
   color: $navbar-font-subtle-color;
 }
