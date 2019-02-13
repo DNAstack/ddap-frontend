@@ -1,0 +1,16 @@
+input,
+mat-select {
+  padding: 0.75rem 0;
+}
+
+div.flex {
+  height: 3rem;
+
+  > * {
+    padding: 1rem;
+  }
+}
+
+.input-select {
+  width: 6rem;
+}

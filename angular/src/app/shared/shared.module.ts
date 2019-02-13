@@ -9,8 +9,10 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatOptionModule,
   MatProgressBarModule,
-  MatSidenavModule
+  MatSelectModule,
+  MatSidenavModule,
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -18,12 +20,12 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { AppRoutingModule } from '../app-routing.module';
 
 import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
+import { BeaconSearchBarComponent } from './beacons/beacon-search-bar/beacon-search-bar.component';
 import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
 import { ResourceViewsComponent } from './resource-views/resource-views.component';
-import { SearchBarComponent } from './search-bar/search-bar.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,7 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
     NavBackComponent,
     ResourceLogoComponent,
     ResourceViewsComponent,
-    SearchBarComponent,
+    BeaconSearchBarComponent,
     BeaconResultComponent,
   ],
   imports: [
@@ -52,6 +54,8 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
     MatButtonModule,
     MatIconModule,
     MatListModule,
+    MatOptionModule,
+    MatSelectModule,
   ],
   exports: [
     AppRoutingModule,
@@ -70,11 +74,13 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
     MatButtonModule,
     MatIconModule,
     MatListModule,
+    MatOptionModule,
+    MatSelectModule,
 
     HeaderComponent,
     MainComponent,
     NavBackComponent,
-    SearchBarComponent,
+    BeaconSearchBarComponent,
     BeaconResultComponent,
     ResourceLogoComponent,
     ResourceViewsComponent,
