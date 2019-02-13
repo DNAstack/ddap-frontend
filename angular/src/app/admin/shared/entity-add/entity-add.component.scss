@@ -1,8 +1,5 @@
-div {
-  display: inline-block;
-  float: right;
-  vertical-align: middle;
-  line-height: 5rem;
+:host {
+  margin-left: auto;
 
   button {
     color: white;

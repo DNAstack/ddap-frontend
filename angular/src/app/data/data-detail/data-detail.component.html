@@ -1,4 +1,6 @@
-<ddap-header [backLink]="['/data']" [label]="resource?.ui.label">
+<ddap-header class="no-border"
+             [backLink]="['/data']"
+             [label]="resource?.ui.label">
   <ddap-search-bar
     [placeholder]="['1 : 156105028 T > C']"
     (valueChanged)="queryBeacons($event, resource)">

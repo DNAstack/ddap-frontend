@@ -10,9 +10,7 @@ import { DataService } from '../data.service';
   selector: 'ddap-resource-detail',
   templateUrl: './data-detail.component.html',
   styleUrls: ['./data-detail.component.scss'],
-  providers: [ImagePlaceholderRetriever, ResourceBeaconService],
-  // Easiest way to override inner component styles; https://stackoverflow.com/a/36225709
-  encapsulation: ViewEncapsulation.None,
+  providers: [ImagePlaceholderRetriever, ResourceBeaconService]
 })
 export class DataDetailComponent implements OnInit {
 
