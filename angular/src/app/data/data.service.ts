@@ -5,8 +5,6 @@ import { first, mergeMap, pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
-const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
-
 @Injectable({
   providedIn: 'root',
 })
