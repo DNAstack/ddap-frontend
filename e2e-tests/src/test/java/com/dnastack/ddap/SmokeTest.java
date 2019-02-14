@@ -44,7 +44,7 @@ public class SmokeTest {
         put(NavBar.NavItem.CLAIMS,
                 Arrays.asList("elixir", "nci", "ustanford"));
         put(NavBar.NavItem.DEFINITIONS,
-                Arrays.asList("ga4gh.AcademicInstitutionAffiliations", "ga4gh.ControlledDatasetsAccess"));
+                Arrays.asList("ga4gh.AcceptedTermsAndPolicies", "ga4gh.ControlledAccessGrants"));
         put(NavBar.NavItem.GRANTS,
                 Arrays.asList("bq_read", "gcs_read"));
         put(NavBar.NavItem.RULES,
