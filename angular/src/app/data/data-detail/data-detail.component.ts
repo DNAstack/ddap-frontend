@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { flatMap } from 'rxjs/operators';
 
@@ -10,7 +10,7 @@ import { DataService } from '../data.service';
   selector: 'ddap-resource-detail',
   templateUrl: './data-detail.component.html',
   styleUrls: ['./data-detail.component.scss'],
-  providers: [ImagePlaceholderRetriever, ResourceBeaconService]
+  providers: [ImagePlaceholderRetriever, ResourceBeaconService],
 })
 export class DataDetailComponent implements OnInit {
 

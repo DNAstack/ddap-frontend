@@ -46,7 +46,7 @@
     </div>
     <div class="ddap-column">
       <mat-list>
-        <mat-list-item *ngFor="let view of views">
+        <mat-list-item *ngFor="let view of views" class="ddap-data-view">
           <ddap-resource-views [view]="resource.views[view.name]"
                                (accessRequested)="getAccess(view.name)">
           </ddap-resource-views>
