@@ -1,6 +1,6 @@
 <mat-progress-bar *ngIf="loader.progress$ | async" mode="determinate" [value]="loader.progress$ | async"></mat-progress-bar>
 <mat-sidenav-container>
-  <mat-sidenav #sidenav mode="side" [opened]="true">
+  <mat-sidenav #sidenav mode="side" [opened]="true" disableClose>
     <header>
       <h1>DDAP</h1>
     </header>
