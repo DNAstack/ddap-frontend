@@ -164,11 +164,6 @@ ddap-root {
     }
   }
 
-  .mat-form-field.mat-focused .mat-form-field-label,
-  .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
-    color: $accent-color;
-  }
-
   mat-sidenav-content {
     .mat-expansion-panel-header-description,
     .mat-expansion-panel-header-title {

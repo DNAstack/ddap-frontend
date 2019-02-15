@@ -1,8 +1,41 @@
 // Base
 
-$accent-color: #00bdd4;
+$primary-color: #00bdd4;
 $color-grey: #888888;
 $color-faded-grey: #d8d8d8;
+
+$mat-primary-color: (
+  50 : #e0f7fa,
+  100 : #b3ebf2,
+  200 : #80deea,
+  300 : #4dd1e1,
+  400 : #26c7da,
+  500 : #00bdd4,
+  600 : #00b7cf,
+  700 : #00aec9,
+  800 : #00a6c3,
+  900 : #0098b9,
+  A100 : #e2f9ff,
+  A200 : #afefff,
+  A400 : #7ce4ff,
+  A700 : #63dfff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
 
 // Navigation
 
@@ -11,7 +44,7 @@ $navbar-expanded-background: #222322;
 $navbar-selected-background: #000;
 $navbar-font-main-color: #e2e2e2;
 $navbar-font-subtle-color: #585859;
-$navbar-font-accent-color: $accent-color;
+$navbar-font-accent-color: $primary-color;
 $navbar-icon-font-main-color: #888888;
 $navbar-border: 1px solid $navbar-font-subtle-color;
 

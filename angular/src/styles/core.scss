@@ -8,10 +8,6 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-.margin-bottom--1 {
-  margin-bottom: 1rem;
-}
-
 .flex {
   display: flex;
 }
@@ -26,9 +22,4 @@ body {
 
 .stretch {
   flex-grow: 1;
-}
-
-.background--accent {
-  background-color: $accent-color;
-  color: white;
 }
