@@ -6,9 +6,11 @@
     <mat-card-title>{{ resource.ui.label || 'Unknown' }}</mat-card-title>
     <mat-card-subtitle>{{ resource.ui.description || 'Unknown' }}</mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image
-       [src]="[resource.ui.imageUrl || randomImageRetriever.getPathToFixedRandomImage(resource.ui.label)]"
-       alt="Photo">
+  <div class="ddap-data-image">
+    <img mat-card-image
+         [src]="[resource.ui.imageUrl || randomImageRetriever.getPathToFixedRandomImage(resource.ui.label)]"
+         alt="Photo">
+  </div>
   <mat-card-content>
     <p>{{ resource.ui.description || 'Unknown' }}</p>
   </mat-card-content>
