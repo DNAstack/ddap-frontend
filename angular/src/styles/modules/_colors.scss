@@ -1,6 +1,7 @@
 // Base
 
 $primary-color: #00bdd4;
+
 $color-grey: #888888;
 $color-faded-grey: #d8d8d8;
 
@@ -51,4 +52,4 @@ $navbar-border: 1px solid $navbar-font-subtle-color;
 // Progress bar
 
 $progressbar-background: $navbar-font-main-color;
-$progressbar-fill-background: $navbar-font-accent-color;
+$progressbar-fill-background: $primary-color;
