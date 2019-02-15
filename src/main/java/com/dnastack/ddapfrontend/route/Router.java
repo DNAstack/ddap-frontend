@@ -148,7 +148,7 @@ public class Router {
     }
 
     private Mono<ClientResponse> idpTokenRequest(ServerRequest request, String code) {
-        return WebClient.create(format(idpBaseUrl.toString() + "identity/v1alpha/token" +
+        return WebClient.create(format(idpBaseUrl.toString() + "identity/v1alpha/dnastack/token" +
                                                "?grant_type=authorization_code" +
                                                "&code=%s" +
                                                "&redirect_uri=%s" +
@@ -199,7 +199,7 @@ public class Router {
 
     private URI authorizeUrl(String redirectUri) {
         return URI.create(format(
-                idpBaseUrl.toString() + "identity/v1alpha/authorize?response_type=code&clientId=%s&redirect_uri=%s",
+                idpBaseUrl.toString() + "identity/v1alpha/dnastack/authorize?response_type=code&clientId=%s&redirect_uri=%s",
                 idpClientId,
                 redirectUri));
     }

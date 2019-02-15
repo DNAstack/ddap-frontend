@@ -32,11 +32,13 @@ spring:
             - Logging
           uri: https://beacon.cafevariome.org
         - predicates:
-            - Path=/dam/**
+            - Path=/dam/v1alpha/**
           filters:
             - AddRequestParameter=clientId,${dam.client-id}
             - AddRequestParameter=clientSecret,${dam.client-secret}
             - SetBearerTokenFromCookie
+            - StripPrefix=2
+            - PrependPath=/dam/v1alpha/dnastack
             - Logging
           uri: ${dam.base-url}
         - predicates:
@@ -44,12 +46,16 @@ spring:
           filters:
             - AddRequestParameter=clientId,${idp.client-id}
             - AddRequestParameter=clientSecret,${idp.client-secret}
+            - StripPrefix=2
+            - PrependPath=/identity/v1alpha/dnastack
             - Logging
           uri: ${idp.base-url}
         - predicates:
-            - Path=/identity/**
+            - Path=/identity/v1alpha/**
           filters:
             - AddRequestParameter=clientId,${idp.client-id}
             - AddRequestParameter=clientSecret,${idp.client-secret}
+            - StripPrefix=2
+            - PrependPath=/identity/v1alpha/dnastack
             - Logging
           uri: ${idp.base-url}
