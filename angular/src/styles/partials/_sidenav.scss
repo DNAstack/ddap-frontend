@@ -1,21 +1,4 @@
-mat-form-field {
-  width: 100%;
-}
-
-.mat-progress-bar-fill::after {
-  background-color: $progressbar-fill-background;
-}
-
-.mat-progress-bar-buffer {
-  background-color: $progressbar-background;
-}
-
 ddap-root {
-  mat-progress-bar.mat-progress-bar {
-    position: fixed;
-    z-index: 100;
-  }
-
   mat-sidenav {
     width: 15rem;
 
@@ -168,41 +151,6 @@ ddap-root {
     .mat-expansion-panel-header-description,
     .mat-expansion-panel-header-title {
       flex-basis: 100%;
-    }
-  }
-
-  ddap-beacon-search-bar {
-    .mat-form-field-appearance-legacy {
-      .mat-form-field-underline,
-      .mat-form-field-subscript-wrapper {
-        display: none;
-      }
-
-      .mat-form-field-wrapper {
-        padding-bottom: 0;
-      }
-
-      .mat-form-field-infix {
-        padding: 0;
-        border-top: none;
-      }
-    }
-
-    .mat-form-field-label-wrapper {
-      top: -0.5rem;
-      padding: 0;
-    }
-
-    .mat-form-field-label {
-      position: relative;
-    }
-
-    .mat-form-field.mat-focused .mat-form-field-label {
-      display: none;
-    }
-
-    mat-form-field:not(:last-child) {
-      margin-right: 1.5rem;
     }
   }
 }
