@@ -10,11 +10,16 @@
     <mat-icon class="icon icon-copy"></mat-icon>
   </button>
   <div *ngIf="!isTokenGranted()">
-    <button mat-flat-button class="background--accent uppercase" (click)="getAccess()">
+    <button mat-flat-button
+            class="background--accent uppercase"
+            (click)="getAccess()"
+            data-se="get-access-btn">
       Get access
     </button>
   </div>
-  <a *ngIf="view.url" href="{{view.url}}"
+  <a *ngIf="view.url"
+     href="{{view.url}}"
+     data-se="access-btn"
      target='_blank' rel='noopener noreferrer'>
     <button mat-flat-button class="background--accent uppercase">
       Access
