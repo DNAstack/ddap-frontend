@@ -14,7 +14,9 @@ export class ResourceViewsComponent {
   accessRequested: EventEmitter<void> = new EventEmitter();
 
   getAccess(): void {
-    this.accessRequested.emit();
+    if (!this.isTokenGranted()) {
+      this.accessRequested.emit();
+    }
   }
 
   isTokenGranted() {

@@ -62,15 +62,10 @@ ddap-resource-views {
   padding-top: 1rem;
 
   mat-list-item.ddap-data-view {
-    border-bottom: 1px solid $color-faded-grey;
-    padding: 2rem 0;
+    padding: 1rem 0;
 
     &:first-child {
       padding-top: 0;
-    }
-
-    &:last-child {
-      border-bottom: none;
     }
 
     > .mat-list-item-content {
