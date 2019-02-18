@@ -92,6 +92,9 @@ h2 {
 .icon-arrow:before {
   content: "\71";
 }
+.icon-close:before {
+  content: "c";
+}
 
 .text-color--subtle {
   color: $navbar-font-subtle-color;

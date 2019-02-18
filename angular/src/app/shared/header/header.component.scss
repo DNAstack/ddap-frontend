@@ -10,15 +10,23 @@ header {
   min-height: $ddap-header-height;
   border-bottom: 1px solid $color-faded-grey;
 
-  h2 {
+  h2, ddap-beacon-search-bar {
     margin: 0;
+    display: inline-block;
+    line-height: 2rem;
+    vertical-align: middle;
+  }
+
+  ddap-beacon-search-bar {
+    width: 100%;
+    margin: 0 2rem;
+  }
+
+  h2 {
     font-weight: 400;
     padding: 1rem 0 1rem 0.5rem;
-    display: inline-block;
     font-size: 2.2rem;
-    line-height: 2rem;
     color: $navbar-main-background;
-    vertical-align: middle;
   }
 
   mat-icon {

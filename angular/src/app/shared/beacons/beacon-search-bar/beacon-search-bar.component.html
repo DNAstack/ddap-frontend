@@ -1,15 +1,21 @@
-<div class="flex vertical-center mat-elevation-z2">
-  <mat-icon class="icon icon-search"></mat-icon>
+<form class="flex vertical-center" (ngSubmit)="search()">
   <mat-form-field class="input-select">
-    <mat-select #assemblySelect [(value)]="selectedAssemblyId" (selectionChange)="emitChange()">
-      <mat-option *ngFor="let assemblyId of assemblyIds" [value]="assemblyId">
+    <mat-select class="mbat-button-wrapper"
+                name="assembly"
+                [(ngModel)]="selectedAssemblyId">
+      <mat-option *ngFor="let assemblyId of assemblyIds"
+                  [value]="assemblyId">
         {{ assemblyId }}
       </mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field class="stretch">
-    <input #searchBar matInput type="search"
-           [placeholder]="searchBar.value ? '' : placeholder" [disabled]="disabled"
-           (keyup)="emitChange(searchBar.value)">
+    <input name="query"
+           matInput
+           type="search"
+           [(ngModel)]="query"
+           [placeholder]="query ? '' : placeholder"
+           [disabled]="disabled">
   </mat-form-field>
-</div>
+</form>
+
