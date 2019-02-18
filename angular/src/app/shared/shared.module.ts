@@ -9,10 +9,12 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatMenuModule,
   MatOptionModule,
   MatProgressBarModule,
   MatSelectModule,
   MatSidenavModule,
+  MatTooltipModule,
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -54,8 +56,10 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     MatButtonModule,
     MatIconModule,
     MatListModule,
+    MatMenuModule,
     MatOptionModule,
     MatSelectModule,
+    MatTooltipModule,
   ],
   exports: [
     AppRoutingModule,
@@ -74,8 +78,10 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     MatButtonModule,
     MatIconModule,
     MatListModule,
+    MatMenuModule,
     MatOptionModule,
     MatSelectModule,
+    MatTooltipModule,
 
     HeaderComponent,
     MainComponent,

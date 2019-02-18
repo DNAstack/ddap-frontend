@@ -1,4 +1,51 @@
+@import "../../../styles/modules/colors";
+
 h4 {
   font-size: 1.25rem;
   font-weight: 400;
+}
+
+mat-card {
+  display: flex;
+  align-items: center;
+
+  & > .mat-card-actions,
+  & > .mat-card-actions:last-child {
+    margin: auto;
+    padding: 0;
+  }
+
+  .mat-card-header .mat-card-title,
+  .mat-card-header .mat-card-subtitle {
+    margin: 0;
+  }
+}
+
+::ng-deep .access-menu {
+  width: 30rem;
+
+  &.mat-menu-panel {
+    min-width: 0;
+    min-height: 0;
+    max-width: 30rem;
+  }
+
+  .mat-menu-content:not(:empty) {
+    padding: 0;
+  }
+
+  mat-form-field {
+    padding-left: 1rem;
+    padding-top: 1rem;
+    margin-right: 1rem;
+  }
+
+  button {
+    padding-right: 1rem;
+  }
+
+  a > button {
+    text-align: left;
+    padding: 0 0 0 1rem;
+  }
 }
