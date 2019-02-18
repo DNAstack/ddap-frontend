@@ -16,4 +16,24 @@ export class HeaderComponent {
   @Input()
   backLink: any = null;
 
+  @Input()
+  searchButton = true;
+
+  @Input()
+  searchParams: any = {};
+
+  @Input()
+  searchOpen = false;
+
+  constructor() {
+
+  }
+
+  openSearch() {
+    this.searchOpen = !this.searchOpen;
+  }
+
+  queryBeacons() {
+  }
+
 }

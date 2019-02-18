@@ -1,14 +1,33 @@
 <header>
-  <button *ngIf="backLink"
+  <ng-template [ngIf]="!searchOpen">
+    <button *ngIf="backLink"
+            mat-icon-button>
+      <mat-icon class="icon icon-arrow"
+                [routerLink]="backLink"></mat-icon>
+    </button>
+
+    <mat-icon *ngIf="icon"
+              class="icon"
+              [ngClass]="'icon-' + icon"></mat-icon>
+    <h2 class="stretch">{{ label || 'Unknown' }}</h2>
+
+    <ng-content></ng-content>
+  </ng-template>
+
+  <ng-template [ngIf]="searchOpen">
+    <button mat-icon-button (click)="openSearch()">
+      <mat-icon class="icon icon-close"></mat-icon>
+    </button>
+
+    <ddap-beacon-search-bar
+      [searchParams]="searchParams"
+      [placeholder]="['1 : 156105028 T > C']"
+      (valueChanged)="queryBeacons($event, resource)">
+    </ddap-beacon-search-bar>
+  </ng-template>
+
+  <button *ngIf="searchButton" (click)="openSearch()"
           mat-icon-button>
-    <mat-icon class="icon icon-arrow"
-              [routerLink]="backLink"></mat-icon>
+    <mat-icon class="icon icon-search"></mat-icon>
   </button>
-
-  <mat-icon *ngIf="icon"
-            class="icon"
-            [ngClass]="'icon-' + icon"></mat-icon>
-  <h2 class="stretch">{{ label || 'Unknown' }}</h2>
-
-  <ng-content></ng-content>
 </header>
