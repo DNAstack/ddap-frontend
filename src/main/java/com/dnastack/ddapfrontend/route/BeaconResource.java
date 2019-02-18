@@ -1,30 +1,35 @@
 package com.dnastack.ddapfrontend.route;
 
+import static java.lang.String.format;
+
 import com.dnastack.ddapfrontend.beacon.BeaconInfo;
 import com.dnastack.ddapfrontend.beacon.BeaconOrganization;
 import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.beacon.ExternalBeaconQueryResult;
+import com.dnastack.ddapfrontend.model.BeaconRequestModel;
+import java.util.Optional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Optional;
-
-import static java.lang.String.format;
 
 @RestController
 class BeaconResource {
 
+    @GetMapping(value = "/api/resources/search", params = "type=beacon")
+    public Flux<ExternalBeaconQueryResult> handleBeaconQuery(BeaconRequestModel request) {
+        return Flux.merge(
+            handleBeaconQueryForResource(null, request),
+            handleBeaconQueryForResource(null, request),
+            handleBeaconQueryForResource(null, request),
+            handleBeaconQueryForResource(null, request)
+        );
+    }
+
     @GetMapping(value = "/api/resources/{resourceId}/search", params = "type=beacon")
-    public Mono<ExternalBeaconQueryResult> handleBeaconQuery(@PathVariable String resourceId,
-                                                             @RequestParam String assemblyId,
-                                                             @RequestParam String referenceName,
-                                                             @RequestParam String start,
-                                                             @RequestParam String referenceBases,
-                                                             @RequestParam String alternateBases) {
+    public Mono<ExternalBeaconQueryResult> handleBeaconQueryForResource(@PathVariable String resourceId, BeaconRequestModel request) {
         final String queryTemplate = "https://beacon.cafevariome.org/query" +
                 "?assemblyId=%s" +
                 "&referenceName=%s" +
@@ -36,11 +41,11 @@ class BeaconResource {
                                                                      .get()
                                                                      .uri(format(
                                                                              queryTemplate,
-                                                                             assemblyId,
-                                                                             referenceName,
-                                                                             start,
-                                                                             referenceBases,
-                                                                             alternateBases))
+                                                                         request.getAssemblyId(),
+                                                                         request.getReferenceName(),
+                                                                         request.getStart(),
+                                                                         request.getReferenceBases(),
+                                                                         request.getAlternateBases()))
                                                                      .exchange()
                                                                      .flatMap(clientResponse -> clientResponse.bodyToMono(
                                                                              BeaconQueryResult.class));
