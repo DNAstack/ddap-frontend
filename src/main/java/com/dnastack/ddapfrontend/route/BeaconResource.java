@@ -7,6 +7,8 @@ import com.dnastack.ddapfrontend.beacon.BeaconOrganization;
 import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.beacon.ExternalBeaconQueryResult;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,11 +75,23 @@ class BeaconResource {
 
         final Optional<BeaconQueryResult> oQueryResponse = Optional.ofNullable(queryResponse);
 
+        final Boolean exists = oQueryResponse.map(BeaconQueryResult::getExists).orElse(null);
+
         externalResult.setName(beaconName);
         externalResult.setOrganization(organizationName);
-        externalResult.setExists(oQueryResponse.map(BeaconQueryResult::getExists)
-                                               .orElse(null));
+        externalResult.setExists(exists);
 
+        Map<String, String> info = new HashMap<>();
+        info.put("Allele origin", "Germline");
+        info.put("Clinical significance", "Pathogenic");
+        info.put("Clinical significance citations", "PMID:23108138");
+        info.put("Collection method", "Curation");
+        info.put("Condition category", "Disease");
+        info.put("Gene symbol", "BRCA2");
+
+        if (exists != null && exists) {
+            externalResult.setInfo(info);
+        }
 
         oQueryResponse.map(BeaconQueryResult::getAlleleRequest)
                       .ifPresent(alleleRequest -> externalResult.getMetadata().put("alleleRequest", alleleRequest));
