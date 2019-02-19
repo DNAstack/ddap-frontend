@@ -1,4 +1,5 @@
 <mat-card>
+  <mat-progress-bar *ngIf="!isTokenGranted() && accessClicked" mode="indeterminate"></mat-progress-bar>
   <mat-card-header class="stretch">
     <mat-card-title>{{ view.ui?.label || view.name }}</mat-card-title>
     <mat-card-subtitle *ngIf="view.ui?.label">{{ view.name }}</mat-card-subtitle>
@@ -12,7 +13,6 @@
       <mat-icon>keyboard_arrow_down</mat-icon>
     </button>
     <mat-menu #appMenu="matMenu" class="access-menu" xPosition="before" yPosition="below">
-      <mat-progress-bar *ngIf="!isTokenGranted()" mode="indeterminate"></mat-progress-bar>
       <div class="flex vertical-center row">
         <mat-form-field *ngIf="isTokenGranted()" [class]="isTokenGranted() ? 'stretch' : ''">
           <input matInput readonly type="text" [placeholder]="view.ui?.label || view.name" [value]="view.url || view.token">
