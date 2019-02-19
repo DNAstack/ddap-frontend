@@ -13,8 +13,11 @@ export class ResourceViewsComponent {
   @Output()
   accessRequested: EventEmitter<void> = new EventEmitter();
 
+  public accessClicked = false;
+
   getAccess(): void {
     if (!this.isTokenGranted()) {
+      this.accessClicked = true;
       this.accessRequested.emit();
     }
   }
