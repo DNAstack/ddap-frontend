@@ -188,7 +188,7 @@ public class Router {
 
     private Optional<String> extractToken(String body) {
         try {
-            return Optional.of(((JSONObject) new JSONParser().parse(body)).get("accessToken").toString());
+            return Optional.of(((JSONObject) new JSONParser().parse(body)).get("access_token").toString());
         } catch (ParseException | NullPointerException e) {
             if (log.isDebugEnabled()) {
                 log.debug("Unable to parse token from payload. Payload: " + body, e);
