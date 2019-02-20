@@ -15,18 +15,14 @@ export class DataSearchComponent implements OnInit {
 
   resource: any;
   views: any;
-  searchParams: any;
-
   results: any[];
   resultsAction: Subscription;
+
+  private searchParams;
 
   constructor(private route: ActivatedRoute,
               private beaconService: ResourceBeaconService) {
 
-  }
-
-  limitSearch($event) {
-    console.log('limitSearch', $event);
   }
 
   ngOnInit() {
@@ -35,8 +31,23 @@ export class DataSearchComponent implements OnInit {
         (params: any) => {
           this.searchParams = params;
           this.resource = params.resource;
-          this.resultsAction = this.beaconService.queryResourceBeacons(params, params.resource)
-            .subscribe((beaconResponseDto) => this.results = [beaconResponseDto]);
+          this.query(params, params.resource);
         });
+  }
+
+  limitSearch($event) {
+    if ($event.checked) {
+      return this.query(this.searchParams, this.resource);
+    }
+
+    return this.query(this.searchParams, null);
+  }
+
+  private query(searchParams, resourceId) {
+    this.resultsAction = this.beaconService.query(searchParams, resourceId)
+      .subscribe((beaconResponseDto: any) => {
+          this.results = beaconResponseDto;
+        }
+      );
   }
 }
