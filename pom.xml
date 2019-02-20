@@ -69,6 +69,23 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Feign HTTP Client -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-core</artifactId>
+            <version>10.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+            <version>10.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson</artifactId>
+            <version>10.2.0</version>
+        </dependency>
+
 		<!-- Automatically excluded from repackaged archive ("fat jar") by spring-boot-maven-plugin -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

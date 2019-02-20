@@ -16,7 +16,7 @@ export class ResourceBeaconService {
   constructor(private http: HttpClient) {
   }
 
-  queryResourceBeacons(query: any, resource): Observable<BeaconResponse> {
+  queryResourceBeacons(query: any, resource): Observable<BeaconResponse[]> {
     const { value, assemblyId } = query;
 
     if (!DnaChangeQueryParser.validate(value)) {
@@ -30,8 +30,8 @@ export class ResourceBeaconService {
     return this.queryBeacon(resource.name, params);
   }
 
-  private queryBeacon(resourceId, params?): Observable<BeaconResponse> {
-    return this.http.get<BeaconResponse>(`${environment.ddapApiUrl}/resources/${resourceId}/search`, { params });
+  private queryBeacon(resourceId, params?): Observable<BeaconResponse[]> {
+    return this.http.get<BeaconResponse[]>(`${environment.ddapApiUrl}/resources/${resourceId}/search`, { params });
   }
 
 }
