@@ -9,7 +9,8 @@
     <mat-icon *ngIf="icon"
               class="icon"
               [ngClass]="'icon-' + icon"></mat-icon>
-    <h2 class="stretch">{{ label || 'Unknown' }}</h2>
+    <h2 class="stretch"
+        data-se="page-title">{{ label || 'Unknown' }}</h2>
 
     <ng-content></ng-content>
   </ng-template>
@@ -22,12 +23,13 @@
     </button>
 
     <ddap-beacon-search-bar
-      [searchParams]="searchParams"
       [placeholder]="['1 : 156105028 T > C']">
     </ddap-beacon-search-bar>
   </ng-template>
 
-  <button *ngIf="searchButton" (click)="openSearch()"
+  <button *ngIf="searchButton && !searchOpen"
+          (click)="openSearch()"
+          color="primary"
           mat-icon-button>
     <mat-icon class="icon icon-search"></mat-icon>
   </button>

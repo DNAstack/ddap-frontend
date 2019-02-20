@@ -23,9 +23,6 @@ export class HeaderComponent {
   searchButton = true;
 
   @Input()
-  searchParams: any = {};
-
-  @Input()
   searchOpen = false;
 
   constructor() {

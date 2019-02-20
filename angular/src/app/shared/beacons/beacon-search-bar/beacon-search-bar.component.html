@@ -17,7 +17,11 @@
            matInput
            type="search"
            formControlName="query"
-           [placeholder]="placeholder">
+           [placeholder]="search.get('query').value ? '' : placeholder">
   </mat-form-field>
+  <button type="submit"
+          mat-icon-button>
+    <mat-icon class="icon icon-search"></mat-icon>
+  </button>
 </form>
 

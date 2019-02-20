@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { SearchQuery } from './SearchQuery';
 import { ValidateVariant } from './variant.validator';
@@ -10,14 +10,12 @@ import { ValidateVariant } from './variant.validator';
   templateUrl: './beacon-search-bar.component.html',
   styleUrls: ['./beacon-search-bar.component.scss'],
 })
-export class BeaconSearchBarComponent implements OnChanges {
+export class BeaconSearchBarComponent implements OnInit {
 
   @Input()
   placeholder: string;
   @Input()
   disabled: boolean;
-  @Input()
-  searchParams: any = {};
 
   @Output()
   valueChanged: EventEmitter<object> = new EventEmitter<object>();
@@ -27,23 +25,37 @@ export class BeaconSearchBarComponent implements OnChanges {
   public assemblyIds = ['GRCh37', 'GRCh38', 'NCBI36'];
   public resource = null;
 
-  constructor(private router: Router) {
+  constructor(private route: ActivatedRoute,
+              private router: Router) {
+
     this.search = new FormGroup({
       assembly: new FormControl(this.assemblyIds[0], [Validators.required]),
       query: new FormControl('', [Validators.required, ValidateVariant]),
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const {assembly, query, resource} = changes.searchParams.currentValue;
-    this.resource = resource;
-    if (query && assembly) {
-      this.search.setValue({assembly, query});
-    }
+  onSubmit({value, valid}: { value: SearchQuery, valid: boolean }) {
+    this.route.params
+      .subscribe((params) => {
+        value['resource'] = params['resourceName'];
+        this.router.navigate(['/data/search'], {queryParams: value});
+      });
   }
 
-  onSubmit({value, valid}: { value: SearchQuery, valid: boolean }) {
-    value['resource'] = this.resource;
-    this.router.navigate(['/data/search'], {queryParams: value});
+  ngOnInit(): void {
+    this.route.queryParams
+      .subscribe(
+        (params: any) => {
+          const {assembly, query, resource} = params;
+          this.resource = resource;
+
+          if (query) {
+            this.search.patchValue({query});
+          }
+
+          if (assembly) {
+            this.search.patchValue({assembly});
+          }
+        });
   }
 }

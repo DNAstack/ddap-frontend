@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCardModule,
+  MatChipsModule,
   MatExpansionModule,
   MatFormFieldModule,
   MatIconModule,
@@ -51,6 +52,7 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     ReactiveFormsModule,
 
     MatCardModule,
+    MatChipsModule,
     MatProgressBarModule,
     MatSidenavModule,
     MatExpansionModule,
@@ -76,6 +78,7 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     ReactiveFormsModule,
 
     MatCardModule,
+    MatChipsModule,
     MatProgressBarModule,
     MatSidenavModule,
     MatExpansionModule,

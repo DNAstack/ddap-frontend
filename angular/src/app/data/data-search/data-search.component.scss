@@ -5,10 +5,21 @@
 }
 
 .ddap-search-filter {
-  margin: 0 -2rem 2rem -2rem;
+  margin: -2rem -2rem 2rem -2rem;
   padding: 1.5rem 2rem 0 2rem;
   height: 3rem;
   background-color: $color-grey-light;
-  border-top: 1px solid $color-faded-grey;
   border-bottom: 1px solid $color-faded-grey;
+}
+
+mat-spinner {
+  display: inline-block;
+}
+
+mat-card {
+  margin-bottom: 1rem;
+}
+
+.ddap-beacon-result {
+  flex-grow: 1;
 }
