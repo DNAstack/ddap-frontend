@@ -14,6 +14,9 @@ export class HeaderComponent {
   icon: string = null;
 
   @Input()
+  isSearchPage = false;
+
+  @Input()
   backLink: any = null;
 
   @Input()
@@ -26,14 +29,13 @@ export class HeaderComponent {
   searchOpen = false;
 
   constructor() {
+  }
 
+  closeSearch() {
+    this.searchOpen = false;
   }
 
   openSearch() {
-    this.searchOpen = !this.searchOpen;
+    this.searchOpen = true;
   }
-
-  queryBeacons() {
-  }
-
 }

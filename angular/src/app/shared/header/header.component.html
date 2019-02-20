@@ -15,14 +15,15 @@
   </ng-template>
 
   <ng-template [ngIf]="searchOpen">
-    <button mat-icon-button (click)="openSearch()">
-      <mat-icon class="icon icon-close"></mat-icon>
+    <button *ngIf="!isSearchPage"
+            mat-icon-button
+            (click)="closeSearch()">
+      <mat-icon class="icon">X</mat-icon>
     </button>
 
     <ddap-beacon-search-bar
       [searchParams]="searchParams"
-      [placeholder]="['1 : 156105028 T > C']"
-      (valueChanged)="queryBeacons($event, resource)">
+      [placeholder]="['1 : 156105028 T > C']">
     </ddap-beacon-search-bar>
   </ng-template>
 

@@ -1,8 +1,11 @@
-<form class="flex vertical-center" (ngSubmit)="search()">
+<form novalidate
+      class="flex vertical-center"
+      (ngSubmit)="onSubmit(search)"
+      [formGroup]="search">
   <mat-form-field class="input-select">
     <mat-select class="mbat-button-wrapper"
                 name="assembly"
-                [(ngModel)]="selectedAssemblyId">
+                formControlName="assembly">
       <mat-option *ngFor="let assemblyId of assemblyIds"
                   [value]="assemblyId">
         {{ assemblyId }}
@@ -13,9 +16,8 @@
     <input name="query"
            matInput
            type="search"
-           [(ngModel)]="query"
-           [placeholder]="query ? '' : placeholder"
-           [disabled]="disabled">
+           formControlName="query"
+           [placeholder]="placeholder">
   </mat-form-field>
 </form>
 
