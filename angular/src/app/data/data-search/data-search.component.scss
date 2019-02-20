@@ -1,81 +1,14 @@
 @import "~src/styles/modules/colors";
-@import "~@angular/material/theming";
 
-table, p {
-  color: $navbar-font-subtle-color;
+.ddap-center {
+  text-align: center;
 }
 
-
-
-table {
-  margin-top: 2rem;
-
-  tr {
-    margin-bottom: 2rem;
-  }
-
-  td:first-child {
-    padding-right: 3rem;
-  }
-}
-
-mat-list.mat-list-base .mat-list-item .mat-list-item-content {
-  padding: 2rem 0;
-
-  .mat-list-text .mat-line {
-    font-weight: 400;
-    font-size: 1.5rem;
-  }
-}
-
-.ddap-column-panel {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-
-  > .ddap-column {
-    flex: 1;
-    padding: 0 1rem 0 0;
-
-    &:last-child {
-      padding: 0;
-    }
-  }
-}
-
-.ddap-resource-title {
-  padding-top: 1rem;
-  padding-bottom: 0.5rem;
-}
-
-mat-divider.ddap-main-divider {
-  border-top-width: 1px;
-  background-color: $color-grey;
-  margin-bottom: 1rem;
-}
-
-ddap-resource-views {
-  width: 100%;
-}
-
-/deep/ .mat-list-base {
-  padding-top: 1rem;
-
-  mat-list-item.ddap-data-view {
-    border-bottom: 1px solid $color-faded-grey;
-    padding: 2rem 0;
-
-    &:first-child {
-      padding-top: 0;
-    }
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    > .mat-list-item-content {
-      padding-left: 0;
-      padding-right: 0;
-    }
-  }
+.ddap-search-filter {
+  margin: 0 -2rem 2rem -2rem;
+  padding: 1.5rem 2rem 0 2rem;
+  height: 3rem;
+  background-color: $color-grey-light;
+  border-top: 1px solid $color-faded-grey;
+  border-bottom: 1px solid $color-faded-grey;
 }

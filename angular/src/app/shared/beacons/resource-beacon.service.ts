@@ -16,22 +16,22 @@ export class ResourceBeaconService {
   constructor(private http: HttpClient) {
   }
 
-  queryResourceBeacons(query: any, resource): Observable<BeaconResponse> {
-    const { value, assemblyId } = query;
+  queryResourceBeacons(queryValue: any, resource): Observable<BeaconResponse> {
+    const {query, assembly} = queryValue;
 
-    if (!DnaChangeQueryParser.validate(value)) {
+    if (!DnaChangeQueryParser.validate(query)) {
       return new EmptyObservable();
     }
 
-    const params = DnaChangeQueryParser.parseParams(value);
+    const params = DnaChangeQueryParser.parseParams(query);
     params.type = 'beacon';
-    params.assemblyId = assemblyId;
+    params.assemblyId = assembly;
 
-    return this.queryBeacon(resource.name, params);
+    return this.queryBeacon(resource, params);
   }
 
   private queryBeacon(resourceId, params?): Observable<BeaconResponse> {
-    return this.http.get<BeaconResponse>(`${environment.ddapApiUrl}/resources/${resourceId}/search`, { params });
+    return this.http.get<BeaconResponse>(`${environment.ddapApiUrl}/resources/${resourceId}/search`, {params});
   }
 
 }

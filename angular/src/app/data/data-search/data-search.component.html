@@ -1,14 +1,29 @@
 <ddap-header class="no-border"
-             [backLink]="['/data']"
+             [isSearchPage]="true"
              [searchOpen]="true"
              [searchParams]="searchParams"
              label="Search Results">
 </ddap-header>
+<p *ngIf="resource" class="ddap-search-filter">
+  <mat-slide-toggle (change)="limitSearch($event)">Limit beacon search to <b>{{ resource }}</b></mat-slide-toggle>
+</p>
 
-<div>
+<div *ngIf="!resultsAction.closed"
+     class="ddap-center">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="resultsAction.closed && !results?.length"
+     class="ddap-center">
+  <h3>No results</h3>
   <p>
-    Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Integer posuere erat a
-    ante venenatis dapibus posuere velit aliquet. Maecenas faucibus mollis interdum. Maecenas faucibus interdum.
+    <b>Tip:</b> Try searching for a BRCA2 variant: 13 : 32936732 G > C
   </p>
 </div>
 
+<mat-card *ngFor="let beaconResult of results">
+  <mat-card-header class="stretch">
+    <mat-card-title>{{ beaconResult.name }}</mat-card-title>
+    <mat-card-subtitle>{{ beaconResult.organization }}</mat-card-subtitle>
+  </mat-card-header>
+</mat-card>

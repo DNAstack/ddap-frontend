@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
@@ -16,14 +17,26 @@ export class DataSearchComponent implements OnInit {
   views: any;
   searchParams: any;
 
-  constructor(private route: ActivatedRoute) {
+  results: any[];
+  resultsAction: Subscription;
 
+  constructor(private route: ActivatedRoute,
+              private beaconService: ResourceBeaconService) {
+
+  }
+
+  limitSearch($event) {
+    console.log('limitSearch', $event);
   }
 
   ngOnInit() {
     this.route.queryParams
-      .subscribe((params) => {
-        this.searchParams = params;
-      });
+      .subscribe(
+        (params: any) => {
+          this.searchParams = params;
+          this.resource = params.resource;
+          this.resultsAction = this.beaconService.queryResourceBeacons(params, params.resource)
+            .subscribe((beaconResponseDto) => this.results = [beaconResponseDto]);
+        });
   }
 }
