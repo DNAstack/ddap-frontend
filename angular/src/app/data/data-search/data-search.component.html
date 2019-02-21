@@ -5,7 +5,8 @@
 
 <ddap-main>
   <p *ngIf="resource" class="ddap-search-filter">
-    <mat-slide-toggle (change)="limitSearch($event)" [checked]="!!resource">Limit beacon search to <b>{{ resource }}</b>
+    <mat-slide-toggle (change)="limitSearch($event)" [checked]="!!resource">Limit beacon search to
+      <b>{{ resourceName$ | async }}</b>
     </mat-slide-toggle>
   </p>
 
