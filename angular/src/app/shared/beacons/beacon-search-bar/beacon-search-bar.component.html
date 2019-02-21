@@ -2,7 +2,7 @@
       class="flex vertical-center"
       (ngSubmit)="onSubmit(search)"
       [formGroup]="search">
-  <mat-form-field class="input-select">
+  <mat-form-field class="input-select" appearance="outline">
     <mat-select class="mbat-button-wrapper"
                 name="assembly"
                 formControlName="assembly">
@@ -19,7 +19,7 @@
            formControlName="query"
            [placeholder]="search.get('query').value ? '' : placeholder">
   </mat-form-field>
-  <button type="submit"
+  <button color="primary"
           mat-icon-button>
     <mat-icon class="icon icon-search"></mat-icon>
   </button>

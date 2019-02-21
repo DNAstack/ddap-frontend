@@ -17,8 +17,14 @@ ddap-root {
     }
 
     .mat-form-field-label-wrapper {
-      top: -0.5rem;
       padding: 0;
+      overflow: visible;
+      top: -0.64375em;
+    }
+
+    .mat-input-element,
+    .mat-form-field-label-wrapper {
+      font-size: 1.5rem;
     }
 
     .mat-form-field-label {
@@ -31,6 +37,26 @@ ddap-root {
 
     mat-form-field:not(:last-child) {
       margin-right: 1.5rem;
+    }
+
+    .mat-form-field-appearance-outline .mat-form-field-infix,
+    .mat-form-field-appearance-outline .mat-form-field-wrapper {
+      padding: 0;
+      border-top: none;
+    }
+
+    .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+      transform: none;
+    }
+
+    .mat-select-value-text {
+      font-size: 1.5rem;
+    }
+
+    .icon {
+      font-size: 2rem;
+      width: 2.5rem;
+      padding-bottom: 0.5rem;
     }
   }
 }
