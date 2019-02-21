@@ -1,29 +1,37 @@
-<div class="flex vertical-center">
-  <h4 *ngIf="!isTokenGranted()" class="stretch">{{ view.ui?.label || view.name }}</h4>
-  <mat-form-field *ngIf="isTokenGranted()" [class]="isTokenGranted() ? 'stretch' : ''">
-    <input matInput readonly type="text" [placeholder]="view.ui?.label || view.name" [value]="view.url || view.token">
-  </mat-form-field>
-  <button *ngIf="isTokenGranted()"
-          mat-flat-button matSuffix mat-icon-button ngxClipboard
-          [cbContent]="view.url || view.token"
-          aria-label="Copy to clipboard">
-    <mat-icon class="icon icon-copy"></mat-icon>
-  </button>
-  <div *ngIf="!isTokenGranted()">
-    <button mat-flat-button
-            color="primary"
-            class="uppercase"
-            (click)="getAccess()"
-            data-se="get-access-btn">
-      Get access
-    </button>
-  </div>
-  <a *ngIf="view.url"
-     href="{{view.url}}"
-     data-se="access-btn"
-     target='_blank' rel='noopener noreferrer'>
-    <button mat-flat-button color="primary" class="uppercase">
+<mat-card>
+  <mat-progress-bar *ngIf="!isTokenGranted() && accessClicked" mode="indeterminate"></mat-progress-bar>
+  <mat-card-header class="stretch">
+    <mat-card-title>{{ view.ui?.label || view.name }}</mat-card-title>
+    <mat-card-subtitle *ngIf="view.ui?.label">{{ view.name }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-actions>
+    <button mat-flat-button color="primary" class="uppercase"
+            [matMenuTriggerFor]="appMenu"
+            data-se="get-access-btn"
+            (click)="getAccess()">
       Access
+      <mat-icon>keyboard_arrow_down</mat-icon>
     </button>
-  </a>
-</div>
+    <mat-menu #appMenu="matMenu" class="access-menu" xPosition="before" yPosition="below">
+      <div class="flex vertical-center row">
+        <mat-form-field *ngIf="isTokenGranted()" [class]="isTokenGranted() ? 'stretch' : ''">
+          <input matInput readonly type="text" [placeholder]="view.ui?.label || view.name" [value]="view.url || view.token">
+        </mat-form-field>
+        <button *ngIf="isTokenGranted()"
+                mat-flat-button matSuffix mat-icon-button ngxClipboard
+                [cbContent]="view.url || view.token"
+                matTooltip="Copy to clipboard"
+                aria-label="Copy to clipboard">
+          <mat-icon class="icon icon-copy"></mat-icon>
+        </button>
+      </div>
+      <div class="row">
+        <a *ngIf="view.url" href="{{view.url}}"
+           data-se="access-btn"
+           target='_blank' rel='noopener noreferrer'>
+          <button mat-button color="primary" class="uppercase">View</button>
+        </a>
+      </div>
+    </mat-menu>
+  </mat-card-actions>
+</mat-card>

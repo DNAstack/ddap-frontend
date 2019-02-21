@@ -1,18 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCardModule,
+  MatChipsModule,
   MatExpansionModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatMenuModule,
   MatOptionModule,
   MatProgressBarModule,
+  MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
+  MatSlideToggleModule,
+  MatTooltipModule,
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -44,8 +49,10 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     FormsModule,
     BrowserAnimationsModule,
     ClipboardModule,
+    ReactiveFormsModule,
 
     MatCardModule,
+    MatChipsModule,
     MatProgressBarModule,
     MatSidenavModule,
     MatExpansionModule,
@@ -54,8 +61,12 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     MatButtonModule,
     MatIconModule,
     MatListModule,
+    MatMenuModule,
     MatOptionModule,
+    MatProgressSpinnerModule,
     MatSelectModule,
+    MatTooltipModule,
+    MatSlideToggleModule,
   ],
   exports: [
     AppRoutingModule,
@@ -64,8 +75,10 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     FormsModule,
     BrowserAnimationsModule,
     ClipboardModule,
+    ReactiveFormsModule,
 
     MatCardModule,
+    MatChipsModule,
     MatProgressBarModule,
     MatSidenavModule,
     MatExpansionModule,
@@ -74,8 +87,12 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     MatButtonModule,
     MatIconModule,
     MatListModule,
+    MatMenuModule,
     MatOptionModule,
+    MatProgressSpinnerModule,
     MatSelectModule,
+    MatTooltipModule,
+    MatSlideToggleModule,
 
     HeaderComponent,
     MainComponent,
@@ -86,4 +103,5 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     ResourceViewsComponent,
   ],
 })
-export class SharedModule { }
+export class SharedModule {
+}

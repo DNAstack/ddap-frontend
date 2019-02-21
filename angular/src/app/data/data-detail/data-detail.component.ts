@@ -47,8 +47,8 @@ export class DataDetailComponent implements OnInit {
   }
 
   queryBeacons(query, resource) {
-    this.beaconService.queryResourceBeacons(query, resource)
-      .subscribe(response => this.beaconResponse = response[0]); // TODO [DISCO-1977] pass the whole array to be rendered in the view
+    this.beaconService.query(query, resource)
+      .subscribe(response => this.beaconResponse = response[0]);
   }
 
   private getViews(resource) {

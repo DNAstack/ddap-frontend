@@ -1,15 +1,27 @@
-<div class="flex vertical-center mat-elevation-z2">
-  <mat-icon class="icon icon-search"></mat-icon>
+<form novalidate
+      class="flex vertical-center"
+      (ngSubmit)="onSubmit(search)"
+      [formGroup]="search">
   <mat-form-field class="input-select">
-    <mat-select #assemblySelect [(value)]="selectedAssemblyId" (selectionChange)="emitChange()">
-      <mat-option *ngFor="let assemblyId of assemblyIds" [value]="assemblyId">
+    <mat-select class="mbat-button-wrapper"
+                name="assembly"
+                formControlName="assembly">
+      <mat-option *ngFor="let assemblyId of assemblyIds"
+                  [value]="assemblyId">
         {{ assemblyId }}
       </mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field class="stretch">
-    <input #searchBar matInput type="search"
-           [placeholder]="searchBar.value ? '' : placeholder" [disabled]="disabled"
-           (keyup)="emitChange(searchBar.value)">
+    <input name="query"
+           matInput
+           type="search"
+           formControlName="query"
+           [placeholder]="search.get('query').value ? '' : placeholder">
   </mat-form-field>
-</div>
+  <button type="submit"
+          mat-icon-button>
+    <mat-icon class="icon icon-search"></mat-icon>
+  </button>
+</form>
+

@@ -1,0 +1,42 @@
+<ddap-header [isSearchPage]="true"
+             [searchOpen]="true"
+             label="Search Results">
+</ddap-header>
+
+<ddap-main>
+  <p *ngIf="resource" class="ddap-search-filter">
+    <mat-slide-toggle (change)="limitSearch($event)" [checked]="!!resource">Limit beacon search to
+      <b>{{ resourceName$ | async }}</b>
+    </mat-slide-toggle>
+  </p>
+
+  <div *ngIf="!resultsAction.closed"
+       class="ddap-center">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="resultsAction.closed && !results?.length"
+       class="ddap-center">
+    <h3>No results</h3>
+    <p>
+      <b>Tip:</b> Try searching for a BRCA2 variant:
+      <a [routerLink]="['/data/search']" [queryParams]="{ query: '13 : 32936732 G > C'}">13 : 32936732 G > C</a>
+    </p>
+  </div>
+
+  <ng-template [ngIf]="resultsAction.closed && results?.length">
+    <mat-card *ngFor="let beaconResult of results">
+      <mat-card-header>
+        <mat-card-title class="stretch">{{ beaconResult.name }}</mat-card-title>
+        <mat-card-subtitle>{{ beaconResult.organization }}</mat-card-subtitle>
+        <div class="ddap-beacon-result">
+          <mat-chip-list>
+            <mat-chip [color]="beaconResult.exists ? 'Accent' : 'Warn'">
+              {{ beaconResult.exists ? 'Found' : 'Not Found' }}
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+      </mat-card-header>
+    </mat-card>
+  </ng-template>
+</ddap-main>
