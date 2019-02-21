@@ -30,19 +30,30 @@ import static java.lang.String.format;
 @Component
 public class SetBearerTokenFromCookieGatewayFilterFactory extends AbstractGatewayFilterFactory {
 
-	@Override
-	public GatewayFilter apply(Object config) {
-		return (exchange, chain) -> {
-			final ServerHttpRequest request = exchange.getRequest();
-			final Optional<HttpCookie> foundCookie = Optional.ofNullable(request.getCookies()
-																				   .getFirst("user_token"));
-			foundCookie.map(cookie -> cookie.getValue())
-					   .ifPresent(token -> request.mutate()
-												  .header("Authorization", format("Bearer %s", token))
-												  .path("/")
-												  .build());
+    @Override
+    public GatewayFilter apply(Object config) {
+        return (exchange, chain) -> {
+            final ServerHttpRequest request = exchange.getRequest();
+            extractDamToken(request)
+                    .ifPresent(token -> request.mutate()
+                            .header("Authorization", format("Bearer %s", token))
+                            .path("/")
+                            .build());
 
-			return chain.filter(exchange);
-		};
-	}
+            return chain.filter(exchange);
+        };
+    }
+
+    /**
+     * Extracts the user's DAM authorization token from the given request, which carries it in an
+     * encrypted cookie.
+     *
+     * @param request the request that originated from the user and probably contains the encrypted DAM token.
+     * @return A string that can be used as a bearer token in a request to DAM, or {@code Optional.empty}
+     * if the given request doesn't contain a usable token.
+     */
+    public static Optional<String> extractDamToken(ServerHttpRequest request) {
+        return Optional.ofNullable(request.getCookies().getFirst("user_token"))
+                .map(HttpCookie::getValue);
+    }
 }

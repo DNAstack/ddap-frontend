@@ -48,7 +48,7 @@ export class DataDetailComponent implements OnInit {
 
   queryBeacons(query, resource) {
     this.beaconService.query(query, resource)
-      .subscribe(response => this.beaconResponse = response);
+      .subscribe(response => this.beaconResponse = response[0]);
   }
 
   private getViews(resource) {

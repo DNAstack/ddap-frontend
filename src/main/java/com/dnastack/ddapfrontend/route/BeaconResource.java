@@ -1,15 +1,17 @@
 package com.dnastack.ddapfrontend.route;
 
-import static java.lang.String.format;
-
 import com.dnastack.ddapfrontend.beacon.BeaconInfo;
 import com.dnastack.ddapfrontend.beacon.BeaconOrganization;
 import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.beacon.ExternalBeaconQueryResult;
+import com.dnastack.ddapfrontend.client.dam.DamClient;
+import com.dnastack.ddapfrontend.client.dam.DamResource;
+import com.dnastack.ddapfrontend.client.dam.DamView;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import com.dnastack.ddapfrontend.proxy.SetBearerTokenFromCookieGatewayFilterFactory;
+import lombok.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,48 +19,91 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
+
 @RestController
 class BeaconResource {
 
+    private static final String BEACON_QUERY_TEMPLATE = "%s" +
+            "?assemblyId=%s" +
+            "&referenceName=%s" +
+            "&start=%s" +
+            "&referenceBases=%s" +
+            "&alternateBases=%s";
+
+    @Autowired
+    private DamClient damClient;
+
     @GetMapping(value = "/api/resources/search", params = "type=beacon")
-    public Flux<ExternalBeaconQueryResult> handleBeaconQuery(BeaconRequestModel request) {
+    public Flux<ExternalBeaconQueryResult> handleBeaconQuery(BeaconRequestModel beaconRequest, ServerHttpRequest request) {
         return Flux.merge(
-            handleBeaconQueryForResource(null, request),
-            handleBeaconQueryForResource(null, request),
-            handleBeaconQueryForResource(null, request),
-            handleBeaconQueryForResource(null, request)
+            handleBeaconQueryForResource(null, beaconRequest, request),
+            handleBeaconQueryForResource(null, beaconRequest, request),
+            handleBeaconQueryForResource(null, beaconRequest, request),
+            handleBeaconQueryForResource(null, beaconRequest, request)
         );
     }
 
     @GetMapping(value = "/api/resources/{resourceId}/search", params = "type=beacon")
-    public Mono<ExternalBeaconQueryResult> handleBeaconQueryForResource(@PathVariable String resourceId, BeaconRequestModel request) {
-        final String queryTemplate = "https://beacon.cafevariome.org/query" +
-                "?assemblyId=%s" +
-                "&referenceName=%s" +
-                "&start=%s" +
-                "&referenceBases=%s" +
-                "&alternateBases=%s";
+    public Flux<ExternalBeaconQueryResult> handleBeaconQueryForResource(
+            @PathVariable String resourceId,
+            BeaconRequestModel beaconRequest,
+            ServerHttpRequest request) {
 
-        final Mono<BeaconQueryResult> beaconQueryResponse = WebClient.create()
-                                                                     .get()
-                                                                     .uri(format(
-                                                                             queryTemplate,
-                                                                         request.getAssemblyId(),
-                                                                         request.getReferenceName(),
-                                                                         request.getStart(),
-                                                                         request.getReferenceBases(),
-                                                                         request.getAlternateBases()))
-                                                                     .exchange()
-                                                                     .flatMap(clientResponse -> clientResponse.bodyToMono(
-                                                                             BeaconQueryResult.class));
-        final Mono<BeaconInfo> beaconInfoResponse = WebClient.create()
-                                                             .get()
-                                                             .uri("https://beacon.cafevariome.org/")
-                                                             .exchange()
-                                                             .flatMap(clientResponse -> clientResponse.bodyToMono(
-                                                                     BeaconInfo.class));
-        return Mono.zip(beaconInfoResponse, beaconQueryResponse, this::formatBeaconServerPayload);
+        // find beacons under resourceId in DAM config
+        Optional<String> damToken = SetBearerTokenFromCookieGatewayFilterFactory.extractDamToken(request);
+        if (!damToken.isPresent()) {
+            return Flux.error(new IllegalArgumentException("Authoriation is required")); // TODO make this return a 401
+        }
 
+        DamResource resource = damClient.getResource(damToken.get(), resourceId);
+
+        // find all the views with beacon URLs
+        List<ViewToken> beaconViewTokens = resource.getViews().entrySet().stream()
+                .flatMap(entry -> {
+                    String viewId = entry.getKey();
+                    DamView view = entry.getValue();
+                    Map<String, String> interfaces = view.getInterfaces();
+                    String beaconInterface = interfaces.get("http:beacon");
+                    if (beaconInterface != null) {
+                        return Stream.of(new ViewToken(viewId, beaconInterface, damClient.getAccessTokenForView(damToken.get(), resourceId, viewId).getToken()));
+                    }
+                    return Stream.of();
+                })
+                .collect(toList());
+
+        Mono[] beaconRequests = beaconViewTokens.stream().map(viewToken -> {
+            final Mono<BeaconQueryResult> beaconQueryResponse = WebClient.create()
+                    .get()
+                    .uri(format(
+                            BEACON_QUERY_TEMPLATE,
+                            viewToken.getUrl(),
+                            beaconRequest.getAssemblyId(),
+                            beaconRequest.getReferenceName(),
+                            beaconRequest.getStart(),
+                            beaconRequest.getReferenceBases(),
+                            beaconRequest.getAlternateBases()))
+                    .header("Authorization", "Bearer " + viewToken.getToken())
+                    .exchange()
+                    .flatMap(clientResponse -> clientResponse.bodyToMono(
+                            BeaconQueryResult.class));
+            final Mono<BeaconInfo> beaconInfoResponse = WebClient.create()
+                    .get()
+                    .uri("https://beacon.cafevariome.org/")
+                    .exchange()
+                    .flatMap(clientResponse -> clientResponse.bodyToMono(
+                            BeaconInfo.class));
+            return Mono.zip(beaconInfoResponse, beaconQueryResponse, this::formatBeaconServerPayload);
+        }).toArray(Mono[]::new);
+
+        return Flux.merge(beaconRequests);
     }
 
     private ExternalBeaconQueryResult formatBeaconServerPayload(BeaconInfo infoResponse, BeaconQueryResult queryResponse) {
@@ -102,5 +147,12 @@ class BeaconResource {
                       .ifPresent(error -> externalResult.getMetadata().put("error", error));
 
         return externalResult;
+    }
+
+    @Value
+    private static class ViewToken {
+        String viewId;
+        String url;
+        String token;
     }
 }
