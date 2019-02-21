@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'ddap-resource-detail',
@@ -13,7 +15,8 @@ import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.servic
 })
 export class DataSearchComponent implements OnInit {
 
-  resource: any;
+  resource: string;
+  resourceName$:  Observable<string>;
   views: any;
   results: any[];
   resultsAction: Subscription;
@@ -21,16 +24,20 @@ export class DataSearchComponent implements OnInit {
   private searchParams;
 
   constructor(private route: ActivatedRoute,
+              private dataService: DataService,
               private beaconService: ResourceBeaconService) {
 
   }
 
   ngOnInit() {
+    this.resultsAction = new Subscription();
+
     this.route.queryParams
       .subscribe(
         (params: any) => {
           this.searchParams = params;
           this.resource = params.resource;
+          this.resourceName$ = this.dataService.getName(this.resource);
           this.query(params, params.resource);
         });
   }
