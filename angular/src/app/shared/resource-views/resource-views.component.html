@@ -37,10 +37,10 @@
       <div *ngIf="error" class="flex flex--column">
         <div class="flex flex--row vertical-center">
           <mat-icon color="warn">warning</mat-icon>
-          <p>Unable to request access token at the moment. Please try again later or contact <a href="mailto:TODO">admin</a>.</p>
+          <p>Unable to request access token at the moment. Please try again later or contact admin.</p>
         </div>
         <div class="error-message">
-          <p>{{ error.message }}</p>
+          <button mat-button class="uppercase" (click)="sendFeedback()">Send Feedback</button>
         </div>
       </div>
     </mat-menu>
