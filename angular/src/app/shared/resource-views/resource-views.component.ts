@@ -9,6 +9,8 @@ export class ResourceViewsComponent {
 
   @Input()
   view: any;
+  @Input()
+  error: any;
 
   @Output()
   accessRequested: EventEmitter<void> = new EventEmitter();

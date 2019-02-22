@@ -1,7 +1,6 @@
 <ddap-header class="no-border"
              [backLink]="['/data']"
              [label]="resource?.ui.label">
-
 </ddap-header>
 
 <ddap-resource-logo [imageUrl]="resource?.ui.imageUrl"></ddap-resource-logo>
@@ -12,8 +11,6 @@
   </p>
 
   <mat-divider class="ddap-main-divider"></mat-divider>
-
-  <ddap-beacon-result *ngIf="beaconResponse" [beacon]="beaconResponse"></ddap-beacon-result>
 
   <div class="ddap-column-panel">
     <div class="ddap-column">
@@ -45,6 +42,7 @@
       <mat-list>
         <mat-list-item *ngFor="let view of views" class="ddap-data-view">
           <ddap-resource-views [view]="resource.views[view.name]"
+                               [error]="accessError"
                                (accessRequested)="getAccess(view.name)">
           </ddap-resource-views>
         </mat-list-item>
