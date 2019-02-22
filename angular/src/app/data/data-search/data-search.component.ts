@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
+import { SearchState } from '../../shared/search-state.model';
+import { SearchStateService } from '../../shared/search-state.service';
 import { DataService } from '../data.service';
 
 @Component({
@@ -21,10 +22,8 @@ export class DataSearchComponent implements OnInit {
   results: any[];
   resultsAction: Subscription;
 
-  private searchParams;
-
-  constructor(private route: ActivatedRoute,
-              private dataService: DataService,
+  constructor(private dataService: DataService,
+              private searchStateService: SearchStateService,
               private beaconService: ResourceBeaconService) {
 
   }
@@ -32,26 +31,29 @@ export class DataSearchComponent implements OnInit {
   ngOnInit() {
     this.resultsAction = new Subscription();
 
-    this.route.queryParams
+    this.searchStateService.searchState
       .subscribe(
-        (params: any) => {
-          this.searchParams = params;
-          this.resource = params.resource;
+        (searchState: SearchState) => {
+          this.resource = searchState.resource;
           this.resourceName$ = this.dataService.getName(this.resource);
-          this.query(params, params.resource);
+          this.query(searchState);
         });
   }
 
   limitSearch($event) {
-    if ($event.checked) {
-      return this.query(this.searchParams, this.resource);
-    }
-
-    return this.query(this.searchParams, null);
+    this.searchStateService.patch({limitSearch: $event.checked});
   }
 
-  private query(searchParams, resourceId) {
-    this.resultsAction = this.beaconService.query(searchParams, resourceId)
+  private query(searchParams: SearchState) {
+    let beaconResult;
+
+    if (searchParams.limitSearch) {
+      beaconResult = this.beaconService.query(searchParams, searchParams.resource);
+    } else {
+      beaconResult = this.beaconService.query(searchParams, null);
+    }
+
+    this.resultsAction = beaconResult
       .subscribe((beaconResponseDto: any) => {
           this.results = beaconResponseDto;
         }

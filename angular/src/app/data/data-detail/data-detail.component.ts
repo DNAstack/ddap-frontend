@@ -4,6 +4,7 @@ import { flatMap } from 'rxjs/operators';
 
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
+import { SearchStateService } from '../../shared/search-state.service';
 import { DataService } from '../data.service';
 
 @Component({
@@ -18,13 +19,17 @@ export class DataDetailComponent implements OnInit {
   views: any;
   accessError: any = null;
 
-  constructor(private route: ActivatedRoute, private dataService: DataService) {
+  constructor(private route: ActivatedRoute,
+              private dataService: DataService,
+              private searchStateService: SearchStateService) {
   }
 
   ngOnInit() {
     this.route.params.pipe(
       flatMap(params => this.dataService.getResource(params['resourceName']))
     ).subscribe((resource) => {
+      const resourceName = resource.name;
+      this.searchStateService.patch({resource: resourceName});
       this.resource = resource;
       this.views = this.getViews(resource);
     });

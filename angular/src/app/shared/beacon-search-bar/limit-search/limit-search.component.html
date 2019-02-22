@@ -1,0 +1,5 @@
+<div>
+  <mat-slide-toggle (change)="limitSearch($event)" [checked]="checked">Limit beacon search to
+    <b>{{ resourceName$ | async }}</b>
+  </mat-slide-toggle>
+</div>
