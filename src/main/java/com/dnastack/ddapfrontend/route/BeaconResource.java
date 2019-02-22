@@ -6,6 +6,7 @@ import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.beacon.ExternalBeaconQueryResult;
 import com.dnastack.ddapfrontend.client.dam.DamClient;
 import com.dnastack.ddapfrontend.client.dam.DamResource;
+import com.dnastack.ddapfrontend.client.dam.DamResourceList;
 import com.dnastack.ddapfrontend.client.dam.DamView;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.proxy.SetBearerTokenFromCookieGatewayFilterFactory;
@@ -19,10 +20,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
@@ -43,12 +41,22 @@ class BeaconResource {
 
     @GetMapping(value = "/api/resources/search", params = "type=beacon")
     public Flux<ExternalBeaconQueryResult> handleBeaconQuery(BeaconRequestModel beaconRequest, ServerHttpRequest request) {
-        return Flux.merge(
-            handleBeaconQueryForResource(null, beaconRequest, request),
-            handleBeaconQueryForResource(null, beaconRequest, request),
-            handleBeaconQueryForResource(null, beaconRequest, request),
-            handleBeaconQueryForResource(null, beaconRequest, request)
-        );
+
+        DamResourceList resourceList = damClient.getResources();
+
+        List<String> resourceNameList = resourceList.getResources().stream()
+                .map(entry -> entry.getName())
+                .collect(toList());
+
+        Flux<ExternalBeaconQueryResult> fluxResult = Flux.empty();
+        Flux<ExternalBeaconQueryResult> externalBeaconQueryResultFlux;
+        for (String resourceName: resourceNameList) {
+            externalBeaconQueryResultFlux =
+                    handleBeaconQueryForResource(resourceName, beaconRequest, request);
+            fluxResult = fluxResult.merge(externalBeaconQueryResultFlux);
+        }
+
+        return fluxResult;
     }
 
     @GetMapping(value = "/api/resources/{resourceId}/search", params = "type=beacon")
@@ -60,8 +68,9 @@ class BeaconResource {
         // find beacons under resourceId in DAM config
         Optional<String> damToken = SetBearerTokenFromCookieGatewayFilterFactory.extractDamToken(request);
         if (!damToken.isPresent()) {
-            return Flux.error(new IllegalArgumentException("Authoriation is required")); // TODO make this return a 401
+            return Flux.error(new IllegalArgumentException("Authorization is required")); // TODO make this return a 401
         }
+
 
         DamResource resource = damClient.getResource(damToken.get(), resourceId);
 

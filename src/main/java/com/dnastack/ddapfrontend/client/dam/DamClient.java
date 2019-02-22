@@ -4,9 +4,15 @@ import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 
+import java.util.List;
+
 public interface DamClient {
 
     String API_VERSION = "v1alpha";
+
+    @RequestLine("GET /dam/" + API_VERSION + "/dnastack/resources")
+    DamResourceList getResources();
+
 
     @RequestLine("GET /dam/" + API_VERSION + "/dnastack/config/resources/{resourceId}")
     @Headers("Authorization: Bearer {damToken}")
