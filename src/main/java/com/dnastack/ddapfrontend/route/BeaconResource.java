@@ -44,10 +44,9 @@ class BeaconResource {
 
         DamResourceList resourceList = damClient.getResources();
 
-        List<String> resourceNameList = resourceList.getResources().stream().map(entry -> {
-            return entry.getName();
-        })
-        .collect(toList());
+        List<String> resourceNameList = resourceList.getResources().stream()
+                .map(entry -> entry.getName())
+                .collect(toList());
 
         Flux<ExternalBeaconQueryResult> fluxResult = Flux.empty();
         Flux<ExternalBeaconQueryResult> externalBeaconQueryResultFlux;
