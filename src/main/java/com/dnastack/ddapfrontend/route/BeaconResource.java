@@ -49,10 +49,6 @@ class BeaconResource {
         })
         .collect(toList());
 
-//        String temp = "ga4gh-apis";
-//        resourceNameList.removeAll(resourceNameList);
-//        resourceNameList.add(temp);
-
         Flux<ExternalBeaconQueryResult> fluxResult = Flux.empty();
         Flux<ExternalBeaconQueryResult> externalBeaconQueryResultFlux;
         for (String resourceName: resourceNameList) {
@@ -77,11 +73,7 @@ class BeaconResource {
         }
 
 
-        String damTokenStr;
-
-        damTokenStr="eyJhbGciOiJIUzI1NiIsImtpZCI6ImtpZCIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2ljLWRvdC1jcmFpZ3YtY29kZWxhYi5hcHBzcG90LmNvbS9vaWRjIiwic3ViIjoiaWNfNGI2NWVjMDU2NjlhNDg2OGJAaWMtZG90LWNyYWlndi1jb2RlbGFiLmFwcHNwb3QuY29tIiwiYXVkIjoiZ29waGVycyIsIm5iZiI6MTU1MDg1OTQxNywiaWF0IjoxNTUwODU5NDc3LCJqdGkiOiJmb29iYXIiLCJhenAiOiJiMWFlZDk2ZC02MzY3LTQzMTMtODdhMS02NWVkYTQ5NjJhNzYiLCJleHAiOjE1NTA4NjMwNzcsImdhNGdoIjp7ImdhNGdoLkFjY2VwdGVkVGVybXNBbmRQb2xpY2llcyI6W3sidmFsdWUiOiJodHRwczovL3d3dy5uYXR1cmUuY29tL2FydGljbGVzL3M0MTQzMS0wMTgtMDIxOS15Iiwic291cmNlIjoiaHR0cHM6Ly9uY2kubmloLm9yZyIsImlhdCI6MTU1MDEyMDQwMiwiZXhwIjoxNTUyNzEyNDAyLCJieSI6InNlbGYifV0sImdhNGdoLkJvbmFGaWRlIjpbeyJ2YWx1ZSI6Imh0dHBzOi8vd3d3Lm5hdHVyZS5jb20vYXJ0aWNsZXMvczQxNDMxLTAxOC0wMjE5LXkiLCJzb3VyY2UiOiJodHRwczovL25jaS5uaWgub3JnIiwiaWF0IjoxNTUwMTIwNDAxLCJleHAiOjE1NTI3MTI0MDEsImJ5Ijoic2lnbmluZ19vZmZpY2lhbCJ9XX19.CPkU2CQ62HeN_9FyMRGK4zKb5Xwkivgk92FHnSmS04g";
-
-        DamResource resource = damClient.getResource(damTokenStr, resourceId);
+        DamResource resource = damClient.getResource(damToken.get(), resourceId);
 
         // find all the views with beacon URLs
         List<ViewToken> beaconViewTokens = resource.getViews().entrySet().stream()
@@ -91,7 +83,7 @@ class BeaconResource {
                     Map<String, String> interfaces = view.getInterfaces();
                     String beaconInterface = interfaces.get("http:beacon");
                     if (beaconInterface != null) {
-                        return Stream.of(new ViewToken(viewId, beaconInterface, damClient.getAccessTokenForView(damTokenStr, resourceId, viewId).getToken()));
+                        return Stream.of(new ViewToken(viewId, beaconInterface, damClient.getAccessTokenForView(damToken.get(), resourceId, viewId).getToken()));
                     }
                     return Stream.of();
                 })
