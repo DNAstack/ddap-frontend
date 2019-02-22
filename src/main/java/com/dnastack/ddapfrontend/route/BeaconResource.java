@@ -44,8 +44,8 @@ class BeaconResource {
 
         DamResourceList resourceList = damClient.getResources();
 
-        List<String> resourceNameList = resourceList.getResources().stream().flatMap(entry -> {
-            return Stream.of(entry.getName());
+        List<String> resourceNameList = resourceList.getResources().stream().map(entry -> {
+            return entry.getName();
         })
         .collect(toList());
 
