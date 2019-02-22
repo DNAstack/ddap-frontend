@@ -28,4 +28,8 @@ export class ResourceViewsComponent {
     return this.view.url || this.view.token;
   }
 
+  sendFeedback() {
+    // TODO (this could be component on its own)
+  }
+
 }

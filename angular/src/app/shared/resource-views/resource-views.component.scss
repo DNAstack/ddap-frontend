@@ -51,11 +51,6 @@ mat-card {
 
   .error-message {
     background: $color-faded-grey;
-
-    p:last-child {
-      font-size: 0.8rem;
-      color: $color-grey;
-    }
   }
 
   mat-form-field {
