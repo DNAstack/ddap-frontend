@@ -40,6 +40,24 @@ mat-card {
     padding: 0;
   }
 
+  mat-icon {
+    margin-left: 1rem;
+  }
+
+  p {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .error-message {
+    background: $color-faded-grey;
+
+    p:last-child {
+      font-size: 0.8rem;
+      color: $color-grey;
+    }
+  }
+
   mat-form-field {
     padding-left: 1rem;
     padding-top: 1rem;

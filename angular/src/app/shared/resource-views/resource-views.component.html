@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-progress-bar *ngIf="!isTokenGranted() && accessClicked" mode="indeterminate"></mat-progress-bar>
+  <mat-progress-bar *ngIf="!isTokenGranted() && accessClicked && !error" mode="indeterminate"></mat-progress-bar>
   <mat-card-header class="stretch">
     <mat-card-title>{{ view.ui?.label || view.name }}</mat-card-title>
     <mat-card-subtitle *ngIf="view.ui?.label">{{ view.name }}</mat-card-subtitle>
@@ -13,24 +13,35 @@
       <mat-icon>keyboard_arrow_down</mat-icon>
     </button>
     <mat-menu #appMenu="matMenu" class="access-menu" xPosition="before" yPosition="below">
-      <div class="flex vertical-center row">
-        <mat-form-field *ngIf="isTokenGranted()" [class]="isTokenGranted() ? 'stretch' : ''">
-          <input matInput readonly type="text" [placeholder]="view.ui?.label || view.name" [value]="view.url || view.token">
-        </mat-form-field>
-        <button *ngIf="isTokenGranted()"
-                mat-flat-button matSuffix mat-icon-button ngxClipboard
-                [cbContent]="view.url || view.token"
-                matTooltip="Copy to clipboard"
-                aria-label="Copy to clipboard">
-          <mat-icon class="icon icon-copy"></mat-icon>
-        </button>
+      <div *ngIf="!error" >
+        <div class="flex vertical-center">
+          <mat-form-field *ngIf="isTokenGranted()" [class]="isTokenGranted() ? 'stretch' : ''">
+            <input matInput readonly type="text" [placeholder]="view.ui?.label || view.name" [value]="view.url || view.token">
+          </mat-form-field>
+          <button *ngIf="isTokenGranted()"
+                  mat-flat-button matSuffix mat-icon-button ngxClipboard
+                  [cbContent]="view.url || view.token"
+                  matTooltip="Copy to clipboard"
+                  aria-label="Copy to clipboard">
+            <mat-icon class="icon icon-copy"></mat-icon>
+          </button>
+        </div>
+        <div>
+          <a *ngIf="view.url" href="{{view.url}}"
+             data-se="access-btn"
+             target='_blank' rel='noopener noreferrer'>
+            <button mat-button color="primary" class="uppercase">View</button>
+          </a>
+        </div>
       </div>
-      <div class="row">
-        <a *ngIf="view.url" href="{{view.url}}"
-           data-se="access-btn"
-           target='_blank' rel='noopener noreferrer'>
-          <button mat-button color="primary" class="uppercase">View</button>
-        </a>
+      <div *ngIf="error" class="flex flex--column">
+        <div class="flex flex--row vertical-center">
+          <mat-icon color="warn">warning</mat-icon>
+          <p>Unable to request access token at the moment. Please try again later or contact <a href="mailto:TODO">admin</a>.</p>
+        </div>
+        <div class="error-message">
+          <p>{{ error.message }}</p>
+        </div>
       </div>
     </mat-menu>
   </mat-card-actions>

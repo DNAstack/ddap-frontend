@@ -14,14 +14,12 @@ import { DataService } from '../data.service';
 })
 export class DataDetailComponent implements OnInit {
 
-  beaconResponse: any = null;
   resource: any;
   views: any;
+  accessError: any = null;
 
-  constructor(
-    private route: ActivatedRoute,
-    private dataService: DataService,
-    private beaconService: ResourceBeaconService) {}
+  constructor(private route: ActivatedRoute, private dataService: DataService) {
+  }
 
   ngOnInit() {
     this.route.params.pipe(
@@ -34,21 +32,21 @@ export class DataDetailComponent implements OnInit {
 
   getAccess(viewName) {
     this.dataService.getAccessRequestToken(this.resource.name, viewName)
-      .subscribe((accessToken) => {
-        this.resource.views[viewName].token = accessToken;
-
-        const view = this.resource.views[viewName];
-        // tslint:disable-next-line
-        const viewAccessUrl = view!.interfaces['http:gcp:gs'];
-        if (viewAccessUrl) {
-          this.resource.views[viewName].url = `${viewAccessUrl}/o?access_token=${accessToken}`;
-        }
-      });
+      .subscribe(
+        (accessToken) => this.mutateViewWithTokenAndUrl(viewName, accessToken),
+        (error) => this.accessError = error
+      );
   }
 
-  queryBeacons(query, resource) {
-    this.beaconService.query(query, resource)
-      .subscribe(response => this.beaconResponse = response[0]);
+  private mutateViewWithTokenAndUrl(viewName, accessToken) {
+    this.resource.views[viewName].token = accessToken;
+
+    const view = this.resource.views[viewName];
+    // tslint:disable-next-line
+    const viewAccessUrl = view!.interfaces['http:gcp:gs'];
+    if (viewAccessUrl) {
+      this.resource.views[viewName].url = `${viewAccessUrl}/o?access_token=${accessToken}`;
+    }
   }
 
   private getViews(resource) {
