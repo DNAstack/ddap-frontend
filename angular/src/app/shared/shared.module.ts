@@ -24,8 +24,9 @@ import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppRoutingModule } from '../app-routing.module';
 
+import { BeaconSearchBarComponent } from './beacon-search-bar/beacon-search-bar.component';
+import { LimitSearchComponent } from './beacon-search-bar/limit-search/limit-search.component';
 import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
-import { BeaconSearchBarComponent } from './beacons/beacon-search-bar/beacon-search-bar.component';
 import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
@@ -41,6 +42,7 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     ResourceViewsComponent,
     BeaconSearchBarComponent,
     BeaconResultComponent,
+    LimitSearchComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -101,6 +103,7 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     BeaconResultComponent,
     ResourceLogoComponent,
     ResourceViewsComponent,
+    LimitSearchComponent,
   ],
 })
 export class SharedModule {

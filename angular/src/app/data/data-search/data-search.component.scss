@@ -1,15 +1,5 @@
-@import "~src/styles/modules/colors";
-
 .ddap-center {
   text-align: center;
-}
-
-.ddap-search-filter {
-  margin: -2rem -2rem 2rem -2rem;
-  padding: 1.5rem 2rem 0 2rem;
-  height: 3rem;
-  background-color: $color-grey-light;
-  border-bottom: 1px solid $color-faded-grey;
 }
 
 mat-spinner {
