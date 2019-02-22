@@ -68,7 +68,7 @@ class BeaconResource {
 
         // find beacons under resourceId in DAM config
         Optional<String> damToken = SetBearerTokenFromCookieGatewayFilterFactory.extractDamToken(request);
-        if (!true && !damToken.isPresent()) {
+        if (!damToken.isPresent()) {
             return Flux.error(new IllegalArgumentException("Authorization is required")); // TODO make this return a 401
         }
 

@@ -10,8 +10,6 @@ public interface DamClient {
 
     String API_VERSION = "v1alpha";
 
-    //https://ddap-frontend.staging.dnastack.com/dam/v1alpha/resources?persona=nci_researcher
-
     @RequestLine("GET /dam/" + API_VERSION + "/dnastack/resources")
     DamResourceList getResources();
 
