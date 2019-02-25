@@ -22,6 +22,7 @@ export class BeaconSearchBarComponent implements OnInit {
   disabled: boolean;
 
   assemblyIds = assemblyIds;
+  limitSearch = false;
   search: FormGroup;
 
   private resource;
@@ -41,17 +42,23 @@ export class BeaconSearchBarComponent implements OnInit {
       queryParams: {
         ...value,
         resource,
+        limitSearch: this.limitSearch,
       },
     });
   }
 
   ngOnInit(): void {
     this.searchStateService.searchState.subscribe((state: SearchState) => {
-      const {assembly, query, resource} = state;
+      const {assembly, query, resource, limitSearch} = state;
       this.resource = resource;
+      this.limitSearch = limitSearch;
 
       if (assembly) {
         this.search.patchValue({assembly});
+      }
+
+      if (limitSearch) {
+        this.search.patchValue({limitSearch});
       }
 
       if (query) {

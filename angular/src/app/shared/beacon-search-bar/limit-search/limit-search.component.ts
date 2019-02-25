@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 })
 export class LimitSearchComponent {
   @Input()
-  checked = false;
+  checked;
 
   @Input()
   resourceName$: Observable<string>;
