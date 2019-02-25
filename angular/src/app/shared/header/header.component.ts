@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'ddap-header',
@@ -25,14 +25,19 @@ export class HeaderComponent {
   @Input()
   searchOpen = false;
 
+  @Output()
+  searchOpenChange = new EventEmitter<boolean>();
+
   constructor() {
   }
 
   closeSearch() {
     this.searchOpen = false;
+    this.searchOpenChange.emit(this.searchOpen);
   }
 
   openSearch() {
     this.searchOpen = true;
+    this.searchOpenChange.emit(this.searchOpen);
   }
 }

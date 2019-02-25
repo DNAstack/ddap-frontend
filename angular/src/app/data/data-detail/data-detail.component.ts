@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 import { flatMap } from 'rxjs/operators';
 
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
@@ -15,7 +17,10 @@ import { DataService } from '../data.service';
 })
 export class DataDetailComponent implements OnInit {
 
+  limitSearch = true;
   resource: any;
+  resourceName$: Observable<string>;
+  searchOpened = false;
   views: any;
   accessError: any = null;
 
@@ -29,8 +34,12 @@ export class DataDetailComponent implements OnInit {
       flatMap(params => this.dataService.getResource(params['resourceName']))
     ).subscribe((resource) => {
       const resourceName = resource.name;
-      this.searchStateService.patch({resource: resourceName});
+      this.searchStateService.patch({
+        resource: resourceName,
+        limitSearch: true,
+      });
       this.resource = resource;
+      this.resourceName$ = of(resource.ui.label);
       this.views = this.getViews(resource);
     });
   }
@@ -41,6 +50,17 @@ export class DataDetailComponent implements OnInit {
         (accessToken) => this.mutateViewWithTokenAndUrl(viewName, accessToken),
         (error) => this.accessError = error
       );
+  }
+
+  limitSearchChange($event) {
+    this.limitSearch = $event.checked;
+    this.searchStateService.patch({
+      limitSearch: this.limitSearch,
+    });
+  }
+
+  searchOpenedChange($event) {
+    this.searchOpened = $event;
   }
 
   private mutateViewWithTokenAndUrl(viewName, accessToken) {

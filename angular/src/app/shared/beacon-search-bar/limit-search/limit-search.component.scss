@@ -7,3 +7,11 @@
   background-color: $color-grey-light;
   border-bottom: 1px solid $color-faded-grey;
 }
+
+:host.filter-top-border > div {
+  border-top: 1px solid $color-faded-grey;
+}
+
+:host.filter-inline > div {
+  margin: auto;
+}

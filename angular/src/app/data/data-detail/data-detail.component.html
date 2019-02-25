@@ -1,9 +1,17 @@
 <ddap-header class="no-border"
              [backLink]="['/data']"
-             [label]="resource?.ui.label">
+             [label]="resource?.ui.label"
+             (searchOpenChange)="searchOpenedChange($event)">
 </ddap-header>
 
-<ddap-resource-logo [imageUrl]="resource?.ui.imageUrl"></ddap-resource-logo>
+<ddap-resource-logo [imageUrl]="resource?.ui.imageUrl">
+  <ddap-limit-search *ngIf="searchOpened"
+                     [checked]="limitSearch"
+                     (change)="limitSearchChange($event)"
+                     class="filter-top-border filter-inline"
+                     [resourceName$]="resourceName$">
+  </ddap-limit-search>
+</ddap-resource-logo>
 
 <div>
   <p class="ddap-resource-title">

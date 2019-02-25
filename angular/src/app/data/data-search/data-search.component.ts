@@ -16,6 +16,7 @@ import { DataService } from '../data.service';
 })
 export class DataSearchComponent implements OnInit {
 
+  limitSearch = false;
   resource: string;
   resourceName$:  Observable<string>;
   views: any;
@@ -34,13 +35,14 @@ export class DataSearchComponent implements OnInit {
     this.searchStateService.searchState
       .subscribe(
         (searchState: SearchState) => {
+          this.limitSearch = searchState.limitSearch;
           this.resource = searchState.resource;
           this.resourceName$ = this.dataService.getName(this.resource);
           this.query(searchState);
         });
   }
 
-  limitSearch($event) {
+  limitSearchChange($event) {
     this.searchStateService.patch({limitSearch: $event.checked});
   }
 
