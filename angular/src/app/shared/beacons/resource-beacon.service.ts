@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs-compat';
-import { map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 import { DnaChangeQueryParser } from '../dna-change-query.parser';
@@ -35,10 +34,7 @@ export class ResourceBeaconService {
   }
 
   private queryBeacon(resourceId, params?): any {
-    return this.http.get<any>(`${environment.ddapApiUrl}/resources/${resourceId}/search`, {params})
-      .pipe(
-        map((responseDto) => [responseDto])
-      );
+    return this.http.get<BeaconResponse[]>(`${environment.ddapApiUrl}/resources/${resourceId}/search`, {params});
   }
 
   private queryAll(params?): Observable<BeaconResponse[]> {

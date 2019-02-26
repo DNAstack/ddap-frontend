@@ -20,19 +20,12 @@ export class SearchStateService {
       .subscribe(
         (params: any) => {
           const {assembly, query, resource, limitSearch} = params;
-          let limitSearchUpdated = false;
-
-          if (this.state.limitSearch === null && resource) {
-            limitSearchUpdated = true;
-          } else if ( limitSearch === true ) {
-            limitSearchUpdated = true;
-          }
 
           this.patch({
             assembly,
             query,
             resource,
-            limitSearch: limitSearchUpdated,
+            limitSearch,
           });
         });
   }
