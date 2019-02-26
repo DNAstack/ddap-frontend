@@ -20,7 +20,7 @@ export class HeaderComponent {
   backLink: any = null;
 
   @Input()
-  searchButton = true;
+  searchButton = false;
 
   @Input()
   searchOpen = false;
