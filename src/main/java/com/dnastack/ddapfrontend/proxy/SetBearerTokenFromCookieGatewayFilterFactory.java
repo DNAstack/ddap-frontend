@@ -34,13 +34,12 @@ public class SetBearerTokenFromCookieGatewayFilterFactory extends AbstractGatewa
     public GatewayFilter apply(Object config) {
         return (exchange, chain) -> {
             final ServerHttpRequest request = exchange.getRequest();
-            extractDamToken(request)
-                    .ifPresent(token -> request.mutate()
+            Optional<ServerHttpRequest> requestWithDamToken = extractDamToken(request)
+                    .map(token -> request.mutate()
                             .header("Authorization", format("Bearer %s", token))
-                            .path("/")
                             .build());
 
-            return chain.filter(exchange);
+            return chain.filter(exchange.mutate().request(requestWithDamToken.orElse(request)).build());
         };
     }
 
