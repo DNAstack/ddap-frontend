@@ -1,4 +1,8 @@
-<ddap-header icon="explore" label="Explore Data"></ddap-header>
+<ddap-header icon="explore"
+             [searchButton]="true"
+             label="Explore Data">
+
+</ddap-header>
 
 <div class="ddap-data-pane">
 <mat-card class="ddap-card" *ngFor="let resource of (resources$ | async)">
