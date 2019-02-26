@@ -16,6 +16,12 @@
   </ng-template>
 
   <ng-template [ngIf]="searchOpen">
+    <button *ngIf="isSearchPage && searchBackLink"
+            mat-icon-button
+            [routerLink]="searchBackLink">
+      <mat-icon class="icon icon-close"></mat-icon>
+    </button>
+
     <button *ngIf="!isSearchPage"
             mat-icon-button
             (click)="closeSearch()">

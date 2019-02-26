@@ -1,11 +1,14 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+
+import { SearchState } from '../search-state.model';
+import { SearchStateService } from '../search-state.service';
 
 @Component({
   selector: 'ddap-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
   @Input()
   label: string;
@@ -28,7 +31,16 @@ export class HeaderComponent {
   @Output()
   searchOpenChange = new EventEmitter<boolean>();
 
-  constructor() {
+  searchBackLink: any = null;
+
+  constructor(private searchStateService: SearchStateService) {
+  }
+
+  ngOnInit(): void {
+    this.searchStateService.searchState.subscribe((state: SearchState) => {
+      const {backLink} = state;
+      this.searchBackLink = backLink;
+    });
   }
 
   closeSearch() {

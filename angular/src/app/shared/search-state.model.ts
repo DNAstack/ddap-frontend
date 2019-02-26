@@ -3,4 +3,5 @@ export class SearchState {
   resource: string = null;
   query = '';
   assembly = '';
+  backLink: null;
 }
