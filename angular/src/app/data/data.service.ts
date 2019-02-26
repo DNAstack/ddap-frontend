@@ -51,12 +51,17 @@ export class DataService {
     );
   }
 
-  getAccessRequestToken(resource, view): Observable<any[]> {
+  getAccessRequestToken(resource, view): any {
     const params = {};
 
-    return this.http.get<any[]>(`${environment.damApiUrl}/resources/${resource}/views/${view}`, {params})
+    return this.http.get<any>(`${environment.damApiUrl}/resources/${resource}/views/${view}`, {params})
       .pipe(
-        pluck('token')
+        map((response) => {
+          return {
+            account: response.account,
+            token: response.token,
+          };
+        })
       );
   }
 

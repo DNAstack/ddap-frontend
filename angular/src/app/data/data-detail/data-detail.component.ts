@@ -47,7 +47,7 @@ export class DataDetailComponent implements OnInit {
   getAccess(viewName) {
     this.dataService.getAccessRequestToken(this.resource.name, viewName)
       .subscribe(
-        (accessToken) => this.mutateViewWithTokenAndUrl(viewName, accessToken),
+        (response) => this.mutateViewWithTokenAndUrl(viewName, response),
         (error) => this.accessError = error
       );
   }
@@ -63,14 +63,17 @@ export class DataDetailComponent implements OnInit {
     this.searchOpened = $event;
   }
 
-  private mutateViewWithTokenAndUrl(viewName, accessToken) {
-    this.resource.views[viewName].token = accessToken;
+  private mutateViewWithTokenAndUrl(viewName, response) {
+    const { account, token } = response;
+
+    this.resource.views[viewName].account = account;
+    this.resource.views[viewName].token = token;
 
     const view = this.resource.views[viewName];
     // tslint:disable-next-line
     const viewAccessUrl = view!.interfaces['http:gcp:gs'];
     if (viewAccessUrl) {
-      this.resource.views[viewName].url = `${viewAccessUrl}/o?access_token=${accessToken}`;
+      this.resource.views[viewName].url = `${viewAccessUrl}/o?access_token=${token}`;
     }
   }
 
