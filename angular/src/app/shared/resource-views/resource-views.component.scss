@@ -40,8 +40,8 @@ mat-card {
     padding: 0;
   }
 
-  mat-icon {
-    margin-left: 1rem;
+  & .row {
+    width: 100%;
   }
 
   p {

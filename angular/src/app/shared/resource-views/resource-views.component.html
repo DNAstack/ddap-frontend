@@ -14,17 +14,29 @@
     </button>
     <mat-menu #appMenu="matMenu" class="access-menu" xPosition="before" yPosition="below">
       <div *ngIf="!error" >
-        <div class="flex vertical-center">
-          <mat-form-field *ngIf="isTokenGranted()" [class]="isTokenGranted() ? 'stretch' : ''">
-            <input matInput readonly type="text" [placeholder]="view.ui?.label || view.name" [value]="view.url || view.token">
-          </mat-form-field>
-          <button *ngIf="isTokenGranted()"
-                  mat-flat-button matSuffix mat-icon-button ngxClipboard
-                  [cbContent]="view.url || view.token"
-                  matTooltip="Copy to clipboard"
-                  aria-label="Copy to clipboard">
-            <mat-icon class="icon icon-copy"></mat-icon>
-          </button>
+        <div class="flex flex--column vertical-center">
+          <div class="flex vertical-center row" *ngIf="isTokenGranted() && view.account">
+            <mat-form-field class="stretch">
+              <input matInput readonly type="text" [placeholder]="'Service account'" [value]="view.account">
+            </mat-form-field>
+            <button mat-flat-button matSuffix mat-icon-button ngxClipboard
+                    [cbContent]="view.account"
+                    matTooltip="Copy to clipboard"
+                    aria-label="Copy to clipboard">
+              <mat-icon class="icon icon-copy"></mat-icon>
+            </button>
+          </div>
+          <div class="flex vertical-center row" *ngIf="isTokenGranted() && (view.url || view.token)">
+            <mat-form-field class="stretch">
+              <input matInput readonly type="text" [placeholder]="view.url ? 'Access url' : 'Access token'" [value]="view.url || view.token">
+            </mat-form-field>
+            <button mat-flat-button matSuffix mat-icon-button ngxClipboard
+                    [cbContent]="view.url || view.token"
+                    matTooltip="Copy to clipboard"
+                    aria-label="Copy to clipboard">
+              <mat-icon class="icon icon-copy"></mat-icon>
+            </button>
+          </div>
         </div>
         <div>
           <a *ngIf="view.url" href="{{view.url}}"
