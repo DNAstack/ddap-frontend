@@ -37,6 +37,13 @@ export class BeaconSearchBarComponent implements OnInit {
   }
 
   onSubmit({value, valid}: { value: any, valid: boolean }) {
+    const currentRoute = this.router.url;
+    if (currentRoute.startsWith('/data')) {
+      this.searchStateService.patch({
+        backLink: currentRoute,
+      });
+    }
+
     const resource = this.resource;
     this.router.navigate(['/data/search'], {
       queryParams: {
