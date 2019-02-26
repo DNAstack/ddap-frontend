@@ -34,26 +34,24 @@ export class DataSearchComponent implements OnInit {
 
     this.searchStateService.searchState
       .subscribe(
-        (searchState: SearchState) => {
-          this.limitSearch = searchState.limitSearch;
-          this.resource = searchState.resource;
-          this.resourceName$ = this.dataService.getName(this.resource);
-          this.query(searchState);
-        });
+        (searchState: SearchState) => this.initializeComponentFields(searchState));
   }
 
   limitSearchChange($event) {
     this.searchStateService.patch({limitSearch: $event.checked});
   }
 
-  private query(searchParams: SearchState) {
-    let beaconResult;
+  private initializeComponentFields(searchParams: SearchState) {
+    this.limitSearch = searchParams.limitSearch;
+    this.resource = searchParams.resource;
+    this.resourceName$ = this.dataService.getName(this.resource);
 
-    if (searchParams.limitSearch) {
-      beaconResult = this.beaconService.query(searchParams, searchParams.resource);
-    } else {
-      beaconResult = this.beaconService.query(searchParams, null);
-    }
+    this.queryBeacon(searchParams);
+  }
+
+  private queryBeacon(searchParams: SearchState) {
+    const { limitSearch, resource  } = searchParams;
+    const beaconResult = this.beaconService.query(searchParams, limitSearch ? resource : null);
 
     this.resultsAction = beaconResult
       .subscribe((beaconResponseDto: any) => {
