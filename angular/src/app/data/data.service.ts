@@ -56,12 +56,7 @@ export class DataService {
 
     return this.http.get<any>(`${environment.damApiUrl}/resources/${resource}/views/${view}`, {params})
       .pipe(
-        map((response) => {
-          return {
-            account: response.account,
-            token: response.token,
-          };
-        })
+        map(({ account, token }) => ({ account, token }))
       );
   }
 

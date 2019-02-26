@@ -49,10 +49,16 @@ mat-card {
     margin-right: 1rem;
   }
 
-  .error-message {
-    background: $color-faded-grey;
-  }
+  .error-container {
+    mat-icon {
+      margin-left: 1rem;
+    }
 
+    .error-message {
+      background: $color-faded-grey;
+    }
+  }
+  
   mat-form-field {
     padding-left: 1rem;
     padding-top: 1rem;
