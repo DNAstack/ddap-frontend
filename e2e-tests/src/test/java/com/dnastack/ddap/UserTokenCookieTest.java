@@ -36,6 +36,63 @@ public class UserTokenCookieTest extends BaseE2eTest {
         // @formatter:on
     }
 
+    @Test
+    public void shouldIncludeValidAuthStatusInResponseHeader() throws Exception {
+        String unexpiredUserTokenCookie = fakeUserToken(Instant.now().plusSeconds(10));
+
+        // @formatter:off
+        given()
+            .log().method()
+            .log().cookies()
+            .log().uri()
+            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+            .cookie("user_token", unexpiredUserTokenCookie)
+        .when()
+            .get("/dam/v1alpha/resources/resource-name/views/view-name")
+        .then()
+            .log().body()
+            .log().ifValidationFails()
+            .header("X-DDAP-Authenticated", "true");
+        // @formatter:on
+    }
+
+    @Test
+    public void shouldIncludeInvalidAuthStatusInResponseHeader() throws Exception {
+        String expiredUserTokenCookie = fakeUserToken(Instant.now().minusSeconds(10));
+
+        // @formatter:off
+        given()
+            .log().method()
+            .log().cookies()
+            .log().uri()
+            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+            .cookie("user_token", expiredUserTokenCookie)
+        .when()
+            .get("/dam/v1alpha/resources/resource-name/views/view-name")
+        .then()
+            .log().body()
+            .log().ifValidationFails()
+            .header("X-DDAP-Authenticated", "false");
+        // @formatter:on
+    }
+
+    @Test
+    public void shouldIncludeMissingAuthStatusInResponseHeader() throws Exception {
+        // @formatter:off
+        given()
+            .log().method()
+            .log().cookies()
+            .log().uri()
+            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+        .when()
+            .get("/dam/v1alpha/resources/resource-name/views/view-name")
+        .then()
+            .log().body()
+            .log().ifValidationFails()
+            .header("X-DDAP-Authenticated", "false");
+        // @formatter:on
+    }
+
     private String fakeUserToken(Instant exp) throws JsonProcessingException {
         // Note this will only work so long as DDAP frontend uses unencrypted DAM access tokens as cookie value
         ObjectMapper jsonMapper = new ObjectMapper();

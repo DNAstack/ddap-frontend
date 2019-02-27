@@ -1,28 +1,20 @@
 package com.dnastack.ddapfrontend.proxy;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpCookie;
-import org.springframework.http.ResponseCookie;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.mock.web.server.MockServerWebExchange;
 import org.springframework.web.server.ServerWebExchange;
 
 import java.net.URI;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -38,15 +30,26 @@ public class SetBearerTokenFromCookieGatewayFilterFactoryTest {
     }
 
     @Test
-    public void shouldTreatMalformedJwtAsExpired() {
-        assertResponseExpiresCookie("not_enough_sections");
-        assertResponseExpiresCookie("not!.even!.base64!");
-        assertResponseExpiresCookie("not.aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g_dj1vSGc1U0pZUkhBMA.json");
-    }
+    public void shouldCopyUserTokenCookieAsBearerTokenInOnwardRequest() {
+        // given
+        String cookieToken = "attach this as a bearer token and everyone's happy!";
+        URI originalUri = URI.create("http://example.com/anything");
 
-    @Test
-    public void shouldNotRemoveValidJwtCookie() throws Exception {
-        assertResponseLeavesCookieAlone(fakeUserToken(Instant.now().plusSeconds(10)));
+        ServerWebExchange exchange = MockServerWebExchange.from(
+                MockServerHttpRequest.get("http://example.com/anything")
+                        .cookie(new HttpCookie("user_token", cookieToken)).build());
+
+        GatewayFilterChain chain = mock(GatewayFilterChain.class);
+
+        // when
+        filter.filter(exchange, chain);
+
+        // then
+        ArgumentCaptor<ServerWebExchange> result = ArgumentCaptor.forClass(ServerWebExchange.class);
+        verify(chain).filter(result.capture());
+        ServerHttpRequest onwardRequest = result.getValue().getRequest();
+        assertThat(onwardRequest.getURI(), is(originalUri));
+        assertThat(onwardRequest.getHeaders().getFirst("Authorization"), is("Bearer " + cookieToken));
     }
 
     @Test
@@ -69,50 +72,4 @@ public class SetBearerTokenFromCookieGatewayFilterFactoryTest {
         assertThat(onwardRequestUri, is(originalUri));
     }
 
-    private void assertResponseExpiresCookie(String jwtValue) {
-        ResponseCookie responseCookie = runFilterAndExtractResponseCookie(jwtValue);
-        assertThat("Expected a 'user_token' cookie in the response",
-                responseCookie, notNullValue());
-        assertThat(responseCookie.getValue(), is("expired"));
-        assertThat(responseCookie.getMaxAge(), is(Duration.ZERO));
-    }
-
-    private void assertResponseLeavesCookieAlone(String jwtValue) {
-        ResponseCookie responseCookie = runFilterAndExtractResponseCookie(jwtValue);
-        assertThat(responseCookie, nullValue());
-    }
-
-    private ResponseCookie runFilterAndExtractResponseCookie(String jwtValue) {
-        // given
-        ServerWebExchange exchange = MockServerWebExchange.from(
-                MockServerHttpRequest.get("http://example.com/anything")
-                        .cookie(new HttpCookie("user_token", jwtValue)).build());
-
-        GatewayFilterChain chain = mock(GatewayFilterChain.class);
-
-        // when
-        filter.filter(exchange, chain);
-
-        // then
-        ArgumentCaptor<ServerWebExchange> result = ArgumentCaptor.forClass(ServerWebExchange.class);
-        verify(chain).filter(result.capture());
-        return result.getValue().getResponse().getCookies().getFirst("user_token");
-    }
-
-    private String fakeUserToken(Instant exp) throws JsonProcessingException {
-        ObjectMapper jsonMapper = new ObjectMapper();
-        Base64.Encoder b64Encoder = Base64.getUrlEncoder().withoutPadding();
-
-        Map<String, Object> header = new HashMap<>();
-        header.put("typ", "JWT");
-        header.put("alg", "none");
-
-        Map<String, Object> body = new HashMap<>();
-        body.put("exp", exp.getEpochSecond());
-
-        return b64Encoder.encodeToString(jsonMapper.writeValueAsBytes(header)) +
-                "." +
-                b64Encoder.encodeToString(jsonMapper.writeValueAsBytes(body)) +
-                ".";
-    }
 }

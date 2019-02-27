@@ -1,6 +1,6 @@
 package com.dnastack.ddapfrontend.route;
 
-import com.dnastack.ddapfrontend.proxy.SetBearerTokenFromCookieGatewayFilterFactory;
+import com.dnastack.ddapfrontend.security.UserTokenStatusFilter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -149,7 +149,7 @@ public class Router {
     private Mono<ServerResponse> successfulUserTokenResponse(ServerRequest request, String token) {
         final URI redirectUri = URI.create(getExternalPath(request, "/data"));
         final String publicHost = redirectUri.getHost();
-        final ResponseCookie cookie = SetBearerTokenFromCookieGatewayFilterFactory.packageDamToken(token, publicHost);
+        final ResponseCookie cookie = UserTokenStatusFilter.packageDamToken(token, publicHost);
         return temporaryRedirect(redirectUri).cookie(cookie)
                                              .build();
     }
