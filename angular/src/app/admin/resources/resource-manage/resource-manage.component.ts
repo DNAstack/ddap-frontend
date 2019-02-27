@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 
+import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 import { ResourceService } from '../resources.service';
 
 @Component({
@@ -10,15 +12,41 @@ import { ResourceService } from '../resources.service';
 })
 export class ResourceManageComponent implements OnInit {
 
-  resource: any = {};
+  errorDto: any;
+  itemDto: any;
 
-  constructor(private resourceService: ResourceService, private router: Router) { }
+  errorEditorOptions: JsonEditorOptions;
+  itemEditorOptions: JsonEditorOptions;
+
+  @ViewChild('itemEditor')
+  entityEditor: JsonEditorComponent;
+
+  @ViewChild('errorEditor')
+  errorEditor: JsonEditorComponent;
+
+  constructor(public resourceService: ResourceService,
+              private router: Router) {
+    this.itemEditorOptions = new JsonEditorDefaults();
+    this.errorEditorOptions = new JsonEditorDefaults();
+    this.itemEditorOptions.mode = 'code';
+    this.errorEditorOptions.mode = 'code';
+    this.errorEditorOptions.onEditable = () => false;
+  }
 
   ngOnInit() {
   }
 
-  onSubmit(value: any) {
-    this.resourceService.save(JSON.parse(value.body))
-      .subscribe(() => this.router.navigate(['/resources']));
+  save() {
+    this.resourceService.save(this.itemDto)
+      .subscribe(() => {
+        this.router.navigate(['/resources']);
+        },
+        (errorDto) => {
+        this.errorDto = errorDto.error;
+      });
+  }
+
+  updateItemDto(event: any) {
+    this.itemDto = event;
   }
 }
