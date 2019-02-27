@@ -1,6 +1,7 @@
 package com.dnastack.ddapfrontend.header;
 
 import io.netty.handler.codec.http.HttpRequest;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.reactive.function.server.ServerRequest;
 
 import java.net.URI;
@@ -43,6 +44,19 @@ public class XForwardUtil {
      */
     public static String getExternalPath(ServerRequest request, String path) {
         return getExternalPath(new SpringServerRequestAdapter(request), path);
+    }
+
+    /**
+     * Infers the existence of a reverse proxy from 'X-Forwarded-*' headers and generates a URL with the correct
+     * protocol when necessary.
+     *
+     * @param request Never null. Headers in this request are used to infer reverse proxy setup.
+     * @param path Never null.
+     * @return The full URL with the externally visible hostname, port, and protocol, using the values from
+     *          X-Forwarded-* headers if present, or else the literal values from the given request.
+     */
+    public static String getExternalPath(ServerHttpRequest request, String path) {
+        return getExternalPath(new SpringServerHttpRequestAdapter(request), path);
     }
 
     private static String getExternalPath(Request request, String path) {
@@ -125,6 +139,24 @@ public class XForwardUtil {
         @Override
         public URI getUri() {
             return request.uri();
+        }
+    }
+
+    private static class SpringServerHttpRequestAdapter implements Request {
+        private final ServerHttpRequest request;
+
+        public SpringServerHttpRequestAdapter(ServerHttpRequest request) {
+            this.request = request;
+        }
+
+        @Override
+        public String getHeader(String headerName) {
+            return request.getHeaders().getFirst(headerName);
+        }
+
+        @Override
+        public URI getUri() {
+            return request.getURI();
         }
     }
 }

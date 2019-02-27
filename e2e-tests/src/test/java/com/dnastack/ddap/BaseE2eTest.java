@@ -7,12 +7,16 @@ import static org.junit.Assert.fail;
 
 public class BaseE2eTest {
 
+    static final String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
+    static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
+    static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
+
     @Before
     public void setUp() {
-        RestAssured.baseURI = requiredEnv("E2E_BASE_URI");
+        RestAssured.baseURI = DDAP_BASE_URL;
     }
 
-    protected String requiredEnv(String name) {
+    protected static String requiredEnv(String name) {
         String val = System.getenv(name);
         if (val == null) {
             fail("Environnment variable `" + name + "` is required");
@@ -20,7 +24,7 @@ public class BaseE2eTest {
         return val;
     }
 
-    protected String optionalEnv(String name, String defaultValue) {
+    protected static String optionalEnv(String name, String defaultValue) {
         String val = System.getenv(name);
         if (val == null) {
             return defaultValue;
