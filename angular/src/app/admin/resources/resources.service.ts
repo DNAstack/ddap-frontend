@@ -1,10 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { throwError } from 'rxjs/internal/observable/throwError';
 import { Observable } from 'rxjs/Observable';
 import { pluck } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 import { EntityService } from '../shared/entity.service';
+
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
 
@@ -38,13 +40,18 @@ export class ResourceService implements EntityService {
     );
   }
 
-  save(resourceChange: any): Observable<any> {
+  save(resource: any): Observable<any> {
     const params = {
     };
-    const resourceName = resourceChange.item.name;
+
+    if (!resource.item || !resource.item.name) {
+      return throwError({error: 'The resource is missing the `item.name` field.'});
+    }
+
+    const resourceName = resource.item.name;
 
     return this.http.post(`${environment.damApiUrl}/config/resources/${resourceName}`,
-      resourceChange,
+      resource,
       { params, headers }
     );
   }

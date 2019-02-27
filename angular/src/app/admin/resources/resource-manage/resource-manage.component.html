@@ -2,15 +2,30 @@
 </ddap-header>
 
 <ddap-main>
-  <form #resourceForm="ngForm" (ngSubmit)="onSubmit(resourceForm.value)">
-    <mat-form-field>
-      <textarea matInput placeholder="Resource JSON" rows="10" name="body" ngModel required></textarea>
-    </mat-form-field>
-    <div>
-      <button type="submit" mat-flat-button color="primary"
-              [disabled]="!resourceForm.form.valid || resourceForm.submitted">
-        Add Resource
-      </button>
+  <div class="mat-expansion-panel">
+    <json-editor #itemEditor
+                 [options]="itemEditorOptions"
+                 [data]="itemDto"
+                 (change)="updateItemDto($event)"></json-editor>
+
+    <div *ngIf="errorDto">
+    <h3>Error</h3>
+    <mat-error>
+      <span *ngIf="!errorDto.apply">{{ errorDto }}</span>
+      <span *ngIf="errorDto.apply">Cannot save, please consider using following DTOs:</span>
+    </mat-error>
+    <json-editor *ngIf="errorDto.apply"
+                 #errorEditor
+                 [options]="errorEditorOptions"
+                 [data]="errorDto"></json-editor>
+
     </div>
-  </form>
+    <mat-action-row>
+      <button mat-flat-button
+              color="primary"
+              (click)="save()"
+              data-se="create-resource">Add Resource
+      </button>
+    </mat-action-row>
+  </div>
 </ddap-main>

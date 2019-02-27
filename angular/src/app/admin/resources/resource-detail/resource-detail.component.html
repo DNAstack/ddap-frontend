@@ -2,7 +2,7 @@
 </ddap-header>
 
 <ddap-main>
-  <p>{{ resource?.ui.description }}</p>
+  <p *ngIf="resource?.ui.description">{{ resource?.ui.description }}</p>
 
   <ddap-json-panel [useTests]="true"
                    [entityService]="resourceService"
