@@ -1,6 +1,5 @@
 package com.dnastack.ddapfrontend.route;
 
-import com.dnastack.ddapfrontend.beacon.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -13,7 +12,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.ResponseCookie;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -24,7 +22,6 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static com.dnastack.ddapfrontend.header.XForwardUtil.getExternalPath;
 import static java.lang.String.format;
@@ -127,7 +124,7 @@ public class Router {
     private Mono<ServerResponse> downstreamTokenResponse(ServerRequest request, ClientResponse response) {
         if (response.statusCode().is2xxSuccessful() && contentTypeIsApplicationJson(response)) {
             return response.bodyToMono(String.class)
-                           .map(this::extractToken)
+                           .map(this::extractPassportToken)
                            .flatMap(oToken -> oToken.map(token -> successfulUserTokenResponse(request, token))
                                                     .orElseGet(() -> failedUserTokenResponse(response)));
         } else {
@@ -186,9 +183,9 @@ public class Router {
                        .isPresent();
     }
 
-    private Optional<String> extractToken(String body) {
+    private Optional<String> extractPassportToken(String body) {
         try {
-            return Optional.of(((JSONObject) new JSONParser().parse(body)).get("access_token").toString());
+            return Optional.of(((JSONObject) new JSONParser().parse(body)).get("id_token").toString());
         } catch (ParseException | NullPointerException e) {
             if (log.isDebugEnabled()) {
                 log.debug("Unable to parse token from payload. Payload: " + body, e);
