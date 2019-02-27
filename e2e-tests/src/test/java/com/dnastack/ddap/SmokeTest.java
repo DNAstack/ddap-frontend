@@ -38,7 +38,7 @@ public class SmokeTest {
         put(NavBar.NavItem.RESOURCES,
                 Arrays.asList("allOfUs", "ga4gh-apis"));
         put(NavBar.NavItem.IDENTITIES,
-                Arrays.asList("dr_joe", "nci_researcher", "john"));
+                Arrays.asList("nci_researcher", "john"));
         put(NavBar.NavItem.CLIENTS,
                 Arrays.asList("craig_test", "dnastack_fe", "test_client", "test_page"));
         put(NavBar.NavItem.CLAIMS,
