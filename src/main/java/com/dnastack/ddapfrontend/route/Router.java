@@ -1,5 +1,6 @@
 package com.dnastack.ddapfrontend.route;
 
+import com.dnastack.ddapfrontend.proxy.SetBearerTokenFromCookieGatewayFilterFactory;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpCookie;
 import org.springframework.http.ResponseCookie;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -78,27 +78,9 @@ public class Router {
                                              .and(path("/dam/**").negate())
                                              .and(path("/identity/**").negate())
                                              .and(pathExtension(StringUtils::isEmpty)),
-                                     this::handleAngularRequest);
-    }
-
-    private Mono<ServerResponse> handleAngularRequest(ServerRequest request) {
-        final Optional<HttpCookie> foundCookie = Optional.ofNullable(request.cookies()
-                                                                            .getFirst("user_token"));
-        // Can't parse token yet because we don't have a public key (uses symmetric encryption)
-//        final boolean hasValidToken = foundCookie.map(HttpCookie::getValue)
-//                                                 .map(token -> jwtParser.parse(token))
-//                                                 .map(jwt -> ((Claims) jwt.getBody()).getExpiration())
-//                                                 .filter(exp -> exp.toInstant().isBefore(Instant.now()))
-//                                                 .isPresent();
-        final boolean hasValidToken = true;
-
-        if (hasValidToken) {
-            return ok()
-                    .contentType(TEXT_HTML)
-                    .syncBody(angularIndex);
-        } else {
-            return temporaryRedirect(redirectUrl(request)).build();
-        }
+                                     request -> ok()
+                                             .contentType(TEXT_HTML)
+                                             .syncBody(angularIndex));
     }
 
     @Bean
@@ -167,11 +149,8 @@ public class Router {
     private Mono<ServerResponse> successfulUserTokenResponse(ServerRequest request, String token) {
         final URI redirectUri = URI.create(getExternalPath(request, "/data"));
         final String publicHost = redirectUri.getHost();
-        return temporaryRedirect(redirectUri).cookie(
-                ResponseCookie.from("user_token", token)
-                              .domain(publicHost)
-                              .path("/")
-                              .build())
+        final ResponseCookie cookie = SetBearerTokenFromCookieGatewayFilterFactory.packageDamToken(token, publicHost);
+        return temporaryRedirect(redirectUri).cookie(cookie)
                                              .build();
     }
 
