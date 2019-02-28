@@ -12,24 +12,31 @@ import { ResourceService } from '../resources.service';
 })
 export class ResourceManageComponent implements OnInit {
 
+  applyDto: any;
   errorDto: any;
   itemDto: any;
 
+  applyEditorOptions: JsonEditorOptions;
   errorEditorOptions: JsonEditorOptions;
   itemEditorOptions: JsonEditorOptions;
 
-  @ViewChild('itemEditor')
-  entityEditor: JsonEditorComponent;
+  @ViewChild('applyEditor')
+  applyEditor: JsonEditorComponent;
 
   @ViewChild('errorEditor')
   errorEditor: JsonEditorComponent;
 
+  @ViewChild('itemEditor')
+  entityEditor: JsonEditorComponent;
+
   constructor(public resourceService: ResourceService,
               private router: Router) {
-    this.itemEditorOptions = new JsonEditorDefaults();
+    this.applyEditorOptions = new JsonEditorDefaults();
     this.errorEditorOptions = new JsonEditorDefaults();
-    this.itemEditorOptions.mode = 'code';
+    this.itemEditorOptions = new JsonEditorDefaults();
+    this.applyEditorOptions.mode = 'code';
     this.errorEditorOptions.mode = 'code';
+    this.itemEditorOptions.mode = 'code';
     this.errorEditorOptions.onEditable = () => false;
   }
 
@@ -37,7 +44,12 @@ export class ResourceManageComponent implements OnInit {
   }
 
   save() {
-    this.resourceService.save(this.itemDto)
+    const resource = {
+      item: this.itemDto,
+      apply: this.applyDto,
+    };
+
+    this.resourceService.save(resource)
       .subscribe(() => {
         this.router.navigate(['/resources']);
         },
@@ -48,5 +60,9 @@ export class ResourceManageComponent implements OnInit {
 
   updateItemDto(event: any) {
     this.itemDto = event;
+  }
+
+  updateApplyDto(event: any) {
+    this.applyDto = event;
   }
 }

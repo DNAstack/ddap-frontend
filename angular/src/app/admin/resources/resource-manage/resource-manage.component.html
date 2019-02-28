@@ -3,10 +3,19 @@
 
 <ddap-main>
   <div class="mat-expansion-panel">
+    <h3>Item</h3>
     <json-editor #itemEditor
                  [options]="itemEditorOptions"
                  [data]="itemDto"
-                 (change)="updateItemDto($event)"></json-editor>
+                 (change)="updateItemDto($event)"
+                 data-se="item-editor"></json-editor>
+
+    <h3>Test</h3>
+    <json-editor #applyEditor
+                 [options]="applyEditorOptions"
+                 [data]="applyDto"
+                 (change)="updateApplyDto($event)"
+                 data-se="apply-editor"></json-editor>
 
     <div *ngIf="errorDto">
     <h3>Error</h3>
