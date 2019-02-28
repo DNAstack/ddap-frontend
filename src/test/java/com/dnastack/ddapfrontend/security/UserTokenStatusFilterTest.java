@@ -19,6 +19,8 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dnastack.ddapfrontend.security.UserTokenStatusFilter.TokenAudience.DAM;
+import static java.lang.String.format;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -67,7 +69,7 @@ public class UserTokenStatusFilterTest {
 
     private void assertResponseExpiresCookie(String jwtValue) {
         ResponseCookie responseCookie = runFilterAndExtractResponseCookie(jwtValue);
-        assertThat("Expected a 'user_token' cookie in the response",
+        assertThat(format("Expected a '%s' cookie in the response", DAM.cookieName()),
                 responseCookie, notNullValue());
         assertThat(responseCookie.getValue(), is("expired"));
         assertThat(responseCookie.getMaxAge(), is(Duration.ZERO));
@@ -82,7 +84,7 @@ public class UserTokenStatusFilterTest {
         // given
         ServerWebExchange exchange = MockServerWebExchange.from(
                 MockServerHttpRequest.get("http://example.com/anything")
-                        .cookie(new HttpCookie("user_token", jwtValue)).build());
+                        .cookie(new HttpCookie(DAM.cookieName(), jwtValue)).build());
 
         WebFilterChain chain = mock(WebFilterChain.class);
 
@@ -92,7 +94,7 @@ public class UserTokenStatusFilterTest {
         // then
         ArgumentCaptor<ServerWebExchange> result = ArgumentCaptor.forClass(ServerWebExchange.class);
         verify(chain).filter(result.capture());
-        return result.getValue().getResponse().getCookies().getFirst("user_token");
+        return result.getValue().getResponse().getCookies().getFirst(DAM.cookieName());
     }
 
     private String fakeUserToken(Instant exp) throws JsonProcessingException {

@@ -1,5 +1,6 @@
 package com.dnastack.ddapfrontend.proxy;
 
+import com.dnastack.ddapfrontend.security.UserTokenStatusFilter.TokenAudience;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -24,9 +25,11 @@ public class SetBearerTokenFromCookieGatewayFilterFactoryTest {
     GatewayFilter filter;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         SetBearerTokenFromCookieGatewayFilterFactory filterFactory = new SetBearerTokenFromCookieGatewayFilterFactory();
-        filter = filterFactory.apply(new Object());
+        SetBearerTokenFromCookieGatewayFilterFactory.Config config = new SetBearerTokenFromCookieGatewayFilterFactory.Config();
+        config.setTokenAudience(TokenAudience.DAM);
+        filter = filterFactory.apply(config);
     }
 
     @Test
@@ -37,7 +40,7 @@ public class SetBearerTokenFromCookieGatewayFilterFactoryTest {
 
         ServerWebExchange exchange = MockServerWebExchange.from(
                 MockServerHttpRequest.get("http://example.com/anything")
-                        .cookie(new HttpCookie("user_token", cookieToken)).build());
+                        .cookie(new HttpCookie(TokenAudience.DAM.cookieName(), cookieToken)).build());
 
         GatewayFilterChain chain = mock(GatewayFilterChain.class);
 

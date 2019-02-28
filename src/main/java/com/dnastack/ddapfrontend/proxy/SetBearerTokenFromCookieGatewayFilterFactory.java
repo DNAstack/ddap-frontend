@@ -17,29 +17,46 @@
 
 package com.dnastack.ddapfrontend.proxy;
 
+import com.dnastack.ddapfrontend.security.UserTokenStatusFilter.TokenAudience;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-import static com.dnastack.ddapfrontend.security.UserTokenStatusFilter.extractDamToken;
+import static com.dnastack.ddapfrontend.security.UserTokenStatusFilter.extractToken;
 import static java.lang.String.format;
+import static java.util.Collections.singletonList;
+import static java.util.Objects.requireNonNull;
 
 @Slf4j
 @Component
-public class SetBearerTokenFromCookieGatewayFilterFactory extends AbstractGatewayFilterFactory {
+public class SetBearerTokenFromCookieGatewayFilterFactory extends AbstractGatewayFilterFactory<SetBearerTokenFromCookieGatewayFilterFactory.Config> {
+
+    public SetBearerTokenFromCookieGatewayFilterFactory() {
+        super(Config.class);
+    }
 
     @Override
-    public GatewayFilter apply(Object config) {
+    public List<String> shortcutFieldOrder() {
+        return singletonList("tokenAudience");
+    }
+
+    @Override
+    public GatewayFilter apply(Config config) {
+        requireNonNull(config.getTokenAudience(), "Must specify token audience in filter config.");
         return (exchange, chain) -> {
             final ServerHttpRequest request = exchange.getRequest();
 
-            Optional<String> extractedToken = extractDamToken(request);
+            Optional<String> extractedToken = extractToken(request, config.getTokenAudience());
 
             if (extractedToken.isPresent()) {
+                log.debug("Including {} token in this request", config.getTokenAudience());
                 final String token = extractedToken.get();
 
                 final ServerHttpRequest requestWithDamToken = request.mutate()
@@ -50,9 +67,15 @@ public class SetBearerTokenFromCookieGatewayFilterFactory extends AbstractGatewa
                         .request(requestWithDamToken)
                         .build());
             } else {
+                log.debug("No {} token available for this request", config.getTokenAudience());
                 return chain.filter(exchange);
             }
-
         };
     }
+
+    @Data
+    public static class Config {
+        private TokenAudience tokenAudience;
+    }
+
 }
