@@ -36,7 +36,7 @@ spring:
           filters:
             - AddRequestParameter=clientId,${dam.client-id}
             - AddRequestParameter=clientSecret,${dam.client-secret}
-            - SetBearerTokenFromCookie
+            - SetBearerTokenFromCookie=DAM
             - StripPrefix=2
             - PrependPath=/dam/v1alpha/dnastack
             - Logging
@@ -55,7 +55,13 @@ spring:
           filters:
             - AddRequestParameter=clientId,${idp.client-id}
             - AddRequestParameter=clientSecret,${idp.client-secret}
+            - SetBearerTokenFromCookie=IC
             - StripPrefix=2
             - PrependPath=/identity/v1alpha/dnastack
             - Logging
           uri: ${idp.base-url}
+logging:
+  level:
+    com:
+      dnastack:
+        ddap: DEBUG

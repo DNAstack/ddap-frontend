@@ -69,7 +69,7 @@ class BeaconResource {
             ServerHttpRequest request) {
 
         // find beacons under resourceId in DAM config
-        Optional<String> damToken = UserTokenStatusFilter.extractDamToken(request);
+        Optional<String> damToken = UserTokenStatusFilter.extractToken(request, UserTokenStatusFilter.TokenAudience.DAM);
         if (!damToken.isPresent()) {
             return Flux.error(new IllegalArgumentException("Authorization is required")); // TODO make this return a 401
         }

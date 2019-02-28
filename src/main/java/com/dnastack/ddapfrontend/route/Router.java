@@ -1,9 +1,8 @@
 package com.dnastack.ddapfrontend.route;
 
+import com.dnastack.ddapfrontend.client.ic.TokenResponse;
 import com.dnastack.ddapfrontend.security.UserTokenStatusFilter;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.dnastack.ddapfrontend.security.UserTokenStatusFilter.TokenAudience;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,10 +63,10 @@ public class Router {
                               "  <meta http-equiv=\"refresh\" content=\"0; URL='%s'\">\n" +
                               "</head>\n" +
                               "</html>\n",
-                      redirectUrl(request));
+                      rootLoginRedirectUrl(request));
     }
 
-    private URI redirectUrl(ServerRequest request) {
+    private URI rootLoginRedirectUrl(ServerRequest request) {
         return URI.create(getExternalPath(request, "/api/identity/login"));
     }
 
@@ -96,19 +95,19 @@ public class Router {
 
     private Mono<ServerResponse> handleTokenRequest(ServerRequest request) {
         final Optional<String> foundCode = request.queryParam("code");
-        return foundCode.map(code ->
-                                     idpTokenRequest(request, code).flatMap(response -> downstreamTokenResponse(request,
-                                                                                                       response)))
-                        .orElseGet(() -> badRequest().contentType(TEXT_PLAIN)
-                                                     .syncBody("Token request requires 'code' parameter."));
+        return foundCode.map(
+                code -> idpTokenRequest(request, code)
+                        .flatMap(response -> downstreamTokenResponse(request, response)))
+                .orElseGet(
+                        () -> badRequest().contentType(TEXT_PLAIN)
+                                .syncBody("Token request requires 'code' parameter."));
     }
 
     private Mono<ServerResponse> downstreamTokenResponse(ServerRequest request, ClientResponse response) {
         if (response.statusCode().is2xxSuccessful() && contentTypeIsApplicationJson(response)) {
-            return response.bodyToMono(String.class)
-                           .map(this::extractPassportToken)
-                           .flatMap(oToken -> oToken.map(token -> successfulUserTokenResponse(request, token))
-                                                    .orElseGet(() -> failedUserTokenResponse(response)));
+            return response.bodyToMono(TokenResponse.class)
+                           .doOnError(this::logTokenResponseError)
+                           .flatMap(token -> handleTokenResponse(response, request, token));
         } else {
             logTokenFailureInDetail(response);
             return badRequest().contentType(TEXT_PLAIN).syncBody("Failed to acquire token.");
@@ -134,11 +133,19 @@ public class Router {
                                                "&clientId=%s" +
                                                "&clientSecret=%s",
                                        code,
-                                       redirectUrl(request),
+                                       rootLoginRedirectUrl(request),
                                        idpClientId,
                                        idpClientSecret))
                         .post()
                         .exchange();
+    }
+
+    private Mono<ServerResponse> handleTokenResponse(ClientResponse response, ServerRequest request, TokenResponse token) {
+        if (token == null || token.getAccessToken() == null || token.getIdToken() == null) {
+            return failedUserTokenResponse(response);
+        } else {
+            return successfulUserTokenResponse(request, token);
+        }
     }
 
     private Mono<ServerResponse> failedUserTokenResponse(ClientResponse response) {
@@ -146,11 +153,13 @@ public class Router {
         return status(INTERNAL_SERVER_ERROR).syncBody("Failed to parse token.");
     }
 
-    private Mono<ServerResponse> successfulUserTokenResponse(ServerRequest request, String token) {
+    private Mono<ServerResponse> successfulUserTokenResponse(ServerRequest request, TokenResponse token) {
         final URI redirectUri = URI.create(getExternalPath(request, "/data"));
         final String publicHost = redirectUri.getHost();
-        final ResponseCookie cookie = UserTokenStatusFilter.packageDamToken(token, publicHost);
-        return temporaryRedirect(redirectUri).cookie(cookie)
+        final ResponseCookie damTokenCookie = UserTokenStatusFilter.packageToken(token.getIdToken(), publicHost, TokenAudience.DAM);
+        final ResponseCookie icTokenCookie = UserTokenStatusFilter.packageToken(token.getAccessToken(), publicHost, TokenAudience.IC);
+        return temporaryRedirect(redirectUri).cookie(damTokenCookie)
+                                             .cookie(icTokenCookie)
                                              .build();
     }
 
@@ -162,15 +171,8 @@ public class Router {
                        .isPresent();
     }
 
-    private Optional<String> extractPassportToken(String body) {
-        try {
-            return Optional.of(((JSONObject) new JSONParser().parse(body)).get("id_token").toString());
-        } catch (ParseException | NullPointerException e) {
-            if (log.isDebugEnabled()) {
-                log.debug("Unable to parse token from payload. Payload: " + body, e);
-            }
-            return Optional.empty();
-        }
+    private void logTokenResponseError(Throwable t) {
+        log.debug("Unable to parse token from payload.", t);
     }
 
     private URI authorizeUrl(String redirectUri) {
@@ -181,9 +183,35 @@ public class Router {
     }
 
     private Mono<ServerResponse> handleApiLogin(ServerRequest request) {
+        Optional<String> foundPersona = request.queryParam("persona");
+        if (foundPersona.isPresent()) {
+            return handlePersonaLogin(request, foundPersona.get());
+        } else {
+            return handleRegularLogin(request);
+        }
+    }
+
+    private Mono<ServerResponse> handlePersonaLogin(ServerRequest request, String personaName) {
+        String personaLoginUrl = format("%s/identity/v1alpha/dnastack/persona/%s" +
+                "?client_id=%s" +
+                "&redirect_uri=%s" +
+                "&scope=ga4gh+account_admin",
+                idpBaseUrl,
+                personaName,
+                idpClientId,
+                getRegisteredRedirectUri(request));
+        log.debug("Redirecting to persona login IC endpoint {}", personaLoginUrl);
+        return temporaryRedirect(URI.create(personaLoginUrl)).build();
+    }
+
+    private Mono<ServerResponse> handleRegularLogin(ServerRequest request) {
         final Optional<String> foundRedirectUri = request.queryParam("redirect_uri");
-        final String redirectUri = foundRedirectUri.orElseGet(() -> getExternalPath(request, "/api/identity/token"));
+        final String redirectUri = foundRedirectUri.orElseGet(() -> getRegisteredRedirectUri(request));
 
         return temporaryRedirect(authorizeUrl(redirectUri)).build();
+    }
+
+    private String getRegisteredRedirectUri(ServerRequest request) {
+        return getExternalPath(request, "/api/identity/token");
     }
 }
