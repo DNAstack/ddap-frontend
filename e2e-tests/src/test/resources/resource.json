@@ -1,0 +1,72 @@
+{
+  "item": {
+    "name": "harshtestresource9",
+    "state": "ACTIVE",
+    "views": {
+      "gcs_read": {
+        "name": "gcs_read",
+        "action": "token:gcp:sa",
+        "interfaces": {
+          "gcp:gs": "gs://ga4gh-apis-controlled-access",
+          "http:gcp:gs": "https://www.googleapis.com/storage/v1/b/ga4gh-apis-controlled-access"
+        },
+        "contentTypes": [
+          "application/bam"
+        ]
+      }
+    },
+    "rules": [
+      "ethics"
+    ],
+    "ui": {
+      "applyUrl": "http://apply.example.com",
+      "desc": "Test posting a resource",
+      "displayAs": "Test posting for Max",
+      "infoUrl": "http://info.example.com",
+      "troubleshootUrl": "http://troubleshoot.example.com"
+    }
+  },
+  "apply": {
+    "testPersonas": {
+      "dr_joe_elixir": {
+        "addResources": {
+          "harshtestresource9": {
+            "views": [
+              "gcs_read"
+            ]
+          }
+        },
+        "removeResources": {
+        }
+      },
+      "dr_joe_era_commons": {
+        "addResources": {
+        },
+        "removeResources": {
+        }
+      },
+      "john": {
+        "addResources": {
+        },
+        "removeResources": {
+        }
+      },
+      "nci_researcher": {
+        "addResources": {
+          "harshtestresource9":{
+            "views":[
+              "gcs_read"]
+          }
+        },
+        "removeResources": {
+        }
+      },
+      "undergrad_candice": {
+        "addResources": {
+        },
+        "removeResources": {
+        }
+      }
+    }
+  }
+}
