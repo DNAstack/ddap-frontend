@@ -56,48 +56,56 @@ public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
         Integer counter = 0;
         for (String resourceName: resourceList) {
             /* Create the resource */
+            // @formatter:off
             given()
                     .log().method()
                     .log().uri()
                     .auth().basic("dev", "dev")
+                    .cookie("dam_token", validPersonaToken)
                     .body(resourceCreateList.get(counter++))
                     .when()
-                    .post("dam/v1alpha/config/resources/" + resourceName + "?persona=nci_researcher")
+                    .post("dam/v1alpha/config/resources/" + resourceName)
                     .then()
                     .log().ifValidationFails()
                     .statusCode(200);
+            // @formatter:on
         }
 
         /* Run the aggregate search query  */
-        ValidatableResponse validatableResponse = given()
-        .log().method()
-        .log().uri()
-        .when()
-        .auth().basic("dev", "dev")
-        .cookie("dam_token", validPersonaToken)
-        .get("/api/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
-        .then()
-        .log().ifValidationFails();
-        validatableResponse.contentType(JSON)
-        .statusCode(200)
-        .body("[0].name", equalTo("Cafe Variome Beacon"))
-        .body("[0].organization", equalTo("University of Leicester"))
-        .body("[1].name", equalTo("Cafe Variome Beacon"))
-        .body("[1].organization", equalTo("University of Leicester"));
+        // @formatter:off
+        given()
+                    .log().method()
+                    .log().uri()
+                    .when()
+                    .auth().basic("dev", "dev")
+                    .cookie("dam_token", validPersonaToken)
+                    .get("/api/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
+                    .then()
+                    .log().ifValidationFails()
+                    .contentType(JSON)
+                    .statusCode(200)
+                    .body("[0].name", equalTo("Cafe Variome Beacon"))
+                    .body("[0].organization", equalTo("University of Leicester"))
+                    .body("[1].name", equalTo("Cafe Variome Beacon"))
+                    .body("[1].organization", equalTo("University of Leicester"));
+        // @formatter:on
 
 
         /* Delete the resources */
         for (String resourceName: resourceList) {
             /* Delete the resource */
+            // @formatter:off
             given()
                     .log().method()
                     .log().uri()
                     .auth().basic("dev", "dev")
+                    .cookie("dam_token", validPersonaToken)
                     .when()
-                    .delete("dam/v1alpha/config/resources/" + resourceName + "?persona=nci_researcher")
+                    .delete("dam/v1alpha/config/resources/" + resourceName)
                     .then()
                     .log().ifValidationFails()
                     .statusCode(200);
+            // @formatter:on
         }
 
     }

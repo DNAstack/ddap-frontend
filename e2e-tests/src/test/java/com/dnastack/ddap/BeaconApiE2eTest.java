@@ -53,19 +53,19 @@ public class BeaconApiE2eTest extends BaseE2eTest {
             .statusCode(200);
 
         /* Query the resource  */
-        ValidatableResponse validatableResponse = given()
-        .log().method()
-        .log().uri()
-        .when()
-        .auth().basic("dev", "dev")
-        .cookie("dam_token", validPersonaToken)
-        .get("/api/resources/" + resourceId + "/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
-        .then()
-        .log().ifValidationFails();
-        validatableResponse.contentType(JSON)
-        .statusCode(200)
-        .body("[0].name", equalTo("Cafe Variome Beacon"))
-        .body("[0].organization", equalTo("University of Leicester"));
+        given()
+            .log().method()
+            .log().uri()
+            .when()
+            .auth().basic("dev", "dev")
+            .cookie("dam_token", validPersonaToken)
+            .get("/api/resources/" + resourceId + "/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
+            .then()
+            .log().ifValidationFails()
+            .contentType(JSON)
+            .statusCode(200)
+            .body("[0].name", equalTo("Cafe Variome Beacon"))
+            .body("[0].organization", equalTo("University of Leicester"));
 
         /* Delete the resource */
         given()
