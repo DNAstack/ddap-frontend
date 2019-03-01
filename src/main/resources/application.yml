@@ -2,9 +2,9 @@ server:
   port: 8085
 
 dam:
-  base-url: http://localhost:3000/
-  client-id: local-dam-client-id
-  client-secret: local-dam-client-secret
+  base-url: https://dam-dot-craigv-codelab.appspot.com/
+  client-id: b1aed96d-6367-4313-87a1-65eda4962a76
+  client-secret: 7e9c26f5-e92f-4e8f-ba47-035b8b9f4b66
 idp:
   base-url: http://localhost:3001/
   client-id: local-dam-client-id
