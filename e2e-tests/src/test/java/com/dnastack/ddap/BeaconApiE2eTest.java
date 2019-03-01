@@ -30,7 +30,7 @@ public class BeaconApiE2eTest extends BaseE2eTest {
         RestAssured.baseURI = requiredEnv("E2E_BASE_URI");
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String resourceId="testResource1";
+        String resourceId="testResource3";
 
         Map<String, Object> resources;
         try (InputStream in = this.getClass().getClassLoader()
@@ -41,42 +41,50 @@ public class BeaconApiE2eTest extends BaseE2eTest {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher");
 
         /* Create the resource */
+        // @formatter:off
         given()
-            .log().method()
-            .log().uri()
-            .auth().basic("dev", "dev")
-            .body(resources)
-        .when()
-            .post("dam/v1alpha/config/resources/" + resourceId + "?persona=nci_researcher")
-        .then()
-            .log().ifValidationFails()
-            .statusCode(200);
+                    .log().method()
+                    .log().uri()
+                    .auth().basic("dev", "dev")
+                    .cookie("dam_token", validPersonaToken)
+                    .body(resources)
+                .when()
+                    .post("dam/v1alpha/config/resources/" + resourceId)
+                .then()
+                    .log().ifValidationFails()
+                    .statusCode(200);
+        // @formatter:on
 
         /* Query the resource  */
+        // @formatter:off
         given()
-            .log().method()
-            .log().uri()
-            .when()
-            .auth().basic("dev", "dev")
-            .cookie("dam_token", validPersonaToken)
-            .get("/api/resources/" + resourceId + "/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
-            .then()
-            .log().ifValidationFails()
-            .contentType(JSON)
-            .statusCode(200)
-            .body("[0].name", equalTo("Cafe Variome Beacon"))
-            .body("[0].organization", equalTo("University of Leicester"));
+                    .log().method()
+                    .log().uri()
+                    .when()
+                    .auth().basic("dev", "dev")
+                    .cookie("dam_token", validPersonaToken)
+                    .get("/api/resources/" + resourceId + "/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
+                    .then()
+                    .log().ifValidationFails()
+                    .contentType(JSON)
+                    .statusCode(200)
+                    .body("[0].name", equalTo("Cafe Variome Beacon"))
+                    .body("[0].organization", equalTo("University of Leicester"));
+        // @formatter:on
 
         /* Delete the resource */
+        // @formatter:off
         given()
-        .log().method()
-        .log().uri()
-        .auth().basic("dev", "dev")
-        .when()
-        .delete("dam/v1alpha/config/resources/" + resourceId + "?persona=nci_researcher")
-        .then()
-        .log().ifValidationFails()
-        .statusCode(200);
+                    .log().method()
+                    .log().uri()
+                    .auth().basic("dev", "dev")
+                    .cookie("dam_token", validPersonaToken)
+                    .when()
+                    .delete("dam/v1alpha/config/resources/" + resourceId)
+                    .then()
+                    .log().ifValidationFails()
+                    .statusCode(200);
+        // @formatter:on
     }
 
 }
