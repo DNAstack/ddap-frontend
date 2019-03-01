@@ -53,7 +53,7 @@ public class SetBearerTokenFromCookieGatewayFilterFactory extends AbstractGatewa
      * if the given request doesn't contain a usable token.
      */
     public static Optional<String> extractDamToken(ServerHttpRequest request) {
-        return Optional.ofNullable(request.getCookies().getFirst("user_token"))
+        return Optional.ofNullable(request.getCookies().getFirst("ic_token"))
                 .map(HttpCookie::getValue);
     }
 }
