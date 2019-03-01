@@ -1,6 +1,6 @@
 {
   "item": {
-    "name": "testResource3",
+    "name": "testResource2",
     "state": "ACTIVE",
     "views": {
       "beacon": {
@@ -52,7 +52,7 @@
     "testPersonas": {
       "dr_joe_elixir": {
         "addResources": {
-          "testResource3": {
+          "testResource2": {
             "views": [
               "beacon",
               "gcs_read"
@@ -76,7 +76,7 @@
       },
       "nci_researcher": {
         "addResources": {
-          "testResource3":{
+          "testResource2":{
             "views":[
               "beacon",
               "gcs_read"]

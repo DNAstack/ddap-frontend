@@ -67,6 +67,7 @@ public class BeaconApiE2eTest extends BaseE2eTest {
         .body("[0].name", equalTo("Cafe Variome Beacon"))
         .body("[0].organization", equalTo("University of Leicester"));
 
+        /* Delete the resource */
         given()
         .log().method()
         .log().uri()
