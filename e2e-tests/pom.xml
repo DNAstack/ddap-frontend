@@ -89,6 +89,7 @@
                         <configuration>
                             <sources>
                                 <source>${project.basedir}/src/test/java/</source>
+                                <source>${project.basedir}/src/test/resources/</source>
                             </sources>
                         </configuration>
                     </execution>
