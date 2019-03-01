@@ -14,6 +14,10 @@ ddap:
   public-uri: http://localhost:8085
   cors:
     origins: "http://localhost:4200"
+  cookies:
+    # Default to false so cookies work on http://localhost
+    # e2e tests will remind you to set this true in real deployments!
+    secure: false
 
 spring:
   security:

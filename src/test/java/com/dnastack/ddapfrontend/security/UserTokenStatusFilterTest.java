@@ -19,7 +19,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.dnastack.ddapfrontend.security.UserTokenStatusFilter.TokenAudience.DAM;
+import static com.dnastack.ddapfrontend.security.UserTokenCookiePackager.TokenAudience.DAM;
 import static java.lang.String.format;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;

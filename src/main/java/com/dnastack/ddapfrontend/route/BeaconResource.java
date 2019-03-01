@@ -9,6 +9,7 @@ import com.dnastack.ddapfrontend.client.dam.DamResource;
 import com.dnastack.ddapfrontend.client.dam.DamResourceList;
 import com.dnastack.ddapfrontend.client.dam.DamView;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import com.dnastack.ddapfrontend.security.UserTokenStatusFilter;
 import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,9 @@ class BeaconResource {
     @Autowired
     private DamClient damClient;
 
+    @Autowired
+    private UserTokenCookiePackager cookiePackager;
+
     @GetMapping(value = "/api/resources/search", params = "type=beacon")
     public Flux<ExternalBeaconQueryResult> handleBeaconQuery(BeaconRequestModel beaconRequest, ServerHttpRequest request) {
 
@@ -69,7 +73,7 @@ class BeaconResource {
             ServerHttpRequest request) {
 
         // find beacons under resourceId in DAM config
-        Optional<String> damToken = UserTokenStatusFilter.extractToken(request, UserTokenStatusFilter.TokenAudience.DAM);
+        Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.TokenAudience.DAM);
         if (!damToken.isPresent()) {
             return Flux.error(new IllegalArgumentException("Authorization is required")); // TODO make this return a 401
         }

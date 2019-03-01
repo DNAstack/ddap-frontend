@@ -6,9 +6,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.util.EntityUtils;
 import org.junit.Before;
 
@@ -18,8 +18,7 @@ import java.util.Base64;
 
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.fail;
 
 public class BaseE2eTest {
@@ -68,16 +67,24 @@ public class BaseE2eTest {
         String responseBody = EntityUtils.toString(response.getEntity());
         assertThat("Response body: " + responseBody, response.getStatusLine().getStatusCode(), is(200));
 
-        String icToken = cookieStore.getCookies().stream()
-                .filter(c -> {
-                    return tokenCookieName.equals(c.getName());
-                })
-                .map(Cookie::getValue)
+        BasicClientCookie icTokenCookie = (BasicClientCookie) cookieStore.getCookies().stream()
+                .filter(c -> tokenCookieName.equals(c.getName()))
                 .findFirst()
                 .orElse(null);
-        assertThat(icToken, notNullValue());
 
-        return icToken;
+        assertThat(icTokenCookie, notNullValue());
+
+        // Require cookies to be marked as secure unless we're testing on localhost
+        if (!DDAP_BASE_URL.startsWith("http://localhost:")) {
+            assertThat("It looks like DDAP_COOKIES_SECURE=true isn't set on this deployment",
+                    icTokenCookie.containsAttribute("secure"), is(true));
+            assertThat(icTokenCookie.getAttribute("secure"), nullValue());
+        }
+
+        assertThat(icTokenCookie.containsAttribute("httponly"), is(true));
+        assertThat(icTokenCookie.getAttribute("httponly"), nullValue());
+
+        return icTokenCookie.getValue();
     }
 
     protected String ddapBasicAuthHeader() {

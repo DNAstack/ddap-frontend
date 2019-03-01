@@ -1,12 +1,12 @@
 package com.dnastack.ddapfrontend.security;
 
 import com.dnastack.ddapfrontend.header.XForwardUtil;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.TokenAudience;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpCookie;
-import org.springframework.http.ResponseCookie;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,6 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Optional;
@@ -39,13 +38,16 @@ public class UserTokenStatusFilter implements WebFilter {
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
+    @Autowired
+    private UserTokenCookiePackager cookiePackager;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
 
         final ServerHttpRequest originalRequest = exchange.getRequest();
         final ServerHttpResponse mutableResponse = exchange.getResponse();
 
-        Optional<String> extractedToken = extractToken(originalRequest, TokenAudience.DAM);
+        Optional<String> extractedToken = cookiePackager.extractToken(originalRequest, TokenAudience.DAM);
         boolean haveValidAuth;
 
         if (extractedToken.isPresent()) {
@@ -55,7 +57,7 @@ public class UserTokenStatusFilter implements WebFilter {
                 log.info("Clearing expired token cookie");
                 final String requestUrl = XForwardUtil.getExternalPath(originalRequest, "/");
                 final String cookieHost = URI.create(requestUrl).getHost();
-                mutableResponse.addCookie(clearToken(cookieHost, TokenAudience.DAM));
+                mutableResponse.addCookie(cookiePackager.clearToken(cookieHost, TokenAudience.DAM));
                 haveValidAuth = false;
             } else {
                 haveValidAuth = true;
@@ -95,65 +97,6 @@ public class UserTokenStatusFilter implements WebFilter {
         }
 
         return decodedBody.getExp() < Instant.now().getEpochSecond();
-    }
-
-    /**
-     * Extracts a security token from the given request, which carries it in an encrypted cookie.
-     *
-     * @param request the request that originated from the user and probably contains the encrypted DAM token.
-     * @param audience The collaborating service that honours the token.
-     * @return A string that can be used as a bearer token in a request to DAM, or {@code Optional.empty}
-     * if the given request doesn't contain a usable token.
-     */
-    public static Optional<String> extractToken(ServerHttpRequest request, TokenAudience audience) {
-        return Optional.ofNullable(request.getCookies().getFirst(audience.cookieName()))
-                       .map(HttpCookie::getValue);
-    }
-
-    /**
-     * Encrypts the given security token, and returns the result as a cookie to be set for the given hostname.
-     *
-     * @param token The token as usable for calling the IC account info endpoints.
-     * @param cookieHost The host the returned cookie should target. Should usually point to this DDAP server, since we
-     *                  are the only ones who can decrypt the cookie's contents.
-     * @param audience The collaborating service that honours the token.
-     * @return a cookie that should be sent to the user's browser.
-     */
-    public static ResponseCookie packageToken(String token, String cookieHost, TokenAudience audience) {
-        return ResponseCookie.from(audience.cookieName(), token)
-                             .domain(cookieHost)
-                             .path("/")
-                             .build();
-    }
-
-    /**
-     * Produces a cookie that, when set for the given hostname, clears the corresponding security authorization.
-     *
-     * @param cookieHost The host the returned cookie should target. Should usually point to this DDAP server, and
-     *                   should match the cookieHost passed to {@link #packageToken} on a previous request.
-     * @return a cookie that should be sent to the user's browser to clear their DAM token.
-     */
-    public static ResponseCookie clearToken(String cookieHost, TokenAudience audience) {
-        return ResponseCookie.from(audience.cookieName(), "expired")
-                             .domain(cookieHost)
-                             .path("/")
-                             .maxAge(Duration.ZERO)
-                             .build();
-    }
-
-    public enum TokenAudience {
-        IC("ic_token"),
-        DAM("dam_token");
-
-        private String cookieName;
-
-        TokenAudience(String cookieName) {
-            this.cookieName = cookieName;
-        }
-
-        public String cookieName() {
-            return cookieName;
-        }
     }
 
     @Data
