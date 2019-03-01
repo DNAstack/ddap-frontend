@@ -127,33 +127,6 @@ public class UserTokenCookieTest extends BaseE2eTest {
         // @formatter:on
     }
 
-    private String fetchRealPersonaIcToken(String personaName) throws IOException {
-        final CookieStore cookieStore = new BasicCookieStore();
-        final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpGet request = new HttpGet(format("%s/api/identity/login?persona=%s", DDAP_BASE_URL, personaName));
-        request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
-
-        HttpResponse response = httpclient.execute(request);
-
-        String responseBody = EntityUtils.toString(response.getEntity());
-        assertThat("Response body: " + responseBody, response.getStatusLine().getStatusCode(), is(200));
-
-        String icToken = cookieStore.getCookies().stream()
-                .filter(c -> "ic_token".equals(c.getName()))
-                .map(Cookie::getValue)
-                .findFirst()
-                .orElse(null);
-        assertThat(icToken, notNullValue());
-
-        return icToken;
-    }
-
-    private String ddapBasicAuthHeader() {
-        String auth = DDAP_USERNAME + ":" + DDAP_PASSWORD;
-        byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.ISO_8859_1));
-        return "Basic " + new String(encodedAuth);
-    }
-
     private String fakeUserToken(Instant exp) throws JsonProcessingException {
         // Note this will only work so long as DDAP frontend uses unencrypted DAM access tokens as cookie value
         ObjectMapper jsonMapper = new ObjectMapper();
