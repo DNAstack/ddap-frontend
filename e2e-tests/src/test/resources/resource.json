@@ -1,8 +1,30 @@
 {
   "item": {
-    "name": "harshtestresource9",
+    "name": "testResource1",
     "state": "ACTIVE",
     "views": {
+      "beacon": {
+        "name": "beacon",
+        "action": "token:jwt:gatekeeper",
+        "interfaces": {
+          "http:beacon": "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
+        },
+        "contentTypes": [
+          "application/bam"
+        ],
+        "grants": [
+          {
+            "name": "beacon",
+            "aud": "https://ga4gh-apis-beacon.dnastack.com",
+            "items": [
+              "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
+            ]
+          }
+        ],
+        "ui": {
+          "label": "Beacon Discovery"
+        }
+      },
       "gcs_read": {
         "name": "gcs_read",
         "action": "token:gcp:sa",
@@ -30,8 +52,9 @@
     "testPersonas": {
       "dr_joe_elixir": {
         "addResources": {
-          "harshtestresource9": {
+          "testResource1": {
             "views": [
+              "beacon",
               "gcs_read"
             ]
           }
@@ -53,8 +76,9 @@
       },
       "nci_researcher": {
         "addResources": {
-          "harshtestresource9":{
+          "testResource1":{
             "views":[
+              "beacon",
               "gcs_read"]
           }
         },
