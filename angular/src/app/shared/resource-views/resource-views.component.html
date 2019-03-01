@@ -17,7 +17,7 @@
         <div class="flex flex--column vertical-center">
           <div class="flex vertical-center row" *ngIf="isTokenGranted() && view.account">
             <mat-form-field class="stretch">
-              <input matInput readonly type="text" [placeholder]="'Service account'" [value]="view.account">
+              <input matInput readonly type="text" [placeholder]="'Account'" [value]="view.account">
             </mat-form-field>
             <button mat-flat-button matSuffix mat-icon-button ngxClipboard
                     [cbContent]="view.account"
