@@ -24,13 +24,9 @@ import static org.junit.Assert.fail;
 
 public class BaseE2eTest {
 
-//    static final String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
-//    static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
-//    static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
-
-    static final String DDAP_USERNAME = requiredEnv("E2E_DDAP_USERNAME");
-    static final String DDAP_PASSWORD = requiredEnv("E2E_DDAP_PASSWORD");
-    static final String DDAP_BASE_URL = requiredEnv("E2E_DDAP_BASE_URL");
+    static final String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
+    static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
+    static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
 
     @Before
     public void setUp() {
