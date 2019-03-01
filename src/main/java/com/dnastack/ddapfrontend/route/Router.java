@@ -1,10 +1,11 @@
 package com.dnastack.ddapfrontend.route;
 
 import com.dnastack.ddapfrontend.client.ic.TokenResponse;
-import com.dnastack.ddapfrontend.security.UserTokenStatusFilter;
-import com.dnastack.ddapfrontend.security.UserTokenStatusFilter.TokenAudience;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.TokenAudience;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,6 +47,9 @@ public class Router {
 
     @Value("${idp.client-secret}")
     private String idpClientSecret;
+
+    @Autowired
+    private UserTokenCookiePackager cookiePackager;
 
     // FIXME should serve angular app but we need proper login first
     @Bean
@@ -156,8 +160,8 @@ public class Router {
     private Mono<ServerResponse> successfulUserTokenResponse(ServerRequest request, TokenResponse token) {
         final URI redirectUri = URI.create(getExternalPath(request, "/data"));
         final String publicHost = redirectUri.getHost();
-        final ResponseCookie damTokenCookie = UserTokenStatusFilter.packageToken(token.getIdToken(), publicHost, TokenAudience.DAM);
-        final ResponseCookie icTokenCookie = UserTokenStatusFilter.packageToken(token.getAccessToken(), publicHost, TokenAudience.IC);
+        final ResponseCookie damTokenCookie = cookiePackager.packageToken(token.getIdToken(), publicHost, TokenAudience.DAM);
+        final ResponseCookie icTokenCookie = cookiePackager.packageToken(token.getAccessToken(), publicHost, TokenAudience.IC);
         return temporaryRedirect(redirectUri).cookie(damTokenCookie)
                                              .cookie(icTokenCookie)
                                              .build();

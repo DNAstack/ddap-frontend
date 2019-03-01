@@ -1,6 +1,7 @@
 package com.dnastack.ddapfrontend.proxy;
 
-import com.dnastack.ddapfrontend.security.UserTokenStatusFilter.TokenAudience;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.TokenAudience;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -26,7 +27,8 @@ public class SetBearerTokenFromCookieGatewayFilterFactoryTest {
 
     @Before
     public void setUp() {
-        SetBearerTokenFromCookieGatewayFilterFactory filterFactory = new SetBearerTokenFromCookieGatewayFilterFactory();
+        UserTokenCookiePackager cookiePackager = new UserTokenCookiePackager();
+        SetBearerTokenFromCookieGatewayFilterFactory filterFactory = new SetBearerTokenFromCookieGatewayFilterFactory(cookiePackager);
         SetBearerTokenFromCookieGatewayFilterFactory.Config config = new SetBearerTokenFromCookieGatewayFilterFactory.Config();
         config.setTokenAudience(TokenAudience.DAM);
         filter = filterFactory.apply(config);

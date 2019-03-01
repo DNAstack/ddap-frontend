@@ -17,19 +17,19 @@
 
 package com.dnastack.ddapfrontend.proxy;
 
-import com.dnastack.ddapfrontend.security.UserTokenStatusFilter.TokenAudience;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.TokenAudience;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
-import static com.dnastack.ddapfrontend.security.UserTokenStatusFilter.extractToken;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -38,8 +38,12 @@ import static java.util.Objects.requireNonNull;
 @Component
 public class SetBearerTokenFromCookieGatewayFilterFactory extends AbstractGatewayFilterFactory<SetBearerTokenFromCookieGatewayFilterFactory.Config> {
 
-    public SetBearerTokenFromCookieGatewayFilterFactory() {
+    private UserTokenCookiePackager cookiePackager;
+
+    @Autowired
+    public SetBearerTokenFromCookieGatewayFilterFactory(UserTokenCookiePackager cookiePackager) {
         super(Config.class);
+        this.cookiePackager = cookiePackager;
     }
 
     @Override
@@ -53,7 +57,7 @@ public class SetBearerTokenFromCookieGatewayFilterFactory extends AbstractGatewa
         return (exchange, chain) -> {
             final ServerHttpRequest request = exchange.getRequest();
 
-            Optional<String> extractedToken = extractToken(request, config.getTokenAudience());
+            Optional<String> extractedToken = cookiePackager.extractToken(request, config.getTokenAudience());
 
             if (extractedToken.isPresent()) {
                 log.debug("Including {} token in this request", config.getTokenAudience());
