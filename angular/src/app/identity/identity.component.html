@@ -1,0 +1,11 @@
+<ddap-header label="My Identity" icon="identity">
+</ddap-header>
+
+<ddap-main>
+  <div class="mat-expansion-panel">
+    <mat-progress-bar *ngIf="identitySubscription && !identitySubscription.closed" mode="indeterminate"></mat-progress-bar>
+    <json-editor #identityEditor
+                 [options]="identityEditorOptions"
+                 [data]="identity"></json-editor>
+  </div>
+</ddap-main>

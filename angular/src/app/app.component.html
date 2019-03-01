@@ -6,12 +6,14 @@
     </header>
 
     <mat-nav-list>
-      <mat-list-item class="credentials-username">
+      <mat-list-item class="credentials-username"
+                     data-se="nav-account">
         <h4 mat-line>John Doe</h4>
         <a mat-line href="">Log out</a>
         <div class="credentials-initials">JD</div>
       </mat-list-item>
-      <mat-list-item [routerLink]="['/data']" [routerLinkActive]="['active-nav-link']">
+      <mat-list-item [routerLink]="['/data']"
+                     [routerLinkActive]="['active-nav-link']">
         <mat-icon class="icon icon-explore"></mat-icon>
         <h4 mat-line>Explore data</h4>
       </mat-list-item>
@@ -19,7 +21,9 @@
         <mat-icon class="icon icon-collections"></mat-icon>
         <h4 mat-line>My collections</h4>
       </mat-list-item>
-      <mat-list-item>
+      <mat-list-item  [routerLink]="['/identity']"
+                      [routerLinkActive]="['active-nav-link']"
+                      data-se="nav-identity">
         <mat-icon class="icon icon-identity"></mat-icon>
         <h4 mat-line>My identity</h4>
       </mat-list-item>
