@@ -14,6 +14,7 @@ public class NavBar {
     private Map<NavItem, String> NAV_SELECTOR = new HashMap() {{
         put(NavItem.RESOURCES, "nav-resources");
         put(NavItem.IDENTITIES, "nav-personas");
+        put(NavItem.IDENTITY, "nav-identity");
         put(NavItem.CLIENTS, "nav-clients");
         put(NavItem.CLAIMS, "nav-claims");
         put(NavItem.DEFINITIONS, "nav-definitions");
@@ -25,6 +26,7 @@ public class NavBar {
     private Map<NavItem, String> PAGE_TITLE = new HashMap() {{
         put(NavItem.RESOURCES, "Resource");
         put(NavItem.IDENTITIES, "Personas");
+        put(NavItem.IDENTITY, "My Identity");
         put(NavItem.CLIENTS, "Clients");
         put(NavItem.CLAIMS, "Claims");
         put(NavItem.DEFINITIONS, "Definitions");
@@ -36,6 +38,7 @@ public class NavBar {
     public enum NavItem {
         RESOURCES,
         IDENTITIES,
+        IDENTITY,
         CLIENTS,
         CLAIMS,
         DEFINITIONS,

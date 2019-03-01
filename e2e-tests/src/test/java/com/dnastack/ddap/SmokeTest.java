@@ -172,6 +172,14 @@ public class SmokeTest {
                 .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
     }
 
+    @Test
+    public void getDefaultIdentity() {
+        ddapPage.getNavBar()
+                .goTo(NavBar.NavItem.IDENTITY);
+
+        driver.findElement(By.xpath("//div[contains(text(), 'nci_researcher@nci.nih.gov')]"));
+    }
+
     private ICLoginPage startLogin() {
         driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve("/api/identity/login").toString()));
         return new ICLoginPage(driver);
