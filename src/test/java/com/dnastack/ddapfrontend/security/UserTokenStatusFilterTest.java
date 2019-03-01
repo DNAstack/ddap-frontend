@@ -32,7 +32,7 @@ public class UserTokenStatusFilterTest {
 
     @Before
     public void setUp() throws Exception {
-        filter = new UserTokenStatusFilter();
+        filter = new UserTokenStatusFilter(new UserTokenCookiePackager());
     }
 
     @Test

@@ -38,8 +38,12 @@ public class UserTokenStatusFilter implements WebFilter {
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
+    private final UserTokenCookiePackager cookiePackager;
+
     @Autowired
-    private UserTokenCookiePackager cookiePackager;
+    public UserTokenStatusFilter(UserTokenCookiePackager cookiePackager) {
+        this.cookiePackager = cookiePackager;
+    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
