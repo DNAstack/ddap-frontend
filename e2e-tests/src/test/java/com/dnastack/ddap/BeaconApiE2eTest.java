@@ -2,14 +2,10 @@ package com.dnastack.ddap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
-import io.restassured.response.ValidatableResponse;
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -34,7 +30,7 @@ public class BeaconApiE2eTest extends BaseE2eTest {
 
         Map<String, Object> resources;
         try (InputStream in = this.getClass().getClassLoader()
-                .getResourceAsStream("resource.json")) {
+                .getResourceAsStream("com/dnastack/ddap/resource.json")) {
             resources = objectMapper.readValue(in, Map.class);
         }
 
