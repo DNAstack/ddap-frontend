@@ -5,6 +5,7 @@ import com.dnastack.ddap.page.ICLoginPage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import lombok.Getter;
@@ -100,46 +101,44 @@ public class BeaconApiE2eTest {
         final HasNavBar someDdapPage = icLoginPage.loginAsNciResearcher();
         Cookie userTokenCookie = driver.manage().getCookieNamed("dam_token");
 
-        String resourceName="harshtestresource9";
+        String resourceId="harshtestresource10";
 
-//        given()
-//            .log().method()
-//            .log().uri()
-//            .auth().basic("dev", "dev")
-//            .body(resources)
-//        .when()
-//            .post("dam/v1alpha/config/resources/" + resourceName + "?persona=nci_researcher")
-//        .then()
-//            .log().ifValidationFails()
-//            .statusCode(200);
+        given()
+            .log().method()
+            .log().uri()
+            .auth().basic("dev", "dev")
+            .body(resources)
+        .when()
+            .post("dam/v1alpha/config/resources/" + resourceId + "?persona=nci_researcher")
+        .then()
+            .log().ifValidationFails()
+            .statusCode(200);
 
-        String resourceId = resourceName;
-        resourceId = "ga4gh-apis";
         ValidatableResponse validatableResponse = given()
-                .log().method()
-                .log().uri()
-                .when()
-                .auth().basic("dev", "dev")
-                .cookie(userTokenCookie.getName(), userTokenCookie.getValue())
-                .get("/api/resources/" + resourceId + "/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
-                .then()
-                .log().ifValidationFails();
-                validatableResponse.contentType(JSON)
-                    .statusCode(200)
-                    .body("build.name", equalTo("ddap-frontend"))
-                    .body("build.version", notNullValue());
+        .log().method()
+        .log().uri()
+        .when()
+        .auth().basic("dev", "dev")
+        .cookie(userTokenCookie.getName(), userTokenCookie.getValue())
+        .get("/api/resources/" + resourceId + "/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
+        .then()
+        .log().ifValidationFails();
 
-//        given()
-//                .log().method()
-//                .log().uri()
-//                .auth().basic("dev", "dev")
-//                .when()
-//                .delete("dam/v1alpha/config/resources/" + resourceName + "?persona=nci_researcher")
-//                .then()
-//                .log().ifValidationFails()
-//                .statusCode(200)
-//                .body("build.name", equalTo("ddap-frontend"))
-//                .body("build.version", notNullValue());
+        validatableResponse.contentType(JSON)
+        .statusCode(200)
+        .body("[0].name", equalTo("Cafe Variome Beacon"))
+        .body("[0].organization", equalTo("University of Leicester"))
+        .body("[0].exists", equalTo("true"));
+
+        given()
+        .log().method()
+        .log().uri()
+        .auth().basic("dev", "dev")
+        .when()
+        .delete("dam/v1alpha/config/resources/" + resourceId + "?persona=nci_researcher")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(200);
     }
 
     private static String requiredEnv(String name) {
