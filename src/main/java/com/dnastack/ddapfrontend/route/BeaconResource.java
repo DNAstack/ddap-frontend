@@ -14,6 +14,7 @@ import com.dnastack.ddapfrontend.security.UserTokenStatusFilter;
 import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,9 +59,10 @@ class BeaconResource {
         Flux<ExternalBeaconQueryResult> fluxResult = Flux.empty();
         Flux<ExternalBeaconQueryResult> externalBeaconQueryResultFlux;
         for (String resourceName: resourceNameList) {
+
             externalBeaconQueryResultFlux =
                     handleBeaconQueryForResource(resourceName, beaconRequest, request);
-            fluxResult = fluxResult.merge(externalBeaconQueryResultFlux);
+            fluxResult = Flux.merge(fluxResult, externalBeaconQueryResultFlux);
         }
 
         return fluxResult;

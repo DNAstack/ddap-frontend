@@ -1,0 +1,96 @@
+{
+  "item": {
+    "name": "testResource2",
+    "state": "ACTIVE",
+    "views": {
+      "beacon": {
+        "name": "beacon",
+        "action": "token:jwt:gatekeeper",
+        "interfaces": {
+          "http:beacon": "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
+        },
+        "contentTypes": [
+          "application/bam"
+        ],
+        "grants": [
+          {
+            "name": "beacon",
+            "aud": "https://ga4gh-apis-beacon.dnastack.com",
+            "items": [
+              "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
+            ]
+          }
+        ],
+        "ui": {
+          "label": "Beacon Discovery"
+        }
+      },
+      "gcs_read": {
+        "name": "gcs_read",
+        "action": "token:gcp:sa",
+        "interfaces": {
+          "gcp:gs": "gs://ga4gh-apis-controlled-access",
+          "http:gcp:gs": "https://www.googleapis.com/storage/v1/b/ga4gh-apis-controlled-access"
+        },
+        "contentTypes": [
+          "application/bam"
+        ]
+      }
+    },
+    "rules": [
+      "ethics"
+    ],
+    "ui": {
+      "applyUrl": "http://apply.example.com",
+      "desc": "Test posting a resource",
+      "displayAs": "Test posting for Max",
+      "infoUrl": "http://info.example.com",
+      "troubleshootUrl": "http://troubleshoot.example.com"
+    }
+  },
+  "apply": {
+    "testPersonas": {
+      "dr_joe_elixir": {
+        "addResources": {
+          "testResource2": {
+            "views": [
+              "beacon",
+              "gcs_read"
+            ]
+          }
+        },
+        "removeResources": {
+        }
+      },
+      "dr_joe_era_commons": {
+        "addResources": {
+        },
+        "removeResources": {
+        }
+      },
+      "john": {
+        "addResources": {
+        },
+        "removeResources": {
+        }
+      },
+      "nci_researcher": {
+        "addResources": {
+          "testResource2":{
+            "views":[
+              "beacon",
+              "gcs_read"]
+          }
+        },
+        "removeResources": {
+        }
+      },
+      "undergrad_candice": {
+        "addResources": {
+        },
+        "removeResources": {
+        }
+      }
+    }
+  }
+}
