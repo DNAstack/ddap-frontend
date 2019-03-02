@@ -108,7 +108,7 @@ public class UserTokenCookieTest extends BaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("ic_token", validPersonaToken)
         .when()
-            .get("/identity/v1alpha/accounts/-")
+            .get("/identity/v1alpha/dnastack/accounts/-")
         .then()
             .log().everything()
             .contentType(not("text/html"))

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -47,10 +48,10 @@ class BeaconResource {
     @Autowired
     private UserTokenCookiePackager cookiePackager;
 
-    @GetMapping(value = "/api/resources/search", params = "type=beacon")
-    public Flux<ExternalBeaconQueryResult> handleBeaconQuery(BeaconRequestModel beaconRequest, ServerHttpRequest request) {
+    @GetMapping(value = "/api/v1alpha/{realm}/resources/search", params = "type=beacon")
+    public Flux<ExternalBeaconQueryResult> handleBeaconQuery(BeaconRequestModel beaconRequest, ServerHttpRequest request, @PathVariable String realm) {
 
-        DamResourceList resourceList = damClient.getResources();
+        DamResourceList resourceList = damClient.getResources(realm);
 
         List<String> resourceNameList = resourceList.getResources().stream()
                 .map(entry -> entry.getName())
@@ -61,18 +62,19 @@ class BeaconResource {
         for (String resourceName: resourceNameList) {
 
             externalBeaconQueryResultFlux =
-                    handleBeaconQueryForResource(resourceName, beaconRequest, request);
+                    handleBeaconQueryForResource(resourceName, beaconRequest, request, realm);
             fluxResult = Flux.merge(fluxResult, externalBeaconQueryResultFlux);
         }
 
         return fluxResult;
     }
 
-    @GetMapping(value = "/api/resources/{resourceId}/search", params = "type=beacon")
+    @GetMapping(value = "/api/v1alpha/{realm}/resources/{resourceId}/search", params = "type=beacon")
     public Flux<ExternalBeaconQueryResult> handleBeaconQueryForResource(
             @PathVariable String resourceId,
             BeaconRequestModel beaconRequest,
-            ServerHttpRequest request) {
+            ServerHttpRequest request,
+            @PathVariable String realm) {
 
         // find beacons under resourceId in DAM config
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.TokenAudience.DAM);
@@ -81,7 +83,8 @@ class BeaconResource {
         }
 
 
-        DamResource resource = damClient.getResource(damToken.get(), resourceId);
+        DamResource resource = damClient.getResource(damToken.get(),
+                                                     realm, resourceId);
 
         // find all the views with beacon URLs
         List<ViewToken> beaconViewTokens = resource.getViews().entrySet().stream()
@@ -91,7 +94,12 @@ class BeaconResource {
                     Map<String, String> interfaces = view.getInterfaces();
                     String beaconInterface = interfaces.get("http:beacon");
                     if (beaconInterface != null) {
-                        return Stream.of(new ViewToken(viewId, beaconInterface, damClient.getAccessTokenForView(damToken.get(), resourceId, viewId).getToken()));
+                        return Stream.of(new ViewToken(viewId,
+                                                       beaconInterface,
+                                                       damClient.getAccessTokenForView(damToken.get(),
+                                                                                       realm,
+                                                                                       resourceId,
+                                                                                       viewId).getToken()));
                     }
                     return Stream.of();
                 })
