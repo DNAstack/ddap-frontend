@@ -12,6 +12,7 @@ idp:
 
 ddap:
   public-uri: http://localhost:8085
+  default-realm: dnastack
   cors:
     origins: "http://localhost:4200"
   cookies:
@@ -41,27 +42,14 @@ spring:
             - AddRequestParameter=clientId,${dam.client-id}
             - AddRequestParameter=clientSecret,${dam.client-secret}
             - SetBearerTokenFromCookie=DAM
-            - StripPrefix=2
-            - PrependPath=/dam/v1alpha/dnastack
             - Logging
           uri: ${dam.base-url}
-        - predicates:
-            - Path=/identity/v1alpha/passport
-          filters:
-            - AddRequestParameter=clientId,${idp.client-id}
-            - AddRequestParameter=clientSecret,${idp.client-secret}
-            - StripPrefix=2
-            - PrependPath=/identity/v1alpha/dnastack
-            - Logging
-          uri: ${idp.base-url}
         - predicates:
             - Path=/identity/v1alpha/**
           filters:
             - AddRequestParameter=clientId,${idp.client-id}
             - AddRequestParameter=clientSecret,${idp.client-secret}
             - SetBearerTokenFromCookie=IC
-            - StripPrefix=2
-            - PrependPath=/identity/v1alpha/dnastack
             - Logging
           uri: ${idp.base-url}
 logging:

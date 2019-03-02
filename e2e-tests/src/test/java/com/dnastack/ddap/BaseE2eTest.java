@@ -59,7 +59,7 @@ public class BaseE2eTest {
     private String fetchRealPersonaToken(String personaName, String tokenCookieName) throws IOException {
         final CookieStore cookieStore = new BasicCookieStore();
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpGet request = new HttpGet(format("%s/api/identity/login?persona=%s", DDAP_BASE_URL, personaName));
+        HttpGet request = new HttpGet(format("%s/api/v1alpha/dnastack/identity/login?persona=%s", DDAP_BASE_URL, personaName));
         request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
 
         HttpResponse response = httpclient.execute(request);

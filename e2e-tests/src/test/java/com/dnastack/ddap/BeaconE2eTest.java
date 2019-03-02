@@ -39,7 +39,7 @@ public class BeaconE2eTest extends BaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
         .when()
-            .get("/api/resources/ga4gh-apis/search?referenceName=13&start=32936732&referenceBases=G&alternateBases=C&type=beacon&assemblyId=GRCh37")
+            .get("/api/v1alpha/dnastack/resources/ga4gh-apis/search?referenceName=13&start=32936732&referenceBases=G&alternateBases=C&type=beacon&assemblyId=GRCh37")
         .then()
             .log().everything()
             .contentType("application/json")

@@ -181,7 +181,7 @@ public class SmokeTest {
     }
 
     private ICLoginPage startLogin() {
-        driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve("/api/identity/login").toString()));
+        driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve("/api/v1alpha/dnastack/identity/login").toString()));
         return new ICLoginPage(driver);
     }
 

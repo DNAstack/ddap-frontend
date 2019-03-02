@@ -18,9 +18,12 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.dnastack.ddapfrontend.header.XForwardUtil.getExternalPath;
@@ -51,6 +54,9 @@ public class Router {
     @Autowired
     private UserTokenCookiePackager cookiePackager;
 
+    @Value("${ddap.default-realm}")
+    private String defaultRealm;
+
     // FIXME should serve angular app but we need proper login first
     @Bean
     RouterFunction<ServerResponse> index() {
@@ -67,11 +73,12 @@ public class Router {
                               "  <meta http-equiv=\"refresh\" content=\"0; URL='%s'\">\n" +
                               "</head>\n" +
                               "</html>\n",
-                      rootLoginRedirectUrl(request));
+                      rootLoginRedirectUrl(request, defaultRealm));
     }
 
-    private URI rootLoginRedirectUrl(ServerRequest request) {
-        return URI.create(getExternalPath(request, "/api/identity/login"));
+    private URI rootLoginRedirectUrl(ServerRequest request, String realm) {
+        return URI.create(getExternalPath(request,
+                                          format("/api/v1alpha/%s/identity/login", realm)));
     }
 
     @Bean
@@ -88,13 +95,13 @@ public class Router {
 
     @Bean
     RouterFunction<ServerResponse> apiLogin() {
-        return RouterFunctions.route(GET("/api/identity/login"),
+        return RouterFunctions.route(GET("/api/v1alpha/{realm}/identity/login"),
                                      this::handleApiLogin);
     }
 
     @Bean
     RouterFunction<ServerResponse> apiToken() {
-        return RouterFunctions.route(GET("/api/identity/token"), this::handleTokenRequest);
+        return RouterFunctions.route(GET("/api/v1alpha/{realm}/identity/token"), this::handleTokenRequest);
     }
 
     private Mono<ServerResponse> handleTokenRequest(ServerRequest request) {
@@ -130,16 +137,22 @@ public class Router {
     }
 
     private Mono<ClientResponse> idpTokenRequest(ServerRequest request, String code) {
-        return WebClient.create(format(idpBaseUrl.toString() + "identity/v1alpha/dnastack/token" +
-                                               "?grant_type=authorization_code" +
-                                               "&code=%s" +
-                                               "&redirect_uri=%s" +
-                                               "&clientId=%s" +
-                                               "&clientSecret=%s",
-                                       code,
-                                       rootLoginRedirectUrl(request),
-                                       idpClientId,
-                                       idpClientSecret))
+        final UriTemplate template = new UriTemplate("{idpBaseUrl}/identity/v1alpha/{realm}/token" +
+                                                             "?grant_type=authorization_code" +
+                                                             "&code={code}" +
+                                                             "&redirect_uri={redirectUri}" +
+                                                             "&clientId={clientId}" +
+                                                             "&clientSecret={clientSecret}");
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("idpBaseUrl", idpBaseUrl);
+        variables.put("realm", request.pathVariable("realm"));
+        variables.put("code", code);
+        variables.put("redirectUri", rootLoginRedirectUrl(request, request.pathVariable("realm")));
+        variables.put("clientId", idpClientId);
+        variables.put("clientSecret", idpClientSecret);
+
+        final URI uri = template.expand(variables);
+        return WebClient.create(uri.toString())
                         .post()
                         .exchange();
     }
@@ -158,7 +171,7 @@ public class Router {
     }
 
     private Mono<ServerResponse> successfulUserTokenResponse(ServerRequest request, TokenResponse token) {
-        final URI redirectUri = URI.create(getExternalPath(request, "/data"));
+        final URI redirectUri = URI.create(getExternalPath(request, format("/%s/data", request.pathVariable("realm"))));
         final String publicHost = redirectUri.getHost();
         final ResponseCookie damTokenCookie = cookiePackager.packageToken(token.getIdToken(), publicHost, TokenAudience.DAM);
         final ResponseCookie icTokenCookie = cookiePackager.packageToken(token.getAccessToken(), publicHost, TokenAudience.IC);
@@ -179,43 +192,53 @@ public class Router {
         log.debug("Unable to parse token from payload.", t);
     }
 
-    private URI authorizeUrl(String redirectUri) {
-        return URI.create(format(
-                idpBaseUrl.toString() + "identity/v1alpha/dnastack/authorize?response_type=code&clientId=%s&redirect_uri=%s",
-                idpClientId,
-                redirectUri));
+    private URI authorizeUrl(String redirectUri, String realm) {
+        final UriTemplate template = new UriTemplate("{idpBaseUrl}/identity/v1alpha/{realm}/authorize?response_type=code&clientId={clientId}&redirect_uri={redirectUri}");
+
+        final HashMap<String, Object> variables = new HashMap<>();
+        variables.put("idpBaseUrl", idpBaseUrl);
+        variables.put("realm", realm);
+        variables.put("clientId", idpClientId);
+        variables.put("redirectUri", redirectUri);
+
+        return template.expand(variables);
     }
 
     private Mono<ServerResponse> handleApiLogin(ServerRequest request) {
         Optional<String> foundPersona = request.queryParam("persona");
-        if (foundPersona.isPresent()) {
-            return handlePersonaLogin(request, foundPersona.get());
-        } else {
-            return handleRegularLogin(request);
-        }
+        return foundPersona
+                .map(persona -> handlePersonaLogin(request, persona))
+                .orElseGet(() -> handleRegularLogin(request));
     }
 
     private Mono<ServerResponse> handlePersonaLogin(ServerRequest request, String personaName) {
-        String personaLoginUrl = format("%s/identity/v1alpha/dnastack/persona/%s" +
-                "?client_id=%s" +
-                "&redirect_uri=%s" +
-                "&scope=ga4gh+account_admin",
-                idpBaseUrl,
-                personaName,
-                idpClientId,
-                getRegisteredRedirectUri(request));
+        final UriTemplate template = new UriTemplate("{idpBaseUrl}/identity/v1alpha/{realm}/persona/{persona}" +
+                                                             "?client_id={clientId}" +
+                                                             "&redirect_uri={redirectUri}" +
+                                                             "&scope=ga4gh+account_admin");
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("idpBaseUrl", idpBaseUrl);
+        variables.put("persona", personaName);
+        variables.put("realm", request.pathVariable("realm"));
+        variables.put("clientId", idpClientId);
+        variables.put("redirectUri", getRegisteredRedirectUri(request, request.pathVariable("realm")));
+
+        final String personaLoginUrl = template.expand(variables).toString();
+
         log.debug("Redirecting to persona login IC endpoint {}", personaLoginUrl);
         return temporaryRedirect(URI.create(personaLoginUrl)).build();
     }
 
     private Mono<ServerResponse> handleRegularLogin(ServerRequest request) {
         final Optional<String> foundRedirectUri = request.queryParam("redirect_uri");
-        final String redirectUri = foundRedirectUri.orElseGet(() -> getRegisteredRedirectUri(request));
+        final String redirectUri = foundRedirectUri.orElseGet(() -> getRegisteredRedirectUri(request,
+                                                                                             request.pathVariable(
+                                                                                                     "realm")));
 
-        return temporaryRedirect(authorizeUrl(redirectUri)).build();
+        return temporaryRedirect(authorizeUrl(redirectUri, request.pathVariable("realm"))).build();
     }
 
-    private String getRegisteredRedirectUri(ServerRequest request) {
-        return getExternalPath(request, "/api/identity/token");
+    private String getRegisteredRedirectUri(ServerRequest request, String realm) {
+        return getExternalPath(request, format("/api/v1alpha/%s/identity/token", realm));
     }
 }
