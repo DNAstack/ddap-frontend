@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IdentityComponent } from './identity.component';
 
 const routes: Routes = [
-  {path: 'identity', component: IdentityComponent},
+  {path: 'myidentity', component: IdentityComponent},
 ];
 
 @NgModule({
