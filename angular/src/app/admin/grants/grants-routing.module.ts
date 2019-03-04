@@ -6,9 +6,9 @@ import { GrantListComponent } from './grant-list/grant-list.component';
 import { GrantManageComponent } from './grant-manage/grant-manage.component';
 
 const routes: Routes = [
-  { path: 'grants', component: GrantListComponent },
-  { path: 'grants/:grantName', component: GrantDetailComponent },
-  { path: 'grants/manage/add', component: GrantManageComponent, pathMatch: 'full' },
+  { path: ':realm/grants', component: GrantListComponent },
+  { path: ':realm/grants/:grantName', component: GrantDetailComponent },
+  { path: ':realm/grants/manage/add', component: GrantManageComponent, pathMatch: 'full' },
 ];
 
 @NgModule({

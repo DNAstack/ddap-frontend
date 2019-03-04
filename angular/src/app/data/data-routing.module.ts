@@ -6,9 +6,9 @@ import { DataListComponent } from './data-list/data-list.component';
 import { DataSearchComponent } from './data-search/data-search.component';
 
 const routes: Routes = [
-  {path: 'data', component: DataListComponent},
-  {path: 'data/search', component: DataSearchComponent},
-  {path: 'data/:resourceName', component: DataDetailComponent},
+  {path: ':realm/data', component: DataListComponent},
+  {path: ':realm/data/search', component: DataSearchComponent},
+  {path: ':realm/data/:resourceName', component: DataDetailComponent},
 ];
 
 @NgModule({

@@ -1,4 +1,4 @@
-<ddap-header [backLink]="['/rules']" [label]="rule?.name">
+<ddap-header [backLink]="ruleService.underRealm('/rules') | async" [label]="rule?.name">
 </ddap-header>
 
 <ddap-main>

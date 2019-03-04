@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
+import { RealmService } from '../../shared/realm.service';
 import { DataService } from '../data.service';
 
 
@@ -17,7 +18,8 @@ export class DataListComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    public randomImageRetriever: ImagePlaceholderRetriever
+    public randomImageRetriever: ImagePlaceholderRetriever,
+    public realmService: RealmService
   ) {}
 
   ngOnInit() {

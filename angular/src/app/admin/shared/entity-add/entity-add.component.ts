@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+import { RealmService } from '../../../shared/realm.service';
+
 @Component({
   selector: 'ddap-entity-add',
   templateUrl: './entity-add.component.html',
@@ -8,4 +10,6 @@ import { Component, Input } from '@angular/core';
 export class EntityAddComponent {
   @Input()
   configName: string;
+
+  constructor(public realmService: RealmService) { }
 }

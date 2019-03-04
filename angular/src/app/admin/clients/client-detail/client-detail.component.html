@@ -1,4 +1,4 @@
-<ddap-header [backLink]="['/clients']" [label]="client?.name">
+<ddap-header [backLink]="clientService.realmService.underRealm('/clients') | async" [label]="client?.name">
 </ddap-header>
 
 <ddap-main>

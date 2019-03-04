@@ -1,4 +1,4 @@
-<ddap-header [backLink]="['/claims']" [label]="claim?.name">
+<ddap-header [backLink]="claimService.realmService.underRealm('/claims') | async" [label]="claim?.name">
 </ddap-header>
 
 <ddap-main>

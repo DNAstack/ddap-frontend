@@ -1,5 +1,5 @@
 <div>
-  <a [routerLink]="['/' + configName + '/manage/add']">
+  <a [routerLink]="realmService.underRealm('/' + configName + '/manage/add') | async">
     <button mat-flat-button color="primary" class="uppercase">Add {{ configName }}</button>
   </a>
 </div>

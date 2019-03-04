@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/resources', pathMatch: 'full'},
+  {path: '', redirectTo: 'dnastack/data', pathMatch: 'full'},
 ];
 
 @NgModule({

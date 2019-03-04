@@ -1,4 +1,4 @@
-<ddap-header [backLink]="['/definitions']" label="Add Definition">
+<ddap-header [backLink]="definitionService.realmService.underRealm('/definitions') | async" label="Add Definition">
 </ddap-header>
 
 <ddap-main>

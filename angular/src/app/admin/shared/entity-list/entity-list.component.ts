@@ -3,6 +3,7 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs/Observable';
 
+import { RealmService } from '../../../shared/realm.service';
 import { JsonEditorDefaults } from '../jsonEditorDefaults';
 
 @Component({
@@ -28,7 +29,7 @@ export class EntityListComponent {
   @Input()
   editorOptions: JsonEditorOptions | any;
 
-  constructor() {
+  constructor(public realmService: RealmService) {
     this.editorOptions = new JsonEditorDefaults();
   }
 

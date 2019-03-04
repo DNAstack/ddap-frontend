@@ -6,9 +6,9 @@ import { ClaimListComponent } from './claim-list/claim-list.component';
 import { ClaimManageComponent } from './claim-manage/claim-manage.component';
 
 const routes: Routes = [
-  { path: 'claims', component: ClaimListComponent },
-  { path: 'claims/:claimName', component: ClaimDetailComponent },
-  { path: 'claims/manage/add', component: ClaimManageComponent, pathMatch: 'full' },
+  { path: ':realm/claims', component: ClaimListComponent },
+  { path: ':realm/claims/:claimName', component: ClaimDetailComponent },
+  { path: ':realm/claims/manage/add', component: ClaimManageComponent, pathMatch: 'full' },
 ];
 
 @NgModule({

@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
+import { RealmService } from '../../shared/realm.service';
 import { SearchState } from '../../shared/search-state.model';
 import { SearchStateService } from '../../shared/search-state.service';
 import { DataService } from '../data.service';
@@ -25,7 +26,8 @@ export class DataSearchComponent implements OnInit {
 
   constructor(private dataService: DataService,
               private searchStateService: SearchStateService,
-              private beaconService: ResourceBeaconService) {
+              private beaconService: ResourceBeaconService,
+              public realmService: RealmService) {
 
   }
 

@@ -1,4 +1,4 @@
-<ddap-header [backLink]="['/resources']" [label]="resource?.ui.label">
+<ddap-header [backLink]="resourceService.realmService.underRealm('/resources') | async" [label]="resource?.ui.label">
 </ddap-header>
 
 <ddap-main>

@@ -6,9 +6,9 @@ import { PassportListComponent } from './passport-list/passport-list.component';
 import { PassportManageComponent } from './passport-manage/passport-manage.component';
 
 const routes: Routes = [
-  { path: 'passports', component: PassportListComponent },
-  { path: 'passports/:passportName', component: PassportDetailComponent },
-  { path: 'passports/manage/add', component: PassportManageComponent, pathMatch: 'full' },
+  { path: ':realm/passports', component: PassportListComponent },
+  { path: ':realm/passports/:passportName', component: PassportDetailComponent },
+  { path: ':realm/passports/manage/add', component: PassportManageComponent, pathMatch: 'full' },
 ];
 
 @NgModule({

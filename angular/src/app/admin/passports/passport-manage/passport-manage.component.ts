@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { flatMap } from 'rxjs/operators';
 
+import { RealmService } from '../../../shared/realm.service';
 import { PassportService } from '../passports.service';
 
 @Component({
@@ -12,10 +14,11 @@ export class PassportManageComponent {
 
   passport: any = {};
 
-  constructor(private passportService: PassportService, private router: Router) { }
+  constructor(private passportService: PassportService, private router: Router, private realmService: RealmService) { }
 
   onSubmit(value: any) {
     this.passportService.save(JSON.parse(value.body))
-      .subscribe(() => this.router.navigate(['/passports']));
+      .pipe(flatMap(_ => this.realmService.underRealm('/rules')))
+      .subscribe(path => this.router.navigate([path]));
   }
 }

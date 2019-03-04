@@ -1,4 +1,4 @@
-<ddap-header [backLink]="['/personas']" label="Add Persona">
+<ddap-header [backLink]="personaService.realmService.underRealm('/personas') | async" label="Add Persona">
 </ddap-header>
 
 <ddap-main>

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { flatMap } from 'rxjs/operators';
 
+import { RealmService } from '../../../shared/realm.service';
 import { GrantService } from '../grants.service';
 
 @Component({
@@ -12,10 +14,11 @@ export class GrantManageComponent {
 
   grant: any = {};
 
-  constructor(private grantService: GrantService, private router: Router) { }
+  constructor(private grantService: GrantService, private router: Router, private realmService: RealmService) { }
 
   onSubmit(value: any) {
     this.grantService.save(JSON.parse(value.body))
-      .subscribe(() => this.router.navigate(['/grants']));
+      .pipe(flatMap(_ => this.realmService.underRealm('/grants')))
+      .subscribe(path => this.router.navigate([path]));
   }
 }

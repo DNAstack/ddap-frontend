@@ -6,9 +6,9 @@ import { DefinitionListComponent } from './definition-list/definition-list.compo
 import { DefinitionManageComponent } from './definition-manage/definition-manage.component';
 
 const routes: Routes = [
-  { path: 'definitions', component: DefinitionListComponent },
-  { path: 'definitions/:definitionName', component: DefinitionDetailComponent },
-  { path: 'definitions/manage/add', component: DefinitionManageComponent, pathMatch: 'full' },
+  { path: ':realm/definitions', component: DefinitionListComponent },
+  { path: ':realm/definitions/:definitionName', component: DefinitionDetailComponent },
+  { path: ':realm/definitions/manage/add', component: DefinitionManageComponent, pathMatch: 'full' },
 ];
 
 @NgModule({
