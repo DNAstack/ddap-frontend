@@ -6,9 +6,9 @@ import { RuleListComponent } from './rule-list/rule-list.component';
 import { RuleManageComponent } from './rule-manage/rule-manage.component';
 
 const routes: Routes = [
-  { path: 'rules', component: RuleListComponent },
-  { path: 'rules/:ruleName', component: RuleDetailComponent },
-  { path: 'rules/manage/add', component: RuleManageComponent, pathMatch: 'full' },
+  { path: ':realm/rules', component: RuleListComponent },
+  { path: ':realm/rules/:ruleName', component: RuleDetailComponent },
+  { path: ':realm/rules/manage/add', component: RuleManageComponent, pathMatch: 'full' },
 ];
 
 @NgModule({

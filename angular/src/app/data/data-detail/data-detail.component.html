@@ -1,5 +1,5 @@
 <ddap-header class="no-border"
-             [backLink]="['/data']"
+             [backLink]="realmService.underRealm('/data') | async"
              [label]="resource?.ui.label"
              [searchButton]="true"
              (searchOpenChange)="searchOpenedChange($event)">

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { flatMap } from 'rxjs/operators';
 
+import { RealmService } from '../../../shared/realm.service';
 import { RuleService } from '../rules.service';
 
 @Component({
@@ -12,10 +14,11 @@ export class RuleManageComponent {
 
   rule: any = {};
 
-  constructor(private ruleService: RuleService, private router: Router) { }
+  constructor(private ruleService: RuleService, private router: Router, private realmService: RealmService) { }
 
   onSubmit(value: any) {
     this.ruleService.save(JSON.parse(value.body))
-      .subscribe(() => this.router.navigate(['/rules']));
+      .pipe(flatMap(_ => this.realmService.underRealm('/rules')))
+      .subscribe(path => this.router.navigate([path]));
   }
 }

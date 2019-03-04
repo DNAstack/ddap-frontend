@@ -6,6 +6,7 @@ import { flatMap } from 'rxjs/operators';
 
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
+import { RealmService } from '../../shared/realm.service';
 import { SearchStateService } from '../../shared/search-state.service';
 import { DataService } from '../data.service';
 
@@ -26,7 +27,8 @@ export class DataDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private dataService: DataService,
-              private searchStateService: SearchStateService) {
+              private searchStateService: SearchStateService,
+              public realmService: RealmService) {
   }
 
   ngOnInit() {

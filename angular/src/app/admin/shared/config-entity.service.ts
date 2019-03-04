@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { mergeMap, pluck } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
+import { RealmService } from '../../shared/realm.service';
 
 import { EntityService } from './entity.service';
 
@@ -10,15 +11,16 @@ const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'charset':
 
 export class ConfigEntityService implements EntityService {
 
-  constructor(protected http: HttpClient, protected entityName: string) { }
+  constructor(protected http: HttpClient, protected entityName: string, protected realmService: RealmService) { }
 
   get(params?): Observable<any> {
     params = params || {};
 
-    return this.http.get<any[]>(`${environment.damApiUrl}/config`, { params })
-      .pipe(
-        pluck(this.entityName)
-      );
+    return this.realmService.flatMap(realm =>
+      this.http.get<any[]>(`${environment.damApiUrl}/${realm}/config`, {params})
+        .pipe(
+          pluck(this.entityName)
+        ));
   }
 
   save(dto: any): Observable<any> {
@@ -26,13 +28,14 @@ export class ConfigEntityService implements EntityService {
     };
     const id = dto.name;
 
-    return this.http.get<any[]>(`${environment.damApiUrl}/config`, { params })
-      .pipe(
-        mergeMap((config: any) => {
-          config[this.entityName][id] = dto;
-          return this.updateConfig(config);
-        })
-      );
+    return this.realmService.flatMap(realm =>
+      this.http.get<any[]>(`${environment.damApiUrl}/${realm}/config`, {params})
+        .pipe(
+          mergeMap((config: any) => {
+            config[this.entityName][id] = dto;
+            return this.updateConfig(config);
+          })
+        ));
   }
 
   update(dto: any): Observable<any> {
@@ -43,23 +46,25 @@ export class ConfigEntityService implements EntityService {
     const params = {
     };
 
-    return this.http.get<any[]>(`${environment.damApiUrl}/config`, { params })
-      .pipe(
-        mergeMap((config: any) => {
-          delete config[this.entityName][id];
-          return this.updateConfig(config);
-        })
-      );
+    return this.realmService.flatMap(realm =>
+      this.http.get<any[]>(`${environment.damApiUrl}/${realm}/config`, {params})
+        .pipe(
+          mergeMap((config: any) => {
+            delete config[this.entityName][id];
+            return this.updateConfig(config);
+          })
+        ));
   }
 
   private updateConfig(config: object): Observable<any> {
     const params = {
     };
 
-    return this.http.put(`${environment.damApiUrl}/config`,
-      { item: config },
-      { params, headers }
-    );
+    return this.realmService.flatMap(realm =>
+      this.http.put(`${environment.damApiUrl}/${realm}/config`,
+        {item: config},
+        {params, headers}
+      ));
   }
 
 }

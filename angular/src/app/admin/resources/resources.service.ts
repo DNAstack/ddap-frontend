@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { pluck } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
+import { RealmService } from '../../shared/realm.service';
 import { EntityService } from '../shared/entity.service';
 
 
@@ -15,23 +16,25 @@ const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'charset':
 })
 export class ResourceService implements EntityService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, public realmService: RealmService) { }
 
   getAccessRequestToken(resource, view): Observable<any[]> {
     const params = {
     };
 
-    return this.http.get<any[]>(`${environment.damApiUrl}/resources/${resource}/views/${view}`, { params })
-      .pipe(
-        pluck('token')
-      );
+    return this.realmService.flatMap(realm =>
+      this.http.get<any[]>(`${environment.damApiUrl}/${realm}/resources/${resource}/views/${view}`, {params})
+        .pipe(
+          pluck('token')
+        ));
   }
 
   get(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.damApiUrl}/config`)
-      .pipe(
-        pluck('resources')
-      );
+    return this.realmService.flatMap(realm =>
+      this.http.get<any[]>(`${environment.damApiUrl}/${realm}/config`)
+        .pipe(
+          pluck('resources')
+        ));
   }
 
   getResource(resourceName: string): Observable<any> {
@@ -50,10 +53,11 @@ export class ResourceService implements EntityService {
 
     const resourceName = resource.item.name;
 
-    return this.http.post(`${environment.damApiUrl}/config/resources/${resourceName}`,
-      resource,
-      { params, headers }
-    );
+    return this.realmService.flatMap(realm =>
+      this.http.post(`${environment.damApiUrl}/${realm}/config/resources/${resourceName}`,
+        resource,
+        {params, headers}
+      ));
   }
 
   update(resource: any, test?: any): Observable<any> {
@@ -68,10 +72,11 @@ export class ResourceService implements EntityService {
       resourceChange.apply = test;
     }
 
-    return this.http.put(`${environment.damApiUrl}/config/resources/${resourceName}`,
-      resourceChange,
-      { params, headers }
-    );
+    return this.realmService.flatMap(realm =>
+      this.http.put(`${environment.damApiUrl}/${realm}/config/resources/${resourceName}`,
+        resourceChange,
+        {params, headers}
+      ));
   }
 
   remove(id: string): Observable<any> {

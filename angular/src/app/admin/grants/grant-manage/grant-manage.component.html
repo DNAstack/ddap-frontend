@@ -1,4 +1,4 @@
-<ddap-header [backLink]="['/grants']" label="Add Grant">
+<ddap-header [backLink]="grantService.realmService.underRealm('/grants') | async" label="Add Grant">
 </ddap-header>
 
 <ddap-main>

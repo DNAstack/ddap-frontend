@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { assemblyIds } from '../assembly.model';
+import { RealmService } from '../realm.service';
 import { SearchState } from '../search-state.model';
 import { SearchStateService } from '../search-state.service';
 
@@ -30,7 +31,8 @@ export class BeaconSearchBarComponent implements OnDestroy, OnInit {
   private searchStateSubscription: Subscription;
 
   constructor(private router: Router,
-              private searchStateService: SearchStateService) {
+              private searchStateService: SearchStateService,
+              private realmService: RealmService) {
 
     this.search = new FormGroup({
       assembly: new FormControl(this.assemblyIds[0], [Validators.required]),
@@ -40,26 +42,28 @@ export class BeaconSearchBarComponent implements OnDestroy, OnInit {
 
   onSubmit({value, valid}: { value: any, valid: boolean }) {
     const currentRoute = this.router.url;
-    if (currentRoute === '/data') {
+    if (currentRoute.endsWith('/data')) {
       this.searchStateService.patch({
         limitSearch: false,
         resource: null,
         backLink: currentRoute,
       });
-    } else if (currentRoute.startsWith('/data')) {
+    } else if (currentRoute.includes('/data/')) {
       this.searchStateService.patch({
         backLink: currentRoute,
       });
     }
 
     const resource = this.resource;
-    this.router.navigate(['/data/search'], {
-      queryParams: {
-        ...value,
-        resource,
-        limitSearch: this.limitSearch,
-      },
-    });
+    this.realmService.getActiveRealm()
+      .subscribe(realm =>
+        this.router.navigate([`/${realm}/data/search`], {
+          queryParams: {
+            ...value,
+            resource,
+            limitSearch: this.limitSearch,
+          },
+        }));
   }
 
   ngOnInit(): void {

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs-compat';
 
 import { environment } from '../../../environments/environment';
 import { DnaChangeQueryParser } from '../dna-change-query.parser';
+import { RealmService } from '../realm.service';
 
 import { BeaconResponse } from './beacon-response.model';
 
@@ -12,7 +13,7 @@ import { BeaconResponse } from './beacon-response.model';
 })
 export class ResourceBeaconService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private realmService: RealmService) {
   }
 
   query(queryValue: any, resource): Observable<BeaconResponse[]> {
@@ -34,10 +35,14 @@ export class ResourceBeaconService {
   }
 
   private queryBeacon(resourceId, params?): any {
-    return this.http.get<BeaconResponse[]>(`${environment.ddapApiUrl}/resources/${resourceId}/search`, {params});
+    return this.realmService.flatMap(realm =>
+      this.http.get<BeaconResponse[]>(`${environment.ddapApiUrl}/${realm}/resources/${resourceId}/search`, {params})
+    );
   }
 
   private queryAll(params?): Observable<BeaconResponse[]> {
-    return this.http.get<BeaconResponse[]>(`${environment.ddapApiUrl}/resources/search`, {params});
+    return this.realmService.flatMap(realm =>
+      this.http.get<BeaconResponse[]>(`${environment.ddapApiUrl}/${realm}/resources/search`, {params})
+    );
   }
 }

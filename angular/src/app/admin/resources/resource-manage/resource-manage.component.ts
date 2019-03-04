@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { flatMap } from 'rxjs/operators';
 
 import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 import { ResourceService } from '../resources.service';
@@ -38,8 +39,9 @@ export class ResourceManageComponent implements OnInit {
 
   save() {
     this.resourceService.save(this.itemDto)
-      .subscribe(() => {
-        this.router.navigate(['/resources']);
+      .pipe(flatMap(_ => this.resourceService.realmService.underRealm('/resources')))
+      .subscribe(path => {
+        this.router.navigate([path]);
         },
         (errorDto) => {
         this.errorDto = errorDto.error;

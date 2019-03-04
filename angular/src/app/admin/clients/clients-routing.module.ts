@@ -6,9 +6,9 @@ import { ClientListComponent } from './client-list/client-list.component';
 import { ClientManageComponent } from './client-manage/client-manage.component';
 
 const routes: Routes = [
-  { path: 'clients', component: ClientListComponent },
-  { path: 'clients/:clientName', component: ClientDetailComponent },
-  { path: 'clients/manage/add', component: ClientManageComponent, pathMatch: 'full' },
+  { path: ':realm/clients', component: ClientListComponent },
+  { path: ':realm/clients/:clientName', component: ClientDetailComponent },
+  { path: ':realm/clients/manage/add', component: ClientManageComponent, pathMatch: 'full' },
 ];
 
 @NgModule({
