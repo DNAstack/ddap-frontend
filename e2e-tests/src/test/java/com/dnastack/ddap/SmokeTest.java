@@ -46,7 +46,7 @@ public class SmokeTest {
         put(NavBar.NavItem.DEFINITIONS,
                 Arrays.asList("ga4gh.AcceptedTermsAndPolicies", "ga4gh.ControlledAccessGrants"));
         put(NavBar.NavItem.GRANTS,
-                Arrays.asList("bq_read", "gcs_read"));
+                Arrays.asList("bigquery", "gcs"));
         put(NavBar.NavItem.RULES,
                 Arrays.asList("GRU", "bona_fide", "ethics"));
         put(NavBar.NavItem.PASSPORTS,
