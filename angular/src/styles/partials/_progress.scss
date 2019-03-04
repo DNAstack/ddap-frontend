@@ -12,3 +12,11 @@ ddap-root {
     z-index: 100;
   }
 }
+
+mat-card {
+  > mat-progress-bar.ddap-card-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}

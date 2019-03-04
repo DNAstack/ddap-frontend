@@ -16,7 +16,7 @@ export class IdentityService {
   get(params?): Observable<any[]> {
     params = params || {};
 
-    return this.http.get<any[]>(environment.idpApiUrl + '/accounts/-', {params})
+    return this.http.get<any[]>(`${environment.idpApiUrl}/accounts/-`, {params})
       .pipe();
   }
 
