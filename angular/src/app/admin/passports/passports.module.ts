@@ -5,7 +5,6 @@ import { AdminSharedModule } from '../shared/shared.module';
 import { PassportDetailComponent } from './passport-detail/passport-detail.component';
 import { PassportListComponent } from './passport-list/passport-list.component';
 import { PassportManageComponent } from './passport-manage/passport-manage.component';
-import { PassportsRoutingModule } from './passports-routing.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +14,6 @@ import { PassportsRoutingModule } from './passports-routing.module';
   ],
   imports: [
     AdminSharedModule,
-    PassportsRoutingModule,
   ],
 })
 export class PassportsModule { }

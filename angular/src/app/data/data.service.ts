@@ -5,7 +5,8 @@ import { of } from 'rxjs/observable/of';
 import { first, map, mergeMap, pluck, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { RealmService } from '../shared/realm.service';
+import { RealmService } from '../realm.service';
+
 
 @Injectable({
   providedIn: 'root',
@@ -13,9 +14,14 @@ import { RealmService } from '../shared/realm.service';
 export class DataService {
 
   private cache: any = {};
+  private realm;
 
-  constructor(private http: HttpClient, private realmService: RealmService) {
+  constructor(private http: HttpClient,
+              private realmService: RealmService) {
 
+    this.realmService.getRealm().subscribe(realm => {
+      this.realm = realm;
+    });
   }
 
   getName(resourceId: string): Observable<string> {
@@ -38,12 +44,11 @@ export class DataService {
       });
     };
 
-    return this.realmService.flatMap(realm =>
-      this.http.get<any[]>(`${environment.damApiUrl}/${realm}/resources`, {params})
-        .pipe(
-          pluck('resources'),
-          tap(putIntoCache)
-        ));
+    return this.http.get<any[]>(`${environment.damApiUrl}/${this.realm}/resources`, {params})
+      .pipe(
+        pluck('resources'),
+        tap(putIntoCache)
+      );
   }
 
   getResource(resourceId: string): Observable<any> {
@@ -56,11 +61,12 @@ export class DataService {
   getAccessRequestToken(resource, view): any {
     const params = {};
 
-    return this.realmService.flatMap(realm =>
-      this.http.get<any>(`${environment.damApiUrl}/${realm}/resources/${resource}/views/${view}`, {params})
-        .pipe(
-          map(({account, token}) => ({account, token}))
-        ));
+    return this.http.get<any>(
+      `${environment.damApiUrl}/${this.realm}/resources/${resource}/views/${view}`,
+      {params})
+      .pipe(
+        map(({account, token}) => ({account, token}))
+      );
   }
 
 }

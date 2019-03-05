@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { RealmService } from '../realm.service';
 import { SearchState } from '../search-state.model';
 import { SearchStateService } from '../search-state.service';
 
@@ -37,7 +36,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
 
   private searchStateSubscription: Subscription;
 
-  constructor(private searchStateService: SearchStateService, public realmService: RealmService) {
+  constructor(private searchStateService: SearchStateService) {
   }
 
   ngOnInit(): void {

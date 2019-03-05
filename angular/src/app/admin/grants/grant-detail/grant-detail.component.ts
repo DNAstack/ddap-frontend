@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { flatMap, pluck } from 'rxjs/operators';
 
-import { RealmService } from '../../../shared/realm.service';
 import { GrantService } from '../grants.service';
 
 @Component({
@@ -16,8 +15,7 @@ export class GrantDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    public grantService: GrantService,
-    public realmService: RealmService
+    public grantService: GrantService
   ) {}
 
   ngOnInit() {

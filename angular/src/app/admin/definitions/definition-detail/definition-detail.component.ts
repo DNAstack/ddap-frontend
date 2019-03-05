@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { flatMap, pluck } from 'rxjs/operators';
 
-import { RealmService } from '../../../shared/realm.service';
 import { DefinitionService } from '../definitions.service';
 
 @Component({
@@ -16,8 +15,7 @@ export class DefinitionDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    public definitionService: DefinitionService,
-    public realmService: RealmService
+    public definitionService: DefinitionService
   ) {}
 
   ngOnInit() {

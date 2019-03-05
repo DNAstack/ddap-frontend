@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { flatMap } from 'rxjs/operators';
 
-import { RealmService } from '../../../shared/realm.service';
 import { DefinitionService } from '../definitions.service';
 
 @Component({
@@ -12,13 +10,11 @@ import { DefinitionService } from '../definitions.service';
 })
 export class DefinitionManageComponent {
 
-  definition: any = {};
-
-  constructor(private definitionService: DefinitionService, private router: Router, public realmService: RealmService) { }
+  constructor(private definitionService: DefinitionService,
+              private router: Router) { }
 
   onSubmit(value: any) {
     this.definitionService.save(JSON.parse(value.body))
-      .pipe(flatMap(_ => this.realmService.underRealm('/definitions')))
       .subscribe(path => this.router.navigate([path]));
   }
 }

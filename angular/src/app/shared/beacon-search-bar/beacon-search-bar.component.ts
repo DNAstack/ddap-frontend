@@ -3,8 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
+import { RealmService } from '../../realm.service';
 import { assemblyIds } from '../assembly.model';
-import { RealmService } from '../realm.service';
 import { SearchState } from '../search-state.model';
 import { SearchStateService } from '../search-state.service';
 
@@ -27,6 +27,7 @@ export class BeaconSearchBarComponent implements OnDestroy, OnInit {
   limitSearch = false;
   search: FormGroup;
 
+  private realm;
   private resource;
   private searchStateSubscription: Subscription;
 
@@ -37,6 +38,10 @@ export class BeaconSearchBarComponent implements OnDestroy, OnInit {
     this.search = new FormGroup({
       assembly: new FormControl(this.assemblyIds[0], [Validators.required]),
       query: new FormControl('', [Validators.required, ValidateVariant]),
+    });
+
+    this.realmService.getRealm().subscribe(realm => {
+      this.realm = realm;
     });
   }
 
@@ -55,15 +60,13 @@ export class BeaconSearchBarComponent implements OnDestroy, OnInit {
     }
 
     const resource = this.resource;
-    this.realmService.getActiveRealm()
-      .subscribe(realm =>
-        this.router.navigate([`/${realm}/data/search`], {
-          queryParams: {
-            ...value,
-            resource,
-            limitSearch: this.limitSearch,
-          },
-        }));
+    this.router.navigate([this.realm, 'data', 'search'], {
+      queryParams: {
+        ...value,
+        resource,
+        limitSearch: this.limitSearch,
+      },
+    });
   }
 
   ngOnInit(): void {
