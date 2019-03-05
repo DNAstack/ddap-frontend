@@ -11,6 +11,7 @@ import java.util.Base64;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static java.lang.String.format;
 import static org.hamcrest.Matchers.isOneOf;
 import static org.hamcrest.Matchers.not;
 
@@ -29,7 +30,7 @@ public class UserTokenCookieTest extends BaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", expiredUserTokenCookie)
         .when()
-            .get("/dam/v1alpha/resources/resource-name/views/view-name")
+            .get(format("/dam/v1alpha/%s/resources/resource-name/views/view-name", DDAP_TEST_REALM))
         .then()
             .log().body()
             .log().ifValidationFails()
@@ -50,7 +51,7 @@ public class UserTokenCookieTest extends BaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", unexpiredUserTokenCookie)
         .when()
-            .get("/dam/v1alpha/resources/resource-name/views/view-name")
+            .get(format("/dam/v1alpha/%s/resources/resource-name/views/view-name", DDAP_TEST_REALM))
         .then()
             .log().body()
             .log().ifValidationFails()
@@ -70,7 +71,7 @@ public class UserTokenCookieTest extends BaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", expiredUserTokenCookie)
         .when()
-            .get("/dam/v1alpha/resources/resource-name/views/view-name")
+            .get(format("/dam/v1alpha/%s/resources/resource-name/views/view-name", DDAP_TEST_REALM))
         .then()
             .log().body()
             .log().ifValidationFails()
@@ -87,7 +88,7 @@ public class UserTokenCookieTest extends BaseE2eTest {
             .log().uri()
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
         .when()
-            .get("/dam/v1alpha/resources/resource-name/views/view-name")
+            .get(format("/dam/v1alpha/%s/resources/resource-name/views/view-name", DDAP_TEST_REALM))
         .then()
             .log().body()
             .log().ifValidationFails()
@@ -98,7 +99,7 @@ public class UserTokenCookieTest extends BaseE2eTest {
     @Test
     public void shouldBeAbleToAccessICWithAppropriateCookie() throws IOException {
         // TODO [DISCO-2022] this test should create its own realm and populate it with the needed personas!
-        String validPersonaToken = fetchRealPersonaIcToken("nci_researcher");
+        String validPersonaToken = fetchRealPersonaIcToken("dr_joe_era_commons");
 
         // @formatter:off
         given()
@@ -108,7 +109,7 @@ public class UserTokenCookieTest extends BaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("ic_token", validPersonaToken)
         .when()
-            .get("/identity/v1alpha/dnastack/accounts/-")
+            .get(format("/identity/v1alpha/%s/accounts/-", DDAP_TEST_REALM))
         .then()
             .log().everything()
             .contentType(not("text/html"))

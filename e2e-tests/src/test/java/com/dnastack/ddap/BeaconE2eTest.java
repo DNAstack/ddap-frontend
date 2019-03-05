@@ -1,35 +1,24 @@
 package com.dnastack.ddap;
 
-import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.time.*;
-import java.util.TimeZone;
 
 import static io.restassured.RestAssured.given;
+import static java.lang.String.format;
 import static org.hamcrest.Matchers.*;
 
 public class BeaconE2eTest extends BaseE2eTest {
 
+    @Before
+    public void setupRealm() throws IOException {
+        setupRealmConfig("dr_joe_era_commons", loadTemplate("/com/dnastack/ddap/config.json"));
+    }
+
     @Test
     public void querySingleBeacon() throws IOException {
-        // @formatter:off
-        Assume.assumeTrue("Feature is temporarily broken. Temporarily unblocking build.",
-                          Instant.now()
-                                 .isAfter(ZonedDateTime.of(
-                                         LocalDateTime.of(
-                                                 2019,
-                                                 Month.MARCH,
-                                                 6,
-                                                 10,
-                                                 0),
-                                         ZoneId.of("America/Toronto")
-                                 ).toInstant()));
-        // @formatter:on
-
-        // TODO [DISCO-2022] this test should create its own realm and populate it with the needed personas and beacons!
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher");
+        String validPersonaToken = fetchRealPersonaDamToken("dr_joe_era_commons");
 
         // @formatter:off
         given()
@@ -39,7 +28,15 @@ public class BeaconE2eTest extends BaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
         .when()
-            .get("/api/v1alpha/dnastack/resources/ga4gh-apis/search?referenceName=13&start=32936732&referenceBases=G&alternateBases=C&type=beacon&assemblyId=GRCh37")
+            .get(format(
+                    "/api/v1alpha/%s/resources/thousand-genomes/search" +
+                            "?referenceName=13" +
+                            "&start=32936732" +
+                            "&referenceBases=G" +
+                            "&alternateBases=C" +
+                            "&type=beacon" +
+                            "&assemblyId=GRCh37",
+                    DDAP_TEST_REALM))
         .then()
             .log().everything()
             .contentType("application/json")

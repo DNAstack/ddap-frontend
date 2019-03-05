@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.Map;
 
 @Data
-public class DamResource {
+public class DamResourceViews {
     Map<String, DamView> views;
 }

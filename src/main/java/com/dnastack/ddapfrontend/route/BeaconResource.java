@@ -5,33 +5,29 @@ import com.dnastack.ddapfrontend.beacon.BeaconOrganization;
 import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.beacon.ExternalBeaconQueryResult;
 import com.dnastack.ddapfrontend.client.dam.DamClient;
-import com.dnastack.ddapfrontend.client.dam.DamResource;
+import com.dnastack.ddapfrontend.client.dam.DamResourceViews;
 import com.dnastack.ddapfrontend.client.dam.DamResourceList;
 import com.dnastack.ddapfrontend.client.dam.DamView;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
-import com.dnastack.ddapfrontend.security.UserTokenStatusFilter;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RestController
 class BeaconResource {
 
@@ -83,53 +79,86 @@ class BeaconResource {
         }
 
 
-        DamResource resource = damClient.getResource(damToken.get(),
-                                                     realm, resourceId);
+        DamResourceViews resource = damClient.getResourceViews(damToken.get(), realm, resourceId);
 
         // find all the views with beacon URLs
-        List<ViewToken> beaconViewTokens = resource.getViews().entrySet().stream()
-                .flatMap(entry -> {
-                    String viewId = entry.getKey();
-                    DamView view = entry.getValue();
-                    Map<String, String> interfaces = view.getInterfaces();
-                    String beaconInterface = interfaces.get("http:beacon");
-                    if (beaconInterface != null) {
-                        return Stream.of(new ViewToken(viewId,
-                                                       beaconInterface,
-                                                       damClient.getAccessTokenForView(damToken.get(),
-                                                                                       realm,
-                                                                                       resourceId,
-                                                                                       viewId).getToken()));
-                    }
-                    return Stream.of();
-                })
-                .collect(toList());
+        List<ViewToken> beaconViewTokens = resource.getViews()
+                                                   .entrySet()
+                                                   .stream()
+                                                   .flatMap(entry -> processResourceBeacons(resourceId,
+                                                                                            realm,
+                                                                                            damToken.get(),
+                                                                                            entry))
+                                                   .collect(toList());
 
-        Mono[] beaconRequests = beaconViewTokens.stream().map(viewToken -> {
-            final Mono<BeaconQueryResult> beaconQueryResponse = WebClient.create()
-                    .get()
-                    .uri(format(
-                            BEACON_QUERY_TEMPLATE,
-                            viewToken.getUrl(),
-                            beaconRequest.getAssemblyId(),
-                            beaconRequest.getReferenceName(),
-                            beaconRequest.getStart(),
-                            beaconRequest.getReferenceBases(),
-                            beaconRequest.getAlternateBases()))
-                    .header("Authorization", "Bearer " + viewToken.getToken())
-                    .exchange()
-                    .flatMap(clientResponse -> clientResponse.bodyToMono(
-                            BeaconQueryResult.class));
-            final Mono<BeaconInfo> beaconInfoResponse = WebClient.create()
-                    .get()
-                    .uri("https://beacon.cafevariome.org/")
-                    .exchange()
-                    .flatMap(clientResponse -> clientResponse.bodyToMono(
-                            BeaconInfo.class));
-            return Mono.zip(beaconInfoResponse, beaconQueryResponse, this::formatBeaconServerPayload);
-        }).toArray(Mono[]::new);
+        Stream<Flux<ExternalBeaconQueryResult>> beaconRequests = beaconViewTokens.stream().map(viewToken -> {
+            final Mono<BeaconQueryResult> beaconQueryResponse = beaconQuery(beaconRequest, viewToken);
+            final Mono<BeaconInfo> beaconInfoResponse = beaconInfo();
+            return Flux.zip(beaconInfoResponse, beaconQueryResponse, this::formatBeaconServerPayload);
+        });
 
-        return Flux.merge(beaconRequests);
+        return beaconRequests.reduce(Flux.empty(), Flux::merge);
+    }
+
+    private Stream<? extends ViewToken> processResourceBeacons(String resourceId, String realm, String damToken, Map.Entry<String, DamView> entry) {
+        String viewId = entry.getKey();
+        DamView view = entry.getValue();
+        Map<String, Map<String, Object>> interfaces = view.getInterfaces();
+        Map<String, Object> beaconInterface = interfaces.get("http:beacon");
+        if (beaconInterface != null) {
+            log.debug("Found beacon interface in view [{}/{}]", resourceId, viewId);
+            final Optional<String> foundUri = getFirstUri(beaconInterface);
+            return foundUri.map(uri -> new ViewToken(viewId,
+                                                     uri,
+                                                     damClient.getAccessTokenForView(
+                                                             damToken,
+                                                             realm,
+                                                             resourceId,
+                                                             viewId).getToken()))
+                           .map(Stream::of)
+                           .orElse(Stream.empty());
+        } else {
+            log.debug("No beacon interface found in view [{}/{}]", resourceId, viewId);
+            return Stream.of();
+        }
+    }
+
+    private Optional<String> getFirstUri(Map<String, Object> beaconInterface) {
+        final Object maybeIterableThing = beaconInterface.get("uri");
+        return Optional.ofNullable(maybeIterableThing)
+                       .filter(Iterable.class::isInstance)
+                       .map(Iterable.class::cast)
+                       .map(Iterable::iterator)
+                       .filter(Iterator::hasNext)
+                       .map(Iterator::next)
+                       .map(Object::toString);
+    }
+
+    private Mono<BeaconInfo> beaconInfo() {
+        return WebClient.create()
+                        .get()
+                        .uri("https://beacon.cafevariome.org/")
+                        .exchange()
+                        .flatMap(clientResponse -> clientResponse.bodyToMono(
+                                                                             BeaconInfo.class));
+    }
+
+    private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewToken viewToken) {
+        return WebClient.create()
+                        .get()
+                        .uri(format(
+                                BEACON_QUERY_TEMPLATE,
+                                viewToken.getUrl(),
+                                beaconRequest.getAssemblyId(),
+                                beaconRequest.getReferenceName(),
+                                beaconRequest.getStart(),
+                                beaconRequest.getReferenceBases(),
+                                beaconRequest.getAlternateBases()))
+                        .header("Authorization",
+                                "Bearer " + viewToken.getToken())
+                        .exchange()
+                        .flatMap(clientResponse -> clientResponse.bodyToMono(
+                                BeaconQueryResult.class));
     }
 
     private ExternalBeaconQueryResult formatBeaconServerPayload(BeaconInfo infoResponse, BeaconQueryResult queryResponse) {

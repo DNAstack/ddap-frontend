@@ -1,0 +1,402 @@
+{
+  "version": "v0",
+  "revision": "1",
+  "commitTime": 1544824316,
+  "trustedPassportIssuers": {
+    "dbGaP": {
+      "name": "dbGaP",
+      "issuer": "https://dbgap.nlm.nih.gov/aa",
+      "translateUsing": "dbgap"
+    },
+    "elixir": {
+      "name": "elixir",
+      "issuer": "https://login.elixir-czech.org/oidc/",
+      "translateUsing": "elixir"
+    },
+    "playgroundIC": {
+      "name": "playgroundIC",
+      "issuer": "https://ic-dot-craigv-codelab.appspot.com/oidc"
+    }
+  },
+  "trustedClaims": {
+    "dbgap": {
+      "name": "dbgap",
+      "source": "https://dbgap.nlm.nih.gov",
+      "claims": [
+        "^.*"
+      ]
+    },
+    "elixir": {
+      "name": "elixir",
+      "source": "https://ga4gh.elixir-czech.org/claims",
+      "claims": [
+        "ga4gh.BonaFide",
+        "^ga4gh.*"
+      ]
+    },
+    "nci": {
+      "name": "nci",
+      "source": "https://nci.nih.org",
+      "claims": [
+        "ga4gh.AffiliationAndRole"
+      ]
+    },
+    "ustanford": {
+      "name": "ustanford",
+      "source": "https://ga4gh.stanford.edu/claims",
+      "claims": [
+        "ga4gh.BonaFide"
+      ]
+    }
+  },
+  "rules": {
+    "GRU": {
+      "name": "GRU",
+      "allow": {
+        "dataUse": "DUO:0000005"
+      }
+    },
+    "bona_fide": {
+      "name": "bona_fide",
+      "allow": {
+        "anyTrue": [
+          {
+            "claim": "ga4gh.BonaFide",
+            "value": "https://www.nature.com/articles/s41431-018-0219-y",
+            "from": [
+              "dbgap",
+              "elixir"
+            ]
+          },
+          {
+            "claim": "ga4gh.AcceptedTermsAndPolicies",
+            "value": "https://librarycard.broadinstitute.org/v1"
+          }
+        ]
+      },
+      "disallow": {
+        "claim": "nih.Blacklisted",
+        "value": "true"
+      }
+    },
+    "dac-1000-genomes": {
+      "name": "dac-1000-genomes",
+      "allow": {
+        "claim": "ga4gh.ControlledAccessGrants",
+        "value": "https://dac.nih.gov/datasets/phys000710",
+        "from": [
+          "dbgap"
+        ]
+      }
+    },
+    "ethics": {
+      "name": "ethics",
+      "allow": {
+        "claim": "ga4gh.AcceptedTermsAndPolicies",
+        "value": "https://www.nature.com/articles/s41431-018-0219-y"
+      }
+    }
+  },
+  "resources": {
+    "thousand-genomes": {
+      "name": "thousand-genomes",
+      "state": "ACTIVE",
+      "views": {
+        "discovery-access": {
+          "name": "discovery-access",
+          "action": "token:jwt:gatekeeper",
+          "contentTypes": [
+            "application/bam"
+          ],
+          "grants": [
+            {
+              "name": "beacon",
+              "aud": "https://ga4gh-apis-beacon.dnastack.com",
+              "roles": {
+                "discovery": {
+                  "actionRoles": [
+                    "projects/ga4gh-apis/roles/BeaconUser"
+                  ],
+                  "actionScopes": [
+                    "registered",
+                    "controlled"
+                  ],
+                  "actionPolicy": [
+                    "dac-1000-genomes"
+                  ],
+                  "permissionType": [
+                    "meta"
+                  ],
+                  "ui": {
+                    "description": "Query genome data and receive metadata results",
+                    "label": "Discovery Beacon Search with Metadata"
+                  }
+                }
+              },
+              "items": [
+                "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
+              ]
+            }
+          ],
+          "defaultRole": "discovery",
+          "ui": {
+            "label": "Beacon Discovery Access"
+          }
+        },
+        "full-read-access": {
+          "name": "full-read-access",
+          "action": "token:gcp:sa",
+          "contentTypes": [
+            "application/bam"
+          ],
+          "grants": [
+            {
+              "name": "gcs",
+              "roles": {
+                "viewer": {
+                  "actionRoles": [
+                    "projects/ga4gh-apis/roles/BeaconUser"
+                  ],
+                  "actionScopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ],
+                  "actionPolicy": [
+                    "dac-1000-genomes"
+                  ],
+                  "permissionType": [
+                    "read"
+                  ],
+                  "ui": {
+                    "description": "List and read files",
+                    "label": "File Viewer"
+                  }
+                }
+              },
+              "items": [
+                "projects/ga4gh-apis/buckets/ga4gh-apis-controlled-access"
+              ]
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "Full File Read Access"
+          }
+        }
+      },
+      "maxTokenTtl": "7d",
+      "ui": {
+        "applyUrl": "http://apply.1000-genomes.org",
+        "description": "Demo Controlled Access of 1000 Genomes",
+        "imageUrl": "https://www.genengnews.com/wp-content/uploads/2018/08/Oct1_2015_ErnestoDelAguilaIII_1000GenomesProject9614313724-1.jpg",
+        "infoUrl": "http://info.1000-genomes.org",
+        "label": "1000 Genomes",
+        "troubleshootUrl": "http://troubleshoot.1000-genomes.org"
+      }
+    }
+  },
+  "clients": {
+    "billing_test": {
+      "name": "billing_test",
+      "clientId": "135d6a28-5508-493d-a45d-93f4fe02211b"
+    },
+    "craig_test": {
+      "name": "craig_test",
+      "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c"
+    },
+    "dnastack_fe": {
+      "name": "dnastack_fe",
+      "clientId": "b1aed96d-6367-4313-87a1-65eda4962a76"
+    },
+    "test_client": {
+      "name": "test_client",
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed64"
+    },
+    "test_page": {
+      "name": "test_page",
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed65"
+    }
+  },
+  "accessGrants": {
+    "beacon": {
+      "name": "beacon",
+      "action": "token:jwt:gatekeeper",
+      "inheritActionPolicy": [],
+      "roles": {
+        "basic_discovery": {
+          "actionScopes": [
+            "registered"
+          ],
+          "permissionType": [
+            "exists"
+          ],
+          "ui": {
+            "description": "Query genome data and return 'found' or 'not found' status",
+            "label": "Discovery Beacon Search without Metadata"
+          }
+        },
+        "discovery": {
+          "actionScopes": [
+            "registered",
+            "controlled"
+          ],
+          "permissionType": [
+            "meta"
+          ],
+          "ui": {
+            "description": "Query genome data and receive metadata results",
+            "label": "Discovery Beacon Search with Metadata"
+          }
+        }
+      },
+      "interfaces": {
+        "http:beacon": "${URL}"
+      }
+    },
+    "bigquery": {
+      "name": "bigquery",
+      "action": "token:gcp:sa",
+      "service": "Google BigQuery",
+      "inheritActionScopes": [
+        "https://www.googleapis.com/auth/cloud-platform"
+      ],
+      "roles": {
+        "editor": {
+          "actionRoles": [
+            "roles/bigquery.dataEditor"
+          ],
+          "permissionType": [
+            "read",
+            "write"
+          ],
+          "ui": {
+            "description": "Query and modify tables and table metadata",
+            "label": "BigQuery Editor"
+          }
+        },
+        "viewer": {
+          "actionRoles": [
+            "roles/bigquery.dataViewer"
+          ],
+          "permissionType": [
+            "read"
+          ],
+          "ui": {
+            "description": "Query tables and view table metadata",
+            "label": "BigQuery Viewer"
+          }
+        }
+      },
+      "interfaces": {
+        "http:gcp:bq": "https://www.googleapis.com/bigquery/v1/projects/${PROJECT-ID}"
+      }
+    },
+    "gcs": {
+      "name": "gcs",
+      "action": "token:gcp:sa",
+      "service": "Google Cloud Storage",
+      "inheritActionScopes": [
+        "https://www.googleapis.com/auth/cloud-platform"
+      ],
+      "roles": {
+        "creator": {
+          "actionRoles": [
+            "roles/storage.objectCreator"
+          ],
+          "permissionType": [
+            "write"
+          ],
+          "ui": {
+            "description": "Write files (without read access)",
+            "label": "File Creator"
+          }
+        },
+        "editor": {
+          "actionRoles": [
+            "roles/storage.objectViewer",
+            "roles/storage.objectCreator"
+          ],
+          "permissionType": [
+            "read",
+            "write"
+          ],
+          "ui": {
+            "description": "Read and write files plus manipulate file metadata",
+            "label": "File Editor"
+          }
+        },
+        "viewer": {
+          "actionRoles": [
+            "roles/storage.objectViewer"
+          ],
+          "permissionType": [
+            "read"
+          ],
+          "ui": {
+            "description": "List and read files",
+            "label": "File Viewer"
+          }
+        }
+      },
+      "interfaces": {
+        "gcp:gs": "gs://${BUCKET-ID}",
+        "http:gcp:gs": "https://www.googleapis.com/storage/v1/b/${BUCKET-ID}"
+      }
+    }
+  },
+  "claimDefinitions": {
+    "ga4gh.AcceptedTermsAndPolicies": {
+      "name": "ga4gh.AcceptedTermsAndPolicies"
+    },
+    "ga4gh.AffiliationAndRole": {
+      "name": "ga4gh.AffiliationAndRole"
+    },
+    "ga4gh.BonaFide": {
+      "name": "ga4gh.BonaFide"
+    },
+    "ga4gh.ControlledAccessGrants": {
+      "name": "ga4gh.ControlledAccessGrants"
+    },
+    "nih.Blacklisted": {
+      "name": "nih.Blacklisted"
+    }
+  },
+  "testPersonas": {
+    "dr_joe_era_commons": {
+      "name": "dr_joe_era_commons",
+      "idToken": {
+        "standardClaims": {
+          "iss": "https://login.nih.org/oidc/",
+          "sub": "dr_joe@era.nih.gov"
+        },
+        "ga4ghClaims": [
+          {
+            "claimName": "ga4gh.ControlledAccessGrants",
+            "source": "https://dbgap.nlm.nih.gov/aa",
+            "value": "https://dac.nih.gov/datasets/phys000710",
+            "iat": 1550120402,
+            "exp": 2181272402,
+            "by": "dac"
+          }
+        ]
+      },
+      "resources": {
+        "thousand-genomes": {
+          "access": [
+            "discovery-access/discovery",
+            "full-read-access/viewer"
+          ]
+        }
+      },
+      "state": "ACTIVE"
+    }
+  },
+  "options": {
+    "regexpConditions": true,
+    "configReadOnly": true,
+    "gcp": {
+      "managedKeysMinTtl": "7d",
+      "managedKeysPerAccount": 10,
+      "serviceAccountProject": "craigv-codelab"
+    }
+  }
+}
