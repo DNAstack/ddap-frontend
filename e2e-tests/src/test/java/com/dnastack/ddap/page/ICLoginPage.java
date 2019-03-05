@@ -9,7 +9,7 @@ public class ICLoginPage implements HasNavBar {
     @Getter
     private WebDriver driver;
 
-    private final By loginButton = By.xpath("//a[descendant-or-self::*[contains(text(), 'nci_researcher')]]");
+    private final By loginButton = By.xpath("//a[contains(@href, 'nci_researcher')]");
 
     public ICLoginPage(WebDriver driver) {
         this.driver = driver;
