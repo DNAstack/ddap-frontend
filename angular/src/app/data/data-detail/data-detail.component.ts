@@ -73,7 +73,7 @@ export class DataDetailComponent implements OnInit {
 
     const view = this.resource.views[viewName];
     // tslint:disable-next-line
-    const viewAccessUrl = view!.interfaces['http:gcp:gs'];
+    const viewAccessUrl = view!.interfaces['http:gcp:gs']!.uri![0];
     if (viewAccessUrl) {
       this.resource.views[viewName].url = `${viewAccessUrl}/o?access_token=${token}`;
     }
