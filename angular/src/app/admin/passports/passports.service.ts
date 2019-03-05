@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { RealmService } from '../../shared/realm.service';
+import { RealmService } from '../../realm.service';
 import { ConfigEntityService } from '../shared/config-entity.service';
 
 @Injectable({
@@ -9,8 +9,9 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 })
 export class PassportService extends ConfigEntityService {
 
-  constructor(protected http: HttpClient, protected realmService: RealmService) {
-    super(http, 'trustedPassportIssuers', realmService);
+  constructor(http: HttpClient,
+              realmService: RealmService) {
+    super(http, realmService, 'trustedPassportIssuers');
   }
 
 }

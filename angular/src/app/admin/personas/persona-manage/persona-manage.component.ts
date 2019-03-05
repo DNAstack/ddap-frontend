@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { flatMap } from 'rxjs/operators';
 
-import { RealmService } from '../../../shared/realm.service';
 import { PersonaService } from '../personas.service';
 
 @Component({
@@ -14,11 +12,11 @@ export class PersonaManageComponent {
 
   persona: any = {};
 
-  constructor(private personaService: PersonaService, private router: Router, public realmService: RealmService) { }
+  constructor(private personaService: PersonaService,
+              private router: Router) { }
 
   onSubmit(value: any) {
     this.personaService.save(JSON.parse(value.body))
-      .pipe(flatMap(_ => this.realmService.underRealm('/personas')))
       .subscribe(path => this.router.navigate([path]));
   }
 }

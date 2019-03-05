@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { flatMap } from 'rxjs/operators';
 
-import { RealmService } from '../../../shared/realm.service';
 import { ClaimService } from '../claims.service';
 
 @Component({
@@ -12,13 +10,12 @@ import { ClaimService } from '../claims.service';
 })
 export class ClaimManageComponent {
 
-  claim: any = {};
-
-  constructor(private claimService: ClaimService, private router: Router, public realmService: RealmService) { }
+  constructor(private claimService: ClaimService,
+              private router: Router) {
+  }
 
   onSubmit(value: any) {
     this.claimService.save(JSON.parse(value.body))
-      .pipe(flatMap(_ => this.realmService.underRealm('/claims')))
       .subscribe(path => this.router.navigate([path]));
   }
 }

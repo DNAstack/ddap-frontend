@@ -21,8 +21,11 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <json-editor [options]="editorOptions" [data]="entity"></json-editor>
+        <pre>
+          {{ configName | json }} {{ entity.name | json }}
+        </pre>
         <mat-action-row>
-          <button mat-button [routerLink]="realmService.underRealm('/' + configName + '/' + entity.name) | async">View</button>
+          <button mat-button [routerLink]="[entity.name]">View</button>
         </mat-action-row>
       </mat-expansion-panel>
     </ng-container>
