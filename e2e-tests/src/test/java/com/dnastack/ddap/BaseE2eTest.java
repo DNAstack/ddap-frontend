@@ -1,11 +1,14 @@
 package com.dnastack.ddap;
 
 import io.restassured.RestAssured;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.cookie.BasicClientCookie;
@@ -13,6 +16,9 @@ import org.apache.http.util.EntityUtils;
 import org.junit.Before;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -26,6 +32,7 @@ public class BaseE2eTest {
     static final String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
     static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
     static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
+    static final String DDAP_TEST_REALM = requiredEnv("E2E_TEST_REALM");
 
     @Before
     public void setUp() {
@@ -48,6 +55,34 @@ public class BaseE2eTest {
         return val;
     }
 
+    protected void setupRealmConfig(String personaName, String config) throws IOException {
+        final String modificationPayload = format("{ \"item\": %s }", config);
+        final CookieStore cookieStore = performPersonaLogin("dr_joe_era_commons");
+
+        final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
+        HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config?persona=dr_joe_era_commons", DDAP_BASE_URL, DDAP_TEST_REALM, personaName));
+        request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
+        request.setEntity(new StringEntity(modificationPayload));
+
+        final HttpResponse response = httpclient.execute(request);
+
+        assertThat("Unable to set realm config. Response:\n" + EntityUtils.toString(response.getEntity()),
+                   response.getStatusLine().getStatusCode(),
+                   allOf(greaterThanOrEqualTo(200), lessThan(300)));
+    }
+
+    protected String loadTemplate(String resourcePath) {
+        final String resourceTemplate;
+        try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
+            final StringWriter writer = new StringWriter();
+            IOUtils.copy(is, writer, Charset.forName("UTF-8"));
+            resourceTemplate = writer.toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to load test resource template.", e);
+        }
+        return resourceTemplate;
+    }
+
     protected String fetchRealPersonaIcToken(String personaName) throws IOException {
         return fetchRealPersonaToken(personaName, "ic_token");
     }
@@ -57,15 +92,7 @@ public class BaseE2eTest {
     }
 
     private String fetchRealPersonaToken(String personaName, String tokenCookieName) throws IOException {
-        final CookieStore cookieStore = new BasicCookieStore();
-        final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpGet request = new HttpGet(format("%s/api/v1alpha/dnastack/identity/login?persona=%s", DDAP_BASE_URL, personaName));
-        request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
-
-        HttpResponse response = httpclient.execute(request);
-
-        String responseBody = EntityUtils.toString(response.getEntity());
-        assertThat("Response body: " + responseBody, response.getStatusLine().getStatusCode(), is(200));
+        final CookieStore cookieStore = performPersonaLogin(personaName);
 
         BasicClientCookie icTokenCookie = (BasicClientCookie) cookieStore.getCookies().stream()
                 .filter(c -> tokenCookieName.equals(c.getName()))
@@ -85,6 +112,20 @@ public class BaseE2eTest {
         assertThat(icTokenCookie.getAttribute("httponly"), nullValue());
 
         return icTokenCookie.getValue();
+    }
+
+    private CookieStore performPersonaLogin(String personaName) throws IOException {
+        final CookieStore cookieStore = new BasicCookieStore();
+        final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
+        HttpGet request = new HttpGet(format("%s/api/v1alpha/%s/identity/login?persona=%s", DDAP_BASE_URL, DDAP_TEST_REALM, personaName));
+        request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
+
+        HttpResponse response = httpclient.execute(request);
+
+        String responseBody = EntityUtils.toString(response.getEntity());
+        assertThat("Response body: " + responseBody, response.getStatusLine().getStatusCode(), is(200));
+
+        return cookieStore;
     }
 
     protected String ddapBasicAuthHeader() {

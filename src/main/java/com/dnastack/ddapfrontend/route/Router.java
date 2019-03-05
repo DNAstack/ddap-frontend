@@ -212,8 +212,9 @@ public class Router {
     }
 
     private Mono<ServerResponse> handlePersonaLogin(ServerRequest request, String personaName) {
-        final UriTemplate template = new UriTemplate("{idpBaseUrl}/identity/v1alpha/{realm}/persona/{persona}" +
+        final UriTemplate template = new UriTemplate("{idpBaseUrl}/identity/v1alpha/{realm}/personas/{persona}" +
                                                              "?client_id={clientId}" +
+                                                             "&client_secret={clientSecret}" +
                                                              "&redirect_uri={redirectUri}" +
                                                              "&scope=ga4gh+account_admin");
         final Map<String, Object> variables = new HashMap<>();
@@ -221,6 +222,7 @@ public class Router {
         variables.put("persona", personaName);
         variables.put("realm", request.pathVariable("realm"));
         variables.put("clientId", idpClientId);
+        variables.put("clientSecret", idpClientSecret);
         variables.put("redirectUri", getRegisteredRedirectUri(request, request.pathVariable("realm")));
 
         final String personaLoginUrl = template.expand(variables).toString();
