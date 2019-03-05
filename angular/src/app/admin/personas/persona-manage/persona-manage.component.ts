@@ -14,7 +14,7 @@ export class PersonaManageComponent {
 
   persona: any = {};
 
-  constructor(private personaService: PersonaService, private router: Router, private realmService: RealmService) { }
+  constructor(private personaService: PersonaService, private router: Router, public realmService: RealmService) { }
 
   onSubmit(value: any) {
     this.personaService.save(JSON.parse(value.body))

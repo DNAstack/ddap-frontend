@@ -14,7 +14,7 @@ export class ClaimManageComponent {
 
   claim: any = {};
 
-  constructor(private claimService: ClaimService, private router: Router, private realmService: RealmService) { }
+  constructor(private claimService: ClaimService, private router: Router, public realmService: RealmService) { }
 
   onSubmit(value: any) {
     this.claimService.save(JSON.parse(value.body))

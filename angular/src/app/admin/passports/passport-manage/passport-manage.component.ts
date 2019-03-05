@@ -14,7 +14,7 @@ export class PassportManageComponent {
 
   passport: any = {};
 
-  constructor(private passportService: PassportService, private router: Router, private realmService: RealmService) { }
+  constructor(private passportService: PassportService, private router: Router, public realmService: RealmService) { }
 
   onSubmit(value: any) {
     this.passportService.save(JSON.parse(value.body))

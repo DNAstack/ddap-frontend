@@ -14,7 +14,7 @@ export class GrantManageComponent {
 
   grant: any = {};
 
-  constructor(private grantService: GrantService, private router: Router, private realmService: RealmService) { }
+  constructor(private grantService: GrantService, private router: Router, public realmService: RealmService) { }
 
   onSubmit(value: any) {
     this.grantService.save(JSON.parse(value.body))

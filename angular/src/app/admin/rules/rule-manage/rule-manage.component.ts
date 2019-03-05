@@ -14,7 +14,7 @@ export class RuleManageComponent {
 
   rule: any = {};
 
-  constructor(private ruleService: RuleService, private router: Router, private realmService: RealmService) { }
+  constructor(private ruleService: RuleService, private router: Router, public realmService: RealmService) { }
 
   onSubmit(value: any) {
     this.ruleService.save(JSON.parse(value.body))

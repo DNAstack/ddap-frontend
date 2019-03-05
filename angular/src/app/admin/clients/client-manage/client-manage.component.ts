@@ -14,7 +14,7 @@ export class ClientManageComponent {
 
   client: any = {};
 
-  constructor(private clientService: ClientService, private router: Router, private realmService: RealmService) { }
+  constructor(private clientService: ClientService, private router: Router, public realmService: RealmService) { }
 
   onSubmit(value: any) {
     this.clientService.save(JSON.parse(value.body))

@@ -14,7 +14,7 @@ export class DefinitionManageComponent {
 
   definition: any = {};
 
-  constructor(private definitionService: DefinitionService, private router: Router, private realmService: RealmService) { }
+  constructor(private definitionService: DefinitionService, private router: Router, public realmService: RealmService) { }
 
   onSubmit(value: any) {
     this.definitionService.save(JSON.parse(value.body))

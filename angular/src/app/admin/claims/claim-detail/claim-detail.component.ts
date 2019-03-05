@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { flatMap, pluck } from 'rxjs/operators';
 
+import { RealmService } from '../../../shared/realm.service';
 import { ClaimService } from '../claims.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class ClaimDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    public claimService: ClaimService
+    public claimService: ClaimService,
+    public realmService: RealmService
   ) {}
 
   ngOnInit() {
