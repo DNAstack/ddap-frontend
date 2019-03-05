@@ -21,7 +21,7 @@
         <mat-icon class="icon icon-collections"></mat-icon>
         <h4 mat-line>My collections</h4>
       </mat-list-item>
-      <mat-list-item  [routerLink]="['/myidentity']"
+      <mat-list-item  [routerLink]="realmService.underRealm('/myidentity') | async"
                       [routerLinkActive]="['active-nav-link']"
                       data-se="nav-identity">
         <mat-icon class="icon icon-identity"></mat-icon>

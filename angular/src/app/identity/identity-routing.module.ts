@@ -5,7 +5,7 @@ import { IdentityComponent } from './identity.component';
 
 const routes: Routes = [
   // TODO https://dnastack.atlassian.net/browse/DISCO-2026
-  {path: 'myidentity', component: IdentityComponent},
+  {path: ':realm/myidentity', component: IdentityComponent},
 ];
 
 @NgModule({
