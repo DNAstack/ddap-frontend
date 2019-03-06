@@ -21,8 +21,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
  */
 public class BeaconApiE2eTest extends BaseE2eTest {
 
-    /* Ignoring until resource problem is fixed */
-    @Ignore
     @Test
     public void beaconApiTest() throws IOException {
 

@@ -23,8 +23,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
  */
 public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
 
-    /* Ignoring until resource problem is fixed */
-    @Ignore
     @Test
     public void beaconApiTest() throws IOException {
 
@@ -40,12 +38,12 @@ public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
 
         Map<String, Object> resource1, resource2;
         try (InputStream in = this.getClass().getClassLoader()
-                .getResourceAsStream("/com/dnastack/ddap/resource.json")) {
+                .getResourceAsStream("com/dnastack/ddap/resource.json")) {
             resource1 = objectMapper.readValue(in, Map.class);
         }
 
         try (InputStream in = this.getClass().getClassLoader()
-                .getResourceAsStream("/com/dnastack/ddap/resource2.json")) {
+                .getResourceAsStream("com/dnastack/ddap/resource2.json")) {
             resource2 = objectMapper.readValue(in, Map.class);
         }
 
