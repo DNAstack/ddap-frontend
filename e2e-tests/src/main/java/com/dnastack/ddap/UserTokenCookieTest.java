@@ -103,7 +103,7 @@ public class UserTokenCookieTest extends BaseE2eTest {
     @Test
     public void shouldBeAbleToAccessICWithAppropriateCookie() throws IOException {
         // TODO [DISCO-2022] this test should create its own realm and populate it with the needed personas!
-        String validPersonaToken = fetchRealPersonaIcToken("dr_joe_era_commons");
+        String validPersonaToken = fetchRealPersonaIcToken("nci_researcher");
 
         // @formatter:off
         given()
