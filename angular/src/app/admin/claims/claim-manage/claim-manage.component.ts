@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ClaimService } from '../claims.service';
 
@@ -11,11 +11,13 @@ import { ClaimService } from '../claims.service';
 export class ClaimManageComponent {
 
   constructor(private claimService: ClaimService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
+
   }
 
   onSubmit(value: any) {
     this.claimService.save(JSON.parse(value.body))
-      .subscribe(path => this.router.navigate([path]));
+      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }
 }

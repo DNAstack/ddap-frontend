@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { PassportService } from '../passports.service';
 
@@ -11,10 +11,13 @@ import { PassportService } from '../passports.service';
 export class PassportManageComponent {
 
   constructor(private passportService: PassportService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute) {
+
+  }
 
   onSubmit(value: any) {
     this.passportService.save(JSON.parse(value.body))
-      .subscribe(path => this.router.navigate([path]));
+      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }
 }

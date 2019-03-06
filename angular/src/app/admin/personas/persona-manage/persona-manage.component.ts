@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { PersonaService } from '../personas.service';
 
@@ -10,13 +10,14 @@ import { PersonaService } from '../personas.service';
 })
 export class PersonaManageComponent {
 
-  persona: any = {};
-
   constructor(private personaService: PersonaService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute) {
+
+  }
 
   onSubmit(value: any) {
     this.personaService.save(JSON.parse(value.body))
-      .subscribe(path => this.router.navigate([path]));
+      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }
 }

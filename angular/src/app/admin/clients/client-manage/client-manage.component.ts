@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ClientService } from '../clients.service';
 
@@ -11,10 +11,13 @@ import { ClientService } from '../clients.service';
 export class ClientManageComponent {
 
   constructor(private clientService: ClientService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute) {
+
+  }
 
   onSubmit(value: any) {
     this.clientService.save(JSON.parse(value.body))
-      .subscribe(path => this.router.navigate([path]));
+      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }
 }
