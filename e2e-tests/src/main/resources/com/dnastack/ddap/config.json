@@ -2,30 +2,30 @@
     "version": "v0",
     "trustedPassportIssuers": {
       "dbGaP": {
-        "name": "dbGaP",
+        
         "issuer": "https://dbgap.nlm.nih.gov/aa",
         "translateUsing": "dbgap"
       },
       "elixir": {
-        "name": "elixir",
+        
         "issuer": "https://login.elixir-czech.org/oidc/",
         "translateUsing": "elixir"
       },
       "playgroundIC": {
-        "name": "playgroundIC",
+        
         "issuer": "https://ic-dot-craigv-codelab.appspot.com/oidc"
       }
     },
     "trustedClaims": {
       "dbgap": {
-        "name": "dbgap",
+        
         "source": "https://dbgap.nlm.nih.gov",
         "claims": [
           "^.*"
         ]
       },
       "elixir": {
-        "name": "elixir",
+        
         "source": "https://ga4gh.elixir-czech.org/claims",
         "claims": [
           "ga4gh.BonaFide",
@@ -33,29 +33,29 @@
         ]
       },
       "nci": {
-        "name": "nci",
+        
         "source": "https://nci.nih.org",
         "claims": [
           "ga4gh.AffiliationAndRole"
         ]
       },
       "ustanford": {
-        "name": "ustanford",
+        
         "source": "https://ga4gh.stanford.edu/claims",
         "claims": [
           "ga4gh.BonaFide"
         ]
       }
     },
-    "rules": {
+    "policies": {
       "GRU": {
-        "name": "GRU",
+        
         "allow": {
           "dataUse": "DUO:0000005"
         }
       },
       "bona_fide": {
-        "name": "bona_fide",
+        
         "allow": {
           "anyTrue": [
             {
@@ -78,7 +78,7 @@
         }
       },
       "dac-1000-genomes": {
-        "name": "dac-1000-genomes",
+        
         "allow": {
           "claim": "ga4gh.ControlledAccessGrants",
           "value": "https://dac.nih.gov/datasets/phys000710",
@@ -88,7 +88,7 @@
         }
       },
       "ethics": {
-        "name": "ethics",
+        
         "allow": {
           "claim": "ga4gh.AcceptedTermsAndPolicies",
           "value": "https://www.nature.com/articles/s41431-018-0219-y"
@@ -97,11 +97,11 @@
     },
     "resources": {
       "thousand-genomes": {
-        "name": "thousand-genomes",
+        
         "state": "ACTIVE",
         "views": {
           "discovery-access": {
-            "name": "discovery-access",
+            
             "target": "token:jwt:gatekeeper",
             "version": "Phase 3",
             "topic": "variants",
@@ -113,7 +113,7 @@
             ],
             "grants": [
               {
-                "name": "beacon",
+                "accessGrant": "beacon",
                 "aud": "https://ga4gh-apis-beacon.dnastack.com",
                 "roles": {
                   "discovery": {
@@ -121,7 +121,7 @@
                       "registered",
                       "controlled"
                     ],
-                    "targetPolicy": [
+                    "policies": [
                       "bona_fide",
                       "ethics"
                     ],
@@ -145,7 +145,7 @@
             }
           },
           "full-read-access": {
-            "name": "full-read-access",
+            
             "target": "token:gcp:sa",
             "version": "Phase 3",
             "topic": "variants",
@@ -157,7 +157,7 @@
             ],
             "grants": [
               {
-                "name": "gcs",
+                "accessGrant": "gcs",
                 "roles": {
                   "viewer": {
                     "targetRoles": [
@@ -166,7 +166,7 @@
                     "targetScopes": [
                       "https://www.googleapis.com/auth/cloud-platform"
                     ],
-                    "targetPolicy": [
+                    "policies": [
                       "dac-1000-genomes"
                     ],
                     "damRoleCategories": [
@@ -202,31 +202,31 @@
     },
     "clients": {
       "billing_test": {
-        "name": "billing_test",
+        
         "clientId": "135d6a28-5508-493d-a45d-93f4fe02211b"
       },
       "craig_test": {
-        "name": "craig_test",
+        
         "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c"
       },
       "dnastack_fe": {
-        "name": "dnastack_fe",
+        
         "clientId": "b1aed96d-6367-4313-87a1-65eda4962a76"
       },
       "test_client": {
-        "name": "test_client",
+        
         "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed64"
       },
       "test_page": {
-        "name": "test_page",
+        
         "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed65"
       }
     },
     "accessGrants": {
       "beacon": {
-        "name": "beacon",
+        
         "targetAdapter": "token:jwt:gatekeeper",
-        "inheritTargetPolicy": [
+        "inheritPolicies": [
           "bona_fide",
           "ethics"
         ],
@@ -265,7 +265,7 @@
         }
       },
       "bigquery": {
-        "name": "bigquery",
+        
         "targetAdapter": "token:gcp:sa",
         "inheritTargetScopes": [
           "https://www.googleapis.com/auth/cloud-platform"
@@ -305,7 +305,7 @@
         }
       },
       "gcs": {
-        "name": "gcs",
+        
         "targetAdapter": "token:gcp:sa",
         "inheritTargetScopes": [
           "https://www.googleapis.com/auth/cloud-platform"
@@ -361,24 +361,34 @@
     },
     "claimDefinitions": {
       "ga4gh.AcceptedTermsAndPolicies": {
-        "name": "ga4gh.AcceptedTermsAndPolicies"
+        "ui": {
+          "label": "Accepted Terms and Policies"
+        }
       },
       "ga4gh.AffiliationAndRole": {
-        "name": "ga4gh.AffiliationAndRole"
+        "ui": {
+          "label": "Affiliation and Role"
+        }
       },
       "ga4gh.BonaFide": {
-        "name": "ga4gh.BonaFide"
+        "ui": {
+          "label": "Bona Fide"
+        }
       },
       "ga4gh.ControlledAccessGrants": {
-        "name": "ga4gh.ControlledAccessGrants"
+        "ui": {
+          "label": "Controlled Access Grants"
+        }
       },
       "nih.Blacklisted": {
-        "name": "nih.Blacklisted"
+        "ui": {
+          "label": "NIH Blacklisted from Access"
+        }
       }
     },
     "testPersonas": {
       "nci_researcher": {
-        "name": "nci_researcher",
+        
         "idToken": {
           "standardClaims": {
             "iss": "https://login.nih.org/oidc/",
