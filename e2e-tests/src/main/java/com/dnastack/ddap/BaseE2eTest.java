@@ -34,6 +34,7 @@ public class BaseE2eTest {
     static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
     static final String DDAP_TEST_REALM = requiredEnv("E2E_TEST_REALM");
 
+
     @Before
     public void setUp() {
         RestAssured.baseURI = DDAP_BASE_URL;
@@ -57,10 +58,10 @@ public class BaseE2eTest {
 
     protected void setupRealmConfig(String personaName, String config) throws IOException {
         final String modificationPayload = format("{ \"item\": %s }", config);
-        final CookieStore cookieStore = performPersonaLogin("dr_joe_era_commons");
+        final CookieStore cookieStore = performPersonaLogin("nci_researcher");
 
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config?persona=dr_joe_era_commons", DDAP_BASE_URL, DDAP_TEST_REALM, personaName));
+        HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config?persona=nci_researcher", DDAP_BASE_URL, DDAP_TEST_REALM, personaName));
         request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
         request.setEntity(new StringEntity(modificationPayload));
 

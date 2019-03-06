@@ -13,12 +13,12 @@ public class BeaconE2eTest extends BaseE2eTest {
 
     @Before
     public void setupRealm() throws IOException {
-        setupRealmConfig("dr_joe_era_commons", loadTemplate("/com/dnastack/ddap/config.json"));
+        setupRealmConfig("nci_researcher", loadTemplate("/com/dnastack/ddap/config.json"));
     }
 
     @Test
     public void querySingleBeacon() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("dr_joe_era_commons");
+        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher");
 
         // @formatter:off
         given()
