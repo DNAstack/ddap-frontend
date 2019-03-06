@@ -2,6 +2,7 @@ package com.dnastack.ddap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -23,10 +24,15 @@ import static org.hamcrest.CoreMatchers.equalTo;
  */
 public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
 
+    @Before
+    public void setupRealm() throws IOException {
+        setupRealmConfig("nci_researcher", loadTemplate("/com/dnastack/ddap/config.json"));
+    }
+
+    @Ignore
     @Test
     public void beaconApiTest() throws IOException {
 
-        RestAssured.baseURI = requiredEnv("E2E_BASE_URI");
         ObjectMapper objectMapper = new ObjectMapper();
 
         String resourceId1="testResource3";
@@ -60,7 +66,7 @@ public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
             given()
                     .log().method()
                     .log().uri()
-                    .auth().basic("dev", "dev")
+                    .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
                     .body(resourceCreateList.get(counter++))
                     .when()
@@ -77,7 +83,7 @@ public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
                     .log().method()
                     .log().uri()
                     .when()
-                    .auth().basic("dev", "dev")
+                    .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
                     .get("/api/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
                     .then()
@@ -98,7 +104,7 @@ public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
             given()
                     .log().method()
                     .log().uri()
-                    .auth().basic("dev", "dev")
+                    .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
                     .when()
                     .delete("dam/v1alpha/config/resources/" + resourceName)
