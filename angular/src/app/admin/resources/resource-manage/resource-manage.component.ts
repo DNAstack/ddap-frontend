@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 
 import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
@@ -25,7 +25,8 @@ export class ResourceManageComponent implements OnInit {
   errorEditor: JsonEditorComponent;
 
   constructor(public resourceService: ResourceService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
     this.itemEditorOptions = new JsonEditorDefaults();
     this.errorEditorOptions = new JsonEditorDefaults();
     this.itemEditorOptions.mode = 'code';
@@ -38,7 +39,7 @@ export class ResourceManageComponent implements OnInit {
 
   save() {
     this.resourceService.save(this.itemDto).subscribe(path => {
-        this.router.navigate([path]);
+        this.router.navigate(['../..'], { relativeTo: this.route });
       },
       (errorDto) => {
         this.errorDto = errorDto.error;

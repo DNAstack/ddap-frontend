@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { RuleService } from '../rules.service';
 
@@ -11,10 +11,13 @@ import { RuleService } from '../rules.service';
 export class RuleManageComponent {
 
   constructor(private ruleService: RuleService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute) {
+
+  }
 
   onSubmit(value: any) {
     this.ruleService.save(JSON.parse(value.body))
-      .subscribe(path => this.router.navigate([path]));
+      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }
 }

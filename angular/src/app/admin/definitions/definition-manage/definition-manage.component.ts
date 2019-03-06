@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { DefinitionService } from '../definitions.service';
 
@@ -11,10 +11,13 @@ import { DefinitionService } from '../definitions.service';
 export class DefinitionManageComponent {
 
   constructor(private definitionService: DefinitionService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute) {
+
+  }
 
   onSubmit(value: any) {
     this.definitionService.save(JSON.parse(value.body))
-      .subscribe(path => this.router.navigate([path]));
+      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }
 }
