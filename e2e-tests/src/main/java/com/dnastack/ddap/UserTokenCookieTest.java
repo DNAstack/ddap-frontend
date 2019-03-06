@@ -30,13 +30,17 @@ public class UserTokenCookieTest extends BaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", expiredUserTokenCookie)
         .when()
-            .get(format("/dam/v1alpha/%s/resources/resource-name/views/view-name", DDAP_TEST_REALM))
+            .get(damViaDdap("/resources/resource-name/views/view-name"))
         .then()
             .log().body()
             .log().ifValidationFails()
             .statusCode(isOneOf(401, 404))
             .cookie("dam_token", "expired");
         // @formatter:on
+    }
+
+    private String damViaDdap(String path) {
+        return format("/dam/v1alpha/%s%s", DDAP_TEST_REALM, path);
     }
 
     @Test
@@ -51,7 +55,7 @@ public class UserTokenCookieTest extends BaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", unexpiredUserTokenCookie)
         .when()
-            .get(format("/dam/v1alpha/%s/resources/resource-name/views/view-name", DDAP_TEST_REALM))
+            .get(damViaDdap("/resources/resource-name/views/view-name"))
         .then()
             .log().body()
             .log().ifValidationFails()
@@ -71,7 +75,7 @@ public class UserTokenCookieTest extends BaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", expiredUserTokenCookie)
         .when()
-            .get(format("/dam/v1alpha/%s/resources/resource-name/views/view-name", DDAP_TEST_REALM))
+            .get(damViaDdap("/resources/resource-name/views/view-name"))
         .then()
             .log().body()
             .log().ifValidationFails()
@@ -88,7 +92,7 @@ public class UserTokenCookieTest extends BaseE2eTest {
             .log().uri()
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
         .when()
-            .get(format("/dam/v1alpha/%s/resources/resource-name/views/view-name", DDAP_TEST_REALM))
+            .get(damViaDdap("/resources/resource-name/views/view-name"))
         .then()
             .log().body()
             .log().ifValidationFails()
@@ -109,12 +113,16 @@ public class UserTokenCookieTest extends BaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("ic_token", validPersonaToken)
         .when()
-            .get(format("/identity/v1alpha/%s/accounts/-", DDAP_TEST_REALM))
+            .get(icViaDdap("/accounts/-"))
         .then()
             .log().everything()
             .contentType(not("text/html"))
             .statusCode(200);
         // @formatter:on
+    }
+
+    private String icViaDdap(String path) {
+        return format("/identity/v1alpha/%s%s", DDAP_TEST_REALM, path);
     }
 
     private String fakeUserToken(Instant exp) throws JsonProcessingException {

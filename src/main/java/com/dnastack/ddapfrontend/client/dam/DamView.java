@@ -9,5 +9,5 @@ import java.util.Map;
 public class DamView {
     String name;
     String action;
-    Map<String, Map<String, Object>> interfaces = new HashMap<>();
+    Map<String, DamInterface> interfaces = new HashMap<>();
 }
