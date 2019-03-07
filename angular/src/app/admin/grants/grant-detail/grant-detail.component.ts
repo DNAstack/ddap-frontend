@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { flatMap, pluck } from 'rxjs/operators';
 
+import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { GrantService } from '../grants.service';
 
 @Component({
@@ -9,25 +9,12 @@ import { GrantService } from '../grants.service';
   templateUrl: './grant-detail.component.html',
   styleUrls: ['./grant-detail.component.scss'],
 })
-export class GrantDetailComponent implements OnInit {
-
-  grant: any;
+export class GrantDetailComponent extends EntityDetailBase<GrantService> {
 
   constructor(
-    private route: ActivatedRoute,
-    public grantService: GrantService
-  ) {}
-
-  ngOnInit() {
-    this.route.params.pipe(
-      flatMap(params => this.getGrant(params['grantName']))
-    ).subscribe(grant => this.grant = grant);
-  }
-
-  private getGrant(grantName) {
-    return this.grantService.get()
-      .pipe(
-        pluck(grantName)
-      );
+    route: ActivatedRoute,
+    grantService: GrantService
+  ) {
+    super(route, grantService, 'grantName');
   }
 }

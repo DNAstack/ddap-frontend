@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { Component } from '@angular/core';
 
-import { objectToArray } from '../../../shared/util';
+import { EntityListBase } from '../../shared/entity-list.base';
 import { GrantService } from '../grants.service';
 
 @Component({
@@ -10,18 +8,10 @@ import { GrantService } from '../grants.service';
   templateUrl: './grant-list.component.html',
   styleUrls: ['./grant-list.component.scss'],
 })
-export class GrantListComponent implements OnInit {
+export class GrantListComponent extends EntityListBase<GrantService> {
 
-  grants$: Observable<any[]>;
-
-  constructor(private grantService: GrantService) {
-  }
-
-  ngOnInit() {
-    this.grants$ = this.grantService.get()
-      .pipe(
-        map(objectToArray)
-      );
+  constructor(grantService: GrantService) {
+    super(grantService);
   }
 
 }

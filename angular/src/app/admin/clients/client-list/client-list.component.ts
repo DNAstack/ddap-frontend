@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { Component } from '@angular/core';
 
-import { objectToArray } from '../../../shared/util';
+import { EntityListBase } from '../../shared/entity-list.base';
 import { ClientService } from '../clients.service';
 
 @Component({
@@ -10,18 +8,10 @@ import { ClientService } from '../clients.service';
   templateUrl: './client-list.component.html',
   styleUrls: ['./client-list.component.scss'],
 })
-export class ClientListComponent implements OnInit {
+export class ClientListComponent extends EntityListBase<ClientService> {
 
-  clients$: Observable<any[]>;
-
-  constructor(private clientService: ClientService) {
-  }
-
-  ngOnInit() {
-    this.clients$ = this.clientService.get()
-      .pipe(
-        map(objectToArray)
-      );
+  constructor(clientService: ClientService) {
+    super(clientService);
   }
 
 }

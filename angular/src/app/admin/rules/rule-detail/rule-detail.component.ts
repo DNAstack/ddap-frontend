@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { flatMap, pluck } from 'rxjs/operators';
 
+import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { RuleService } from '../rules.service';
 
 @Component({
@@ -9,26 +9,13 @@ import { RuleService } from '../rules.service';
   templateUrl: './rule-detail.component.html',
   styleUrls: ['./rule-detail.component.scss'],
 })
-export class RuleDetailComponent implements OnInit {
-
-  rule: any;
+export class RuleDetailComponent extends EntityDetailBase<RuleService> {
 
   constructor(
-    private route: ActivatedRoute,
-    public ruleService: RuleService
-  ) {}
-
-  ngOnInit() {
-    this.route.params.pipe(
-      flatMap(params => this.getRule(params['ruleName']))
-    ).subscribe(rule => this.rule = rule);
-  }
-
-  private getRule(personaName) {
-    return this.ruleService.get()
-      .pipe(
-        pluck(personaName)
-      );
+    route: ActivatedRoute,
+    ruleService: RuleService
+  ) {
+    super(route, ruleService, 'ruleName');
   }
 
 }

@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { Component } from '@angular/core';
 
-import { objectToArray } from '../../../shared/util';
+import { EntityListBase } from '../../shared/entity-list.base';
 import { DefinitionService } from '../definitions.service';
 
 @Component({
@@ -10,18 +8,10 @@ import { DefinitionService } from '../definitions.service';
   templateUrl: './definition-list.component.html',
   styleUrls: ['./definition-list.component.scss'],
 })
-export class DefinitionListComponent implements OnInit {
+export class DefinitionListComponent extends EntityListBase<DefinitionService> {
 
-  definitions$: Observable<any[]>;
-
-  constructor(private definitionService: DefinitionService) {
-  }
-
-  ngOnInit() {
-    this.definitions$ = this.definitionService.get()
-      .pipe(
-        map(objectToArray)
-      );
+  constructor(definitionService: DefinitionService) {
+    super(definitionService);
   }
 
 }

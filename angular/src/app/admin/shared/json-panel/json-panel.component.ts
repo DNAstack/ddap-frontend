@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Observable } from 'rxjs/Observable';
 
+import { ChangeModel } from '../change.model';
+import { EntityModel } from '../entity.model';
 import { EntityService } from '../entity.service';
 import { JsonEditorDefaults } from '../jsonEditorDefaults';
 
@@ -24,10 +26,10 @@ export class JsonPanelComponent implements OnChanges {
   useTests = false;
 
   @Input()
-  entity: any;
+  entity: EntityModel;
 
-  entityDto: any;
-  testDto: any = {};
+  entityDto: object;
+  testDto: object = {};
   ViewState = ViewState;
   state: ViewState = ViewState.Viewing;
 
@@ -57,7 +59,7 @@ export class JsonPanelComponent implements OnChanges {
   }
 
   ngOnChanges () {
-    this.entityDto = this.entity;
+    this.entityDto = (this.entity != null) ? this.entity.dto : null;
   }
 
   updateResourceDto(event: any) {
@@ -72,11 +74,7 @@ export class JsonPanelComponent implements OnChanges {
     this.state = ViewState.Submitting;
     let updateAction: Observable<any>;
 
-    if (this.useTests) {
-      updateAction = this.entityService.update(this.entityDto, this.testDto);
-    } else {
-      updateAction = this.entityService.update(this.entityDto);
-    }
+    updateAction = this.entityService.update(new ChangeModel(new EntityModel(this.entity.name, this.entityDto), this.testDto));
 
     updateAction
       .subscribe(() => {

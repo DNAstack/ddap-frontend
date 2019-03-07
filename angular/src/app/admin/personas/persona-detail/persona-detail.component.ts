@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { flatMap, pluck } from 'rxjs/operators';
 
+import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { PersonaService } from '../personas.service';
 
 @Component({
@@ -9,25 +9,8 @@ import { PersonaService } from '../personas.service';
   templateUrl: './persona-detail.component.html',
   styleUrls: ['./persona-detail.component.scss'],
 })
-export class PersonaDetailComponent implements OnInit {
-
-  persona: any;
-
-  constructor(
-    private route: ActivatedRoute,
-    public personaService: PersonaService
-  ) {}
-
-  ngOnInit() {
-    this.route.params.pipe(
-      flatMap(params => this.getPersona(params['personaName']))
-    ).subscribe(persona => this.persona = persona);
-  }
-
-  private getPersona(personaName) {
-    return this.personaService.get()
-      .pipe(
-        pluck(personaName)
-      );
+export class PersonaDetailComponent extends EntityDetailBase<PersonaService> implements OnInit {
+  constructor(route: ActivatedRoute, personaService: PersonaService) {
+    super(route, personaService, 'personaName');
   }
 }

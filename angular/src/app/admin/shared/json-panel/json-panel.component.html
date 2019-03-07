@@ -6,7 +6,7 @@
   </mat-expansion-panel-header>
   <json-editor #entityEditor
                [options]="entityEditorOptions"
-               [data]="entity"
+               [data]="entity?.dto"
                (change)="updateResourceDto($event)"></json-editor>
 
   <mat-panel-title *ngIf="useTests && state === ViewState.Editing"

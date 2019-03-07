@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { EntityManageBase } from '../../shared/entity-manage.base';
 import { PassportService } from '../passports.service';
 
 @Component({
@@ -8,16 +9,11 @@ import { PassportService } from '../passports.service';
   templateUrl: './passport-manage.component.html',
   styleUrls: ['./passport-manage.component.scss'],
 })
-export class PassportManageComponent {
+export class PassportManageComponent extends EntityManageBase<PassportService> {
 
-  constructor(private passportService: PassportService,
-              private router: Router,
-              private route: ActivatedRoute) {
-
-  }
-
-  onSubmit(value: any) {
-    this.passportService.save(JSON.parse(value.body))
-      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
+  constructor(passportService: PassportService,
+              router: Router,
+              route: ActivatedRoute) {
+    super(passportService, router, route);
   }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { EntityManageBase } from '../../shared/entity-manage.base';
 import { PersonaService } from '../personas.service';
 
 @Component({
@@ -8,16 +9,10 @@ import { PersonaService } from '../personas.service';
   templateUrl: './persona-manage.component.html',
   styleUrls: ['./persona-manage.component.scss'],
 })
-export class PersonaManageComponent {
-
-  constructor(private personaService: PersonaService,
-              private router: Router,
-              private route: ActivatedRoute) {
-
-  }
-
-  onSubmit(value: any) {
-    this.personaService.save(JSON.parse(value.body))
-      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
+export class PersonaManageComponent extends EntityManageBase<PersonaService> {
+  constructor(personaService: PersonaService,
+              router: Router,
+              route: ActivatedRoute) {
+    super(personaService, router, route);
   }
 }

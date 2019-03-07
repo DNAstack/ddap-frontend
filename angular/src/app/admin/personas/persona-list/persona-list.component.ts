@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
-import { objectToArray } from '../../../shared/util';
+import { EntityModel } from '../../shared/entity.model';
 import { PersonaService } from '../personas.service';
 
 @Component({
@@ -19,9 +19,7 @@ export class PersonaListComponent implements OnInit {
 
   ngOnInit() {
     this.personas$ = this.personaService.get()
-      .pipe(
-        map(objectToArray)
-      );
+      .pipe(map(EntityModel.arrayFromMap));
   }
 
 }

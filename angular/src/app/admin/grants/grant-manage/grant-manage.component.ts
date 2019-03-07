@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { EntityManageBase } from '../../shared/entity-manage.base';
 import { GrantService } from '../grants.service';
 
 @Component({
@@ -8,16 +9,11 @@ import { GrantService } from '../grants.service';
   templateUrl: './grant-manage.component.html',
   styleUrls: ['./grant-manage.component.scss'],
 })
-export class GrantManageComponent {
+export class GrantManageComponent extends EntityManageBase<GrantService> {
 
-  constructor(private grantService: GrantService,
-              private router: Router,
-              private route: ActivatedRoute) {
-
-  }
-
-  onSubmit(value: any) {
-    this.grantService.save(JSON.parse(value.body))
-      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
+  constructor(grantService: GrantService,
+              router: Router,
+              route: ActivatedRoute) {
+    super(grantService, router, route);
   }
 }

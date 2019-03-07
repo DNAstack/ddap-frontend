@@ -1,9 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { JsonEditorComponent } from 'ang-jsoneditor';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { Component } from '@angular/core';
 
-import { objectToArray } from '../../../shared/util';
+import { EntityListBase } from '../../shared/entity-list.base';
 import { ResourceService } from '../resources.service';
 
 @Component({
@@ -11,18 +8,10 @@ import { ResourceService } from '../resources.service';
   templateUrl: './resource-list.component.html',
   styleUrls: ['./resource-list.component.scss'],
 })
-export class ResourceListComponent implements OnInit {
+export class ResourceListComponent extends EntityListBase<ResourceService> {
 
-  resources$: Observable<any[]>;
-  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
-
-  constructor(private resourceService: ResourceService) {
-  }
-
-  ngOnInit() {
-    this.resources$ = this.resourceService.get()
-      .pipe(
-        map(objectToArray));
+  constructor(resourceService: ResourceService) {
+    super(resourceService);
   }
 
 }

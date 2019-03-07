@@ -17,10 +17,10 @@
             {{ entity.name }}
           </mat-panel-title>
           <mat-panel-description>
-            {{ getDescription(entity) }}
+            {{ getDescription(entity.dto) }}
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <json-editor [options]="editorOptions" [data]="entity"></json-editor>
+        <json-editor [options]="editorOptions" [data]="entity.dto"></json-editor>
         <pre>
           {{ configName | json }} {{ entity.name | json }}
         </pre>

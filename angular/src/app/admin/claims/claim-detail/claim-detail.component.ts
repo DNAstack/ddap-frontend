@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { flatMap, pluck } from 'rxjs/operators';
 
+import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { ClaimService } from '../claims.service';
 
 @Component({
@@ -9,25 +9,12 @@ import { ClaimService } from '../claims.service';
   templateUrl: './claim-detail.component.html',
   styleUrls: ['./claim-detail.component.scss'],
 })
-export class ClaimDetailComponent implements OnInit {
-
-  claim: any;
+export class ClaimDetailComponent extends EntityDetailBase<ClaimService> {
 
   constructor(
-    private route: ActivatedRoute,
-    public claimService: ClaimService
-  ) {}
-
-  ngOnInit() {
-    this.route.params.pipe(
-      flatMap(params => this.getClaim(params['claimName']))
-    ).subscribe(claim => this.claim = claim);
-  }
-
-  private getClaim(claimName) {
-    return this.claimService.get()
-      .pipe(
-        pluck(claimName)
-      );
+    route: ActivatedRoute,
+    claimService: ClaimService
+  ) {
+    super(route, claimService, 'claimName');
   }
 }

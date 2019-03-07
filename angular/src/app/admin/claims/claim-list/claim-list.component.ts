@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { Component } from '@angular/core';
 
-import { objectToArray } from '../../../shared/util';
+import { EntityListBase } from '../../shared/entity-list.base';
 import { ClaimService } from '../claims.service';
 
 @Component({
@@ -10,18 +8,10 @@ import { ClaimService } from '../claims.service';
   templateUrl: './claim-list.component.html',
   styleUrls: ['./claim-list.component.scss'],
 })
-export class ClaimListComponent implements OnInit {
-
-  claims$: Observable<any[]>;
+export class ClaimListComponent extends EntityListBase<ClaimService> {
 
   constructor(private claimService: ClaimService) {
-  }
-
-  ngOnInit() {
-    this.claims$ = this.claimService.get()
-      .pipe(
-        map(objectToArray)
-      );
+    super(claimService);
   }
 
 }

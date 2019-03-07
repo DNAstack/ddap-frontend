@@ -3,6 +3,7 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs/Observable';
 
+import { EntityModel } from '../entity.model';
 import { JsonEditorDefaults } from '../jsonEditorDefaults';
 
 @Component({
@@ -17,7 +18,7 @@ export class EntityListComponent {
   configName: string;
 
   @Input()
-  entityList: Observable<any[]>;
+  entityList: Observable<EntityModel[]>;
 
   @Input()
   descriptionProperty: string;

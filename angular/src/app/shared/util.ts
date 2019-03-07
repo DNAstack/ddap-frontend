@@ -3,7 +3,8 @@ export function objectToArray(dto) {
     .keys(dto)
     .map((key) => {
       return {
-        ...dto[key],
+        name: key,
+        value: dto[key],
       };
     });
 

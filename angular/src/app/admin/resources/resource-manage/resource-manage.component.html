@@ -3,9 +3,13 @@
 
 <ddap-main>
   <div class="mat-expansion-panel">
+    <mat-form-field>
+      <mat-label>Resource name</mat-label>
+      <input matInput (input)="entity.name = $event">
+    </mat-form-field>
     <json-editor #itemEditor
                  [options]="itemEditorOptions"
-                 [data]="itemDto"
+                 [data]="entity?.dto"
                  (change)="updateItemDto($event)"></json-editor>
 
     <div *ngIf="errorDto">

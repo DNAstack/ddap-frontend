@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { flatMap, pluck } from 'rxjs/operators';
 
+import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { ClientService } from '../clients.service';
 
 @Component({
@@ -9,25 +9,11 @@ import { ClientService } from '../clients.service';
   templateUrl: './client-detail.component.html',
   styleUrls: ['./client-detail.component.scss'],
 })
-export class ClientDetailComponent implements OnInit {
-
-  client: any;
-
+export class ClientDetailComponent extends EntityDetailBase<ClientService> {
   constructor(
-    private route: ActivatedRoute,
-    public clientService: ClientService
-  ) {}
-
-  ngOnInit() {
-    this.route.params.pipe(
-      flatMap(params => this.getClient(params['clientName']))
-    ).subscribe(client => this.client = client);
-  }
-
-  private getClient(clientName) {
-    return this.clientService.get()
-      .pipe(
-        pluck(clientName)
-      );
+    route: ActivatedRoute,
+    clientService: ClientService
+  ) {
+    super(route, clientService, 'clientName');
   }
 }

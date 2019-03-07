@@ -1,10 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { mergeMap, pluck } from 'rxjs/operators';
+import { map, mergeMap, pluck } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 import { RealmService } from '../../realm.service';
 
+import { ChangeModel } from './change.model';
+import { ConfigModel } from './config.model';
+import { EntityModel } from './entity.model';
 import { EntityService } from './entity.service';
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
@@ -21,31 +24,32 @@ export class ConfigEntityService implements EntityService {
     });
   }
 
-  get(params?): Observable<any> {
+  get(params?): Observable<Map<string, EntityModel>> {
     params = params || {};
 
-    return this.http.get<any[]>(`${environment.damApiUrl}/${this.realm}/config`, { params })
+    return this.http.get<ConfigModel>(`${environment.damApiUrl}/${this.realm}/config`, { params })
       .pipe(
-        pluck(this.entityName)
+        pluck(this.entityName),
+        map(EntityModel.objectToMap)
       );
   }
 
-  save(dto: any): Observable<any> {
+  save(change: ChangeModel): Observable<any> {
     const params = {
     };
-    const id = dto.name;
+    const id = change.entity.name;
 
     return this.http.get<any[]>(`${environment.damApiUrl}/${this.realm}/config`, { params })
       .pipe(
         mergeMap((config: any) => {
-          config[this.entityName][id] = dto;
+          config[this.entityName][id] = change.entity.dto;
           return this.updateConfig(config);
         })
       );
   }
 
-  update(dto: any): Observable<any> {
-      return this.save(dto);
+  update(change: ChangeModel): Observable<any> {
+      return this.save(change);
   }
 
   remove(id: string): Observable<any> {

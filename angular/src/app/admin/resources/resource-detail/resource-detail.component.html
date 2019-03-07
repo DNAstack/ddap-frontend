@@ -1,11 +1,11 @@
-<ddap-header [backLink]="['..']" [label]="resource?.ui.label">
+<ddap-header [backLink]="['..']" [label]="entity?.dto.ui.label">
 </ddap-header>
 
 <ddap-main>
-  <p *ngIf="resource?.ui.description">{{ resource?.ui.description }}</p>
+  <p *ngIf="entity?.dto.ui.description">{{ entity?.dto.ui.description }}</p>
 
   <ddap-json-panel [useTests]="true"
-                   [entityService]="resourceService"
-                   [entity]="resource">
+                   [entityService]="entityService"
+                   [entity]="entity">
   </ddap-json-panel>
 </ddap-main>

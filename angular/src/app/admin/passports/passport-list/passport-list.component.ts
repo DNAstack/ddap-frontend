@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { Component } from '@angular/core';
 
-import { objectToArray } from '../../../shared/util';
+import { EntityListBase } from '../../shared/entity-list.base';
 import { PassportService } from '../passports.service';
 
 @Component({
@@ -10,18 +8,10 @@ import { PassportService } from '../passports.service';
   templateUrl: './passport-list.component.html',
   styleUrls: ['./passport-list.component.scss'],
 })
-export class PassportListComponent implements OnInit {
+export class PassportListComponent extends EntityListBase<PassportService> {
 
-  passports$: Observable<any[]>;
-
-  constructor(private passportService: PassportService) {
-  }
-
-  ngOnInit() {
-    this.passports$ = this.passportService.get()
-      .pipe(
-        map(objectToArray)
-      );
+  constructor(passportService: PassportService) {
+    super(passportService);
   }
 
 }

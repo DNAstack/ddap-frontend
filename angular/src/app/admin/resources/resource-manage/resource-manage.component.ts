@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 
+import { ChangeDto, ItemDto } from '../../shared/change.dto';
 import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 import { ResourceService } from '../resources.service';
 
@@ -13,7 +14,7 @@ import { ResourceService } from '../resources.service';
 export class ResourceManageComponent implements OnInit {
 
   errorDto: any;
-  itemDto: any;
+  entity: ChangeDto;
 
   errorEditorOptions: JsonEditorOptions;
   itemEditorOptions: JsonEditorOptions;
@@ -32,13 +33,14 @@ export class ResourceManageComponent implements OnInit {
     this.itemEditorOptions.mode = 'code';
     this.errorEditorOptions.mode = 'code';
     this.errorEditorOptions.onEditable = () => false;
+    this.entity = new ChangeDto(new ItemDto(undefined), {});
   }
 
   ngOnInit() {
   }
 
   save() {
-    this.resourceService.save(this.itemDto).subscribe(path => {
+    this.resourceService.saveDto(this.entity).subscribe(path => {
         this.router.navigate(['../..'], { relativeTo: this.route });
       },
       (errorDto) => {
@@ -47,6 +49,6 @@ export class ResourceManageComponent implements OnInit {
   }
 
   updateItemDto(event: any) {
-    this.itemDto = event;
+    this.entity = event;
   }
 }
