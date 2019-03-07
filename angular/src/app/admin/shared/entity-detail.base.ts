@@ -9,7 +9,7 @@ export class EntityDetailBase<T extends EntityService> implements OnInit {
   public entity: EntityModel;
 
   constructor(protected route: ActivatedRoute,
-              protected entityService: T,
+              public entityService: T,
               protected paramName: string) {}
 
   ngOnInit() {
