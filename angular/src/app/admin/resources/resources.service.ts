@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { throwError } from 'rxjs/internal/observable/throwError';
 import { Observable } from 'rxjs/Observable';
 import { map, pluck } from 'rxjs/operators';
 
@@ -57,13 +58,15 @@ export class ResourceService implements EntityService {
 
   // We should try and get rid of this soon, and edit in terms of a separate model.
   saveDto(dto: ChangeDto): Observable<any> {
-    const params = {
-    };
+    if (!dto.item || !dto.item.name) {
+      return throwError({error: 'The resource is missing the `item.name` field.'});
+    }
+
     const resourceName = dto.item.name;
 
     return this.http.post(`${environment.damApiUrl}/${this.realm}/config/resources/${resourceName}`,
       dto,
-      { params, headers }
+      { headers }
     );
   }
 
