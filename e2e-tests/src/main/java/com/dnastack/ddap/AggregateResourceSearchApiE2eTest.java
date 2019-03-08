@@ -13,7 +13,7 @@ public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
 
     @Before
     public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/config.json");
+        String realmConfigString = loadTemplate("/com/dnastack/ddap/aggregateSearchRealmConfig.json");
         setupRealmConfig("nci_researcher", realmConfigString);
     }
 
@@ -30,7 +30,7 @@ public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
                     .when()
                     .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
-                    .get("/api/v1alpha/nci_researcher/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
+                    .get("/api/v1alpha/" + DDAP_TEST_REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
                     .then()
                     .log().ifValidationFails()
                     .contentType(JSON)
