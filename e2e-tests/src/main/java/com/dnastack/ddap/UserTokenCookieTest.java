@@ -17,6 +17,9 @@ import static org.hamcrest.Matchers.not;
 
 public class UserTokenCookieTest extends BaseE2eTest {
 
+    public UserTokenCookieTest() {
+        this.realmNameSuffix = "_UserTokenCookieTest";
+    }
 
     @Test
     public void damResponsesShouldClearExpiredUserTokenCookies() throws Exception {
@@ -40,7 +43,8 @@ public class UserTokenCookieTest extends BaseE2eTest {
     }
 
     private String damViaDdap(String path) {
-        return format("/dam/v1alpha/%s%s", DDAP_TEST_REALM, path);
+        String realmName = DDAP_TEST_REALM_NAME_PREFIX + realmNameSuffix;
+        return format("/dam/v1alpha/%s%s", realmName, path);
     }
 
     @Test
@@ -122,7 +126,8 @@ public class UserTokenCookieTest extends BaseE2eTest {
     }
 
     private String icViaDdap(String path) {
-        return format("/identity/v1alpha/%s%s", DDAP_TEST_REALM, path);
+        String realmName = DDAP_TEST_REALM_NAME_PREFIX + realmNameSuffix;
+        return format("/identity/v1alpha/%s%s", realmName, path);
     }
 
     private String fakeUserToken(Instant exp) throws JsonProcessingException {

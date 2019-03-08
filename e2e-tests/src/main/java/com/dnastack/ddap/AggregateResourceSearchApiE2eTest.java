@@ -11,6 +11,10 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
 
+    public AggregateResourceSearchApiE2eTest() {
+        this.realmNameSuffix = "_AggregateResourceSearch";
+    }
+
     @Before
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/aggregateSearchRealmConfig.json");
@@ -21,6 +25,7 @@ public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
     public void beaconApiTest() throws IOException {
 
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher");
+        String realmName = DDAP_TEST_REALM_NAME_PREFIX + realmNameSuffix;
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -30,7 +35,7 @@ public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
                     .when()
                     .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
-                    .get("/api/v1alpha/" + DDAP_TEST_REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
+                    .get("/api/v1alpha/" + realmName + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
                     .then()
                     .log().ifValidationFails()
                     .contentType(JSON)

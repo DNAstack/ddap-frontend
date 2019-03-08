@@ -11,6 +11,10 @@ import static org.hamcrest.Matchers.*;
 
 public class BeaconE2eTest extends BaseE2eTest {
 
+    public BeaconE2eTest() {
+        this.realmNameSuffix = "_BeaconE2ETest";
+    }
+
     @Before
     public void setupRealm() throws IOException {
         setupRealmConfig("nci_researcher", loadTemplate("/com/dnastack/ddap/config.json"));
@@ -36,7 +40,7 @@ public class BeaconE2eTest extends BaseE2eTest {
                             "&alternateBases=C" +
                             "&type=beacon" +
                             "&assemblyId=GRCh37",
-                    DDAP_TEST_REALM))
+                    DDAP_TEST_REALM_NAME_PREFIX))
         .then()
             .log().everything()
             .contentType("application/json")

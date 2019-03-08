@@ -32,7 +32,8 @@ public class BaseE2eTest {
     static final String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
     static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
     static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
-    static final String DDAP_TEST_REALM = requiredEnv("E2E_TEST_REALM");
+    static final String DDAP_TEST_REALM_NAME_PREFIX = requiredEnv("E2E_TEST_REALM");
+    protected String realmNameSuffix;
 
 
     @Before
@@ -60,8 +61,10 @@ public class BaseE2eTest {
         final String modificationPayload = format("{ \"item\": %s }", config);
         final CookieStore cookieStore = performPersonaLogin("nci_researcher");
 
+        final String realmName = DDAP_TEST_REALM_NAME_PREFIX + realmNameSuffix;
+
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config?persona=nci_researcher", DDAP_BASE_URL, DDAP_TEST_REALM, personaName));
+        HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config?persona=nci_researcher", DDAP_BASE_URL, realmName, personaName));
         request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
         request.setEntity(new StringEntity(modificationPayload));
 
@@ -118,7 +121,8 @@ public class BaseE2eTest {
     private CookieStore performPersonaLogin(String personaName) throws IOException {
         final CookieStore cookieStore = new BasicCookieStore();
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpGet request = new HttpGet(format("%s/api/v1alpha/%s/identity/login?persona=%s", DDAP_BASE_URL, DDAP_TEST_REALM, personaName));
+        final String realmName = DDAP_TEST_REALM_NAME_PREFIX + realmNameSuffix;
+        HttpGet request = new HttpGet(format("%s/api/v1alpha/%s/identity/login?persona=%s", DDAP_BASE_URL, realmName, personaName));
         request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
 
         HttpResponse response = httpclient.execute(request);
