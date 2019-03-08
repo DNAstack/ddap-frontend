@@ -33,8 +33,6 @@ public class BaseE2eTest {
     static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
     static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
     static final String DDAP_TEST_REALM_NAME_PREFIX = requiredEnv("E2E_TEST_REALM");
-    protected String realmNameSuffix;
-
 
     @Before
     public void setUp() {
@@ -57,11 +55,9 @@ public class BaseE2eTest {
         return val;
     }
 
-    protected void setupRealmConfig(String personaName, String config) throws IOException {
+    protected void setupRealmConfig(String personaName, String config, String realmName) throws IOException {
         final String modificationPayload = format("{ \"item\": %s }", config);
-        final CookieStore cookieStore = performPersonaLogin("nci_researcher");
-
-        final String realmName = DDAP_TEST_REALM_NAME_PREFIX + realmNameSuffix;
+        final CookieStore cookieStore = performPersonaLogin("nci_researcher", realmName);
 
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
         HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config?persona=nci_researcher", DDAP_BASE_URL, realmName, personaName));
@@ -87,16 +83,16 @@ public class BaseE2eTest {
         return resourceTemplate;
     }
 
-    protected String fetchRealPersonaIcToken(String personaName) throws IOException {
-        return fetchRealPersonaToken(personaName, "ic_token");
+    protected String fetchRealPersonaIcToken(String personaName, String realmName) throws IOException {
+        return fetchRealPersonaToken(personaName, "ic_token", realmName);
     }
 
-    protected String fetchRealPersonaDamToken(String personaName) throws IOException {
-        return fetchRealPersonaToken(personaName, "dam_token");
+    protected String fetchRealPersonaDamToken(String personaName, String realmName) throws IOException {
+        return fetchRealPersonaToken(personaName, "dam_token", realmName);
     }
 
-    private String fetchRealPersonaToken(String personaName, String tokenCookieName) throws IOException {
-        final CookieStore cookieStore = performPersonaLogin(personaName);
+    private String fetchRealPersonaToken(String personaName, String tokenCookieName, String realmName) throws IOException {
+        final CookieStore cookieStore = performPersonaLogin(personaName, realmName);
 
         BasicClientCookie icTokenCookie = (BasicClientCookie) cookieStore.getCookies().stream()
                 .filter(c -> tokenCookieName.equals(c.getName()))
@@ -118,10 +114,9 @@ public class BaseE2eTest {
         return icTokenCookie.getValue();
     }
 
-    private CookieStore performPersonaLogin(String personaName) throws IOException {
+    private CookieStore performPersonaLogin(String personaName, String realmName) throws IOException {
         final CookieStore cookieStore = new BasicCookieStore();
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        final String realmName = DDAP_TEST_REALM_NAME_PREFIX + realmNameSuffix;
         HttpGet request = new HttpGet(format("%s/api/v1alpha/%s/identity/login?persona=%s", DDAP_BASE_URL, realmName, personaName));
         request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
 

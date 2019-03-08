@@ -11,18 +11,16 @@ import static org.hamcrest.Matchers.*;
 
 public class BeaconE2eTest extends BaseE2eTest {
 
-    public BeaconE2eTest() {
-        this.realmNameSuffix = "_BeaconE2ETest";
-    }
-
     @Before
     public void setupRealm() throws IOException {
-        setupRealmConfig("nci_researcher", loadTemplate("/com/dnastack/ddap/config.json"));
+        String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_BeaconE2ETest";
+        setupRealmConfig("nci_researcher", loadTemplate("/com/dnastack/ddap/config.json"), realmName);
     }
 
     @Test
     public void querySingleBeacon() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher");
+        String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_BeaconE2ETest";
+        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", realmName);
 
         // @formatter:off
         given()
@@ -40,7 +38,7 @@ public class BeaconE2eTest extends BaseE2eTest {
                             "&alternateBases=C" +
                             "&type=beacon" +
                             "&assemblyId=GRCh37",
-                    DDAP_TEST_REALM_NAME_PREFIX))
+                    realmName))
         .then()
             .log().everything()
             .contentType("application/json")
