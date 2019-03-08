@@ -17,6 +17,8 @@ import static org.hamcrest.Matchers.not;
 
 public class UserTokenCookieTest extends BaseE2eTest {
 
+    private static final String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_UserTokenCookieTest";
+
     @Test
     public void damResponsesShouldClearExpiredUserTokenCookies() throws Exception {
         String expiredUserTokenCookie = fakeUserToken(Instant.now().minusSeconds(10));
@@ -39,7 +41,6 @@ public class UserTokenCookieTest extends BaseE2eTest {
     }
 
     private String damViaDdap(String path) {
-        String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_UserTokenCookieTest";
         return format("/dam/v1alpha/%s%s", realmName, path);
     }
 
@@ -102,8 +103,6 @@ public class UserTokenCookieTest extends BaseE2eTest {
 
     @Test
     public void shouldBeAbleToAccessICWithAppropriateCookie() throws IOException {
-
-        String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_UserTokenCookieTest";
         // TODO [DISCO-2022] this test should create its own realm and populate it with the needed personas!
         String validPersonaToken = fetchRealPersonaIcToken("nci_researcher", realmName);
 
@@ -124,7 +123,6 @@ public class UserTokenCookieTest extends BaseE2eTest {
     }
 
     private String icViaDdap(String path) {
-        String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_UserTokenCookieTest";
         return format("/identity/v1alpha/%s%s", realmName, path);
     }
 

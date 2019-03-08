@@ -11,18 +11,16 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
 
+    private static final String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_AggregateResourceSearch";
+
     @Before
     public void setupRealm() throws IOException {
-        String realmNameSuffix = "_AggregateResourceSearch";
-        String realmName = DDAP_TEST_REALM_NAME_PREFIX + realmNameSuffix;
         String realmConfigString = loadTemplate("/com/dnastack/ddap/aggregateSearchRealmConfig.json");
         setupRealmConfig("nci_researcher", realmConfigString, realmName);
     }
 
     @Test
     public void beaconApiTest() throws IOException {
-
-        String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_AggregateResourceSearch";
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", realmName);
 
         /* Run the aggregate search query on the realm */

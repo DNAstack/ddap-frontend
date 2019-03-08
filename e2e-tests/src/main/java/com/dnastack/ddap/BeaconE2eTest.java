@@ -11,15 +11,15 @@ import static org.hamcrest.Matchers.*;
 
 public class BeaconE2eTest extends BaseE2eTest {
 
+    private static final String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_BeaconE2ETest";
+
     @Before
     public void setupRealm() throws IOException {
-        String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_BeaconE2ETest";
         setupRealmConfig("nci_researcher", loadTemplate("/com/dnastack/ddap/config.json"), realmName);
     }
 
     @Test
     public void querySingleBeacon() throws IOException {
-        String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_BeaconE2ETest";
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", realmName);
 
         // @formatter:off
