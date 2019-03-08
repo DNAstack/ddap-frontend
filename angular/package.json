@@ -7,6 +7,7 @@
     "build": "ng build",
     "build:dev": "ng build --watch --output-path=\"../target/classes/static/\"",
     "build:watch": "nodemon --exec \"ng lint && ng build --output-path=\"../target/classes/static/\"\" --ext ts,html,scss",
+    "build:quickwatch": "nodemon --exec \"ng build --output-path=\"../target/classes/static/\"\" --ext ts,html,scss",
     "test": "ng test",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",

@@ -3,21 +3,28 @@
 
 <ddap-main>
   <div class="mat-expansion-panel">
+    <h3>Item</h3>
     <json-editor #itemEditor
+                 data-se="item-editor"
                  [options]="itemEditorOptions"
-                 [data]="entity?.item"
                  (change)="updateItemDto($event)"></json-editor>
 
+    <h3>Test</h3>
+    <json-editor #testEditor
+                 data-se="test-editor"
+                 [options]="testEditorOptions"
+                 (change)="updateTestDto($event)"></json-editor>
+
     <div *ngIf="errorDto">
-    <h3>Error</h3>
-    <mat-error>
-      <span *ngIf="!errorDto.apply">{{ errorDto }}</span>
-      <span *ngIf="errorDto.apply">Cannot save, please consider using following DTOs:</span>
-    </mat-error>
-    <json-editor *ngIf="errorDto.apply"
-                 #errorEditor
-                 [options]="errorEditorOptions"
-                 [data]="errorDto"></json-editor>
+      <h3>Error</h3>
+      <mat-error>
+        <span *ngIf="!errorDto.apply">{{ errorDto }}</span>
+        <span *ngIf="errorDto.apply">Cannot save, please consider using following DTOs:</span>
+      </mat-error>
+      <json-editor *ngIf="errorDto.apply"
+                   [data]="errorDto"
+                   #errorEditor
+                   [options]="errorEditorOptions"></json-editor>
 
     </div>
     <mat-action-row>
