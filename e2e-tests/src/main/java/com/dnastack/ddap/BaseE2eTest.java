@@ -1,8 +1,5 @@
 package com.dnastack.ddap;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import io.restassured.RestAssured;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
@@ -24,7 +21,6 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.List;
 
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
