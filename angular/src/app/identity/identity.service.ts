@@ -17,7 +17,6 @@ export class IdentityService {
 
   constructor(private http: HttpClient,
               private realmService: RealmService) {
-
     this.realmService.getRealm().subscribe(realm => {
       this.realm = realm;
     });
