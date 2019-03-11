@@ -15,6 +15,7 @@ import { DEFAULT_REALM } from './realm.constant';
 
 const routes: Routes = [
   {path: '', redirectTo: `/${DEFAULT_REALM}/data`, pathMatch: 'full'},
+  {path: ':realmId', redirectTo: `/:realmId/data`, pathMatch: 'full'},
   {path: ':realmId', children: DATA_ROUTES},
   {path: ':realmId', children: IDENTITY_ROUTES},
   {path: ':realmId', children: TRUSTED_SOURCES_ROUTES},

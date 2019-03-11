@@ -1,3 +1,5 @@
+@import "~src/styles/modules/colors";
+
 mat-sidenav-content {
   padding: 0 2rem;
 }
@@ -8,4 +10,26 @@ mat-sidenav-container {
 
 .mat-drawer-side {
   border-right: none;
+}
+
+:host {
+  .ddap-realm-select {
+
+    background-color: $navbar-expanded-background;
+    height: 4.5rem;
+
+    /deep/ .mat-list-item-content {
+      padding: 1.5rem;
+    }
+
+    mat-form-field.mat-form-field {
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+      color: $navbar-font-main-color;
+    }
+  }
+
+  mat-label {
+    color: $navbar-font-main-color;
+  }
 }

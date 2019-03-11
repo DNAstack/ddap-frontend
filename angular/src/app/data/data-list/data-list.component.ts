@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { EntityModel } from '../../admin/shared/entity.model';
@@ -18,11 +19,15 @@ export class DataListComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
+    private route: ActivatedRoute,
     public randomImageRetriever: ImagePlaceholderRetriever
-  ) {}
-
-  ngOnInit() {
-    this.resources$ = this.dataService.get();
+  ) {
   }
 
+  ngOnInit() {
+    // Needed to reload the data every time the realm in the URL changes (i.e. using the realm selector)
+    this.route.params.subscribe(() => {
+      this.resources$ = this.dataService.get();
+    });
+  }
 }
