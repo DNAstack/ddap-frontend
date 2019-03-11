@@ -1,0 +1,979 @@
+{
+  "version": "v0",
+  "revision": "2",
+  "commitTime": 1552314102.428899,
+  "trustedPassportIssuers": {
+    "dbGaP": {
+      "issuer": "https://dbgap.nlm.nih.gov/aa",
+      "translateUsing": "dbgap"
+    },
+    "elixir": {
+      "issuer": "https://login.elixir-czech.org/oidc/",
+      "translateUsing": "elixir"
+    },
+    "playgroundIC": {
+      "issuer": "https://ic-dot-craigv-codelab.appspot.com/oidc"
+    }
+  },
+  "trustedClaims": {
+    "dbgap": {
+      "source": "https://dbgap.nlm.nih.gov",
+      "claims": [
+        "^.*"
+      ]
+    },
+    "elixir": {
+      "source": "https://ga4gh.elixir-czech.org/claims",
+      "claims": [
+        "ga4gh.BonaFide",
+        "^ga4gh.*"
+      ]
+    },
+    "nci": {
+      "source": "https://nci.nih.org",
+      "claims": [
+        "ga4gh.AffiliationAndRole"
+      ]
+    },
+    "ustanford": {
+      "source": "https://ga4gh.stanford.edu/claims",
+      "claims": [
+        "ga4gh.BonaFide"
+      ]
+    }
+  },
+  "policies": {
+    "GRU": {
+      "allow": {
+        "dataUse": "DUO:0000005"
+      }
+    },
+    "bona_fide": {
+      "allow": {
+        "anyTrue": [
+          {
+            "claim": "ga4gh.BonaFide",
+            "value": "https://www.nature.com/articles/s41431-018-0219-y",
+            "from": [
+              "dbgap",
+              "elixir"
+            ]
+          },
+          {
+            "claim": "ga4gh.AcceptedTermsAndPolicies",
+            "value": "https://librarycard.broadinstitute.org/v1"
+          }
+        ]
+      },
+      "disallow": {
+        "claim": "nih.Blacklisted",
+        "value": "true"
+      }
+    },
+    "dac-1000-genomes": {
+      "allow": {
+        "claim": "ga4gh.ControlledAccessGrants",
+        "value": "https://dac.nih.gov/datasets/phys000710",
+        "from": [
+          "dbgap"
+        ]
+      }
+    },
+    "ethics": {
+      "allow": {
+        "claim": "ga4gh.AcceptedTermsAndPolicies",
+        "value": "https://www.nature.com/articles/s41431-018-0219-y"
+      }
+    }
+  },
+  "resources": {
+    "allOfUs": {
+      "state": "ACTIVE",
+      "views": {
+        "bq_read": {
+          "target": "token:gcp:sa",
+          "version": "AoU v1",
+          "topic": "FHIR",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-b",
+          "contentTypes": [
+            "text/csv"
+          ],
+          "grants": [
+            {
+              "accessGrant": "bigquery",
+              "roles": {
+                "viewer": {
+                  "targetRoles": [
+                    "roles/bigquery.dataViewer"
+                  ],
+                  "targetScopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ],
+                  "policies": [
+                    "bona_fide",
+                    "ethics"
+                  ],
+                  "damRoleCategories": [
+                    "list",
+                    "metadata",
+                    "read"
+                  ],
+                  "ui": {
+                    "description": "Query tables and view table metadata",
+                    "label": "BigQuery Viewer"
+                  }
+                }
+              },
+              "items": [
+                "projects/allofus-project/tables/allofus-table1",
+                "projects/allofus-project/tables/allofus-table2"
+              ]
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "BigQuery Read"
+          }
+        },
+        "gcs_read": {
+          "target": "token:gcp:sa",
+          "version": "AoU v1",
+          "topic": "FHIR",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-b",
+          "contentTypes": [
+            "application/bam"
+          ],
+          "grants": [
+            {
+              "accessGrant": "gcs",
+              "roles": {
+                "viewer": {
+                  "targetRoles": [
+                    "roles/Viewer"
+                  ],
+                  "targetScopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ],
+                  "policies": [
+                    "bona_fide",
+                    "ethics"
+                  ],
+                  "damRoleCategories": [
+                    "list",
+                    "metadata",
+                    "read"
+                  ],
+                  "ui": {
+                    "description": "List and read files",
+                    "label": "File Viewer"
+                  }
+                }
+              },
+              "items": [
+                "projects/allofus-project/buckets/allofus-bucket1",
+                "projects/allofus-project/buckets/allofus-bucket2"
+              ]
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "File Read"
+          }
+        }
+      },
+      "maxTokenTtl": "3h",
+      "ui": {
+        "applyUrl": "https://www.researchallofus.org",
+        "description": "Records from 1+ million living in the U.S.",
+        "imageUrl": "https://www.nih.gov/sites/default/files/styles/featured_media_breakpoint-medium/public/research-training/initiatives/pmi/pmi-all-of-us-logo.jpg?itok=BDi3j90Z&timestamp=1476283809",
+        "infoUrl": "https://allofus.nih.gov",
+        "label": "All Of Us",
+        "troubleshootUrl": "https://allofus.nih.gov/about/all-us-research-program-protocol"
+      }
+    },
+    "andrew-test": {
+      "state": "ACTIVE",
+      "views": {
+        "bq_read_01": {
+          "target": "token:gcp:sa",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [],
+          "grants": [
+            {
+              "accessGrant": "bigquery",
+              "roles": {
+                "viewer": {
+                  "targetRoles": [
+                    "projects/datahost01/roles/BQReader"
+                  ],
+                  "targetScopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ],
+                  "policies": [
+                    "bona_fide",
+                    "ethics"
+                  ],
+                  "damRoleCategories": [
+                    "list",
+                    "metadata",
+                    "read"
+                  ],
+                  "ui": {
+                    "description": "Query tables and view table metadata",
+                    "label": "BigQuery Viewer"
+                  }
+                }
+              },
+              "items": [
+                "projects/datahost01/tables/-"
+              ]
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "BigQuery Read on datahost01"
+          }
+        },
+        "bq_read_02": {
+          "target": "token:gcp:sa",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [],
+          "grants": [
+            {
+              "accessGrant": "bigquery",
+              "roles": {
+                "viewer": {
+                  "targetRoles": [
+                    "projects/datahost02/roles/BQReader"
+                  ],
+                  "targetScopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ],
+                  "policies": [
+                    "bona_fide",
+                    "ethics"
+                  ],
+                  "damRoleCategories": [
+                    "list",
+                    "metadata",
+                    "read"
+                  ],
+                  "ui": {
+                    "description": "Query tables and view table metadata",
+                    "label": "BigQuery Viewer"
+                  }
+                }
+              },
+              "items": [
+                "projects/datahost02/tables/-"
+              ]
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "BigQuery Read on datahost02"
+          }
+        },
+        "gcs_read_01": {
+          "target": "token:gcp:sa",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [],
+          "grants": [
+            {
+              "accessGrant": "gcs",
+              "roles": {
+                "viewer": {
+                  "targetRoles": [
+                    "projects/datahost01/roles/GCSReader"
+                  ],
+                  "targetScopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ],
+                  "policies": [
+                    "bona_fide",
+                    "ethics"
+                  ],
+                  "damRoleCategories": [
+                    "list",
+                    "metadata",
+                    "read"
+                  ],
+                  "ui": {
+                    "description": "List and read files",
+                    "label": "File Viewer"
+                  }
+                }
+              },
+              "items": [
+                "projects/datahost01/buckets/hclsdatahost"
+              ]
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "GCS File Read on datahost01"
+          }
+        },
+        "gcs_read_02": {
+          "target": "token:gcp:sa",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [],
+          "grants": [
+            {
+              "accessGrant": "gcs",
+              "roles": {
+                "viewer": {
+                  "targetRoles": [
+                    "projects/datahost02/roles/GCSReader"
+                  ],
+                  "targetScopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ],
+                  "policies": [
+                    "bona_fide",
+                    "ethics"
+                  ],
+                  "damRoleCategories": [
+                    "list",
+                    "metadata",
+                    "read"
+                  ],
+                  "ui": {
+                    "description": "List and read files",
+                    "label": "File Viewer"
+                  }
+                }
+              },
+              "items": [
+                "projects/datahost02/buckets/hclsdatahost02"
+              ]
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "GCS File Read on datahost02"
+          }
+        }
+      },
+      "maxTokenTtl": "1h",
+      "ui": {
+        "applyUrl": "http://apply.example.org",
+        "description": "Google POC for Billing",
+        "imageUrl": "https://psmag.com/.image/t_share/MTI3NTgxNjU1MDk4NjkyODgy/genome.jpg",
+        "infoUrl": "http://info.example.org",
+        "label": "Billing Test for GCS and BigQuery",
+        "troubleshootUrl": "http://troubleshoot.example.org"
+      }
+    },
+    "ga4gh-apis": {
+      "state": "ACTIVE",
+      "views": {
+        "beacon": {
+          "target": "token:jwt:gatekeeper",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "discovery",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [
+            "application/bam"
+          ],
+          "grants": [
+            {
+              "accessGrant": "beacon",
+              "aud": "https://ga4gh-apis-beacon.dnastack.com",
+              "roles": {
+                "discovery": {
+                  "targetScopes": [
+                    "registered",
+                    "controlled"
+                  ],
+                  "policies": [
+                    "bona_fide",
+                    "ethics"
+                  ],
+                  "damRoleCategories": [
+                    "metadata"
+                  ],
+                  "ui": {
+                    "description": "Query genome data and receive metadata results",
+                    "label": "Discovery Beacon Search with Metadata"
+                  }
+                }
+              },
+              "items": [
+                "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
+              ]
+            }
+          ],
+          "defaultRole": "discovery",
+          "ui": {
+            "label": "Beacon Discovery"
+          }
+        },
+        "gcp": {
+          "target": "token:gcp:sa",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [
+            "application/bam"
+          ],
+          "grants": [
+            {
+              "accessGrant": "gcs",
+              "roles": {
+                "viewer": {
+                  "targetRoles": [
+                    "roles/storage.objectViewer"
+                  ],
+                  "targetScopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ],
+                  "policies": [
+                    "bona_fide",
+                    "ethics"
+                  ],
+                  "damRoleCategories": [
+                    "list",
+                    "metadata",
+                    "read"
+                  ],
+                  "ui": {
+                    "description": "List and read files",
+                    "label": "File Viewer"
+                  }
+                }
+              },
+              "items": [
+                "projects/ga4gh-apis/buckets/ga4gh-apis-controlled-access"
+              ]
+            },
+            {
+              "accessGrant": "bigquery",
+              "roles": {
+                "viewer": {
+                  "targetRoles": [
+                    "roles/bigquery.dataViewer"
+                  ],
+                  "targetScopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ],
+                  "policies": [
+                    "bona_fide",
+                    "ethics"
+                  ],
+                  "damRoleCategories": [
+                    "list",
+                    "metadata",
+                    "read"
+                  ],
+                  "ui": {
+                    "description": "Query tables and view table metadata",
+                    "label": "BigQuery Viewer"
+                  }
+                }
+              },
+              "items": [
+                "projects/ga4gh-apis/tables/table1"
+              ]
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "File Read Experiment"
+          }
+        },
+        "gcs_read": {
+          "target": "token:gcp:sa",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [
+            "application/bam"
+          ],
+          "grants": [
+            {
+              "accessGrant": "gcs",
+              "roles": {
+                "viewer": {
+                  "targetRoles": [
+                    "projects/ga4gh-apis/roles/BeaconUser"
+                  ],
+                  "targetScopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ],
+                  "policies": [
+                    "bona_fide",
+                    "ethics",
+                    "GRU"
+                  ],
+                  "damRoleCategories": [
+                    "list",
+                    "metadata",
+                    "read"
+                  ],
+                  "ui": {
+                    "description": "List and read files",
+                    "label": "File Viewer"
+                  }
+                }
+              },
+              "items": [
+                "projects/ga4gh-apis/buckets/ga4gh-apis-controlled-access"
+              ]
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "File Read"
+          }
+        }
+      },
+      "maxTokenTtl": "1h",
+      "ui": {
+        "applyUrl": "http://apply.ga4gh-apis.org",
+        "description": "Google demo of GA4GH APIs",
+        "imageUrl": "https://www.ebi.ac.uk/sites/ebi.ac.uk/files/groups/external_relations/images/wide-imagery/Global_Alliance_news_logo_780x400_0.jpg",
+        "infoUrl": "http://info.ga4gh-apis.org",
+        "label": "GA4GH APIs",
+        "troubleshootUrl": "http://troubleshoot.ga4gh-apis.org"
+      }
+    },
+    "thousand-genomes": {
+      "state": "ACTIVE",
+      "views": {
+        "discovery-access": {
+          "target": "token:jwt:gatekeeper",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "discovery",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [
+            "application/bam"
+          ],
+          "grants": [
+            {
+              "accessGrant": "beacon",
+              "aud": "https://ga4gh-apis-beacon.dnastack.com",
+              "roles": {
+                "discovery": {
+                  "targetScopes": [
+                    "registered",
+                    "controlled"
+                  ],
+                  "policies": [
+                    "bona_fide",
+                    "ethics"
+                  ],
+                  "damRoleCategories": [
+                    "metadata"
+                  ],
+                  "ui": {
+                    "description": "Query genome data and receive metadata results",
+                    "label": "Discovery Beacon Search with Metadata"
+                  }
+                }
+              },
+              "items": [
+                "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
+              ]
+            }
+          ],
+          "defaultRole": "discovery",
+          "ui": {
+            "label": "Beacon Discovery Access"
+          }
+        },
+        "full-read-access": {
+          "target": "token:gcp:sa",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [
+            "application/bam"
+          ],
+          "grants": [
+            {
+              "accessGrant": "gcs",
+              "roles": {
+                "viewer": {
+                  "targetRoles": [
+                    "projects/ga4gh-apis/roles/BeaconUser"
+                  ],
+                  "targetScopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ],
+                  "policies": [
+                    "dac-1000-genomes"
+                  ],
+                  "damRoleCategories": [
+                    "list",
+                    "metadata",
+                    "read"
+                  ],
+                  "ui": {
+                    "description": "List and read files",
+                    "label": "File Viewer"
+                  }
+                }
+              },
+              "items": [
+                "projects/ga4gh-apis/buckets/ga4gh-apis-controlled-access"
+              ]
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "Full File Read Access"
+          }
+        }
+      },
+      "maxTokenTtl": "7d",
+      "ui": {
+        "applyUrl": "http://apply.1000-genomes.org",
+        "description": "Demo Controlled Access of 1000 Genomes",
+        "imageUrl": "https://www.genengnews.com/wp-content/uploads/2018/08/Oct1_2015_ErnestoDelAguilaIII_1000GenomesProject9614313724-1.jpg",
+        "infoUrl": "http://info.1000-genomes.org",
+        "label": "1000 Genomes",
+        "troubleshootUrl": "http://troubleshoot.1000-genomes.org"
+      }
+    }
+  },
+  "clients": {
+    "billing_test": {
+      "clientId": "135d6a28-5508-493d-a45d-93f4fe02211b"
+    },
+    "craig_test": {
+      "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c"
+    },
+    "dnastack_fe": {
+      "clientId": "b1aed96d-6367-4313-87a1-65eda4962a76"
+    },
+    "test_client": {
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed64"
+    },
+    "test_page": {
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed65"
+    }
+  },
+  "accessGrants": {
+    "beacon": {
+      "targetAdapter": "token:jwt:gatekeeper",
+      "inheritPolicies": [
+        "bona_fide",
+        "ethics"
+      ],
+      "roles": {
+        "basic_discovery": {
+          "targetScopes": [
+            "registered"
+          ],
+          "damRoleCategories": [
+            "exists"
+          ],
+          "ui": {
+            "description": "Query genome data and return 'found' or 'not found' status",
+            "label": "Discovery Beacon Search without Metadata"
+          }
+        },
+        "discovery": {
+          "targetScopes": [
+            "registered",
+            "controlled"
+          ],
+          "damRoleCategories": [
+            "metadata"
+          ],
+          "ui": {
+            "description": "Query genome data and receive metadata results",
+            "label": "Discovery Beacon Search with Metadata"
+          }
+        }
+      },
+      "interfaces": {
+        "http:beacon": "${URL}"
+      },
+      "ui": {
+        "label": "Beacon Discovery Search"
+      }
+    },
+    "bigquery": {
+      "targetAdapter": "token:gcp:sa",
+      "inheritTargetScopes": [
+        "https://www.googleapis.com/auth/cloud-platform"
+      ],
+      "roles": {
+        "editor": {
+          "targetRoles": [
+            "roles/bigquery.dataEditor"
+          ],
+          "damRoleCategories": [
+            "metadata",
+            "list",
+            "read",
+            "write"
+          ],
+          "ui": {
+            "description": "Query and modify tables and table metadata",
+            "label": "BigQuery Editor"
+          }
+        },
+        "viewer": {
+          "targetRoles": [
+            "roles/bigquery.dataViewer"
+          ],
+          "damRoleCategories": [
+            "metadata",
+            "list",
+            "read"
+          ],
+          "ui": {
+            "description": "Query tables and view table metadata",
+            "label": "BigQuery Viewer"
+          }
+        }
+      },
+      "interfaces": {
+        "http:gcp:bq": "https://www.googleapis.com/bigquery/v1/projects/${PROJECT-ID}"
+      },
+      "ui": {
+        "label": "Google BigQuery"
+      }
+    },
+    "gcs": {
+      "targetAdapter": "token:gcp:sa",
+      "inheritTargetScopes": [
+        "https://www.googleapis.com/auth/cloud-platform"
+      ],
+      "roles": {
+        "creator": {
+          "targetRoles": [
+            "roles/storage.objectCreator"
+          ],
+          "damRoleCategories": [
+            "write"
+          ],
+          "ui": {
+            "description": "Write files (without read access)",
+            "label": "File Creator"
+          }
+        },
+        "editor": {
+          "targetRoles": [
+            "roles/storage.objectViewer",
+            "roles/storage.objectCreator"
+          ],
+          "damRoleCategories": [
+            "metadata",
+            "list",
+            "read",
+            "write"
+          ],
+          "ui": {
+            "description": "Read and write files plus manipulate file metadata",
+            "label": "File Editor"
+          }
+        },
+        "viewer": {
+          "targetRoles": [
+            "roles/storage.objectViewer"
+          ],
+          "damRoleCategories": [
+            "metadata",
+            "list",
+            "read"
+          ],
+          "ui": {
+            "description": "List and read files",
+            "label": "File Viewer"
+          }
+        }
+      },
+      "interfaces": {
+        "gcp:gs": "gs://${BUCKET-ID}",
+        "http:gcp:gs": "https://www.googleapis.com/storage/v1/b/${BUCKET-ID}"
+      },
+      "ui": {
+        "label": "Google Cloud Storage"
+      }
+    }
+  },
+  "claimDefinitions": {
+    "ga4gh.AcceptedTermsAndPolicies": {
+      "ui": {
+        "label": "Accepted Terms and Policies"
+      }
+    },
+    "ga4gh.AffiliationAndRole": {
+      "ui": {
+        "label": "Affiliation and Role"
+      }
+    },
+    "ga4gh.BonaFide": {
+      "ui": {
+        "label": "Bona Fide"
+      }
+    },
+    "ga4gh.ControlledAccessGrants": {
+      "ui": {
+        "label": "Controlled Access Grants"
+      }
+    },
+    "nih.Blacklisted": {
+      "ui": {
+        "label": "NIH Blacklisted from Access"
+      }
+    }
+  },
+  "testPersonas": {
+    "dr_joe_era_commons": {
+      "idToken": {
+        "standardClaims": {
+          "iss": "https://login.nih.org/oidc/",
+          "sub": "dr_joe@era.nih.gov"
+        },
+        "ga4ghClaims": [
+          {
+            "claimName": "ga4gh.ControlledAccessGrants",
+            "source": "https://dbgap.nlm.nih.gov/aa",
+            "value": "https://dac.nih.gov/datasets/phys000710",
+            "iat": 1550120402,
+            "exp": 2181272402,
+            "by": "dac"
+          }
+        ]
+      },
+      "resources": {
+        "thousand-genomes": {
+          "access": [
+            "full-read-access/viewer"
+          ]
+        }
+      },
+      "state": "ACTIVE",
+      "ui": {
+        "label": "Dr. Joe"
+      }
+    },
+    "john": {
+      "idToken": {
+        "standardClaims": {
+          "iss": "me",
+          "sub": "you@me.com"
+        }
+      },
+      "state": "ACTIVE",
+      "ui": {
+        "label": "John Persona"
+      }
+    },
+    "nci_researcher": {
+      "idToken": {
+        "standardClaims": {
+          "iss": "https://login.nih.org/oidc/",
+          "sub": "nci_researcher@nci.nih.gov"
+        },
+        "ga4ghClaims": [
+          {
+            "claimName": "ga4gh.BonaFide",
+            "source": "https://nci.nih.org",
+            "value": "https://www.nature.com/articles/s41431-018-0219-y",
+            "iat": 1550120401,
+            "exp": 2181272401,
+            "by": "signing_official"
+          },
+          {
+            "claimName": "ga4gh.AcceptedTermsAndPolicies",
+            "source": "https://nci.nih.org",
+            "value": "https://www.nature.com/articles/s41431-018-0219-y",
+            "iat": 1550120402,
+            "exp": 2181272402,
+            "by": "self"
+          }
+        ]
+      },
+      "resources": {
+        "allOfUs": {
+          "access": [
+            "bq_read/viewer",
+            "gcs_read/viewer"
+          ]
+        },
+        "andrew-test": {
+          "access": [
+            "bq_read_01/viewer",
+            "bq_read_02/viewer",
+            "gcs_read_01/viewer",
+            "gcs_read_02/viewer"
+          ]
+        },
+        "ga4gh-apis": {
+          "access": [
+            "beacon/discovery",
+            "gcp/viewer",
+            "gcs_read/viewer"
+          ]
+        },
+        "thousand-genomes": {
+          "access": [
+            "discovery-access/discovery"
+          ]
+        }
+      },
+      "state": "ACTIVE",
+      "ui": {
+        "label": "NCI Researcher"
+      }
+    },
+    "undergrad_candice": {
+      "idToken": {
+        "standardClaims": {
+          "iss": "https://login.elixir-czech.org/oidc/",
+          "sub": "undergrad_candice@undergrad.uwaterloo.ca"
+        }
+      },
+      "resources": {},
+      "state": "ACTIVE",
+      "ui": {
+        "label": "Undergrad Candice"
+      }
+    }
+  },
+  "options": {
+    "regexpConditions": true,
+    "configReadOnly": true,
+    "gcp": {
+      "managedKeysMinTtl": "7d",
+      "managedKeysPerAccount": 10,
+      "serviceAccountProject": "craigv-codelab"
+    }
+  }
+}

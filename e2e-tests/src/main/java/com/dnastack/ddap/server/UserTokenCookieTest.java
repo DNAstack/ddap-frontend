@@ -1,23 +1,24 @@
 package com.dnastack.ddap.server;
 
+import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.time.Instant;
+import java.util.Base64;
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
 import static org.hamcrest.Matchers.isOneOf;
 import static org.hamcrest.Matchers.not;
 
-import com.dnastack.ddap.common.AbstractBaseE2eTest;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
-import java.io.IOException;
-import java.time.Instant;
-import java.util.Base64;
-import java.util.Map;
-import org.junit.Test;
-
 public class UserTokenCookieTest extends AbstractBaseE2eTest {
 
-    private static final String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_UserTokenCookieTest";
+    private static final String REALM = generateRealmName(UserTokenCookieTest.class.getSimpleName());
 
     @Test
     public void damResponsesShouldClearExpiredUserTokenCookies() throws Exception {
@@ -41,7 +42,7 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
     }
 
     private String damViaDdap(String path) {
-        return format("/dam/v1alpha/%s%s", realmName, path);
+        return format("/dam/v1alpha/%s%s", REALM, path);
     }
 
     @Test
@@ -104,7 +105,7 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
     @Test
     public void shouldBeAbleToAccessICWithAppropriateCookie() throws IOException {
         // TODO [DISCO-2022] this test should create its own realm and populate it with the needed personas!
-        String validPersonaToken = fetchRealPersonaIcToken("nci_researcher", realmName);
+        String validPersonaToken = fetchRealPersonaIcToken("nci_researcher", REALM);
 
         // @formatter:off
         given()
@@ -123,7 +124,7 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
     }
 
     private String icViaDdap(String path) {
-        return format("/identity/v1alpha/%s%s", realmName, path);
+        return format("/identity/v1alpha/%s%s", REALM, path);
     }
 
     private String fakeUserToken(Instant exp) throws JsonProcessingException {

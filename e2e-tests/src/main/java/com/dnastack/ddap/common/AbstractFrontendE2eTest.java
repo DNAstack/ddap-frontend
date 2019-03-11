@@ -52,8 +52,8 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
         }
     }
 
-    protected ICLoginPage startLogin() {
-        driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve("/api/v1alpha/dnastack/identity/login").toString()));
+    protected ICLoginPage startLogin(String realm) {
+        driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));
         return new ICLoginPage(driver);
     }
 

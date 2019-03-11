@@ -1,22 +1,6 @@
 package com.dnastack.ddap.common;
 
-import static java.lang.String.format;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.fail;
-
 import io.restassured.RestAssured;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -31,12 +15,35 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.util.EntityUtils;
 import org.junit.Before;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
+import static java.lang.Math.min;
+import static java.lang.String.format;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.fail;
+
 public abstract class AbstractBaseE2eTest {
 
     protected static final String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
     protected static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
     protected static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
     protected static final String DDAP_TEST_REALM_NAME_PREFIX = requiredEnv("E2E_TEST_REALM");
+    // Current size limit on realm names in DAM
+    public static final int REALM_NAME_LIMIT = 32;
+
+    protected static String generateRealmName(String testClassName) {
+        final String fullName = format("%s_%s_%s",
+                                     DDAP_TEST_REALM_NAME_PREFIX,
+                                     testClassName,
+                                     System.currentTimeMillis() % 1000);
+        return fullName.substring(0, min(REALM_NAME_LIMIT, fullName.length()));
+    }
 
     @Before
     public void setUp() {
