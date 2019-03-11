@@ -143,7 +143,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         String profileSelector = "nav-account";
         String text = driver.findElement(By.xpath("//*[@data-se=\"" + profileSelector + "\"]")).getText();
 
-        assertThat(text, containsString("Dr Joe"));
+        assertThat(text, containsString("Craig Voisin"));
     }
 
 }
