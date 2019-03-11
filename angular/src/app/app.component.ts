@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
 import { IdentityService } from './identity/identity.service';
@@ -17,6 +18,7 @@ export class AppComponent implements OnInit {
 
   constructor(public loader: LoadingBarService,
               private realmService: RealmService,
+              private router: Router,
               private identityService: IdentityService) {
 
   }
@@ -29,5 +31,9 @@ export class AppComponent implements OnInit {
     this.identityService.getProfile().subscribe(profile => {
       this.profile = profile;
     });
+  }
+
+  goToRealm(realm) {
+    this.router.navigate([realm]);
   }
 }
