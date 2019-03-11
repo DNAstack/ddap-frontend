@@ -23,12 +23,10 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
@@ -46,11 +44,19 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory {
 		return (exchange, chain) -> {
 			logRoutedRequest(exchange);
 			final long startTime = System.currentTimeMillis();
-			return chain.filter(exchange).then(Mono.fromRunnable(() -> logResponse(exchange, startTime)));
+			return chain.filter(exchange)
+						.doOnCancel(() -> logResponse(exchange, startTime))
+						.doOnTerminate(() -> logResponse(exchange, startTime));
 		};
 	}
 
 	private void logRoutedRequest(ServerWebExchange exchange) {
+		ServerHttpRequest request = exchange.getRequest();
+		URI calculatedRoute = calculateRequestRoute(exchange);
+		log.info(">>> {} {}", request.getMethodValue(), calculatedRoute);
+	}
+
+	private URI calculateRequestRoute(ServerWebExchange exchange) {
 		ServerHttpRequest request = exchange.getRequest();
 		URI requestUri = request.getURI();
 
@@ -58,13 +64,15 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory {
 		URI routeUri = route == null ? UNKNOWN_ROUTE_PLACEHOLDER : route.getUri();
 
 		String requestPathAndQuery = requestUri.getPath() + "?" + requestUri.getQuery();
-		URI calculatedRoute = routeUri.resolve(requestPathAndQuery);
-		log.info(">>> {} {}", request.getMethodValue(), calculatedRoute);
+		return routeUri.resolve(requestPathAndQuery);
 	}
 
 	private void logResponse(ServerWebExchange exchange, long startTime) {
 		ServerHttpResponse response = exchange.getResponse();
 		final long elapsedTime = System.currentTimeMillis() - startTime;
-		log.info("<<< HTTP {}: {} bytes in {}ms", response.getStatusCode(), response.getHeaders().getContentLength(), elapsedTime);
+		log.info("<<< HTTP {}: {} bytes in {}ms",
+				 response.getStatusCode(),
+				 response.getHeaders().getContentLength(),
+				 elapsedTime);
 	}
 }
