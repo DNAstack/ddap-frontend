@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
+import { EntityModel } from '../../admin/shared/entity.model';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 import { DataService } from '../data.service';
 
@@ -13,7 +14,7 @@ import { DataService } from '../data.service';
 })
 export class DataListComponent implements OnInit {
 
-  resources$: Observable<any[]>;
+  resources$: Observable<EntityModel[]>;
 
   constructor(
     private dataService: DataService,

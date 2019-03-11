@@ -1,7 +1,7 @@
 {
   "version": "v0",
-  "revision": "2",
-  "commitTime": 1552314102.428899,
+  "revision": "1",
+  "commitTime": 1544824316,
   "trustedPassportIssuers": {
     "dbGaP": {
       "issuer": "https://dbgap.nlm.nih.gov/aa",
@@ -15,29 +15,49 @@
       "issuer": "https://ic-dot-craigv-codelab.appspot.com/oidc"
     }
   },
-  "trustedClaims": {
-    "dbgap": {
-      "source": "https://dbgap.nlm.nih.gov",
-      "claims": [
-        "^.*"
-      ]
-    },
-    "elixir": {
-      "source": "https://ga4gh.elixir-czech.org/claims",
+  "trustedSources": {
+    "elixir_institutes": {
+      "sources": [
+        "https://ga4gh.elixir-czech.org/claims"
+      ],
       "claims": [
         "ga4gh.BonaFide",
-        "^ga4gh.*"
+        "^elixir.*"
       ]
     },
-    "nci": {
-      "source": "https://nci.nih.org",
+    "nih_institutes": {
+      "sources": [
+        "https://institute1.nih.gov",
+        "https://institute2.nih.gov",
+        "https://institute3.nih.gov",
+        "https://institute4.nih.gov"
+      ],
       "claims": [
-        "ga4gh.AffiliationAndRole"
+        "^ga4gh.*",
+        "^nih.*"
       ]
     },
-    "ustanford": {
-      "source": "https://ga4gh.stanford.edu/claims",
+    "research_companies": {
+      "sources": [
+        "https://ga4gh.google.com/claims",
+        "https://ga4gh.dnastack.com/claims"
+      ],
       "claims": [
+        "ga4gh.AcceptedTermsAndPolicies",
+        "ga4gh.BonaFide"
+      ]
+    },
+    "the_broad": {
+      "sources": [
+        "https://ga4gh.broadinstitute.org"
+      ]
+    },
+    "us_universities": {
+      "sources": [
+        "https://ga4gh.stanford.edu/claims"
+      ],
+      "claims": [
+        "ga4gh.AcceptedTermsAndPolicies",
         "ga4gh.BonaFide"
       ]
     }
@@ -55,13 +75,17 @@
             "claim": "ga4gh.BonaFide",
             "value": "https://www.nature.com/articles/s41431-018-0219-y",
             "from": [
-              "dbgap",
-              "elixir"
+              "nih_institutes",
+              "us_universities",
+              "research_companies"
             ]
           },
           {
             "claim": "ga4gh.AcceptedTermsAndPolicies",
-            "value": "https://librarycard.broadinstitute.org/v1"
+            "value": "https://librarycard.broadinstitute.org/v1",
+            "from": [
+              "the_broad"
+            ]
           }
         ]
       },
@@ -75,7 +99,7 @@
         "claim": "ga4gh.ControlledAccessGrants",
         "value": "https://dac.nih.gov/datasets/phys000710",
         "from": [
-          "dbgap"
+          "nih_institutes"
         ]
       }
     },
@@ -91,7 +115,7 @@
       "state": "ACTIVE",
       "views": {
         "bq_read": {
-          "target": "token:gcp:sa",
+          "serviceTemplate": "bigquery",
           "version": "AoU v1",
           "topic": "FHIR",
           "partition": "all",
@@ -102,28 +126,15 @@
           ],
           "grants": [
             {
-              "accessGrant": "bigquery",
               "roles": {
                 "viewer": {
                   "targetRoles": [
                     "roles/bigquery.dataViewer"
                   ],
-                  "targetScopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ],
                   "policies": [
                     "bona_fide",
                     "ethics"
-                  ],
-                  "damRoleCategories": [
-                    "list",
-                    "metadata",
-                    "read"
-                  ],
-                  "ui": {
-                    "description": "Query tables and view table metadata",
-                    "label": "BigQuery Viewer"
-                  }
+                  ]
                 }
               },
               "items": [
@@ -138,7 +149,7 @@
           }
         },
         "gcs_read": {
-          "target": "token:gcp:sa",
+          "serviceTemplate": "gcs",
           "version": "AoU v1",
           "topic": "FHIR",
           "partition": "all",
@@ -149,28 +160,15 @@
           ],
           "grants": [
             {
-              "accessGrant": "gcs",
               "roles": {
                 "viewer": {
                   "targetRoles": [
                     "roles/Viewer"
                   ],
-                  "targetScopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ],
                   "policies": [
                     "bona_fide",
                     "ethics"
-                  ],
-                  "damRoleCategories": [
-                    "list",
-                    "metadata",
-                    "read"
-                  ],
-                  "ui": {
-                    "description": "List and read files",
-                    "label": "File Viewer"
-                  }
+                  ]
                 }
               },
               "items": [
@@ -199,7 +197,7 @@
       "state": "ACTIVE",
       "views": {
         "bq_read_01": {
-          "target": "token:gcp:sa",
+          "serviceTemplate": "bigquery",
           "version": "Phase 3",
           "topic": "variants",
           "partition": "all",
@@ -208,28 +206,15 @@
           "contentTypes": [],
           "grants": [
             {
-              "accessGrant": "bigquery",
               "roles": {
                 "viewer": {
                   "targetRoles": [
                     "projects/datahost01/roles/BQReader"
                   ],
-                  "targetScopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ],
                   "policies": [
                     "bona_fide",
                     "ethics"
-                  ],
-                  "damRoleCategories": [
-                    "list",
-                    "metadata",
-                    "read"
-                  ],
-                  "ui": {
-                    "description": "Query tables and view table metadata",
-                    "label": "BigQuery Viewer"
-                  }
+                  ]
                 }
               },
               "items": [
@@ -243,7 +228,7 @@
           }
         },
         "bq_read_02": {
-          "target": "token:gcp:sa",
+          "serviceTemplate": "bigquery",
           "version": "Phase 3",
           "topic": "variants",
           "partition": "all",
@@ -252,28 +237,15 @@
           "contentTypes": [],
           "grants": [
             {
-              "accessGrant": "bigquery",
               "roles": {
                 "viewer": {
                   "targetRoles": [
                     "projects/datahost02/roles/BQReader"
                   ],
-                  "targetScopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ],
                   "policies": [
                     "bona_fide",
                     "ethics"
-                  ],
-                  "damRoleCategories": [
-                    "list",
-                    "metadata",
-                    "read"
-                  ],
-                  "ui": {
-                    "description": "Query tables and view table metadata",
-                    "label": "BigQuery Viewer"
-                  }
+                  ]
                 }
               },
               "items": [
@@ -287,7 +259,7 @@
           }
         },
         "gcs_read_01": {
-          "target": "token:gcp:sa",
+          "serviceTemplate": "gcs",
           "version": "Phase 3",
           "topic": "variants",
           "partition": "all",
@@ -296,28 +268,15 @@
           "contentTypes": [],
           "grants": [
             {
-              "accessGrant": "gcs",
               "roles": {
                 "viewer": {
                   "targetRoles": [
                     "projects/datahost01/roles/GCSReader"
                   ],
-                  "targetScopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ],
                   "policies": [
                     "bona_fide",
                     "ethics"
-                  ],
-                  "damRoleCategories": [
-                    "list",
-                    "metadata",
-                    "read"
-                  ],
-                  "ui": {
-                    "description": "List and read files",
-                    "label": "File Viewer"
-                  }
+                  ]
                 }
               },
               "items": [
@@ -331,7 +290,7 @@
           }
         },
         "gcs_read_02": {
-          "target": "token:gcp:sa",
+          "serviceTemplate": "gcs",
           "version": "Phase 3",
           "topic": "variants",
           "partition": "all",
@@ -340,28 +299,15 @@
           "contentTypes": [],
           "grants": [
             {
-              "accessGrant": "gcs",
               "roles": {
                 "viewer": {
                   "targetRoles": [
                     "projects/datahost02/roles/GCSReader"
                   ],
-                  "targetScopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ],
                   "policies": [
                     "bona_fide",
                     "ethics"
-                  ],
-                  "damRoleCategories": [
-                    "list",
-                    "metadata",
-                    "read"
-                  ],
-                  "ui": {
-                    "description": "List and read files",
-                    "label": "File Viewer"
-                  }
+                  ]
                 }
               },
               "items": [
@@ -389,7 +335,7 @@
       "state": "ACTIVE",
       "views": {
         "beacon": {
-          "target": "token:jwt:gatekeeper",
+          "serviceTemplate": "beacon",
           "version": "Phase 3",
           "topic": "variants",
           "partition": "all",
@@ -400,30 +346,13 @@
           ],
           "grants": [
             {
-              "accessGrant": "beacon",
-              "aud": "https://ga4gh-apis-beacon.dnastack.com",
               "roles": {
-                "discovery": {
-                  "targetScopes": [
-                    "registered",
-                    "controlled"
-                  ],
-                  "policies": [
-                    "bona_fide",
-                    "ethics"
-                  ],
-                  "damRoleCategories": [
-                    "metadata"
-                  ],
-                  "ui": {
-                    "description": "Query genome data and receive metadata results",
-                    "label": "Discovery Beacon Search with Metadata"
-                  }
-                }
+                "discovery": {}
               },
               "items": [
                 "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
-              ]
+              ],
+              "aud": "https://ga4gh-apis-beacon.dnastack.com"
             }
           ],
           "defaultRole": "discovery",
@@ -431,83 +360,8 @@
             "label": "Beacon Discovery"
           }
         },
-        "gcp": {
-          "target": "token:gcp:sa",
-          "version": "Phase 3",
-          "topic": "variants",
-          "partition": "all",
-          "fidelity": "normalized",
-          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
-          "contentTypes": [
-            "application/bam"
-          ],
-          "grants": [
-            {
-              "accessGrant": "gcs",
-              "roles": {
-                "viewer": {
-                  "targetRoles": [
-                    "roles/storage.objectViewer"
-                  ],
-                  "targetScopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ],
-                  "policies": [
-                    "bona_fide",
-                    "ethics"
-                  ],
-                  "damRoleCategories": [
-                    "list",
-                    "metadata",
-                    "read"
-                  ],
-                  "ui": {
-                    "description": "List and read files",
-                    "label": "File Viewer"
-                  }
-                }
-              },
-              "items": [
-                "projects/ga4gh-apis/buckets/ga4gh-apis-controlled-access"
-              ]
-            },
-            {
-              "accessGrant": "bigquery",
-              "roles": {
-                "viewer": {
-                  "targetRoles": [
-                    "roles/bigquery.dataViewer"
-                  ],
-                  "targetScopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ],
-                  "policies": [
-                    "bona_fide",
-                    "ethics"
-                  ],
-                  "damRoleCategories": [
-                    "list",
-                    "metadata",
-                    "read"
-                  ],
-                  "ui": {
-                    "description": "Query tables and view table metadata",
-                    "label": "BigQuery Viewer"
-                  }
-                }
-              },
-              "items": [
-                "projects/ga4gh-apis/tables/table1"
-              ]
-            }
-          ],
-          "defaultRole": "viewer",
-          "ui": {
-            "label": "File Read Experiment"
-          }
-        },
         "gcs_read": {
-          "target": "token:gcp:sa",
+          "serviceTemplate": "gcs",
           "version": "Phase 3",
           "topic": "variants",
           "partition": "all",
@@ -518,29 +372,16 @@
           ],
           "grants": [
             {
-              "accessGrant": "gcs",
               "roles": {
                 "viewer": {
                   "targetRoles": [
                     "projects/ga4gh-apis/roles/BeaconUser"
                   ],
-                  "targetScopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ],
                   "policies": [
                     "bona_fide",
                     "ethics",
                     "GRU"
-                  ],
-                  "damRoleCategories": [
-                    "list",
-                    "metadata",
-                    "read"
-                  ],
-                  "ui": {
-                    "description": "List and read files",
-                    "label": "File Viewer"
-                  }
+                  ]
                 }
               },
               "items": [
@@ -568,7 +409,7 @@
       "state": "ACTIVE",
       "views": {
         "discovery-access": {
-          "target": "token:jwt:gatekeeper",
+          "serviceTemplate": "beacon",
           "version": "Phase 3",
           "topic": "variants",
           "partition": "all",
@@ -579,30 +420,13 @@
           ],
           "grants": [
             {
-              "accessGrant": "beacon",
-              "aud": "https://ga4gh-apis-beacon.dnastack.com",
               "roles": {
-                "discovery": {
-                  "targetScopes": [
-                    "registered",
-                    "controlled"
-                  ],
-                  "policies": [
-                    "bona_fide",
-                    "ethics"
-                  ],
-                  "damRoleCategories": [
-                    "metadata"
-                  ],
-                  "ui": {
-                    "description": "Query genome data and receive metadata results",
-                    "label": "Discovery Beacon Search with Metadata"
-                  }
-                }
+                "discovery": {}
               },
               "items": [
                 "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
-              ]
+              ],
+              "aud": "https://ga4gh-apis-beacon.dnastack.com"
             }
           ],
           "defaultRole": "discovery",
@@ -611,7 +435,7 @@
           }
         },
         "full-read-access": {
-          "target": "token:gcp:sa",
+          "serviceTemplate": "gcs",
           "version": "Phase 3",
           "topic": "variants",
           "partition": "all",
@@ -622,27 +446,14 @@
           ],
           "grants": [
             {
-              "accessGrant": "gcs",
               "roles": {
                 "viewer": {
                   "targetRoles": [
                     "projects/ga4gh-apis/roles/BeaconUser"
                   ],
-                  "targetScopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ],
                   "policies": [
                     "dac-1000-genomes"
-                  ],
-                  "damRoleCategories": [
-                    "list",
-                    "metadata",
-                    "read"
-                  ],
-                  "ui": {
-                    "description": "List and read files",
-                    "label": "File Viewer"
-                  }
+                  ]
                 }
               },
               "items": [
@@ -684,13 +495,17 @@
       "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed65"
     }
   },
-  "accessGrants": {
+  "serviceTemplates": {
     "beacon": {
       "targetAdapter": "token:jwt:gatekeeper",
+      "itemFormat": "url",
       "inheritPolicies": [
         "bona_fide",
         "ethics"
       ],
+      "interfaces": {
+        "http:beacon": "${URL}"
+      },
       "roles": {
         "basic_discovery": {
           "targetScopes": [
@@ -718,18 +533,19 @@
           }
         }
       },
-      "interfaces": {
-        "http:beacon": "${URL}"
-      },
       "ui": {
         "label": "Beacon Discovery Search"
       }
     },
     "bigquery": {
       "targetAdapter": "token:gcp:sa",
+      "itemFormat": "bigquery",
       "inheritTargetScopes": [
         "https://www.googleapis.com/auth/cloud-platform"
       ],
+      "interfaces": {
+        "http:gcp:bq": "https://www.googleapis.com/bigquery/v1/projects/${PROJECT-ID}"
+      },
       "roles": {
         "editor": {
           "targetRoles": [
@@ -761,18 +577,20 @@
           }
         }
       },
-      "interfaces": {
-        "http:gcp:bq": "https://www.googleapis.com/bigquery/v1/projects/${PROJECT-ID}"
-      },
       "ui": {
         "label": "Google BigQuery"
       }
     },
     "gcs": {
       "targetAdapter": "token:gcp:sa",
+      "itemFormat": "gcs",
       "inheritTargetScopes": [
         "https://www.googleapis.com/auth/cloud-platform"
       ],
+      "interfaces": {
+        "gcp:gs": "gs://${BUCKET-ID}",
+        "http:gcp:gs": "https://www.googleapis.com/storage/v1/b/${BUCKET-ID}"
+      },
       "roles": {
         "creator": {
           "targetRoles": [
@@ -817,16 +635,17 @@
           }
         }
       },
-      "interfaces": {
-        "gcp:gs": "gs://${BUCKET-ID}",
-        "http:gcp:gs": "https://www.googleapis.com/storage/v1/b/${BUCKET-ID}"
-      },
       "ui": {
         "label": "Google Cloud Storage"
       }
     }
   },
   "claimDefinitions": {
+    "elixir.AffiliatedCountry": {
+      "ui": {
+        "label": "Elixir Affiliated Country"
+      }
+    },
     "ga4gh.AcceptedTermsAndPolicies": {
       "ui": {
         "label": "Accepted Terms and Policies"
@@ -854,6 +673,63 @@
     }
   },
   "testPersonas": {
+    "dr_joe_elixir": {
+      "idToken": {
+        "standardClaims": {
+          "iss": "https://login.elixir-czech.org/oidc/",
+          "sub": "dr_joe@faculty.uni-heidelberg.de"
+        },
+        "ga4ghClaims": [
+          {
+            "claimName": "ga4gh.BonaFide",
+            "source": "https://uni-heidelberg.de",
+            "value": "https://www.nature.com/articles/s41431-018-0219-y",
+            "iat": 1550120400,
+            "exp": 2181272400,
+            "by": "peer"
+          },
+          {
+            "claimName": "ga4gh.AcceptedTermsAndPolicies",
+            "source": "https://uni-heidelberg.de",
+            "value": "https://www.nature.com/articles/s41431-018-0219-y",
+            "iat": 1550120402,
+            "exp": 2181272402,
+            "by": "self"
+          }
+        ]
+      },
+      "resources": {
+        "allOfUs": {
+          "access": [
+            "bq_read/viewer",
+            "gcs_read/viewer"
+          ]
+        },
+        "andrew-test": {
+          "access": [
+            "bq_read_01/viewer",
+            "bq_read_02/viewer",
+            "gcs_read_01/viewer",
+            "gcs_read_02/viewer"
+          ]
+        },
+        "ga4gh-apis": {
+          "access": [
+            "beacon/discovery",
+            "gcs_read/viewer"
+          ]
+        },
+        "thousand-genomes": {
+          "access": [
+            "discovery-access/discovery"
+          ]
+        }
+      },
+      "state": "ACTIVE",
+      "ui": {
+        "label": "Dr. Joe"
+      }
+    },
     "dr_joe_era_commons": {
       "idToken": {
         "standardClaims": {
@@ -938,7 +814,6 @@
         "ga4gh-apis": {
           "access": [
             "beacon/discovery",
-            "gcp/viewer",
             "gcs_read/viewer"
           ]
         },

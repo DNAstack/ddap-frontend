@@ -5,23 +5,23 @@
 </ddap-header>
 
 <div class="ddap-data-pane">
-<mat-card class="ddap-card" *ngFor="let resource of (resources$ | async)">
+<mat-card class="ddap-card" *ngFor="let entity of (resources$ | async)">
   <mat-card-header>
-    <mat-card-title>{{ resource.ui.label || 'Unknown' }}</mat-card-title>
-    <mat-card-subtitle>{{ resource.ui.description || 'Unknown' }}</mat-card-subtitle>
+    <mat-card-title>{{ entity.dto.ui.label || 'Unknown' }}</mat-card-title>
+    <mat-card-subtitle>{{ entity.dto.ui.description || 'Unknown' }}</mat-card-subtitle>
   </mat-card-header>
   <div class="ddap-data-image">
     <img mat-card-image
-         [src]="[resource.ui.imageUrl || randomImageRetriever.getPathToFixedRandomImage(resource.ui.label)]"
+         [src]="[entity.dto.ui.imageUrl || randomImageRetriever.getPathToFixedRandomImage(entity.dto.ui.label)]"
          alt="Photo">
   </div>
   <mat-card-content>
-    <p>{{ resource.ui.description || 'Unknown' }}</p>
+    <p>{{ entity.dto.ui.description || 'Unknown' }}</p>
   </mat-card-content>
   <mat-card-actions>
     <button mat-button
             color="primary"
-            [routerLink]="[resource.name]"
+            [routerLink]="[entity.name]"
             data-se="view-set-btn">VIEW SET</button>
     <span flex></span>
     <mat-icon class="icon icon-add"></mat-icon>

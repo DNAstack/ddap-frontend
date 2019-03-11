@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { flatMap } from 'rxjs/operators';
 
+import { EntityModel } from '../../admin/shared/entity.model';
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 import { SearchStateService } from '../../shared/search-state.service';
@@ -23,6 +24,7 @@ export class DataDetailComponent implements OnInit {
   searchOpened = false;
   views: any;
   accessError: any = null;
+  private entity: EntityModel;
 
   constructor(private route: ActivatedRoute,
               private dataService: DataService,
@@ -32,20 +34,21 @@ export class DataDetailComponent implements OnInit {
   ngOnInit() {
     this.route.params.pipe(
       flatMap(params => this.dataService.getResource(params['resourceName']))
-    ).subscribe((resource) => {
-      const resourceName = resource.name;
+    ).subscribe((entity: EntityModel) => {
+      this.entity = entity;
+      const resourceName = entity.name;
       this.searchStateService.patch({
         resource: resourceName,
         limitSearch: true,
       });
-      this.resource = resource;
-      this.resourceName$ = of(resource.ui.label);
-      this.views = this.getViews(resource);
+      this.resource = entity.dto;
+      this.resourceName$ = of(this.resource.ui.label);
+      this.views = this.getViews(this.resource);
     });
   }
 
   getAccess(viewName) {
-    this.dataService.getAccessRequestToken(this.resource.name, viewName)
+    this.dataService.getAccessRequestToken(this.entity.name, viewName)
       .subscribe(
         (response) => this.mutateViewWithTokenAndUrl(viewName, response),
         (error) => this.accessError = error
@@ -77,14 +80,10 @@ export class DataDetailComponent implements OnInit {
     }
   }
 
-  private getViews(resource) {
+  private getViews(resource: any): EntityModel[] {
     return Object
       .keys(resource.views)
-      .map((key) => {
-        return {
-          ...resource.views[key],
-        };
-      });
+      .map((key) => new EntityModel(key, resource.views[key]));
   }
 
 }
