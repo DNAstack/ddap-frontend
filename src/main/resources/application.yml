@@ -37,7 +37,7 @@ spring:
             - Logging
           uri: https://beacon.cafevariome.org
         - predicates:
-            - Path=/dam/v1alpha/**
+            - Path=/dam/**
           filters:
             - AddRequestParameter=clientId,${dam.client-id}
             - AddRequestParameter=clientSecret,${dam.client-secret}
@@ -45,7 +45,7 @@ spring:
             - Logging
           uri: ${dam.base-url}
         - predicates:
-            - Path=/identity/v1alpha/**
+            - Path=/identity/**
           filters:
             - AddRequestParameter=clientId,${idp.client-id}
             - AddRequestParameter=clientSecret,${idp.client-secret}

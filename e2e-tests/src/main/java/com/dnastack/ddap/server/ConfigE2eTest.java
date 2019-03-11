@@ -91,7 +91,7 @@ public class ConfigE2eTest extends AbstractBaseE2eTest {
                 .log().uri()
                 .auth().preemptive().basic(basicUsername, basicPassword)
                 .when()
-                .get("/identity/v1alpha/dnastack/config?persona=nci_researcher")
+                .get("/identity")
                 .then()
                 .log().ifValidationFails()
                 .contentType("application/json")
