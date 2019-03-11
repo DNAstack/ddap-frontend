@@ -1,9 +1,10 @@
 package com.dnastack.ddap.frontend;
 
 import static java.lang.String.format;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
-import com.dnastack.ddap.common.ScreenShotRule;
 import com.dnastack.ddap.common.page.HasNavBar;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.page.NavBar;
@@ -11,13 +12,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-public class SmokeTest extends AbstractFrontendE2eTest {
+public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
     private final static String NAV_ITEM_FORMAT = "//mat-panel-title[contains(text(), '%s')]";
     private final static Map<NavBar.NavItem, List<String>> DEFAULT_PAGE_ITEMS = new HashMap() {{
@@ -49,19 +48,6 @@ public class SmokeTest extends AbstractFrontendE2eTest {
         }
         ICLoginPage icLoginPage = startLogin();
         ddapPage = icLoginPage.loginAsNciResearcher();
-    }
-
-    @AfterClass
-    public static void quitDriver() {
-        if (driver != null) {
-            driver.quit();
-            driver = null;
-        }
-    }
-
-    @Rule
-    public ScreenShotRule screenShotRule() {
-        return new ScreenShotRule(driver, screenshotDir);
     }
 
     @Test
@@ -150,6 +136,14 @@ public class SmokeTest extends AbstractFrontendE2eTest {
                 .goTo(NavBar.NavItem.IDENTITY);
 
         driver.findElement(By.xpath("//div[contains(text(), 'nci_researcher@nci.nih.gov')]"));
+    }
+
+    @Test
+    public void checkForProfileName() {
+        String profileSelector = "nav-account";
+        String text = driver.findElement(By.xpath("//*[@data-se=\"" + profileSelector + "\"]")).getText();
+
+        assertThat(text, containsString("Dr Joe"));
     }
 
 }
