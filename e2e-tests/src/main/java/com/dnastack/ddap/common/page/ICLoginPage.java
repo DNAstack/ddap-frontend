@@ -1,9 +1,8 @@
-package com.dnastack.ddap.page;
+package com.dnastack.ddap.common.page;
 
 import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 public class ICLoginPage implements HasNavBar {
     @Getter

@@ -1,4 +1,4 @@
-package com.dnastack.ddap;
+package com.dnastack.ddap.common;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.rules.TestWatcher;

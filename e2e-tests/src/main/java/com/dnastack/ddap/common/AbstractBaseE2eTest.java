@@ -1,6 +1,22 @@
-package com.dnastack.ddap;
+package com.dnastack.ddap.common;
+
+import static java.lang.String.format;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.fail;
 
 import io.restassured.RestAssured;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -15,24 +31,12 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.util.EntityUtils;
 import org.junit.Before;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+public abstract class AbstractBaseE2eTest {
 
-import static java.lang.String.format;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.fail;
-
-public class BaseE2eTest {
-
-    static final String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
-    static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
-    static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
-    static final String DDAP_TEST_REALM_NAME_PREFIX = requiredEnv("E2E_TEST_REALM");
+    protected static final String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
+    protected static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
+    protected static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
+    protected static final String DDAP_TEST_REALM_NAME_PREFIX = requiredEnv("E2E_TEST_REALM");
 
     @Before
     public void setUp() {
@@ -47,7 +51,7 @@ public class BaseE2eTest {
         return val;
     }
 
-    protected static String optionalEnv(String name, String defaultValue) {
+    public static String optionalEnv(String name, String defaultValue) {
         String val = System.getenv(name);
         if (val == null) {
             return defaultValue;

@@ -1,13 +1,14 @@
-package com.dnastack.ddap;
+package com.dnastack.ddap.server;
 
+import static io.restassured.RestAssured.given;
+
+import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import io.restassured.RestAssured;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
-import static io.restassured.RestAssured.given;
-
-public class ConfigE2eTest extends BaseE2eTest {
+public class ConfigE2eTest extends AbstractBaseE2eTest {
 
     private String basicUsername;
     private String basicPassword;

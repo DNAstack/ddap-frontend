@@ -1,15 +1,13 @@
-package com.dnastack.ddap;
+package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.page.HasNavBar;
-import com.dnastack.ddap.page.ICLoginPage;
-import com.dnastack.ddap.page.NavBar;
+import static java.lang.String.format;
+import static org.junit.Assert.fail;
+
+import com.dnastack.ddap.common.page.HasNavBar;
+import com.dnastack.ddap.common.page.ICLoginPage;
+import com.dnastack.ddap.common.page.NavBar;
+import com.dnastack.ddap.common.ScreenShotRule;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,9 +16,15 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static java.lang.String.format;
-import static org.junit.Assert.fail;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class SmokeTest {
     private static WebDriver driver;
