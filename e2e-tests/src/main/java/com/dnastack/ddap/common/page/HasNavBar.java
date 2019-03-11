@@ -1,4 +1,4 @@
-package com.dnastack.ddap.page;
+package com.dnastack.ddap.common.page;
 
 import org.openqa.selenium.WebDriver;
 

@@ -1,15 +1,16 @@
-package com.dnastack.ddap;
+package com.dnastack.ddap.server;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.IOException;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.CoreMatchers.equalTo;
 
+import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import java.io.IOException;
+import org.junit.Before;
+import org.junit.Test;
 
-public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
+
+public class AggregateResourceSearchApiE2eTest extends AbstractBaseE2eTest {
 
     private static final String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_AggregateResourceSearch";
 
@@ -41,7 +42,6 @@ public class AggregateResourceSearchApiE2eTest extends BaseE2eTest {
                     .body("[1].name", equalTo("Cafe Variome Beacon"))
                     .body("[1].organization", equalTo("University of Leicester"));
         // @formatter:on
-
     }
 
 }

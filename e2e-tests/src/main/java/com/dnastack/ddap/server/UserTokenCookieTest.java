@@ -1,21 +1,21 @@
-package com.dnastack.ddap;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.time.Instant;
-import java.util.Base64;
-import java.util.Map;
+package com.dnastack.ddap.server;
 
 import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
 import static org.hamcrest.Matchers.isOneOf;
 import static org.hamcrest.Matchers.not;
 
-public class UserTokenCookieTest extends BaseE2eTest {
+import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
+import java.io.IOException;
+import java.time.Instant;
+import java.util.Base64;
+import java.util.Map;
+import org.junit.Test;
+
+public class UserTokenCookieTest extends AbstractBaseE2eTest {
 
     private static final String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_UserTokenCookieTest";
 

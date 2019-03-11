@@ -1,12 +1,13 @@
-package com.dnastack.ddap;
-
-import org.junit.Test;
+package com.dnastack.ddap.server;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-public class ActuatorE2eTest extends BaseE2eTest {
+import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import org.junit.Test;
+
+public class ActuatorE2eTest extends AbstractBaseE2eTest {
 
     @Test
     public void appNameAndVersionShouldBeExposed() {
