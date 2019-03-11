@@ -72,9 +72,8 @@ public class IdentityController {
         }
 
         if (persona != null) {
-            URI personaLoginUrl = idpClient.getPersonaLoginUrl(finalDestination, realm, persona);
-            redirectTarget = personaLoginUrl;
-            log.debug("Redirecting to persona login IC endpoint {}", personaLoginUrl);
+            redirectTarget = idpClient.getPersonaLoginUrl(finalDestination, realm, persona);
+            log.debug("Redirecting to persona login IC endpoint {}", redirectTarget);
         } else {
             redirectTarget = idpClient.getAuthorizeUrl(finalDestination, realm);
             log.debug("Redirecting to IdP login chooser page {}", redirectTarget);
