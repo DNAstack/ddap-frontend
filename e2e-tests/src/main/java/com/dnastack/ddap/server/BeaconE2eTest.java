@@ -15,16 +15,16 @@ import org.junit.Test;
 
 public class BeaconE2eTest extends AbstractBaseE2eTest {
 
-    private static final String realmName = DDAP_TEST_REALM_NAME_PREFIX + "_BeaconE2ETest";
+    private static final String REALM = generateRealmName(BeaconE2eTest.class.getSimpleName());
 
     @Before
     public void setupRealm() throws IOException {
-        setupRealmConfig("nci_researcher", loadTemplate("/com/dnastack/ddap/config.json"), realmName);
+        setupRealmConfig("nci_researcher", loadTemplate("/com/dnastack/ddap/config.json"), REALM);
     }
 
     @Test
     public void querySingleBeacon() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", realmName);
+        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
 
         // @formatter:off
         given()
@@ -42,7 +42,7 @@ public class BeaconE2eTest extends AbstractBaseE2eTest {
                             "&alternateBases=C" +
                             "&type=beacon" +
                             "&assemblyId=GRCh37",
-                    realmName))
+                    REALM))
         .then()
             .log().everything()
             .contentType("application/json")
