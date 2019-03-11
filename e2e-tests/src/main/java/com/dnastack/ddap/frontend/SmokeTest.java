@@ -1,43 +1,25 @@
 package com.dnastack.ddap.frontend;
 
 import static java.lang.String.format;
-import static org.junit.Assert.fail;
 
+import com.dnastack.ddap.common.AbstractFrontendE2eTest;
+import com.dnastack.ddap.common.ScreenShotRule;
 import com.dnastack.ddap.common.page.HasNavBar;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.page.NavBar;
-import com.dnastack.ddap.common.ScreenShotRule;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
-public class SmokeTest {
-    private static WebDriver driver;
-    private static String screenshotDir;
+public class SmokeTest extends AbstractFrontendE2eTest {
 
-    private final static String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
-    private final static String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
-    private final static String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
-    private final static boolean HEADLESS = Boolean.parseBoolean(optionalEnv("HEADLESS", "true"));
-    private final static Pattern URL_PARSE_PATTERN = Pattern.compile("^(https?)://(.*)$");
     private final static String NAV_ITEM_FORMAT = "//mat-panel-title[contains(text(), '%s')]";
-
-    private HasNavBar ddapPage;
     private final static Map<NavBar.NavItem, List<String>> DEFAULT_PAGE_ITEMS = new HashMap() {{
         put(NavBar.NavItem.RESOURCES,
                 Arrays.asList("allOfUs", "ga4gh-apis"));
@@ -57,21 +39,7 @@ public class SmokeTest {
                 Arrays.asList("dbGaP", "elixir", "playgroundIC"));
     }};
 
-    @BeforeClass
-    public static void driverSetup() {
-        screenshotDir = optionalEnv("E2E_SCREENSHOT_DIR", "target");
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        if (HEADLESS) {
-            options.addArguments("headless");
-        }
-        options.addArguments("--disable-gpu");
-        options.addArguments("window-size=1200x600");
-        options.addArguments("incognito");
-
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-    }
+    private HasNavBar ddapPage;
 
     @Before
     public void testSetup() {
@@ -184,35 +152,4 @@ public class SmokeTest {
         driver.findElement(By.xpath("//div[contains(text(), 'nci_researcher@nci.nih.gov')]"));
     }
 
-    private ICLoginPage startLogin() {
-        driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve("/api/v1alpha/dnastack/identity/login").toString()));
-        return new ICLoginPage(driver);
-    }
-
-    private String getUrlWithBasicCredentials(String original) {
-        final Matcher matcher = URL_PARSE_PATTERN.matcher(original);
-        if (matcher.find()) {
-            return format("%s://%s:%s@%s", matcher.group(1), DDAP_USERNAME, DDAP_PASSWORD, matcher.group(2));
-        } else {
-            throw new IllegalArgumentException("Could not parse url: " + original);
-        }
-    }
-
-    private static String optionalEnv(String name, String defaultValue) {
-        System.out.println(name + " " + defaultValue);
-        String val = System.getenv(name);
-        if (val == null) {
-            return defaultValue;
-        }
-        return val;
-    }
-
-    private static String requiredEnv(String name) {
-        String val = System.getenv(name);
-        System.out.println(name + " " + val);
-        if (val == null) {
-            fail("Environment variable `" + name + "` is required");
-        }
-        return val;
-    }
 }
