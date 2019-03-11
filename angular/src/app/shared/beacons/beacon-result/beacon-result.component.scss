@@ -1,3 +1,33 @@
+@import "../../../../styles/modules/colors";
+
+.metadata-key {
+  flex-basis: 30%;
+}
+
+.metadata-value {
+  flex-basis: 70%;
+}
+
+.indicator-green {
+  color: green;
+}
+
+.indicator-red {
+  color: red;
+}
+
 mat-card {
   margin: 1rem;
+}
+
+mat-panel-title {
+  color: $color-grey;
+}
+
+.mat-expansion-panel {
+  background: $color-faded-grey;
+}
+
+.mat-expansion-panel:not([class*='mat-elevation-z']) {
+  box-shadow: none;
 }

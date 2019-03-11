@@ -1,9 +1,25 @@
 <mat-card>
   <mat-card-header>
+    <div mat-card-avatar
+         [class]="beacon.exists ? 'indicator-green' : 'indicator-red'"
+         [matTooltip]="beacon.exists ? 'Variant found' : 'Variant not found'">
+      <mat-icon>lens</mat-icon>
+    </div>
     <mat-card-title>{{ beacon.name }}</mat-card-title>
+    <mat-card-subtitle>{{ beacon.organization }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <p>{{ beacon.organization }}</p>
-    <p>{{ beacon.exists }}</p>
+    <mat-expansion-panel displayMode="flat" [expanded]="true" *ngIf="beacon.exists">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Metadata</mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="flex" *ngFor="let item of metadata | keyvalue">
+        <div class="metadata-key">{{ item.key }}</div><div class="metadata-value">{{ item.value }}</div>
+      </div>
+    </mat-expansion-panel>
   </mat-card-content>
+  <mat-card-actions>
+    <!-- TODO: https://dnastack.atlassian.net/browse/DISCO-1955 -->
+    <button mat-button color="primary" class="uppercase">View Set</button>
+  </mat-card-actions>
 </mat-card>
