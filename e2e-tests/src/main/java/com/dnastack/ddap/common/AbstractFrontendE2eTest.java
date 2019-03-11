@@ -8,7 +8,9 @@ import java.net.URI;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -20,6 +22,11 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
 
     protected static WebDriver driver;
     protected static String screenshotDir;
+
+    @Rule
+    public ScreenShotRule screenShotRule() {
+        return new ScreenShotRule(driver, screenshotDir);
+    }
 
     @BeforeClass
     public static void driverSetup() {
@@ -35,6 +42,14 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
 
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    @AfterClass
+    public static void quitDriver() {
+        if (driver != null) {
+            driver.quit();
+            driver = null;
+        }
     }
 
     protected ICLoginPage startLogin() {
