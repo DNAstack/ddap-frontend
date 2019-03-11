@@ -25,18 +25,7 @@
   </div>
 
   <ng-template [ngIf]="resultsAction.closed && results?.length">
-    <mat-card *ngFor="let beaconResult of results">
-      <mat-card-header>
-        <mat-card-title class="stretch">{{ beaconResult.name }}</mat-card-title>
-        <mat-card-subtitle>{{ beaconResult.organization }}</mat-card-subtitle>
-        <div class="ddap-beacon-result">
-          <mat-chip-list>
-            <mat-chip [color]="beaconResult.exists ? 'Accent' : 'Warn'">
-              {{ beaconResult.exists ? 'Found' : 'Not Found' }}
-            </mat-chip>
-          </mat-chip-list>
-        </div>
-      </mat-card-header>
-    </mat-card>
+    <ddap-beacon-result *ngFor="let beaconResult of results" [beacon]="beaconResult">
+    </ddap-beacon-result>
   </ng-template>
 </ddap-main>

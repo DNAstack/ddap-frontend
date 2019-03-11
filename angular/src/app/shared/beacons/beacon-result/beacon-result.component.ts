@@ -12,4 +12,12 @@ export class BeaconResultComponent {
   @Input()
   beacon: BeaconResponse;
 
+  // TODO: https://dnastack.atlassian.net/browse/DISCO-2046
+  metadata: {[key: string]: string} = {
+    'Allele origin': 'Germline',
+    'Assertion method': 'ENIGMA BRCA1/2 Classification Criteria (2015)',
+    'Clinical significance': 'Pathogenic',
+    'Reference sequence': 'NM_000059.3',
+  };
+
 }
