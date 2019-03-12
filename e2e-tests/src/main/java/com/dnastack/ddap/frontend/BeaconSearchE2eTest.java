@@ -46,7 +46,10 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
 
         List<WebElement> results = ExploreDataPage.getSearchResults(driver);
         assertThat(results.size(), greaterThanOrEqualTo(2));
+
         assertTrue(findFirstElementByCssClass(results, "indicator-green").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "metadata-key").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "metadata-value").isPresent());
     }
 
     @Test
