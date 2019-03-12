@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 
-import { ClaimsModule } from './claims/claims.module';
 import { ClientsModule } from './clients/clients.module';
 import { DefinitionsModule } from './definitions/definitions.module';
-import { GrantsModule } from './grants/grants.module';
 import { PassportsModule } from './passports/passports.module';
 import { PersonasModule } from './personas/personas.module';
 import { ResourcesModule } from './resources/resources.module';
 import { RulesModule } from './rules/rules.module';
+import { ServiceTemplatesModule } from './service-templates/service-templates.module';
+import { TrustedSourcesModule } from './trusted-sources/trusted-sources.module';
 
 @NgModule({
   imports: [
-    ClaimsModule,
+    TrustedSourcesModule,
     ClientsModule,
     DefinitionsModule,
-    GrantsModule,
+    ServiceTemplatesModule,
     PassportsModule,
     PersonasModule,
     ResourcesModule,

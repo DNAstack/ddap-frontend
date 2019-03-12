@@ -2,46 +2,46 @@ package com.dnastack.ddap.common.page;
 
 import static java.lang.String.format;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
+
+import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class NavBar {
     private WebDriver driver;
-    private Map<NavItem, String> NAV_SELECTOR = new HashMap() {{
-        put(NavItem.RESOURCES, "nav-resources");
-        put(NavItem.IDENTITIES, "nav-personas");
-        put(NavItem.IDENTITY, "nav-identity");
-        put(NavItem.CLIENTS, "nav-clients");
-        put(NavItem.CLAIMS, "nav-claims");
-        put(NavItem.DEFINITIONS, "nav-definitions");
-        put(NavItem.GRANTS, "nav-grants");
-        put(NavItem.RULES, "nav-rules");
-        put(NavItem.PASSPORTS, "nav-passports");
-    }};
+    private Map<NavItem, String> NAV_SELECTOR = ImmutableMap.<NavItem, String>builder()
+        .put(NavItem.RESOURCES, "nav-resources")
+        .put(NavItem.PERSONAS, "nav-personas")
+        .put(NavItem.IDENTITY, "nav-identity")
+        .put(NavItem.CLIENTS, "nav-clients")
+        .put(NavItem.TRUSTED_SOURCES, "nav-trusted-sources")
+        .put(NavItem.DEFINITIONS, "nav-definitions")
+        .put(NavItem.SERVICE_TEMPLATES, "nav-service-templates")
+        .put(NavItem.RULES, "nav-rules")
+        .put(NavItem.PASSPORTS, "nav-passports")
+        .build();
 
-    private Map<NavItem, String> PAGE_TITLE = new HashMap() {{
-        put(NavItem.RESOURCES, "Resource");
-        put(NavItem.IDENTITIES, "Personas");
-        put(NavItem.IDENTITY, "My Identity");
-        put(NavItem.CLIENTS, "Clients");
-        put(NavItem.CLAIMS, "Claims");
-        put(NavItem.DEFINITIONS, "Definitions");
-        put(NavItem.GRANTS, "Grants");
-        put(NavItem.RULES, "Rules");
-        put(NavItem.PASSPORTS, "Passports");
-    }};
+    private Map<NavItem, String> PAGE_TITLE = ImmutableMap.<NavItem, String>builder()
+        .put(NavItem.RESOURCES, "Resource")
+        .put(NavItem.PERSONAS, "Personas")
+        .put(NavItem.IDENTITY, "My Identity")
+        .put(NavItem.CLIENTS, "Clients")
+        .put(NavItem.TRUSTED_SOURCES, "Trusted Sources")
+        .put(NavItem.DEFINITIONS, "Definitions")
+        .put(NavItem.SERVICE_TEMPLATES, "Service Templates")
+        .put(NavItem.RULES, "Rules")
+        .put(NavItem.PASSPORTS, "Passports")
+        .build();
 
     public enum NavItem {
         RESOURCES,
-        IDENTITIES,
+        PERSONAS,
         IDENTITY,
         CLIENTS,
-        CLAIMS,
+        TRUSTED_SOURCES,
         DEFINITIONS,
-        GRANTS,
+        SERVICE_TEMPLATES,
         RULES,
         PASSPORTS
     }
@@ -49,8 +49,8 @@ public class NavBar {
     public NavBar(WebDriver driver) {
         this.driver = driver;
 
-        Stream.of("Resources", "Claims", "Rules", "Clients", "Identities")
-              .forEach(item -> driver.findElement(By.xpath(format("//*[contains(text(), '%s')]", item))));
+        PAGE_TITLE.values()
+                .forEach(pageTitle -> driver.findElement(By.xpath(format("//*[contains(text(), '%s')]", pageTitle))));
     }
 
     public NavBar goTo(NavItem pageId) {

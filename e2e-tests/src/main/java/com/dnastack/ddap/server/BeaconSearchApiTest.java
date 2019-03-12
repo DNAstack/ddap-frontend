@@ -2,7 +2,9 @@ package com.dnastack.ddap.server;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import java.io.IOException;
@@ -10,9 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class AggregateResourceSearchApiE2eTest extends AbstractBaseE2eTest {
+public class BeaconSearchApiTest extends AbstractBaseE2eTest {
 
-    private static final String REALM = generateRealmName(AggregateResourceSearchApiE2eTest.class.getSimpleName());
+    private static final String REALM = generateRealmName(BeaconSearchApiTest.class.getSimpleName());
 
     @Before
     public void setupRealm() throws IOException {
@@ -21,7 +23,7 @@ public class AggregateResourceSearchApiE2eTest extends AbstractBaseE2eTest {
     }
 
     @Test
-    public void beaconApiTest() throws IOException {
+    public void shouldGetTwoResultsForAggregateSearch() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
 
         /* Run the aggregate search query on the realm */
@@ -41,6 +43,37 @@ public class AggregateResourceSearchApiE2eTest extends AbstractBaseE2eTest {
                     .body("[0].organization", equalTo("University of Leicester"))
                     .body("[1].name", equalTo("Cafe Variome Beacon"))
                     .body("[1].organization", equalTo("University of Leicester"));
+        // @formatter:on
+    }
+
+    @Test
+    public void shouldGetOneResultForSingleResourceSearch() throws IOException {
+        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+
+        // @formatter:off
+        given()
+            .log().method()
+            .log().cookies()
+            .log().uri()
+            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+            .cookie("dam_token", validPersonaToken)
+        .when()
+            .get(format(
+                    "/api/v1alpha/%s/resources/thousand-genomes/search" +
+                            "?referenceName=13" +
+                            "&start=32936732" +
+                            "&referenceBases=G" +
+                            "&alternateBases=C" +
+                            "&type=beacon" +
+                            "&assemblyId=GRCh37",
+                    REALM))
+        .then()
+            .log().everything()
+            .contentType("application/json")
+            .body("[0].name", not(isEmptyOrNullString()))
+            .body("[0].organization", not(isEmptyOrNullString()))
+            .body("[0].exists", anyOf(nullValue(), instanceOf(boolean.class)))
+            .statusCode(200);
         // @formatter:on
     }
 

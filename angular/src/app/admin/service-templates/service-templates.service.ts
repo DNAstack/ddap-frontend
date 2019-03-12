@@ -7,11 +7,11 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 @Injectable({
   providedIn: 'root',
 })
-export class GrantService extends ConfigEntityService {
+export class ServiceTemplateService extends ConfigEntityService {
 
   constructor(http: HttpClient,
               realmService: RealmService) {
-    super(http, realmService, 'accessGrants');
+    super(http, realmService, 'serviceTemplates');
   }
 
 }

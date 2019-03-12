@@ -5,8 +5,10 @@ import com.dnastack.ddap.common.page.HasNavBar;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.page.NavBar;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -20,7 +22,6 @@ import static org.hamcrest.Matchers.containsString;
 
 public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
-    private final static String NAV_ITEM_FORMAT = "//mat-panel-title[contains(text(), '%s')]";
     private final static Map<NavBar.NavItem, List<String>> DEFAULT_PAGE_ITEMS = pageItems();
     private static final String REALM = generateRealmName(NavbarE2eTest.class.getSimpleName());
 
@@ -30,15 +31,15 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         Map<NavBar.NavItem, List<String>> map = new HashMap<>();
         map.put(NavBar.NavItem.RESOURCES,
                 Arrays.asList("allOfUs", "ga4gh-apis"));
-        map.put(NavBar.NavItem.IDENTITIES,
+        map.put(NavBar.NavItem.PERSONAS,
                 Arrays.asList("nci_researcher", "john"));
         map.put(NavBar.NavItem.CLIENTS,
                 Arrays.asList("craig_test", "dnastack_fe", "test_client", "test_page"));
-        map.put(NavBar.NavItem.CLAIMS,
-                Arrays.asList("elixir", "nci", "ustanford"));
+        map.put(NavBar.NavItem.TRUSTED_SOURCES,
+                Arrays.asList("elixir_institutes", "nih_institutes"));
         map.put(NavBar.NavItem.DEFINITIONS,
                 Arrays.asList("ga4gh.AcceptedTermsAndPolicies", "ga4gh.ControlledAccessGrants"));
-        map.put(NavBar.NavItem.GRANTS,
+        map.put(NavBar.NavItem.SERVICE_TEMPLATES,
                 Arrays.asList("bigquery", "gcs"));
         map.put(NavBar.NavItem.RULES,
                 Arrays.asList("GRU", "bona_fide", "ethics"));
@@ -48,101 +49,110 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         return map;
     }
 
+    private WebElement findNavItemTitle(String title) {
+        return driver.findElement(By.xpath(format("//mat-panel-title[contains(text(), '%s')]", title)));
+    }
+
+    private WebElement findNavItemDescription(String description) {
+        return driver.findElement(By.xpath(format("//mat-panel-description[contains(text(), '%s')]", description)));
+    }
+
+    @BeforeClass
+    public static void oneTimeSetup() throws IOException {
+        final String testConfig = loadTemplate("/com/dnastack/ddap/navbarE2eTestConfig.json");
+        setupRealmConfig("nci_researcher", testConfig, REALM);
+    }
+
     @Before
-    public void testSetup() throws IOException {
+    public void beforeEach() {
         if (driver != null) {
             // Ensure that tests with login work independently of eachother.
             driver.manage().deleteAllCookies();
         }
-        final String testConfig = loadTemplate("/com/dnastack/ddap/navbarE2eTestConfig.json");
-        setupRealmConfig("nci_researcher", testConfig, REALM);
-
         ICLoginPage icLoginPage = startLogin(REALM);
         ddapPage = icLoginPage.loginAsNciResearcher();
     }
 
     @Test
-    public void getDefaultResources() {
+    public void verifyResources() {
         NavBar.NavItem pageId = NavBar.NavItem.RESOURCES;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .stream()
-                .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
+                .forEach(this::findNavItemTitle);
     }
 
     @Test
-    public void getDefaultIdentities() {
-        NavBar.NavItem pageId = NavBar.NavItem.IDENTITIES;
+    public void verifyPersonas() {
+        NavBar.NavItem pageId = NavBar.NavItem.PERSONAS;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .stream()
-                .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
+                .forEach(this::findNavItemTitle);
     }
 
     @Test
-    public void getDefaultClients() {
+    public void verifyClients() {
         NavBar.NavItem pageId = NavBar.NavItem.CLIENTS;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .stream()
-                .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
+                .forEach(this::findNavItemTitle);
     }
 
     @Test
-    public void getDefaultClaims() {
-        NavBar.NavItem pageId = NavBar.NavItem.CLAIMS;
+    public void verifyTrustedSources() {
+        NavBar.NavItem pageId = NavBar.NavItem.TRUSTED_SOURCES;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .stream()
-                .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
+                .forEach(this::findNavItemTitle);
+
+        // make sure the array of sources are displayed too
+        findNavItemDescription("https://ga4gh.elixir-czech.org/claims");
+        findNavItemDescription("https://dbgap.nlm.nih.gov/aa");
+        findNavItemDescription("https://nci.nih.org");
+        findNavItemDescription("https://institute1.nih.gov");
     }
 
     @Test
-    public void getDefaultDefinitions() {
+    public void verifyDefinitions() {
         NavBar.NavItem pageId = NavBar.NavItem.DEFINITIONS;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .stream()
-                .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
+                .forEach(this::findNavItemTitle);
     }
 
     @Test
-    public void getDefaultGrants() {
-        NavBar.NavItem pageId = NavBar.NavItem.GRANTS;
+    public void verifyServiceTemplates() {
+        NavBar.NavItem pageId = NavBar.NavItem.SERVICE_TEMPLATES;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .stream()
-                .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
+                .forEach(this::findNavItemTitle);
     }
 
     @Test
-    public void getDefaultRules() {
+    public void verifyRules() {
         NavBar.NavItem pageId = NavBar.NavItem.RULES;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .stream()
-                .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
+                .forEach(this::findNavItemTitle);
     }
 
     @Test
-    public void getDefaultPassports() {
+    public void verifyPassports() {
         NavBar.NavItem pageId = NavBar.NavItem.PASSPORTS;
         ddapPage.getNavBar()
                 .goTo(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .stream()
-                .forEach(item -> driver.findElement(By.xpath(format(NAV_ITEM_FORMAT, item))));
+                .forEach(this::findNavItemTitle);
     }
 
     @Test
-    public void getDefaultIdentity() {
+    public void verifyIdentity() {
         ddapPage.getNavBar()
                 .goTo(NavBar.NavItem.IDENTITY);
 

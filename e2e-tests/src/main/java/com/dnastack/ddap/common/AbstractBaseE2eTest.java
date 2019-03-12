@@ -66,7 +66,7 @@ public abstract class AbstractBaseE2eTest {
         return val;
     }
 
-    protected void setupRealmConfig(String personaName, String config, String realmName) throws IOException {
+    protected static void setupRealmConfig(String personaName, String config, String realmName) throws IOException {
         final String modificationPayload = format("{ \"item\": %s }", config);
         final CookieStore cookieStore = performPersonaLogin("nci_researcher", realmName);
 
@@ -76,15 +76,16 @@ public abstract class AbstractBaseE2eTest {
         request.setEntity(new StringEntity(modificationPayload));
 
         final HttpResponse response = httpclient.execute(request);
+        String responseBody = EntityUtils.toString(response.getEntity());
 
-        assertThat("Unable to set realm config. Response:\n" + EntityUtils.toString(response.getEntity()),
+        assertThat("Unable to set realm config. Response:\n" + responseBody,
                    response.getStatusLine().getStatusCode(),
                    allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
 
-    protected String loadTemplate(String resourcePath) {
+    protected static String loadTemplate(String resourcePath) {
         final String resourceTemplate;
-        try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
+        try (InputStream is = AbstractBaseE2eTest.class.getResourceAsStream(resourcePath)) {
             final StringWriter writer = new StringWriter();
             IOUtils.copy(is, writer, Charset.forName("UTF-8"));
             resourceTemplate = writer.toString();
@@ -125,7 +126,7 @@ public abstract class AbstractBaseE2eTest {
         return icTokenCookie.getValue();
     }
 
-    private CookieStore performPersonaLogin(String personaName, String realmName) throws IOException {
+    private static CookieStore performPersonaLogin(String personaName, String realmName) throws IOException {
         final CookieStore cookieStore = new BasicCookieStore();
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
         HttpGet request = new HttpGet(format("%s/api/v1alpha/%s/identity/login?persona=%s", DDAP_BASE_URL, realmName, personaName));
@@ -139,7 +140,7 @@ public abstract class AbstractBaseE2eTest {
         return cookieStore;
     }
 
-    protected String ddapBasicAuthHeader() {
+    protected static String ddapBasicAuthHeader() {
         String auth = DDAP_USERNAME + ":" + DDAP_PASSWORD;
         byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.ISO_8859_1));
         return "Basic " + new String(encodedAuth);

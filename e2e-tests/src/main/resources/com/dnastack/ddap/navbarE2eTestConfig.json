@@ -11,6 +11,10 @@
       "issuer": "https://login.elixir-czech.org/oidc/",
       "translateUsing": "elixir"
     },
+    "nih": {
+      "issuer": "https://login.nih.org/oidc/",
+      "translateUsing": "dbgap"
+    },
     "playgroundIC": {
       "issuer": "https://ic-dot-craigv-codelab.appspot.com/oidc"
     }
@@ -25,8 +29,19 @@
         "^elixir.*"
       ]
     },
+    "eu_universities": {
+      "sources": [
+        "https://uni-heidelberg.de"
+      ],
+      "claims": [
+        "ga4gh.AcceptedTermsAndPolicies",
+        "ga4gh.BonaFide"
+      ]
+    },
     "nih_institutes": {
       "sources": [
+        "https://dbgap.nlm.nih.gov/aa",
+        "https://nci.nih.org",
         "https://institute1.nih.gov",
         "https://institute2.nih.gov",
         "https://institute3.nih.gov",
@@ -73,16 +88,21 @@
         "anyTrue": [
           {
             "claim": "ga4gh.BonaFide",
-            "value": "https://www.nature.com/articles/s41431-018-0219-y",
+            "values": [
+              "https://www.nature.com/articles/s41431-018-0219-y"
+            ],
             "from": [
               "nih_institutes",
+              "eu_universities",
               "us_universities",
               "research_companies"
             ]
           },
           {
             "claim": "ga4gh.AcceptedTermsAndPolicies",
-            "value": "https://librarycard.broadinstitute.org/v1",
+            "values": [
+              "https://librarycard.broadinstitute.org/v1"
+            ],
             "from": [
               "the_broad"
             ]
@@ -91,13 +111,20 @@
       },
       "disallow": {
         "claim": "nih.Blacklisted",
-        "value": "true"
+        "values": [
+          "true"
+        ]
       }
     },
     "dac-1000-genomes": {
       "allow": {
         "claim": "ga4gh.ControlledAccessGrants",
-        "value": "https://dac.nih.gov/datasets/phys000710",
+        "is": "~=",
+        "values": [
+          "https?://dac\\.nih\\.gov/datasets/phys000709",
+          "https?://dac\\.nih\\.gov/datasets/phys000710",
+          "https?://dac\\.nih\\.gov/datasets/phys000711"
+        ],
         "from": [
           "nih_institutes"
         ]
@@ -106,7 +133,9 @@
     "ethics": {
       "allow": {
         "claim": "ga4gh.AcceptedTermsAndPolicies",
-        "value": "https://www.nature.com/articles/s41431-018-0219-y"
+        "values": [
+          "https://www.nature.com/articles/s41431-018-0219-y"
+        ]
       }
     }
   },
@@ -196,6 +225,32 @@
     "andrew-test": {
       "state": "ACTIVE",
       "views": {
+        "all": {
+          "serviceTemplate": "views",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [],
+          "grants": [
+            {
+              "roles": {
+                "viewer": {}
+              },
+              "items": [
+                "resources/andrew-test/views/bq_read_01",
+                "resources/andrew-test/views/bq_read_02",
+                "resources/andrew-test/views/gcs_read_01",
+                "resources/andrew-test/views/gcs_read_02"
+              ]
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "GCS File Read on datahost02"
+          }
+        },
         "bq_read_01": {
           "serviceTemplate": "bigquery",
           "version": "Phase 3",
@@ -638,6 +693,26 @@
       "ui": {
         "label": "Google Cloud Storage"
       }
+    },
+    "views": {
+      "targetAdapter": "token:aggregate:view",
+      "itemFormat": "view",
+      "roles": {
+        "viewer": {
+          "damRoleCategories": [
+            "metadata",
+            "list",
+            "read"
+          ],
+          "ui": {
+            "description": "Offers Viewer access across multiple views",
+            "label": "Viewer"
+          }
+        }
+      },
+      "ui": {
+        "label": "Multiple Resource Views"
+      }
     }
   },
   "claimDefinitions": {
@@ -707,6 +782,7 @@
         },
         "andrew-test": {
           "access": [
+            "all/viewer",
             "bq_read_01/viewer",
             "bq_read_02/viewer",
             "gcs_read_01/viewer",
@@ -805,6 +881,7 @@
         },
         "andrew-test": {
           "access": [
+            "all/viewer",
             "bq_read_01/viewer",
             "bq_read_02/viewer",
             "gcs_read_01/viewer",

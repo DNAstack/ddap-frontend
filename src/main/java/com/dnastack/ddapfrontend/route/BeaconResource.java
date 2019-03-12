@@ -18,10 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
@@ -40,11 +37,9 @@ class BeaconResource {
     @GetMapping(value = "/api/v1alpha/{realm}/resources/search", params = "type=beacon")
     public Flux<ExternalBeaconQueryResult> handleBeaconQuery(BeaconRequestModel beaconRequest, ServerHttpRequest request, @PathVariable String realm) {
 
-        DamResourceList resourceList = damClient.getResources(realm);
+        DamResources resourceList = damClient.getResources(realm);
 
-        List<String> resourceNameList = resourceList.getResources().stream()
-                .map(entry -> entry.getName())
-                .collect(toList());
+        Collection<String> resourceNameList = resourceList.getResources().keySet();
 
         Flux<ExternalBeaconQueryResult> fluxResult = Flux.empty();
         Flux<ExternalBeaconQueryResult> externalBeaconQueryResultFlux;

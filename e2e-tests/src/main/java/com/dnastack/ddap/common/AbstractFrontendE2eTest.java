@@ -31,7 +31,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     @BeforeClass
     public static void driverSetup() {
         screenshotDir = optionalEnv("E2E_SCREENSHOT_DIR", "target");
-        WebDriverManager.chromedriver().setup();
+        WebDriverManager.chromedriver().setup(); // 73.0.3683.68
         ChromeOptions options = new ChromeOptions();
         if (HEADLESS) {
             options.addArguments("headless");
@@ -52,12 +52,12 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
         }
     }
 
-    protected ICLoginPage startLogin(String realm) {
+    protected static ICLoginPage startLogin(String realm) {
         driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));
         return new ICLoginPage(driver);
     }
 
-    private String getUrlWithBasicCredentials(String original) {
+    private static String getUrlWithBasicCredentials(String original) {
         final Matcher matcher = URL_PARSE_PATTERN.matcher(original);
         if (matcher.find()) {
             return format("%s://%s:%s@%s", matcher.group(1), DDAP_USERNAME, DDAP_PASSWORD, matcher.group(2));

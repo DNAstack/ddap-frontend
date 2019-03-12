@@ -9,7 +9,7 @@
       <mat-list-item *ngIf="profile" class="credentials-username"
                      data-se="nav-account">
         <h4 mat-line>{{ profile.name }}</h4>
-        <a mat-line href="">Log out</a>
+        <a mat-line href="">Log Out</a>
         <div class="credentials-picture">
           <img matListAvatar [src]="profile.picture" alt="Profile picture">
         </div>
@@ -17,17 +17,17 @@
       <mat-list-item [routerLink]="[realm, 'data']"
                      [routerLinkActive]="['active-nav-link']">
         <mat-icon class="icon icon-explore"></mat-icon>
-        <h4 mat-line>Explore data</h4>
+        <h4 mat-line>Explore Data</h4>
       </mat-list-item>
       <mat-list-item>
         <mat-icon class="icon icon-collections"></mat-icon>
-        <h4 mat-line>My collections</h4>
+        <h4 mat-line>My Collections</h4>
       </mat-list-item>
       <mat-list-item  [routerLink]="[realm, 'myidentity']"
                       [routerLinkActive]="['active-nav-link']"
                       data-se="nav-identity">
         <mat-icon class="icon icon-identity"></mat-icon>
-        <h4 mat-line>My identity</h4>
+        <h4 mat-line>My Identity</h4>
       </mat-list-item>
     </mat-nav-list>
 
@@ -54,7 +54,7 @@
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-personas">
               <mat-icon class="icon icon-identities"></mat-icon>
-              <h4 mat-line>Identities</h4>
+              <h4 mat-line>Personas</h4>
             </mat-list-item>
             <mat-list-item
               [routerLink]="[realm, 'clients']"
@@ -64,11 +64,11 @@
               <h4 mat-line>Clients</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="[realm, 'claims']"
+              [routerLink]="[realm, 'trusted-sources']"
               [routerLinkActive]="['active-nav-link']"
-              data-se="nav-claims">
-              <mat-icon class="icon icon-claims"></mat-icon>
-              <h4 mat-line>Claims</h4>
+              data-se="nav-trusted-sources">
+              <mat-icon class="icon icon-trusted-sources"></mat-icon>
+              <h4 mat-line>Trusted Sources</h4>
             </mat-list-item>
             <mat-list-item
               [routerLink]="[realm, 'definitions']"
@@ -78,11 +78,11 @@
               <h4 mat-line>Definitions</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="[realm, 'grants']"
+              [routerLink]="[realm, 'service-templates']"
               [routerLinkActive]="['active-nav-link']"
-              data-se="nav-grants">
+              data-se="nav-service-templates">
               <mat-icon class="icon icon-views"></mat-icon>
-              <h4 mat-line>Grants</h4>
+              <h4 mat-line>Service Templates</h4>
             </mat-list-item>
             <mat-list-item
               [routerLink]="[realm, 'rules']"

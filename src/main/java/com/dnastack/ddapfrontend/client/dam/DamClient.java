@@ -9,7 +9,7 @@ public interface DamClient {
     String API_VERSION = "v1alpha";
 
     @RequestLine("GET /dam/" + API_VERSION + "/{realm}/resources")
-    DamResourceList getResources(@Param("realm") String realm);
+    DamResources getResources(@Param("realm") String realm);
 
 
     @RequestLine("GET /dam/" + API_VERSION + "/{realm}/resources/{resourceId}/views")

@@ -1,0 +1,13 @@
+<ddap-header icon="views" label="Service Templates">
+  <ddap-entity-add
+    [configName]="'serviceTemplates'">
+  </ddap-entity-add>
+</ddap-header>
+
+<ddap-main>
+  <ddap-entity-list
+    [configName]="'serviceTemplates'"
+    [descriptionProperty]="'targetAdapter'"
+    [entityList]="entities$">
+  </ddap-entity-list>
+</ddap-main>
