@@ -77,7 +77,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     public void verifyResources() {
         NavBar.NavItem pageId = NavBar.NavItem.RESOURCES;
         ddapPage.getNavBar()
-                .goTo(pageId);
+                .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
                 .forEach(this::findNavItemTitle);
     }
@@ -86,7 +86,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     public void verifyPersonas() {
         NavBar.NavItem pageId = NavBar.NavItem.PERSONAS;
         ddapPage.getNavBar()
-                .goTo(pageId);
+                .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
                 .forEach(this::findNavItemTitle);
     }
@@ -95,7 +95,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     public void verifyClients() {
         NavBar.NavItem pageId = NavBar.NavItem.CLIENTS;
         ddapPage.getNavBar()
-                .goTo(pageId);
+                .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
                 .forEach(this::findNavItemTitle);
     }
@@ -104,7 +104,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     public void verifyTrustedSources() {
         NavBar.NavItem pageId = NavBar.NavItem.TRUSTED_SOURCES;
         ddapPage.getNavBar()
-                .goTo(pageId);
+                .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
                 .forEach(this::findNavItemTitle);
 
@@ -119,7 +119,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     public void verifyDefinitions() {
         NavBar.NavItem pageId = NavBar.NavItem.DEFINITIONS;
         ddapPage.getNavBar()
-                .goTo(pageId);
+                .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
                 .forEach(this::findNavItemTitle);
     }
@@ -128,7 +128,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     public void verifyServiceTemplates() {
         NavBar.NavItem pageId = NavBar.NavItem.SERVICE_TEMPLATES;
         ddapPage.getNavBar()
-                .goTo(pageId);
+                .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
                 .forEach(this::findNavItemTitle);
     }
@@ -137,7 +137,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     public void verifyRules() {
         NavBar.NavItem pageId = NavBar.NavItem.RULES;
         ddapPage.getNavBar()
-                .goTo(pageId);
+                .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
                 .forEach(this::findNavItemTitle);
     }
@@ -146,7 +146,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     public void verifyPassports() {
         NavBar.NavItem pageId = NavBar.NavItem.PASSPORTS;
         ddapPage.getNavBar()
-                .goTo(pageId);
+                .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
                 .forEach(this::findNavItemTitle);
     }
@@ -154,7 +154,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void verifyIdentity() {
         ddapPage.getNavBar()
-                .goTo(NavBar.NavItem.IDENTITY);
+                .goToAndCheckForTitle(NavBar.NavItem.IDENTITY);
 
         driver.findElement(By.xpath("//div[contains(text(), 'nci_researcher@nci.nih.gov')]"));
     }
