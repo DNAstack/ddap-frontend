@@ -9,11 +9,11 @@
     <mat-card-subtitle>{{ beacon.organization }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <mat-expansion-panel displayMode="flat" [expanded]="true" *ngIf="beacon.exists">
+    <mat-expansion-panel displayMode="flat" [expanded]="true" *ngIf="metadataNotEmpty()">
       <mat-expansion-panel-header>
         <mat-panel-title>Metadata</mat-panel-title>
       </mat-expansion-panel-header>
-      <div class="flex" *ngFor="let item of metadata | keyvalue">
+      <div class="flex" *ngFor="let item of beacon.info | keyvalue">
         <div class="metadata-key">{{ item.key }}</div><div class="metadata-value">{{ item.value }}</div>
       </div>
     </mat-expansion-panel>
