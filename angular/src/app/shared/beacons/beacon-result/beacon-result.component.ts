@@ -10,6 +10,8 @@ import { BeaconResponse } from '../beacon-response.model';
 export class BeaconResultComponent {
 
   @Input()
+  realm: string;
+  @Input()
   beacon: BeaconResponse;
 
   // TODO: https://dnastack.atlassian.net/browse/DISCO-2046
@@ -19,5 +21,9 @@ export class BeaconResultComponent {
     'Clinical significance': 'Pathogenic',
     'Reference sequence': 'NM_000059.3',
   };
+
+  getLinkToResource() {
+    return `/${this.realm}/data/${this.beacon.resource}`;
+  }
 
 }

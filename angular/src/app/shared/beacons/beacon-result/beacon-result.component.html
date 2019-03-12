@@ -19,7 +19,6 @@
     </mat-expansion-panel>
   </mat-card-content>
   <mat-card-actions>
-    <!-- TODO: https://dnastack.atlassian.net/browse/DISCO-1955 -->
-    <button mat-button color="primary" class="uppercase">View Set</button>
+    <button mat-button color="primary" class="uppercase" [routerLink]="getLinkToResource()">View Set</button>
   </mat-card-actions>
 </mat-card>
