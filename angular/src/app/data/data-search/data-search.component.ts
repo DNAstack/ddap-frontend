@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -16,6 +17,7 @@ import { DataService } from '../data.service';
 })
 export class DataSearchComponent implements OnInit {
 
+  realm: string;
   limitSearch = false;
   resource: string;
   resourceName$:  Observable<string>;
@@ -23,10 +25,11 @@ export class DataSearchComponent implements OnInit {
   results: any[];
   resultsAction: Subscription;
 
-  constructor(private dataService: DataService,
+  constructor(private route: ActivatedRoute,
+              private dataService: DataService,
               private searchStateService: SearchStateService,
               private beaconService: ResourceBeaconService) {
-
+    this.realm = this.route.snapshot.params['realmId'];
   }
 
   ngOnInit() {

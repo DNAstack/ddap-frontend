@@ -1,12 +1,23 @@
 package com.dnastack.ddapfrontend.route;
 
+import static java.lang.String.format;
+
 import com.dnastack.ddapfrontend.beacon.BeaconInfo;
 import com.dnastack.ddapfrontend.beacon.BeaconOrganization;
 import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.beacon.ExternalBeaconQueryResult;
-import com.dnastack.ddapfrontend.client.dam.*;
+import com.dnastack.ddapfrontend.client.dam.DamClient;
+import com.dnastack.ddapfrontend.client.dam.DamInterface;
+import com.dnastack.ddapfrontend.client.dam.DamResourceViews;
+import com.dnastack.ddapfrontend.client.dam.DamResources;
+import com.dnastack.ddapfrontend.client.dam.DamView;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +29,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
-import java.util.stream.Stream;
-
-import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RestController
@@ -42,10 +48,8 @@ class BeaconResource {
         Collection<String> resourceNameList = resourceList.getResources().keySet();
 
         Flux<ExternalBeaconQueryResult> fluxResult = Flux.empty();
-        Flux<ExternalBeaconQueryResult> externalBeaconQueryResultFlux;
         for (String resourceName: resourceNameList) {
-
-            externalBeaconQueryResultFlux =
+            Flux<ExternalBeaconQueryResult> externalBeaconQueryResultFlux =
                     handleBeaconQueryForResource(resourceName, beaconRequest, request, realm);
             fluxResult = Flux.merge(fluxResult, externalBeaconQueryResultFlux);
         }
@@ -59,7 +63,6 @@ class BeaconResource {
             BeaconRequestModel beaconRequest,
             ServerHttpRequest request,
             @PathVariable String realm) {
-
         // find beacons under resourceId in DAM config
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.TokenAudience.DAM);
         if (!damToken.isPresent()) {
@@ -81,7 +84,11 @@ class BeaconResource {
             // TODO DISCO-2038 Handle errors and unauthorized requests
             final Mono<BeaconQueryResult> beaconQueryResponse = beaconQuery(beaconRequest, viewToken);
             final Mono<BeaconInfo> beaconInfoResponse = beaconInfo();
-            return Flux.zip(beaconInfoResponse, beaconQueryResponse, this::formatBeaconServerPayload);
+            return Flux.zip(
+                beaconInfoResponse,
+                beaconQueryResponse,
+                (info, result) -> formatBeaconServerPayload(resourceId, info, result)
+            );
         });
 
         return beaconRequests.reduce(Flux.empty(), Flux::merge);
@@ -125,8 +132,7 @@ class BeaconResource {
                         .header("Authorization",
                                 "Bearer " + viewToken.getToken())
                         .exchange()
-                        .flatMap(clientResponse -> clientResponse.bodyToMono(
-                                BeaconQueryResult.class));
+                        .flatMap(clientResponse -> clientResponse.bodyToMono(BeaconQueryResult.class));
     }
 
     private String beaconQueryUrl(String baseUrl, BeaconRequestModel beaconRequest) {
@@ -144,7 +150,7 @@ class BeaconResource {
                       beaconRequest.getAlternateBases());
     }
 
-    private ExternalBeaconQueryResult formatBeaconServerPayload(BeaconInfo infoResponse, BeaconQueryResult queryResponse) {
+    private ExternalBeaconQueryResult formatBeaconServerPayload(String resourceId, BeaconInfo infoResponse, BeaconQueryResult queryResponse) {
         final ExternalBeaconQueryResult externalResult = new ExternalBeaconQueryResult();
 
         final String beaconName = Optional.ofNullable(infoResponse)
@@ -160,6 +166,7 @@ class BeaconResource {
 
         final Boolean exists = oQueryResponse.map(BeaconQueryResult::getExists).orElse(null);
 
+        externalResult.setResource(resourceId);
         externalResult.setName(beaconName);
         externalResult.setOrganization(organizationName);
         externalResult.setExists(exists);
