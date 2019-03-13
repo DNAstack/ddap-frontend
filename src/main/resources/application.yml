@@ -34,6 +34,7 @@ spring:
             - Path=/api/cafevariome/**
           filters:
             - StripPrefix=2
+            - RemoveRequestHeader=Authorization
             - Logging
           uri: https://beacon.cafevariome.org
         - predicates:
@@ -41,6 +42,7 @@ spring:
           filters:
             - AddRequestParameter=clientId,${dam.client-id}
             - AddRequestParameter=clientSecret,${dam.client-secret}
+            - RemoveRequestHeader=Authorization
             - SetBearerTokenFromCookie=DAM
             - Logging
           uri: ${dam.base-url}
@@ -49,6 +51,7 @@ spring:
           filters:
             - AddRequestParameter=clientId,${idp.client-id}
             - AddRequestParameter=clientSecret,${idp.client-secret}
+            - RemoveRequestHeader=Authorization
             - SetBearerTokenFromCookie=IC
             - Logging
           uri: ${idp.base-url}

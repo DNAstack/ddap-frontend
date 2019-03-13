@@ -11,7 +11,7 @@ export class ClientService extends ConfigEntityService {
 
   constructor(http: HttpClient,
               realmService: RealmService) {
-    super(http, realmService, 'clients');
+    super(http, realmService, 'clients', 'clients');
   }
 
 }

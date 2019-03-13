@@ -11,7 +11,7 @@ export class DefinitionService extends ConfigEntityService {
 
   constructor(http: HttpClient,
               realmService: RealmService) {
-    super(http, realmService, 'claimDefinitions');
+    super(http, realmService, 'claimDefinitions', 'claimDefinitions');
   }
 
 }

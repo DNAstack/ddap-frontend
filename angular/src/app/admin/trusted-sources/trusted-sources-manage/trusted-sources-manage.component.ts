@@ -10,7 +10,6 @@ import { TrustedSourcesService } from '../trusted-sources.service';
   styleUrls: ['./trusted-sources-manage.component.scss'],
 })
 export class TrustedSourcesManageComponent extends EntityManageBase<TrustedSourcesService> {
-
   constructor(trustedSourcesService: TrustedSourcesService,
               router: Router,
               route: ActivatedRoute) {

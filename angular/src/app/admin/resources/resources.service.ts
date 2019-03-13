@@ -1,14 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { throwError } from 'rxjs/internal/observable/throwError';
 import { Observable } from 'rxjs/Observable';
 import { map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 import { RealmService } from '../../realm.service';
-import { ChangeDto } from '../shared/change.dto';
-import { ChangeModel } from '../shared/change.model';
 import { ConfigModel } from '../shared/config.model';
+import { ConfigModificationObject } from '../shared/configModificationObject';
 import { EntityModel } from '../shared/entity.model';
 import { EntityService } from '../shared/entity.service';
 
@@ -28,11 +26,11 @@ export class ResourceService implements EntityService {
     });
   }
 
-  getAccessRequestToken(resource, view): Observable<any[]> {
+  getAccessRequestToken(resourceId, viewId): Observable<any[]> {
     const params = {
     };
 
-    return this.http.get<any[]>(`${environment.damApiUrl}/${this.realm}/resources/${resource}/views/${view}`, { params })
+    return this.http.get<any[]>(`${environment.damApiUrl}/${this.realm}/resources/${resourceId}/views/${viewId}`, { params })
       .pipe(
         pluck('token')
       );
@@ -52,31 +50,19 @@ export class ResourceService implements EntityService {
     );
   }
 
-  save(change: ChangeModel): Observable<any> {
-    return this.saveDto(this.createDto(change));
-  }
-
-  // We should try and get rid of this soon, and edit in terms of a separate model.
-  saveDto(dto: ChangeDto): Observable<any> {
-    if (!dto.item || !dto.item.name) {
-      return throwError({error: 'The resource is missing the `item.name` field.'});
-    }
-
-    const resourceName = dto.item.name;
-
-    return this.http.post(`${environment.damApiUrl}/${this.realm}/config/resources/${resourceName}`,
-      dto,
+  save(id: string, change: ConfigModificationObject): Observable<any> {
+    return this.http.post(`${environment.damApiUrl}/${this.realm}/config/resources/${id}`,
+      change,
       { headers }
     );
   }
 
-  update(change: ChangeModel): Observable<any> {
+  update(id: string, change: ConfigModificationObject): Observable<any> {
     const params = {
     };
-    const dto = this.createDto(change);
 
-    return this.http.put(`${environment.damApiUrl}/${this.realm}/config/resources/${dto.item.name}`,
-      dto,
+    return this.http.put(`${environment.damApiUrl}/${this.realm}/config/resources/${id}`,
+      change,
       { params, headers }
     );
   }
@@ -85,12 +71,4 @@ export class ResourceService implements EntityService {
     throw new Error('Not yet implemented.');
   }
 
-  protected createDto(change: ChangeModel): ChangeDto {
-    const item = {
-      name: change.entity.name,
-      ...change.entity.dto,
-    };
-    const dto = new ChangeDto(item, change.apply);
-    return dto;
-  }
 }

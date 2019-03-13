@@ -2,9 +2,11 @@
 </ddap-header>
 
 <ddap-main>
-  <form #passportForm="ngForm" (ngSubmit)="onSubmit(passportForm.value)">
-    <mat-form-field>
-      <textarea matInput placeholder="Passport JSON" rows="10" name="body" ngModel required></textarea>
+  <form #passportForm="ngForm" (ngSubmit)="onSubmit(idField.value, passportForm.value.body)">
+    <mat-form-field data-se="id-field">
+      <mat-label>Passport ID</mat-label>
+      <input #idField matInput>
+      <mat-hint>The name by which other config objects refer to this resource</mat-hint>
     </mat-form-field>
     <div>
       <button type="submit" mat-flat-button color="primary"

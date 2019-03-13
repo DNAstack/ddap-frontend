@@ -4,6 +4,11 @@
 <ddap-main>
   <div class="mat-expansion-panel">
     <h3>Item</h3>
+    <mat-form-field data-se="id-field">
+      <mat-label>Resource ID</mat-label>
+      <input matInput [(ngModel)]="resourceId">
+      <mat-hint>The name by which other config objects refer to this resource</mat-hint>
+    </mat-form-field>
     <json-editor #itemEditor
                  data-se="item-editor"
                  [options]="itemEditorOptions"

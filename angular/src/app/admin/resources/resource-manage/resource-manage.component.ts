@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 
-import { ChangeModel } from '../../shared/change.model';
-import { EntityModel } from '../../shared/entity.model';
+import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 import { ResourceService } from '../resources.service';
 
@@ -15,6 +14,7 @@ import { ResourceService } from '../resources.service';
 export class ResourceManageComponent implements OnInit {
 
   errorDto: any;
+  resourceId: string;
   item: any;
   test: any;
 
@@ -49,10 +49,9 @@ export class ResourceManageComponent implements OnInit {
   }
 
   save() {
-    const entityModel = new EntityModel(this.item.name, this.item);
-    const change = new ChangeModel(entityModel, this.test);
+    const change = new ConfigModificationObject(this.item, this.test);
 
-    this.resourceService.save(change).subscribe(
+    this.resourceService.save(this.resourceId, change).subscribe(
       () => this.goToResourceList(),
       ({error}) => this.errorDto = error
     );
@@ -69,4 +68,5 @@ export class ResourceManageComponent implements OnInit {
   private goToResourceList() {
     this.router.navigate(['../..'], {relativeTo: this.route});
   }
+
 }

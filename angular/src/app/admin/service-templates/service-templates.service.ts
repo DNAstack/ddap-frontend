@@ -11,7 +11,7 @@ export class ServiceTemplateService extends ConfigEntityService {
 
   constructor(http: HttpClient,
               realmService: RealmService) {
-    super(http, realmService, 'serviceTemplates');
+    super(http, realmService, 'serviceTemplates', 'accessGrants');
   }
 
 }

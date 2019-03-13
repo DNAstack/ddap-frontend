@@ -11,7 +11,7 @@ export class PassportService extends ConfigEntityService {
 
   constructor(http: HttpClient,
               realmService: RealmService) {
-    super(http, realmService, 'trustedPassportIssuers');
+    super(http, realmService, 'trustedPassportIssuers', 'trustedPassportIssuers');
   }
 
 }

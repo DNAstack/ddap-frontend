@@ -10,7 +10,7 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 export class TrustedSourcesService extends ConfigEntityService {
 
   constructor(protected http: HttpClient, protected realmService: RealmService) {
-    super(http, realmService, 'trustedSources');
+    super(http, realmService, 'trustedSources', 'trustedClaims');
   }
 
 }

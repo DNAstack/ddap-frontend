@@ -2,9 +2,11 @@
 </ddap-header>
 
 <ddap-main>
-  <form #serviceTemplateForm="ngForm" (ngSubmit)="onSubmit(serviceTemplateForm.value)">
-    <mat-form-field>
-      <textarea matInput placeholder="Service Template JSON" rows="10" name="body" ngModel required></textarea>
+  <form #serviceTemplateForm="ngForm" (ngSubmit)="onSubmit(idField.value, serviceTemplateForm.value.body)">
+    <mat-form-field data-se="id-field">
+      <mat-label>Service Template ID</mat-label>
+      <input #idField matInput>
+      <mat-hint>The name by which other config objects refer to this resource</mat-hint>
     </mat-form-field>
     <div>
       <button type="submit" mat-flat-button color="primary" [disabled]="!serviceTemplateForm.form.valid || serviceTemplateForm.submitted">

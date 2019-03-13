@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Observable } from 'rxjs/Observable';
 
-import { ChangeModel } from '../change.model';
+import { ConfigModificationObject } from '../configModificationObject';
 import { EntityModel } from '../entity.model';
 import { EntityService } from '../entity.service';
 import { JsonEditorDefaults } from '../jsonEditorDefaults';
@@ -74,7 +74,8 @@ export class JsonPanelComponent implements OnChanges {
     this.state = ViewState.Submitting;
     let updateAction: Observable<any>;
 
-    updateAction = this.entityService.update(new ChangeModel(new EntityModel(this.entity.name, this.entityDto), this.testDto));
+    const change = new ConfigModificationObject(this.entityDto, this.testDto);
+    updateAction = this.entityService.update(this.entity.name, change);
 
     updateAction
       .subscribe(() => {

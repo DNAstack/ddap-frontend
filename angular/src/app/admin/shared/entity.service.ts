@@ -1,11 +1,11 @@
 import { Observable } from 'rxjs/Observable';
 
-import { ChangeModel } from './change.model';
+import { ConfigModificationObject } from './configModificationObject';
 import { EntityModel } from './entity.model';
 
 export interface EntityService {
   get(): Observable<Map<string, EntityModel>>;
-  save(change: ChangeModel): Observable<any>;
-  update(change: ChangeModel): Observable<any>;
+  save(id: string, change: ConfigModificationObject): Observable<any>;
+  update(id: string, change: ConfigModificationObject): Observable<any>;
   remove(id: string): Observable<any>;
 }

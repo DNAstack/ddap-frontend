@@ -11,6 +11,6 @@ export class RuleService extends ConfigEntityService {
 
   constructor(http: HttpClient,
               realmService: RealmService) {
-    super(http, realmService, 'policies');
+    super(http, realmService, 'policies', 'policies');
   }
 }

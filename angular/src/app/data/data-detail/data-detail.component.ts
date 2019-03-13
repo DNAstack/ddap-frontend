@@ -33,14 +33,13 @@ export class DataDetailComponent implements OnInit {
   ngOnInit() {
     this.route.params.pipe(
       flatMap(params => this.dataService.getResource(params['resourceName']))
-    ).subscribe((entity: EntityModel) => {
-      this.resource = entity;
-      const resourceName = entity.name;
+    ).subscribe((resource: EntityModel) => {
+      this.resource = resource;
+      const resourceName = resource.name;
       this.searchStateService.patch({
         resource: resourceName,
         limitSearch: true,
       });
-      this.resource = entity.dto;
       this.resourceLabel$ = of(this.resource.dto.ui.label);
       this.views = this.getViews(this.resource);
     });

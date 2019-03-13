@@ -2,14 +2,19 @@
 </ddap-header>
 
 <ddap-main>
-  <form #personaForm="ngForm" (ngSubmit)="onSubmit(personaForm.value)">
-    <mat-form-field>
+  <form #personaForm="ngForm" (ngSubmit)="onSubmit(idField.value, personaForm.value.body)">
+    <mat-form-field data-se="id-field">
+      <mat-label>Persona ID</mat-label>
+      <input #idField matInput>
+      <mat-hint>The name by which other config objects refer to this resource</mat-hint>
+    </mat-form-field>
+    <mat-form-field data-se="item-editor">
       <textarea matInput placeholder="persona JSON" rows="10" name="body" ngModel required></textarea>
     </mat-form-field>
     <div>
       <button type="submit" mat-flat-button color="primary"
               [disabled]="!personaForm.form.valid || personaForm.submitted">
-        Add persona
+        Add Persona
       </button>
     </div>
   </form>

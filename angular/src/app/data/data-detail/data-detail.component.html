@@ -1,11 +1,11 @@
 <ddap-header class="no-border"
              [backLink]="['..']"
-             [label]="resource?.dto.ui.label"
+             [label]="resource?.dto?.ui?.label"
              [searchButton]="true"
              (searchOpenChange)="searchOpenedChange($event)">
 </ddap-header>
 
-<ddap-resource-logo [imageUrl]="resource?.dto.ui.imageUrl">
+<ddap-resource-logo [imageUrl]="resource?.dto?.ui?.imageUrl">
   <ddap-limit-search *ngIf="searchOpened"
                      [checked]="limitSearch"
                      (change)="limitSearchChange($event)"
@@ -16,7 +16,7 @@
 
 <div>
   <p class="ddap-resource-title">
-    {{ resource?.dto.ui.description }}
+    {{ resource?.dto?.ui?.description }}
   </p>
 
   <mat-divider class="ddap-main-divider"></mat-divider>
