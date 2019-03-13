@@ -4,7 +4,7 @@ import { EntityListBase } from '../../shared/entity-list.base';
 import { ServiceTemplateService } from '../service-templates.service';
 
 @Component({
-  selector: 'ddap-grant-list',
+  selector: 'ddap-service-template-list',
   templateUrl: './service-template-list.component.html',
   styleUrls: ['./service-template-list.component.scss'],
 })

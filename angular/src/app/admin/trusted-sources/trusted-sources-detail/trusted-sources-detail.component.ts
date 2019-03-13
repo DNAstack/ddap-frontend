@@ -5,7 +5,7 @@ import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { TrustedSourcesService } from '../trusted-sources.service';
 
 @Component({
-  selector: 'ddap-claim-detail',
+  selector: 'ddap-trusted-source-detail',
   templateUrl: './trusted-sources-detail.component.html',
   styleUrls: ['./trusted-sources-detail.component.scss'],
 })

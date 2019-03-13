@@ -5,7 +5,7 @@ import { EntityManageBase } from '../../shared/entity-manage.base';
 import { TrustedSourcesService } from '../trusted-sources.service';
 
 @Component({
-  selector: 'ddap-claim-manage',
+  selector: 'ddap-trusted-source-manage',
   templateUrl: './trusted-sources-manage.component.html',
   styleUrls: ['./trusted-sources-manage.component.scss'],
 })

@@ -19,12 +19,11 @@ import { DataService } from '../data.service';
 export class DataDetailComponent implements OnInit {
 
   limitSearch = true;
-  resource: any;
-  resourceName$: Observable<string>;
+  resourceLabel$: Observable<string>;
   searchOpened = false;
   views: any;
   accessError: any = null;
-  private entity: EntityModel;
+  resource: EntityModel;
 
   constructor(private route: ActivatedRoute,
               private dataService: DataService,
@@ -35,20 +34,20 @@ export class DataDetailComponent implements OnInit {
     this.route.params.pipe(
       flatMap(params => this.dataService.getResource(params['resourceName']))
     ).subscribe((entity: EntityModel) => {
-      this.entity = entity;
+      this.resource = entity;
       const resourceName = entity.name;
       this.searchStateService.patch({
         resource: resourceName,
         limitSearch: true,
       });
       this.resource = entity.dto;
-      this.resourceName$ = of(this.resource.ui.label);
+      this.resourceLabel$ = of(this.resource.dto.ui.label);
       this.views = this.getViews(this.resource);
     });
   }
 
   getAccess(viewName) {
-    this.dataService.getAccessRequestToken(this.entity.name, viewName)
+    this.dataService.getAccessRequestToken(this.resource.name, viewName)
       .subscribe(
         (response) => this.mutateViewWithTokenAndUrl(viewName, response),
         (error) => this.accessError = error
@@ -68,22 +67,22 @@ export class DataDetailComponent implements OnInit {
 
   private mutateViewWithTokenAndUrl(viewName, response) {
     const { account, token } = response;
+    const view = this.resource.dto.views[viewName];
 
-    this.resource.views[viewName].account = account;
-    this.resource.views[viewName].token = token;
+    view.account = account;
+    view.token = token;
 
-    const view = this.resource.views[viewName];
     // tslint:disable-next-line
     const viewAccessUrl = view!.interfaces['http:gcp:gs']!.uri![0];
     if (viewAccessUrl) {
-      this.resource.views[viewName].url = `${viewAccessUrl}/o?access_token=${token}`;
+      view.url = `${viewAccessUrl}/o?access_token=${token}`;
     }
   }
 
-  private getViews(resource: any): EntityModel[] {
+  private getViews(resource: EntityModel): EntityModel[] {
     return Object
-      .keys(resource.views)
-      .map((key) => new EntityModel(key, resource.views[key]));
+      .keys(resource.dto.views)
+      .map((key) => new EntityModel(key, resource.dto.views[key]));
   }
 
 }

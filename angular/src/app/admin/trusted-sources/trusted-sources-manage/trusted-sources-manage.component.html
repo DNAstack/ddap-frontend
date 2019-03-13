@@ -1,14 +1,14 @@
-<ddap-header [backLink]="['../..']" label="Add Claim">
+<ddap-header [backLink]="['../..']" label="Add Trusted Source">
 </ddap-header>
 
 <ddap-main>
-  <form #claimForm="ngForm" (ngSubmit)="onSubmit(claimForm.value)">
+  <form #trustedSourceForm="ngForm" (ngSubmit)="onSubmit(trustedSourceForm.value)">
     <mat-form-field>
-      <textarea matInput placeholder="Claim JSON" rows="10" name="body" ngModel required></textarea>
+      <textarea matInput placeholder="Trusted Source JSON" rows="10" name="body" ngModel required></textarea>
     </mat-form-field>
     <div>
-      <button type="submit" mat-flat-button color="primary" [disabled]="!claimForm.form.valid || claimForm.submitted">
-        Add Claim
+      <button type="submit" mat-flat-button color="primary" [disabled]="!trustedSourceForm.form.valid || trustedSourceForm.submitted">
+        Add Trusted Source
       </button>
     </div>
   </form>

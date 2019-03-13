@@ -1,14 +1,14 @@
-<ddap-header [backLink]="['../..']" label="Add Grant">
+<ddap-header [backLink]="['../..']" label="Add Service Template">
 </ddap-header>
 
 <ddap-main>
-  <form #grantForm="ngForm" (ngSubmit)="onSubmit(grantForm.value)">
+  <form #serviceTemplateForm="ngForm" (ngSubmit)="onSubmit(serviceTemplateForm.value)">
     <mat-form-field>
-      <textarea matInput placeholder="Grant JSON" rows="10" name="body" ngModel required></textarea>
+      <textarea matInput placeholder="Service Template JSON" rows="10" name="body" ngModel required></textarea>
     </mat-form-field>
     <div>
-      <button type="submit" mat-flat-button color="primary" [disabled]="!grantForm.form.valid || grantForm.submitted">
-        Add Grant
+      <button type="submit" mat-flat-button color="primary" [disabled]="!serviceTemplateForm.form.valid || serviceTemplateForm.submitted">
+        Add Service Template
       </button>
     </div>
   </form>

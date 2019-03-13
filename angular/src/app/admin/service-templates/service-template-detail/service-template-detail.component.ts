@@ -5,7 +5,7 @@ import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { ServiceTemplateService } from '../service-templates.service';
 
 @Component({
-  selector: 'ddap-grant-detail',
+  selector: 'ddap-service-template-detail',
   templateUrl: './service-template-detail.component.html',
   styleUrls: ['./service-template-detail.component.scss'],
 })
@@ -15,6 +15,6 @@ export class ServiceTemplateDetailComponent extends EntityDetailBase<ServiceTemp
     route: ActivatedRoute,
     serviceTemplateService: ServiceTemplateService
   ) {
-    super(route, serviceTemplateService, 'grantName');
+    super(route, serviceTemplateService, 'serviceTemplateName');
   }
 }

@@ -5,7 +5,7 @@ import { EntityManageBase } from '../../shared/entity-manage.base';
 import { ServiceTemplateService } from '../service-templates.service';
 
 @Component({
-  selector: 'ddap-grant-manage',
+  selector: 'ddap-service-template-manage',
   templateUrl: './service-template-manage.component.html',
   styleUrls: ['./service-template-manage.component.scss'],
 })
