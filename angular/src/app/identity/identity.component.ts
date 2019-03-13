@@ -1,8 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-
-import { JsonEditorDefaults } from '../admin/shared/jsonEditorDefaults';
 
 import { IdentityService } from './identity.service';
 
@@ -12,23 +9,21 @@ import { IdentityService } from './identity.service';
 })
 export class IdentityComponent implements OnInit {
 
-  identity: any;
-  identityEditorOptions: JsonEditorOptions;
-  identitySubscription: Subscription;
-
-  @ViewChild('identityEditor')
-  identityEditor: JsonEditorComponent;
+  accounts: any[];
+  accountsSubscription: Subscription;
 
   constructor(private accountService: IdentityService) {
-    this.identityEditorOptions = new JsonEditorDefaults();
-    this.identityEditorOptions.expandAll = true;
-    this.identityEditorOptions.onEditable = () => false;
+
   }
 
   ngOnInit(): void {
-    this.identitySubscription = this.accountService.get().subscribe((accountDto) => {
-      this.identity = accountDto;
+    this.accountsSubscription = this.accountService.get().subscribe((accountDto: any) => {
+      this.accounts = accountDto.accounts;
     });
+  }
+
+  disconnectAccount(account) {
+    // TODO:
   }
 
 }
