@@ -20,13 +20,16 @@ export class IdentityService {
   get(params = {}): Observable<any> {
     return this.realmService.switchMap<any>(
       realm => this.http.get<any>(`${environment.idpApiUrl}/${realm}/accounts/-`, {params})
+        .pipe(
+          pluck('account')
+        )
     );
   }
 
   getProfile(params?): Observable<Profile> {
     return this.get(params)
       .pipe(
-        pluck('account', 'profile', 'attributes')
+        pluck('profile', 'attributes')
       );
   }
 }

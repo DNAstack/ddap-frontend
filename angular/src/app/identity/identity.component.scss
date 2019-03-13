@@ -1,0 +1,11 @@
+.mat-card-actions, .mat-card-content, .mat-card-subtitle {
+  margin-bottom: 0;
+}
+
+mat-expansion-panel:not(:last-of-type) {
+  margin-bottom: 1rem;
+}
+
+mat-expansion-panel-header {
+  padding: 0;
+}

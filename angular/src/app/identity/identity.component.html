@@ -2,12 +2,25 @@
 </ddap-header>
 
 <ddap-main>
-  <mat-card>
-    <mat-progress-bar *ngIf="identitySubscription && !identitySubscription.closed"
-                      class="ddap-card-loader"
-                      mode="indeterminate"></mat-progress-bar>
-    <json-editor #identityEditor
-                 [options]="identityEditorOptions"
-                 [data]="identity"></json-editor>
-  </mat-card>
+  <mat-accordion>
+    <h2>Connected Accounts</h2>
+    <mat-card>
+      <mat-progress-bar *ngIf="accountsSubscription && !accountsSubscription.closed"
+                        class="ddap-card-loader"
+                        mode="indeterminate">
+      </mat-progress-bar>
+      <mat-expansion-panel class="stretch mat-elevation-z0" *ngFor="let account of accounts">
+        <mat-expansion-panel-header>
+          <mat-card-header>
+            <img mat-card-avatar src="https://lh5.googleusercontent.com/-IDBhD6s9R5w/AAAAAAAAAAI/AAAAAAAABXk/uJXX9ztGEh4/s96-c/photo.jpg" />
+            <mat-card-title>{{ account.provider }}</mat-card-title>
+            <mat-card-subtitle>{{ account.profile.subject }}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-expansion-panel-header>
+        <mat-card-content>
+          <button mat-button color="primary" class="uppercase" (click)="disconnectAccount(account)">Disconnect</button>
+        </mat-card-content>
+      </mat-expansion-panel>
+    </mat-card>
+  </mat-accordion>
 </ddap-main>
