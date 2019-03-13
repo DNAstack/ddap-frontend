@@ -15,14 +15,10 @@ import { RealmService } from '../realm.service';
 export class DataService {
 
   private cache: any = {};
-  private realm;
 
   constructor(private http: HttpClient,
               private realmService: RealmService) {
 
-    this.realmService.getRealm().subscribe(realm => {
-      this.realm = realm;
-    });
   }
 
   getName(resourceId: string): Observable<string> {
@@ -36,22 +32,21 @@ export class DataService {
     return of(resourceName);
   }
 
-  get(params?): Observable<EntityModel[]> {
-    params = params || {};
-
+  get(params = {}): Observable<EntityModel[]> {
     const putIntoCache = (resourcesDto: EntityModel[]) => {
       resourcesDto.forEach((resource: EntityModel) => {
         this.cache[resource.name] = resource.dto.ui.label;
       });
     };
 
-    return this.http.get<any[]>(`${environment.damApiUrl}/${this.realm}/resources`, {params})
-      .pipe(
-        pluck('resources'),
-        map(EntityModel.objectToMap),
-        map(EntityModel.arrayFromMap),
-        tap(putIntoCache)
-      );
+    return this.realmService.switchMap(
+      realm => this.http.get<any[]>(`${environment.damApiUrl}/${realm}/resources`, {params})
+    ).pipe(
+      pluck('resources'),
+      map(EntityModel.objectToMap),
+      map(EntityModel.arrayFromMap),
+      tap(putIntoCache)
+    );
   }
 
   getResource(resourceId: string): Observable<EntityModel> {
@@ -64,12 +59,13 @@ export class DataService {
   getAccessRequestToken(resource, view): any {
     const params = {};
 
-    return this.http.get<any>(
-      `${environment.damApiUrl}/${this.realm}/resources/${resource}/views/${view}`,
-      {params})
-      .pipe(
-        map(({account, token}) => ({account, token}))
-      );
+    return this.realmService.switchMap(
+      realm => {
+        const viewUrl = `${environment.damApiUrl}/${realm}/resources/${resource}/views/${view}`;
+        return this.http.get<any>(viewUrl, {params});
+      }
+    ).pipe(
+      map(({account, token}) => ({account, token}))
+    );
   }
-
 }

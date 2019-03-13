@@ -13,14 +13,8 @@ import { BeaconResponse } from './beacon-response.model';
 })
 export class ResourceBeaconService {
 
-  realm;
-
   constructor(private http: HttpClient,
               private realmService: RealmService) {
-
-    this.realmService.getRealm().subscribe(realm => {
-      this.realm = realm;
-    });
   }
 
   query(queryValue: any, resource): Observable<BeaconResponse[]> {
@@ -41,17 +35,21 @@ export class ResourceBeaconService {
     return this.queryAll(params);
   }
 
-  private queryBeacon(resourceId, params?): any {
-    return this.http.get<BeaconResponse[]>(
-      `${environment.ddapApiUrl}/${this.realm}/resources/${resourceId}/search`,
-      {params}
+  private queryBeacon(resourceId, params?): Observable<BeaconResponse[]> {
+    return this.realmService.switchMap( (realm) => {
+      return this.http.get<BeaconResponse[]>(
+        `${environment.ddapApiUrl}/${realm}/resources/${resourceId}/search`,
+        {params}
       );
+    });
   }
 
-  private queryAll(params?): Observable<BeaconResponse[]> {
-    return this.http.get<BeaconResponse[]>(
-      `${environment.ddapApiUrl}/${this.realm}/resources/search`,
-      {params}
+  private queryAll(params = {}): Observable<BeaconResponse[]> {
+    return this.realmService.switchMap((realm) => {
+      return this.http.get<BeaconResponse[]>(
+        `${environment.ddapApiUrl}/${realm}/resources/search`,
+        {params}
       );
+    });
   }
 }

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { distinct, filter, map } from 'rxjs/operators';
-
-import { DEFAULT_REALM } from './realm.constant';
+import { distinct, filter, map, switchMap, take } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Subject } from 'rxjs/Subject';
 
 
 @Injectable({
@@ -12,7 +11,7 @@ import { DEFAULT_REALM } from './realm.constant';
 })
 export class RealmService {
 
-  private realm: BehaviorSubject<string> = new BehaviorSubject(DEFAULT_REALM);
+  private realm: Subject<string> = new ReplaySubject(1);
 
   constructor(private router: Router) {
     this.router.events.pipe(
@@ -30,5 +29,13 @@ export class RealmService {
     return this.realm.asObservable().pipe(
       distinct()
     );
+  }
+
+  switchMap<T>(cb: (realm: string) => Observable<T>): Observable<T> {
+    return this.getRealm()
+      .pipe(
+        take(1),
+        switchMap(cb)
+      );
   }
 }
