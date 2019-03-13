@@ -13,19 +13,14 @@ import { Profile } from './profile.model';
 })
 export class IdentityService {
 
-  private realm: string;
-
   constructor(private http: HttpClient,
               private realmService: RealmService) {
-    this.realmService.getRealm().subscribe(realm => {
-      this.realm = realm;
-    });
   }
 
-  get(params?): Observable<any[]> {
-    params = params || {};
-
-    return this.http.get<any[]>(`${environment.idpApiUrl}/${this.realm}/accounts/-`, {params});
+  get(params = {}): Observable<any> {
+    return this.realmService.switchMap<any>(
+      realm => this.http.get<any>(`${environment.idpApiUrl}/${realm}/accounts/-`, {params})
+    );
   }
 
   getProfile(params?): Observable<Profile> {
@@ -34,5 +29,4 @@ export class IdentityService {
         pluck('account', 'profile', 'attributes')
       );
   }
-
 }

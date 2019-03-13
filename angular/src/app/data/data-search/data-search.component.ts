@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
@@ -33,7 +34,9 @@ export class DataSearchComponent implements OnInit {
     this.resultsAction = new Subscription();
 
     this.searchStateService.searchState
-      .subscribe(
+      .pipe(
+        take(1)
+      ).subscribe(
         (searchState: SearchState) => this.initializeComponentFields(searchState));
   }
 

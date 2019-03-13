@@ -25,13 +25,9 @@ export class AppComponent implements OnInit {
     this.realmService.getRealm().subscribe(realm => {
       this.realm = realm;
     });
-    // TODO: this causes fail of journey test because it is using fallback realm
-    // this.identityService.getProfile().subscribe(profile => {
-    //   this.profile = profile;
-    // });
-    this.profile = {
-      name: 'Craig Voisin',
-      picture: 'https://lh5.googleusercontent.com/-IDBhD6s9R5w/AAAAAAAAAAI/AAAAAAAABXk/uJXX9ztGEh4/s96-c/photo.jpg',
-    };
+
+    this.identityService.getProfile().subscribe(profile => {
+      this.profile = profile;
+    });
   }
 }

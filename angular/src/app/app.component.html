@@ -6,12 +6,15 @@
     </header>
 
     <mat-nav-list>
-      <mat-list-item *ngIf="profile" class="credentials-username"
+      <mat-list-item class="credentials-username"
                      data-se="nav-account">
-        <h4 mat-line>{{ profile.name }}</h4>
-        <a mat-line href="">Log Out</a>
+        <h4 mat-line>{{ profile?.name || '&nbsp;' }}</h4>
+        <a mat-line
+           href="">Log Out</a>
         <div class="credentials-picture">
-          <img matListAvatar [src]="profile.picture" alt="Profile picture">
+          <img matListAvatar
+               [src]="profile?.picture || '/assets/images/placeholder_identity.png'"
+               alt="Profile picture">
         </div>
       </mat-list-item>
       <mat-list-item [routerLink]="[realm, 'data']"

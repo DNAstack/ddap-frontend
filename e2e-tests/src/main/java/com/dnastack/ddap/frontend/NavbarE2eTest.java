@@ -161,10 +161,9 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void checkForProfileName() {
-        String profileSelector = "nav-account";
-        String text = driver.findElement(By.xpath("//*[@data-se=\"" + profileSelector + "\"]")).getText();
+        final String usernameXpath = "//*[@data-se='nav-account']//h4[contains(text(), 'NCI Researcher')]";
 
-        assertThat(text, containsString("Craig Voisin"));
+        driver.findElement(By.xpath(usernameXpath)).getText();
     }
 
 }
