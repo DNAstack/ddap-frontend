@@ -1,21 +1,9 @@
-<ddap-header [backLink]="['../..']" label="Add Test Persona">
+<ddap-header [backLink]="['../..']"
+             label="Add Test Persona">
 </ddap-header>
 
 <ddap-main>
-  <form #personaForm="ngForm" (ngSubmit)="onSubmit(idField.value, personaForm.value.body)">
-    <mat-form-field data-se="id-field">
-      <mat-label>Test Persona Identifier</mat-label>
-      <input #idField matInput>
-      <mat-hint>The name by which other config objects refer to this resource</mat-hint>
-    </mat-form-field>
-    <mat-form-field data-se="item-editor">
-      <textarea matInput placeholder="Test Persona JSON" rows="10" name="body" ngModel required></textarea>
-    </mat-form-field>
-    <div>
-      <button type="submit" mat-flat-button color="primary" class="uppercase"
-              [disabled]="!personaForm.form.valid || personaForm.submitted">
-        Add Test Persona
-      </button>
-    </div>
-  </form>
+  <ddap-entity-manage-form [label]="'Test Persona'"
+                           (submitted)="add($event.id, $event.change)">
+  </ddap-entity-manage-form>
 </ddap-main>
