@@ -138,7 +138,8 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(NavBar.NavItem.IDENTITY);
 
-        driver.findElement(By.xpath("//div[contains(text(), 'nci_researcher@nci.nih.gov')]"));
+        String subject = driver.findElement(By.tagName("mat-card-subtitle")).getText();
+        assertThat(subject, containsString("nci_researcher@nci.nih.gov"));
     }
 
     @Test
