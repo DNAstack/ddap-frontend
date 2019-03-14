@@ -7,12 +7,11 @@ import static org.junit.Assert.assertTrue;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.page.ExploreDataPage;
-import com.dnastack.ddap.common.page.HasNavBar;
-import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -21,16 +20,10 @@ import org.openqa.selenium.WebElement;
 @SuppressWarnings("Duplicates")
 public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
 
-    private HasNavBar ddapPage;
-
-    @Before
-    public void testSetup() {
-        if (driver != null) {
-            // Ensure that tests with login work independently of eachother.
-            driver.manage().deleteAllCookies();
-        }
-        ICLoginPage icLoginPage = startLogin();
-        ddapPage = icLoginPage.loginAsNciResearcher();
+    @BeforeClass
+    public static void oneTimeSetup() throws IOException {
+        final String testConfig = loadTemplate("/com/dnastack/ddap/aggregateSearchRealmConfig.json");
+        setupRealmConfig("nci_researcher", testConfig, REALM);
     }
 
     @Test

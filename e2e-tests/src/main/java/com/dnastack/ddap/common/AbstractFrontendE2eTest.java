@@ -2,13 +2,16 @@ package com.dnastack.ddap.common;
 
 import static java.lang.String.format;
 
+import com.dnastack.ddap.common.page.HasNavBar;
 import com.dnastack.ddap.common.page.ICLoginPage;
+import com.dnastack.ddap.frontend.NavbarE2eTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
@@ -17,11 +20,13 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
 
+    protected static final String REALM = generateRealmName(NavbarE2eTest.class.getSimpleName());
     protected static final boolean HEADLESS = Boolean.parseBoolean(optionalEnv("HEADLESS", "true"));
     protected static final Pattern URL_PARSE_PATTERN = Pattern.compile("^(https?)://(.*)$");
 
     protected static WebDriver driver;
     protected static String screenshotDir;
+    protected HasNavBar ddapPage;
 
     @Rule
     public ScreenShotRule screenShotRule() {
@@ -50,6 +55,16 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
             driver.quit();
             driver = null;
         }
+    }
+
+    @Before
+    public void beforeEach() {
+        if (driver != null) {
+            // Ensure that tests with login work independently of eachother.
+            driver.manage().deleteAllCookies();
+        }
+        ICLoginPage icLoginPage = startLogin(REALM);
+        ddapPage = icLoginPage.loginAsNciResearcher();
     }
 
     protected static ICLoginPage startLogin(String realm) {
