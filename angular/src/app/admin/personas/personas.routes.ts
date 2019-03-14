@@ -5,7 +5,7 @@ import { PersonaListComponent } from './persona-list/persona-list.component';
 import { PersonaManageComponent } from './persona-manage/persona-manage.component';
 
 export const PERSONAS_ROUTES: Routes = [
-  { path: 'personas', component: PersonaListComponent },
-  { path: 'personas/:personaName', component: PersonaDetailComponent },
-  { path: 'personas/manage/add', component: PersonaManageComponent, pathMatch: 'full' },
+  { path: 'test-personas', component: PersonaListComponent },
+  { path: 'test-personas/:personaName', component: PersonaDetailComponent },
+  { path: 'test-personas/manage/add', component: PersonaManageComponent, pathMatch: 'full' },
 ];
