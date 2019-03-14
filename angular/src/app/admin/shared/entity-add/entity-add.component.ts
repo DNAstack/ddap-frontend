@@ -6,8 +6,10 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./entity-add.component.scss'],
 })
 export class EntityAddComponent {
+
   @Input()
-  configName: string;
+  label: string;
 
   constructor() { }
+
 }

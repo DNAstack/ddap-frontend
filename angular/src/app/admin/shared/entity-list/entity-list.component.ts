@@ -15,7 +15,7 @@ export class EntityListComponent {
   error: string = null;
 
   @Input()
-  configName: string;
+  headerTitle: string;
 
   @Input()
   entityList: Observable<EntityModel[]>;

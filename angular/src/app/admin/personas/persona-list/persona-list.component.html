@@ -1,12 +1,12 @@
 <ddap-header icon="identities" label="Test Personas">
   <ddap-entity-add
-    [configName]="'test persona'">
+    [label]="'test persona'">
   </ddap-entity-add>
 </ddap-header>
 
 <ddap-main>
   <ddap-entity-list
-    [configName]="'test persona'"
+    [headerTitle]="'test persona'"
     [descriptionProperty]="'state'"
     [entityList]="personas$">
   </ddap-entity-list>

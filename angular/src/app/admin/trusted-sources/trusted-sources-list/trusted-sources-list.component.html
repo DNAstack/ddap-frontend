@@ -1,12 +1,12 @@
 <ddap-header icon="trusted-sources" label="Trusted Sources">
   <ddap-entity-add
-    [configName]="'trustedSources'">
+    [label]="'trustedSources'">
   </ddap-entity-add>
 </ddap-header>
 
 <ddap-main>
   <ddap-entity-list
-    [configName]="'trustedSources'"
+    [headerTitle]="'trustedSources'"
     [descriptionProperty]="'sources'"
     [entityList]="entities$">
   </ddap-entity-list>
