@@ -1,33 +1,25 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.AbstractFrontendE2eTest;
-import com.dnastack.ddap.common.page.HasNavBar;
-import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.common.page.NavBar;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import static java.lang.String.format;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 
+import com.dnastack.ddap.common.AbstractFrontendE2eTest;
+import com.dnastack.ddap.common.page.NavBar;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.lang.String.format;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
-    private final static Map<NavBar.NavItem, List<String>> DEFAULT_PAGE_ITEMS = pageItems();
-    private static final String REALM = generateRealmName(NavbarE2eTest.class.getSimpleName());
-
-    private HasNavBar ddapPage;
-
-    private static Map<NavBar.NavItem, List<String>> pageItems() {
+    private static final Map<NavBar.NavItem, List<String>> DEFAULT_PAGE_ITEMS = pageItems();
+    private static final Map<NavBar.NavItem, List<String>> pageItems() {
         Map<NavBar.NavItem, List<String>> map = new HashMap<>();
         map.put(NavBar.NavItem.RESOURCES,
                 Arrays.asList("allOfUs", "ga4gh-apis"));
@@ -61,16 +53,6 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     public static void oneTimeSetup() throws IOException {
         final String testConfig = loadTemplate("/com/dnastack/ddap/navbarE2eTestConfig.json");
         setupRealmConfig("nci_researcher", testConfig, REALM);
-    }
-
-    @Before
-    public void beforeEach() {
-        if (driver != null) {
-            // Ensure that tests with login work independently of eachother.
-            driver.manage().deleteAllCookies();
-        }
-        ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsNciResearcher();
     }
 
     @Test
