@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CLIENTS_ROUTES } from './admin/clients/clients.routes';
+import { CLIENT_APPLICATIONS_ROUTES } from './admin/client-applications/client-applications.routes';
 import { DEFINITIONS_ROUTES } from './admin/definitions/definitions.routes';
 import { PASSPORTS_ROUTES } from './admin/passports/passports.routes';
 import { PERSONAS_ROUTES } from './admin/personas/personas.routes';
@@ -19,7 +19,7 @@ const routes: Routes = [
   {path: ':realmId', children: DATA_ROUTES},
   {path: ':realmId', children: IDENTITY_ROUTES},
   {path: ':realmId', children: TRUSTED_SOURCES_ROUTES},
-  {path: ':realmId', children: CLIENTS_ROUTES},
+  {path: ':realmId', children: CLIENT_APPLICATIONS_ROUTES},
   {path: ':realmId', children: DEFINITIONS_ROUTES},
   {path: ':realmId', children: SERVICE_TEMPLATES_ROUTES},
   {path: ':realmId', children: PASSPORTS_ROUTES},
