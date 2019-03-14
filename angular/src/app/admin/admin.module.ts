@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { ClientsModule } from './clients/clients.module';
+import { ClientApplicationsModule } from './client-applications/client-applications.module';
 import { DefinitionsModule } from './definitions/definitions.module';
 import { PassportsModule } from './passports/passports.module';
 import { PersonasModule } from './personas/personas.module';
@@ -12,7 +12,7 @@ import { TrustedSourcesModule } from './trusted-sources/trusted-sources.module';
 @NgModule({
   imports: [
     TrustedSourcesModule,
-    ClientsModule,
+    ClientApplicationsModule,
     DefinitionsModule,
     ServiceTemplatesModule,
     PassportsModule,
