@@ -1,12 +1,12 @@
 <ddap-header icon="tests" label="Passports">
   <ddap-entity-add
-    [configName]="'passports'">
+    [label]="'passports'">
   </ddap-entity-add>
 </ddap-header>
 
 <ddap-main>
   <ddap-entity-list
-    [configName]="'passports'"
+    [headerTitle]="'passports'"
     [descriptionProperty]="'issuer'"
     [entityList]="entities$">
   </ddap-entity-list>

@@ -1,12 +1,12 @@
 <ddap-header icon="clients" label="Clients">
   <ddap-entity-add
-    [configName]="'clients'">
+    [label]="'clients'">
   </ddap-entity-add>
 </ddap-header>
 
 <ddap-main>
   <ddap-entity-list
-    [configName]="'clients'"
+    [headerTitle]="'clients'"
     [descriptionProperty]="'clientId'"
     [entityList]="entities$">
   </ddap-entity-list>
