@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EntityManageBase } from '../../shared/entity-manage.base';
 import { PersonaService } from '../personas.service';
 
 @Component({
@@ -9,10 +8,15 @@ import { PersonaService } from '../personas.service';
   templateUrl: './persona-manage.component.html',
   styleUrls: ['./persona-manage.component.scss'],
 })
-export class PersonaManageComponent extends EntityManageBase<PersonaService> {
-  constructor(personaService: PersonaService,
-              router: Router,
-              route: ActivatedRoute) {
-    super(personaService, router, route);
+export class PersonaManageComponent {
+
+  constructor(private personaService: PersonaService,
+              private router: Router,
+              private route: ActivatedRoute) {
+  }
+
+  add(id, change) {
+    this.personaService.save(id, change)
+      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }
 }
