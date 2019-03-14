@@ -21,9 +21,6 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <json-editor [options]="editorOptions" [data]="entity.dto"></json-editor>
-        <pre>
-          {{ configName | json }} {{ entity.name | json }}
-        </pre>
         <mat-action-row>
           <button mat-button [routerLink]="[entity.name]">View</button>
         </mat-action-row>
