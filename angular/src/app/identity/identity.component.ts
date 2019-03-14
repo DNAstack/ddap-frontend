@@ -22,8 +22,4 @@ export class IdentityComponent implements OnInit {
     });
   }
 
-  disconnectAccount(account) {
-    // TODO:
-  }
-
 }
