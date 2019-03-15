@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EntityManageBase } from '../../shared/entity-manage.base';
 import { ServiceTemplateService } from '../service-templates.service';
 
 @Component({
@@ -9,11 +8,15 @@ import { ServiceTemplateService } from '../service-templates.service';
   templateUrl: './service-template-manage.component.html',
   styleUrls: ['./service-template-manage.component.scss'],
 })
-export class ServiceTemplateManageComponent extends EntityManageBase<ServiceTemplateService> {
+export class ServiceTemplateManageComponent {
 
-  constructor(serviceTemplateService: ServiceTemplateService,
-              router: Router,
-              route: ActivatedRoute) {
-    super(serviceTemplateService, router, route);
+  constructor(private serviceTemplateService: ServiceTemplateService,
+              private router: Router,
+              private route: ActivatedRoute) {
+  }
+
+  add(id, change) {
+    this.serviceTemplateService.save(id, change)
+      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }
 }

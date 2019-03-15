@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EntityManageBase } from '../../shared/entity-manage.base';
 import { TrustedSourcesService } from '../trusted-sources.service';
 
 @Component({
@@ -9,10 +8,14 @@ import { TrustedSourcesService } from '../trusted-sources.service';
   templateUrl: './trusted-sources-manage.component.html',
   styleUrls: ['./trusted-sources-manage.component.scss'],
 })
-export class TrustedSourcesManageComponent extends EntityManageBase<TrustedSourcesService> {
-  constructor(trustedSourcesService: TrustedSourcesService,
-              router: Router,
-              route: ActivatedRoute) {
-    super(trustedSourcesService, router, route);
+export class TrustedSourcesManageComponent {
+  constructor(private trustedSourcesService: TrustedSourcesService,
+              private router: Router,
+              private route: ActivatedRoute) {
+  }
+
+  add(id, change) {
+    this.trustedSourcesService.save(id, change)
+      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }
 }
