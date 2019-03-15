@@ -37,7 +37,7 @@ public class BeaconResourceExceptionHandler {
         BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
         String errorMessage = "Failed to connect to: " + ex.getMessage();
         beaconQueryResultError.setError(errorMessage);
-        return new ResponseEntity<>(beaconQueryResultError, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(beaconQueryResultError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
