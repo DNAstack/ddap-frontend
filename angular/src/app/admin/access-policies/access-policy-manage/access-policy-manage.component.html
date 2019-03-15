@@ -1,0 +1,8 @@
+<ddap-header [backLink]="['../..']" label="Add Access Policy">
+</ddap-header>
+
+<ddap-main>
+  <ddap-entity-manage-form [label]="'Access Policy'"
+                           (submitted)="add($event.id, $event.change)">
+  </ddap-entity-manage-form>
+</ddap-main>
