@@ -7,7 +7,7 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 @Injectable({
   providedIn: 'root',
 })
-export class PassportService extends ConfigEntityService {
+export class PassportIssuerService extends ConfigEntityService {
 
   constructor(http: HttpClient,
               realmService: RealmService) {

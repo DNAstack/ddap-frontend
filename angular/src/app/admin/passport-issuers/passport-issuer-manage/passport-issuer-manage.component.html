@@ -1,0 +1,8 @@
+<ddap-header [backLink]="['../..']" label="Add Passport Issuer">
+</ddap-header>
+
+<ddap-main>
+  <ddap-entity-manage-form [label]="'Passport Issuer'"
+                           (submitted)="add($event.id, $event.change)">
+  </ddap-entity-manage-form>
+</ddap-main>
