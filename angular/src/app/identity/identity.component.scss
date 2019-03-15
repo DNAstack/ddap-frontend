@@ -1,19 +1,8 @@
-.mat-card-actions,
-.mat-card-content,
-.mat-card-subtitle {
-  margin-bottom: 0;
-}
-
-mat-expansion-panel:not(:last-of-type) {
-  margin-bottom: 1rem;
-}
-
-mat-expansion-panel-header {
-  padding: 0;
-}
-
-.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled='true']).cdk-keyboard-focused,
-.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled='true']).cdk-program-focused,
-.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled='true']):hover {
+mat-card {
   background: transparent;
+
+  .mat-card-avatar {
+    width: 4rem;
+    height: 4rem;
+  }
 }
