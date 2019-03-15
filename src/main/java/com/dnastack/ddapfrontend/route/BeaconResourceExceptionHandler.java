@@ -19,7 +19,7 @@ public class BeaconResourceExceptionHandler {
     public ResponseEntity<?> handleException(IllegalArgumentException ex) {
         BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
         beaconQueryResultError.setError(ex.getMessage());
-        //logger.error("Error from WebClient - Status {}, Body {}", ex.getRawStatusCode(), ex.getResponseBodyAsString(), ex);
+        log.error("Authorization token is missing");
         return new ResponseEntity<>(beaconQueryResultError, HttpStatus.UNAUTHORIZED);
     }
 
