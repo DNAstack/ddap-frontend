@@ -6,7 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
-import com.dnastack.ddap.common.page.ExploreDataPage;
+import com.dnastack.ddap.common.page.SearchPage;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
 import java.io.IOException;
 import java.util.List;
@@ -32,12 +32,13 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
             .goTo(NavItem.DATA);
 
         String query = "1 : 156105028 T > C";
-        ExploreDataPage.openSearchInput(driver);
-        ExploreDataPage.submitSearchQuery(query, driver);
+        SearchPage searchPage = new SearchPage(driver);
+        searchPage.openSearchInput();
+        searchPage.submitSearchQuery(query);
 
         Thread.sleep(6_000);
 
-        List<WebElement> results = ExploreDataPage.getSearchResults(driver);
+        List<WebElement> results = searchPage.getSearchResults();
         assertThat(results.size(), greaterThanOrEqualTo(2));
 
         assertTrue(findFirstElementByCssClass(results, "indicator-green").isPresent());
@@ -51,12 +52,13 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
             .goTo(NavItem.DATA);
 
         String query = "1 : 1 T > C";
-        ExploreDataPage.openSearchInput(driver);
-        ExploreDataPage.submitSearchQuery(query, driver);
+        SearchPage searchPage = new SearchPage(driver);
+        searchPage.openSearchInput();
+        searchPage.submitSearchQuery(query);
 
         Thread.sleep(6_000);
 
-        List<WebElement> results = ExploreDataPage.getSearchResults(driver);
+        List<WebElement> results = searchPage.getSearchResults();
         assertThat(results.size(), greaterThanOrEqualTo(2));
         assertFalse(findFirstElementByCssClass(results, "indicator-green").isPresent());
         assertTrue(findFirstElementByCssClass(results, "indicator-red").isPresent());
