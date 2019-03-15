@@ -7,7 +7,7 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 @Injectable({
   providedIn: 'root',
 })
-export class DefinitionService extends ConfigEntityService {
+export class ClaimDefinitionService extends ConfigEntityService {
 
   constructor(http: HttpClient,
               realmService: RealmService) {

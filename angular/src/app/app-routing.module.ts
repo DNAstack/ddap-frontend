@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { CLAIM_DEFINITIONS_ROUTES } from './admin/claim-definitions/claim-definitions.routes';
 import { CLIENT_APPLICATIONS_ROUTES } from './admin/client-applications/client-applications.routes';
-import { DEFINITIONS_ROUTES } from './admin/definitions/definitions.routes';
 import { PASSPORTS_ROUTES } from './admin/passports/passports.routes';
 import { PERSONAS_ROUTES } from './admin/personas/personas.routes';
 import { RESOURCES_ROUTES } from './admin/resources/resources.routes';
@@ -20,7 +20,7 @@ const routes: Routes = [
   {path: ':realmId', children: IDENTITY_ROUTES},
   {path: ':realmId', children: TRUSTED_SOURCES_ROUTES},
   {path: ':realmId', children: CLIENT_APPLICATIONS_ROUTES},
-  {path: ':realmId', children: DEFINITIONS_ROUTES},
+  {path: ':realmId', children: CLAIM_DEFINITIONS_ROUTES},
   {path: ':realmId', children: SERVICE_TEMPLATES_ROUTES},
   {path: ':realmId', children: PASSPORTS_ROUTES},
   {path: ':realmId', children: PERSONAS_ROUTES},
