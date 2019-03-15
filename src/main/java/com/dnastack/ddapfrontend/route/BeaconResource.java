@@ -66,8 +66,7 @@ class BeaconResource {
         // find beacons under resourceId in DAM config
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.TokenAudience.DAM);
         if (!damToken.isPresent()) {
-            // TODO DISCO-2038 Make this return a 401
-            return Flux.error(new IllegalArgumentException("Authorization is required"));
+            return Flux.error(new IllegalArgumentException("Authorization token is required"));
         }
 
 
