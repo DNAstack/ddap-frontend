@@ -2,16 +2,7 @@
 </ddap-header>
 
 <ddap-main>
-  <form #serviceTemplateForm="ngForm" (ngSubmit)="onSubmit(idField.value, serviceTemplateForm.value.body)">
-    <mat-form-field data-se="id-field">
-      <mat-label>Service Template ID</mat-label>
-      <input #idField matInput>
-      <mat-hint>The name by which other config objects refer to this resource</mat-hint>
-    </mat-form-field>
-    <div>
-      <button type="submit" mat-flat-button color="primary" [disabled]="!serviceTemplateForm.form.valid || serviceTemplateForm.submitted">
-        Add Service Template
-      </button>
-    </div>
-  </form>
+  <ddap-entity-manage-form [label]="'Service Template'"
+                           (submitted)="add($event.id, $event.change)">
+  </ddap-entity-manage-form>
 </ddap-main>

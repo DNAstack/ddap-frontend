@@ -64,6 +64,41 @@
               <h4 mat-line>Resources</h4>
             </mat-list-item>
             <mat-list-item
+              [routerLink]="[realm, 'access-policies']"
+              [routerLinkActive]="['active-nav-link']"
+              data-se="nav-access-policies">
+              <mat-icon class="icon icon-rules"></mat-icon>
+              <h4 mat-line>Access Policies</h4>
+            </mat-list-item>
+            <mat-list-item
+              [routerLink]="[realm, 'service-templates']"
+              [routerLinkActive]="['active-nav-link']"
+              data-se="nav-service-templates">
+              <mat-icon class="icon icon-views"></mat-icon>
+              <h4 mat-line>Service Templates</h4>
+            </mat-list-item>
+            <mat-list-item
+              [routerLink]="[realm, 'trusted-sources']"
+              [routerLinkActive]="['active-nav-link']"
+              data-se="nav-trusted-sources">
+              <mat-icon class="icon icon-trusted-sources"></mat-icon>
+              <h4 mat-line>Trusted Sources</h4>
+            </mat-list-item>
+            <mat-list-item
+              [routerLink]="[realm, 'passport-issuers']"
+              [routerLinkActive]="['active-nav-link']"
+              data-se="nav-passport-issuers">
+              <mat-icon class="icon icon-tests"></mat-icon>
+              <h4 mat-line>Passport Issuers</h4>
+            </mat-list-item>
+            <mat-list-item
+              [routerLink]="[realm, 'claim-definitions']"
+              [routerLinkActive]="['active-nav-link']"
+              data-se="nav-claim-definitions">
+              <mat-icon class="icon icon-copy"></mat-icon>
+              <h4 mat-line>Claim Definitions</h4>
+            </mat-list-item>
+            <mat-list-item
               [routerLink]="[realm, 'test-personas']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-test-personas">
@@ -76,41 +111,6 @@
               data-se="nav-client-applications">
               <mat-icon class="icon icon-clients"></mat-icon>
               <h4 mat-line>Client Applications</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="[realm, 'trusted-sources']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-trusted-sources">
-              <mat-icon class="icon icon-trusted-sources"></mat-icon>
-              <h4 mat-line>Trusted Sources</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="[realm, 'claim-definitions']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-claim-definitions">
-              <mat-icon class="icon icon-copy"></mat-icon>
-              <h4 mat-line>Claim Definitions</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="[realm, 'service-templates']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-service-templates">
-              <mat-icon class="icon icon-views"></mat-icon>
-              <h4 mat-line>Service Templates</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="[realm, 'access-policies']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-access-policies">
-              <mat-icon class="icon icon-rules"></mat-icon>
-              <h4 mat-line>Access Policies</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="[realm, 'passport-issuers']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-passport-issuers">
-              <mat-icon class="icon icon-tests"></mat-icon>
-              <h4 mat-line>Passport Issuers</h4>
             </mat-list-item>
           </mat-nav-list>
         </mat-expansion-panel>

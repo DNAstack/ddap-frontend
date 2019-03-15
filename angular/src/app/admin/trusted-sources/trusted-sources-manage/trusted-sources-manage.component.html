@@ -2,20 +2,7 @@
 </ddap-header>
 
 <ddap-main>
-  <form #trustedSourceForm="ngForm" (ngSubmit)="onSubmit(idField.value, itemEditor.value)">
-    <mat-form-field data-se="id-field">
-      <mat-label>Trusted Source ID</mat-label>
-      <input #idField matInput>
-      <mat-hint>The name by which other config objects refer to this resource</mat-hint>
-    </mat-form-field>
-
-    <mat-form-field>
-      <textarea #itemEditor matInput placeholder="Trusted Source JSON" rows="10" name="body" ngModel required></textarea>
-    </mat-form-field>
-    <div>
-      <button type="submit" mat-flat-button color="primary" [disabled]="!trustedSourceForm.form.valid || trustedSourceForm.submitted">
-        Add Trusted Source
-      </button>
-    </div>
-  </form>
+  <ddap-entity-manage-form [label]="'Trusted Source'"
+                           (submitted)="add($event.id, $event.change)">
+  </ddap-entity-manage-form>
 </ddap-main>
