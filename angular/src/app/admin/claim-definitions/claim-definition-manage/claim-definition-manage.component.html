@@ -1,0 +1,8 @@
+<ddap-header [backLink]="['../..']" label="Add Claim Definition">
+</ddap-header>
+
+<ddap-main>
+  <ddap-entity-manage-form [label]="'Claim Definition'"
+                           (submitted)="add($event.id, $event.change)">
+  </ddap-entity-manage-form>
+</ddap-main>

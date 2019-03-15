@@ -1,0 +1,13 @@
+<ddap-header icon="copy" label="Claim Definitions">
+  <ddap-entity-add
+    [label]="'claim definitions'">
+  </ddap-entity-add>
+</ddap-header>
+
+<ddap-main>
+  <ddap-entity-list
+    [headerTitle]="'claim definitions'"
+    [descriptionProperty]="'ui.label'"
+    [entityList]="entities$">
+  </ddap-entity-list>
+</ddap-main>
