@@ -52,6 +52,12 @@
         <mat-icon class="icon icon-identity"></mat-icon>
         <h4 mat-line>Identity providers</h4>
       </mat-list-item>
+      <mat-list-item  [routerLink]="[realm, 'clients']"
+                      [routerLinkActive]="['active-nav-link']"
+                      data-se="nav-clients">
+        <mat-icon class="icon icon-identity"></mat-icon>
+        <h4 mat-line>Clients</h4>
+      </mat-list-item>
     </mat-nav-list>
 
     <div class="accordion-wrapper">
