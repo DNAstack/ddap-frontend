@@ -15,7 +15,7 @@ export class ServiceTemplateManageComponent {
               private route: ActivatedRoute) {
   }
 
-  add(id, change) {
+  save(id, change) {
     this.serviceTemplateService.save(id, change)
       .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }

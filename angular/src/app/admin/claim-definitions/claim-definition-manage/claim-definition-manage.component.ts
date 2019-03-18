@@ -16,7 +16,7 @@ export class ClaimDefinitionManageComponent {
               private route: ActivatedRoute) {
   }
 
-  add(id, change) {
+  save(id, change) {
     this.definitionService.save(id, change)
       .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }

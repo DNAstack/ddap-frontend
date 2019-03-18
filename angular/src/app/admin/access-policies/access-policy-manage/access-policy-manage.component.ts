@@ -15,7 +15,7 @@ export class AccessPolicyManageComponent {
               private route: ActivatedRoute) {
   }
 
-  add(id, change) {
+  save(id, change) {
     this.accessPolicyService.save(id, change)
       .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }

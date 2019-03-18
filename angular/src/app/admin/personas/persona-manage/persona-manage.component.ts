@@ -15,7 +15,7 @@ export class PersonaManageComponent {
               private route: ActivatedRoute) {
   }
 
-  add(id, change) {
+  save(id, change) {
     this.personaService.save(id, change)
       .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }
