@@ -1,0 +1,13 @@
+<ddap-header icon="identities" label="Clients">
+  <ddap-entity-add
+    [label]="'client'">
+  </ddap-entity-add>
+</ddap-header>
+
+<ddap-main>
+  <ddap-entity-list
+    [headerTitle]="'client'"
+    [descriptionProperty]="'clientId'"
+    [entityList]="clients$">
+  </ddap-entity-list>
+</ddap-main>

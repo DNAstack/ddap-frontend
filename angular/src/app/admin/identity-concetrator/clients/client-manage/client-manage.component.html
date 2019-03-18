@@ -1,0 +1,9 @@
+<ddap-header [backLink]="['../..']"
+             label="Add Client">
+</ddap-header>
+
+<ddap-main>
+  <ddap-entity-manage-form [label]="'Client'"
+                           (submitted)="save($event.id, $event.change)">
+  </ddap-entity-manage-form>
+</ddap-main>
