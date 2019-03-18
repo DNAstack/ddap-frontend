@@ -1,0 +1,13 @@
+<ddap-header icon="identities" label="Identity Providers">
+  <ddap-entity-add
+    [label]="'identity provider'">
+  </ddap-entity-add>
+</ddap-header>
+
+<ddap-main>
+  <ddap-entity-list
+    [headerTitle]="'identity provider'"
+    [descriptionProperty]="'issuer'"
+    [entityList]="identityProviders$">
+  </ddap-entity-list>
+</ddap-main>

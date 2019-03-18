@@ -45,6 +45,15 @@
       </mat-list-item>
     </mat-nav-list>
 
+    <mat-nav-list>
+      <mat-list-item  [routerLink]="[realm, 'identity-providers']"
+                      [routerLinkActive]="['active-nav-link']"
+                      data-se="nav-identity-providers">
+        <mat-icon class="icon icon-identity"></mat-icon>
+        <h4 mat-line>Identity providers</h4>
+      </mat-list-item>
+    </mat-nav-list>
+
     <div class="accordion-wrapper">
       <mat-accordion [multi]="false">
         <mat-expansion-panel [expanded]="true">
