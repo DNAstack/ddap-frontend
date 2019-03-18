@@ -34,6 +34,9 @@ or `npm run build:watch` (same functionality, but includes a linter).
 All requests to `/dam/**` are passed to the Data Access Manager (DAM) component,
 with backend credentials (clientId and clientSecret) added in by the gateway.
 
+Similarly, all requests to `/identity/**` are passed to the Identity Concentrator with
+its own respective clientId and clientSecret.
+
 The gateway configuration is controlled by the following environment variables
 (default values shown):
 
@@ -41,6 +44,10 @@ The gateway configuration is controlled by the following environment variables
 DAM_BASE_URL=http://localhost:3000/
 DAM_CLIENT_ID=local-dev-client-id
 DAM_CLIENT_SECRET=local-dev-client-secret
+
+IDP_BASE_URL=http://localhost:3000/
+IDP_CLIENT_ID=local-dev-client-id
+IDP_CLIENT_SECRET=local-dev-client-secret
 ```
 
 ### Building the API Gateway
