@@ -1,0 +1,9 @@
+<ddap-header [backLink]="['../..']"
+             label="Add Identity Provider">
+</ddap-header>
+
+<ddap-main>
+  <ddap-entity-manage-form [label]="'Identity Provider'"
+                           (submitted)="save($event.id, $event.change)">
+  </ddap-entity-manage-form>
+</ddap-main>
