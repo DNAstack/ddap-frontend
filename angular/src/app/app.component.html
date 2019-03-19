@@ -45,29 +45,36 @@
       </mat-list-item>
     </mat-nav-list>
 
-    <mat-nav-list>
-      <mat-list-item  [routerLink]="[realm, 'identity-providers']"
-                      [routerLinkActive]="['active-nav-link']"
-                      data-se="nav-identity-providers">
-        <mat-icon class="icon icon-identity"></mat-icon>
-        <h4 mat-line>Identity providers</h4>
-      </mat-list-item>
-      <mat-list-item  [routerLink]="[realm, 'clients']"
-                      [routerLinkActive]="['active-nav-link']"
-                      data-se="nav-clients">
-        <mat-icon class="icon icon-identity"></mat-icon>
-        <h4 mat-line>Clients</h4>
-      </mat-list-item>
-      <mat-list-item  [routerLink]="[realm, 'options']"
-                      [routerLinkActive]="['active-nav-link']"
-                      data-se="nav-options">
-        <mat-icon class="icon icon-identity"></mat-icon>
-        <h4 mat-line>Options</h4>
-      </mat-list-item>
-    </mat-nav-list>
-
     <div class="accordion-wrapper">
       <mat-accordion [multi]="false">
+        <mat-expansion-panel [expanded]="false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span>Identity Concentrator</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <mat-list-item  [routerLink]="[realm, 'identity-providers']"
+                            [routerLinkActive]="['active-nav-link']"
+                            data-se="nav-identity-providers">
+              <mat-icon class="icon icon-identities"></mat-icon>
+              <h4 mat-line>Identity Providers</h4>
+            </mat-list-item>
+            <mat-list-item  [routerLink]="[realm, 'clients']"
+                            [routerLinkActive]="['active-nav-link']"
+                            data-se="nav-clients">
+              <mat-icon class="icon icon-clients"></mat-icon>
+              <h4 mat-line>Clients</h4>
+            </mat-list-item>
+            <mat-list-item  [routerLink]="[realm, 'options']"
+                            [routerLinkActive]="['active-nav-link']"
+                            data-se="nav-options">
+              <mat-icon class="icon icon-rules"></mat-icon>
+              <h4 mat-line>Options</h4>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+
         <mat-expansion-panel [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
