@@ -4,6 +4,7 @@ import { map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 import { HTTP_HEADERS } from '../../shared/HTTP_HEADERS';
+import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
 import { RealmService } from '../../shared/realm/realm.service';
 
 import { ConfigModel } from './config.model';
@@ -23,7 +24,7 @@ export class ConfigEntityService implements EntityService {
   }
 
   get(params = {}): Observable<Map<string, EntityModel>> {
-    return this.http.get<ConfigModel>(`${environment.damApiUrl}/$REALM/config`, {params})
+    return this.http.get<ConfigModel>(`${environment.damApiUrl}/${realmIdPlaceholder}/config`, {params})
       .pipe(
         pluck(this.typeNameInConfig),
         map(EntityModel.objectToMap)
@@ -31,13 +32,13 @@ export class ConfigEntityService implements EntityService {
   }
 
   save(id: string, change: ConfigModificationObject): Observable<any> {
-    return this.http.post(`${environment.damApiUrl}/$REALM/config/${this.typeNameInUrl}/${id}`,
+    return this.http.post(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       change,
       {headers});
   }
 
   update(id: string, change: ConfigModificationObject): Observable<any> {
-    return this.http.put(`${environment.damApiUrl}/$REALM/config/${this.typeNameInUrl}/${id}`,
+    return this.http.put(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       change,
       {headers}
     );
@@ -45,7 +46,7 @@ export class ConfigEntityService implements EntityService {
 
   remove(id: string): Observable<any> {
 
-    return this.http.delete(`${environment.damApiUrl}/$REALM/config/${this.typeNameInUrl}/${id}`,
+    return this.http.delete(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       {headers}
     );
 

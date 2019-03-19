@@ -6,6 +6,7 @@ import { first, map, mergeMap, pluck, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { EntityModel } from '../admin/shared/entity.model';
+import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +37,7 @@ export class DataService {
       });
     };
 
-    return this.http.get<any>(`${environment.damApiUrl}/$REALM/resources`, {params}).pipe(
+    return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/resources`, {params}).pipe(
       pluck('resources'),
       map(EntityModel.objectToMap),
       map(EntityModel.arrayFromMap),
@@ -52,7 +53,7 @@ export class DataService {
   }
 
   getAccessRequestToken(resource, view): any {
-    const viewUrl = `${environment.damApiUrl}/$REALM/resources/${resource}/views/${view}`;
+    const viewUrl = `${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resource}/views/${view}`;
     return this.http.get<any>(viewUrl).pipe(
       map(({account, token}) => ({account, token}))
     );

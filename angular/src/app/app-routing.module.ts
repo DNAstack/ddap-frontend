@@ -12,11 +12,11 @@ import { TRUSTED_SOURCES_ROUTES } from './admin/trusted-sources/trusted-sources.
 import { DATA_ROUTES } from './data/data.routes';
 import { IDENTITY_ROUTES } from './identity/identity.routes';
 import { LayoutComponent } from './layout/layout.component';
-import { DEFAULT_REALM } from './shared/realm/realm.constant';
+import { defaultRealm } from './shared/realm/realm.constant';
 import { RealmGuard } from './shared/realm/realm.guard';
 
 const routes: Routes = [
-  {path: '', redirectTo: `/${DEFAULT_REALM}/data`, pathMatch: 'full'},
+  {path: '', redirectTo: `/${defaultRealm}/data`, pathMatch: 'full'},
   {path: ':realmId', redirectTo: `/:realmId/data`, pathMatch: 'full'},
   {
     path: ':realmId',
