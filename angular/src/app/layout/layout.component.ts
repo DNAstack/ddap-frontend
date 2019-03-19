@@ -12,23 +12,23 @@ import { RealmService } from '../shared/realm/realm.service';
 })
 export class LayoutComponent implements OnInit {
 
-  realm: string;
   profile: Profile = null;
+  realm: string;
 
   constructor(public loader: LoadingBarService,
-              private realmService: RealmService,
               private router: Router,
+              private realmService: RealmService,
               private identityService: IdentityService) {
 
   }
 
   ngOnInit() {
-    this.realmService.getRealm().subscribe(realm => {
-      this.realm = realm;
-    });
-
     this.identityService.getProfile().subscribe(profile => {
       this.profile = profile;
+    });
+
+    this.realmService.getRealm().subscribe(realm => {
+      this.realm = realm;
     });
   }
 
