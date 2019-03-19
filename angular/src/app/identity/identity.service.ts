@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
+import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 import { Identity } from './identity.model';
 import { Profile } from './profile.model';
@@ -17,7 +18,7 @@ export class IdentityService {
   }
 
   getIdentity(params = {}): Observable<Identity> {
-    return this.http.get<any>(`${environment.idpApiUrl}/$REALM/accounts/-`, {params})
+    return this.http.get<any>(`${environment.idpApiUrl}/${realmIdPlaceholder}/accounts/-`, {params})
       .pipe(
         pluck('account')
       );
