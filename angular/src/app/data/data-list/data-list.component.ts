@@ -26,7 +26,7 @@ export class DataListComponent implements OnInit {
 
   ngOnInit() {
     // Needed to reload the data every time the realm in the URL changes (i.e. using the realm selector)
-    this.route.params.subscribe(() => {
+    this.route.parent.params.subscribe(() => {
       this.resources$ = this.dataService.get();
     });
   }
