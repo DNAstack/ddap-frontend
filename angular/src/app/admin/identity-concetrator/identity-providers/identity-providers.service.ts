@@ -11,7 +11,7 @@ export class IdentityProviderService extends IcConfigEntityService {
 
   constructor(http: HttpClient,
               realmService: RealmService) {
-    super(http, realmService, 'idProviders', 'idProviders');
+    super(http, realmService, 'identityProviders', 'identityProviders');
   }
 
 }
