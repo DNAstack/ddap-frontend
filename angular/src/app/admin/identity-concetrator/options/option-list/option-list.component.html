@@ -1,0 +1,13 @@
+<ddap-header icon="identities" label="Options">
+  <ddap-entity-add
+    [label]="'option'">
+  </ddap-entity-add>
+</ddap-header>
+
+<ddap-main>
+  <ddap-entity-list
+    [headerTitle]="'option'"
+    [descriptionLabel]="'value'"
+    [entityList]="options$">
+  </ddap-entity-list>
+</ddap-main>

@@ -12,28 +12,33 @@ import { JsonEditorDefaults } from '../jsonEditorDefaults';
   styleUrls: ['./entity-list.component.scss'],
 })
 export class EntityListComponent {
+
   error: string = null;
 
   @Input()
   headerTitle: string;
-
   @Input()
   entityList: Observable<EntityModel[]>;
-
   @Input()
-  descriptionProperty: string;
+  descriptionLabel: string = null;
+  @Input()
+  descriptionProperty: string = null;
+  @Input()
+  editorOptions: JsonEditorOptions | any;
 
   @ViewChild(JsonEditorComponent)
   editor: JsonEditorComponent;
-
-  @Input()
-  editorOptions: JsonEditorOptions | any;
 
   constructor() {
     this.editorOptions = new JsonEditorDefaults();
   }
 
   getDescription(entity: object) {
-    return _get(entity, this.descriptionProperty);
+    if (!this.descriptionProperty && !this.descriptionLabel) {
+      return;
+    }
+    return this.descriptionProperty
+      ? _get(entity, this.descriptionProperty)
+      : entity;
   }
 }
