@@ -11,6 +11,8 @@ import { Subject } from 'rxjs/Subject';
 })
 export class RealmService {
 
+  public realmSnapshot: string;
+
   private realm: Subject<string> = new ReplaySubject(1);
 
   constructor(private router: Router) {

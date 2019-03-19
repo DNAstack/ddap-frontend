@@ -3,8 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
-import { RealmService } from '../../realm.service';
 import { HTTP_HEADERS } from '../../shared/HTTP_HEADERS';
+import { RealmService } from '../../shared/realm/realm.service';
 
 import { ConfigModel } from './config.model';
 import { ConfigModificationObject } from './configModificationObject';
@@ -23,9 +23,7 @@ export class ConfigEntityService implements EntityService {
   }
 
   get(params = {}): Observable<Map<string, EntityModel>> {
-    return this.realmService.switchMap(realm => {
-      return this.http.get<ConfigModel>(`${environment.damApiUrl}/${realm}/config`, {params});
-    })
+    return this.http.get<ConfigModel>(`${environment.damApiUrl}/$REALM/config`, {params})
       .pipe(
         pluck(this.typeNameInConfig),
         map(EntityModel.objectToMap)
@@ -33,27 +31,23 @@ export class ConfigEntityService implements EntityService {
   }
 
   save(id: string, change: ConfigModificationObject): Observable<any> {
-    return this.realmService.switchMap(realm => {
-      return this.http.post(`${environment.damApiUrl}/${realm}/config/${this.typeNameInUrl}/${id}`,
-        change,
-        { headers });
-    });
+    return this.http.post(`${environment.damApiUrl}/$REALM/config/${this.typeNameInUrl}/${id}`,
+      change,
+      {headers});
   }
 
   update(id: string, change: ConfigModificationObject): Observable<any> {
-    return this.realmService.switchMap(realm => {
-      return this.http.put(`${environment.damApiUrl}/${realm}/config/${this.typeNameInUrl}/${id}`,
-        change,
-        {headers}
-      );
-    });
+    return this.http.put(`${environment.damApiUrl}/$REALM/config/${this.typeNameInUrl}/${id}`,
+      change,
+      {headers}
+    );
   }
 
   remove(id: string): Observable<any> {
-    return this.realmService.switchMap(realm => {
-      return this.http.delete(`${environment.damApiUrl}/${realm}/config/${this.typeNameInUrl}/${id}`,
-        { headers }
-      );
-    });
+
+    return this.http.delete(`${environment.damApiUrl}/$REALM/config/${this.typeNameInUrl}/${id}`,
+      {headers}
+    );
+
   }
 }

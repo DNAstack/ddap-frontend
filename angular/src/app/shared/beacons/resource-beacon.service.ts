@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs-compat';
 
 import { environment } from '../../../environments/environment';
-import { RealmService } from '../../realm.service';
 import { DnaChangeQueryParser } from '../dna-change-query.parser';
+import { RealmService } from '../realm/realm.service';
 
 import { BeaconResponse } from './beacon-response.model';
 

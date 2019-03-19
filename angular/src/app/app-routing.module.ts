@@ -14,28 +14,38 @@ import { SERVICE_TEMPLATES_ROUTES } from './admin/service-templates/service-temp
 import { TRUSTED_SOURCES_ROUTES } from './admin/trusted-sources/trusted-sources.routes';
 import { DATA_ROUTES } from './data/data.routes';
 import { IDENTITY_ROUTES } from './identity/identity.routes';
-import { DEFAULT_REALM } from './realm.constant';
+import { LayoutComponent } from './layout/layout.component';
+import { DEFAULT_REALM } from './shared/realm/realm.constant';
+import { RealmGuard } from './shared/realm/realm.guard';
 
 const routes: Routes = [
   {path: '', redirectTo: `/${DEFAULT_REALM}/data`, pathMatch: 'full'},
   {path: ':realmId', redirectTo: `/:realmId/data`, pathMatch: 'full'},
-  {path: ':realmId', children: DATA_ROUTES},
-  {path: ':realmId', children: IDENTITY_ROUTES},
-  {path: ':realmId', children: CLIENTS_ROUTES},
-  {path: ':realmId', children: IDENTITY_PROVIDERS_ROUTES},
-  {path: ':realmId', children: OPTIONS_ROUTES},
-  {path: ':realmId', children: TRUSTED_SOURCES_ROUTES},
-  {path: ':realmId', children: CLIENT_APPLICATIONS_ROUTES},
-  {path: ':realmId', children: CLAIM_DEFINITIONS_ROUTES},
-  {path: ':realmId', children: SERVICE_TEMPLATES_ROUTES},
-  {path: ':realmId', children: PASSPORT_ISSUERS_ROUTES},
-  {path: ':realmId', children: PERSONAS_ROUTES},
-  {path: ':realmId', children: RESOURCES_ROUTES},
-  {path: ':realmId', children: ACCESS_POLICIES_ROUTES},
+  {
+    path: ':realmId',
+    canActivate: [RealmGuard],
+    component: LayoutComponent,
+    children: [
+      ...DATA_ROUTES,
+      ...IDENTITY_ROUTES,
+      ...CLIENTS_ROUTES,
+      ...IDENTITY_PROVIDERS_ROUTES,
+      ...OPTIONS_ROUTES,
+      ...TRUSTED_SOURCES_ROUTES,
+      ...CLIENT_APPLICATIONS_ROUTES,
+      ...CLAIM_DEFINITIONS_ROUTES,
+      ...SERVICE_TEMPLATES_ROUTES,
+      ...PASSPORT_ISSUERS_ROUTES,
+      ...PERSONAS_ROUTES,
+      ...RESOURCES_ROUTES,
+      ...ACCESS_POLICIES_ROUTES,
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

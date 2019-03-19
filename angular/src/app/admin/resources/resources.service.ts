@@ -4,8 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
-import { RealmService } from '../../realm.service';
 import { HTTP_HEADERS } from '../../shared/HTTP_HEADERS';
+import { RealmService } from '../../shared/realm/realm.service';
 import { ConfigModel } from '../shared/config.model';
 import { ConfigModificationObject } from '../shared/configModificationObject';
 import { EntityModel } from '../shared/entity.model';
