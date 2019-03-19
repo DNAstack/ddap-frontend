@@ -3,9 +3,9 @@ import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
-import { RealmService } from '../../realm.service';
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
+import { RealmService } from '../../shared/realm/realm.service';
 import { SearchState } from '../../shared/search-state.model';
 import { SearchStateService } from '../../shared/search-state.service';
 import { DataService } from '../data.service';

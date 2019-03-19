@@ -6,8 +6,6 @@ import { first, map, mergeMap, pluck, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { EntityModel } from '../admin/shared/entity.model';
-import { RealmService } from '../realm.service';
-
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +14,7 @@ export class DataService {
 
   private cache: any = {};
 
-  constructor(private http: HttpClient,
-              private realmService: RealmService) {
+  constructor(private http: HttpClient) {
 
   }
 
@@ -39,9 +36,7 @@ export class DataService {
       });
     };
 
-    return this.realmService.switchMap(
-      realm => this.http.get<any[]>(`${environment.damApiUrl}/${realm}/resources`, {params})
-    ).pipe(
+    return this.http.get<any>(`${environment.damApiUrl}/$REALM/resources`, {params}).pipe(
       pluck('resources'),
       map(EntityModel.objectToMap),
       map(EntityModel.arrayFromMap),
@@ -57,14 +52,8 @@ export class DataService {
   }
 
   getAccessRequestToken(resource, view): any {
-    const params = {};
-
-    return this.realmService.switchMap(
-      realm => {
-        const viewUrl = `${environment.damApiUrl}/${realm}/resources/${resource}/views/${view}`;
-        return this.http.get<any>(viewUrl, {params});
-      }
-    ).pipe(
+    const viewUrl = `${environment.damApiUrl}/$REALM/resources/${resource}/views/${view}`;
+    return this.http.get<any>(viewUrl).pipe(
       map(({account, token}) => ({account, token}))
     );
   }
