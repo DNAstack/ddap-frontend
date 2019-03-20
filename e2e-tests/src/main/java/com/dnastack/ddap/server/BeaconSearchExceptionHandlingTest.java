@@ -12,7 +12,10 @@ import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
 
-
+/**
+ * 1. Make a beacon query that will return an exception from the beacon endpoint.
+ * 2. Make sure that you collect all the exceptions and then return a collected response from them.
+ */
 public class BeaconSearchExceptionHandlingTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(BeaconSearchExceptionHandlingTest.class.getSimpleName());
