@@ -5,7 +5,6 @@ import { map, pluck } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { HTTP_HEADERS } from '../../shared/HTTP_HEADERS';
 import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
-import { RealmService } from '../../shared/realm/realm.service';
 
 import { ConfigModel } from './config.model';
 import { ConfigModificationObject } from './configModificationObject';
@@ -17,7 +16,6 @@ const headers = HTTP_HEADERS;
 export class ConfigEntityService implements EntityService {
 
   constructor(protected http: HttpClient,
-              protected realmService: RealmService,
               protected typeNameInConfig: string,
               protected typeNameInUrl: string) {
 
