@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { distinct, filter, map, switchMap, take } from 'rxjs/operators';
+import { distinct, filter, switchMap, take } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
 
@@ -17,14 +17,9 @@ export class RealmService {
 
   constructor(private router: Router) {
     this.router.events.pipe(
-      filter(event => event instanceof ActivationEnd),
-      map((event: ActivationEnd) => {
-        return event.snapshot.params.realmId;
-      })
-    ).subscribe((realmId) => {
-        this.realm.next(realmId);
-      }
-    );
+      filter((event) => event instanceof ActivationEnd),
+      filter((event: ActivationEnd) => event.snapshot.params.realmId)
+    ).subscribe((event: ActivationEnd) => this.realm.next(event.snapshot.params.realmId));
   }
 
   getRealm(): Observable<string> {
