@@ -27,7 +27,6 @@ export class BeaconSearchBarComponent implements OnDestroy, OnInit {
   limitSearch = false;
   search: FormGroup;
 
-  private realm;
   private resource;
   private searchStateSubscription: Subscription;
 
@@ -38,10 +37,6 @@ export class BeaconSearchBarComponent implements OnDestroy, OnInit {
     this.search = new FormGroup({
       assembly: new FormControl(this.assemblyIds[0], [Validators.required]),
       query: new FormControl('', [Validators.required, ValidateVariant]),
-    });
-
-    this.realmService.getRealm().subscribe(realm => {
-      this.realm = realm;
     });
   }
 
@@ -60,7 +55,8 @@ export class BeaconSearchBarComponent implements OnDestroy, OnInit {
     }
 
     const resource = this.resource;
-    this.router.navigate([this.realm, 'data', 'search'], {
+    const realmId = this.realmService.realmSnapshot;
+    this.router.navigate([realmId, 'data', 'search'], {
       queryParams: {
         ...value,
         resource,

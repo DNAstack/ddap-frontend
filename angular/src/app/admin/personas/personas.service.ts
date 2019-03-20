@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { RealmService } from '../../shared/realm/realm.service';
 import { ConfigEntityService } from '../shared/config-entity.service';
 
 @Injectable({
@@ -9,9 +8,8 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 })
 export class PersonaService extends ConfigEntityService {
 
-  constructor(http: HttpClient,
-              realmService: RealmService) {
-    super(http, realmService, 'testPersonas', 'personas');
+  constructor(http: HttpClient) {
+    super(http, 'testPersonas', 'personas');
   }
 
 }
