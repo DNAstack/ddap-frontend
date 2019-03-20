@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { distinct, filter, switchMap, take } from 'rxjs/operators';
+import { distinct, filter } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
 
@@ -26,13 +26,5 @@ export class RealmService {
     return this.realm.asObservable().pipe(
       distinct()
     );
-  }
-
-  switchMap<T>(cb: (realm: string) => Observable<T>): Observable<T> {
-    return this.getRealm()
-      .pipe(
-        take(1),
-        switchMap(cb)
-      );
   }
 }

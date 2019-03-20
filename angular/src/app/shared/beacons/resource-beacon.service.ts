@@ -4,7 +4,7 @@ import { Observable } from 'rxjs-compat';
 
 import { environment } from '../../../environments/environment';
 import { DnaChangeQueryParser } from '../dna-change-query.parser';
-import { RealmService } from '../realm/realm.service';
+import { realmIdPlaceholder } from '../realm/realm.constant';
 
 import { BeaconResponse } from './beacon-response.model';
 
@@ -13,8 +13,7 @@ import { BeaconResponse } from './beacon-response.model';
 })
 export class ResourceBeaconService {
 
-  constructor(private http: HttpClient,
-              private realmService: RealmService) {
+  constructor(private http: HttpClient) {
   }
 
   query(queryValue: any, resource): Observable<BeaconResponse[]> {
@@ -36,20 +35,16 @@ export class ResourceBeaconService {
   }
 
   private queryBeacon(resourceId, params?): Observable<BeaconResponse[]> {
-    return this.realmService.switchMap( (realm) => {
-      return this.http.get<BeaconResponse[]>(
-        `${environment.ddapApiUrl}/${realm}/resources/${resourceId}/search`,
-        {params}
-      );
-    });
+    return this.http.get<BeaconResponse[]>(
+      `${environment.ddapApiUrl}/${realmIdPlaceholder}/resources/${resourceId}/search`,
+      {params}
+    );
   }
 
   private queryAll(params = {}): Observable<BeaconResponse[]> {
-    return this.realmService.switchMap((realm) => {
-      return this.http.get<BeaconResponse[]>(
-        `${environment.ddapApiUrl}/${realm}/resources/search`,
-        {params}
-      );
-    });
+    return this.http.get<BeaconResponse[]>(
+      `${environment.ddapApiUrl}/${realmIdPlaceholder}/resources/search`,
+      {params}
+    );
   }
 }
