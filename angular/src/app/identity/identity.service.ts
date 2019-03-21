@@ -6,6 +6,7 @@ import { pluck } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { RealmService } from '../realm.service';
 
+import { Identity } from './identity.model';
 import { Profile } from './profile.model';
 
 @Injectable({
@@ -17,7 +18,7 @@ export class IdentityService {
               private realmService: RealmService) {
   }
 
-  get(params = {}): Observable<any> {
+  getIdentity(params = {}): Observable<Identity> {
     return this.realmService.switchMap<any>(
       realm => this.http.get<any>(`${environment.idpApiUrl}/${realm}/accounts/-`, {params})
         .pipe(
@@ -27,7 +28,7 @@ export class IdentityService {
   }
 
   getProfile(params?): Observable<Profile> {
-    return this.get(params)
+    return this.getIdentity(params)
       .pipe(
         pluck('profile')
       );
