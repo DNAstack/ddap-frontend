@@ -18,7 +18,7 @@ export class IdentityComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountsSubscription = this.accountService.get().subscribe((accountDto: any) => {
-      this.accounts = accountDto.accounts;
+      this.accounts = accountDto.connectedAccounts;
     });
   }
 

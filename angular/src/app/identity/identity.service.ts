@@ -29,7 +29,7 @@ export class IdentityService {
   getProfile(params?): Observable<Profile> {
     return this.get(params)
       .pipe(
-        pluck('profile', 'attributes')
+        pluck('profile')
       );
   }
 }
