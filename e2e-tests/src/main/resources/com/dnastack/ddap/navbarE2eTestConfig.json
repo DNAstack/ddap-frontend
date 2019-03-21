@@ -11,12 +11,24 @@
       "issuer": "https://login.elixir-czech.org/oidc/",
       "translateUsing": "elixir"
     },
+    "ic_dev": {
+      "issuer": "https://ic-dev-dot-craigv-codelab.appspot.com/oidc"
+    },
+    "ic_old": {
+      "issuer": "https://ic-dot-craigv-codelab.appspot.com/oidc"
+    },
+    "ic_prod": {
+      "issuer": "https://ic-prod-dot-craigv-codelab.appspot.com/oidc"
+    },
+    "ic_staging": {
+      "issuer": "https://ic-staging-dot-craigv-codelab.appspot.com/oidc"
+    },
     "nih": {
       "issuer": "https://login.nih.org/oidc/",
       "translateUsing": "dbgap"
     },
     "playgroundIC": {
-      "issuer": "https://ic-dot-craigv-codelab.appspot.com/oidc"
+      "issuer": "https://ic-staging-dot-craigv-codelab.appspot.com/oidc"
     }
   },
   "trustedSources": {
@@ -26,7 +38,7 @@
       ],
       "claims": [
         "ga4gh.BonaFide",
-        "^elixir.*"
+        "^elixir.*$"
       ]
     },
     "eu_universities": {
@@ -48,8 +60,8 @@
         "https://institute4.nih.gov"
       ],
       "claims": [
-        "^ga4gh.*",
-        "^nih.*"
+        "^ga4gh.*$",
+        "^nih.*$"
       ]
     },
     "research_companies": {
@@ -81,6 +93,11 @@
     "GRU": {
       "allow": {
         "dataUse": "DUO:0000005"
+      },
+      "ui": {
+        "description": "This primary category consent code indicates that use is allowed for health/medical/biomedical purposes and other biological research, including the study of population origins or ancestry",
+        "infoUrl": "https://www.ebi.ac.uk/ols/ontologies/duo/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FDUO_0000005",
+        "label": "General Research Use"
       }
     },
     "bona_fide": {
@@ -114,20 +131,87 @@
         "values": [
           "true"
         ]
+      },
+      "ui": {
+        "description": "NIH custom Bona Fide reseacher status that makes use of Registered Access Bona Fide status and/or Library Cards",
+        "infoUrl": "https://www.nature.com/articles/s41431-018-0219-y#Sec6",
+        "label": "Bona Fide"
       }
     },
-    "dac-1000-genomes": {
+    "dac": {
       "allow": {
         "claim": "ga4gh.ControlledAccessGrants",
-        "is": "~=",
         "values": [
-          "https?://dac\\.nih\\.gov/datasets/phys000709",
-          "https?://dac\\.nih\\.gov/datasets/phys000710",
-          "https?://dac\\.nih\\.gov/datasets/phys000711"
+          "${DATASETS}"
         ],
         "from": [
           "nih_institutes"
         ]
+      },
+      "ui": {
+        "description": "Approval from a DAC for the researcher to access specific datasets",
+        "infoUrl": "https://osp.od.nih.gov/scientific-sharing/policy-oversight/",
+        "label": "Data Access Committee Approval"
+      }
+    },
+    "discovery_access": {
+      "allow": {
+        "allTrue": [
+          {
+            "anyTrue": [
+              {
+                "claim": "ga4gh.BonaFide",
+                "values": [
+                  "https://www.nature.com/articles/s41431-018-0219-y",
+                  "https://www.nature.com/articles/s99999-999-9999-z"
+                ],
+                "from": [
+                  "nih_institutes",
+                  "eu_universities",
+                  "us_universities",
+                  "research_companies"
+                ]
+              },
+              {
+                "claim": "nih.DiscoveryAccess",
+                "values": [
+                  "https://nih.gov/access/level1",
+                  "https://nih.gov/access/level2"
+                ],
+                "from": [
+                  "nih_institutes"
+                ]
+              }
+            ]
+          },
+          {
+            "anyTrue": [
+              {
+                "claim": "ga4gh.ControlledAccessGrants",
+                "values": [
+                  "^.*$"
+                ],
+                "from": [
+                  "nih_institutes"
+                ]
+              },
+              {
+                "claim": "ga4gh.AcceptedTermsAndPolicies",
+                "values": [
+                  "https://librarycard.nih.gov/v1"
+                ],
+                "from": [
+                  "nih_institutes"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "ui": {
+        "description": "NIH Discovery Access policy accepting a combination of Bona Fide or special Discovery Access approval in combination with preexisiting grants or library cards",
+        "infoUrl": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5961811/",
+        "label": "NIH Discovery Access"
       }
     },
     "ethics": {
@@ -136,12 +220,16 @@
         "values": [
           "https://www.nature.com/articles/s41431-018-0219-y"
         ]
+      },
+      "ui": {
+        "description": "Based on Registered Access ethics terms",
+        "infoUrl": "https://www.nature.com/articles/s41431-018-0219-y#figure-1",
+        "label": "Researcher Ethics Agreement"
       }
     }
   },
   "resources": {
     "allOfUs": {
-      "state": "ACTIVE",
       "views": {
         "bq_read": {
           "serviceTemplate": "bigquery",
@@ -153,23 +241,26 @@
           "contentTypes": [
             "text/csv"
           ],
-          "grants": [
-            {
-              "roles": {
-                "viewer": {
-                  "targetRoles": [
-                    "roles/bigquery.dataViewer"
-                  ],
-                  "policies": [
-                    "bona_fide",
-                    "ethics"
-                  ]
-                }
-              },
-              "items": [
-                "projects/allofus-project/tables/allofus-table1",
-                "projects/allofus-project/tables/allofus-table2"
+          "roles": {
+            "viewer": {
+              "policies": [
+                "bona_fide",
+                "ethics"
               ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "project": "allofus-project",
+                "table": "allofus-table1"
+              }
+            },
+            {
+              "vars": {
+                "project": "allofus-project",
+                "table": "allofus-table2"
+              }
             }
           ],
           "defaultRole": "viewer",
@@ -187,23 +278,26 @@
           "contentTypes": [
             "application/bam"
           ],
-          "grants": [
-            {
-              "roles": {
-                "viewer": {
-                  "targetRoles": [
-                    "roles/Viewer"
-                  ],
-                  "policies": [
-                    "bona_fide",
-                    "ethics"
-                  ]
-                }
-              },
-              "items": [
-                "projects/allofus-project/buckets/allofus-bucket1",
-                "projects/allofus-project/buckets/allofus-bucket2"
+          "roles": {
+            "viewer": {
+              "policies": [
+                "bona_fide",
+                "ethics"
               ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "bucket": "allofus-bucket1",
+                "project": "allofus-project"
+              }
+            },
+            {
+              "vars": {
+                "bucket": "allofus-bucket2",
+                "project": "allofus-project"
+              }
             }
           ],
           "defaultRole": "viewer",
@@ -223,7 +317,6 @@
       }
     },
     "andrew-test": {
-      "state": "ACTIVE",
       "views": {
         "all": {
           "serviceTemplate": "views",
@@ -233,22 +326,40 @@
           "fidelity": "normalized",
           "geoLocation": "gcp:na/us/us-central1/us-central1-a",
           "contentTypes": [],
-          "grants": [
+          "roles": {
+            "viewer": {
+              "policies": []
+            }
+          },
+          "items": [
             {
-              "roles": {
-                "viewer": {}
-              },
-              "items": [
-                "resources/andrew-test/views/bq_read_01",
-                "resources/andrew-test/views/bq_read_02",
-                "resources/andrew-test/views/gcs_read_01",
-                "resources/andrew-test/views/gcs_read_02"
-              ]
+              "vars": {
+                "resource": "andrew-test",
+                "view": "bq_read_01"
+              }
+            },
+            {
+              "vars": {
+                "resource": "andrew-test",
+                "view": "bq_read_02"
+              }
+            },
+            {
+              "vars": {
+                "resource": "andrew-test",
+                "view": "gcs_read_01"
+              }
+            },
+            {
+              "vars": {
+                "resource": "andrew-test",
+                "view": "gcs_read_02"
+              }
             }
           ],
           "defaultRole": "viewer",
           "ui": {
-            "label": "GCS File Read on datahost02"
+            "label": "All andrew-test GCS+BigQuery resources"
           }
         },
         "bq_read_01": {
@@ -259,22 +370,19 @@
           "fidelity": "normalized",
           "geoLocation": "gcp:na/us/us-central1/us-central1-a",
           "contentTypes": [],
-          "grants": [
-            {
-              "roles": {
-                "viewer": {
-                  "targetRoles": [
-                    "projects/datahost01/roles/BQReader"
-                  ],
-                  "policies": [
-                    "bona_fide",
-                    "ethics"
-                  ]
-                }
-              },
-              "items": [
-                "projects/datahost01/tables/-"
+          "roles": {
+            "viewer": {
+              "policies": [
+                "bona_fide",
+                "ethics"
               ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "project": "datahost01"
+              }
             }
           ],
           "defaultRole": "viewer",
@@ -290,22 +398,19 @@
           "fidelity": "normalized",
           "geoLocation": "gcp:na/us/us-central1/us-central1-a",
           "contentTypes": [],
-          "grants": [
-            {
-              "roles": {
-                "viewer": {
-                  "targetRoles": [
-                    "projects/datahost02/roles/BQReader"
-                  ],
-                  "policies": [
-                    "bona_fide",
-                    "ethics"
-                  ]
-                }
-              },
-              "items": [
-                "projects/datahost02/tables/-"
+          "roles": {
+            "viewer": {
+              "policies": [
+                "bona_fide",
+                "ethics"
               ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "project": "datahost02"
+              }
             }
           ],
           "defaultRole": "viewer",
@@ -321,22 +426,20 @@
           "fidelity": "normalized",
           "geoLocation": "gcp:na/us/us-central1/us-central1-a",
           "contentTypes": [],
-          "grants": [
-            {
-              "roles": {
-                "viewer": {
-                  "targetRoles": [
-                    "projects/datahost01/roles/GCSReader"
-                  ],
-                  "policies": [
-                    "bona_fide",
-                    "ethics"
-                  ]
-                }
-              },
-              "items": [
-                "projects/datahost01/buckets/hclsdatahost"
+          "roles": {
+            "viewer": {
+              "policies": [
+                "bona_fide",
+                "ethics"
               ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "bucket": "hclsdatahost",
+                "project": "datahost01"
+              }
             }
           ],
           "defaultRole": "viewer",
@@ -352,22 +455,20 @@
           "fidelity": "normalized",
           "geoLocation": "gcp:na/us/us-central1/us-central1-a",
           "contentTypes": [],
-          "grants": [
-            {
-              "roles": {
-                "viewer": {
-                  "targetRoles": [
-                    "projects/datahost02/roles/GCSReader"
-                  ],
-                  "policies": [
-                    "bona_fide",
-                    "ethics"
-                  ]
-                }
-              },
-              "items": [
-                "projects/datahost02/buckets/hclsdatahost02"
+          "roles": {
+            "viewer": {
+              "policies": [
+                "bona_fide",
+                "ethics"
               ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "bucket": "hclsdatahost02",
+                "project": "datahost02"
+              }
             }
           ],
           "defaultRole": "viewer",
@@ -387,7 +488,6 @@
       }
     },
     "ga4gh-apis": {
-      "state": "ACTIVE",
       "views": {
         "beacon": {
           "serviceTemplate": "beacon",
@@ -399,17 +499,21 @@
           "contentTypes": [
             "application/bam"
           ],
-          "grants": [
+          "roles": {
+            "discovery": {
+              "policies": [
+                "bona_fide"
+              ]
+            }
+          },
+          "items": [
             {
-              "roles": {
-                "discovery": {}
-              },
-              "items": [
-                "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
-              ],
-              "aud": "https://ga4gh-apis-beacon.dnastack.com"
+              "vars": {
+                "url": "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
+              }
             }
           ],
+          "aud": "https://ga4gh-apis-beacon.dnastack.com",
           "defaultRole": "discovery",
           "ui": {
             "label": "Beacon Discovery"
@@ -425,23 +529,21 @@
           "contentTypes": [
             "application/bam"
           ],
-          "grants": [
-            {
-              "roles": {
-                "viewer": {
-                  "targetRoles": [
-                    "projects/ga4gh-apis/roles/BeaconUser"
-                  ],
-                  "policies": [
-                    "bona_fide",
-                    "ethics",
-                    "GRU"
-                  ]
-                }
-              },
-              "items": [
-                "projects/ga4gh-apis/buckets/ga4gh-apis-controlled-access"
+          "roles": {
+            "viewer": {
+              "policies": [
+                "bona_fide",
+                "ethics",
+                "GRU"
               ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "bucket": "ga4gh-apis-controlled-access",
+                "project": "ga4gh-apis"
+              }
             }
           ],
           "defaultRole": "viewer",
@@ -461,7 +563,6 @@
       }
     },
     "thousand-genomes": {
-      "state": "ACTIVE",
       "views": {
         "discovery-access": {
           "serviceTemplate": "beacon",
@@ -473,17 +574,22 @@
           "contentTypes": [
             "application/bam"
           ],
-          "grants": [
+          "roles": {
+            "discovery": {
+              "policies": [
+                "bona_fide",
+                "ethics"
+              ]
+            }
+          },
+          "items": [
             {
-              "roles": {
-                "discovery": {}
-              },
-              "items": [
-                "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
-              ],
-              "aud": "https://ga4gh-apis-beacon.dnastack.com"
+              "vars": {
+                "url": "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
+              }
             }
           ],
+          "aud": "https://ga4gh-apis-beacon.dnastack.com",
           "defaultRole": "discovery",
           "ui": {
             "label": "Beacon Discovery Access"
@@ -499,21 +605,19 @@
           "contentTypes": [
             "application/bam"
           ],
-          "grants": [
-            {
-              "roles": {
-                "viewer": {
-                  "targetRoles": [
-                    "projects/ga4gh-apis/roles/BeaconUser"
-                  ],
-                  "policies": [
-                    "dac-1000-genomes"
-                  ]
-                }
-              },
-              "items": [
-                "projects/ga4gh-apis/buckets/ga4gh-apis-controlled-access"
+          "roles": {
+            "viewer": {
+              "policies": [
+                "dac(DATASETS=^https?://dac\\.nih\\.gov/datasets/phys000709$,^https?://dac\\.nih\\.gov/datasets/phys000710$,https://dac.nih.gov/datasets/phys000711)"
               ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "bucket": "ga4gh-apis-controlled-access",
+                "project": "ga4gh-apis"
+              }
             }
           ],
           "defaultRole": "viewer",
@@ -534,32 +638,41 @@
     }
   },
   "clients": {
-    "billing_test": {
-      "clientId": "135d6a28-5508-493d-a45d-93f4fe02211b"
-    },
     "craig_test": {
-      "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c"
+      "clientId": "135d6a28-5508-493d-a45d-93f4fe02211b",
+      "ui": {
+        "description": "Direct access by scripts testing Requester Pays billing setups",
+        "label": "Billing Test"
+      }
     },
     "dnastack_fe": {
-      "clientId": "b1aed96d-6367-4313-87a1-65eda4962a76"
+      "clientId": "b1aed96d-6367-4313-87a1-65eda4962a76",
+      "ui": {
+        "description": "DDAP Front-End",
+        "label": "DNAstack Front-End"
+      }
     },
     "test_client": {
-      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed64"
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed64",
+      "ui": {
+        "description": "Any other miscellaneous testing or demos",
+        "label": "Test Client"
+      }
     },
     "test_page": {
-      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed65"
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed65",
+      "ui": {
+        "description": "The Identity Concentrator's test page can access DAM directly",
+        "label": "IC Test Page"
+      }
     }
   },
   "serviceTemplates": {
     "beacon": {
       "targetAdapter": "token:jwt:gatekeeper",
       "itemFormat": "url",
-      "inheritPolicies": [
-        "bona_fide",
-        "ethics"
-      ],
       "interfaces": {
-        "http:beacon": "${URL}"
+        "http:beacon": "${url}"
       },
       "roles": {
         "basic_discovery": {
@@ -595,16 +708,16 @@
     "bigquery": {
       "targetAdapter": "token:gcp:sa",
       "itemFormat": "bigquery",
-      "inheritTargetScopes": [
-        "https://www.googleapis.com/auth/cloud-platform"
-      ],
       "interfaces": {
-        "http:gcp:bq": "https://www.googleapis.com/bigquery/v1/projects/${PROJECT-ID}"
+        "http:gcp:bq": "https://www.googleapis.com/bigquery/v1/projects/${project}"
       },
       "roles": {
         "editor": {
           "targetRoles": [
             "roles/bigquery.dataEditor"
+          ],
+          "targetScopes": [
+            "https://www.googleapis.com/auth/cloud-platform"
           ],
           "damRoleCategories": [
             "metadata",
@@ -619,7 +732,10 @@
         },
         "viewer": {
           "targetRoles": [
-            "roles/bigquery.dataViewer"
+            "roles/BQReader"
+          ],
+          "targetScopes": [
+            "https://www.googleapis.com/auth/cloud-platform"
           ],
           "damRoleCategories": [
             "metadata",
@@ -639,12 +755,9 @@
     "gcs": {
       "targetAdapter": "token:gcp:sa",
       "itemFormat": "gcs",
-      "inheritTargetScopes": [
-        "https://www.googleapis.com/auth/cloud-platform"
-      ],
       "interfaces": {
-        "gcp:gs": "gs://${BUCKET-ID}",
-        "http:gcp:gs": "https://www.googleapis.com/storage/v1/b/${BUCKET-ID}"
+        "gcp:gs": "gs://${bucket}",
+        "http:gcp:gs": "https://www.googleapis.com/storage/v1/b/${bucket}"
       },
       "roles": {
         "creator": {
@@ -664,6 +777,9 @@
             "roles/storage.objectViewer",
             "roles/storage.objectCreator"
           ],
+          "targetScopes": [
+            "https://www.googleapis.com/auth/cloud-platform"
+          ],
           "damRoleCategories": [
             "metadata",
             "list",
@@ -678,6 +794,9 @@
         "viewer": {
           "targetRoles": [
             "roles/storage.objectViewer"
+          ],
+          "targetScopes": [
+            "https://www.googleapis.com/auth/cloud-platform"
           ],
           "damRoleCategories": [
             "metadata",
@@ -718,32 +837,54 @@
   "claimDefinitions": {
     "elixir.AffiliatedCountry": {
       "ui": {
+        "description": "A ISO 3166 country code that represents the researcher's legal country of origin affiliation",
         "label": "Elixir Affiliated Country"
       }
     },
     "ga4gh.AcceptedTermsAndPolicies": {
       "ui": {
+        "description": "The set of unique identifiers in the form of URLs that indicate that a researcher or either organization has acknowledged the specific terms and conditions indicated by the URL",
+        "infoUrl": "https://docs.google.com/document/d/11Wg-uL75ypU5eNu2p_xh9gspmbGtmLzmdq5VfPHBirE/edit#heading=h.pif6raoahha5",
         "label": "Accepted Terms and Policies"
       }
     },
     "ga4gh.AffiliationAndRole": {
       "ui": {
+        "description": "The Identity’s roles within affiliated institutions as specified by eduPerson with specific vocabulary extensions",
+        "infoUrl": "https://docs.google.com/document/d/11Wg-uL75ypU5eNu2p_xh9gspmbGtmLzmdq5VfPHBirE/edit#heading=h.vod2g2cjxjmp",
         "label": "Affiliation and Role"
       }
     },
     "ga4gh.BonaFide": {
       "ui": {
+        "description": "Unique identifiers in the form of URLs that indicate that the person has been acknowledged to be a researcher",
+        "infoUrl": "https://docs.google.com/document/d/11Wg-uL75ypU5eNu2p_xh9gspmbGtmLzmdq5VfPHBirE/edit#heading=h.jdh4ks6h3zzp",
         "label": "Bona Fide"
       }
     },
     "ga4gh.ControlledAccessGrants": {
       "ui": {
+        "description": "A list of datasets or other objects for which controlled access has been granted to this researcher",
+        "infoUrl": "https://docs.google.com/document/d/11Wg-uL75ypU5eNu2p_xh9gspmbGtmLzmdq5VfPHBirE/edit#heading=h.s459xswt1qt3",
         "label": "Controlled Access Grants"
       }
     },
     "nih.Blacklisted": {
       "ui": {
+        "description": "Ability to blacklist users that have been tagged with this claim",
         "label": "NIH Blacklisted from Access"
+      }
+    },
+    "nih.DiscoveryAccess": {
+      "ui": {
+        "description": "A claim that the researcher has been granted special permission to access datasets for discovery purposes",
+        "label": "Custom NIH access level for discovery"
+      }
+    },
+    "nih.HasEraAccount": {
+      "ui": {
+        "description": "Set to 'true' if the researcher as an ERA Commons account",
+        "label": "Has ERA Commons Account"
       }
     }
   },
@@ -801,7 +942,6 @@
           ]
         }
       },
-      "state": "ACTIVE",
       "ui": {
         "label": "Dr. Joe"
       }
@@ -830,7 +970,6 @@
           ]
         }
       },
-      "state": "ACTIVE",
       "ui": {
         "label": "Dr. Joe"
       }
@@ -840,9 +979,18 @@
         "standardClaims": {
           "iss": "me",
           "sub": "you@me.com"
-        }
+        },
+        "ga4ghClaims": [
+          {
+            "claimName": "ga4gh.ControlledAccessGrants",
+            "source": "https://dbgap.nlm.nih.gov/aa",
+            "value": "https://dac.nih.gov/datasets/phys000111",
+            "iat": 1550120402,
+            "exp": 2181272402,
+            "by": "dac"
+          }
+        ]
       },
-      "state": "ACTIVE",
       "ui": {
         "label": "John Persona"
       }
@@ -900,7 +1048,6 @@
           ]
         }
       },
-      "state": "ACTIVE",
       "ui": {
         "label": "NCI Researcher"
       }
@@ -913,7 +1060,6 @@
         }
       },
       "resources": {},
-      "state": "ACTIVE",
       "ui": {
         "label": "Undergrad Candice"
       }
@@ -927,5 +1073,8 @@
       "managedKeysPerAccount": 10,
       "serviceAccountProject": "craigv-codelab"
     }
+  },
+  "ui": {
+    "label": "Mount Sinai Hospital Autism Repository"
   }
 }
