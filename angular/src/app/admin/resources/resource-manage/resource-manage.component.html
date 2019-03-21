@@ -23,10 +23,10 @@
     <div *ngIf="errorDto">
       <h3>Error</h3>
       <mat-error>
-        <span *ngIf="!errorDto.apply">{{ errorDto }}</span>
-        <span *ngIf="errorDto.apply">Cannot save, please consider using following DTOs:</span>
+        <span *ngIf="!errorDto.modification">{{ errorDto }}</span>
+        <span *ngIf="errorDto.modification">Cannot save, please consider using following DTOs:</span>
       </mat-error>
-      <json-editor *ngIf="errorDto.apply"
+      <json-editor *ngIf="errorDto.modification"
                    [data]="errorDto"
                    #errorEditor
                    [options]="errorEditorOptions"></json-editor>

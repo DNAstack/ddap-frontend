@@ -20,11 +20,11 @@
                (change)="updateTestDto($event)"></json-editor>
 
   <mat-error *ngIf="error">
-    <span *ngIf="!error.apply">{{ error }}</span>
-    <span *ngIf="error.apply">Cannot save, please consider using following dtos:</span>
+    <span *ngIf="!error.modification">{{ error }}</span>
+    <span *ngIf="error.modification">Cannot save, please consider using following dtos:</span>
   </mat-error>
 
-  <json-editor *ngIf="error && error.apply && useTests && state === ViewState.Editing"
+  <json-editor *ngIf="error && error.modification && useTests && state === ViewState.Editing"
                #errorEditor
                [options]="errorEditorOptions"
                [data]="error"></json-editor>
