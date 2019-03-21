@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
+import { Account } from './account.model';
+import { Identity } from './identity.model';
 import { IdentityService } from './identity.service';
 
 @Component({
@@ -9,17 +11,18 @@ import { IdentityService } from './identity.service';
 })
 export class IdentityComponent implements OnInit {
 
-  accounts: any[];
+  accounts: Account[];
   accountsSubscription: Subscription;
 
-  constructor(private accountService: IdentityService) {
+  constructor(private identityService: IdentityService) {
 
   }
 
   ngOnInit(): void {
-    this.accountsSubscription = this.accountService.get().subscribe((accountDto: any) => {
-      this.accounts = accountDto.connectedAccounts;
-    });
+    this.accountsSubscription = this.identityService.getIdentity()
+      .subscribe((identity: Identity) => {
+        this.accounts = identity.connectedAccounts;
+      });
   }
 
 }
