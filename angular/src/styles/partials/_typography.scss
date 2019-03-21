@@ -95,6 +95,12 @@ h2 {
 .icon-close:before {
   content: "\72";
 }
+.icon-plus:before {
+  content: "\73";
+}
+.icon-settings:before {
+  content: "\74";
+}
 
 .text-color--subtle {
   color: $navbar-font-subtle-color;
