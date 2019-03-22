@@ -20,9 +20,9 @@ export class EntityListComponent {
   @Input()
   entityList: Observable<EntityModel[]>;
   @Input()
-  descriptionLabel: string = null;
+  descriptionLabel: string;
   @Input()
-  descriptionProperty: string = null;
+  descriptionProperty: string;
   @Input()
   editorOptions: JsonEditorOptions | any;
 
@@ -37,8 +37,6 @@ export class EntityListComponent {
     if (!this.descriptionProperty && !this.descriptionLabel) {
       return;
     }
-    return this.descriptionProperty
-      ? _get(entity, this.descriptionProperty)
-      : entity;
+    return _get(entity, this.descriptionProperty, entity);
   }
 }
