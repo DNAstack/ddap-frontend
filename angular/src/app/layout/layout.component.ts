@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
 import { IdentityService } from '../identity/identity.service';
 import { Profile } from '../identity/profile.model';
-import { RealmService } from '../shared/realm/realm.service';
 
 @Component({
   templateUrl: './layout.component.html',
@@ -17,7 +16,7 @@ export class LayoutComponent implements OnInit {
 
   constructor(public loader: LoadingBarService,
               private router: Router,
-              private realmService: RealmService,
+              private activatedRoute: ActivatedRoute,
               private identityService: IdentityService) {
 
   }
@@ -27,8 +26,8 @@ export class LayoutComponent implements OnInit {
       this.profile = profile;
     });
 
-    this.realmService.getRealm().subscribe(realm => {
-      this.realm = realm;
+    this.activatedRoute.root.firstChild.params.subscribe((params) => {
+      this.realm = params.realmId;
     });
   }
 
