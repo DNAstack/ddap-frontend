@@ -3,3 +3,7 @@ export const personas = {
     imagePath: '/assets/images/nih_identity.png',
   },
 };
+
+export const personaMetadataExists = (persona) => {
+  return personas[persona];
+};

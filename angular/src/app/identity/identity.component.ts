@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
 import { IdentityService } from './identity.service';
-import { personas } from './personas.const';
+import { personaMetadataExists, personas } from './personas.const';
 
 @Component({
   templateUrl: './identity.component.html',
@@ -33,13 +33,12 @@ export class IdentityComponent implements OnInit {
   }
 
   getPicture(account: Account) {
-    if (this.isAccountPersona(account)) {
-      return personas[account.profile.username].imagePath;
+    const username = account.profile.username;
+    if (this.isAccountPersona(account) && personaMetadataExists(username)) {
+      return personas[username].imagePath;
     }
 
-    return account.profile.picture
-      ? account.profile.picture
-      : '/assets/images/placeholder_identity.png';
+    return account.profile.picture || '/assets/images/placeholder_identity.png';
   }
 
   private isAccountPersona(account): boolean {
