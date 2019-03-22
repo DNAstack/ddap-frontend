@@ -1,10 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { assemblyIds } from '../assembly.model';
-import { RealmService } from '../realm/realm.service';
 import { SearchState } from '../search-state.model';
 import { SearchStateService } from '../search-state.service';
 
@@ -32,7 +31,7 @@ export class BeaconSearchBarComponent implements OnDestroy, OnInit {
 
   constructor(private router: Router,
               private searchStateService: SearchStateService,
-              private realmService: RealmService) {
+              private activatedRoute: ActivatedRoute) {
 
     this.search = new FormGroup({
       assembly: new FormControl(this.assemblyIds[0], [Validators.required]),
@@ -55,7 +54,7 @@ export class BeaconSearchBarComponent implements OnDestroy, OnInit {
     }
 
     const resource = this.resource;
-    const realmId = this.realmService.realmSnapshot;
+    const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
     this.router.navigate([realmId, 'data', 'search'], {
       queryParams: {
         ...value,
