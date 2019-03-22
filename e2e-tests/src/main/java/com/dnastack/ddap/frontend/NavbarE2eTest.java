@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.containsString;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.page.NavBar;
+import com.dnastack.ddap.common.page.NavBar.NavItem;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,15 +38,22 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
                 Arrays.asList("GRU", "bona_fide", "ethics"));
         map.put(NavBar.NavItem.PASSPORTS,
                 Arrays.asList("dbGaP", "elixir", "playgroundIC"));
-
+        map.put(NavItem.IC_IDENTITY_PROVIDERS,
+                Arrays.asList("elixir", "era_commons", "google"));
+        map.put(NavItem.IC_CLIENTS,
+                Arrays.asList("craig_test", "dnastack_fe", "test_client", "test_page"));
+        map.put(NavItem.IC_OPTIONS,
+                Arrays.asList("Access Token TTL", "Account Name Length", "Authorization Code TTL",
+                    "Claim TTL Cap", "Default Passport Token TTL", "Maximum Passport Token TTL", "Refresh Token TTL"
+                ));
         return map;
     }
 
-    private WebElement findNavItemTitle(String title) {
+    private WebElement findPanelItemTitle(String title) {
         return driver.findElement(By.xpath(format("//mat-panel-title[contains(text(), '%s')]", title)));
     }
 
-    private WebElement findNavItemDescription(String description) {
+    private WebElement findPanelItemDescription(String description) {
         return driver.findElement(By.xpath(format("//mat-panel-description[contains(text(), '%s')]", description)));
     }
 
@@ -61,7 +69,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findNavItemTitle);
+                .forEach(this::findPanelItemTitle);
     }
 
     @Test
@@ -70,7 +78,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findNavItemTitle);
+                .forEach(this::findPanelItemTitle);
     }
 
     @Test
@@ -79,7 +87,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findNavItemTitle);
+                .forEach(this::findPanelItemTitle);
     }
 
     @Test
@@ -88,13 +96,13 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findNavItemTitle);
+                .forEach(this::findPanelItemTitle);
 
         // make sure the array of sources are displayed too
-        findNavItemDescription("https://ga4gh.elixir-czech.org/claims");
-        findNavItemDescription("https://dbgap.nlm.nih.gov/aa");
-        findNavItemDescription("https://nci.nih.org");
-        findNavItemDescription("https://institute1.nih.gov");
+        findPanelItemDescription("https://ga4gh.elixir-czech.org/claims");
+        findPanelItemDescription("https://dbgap.nlm.nih.gov/aa");
+        findPanelItemDescription("https://nci.nih.org");
+        findPanelItemDescription("https://institute1.nih.gov");
     }
 
     @Test
@@ -103,7 +111,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findNavItemTitle);
+                .forEach(this::findPanelItemTitle);
     }
 
     @Test
@@ -112,7 +120,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findNavItemTitle);
+                .forEach(this::findPanelItemTitle);
     }
 
     @Test
@@ -121,7 +129,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findNavItemTitle);
+                .forEach(this::findPanelItemTitle);
     }
 
     @Test
@@ -130,7 +138,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findNavItemTitle);
+                .forEach(this::findPanelItemTitle);
     }
 
     @Test
@@ -140,6 +148,39 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
         String subject = driver.findElement(By.tagName("mat-card-subtitle")).getText();
         assertThat(subject, containsString("nci_researcher@nci.nih.gov"));
+    }
+
+    @Test
+    public void verifyICIdentityProviders() {
+        ddapPage.getNavBar()
+            .goTo(NavItem.IC_PANEL);
+        ddapPage.getNavBar()
+            .goToAndCheckForTitle(NavItem.IC_IDENTITY_PROVIDERS);
+
+        DEFAULT_PAGE_ITEMS.get(NavItem.IC_IDENTITY_PROVIDERS)
+            .forEach(this::findPanelItemTitle);
+    }
+
+    @Test
+    public void verifyICClients() {
+        ddapPage.getNavBar()
+            .goTo(NavItem.IC_PANEL);
+        ddapPage.getNavBar()
+            .goToAndCheckForTitle(NavItem.IC_CLIENTS);
+
+        DEFAULT_PAGE_ITEMS.get(NavItem.IC_CLIENTS)
+            .forEach(this::findPanelItemTitle);
+    }
+
+    @Test
+    public void verifyICOptions() {
+        ddapPage.getNavBar()
+            .goTo(NavItem.IC_PANEL);
+        ddapPage.getNavBar()
+            .goToAndCheckForTitle(NavItem.IC_OPTIONS);
+
+        DEFAULT_PAGE_ITEMS.get(NavItem.IC_OPTIONS)
+            .forEach(this::findPanelItemTitle);
     }
 
     @Test
