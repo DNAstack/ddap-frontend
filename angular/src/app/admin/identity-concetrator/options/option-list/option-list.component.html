@@ -16,15 +16,17 @@
         </mat-expansion-panel-header>
       </mat-expansion-panel>
       <ng-container *ngFor="let option of options | keyvalue">
-        <mat-expansion-panel (opened)="resetSelection()">
+        <mat-expansion-panel (opened)="resetSelection()"
+                             *ngIf="option.key !== 'descriptors'">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              {{ option.key }}
+              {{ getDescriptorFor(option.key).label }}
             </mat-panel-title>
             <mat-panel-description>
               {{ option.value }}
             </mat-panel-description>
           </mat-expansion-panel-header>
+          <p>{{ getDescriptorFor(option.key).description }}</p>
           <mat-form-field appearance="outline">
             <mat-label>New value</mat-label>
             <input matInput

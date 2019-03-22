@@ -9,7 +9,7 @@ import { OptionService } from '../options.service';
 })
 export class OptionListComponent implements OnInit {
 
-  options: any[];
+  options: any;
   newOptionValue: any = null;
   error: string = null;
 
@@ -19,6 +19,10 @@ export class OptionListComponent implements OnInit {
   ngOnInit() {
     this.optionService.get()
       .subscribe((options) => this.options = options);
+  }
+
+  getDescriptorFor(optionKey) {
+    return this.options.descriptors[optionKey];
   }
 
   updateOptionValue(optionKey, newValue) {
