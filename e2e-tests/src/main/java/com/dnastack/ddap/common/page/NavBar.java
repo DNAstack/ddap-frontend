@@ -21,6 +21,10 @@ public class NavBar {
         .put(NavItem.SERVICE_TEMPLATES, "nav-service-templates")
         .put(NavItem.RULES, "nav-access-policies")
         .put(NavItem.PASSPORTS, "nav-passport-issuers")
+        .put(NavItem.IC_PANEL, "nav-ic-panel")
+        .put(NavItem.IC_IDENTITY_PROVIDERS, "nav-ic-identity-providers")
+        .put(NavItem.IC_CLIENTS, "nav-ic-clients")
+        .put(NavItem.IC_OPTIONS, "nav-ic-options")
         .build();
     private Map<NavItem, String> PAGE_TITLE = ImmutableMap.<NavItem, String>builder()
         .put(NavItem.RESOURCES, "Resource")
@@ -32,10 +36,17 @@ public class NavBar {
         .put(NavItem.SERVICE_TEMPLATES, "Service Templates")
         .put(NavItem.RULES, "Access Policies")
         .put(NavItem.PASSPORTS, "Passport Issuers")
+        .put(NavItem.IC_IDENTITY_PROVIDERS, "Identity Providers")
+        .put(NavItem.IC_CLIENTS, "Clients")
+        .put(NavItem.IC_OPTIONS, "Options")
         .build();
 
     public enum NavItem {
         DATA,
+        IC_PANEL,
+        IC_IDENTITY_PROVIDERS,
+        IC_CLIENTS,
+        IC_OPTIONS,
         RESOURCES,
         PERSONAS,
         IDENTITY,
