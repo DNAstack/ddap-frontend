@@ -23,23 +23,23 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     private static final Map<NavBar.NavItem, List<String>> pageItems() {
         Map<NavBar.NavItem, List<String>> map = new HashMap<>();
         map.put(NavBar.NavItem.RESOURCES,
-                Arrays.asList("allOfUs", "ga4gh-apis"));
+                Arrays.asList("All Of Us", "GA4GH APIs"));
         map.put(NavBar.NavItem.PERSONAS,
-                Arrays.asList("nci_researcher", "john"));
+                Arrays.asList("Dr. Joe", "John Persona", "NCI Researcher"));
         map.put(NavBar.NavItem.CLIENTS,
-                Arrays.asList("craig_test", "dnastack_fe", "test_client", "test_page"));
+                Arrays.asList("Billing Test", "DNAstack Front-End", "Test Client", "IC Test Page"));
         map.put(NavBar.NavItem.TRUSTED_SOURCES,
                 Arrays.asList("elixir_institutes", "nih_institutes"));
         map.put(NavBar.NavItem.DEFINITIONS,
-                Arrays.asList("ga4gh.AcceptedTermsAndPolicies", "ga4gh.ControlledAccessGrants"));
+                Arrays.asList("Elixir Affiliated Country", "Affiliation and Role"));
         map.put(NavBar.NavItem.SERVICE_TEMPLATES,
-                Arrays.asList("bigquery", "gcs"));
+                Arrays.asList("Beacon Discovery Search", "Google BigQuery", "Google Cloud Storage"));
         map.put(NavBar.NavItem.RULES,
-                Arrays.asList("GRU", "bona_fide", "ethics"));
+                Arrays.asList("General Research Use", "Bona Fide", "Researcher Ethics Agreement"));
         map.put(NavBar.NavItem.PASSPORTS,
                 Arrays.asList("dbGaP", "elixir", "playgroundIC"));
         map.put(NavItem.IC_IDENTITY_PROVIDERS,
-                Arrays.asList("elixir", "era_commons", "google"));
+                Arrays.asList("Elixir", "eRA Commons", "Google"));
         map.put(NavItem.IC_CLIENTS,
                 Arrays.asList("craig_test", "dnastack_fe", "test_client", "test_page"));
         map.put(NavItem.IC_OPTIONS,
