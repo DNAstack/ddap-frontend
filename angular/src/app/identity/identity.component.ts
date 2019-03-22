@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
 import { IdentityService } from './identity.service';
-import { personaMetadataExists, personas } from './personas.const';
+import { personaMetadataExists, personas } from './personas.constants';
 
 @Component({
   templateUrl: './identity.component.html',
