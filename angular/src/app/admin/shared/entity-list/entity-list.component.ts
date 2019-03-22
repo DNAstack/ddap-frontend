@@ -33,6 +33,10 @@ export class EntityListComponent {
     this.editorOptions = new JsonEditorDefaults();
   }
 
+  getTitle(entity: any) {
+    return _get(entity, 'dto.ui.label', entity.name);
+  }
+
   getDescription(entity: object) {
     if (!this.descriptionProperty && !this.descriptionLabel) {
       return;
