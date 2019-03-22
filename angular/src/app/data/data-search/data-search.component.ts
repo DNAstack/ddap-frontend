@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
-import { RealmService } from '../../realm.service';
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 import { SearchState } from '../../shared/search-state.model';
@@ -26,12 +26,17 @@ export class DataSearchComponent implements OnInit {
   results: any[];
   resultsAction: Subscription;
 
-  constructor(private realmService: RealmService,
+  constructor(private activatedRoute: ActivatedRoute,
               private dataService: DataService,
               private searchStateService: SearchStateService,
               private beaconService: ResourceBeaconService) {
-    this.realmService.getRealm().subscribe(realm => {
-      this.realm = realm;
+
+    this.activatedRoute
+      .root
+      .firstChild
+      .params
+      .subscribe((params) => {
+      this.realm = params.realmId;
     });
   }
 

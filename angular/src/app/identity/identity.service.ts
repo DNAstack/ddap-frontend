@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { RealmService } from '../realm.service';
+import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 import { Identity } from './identity.model';
 import { Profile } from './profile.model';
@@ -14,17 +14,14 @@ import { Profile } from './profile.model';
 })
 export class IdentityService {
 
-  constructor(private http: HttpClient,
-              private realmService: RealmService) {
+  constructor(private http: HttpClient) {
   }
 
   getIdentity(params = {}): Observable<Identity> {
-    return this.realmService.switchMap<any>(
-      realm => this.http.get<any>(`${environment.idpApiUrl}/${realm}/accounts/-`, {params})
-        .pipe(
-          pluck('account')
-        )
-    );
+    return this.http.get<any>(`${environment.idpApiUrl}/${realmIdPlaceholder}/accounts/-`, {params})
+      .pipe(
+        pluck('account')
+      );
   }
 
   getProfile(params?): Observable<Profile> {
