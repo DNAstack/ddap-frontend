@@ -32,10 +32,7 @@ export class OptionListComponent implements OnInit {
     this.optionService.update(newOptions)
       .subscribe(
         () => this.options[optionKey] = newValue,
-        (response) => {
-          const message = response.error;
-          this.error = message.substring(message.lastIndexOf(':') + 1);
-        }
+        ({error}) => this.error = error.substring(error.lastIndexOf(':') + 1)
       );
   }
 
