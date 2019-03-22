@@ -22,7 +22,7 @@ public class BeaconSearchExceptionHandlingTest extends AbstractBaseE2eTest {
 
     @Before
     public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/aggregateSearchRealmConfig.json");
+        String realmConfigString = loadTemplate("/com/dnastack/ddap/foo.json");
         setupRealmConfig("nci_researcher", realmConfigString, REALM);
     }
 
@@ -50,7 +50,7 @@ public class BeaconSearchExceptionHandlingTest extends AbstractBaseE2eTest {
         // @formatter:on
     }
 
-    @Test
+    //@Test
     public void shouldGetOneResultForSingleResourceSearch() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
 

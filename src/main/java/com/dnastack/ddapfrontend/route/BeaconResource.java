@@ -13,14 +13,20 @@ import com.dnastack.ddapfrontend.client.dam.DamResources;
 import com.dnastack.ddapfrontend.client.dam.DamView;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
+
+import java.net.ConnectException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import feign.FeignException;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -125,13 +131,43 @@ class BeaconResource {
     }
 
     private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewToken viewToken) {
-        return WebClient.create()
-                        .get()
-                        .uri(beaconQueryUrl(viewToken.getUrl(), beaconRequest))
-                        .header("Authorization",
-                                "Bearer " + viewToken.getToken())
-                        .exchange()
-                        .flatMap(clientResponse -> clientResponse.bodyToMono(BeaconQueryResult.class));
+        try {
+            return WebClient.create()
+                    .get()
+                    .uri(beaconQueryUrl(viewToken.getUrl(), beaconRequest))
+                    .header("Authorization",
+                            "Bearer " + viewToken.getToken())
+                    .exchange()
+                    .flatMap(clientResponse -> {
+                        if (clientResponse.statusCode().isError()) {
+                            return clientResponse.bodyToMono(String.class).flatMap(errorMessageBody -> {
+                                return Mono.error(new Exception("HTTP error response code: " + clientResponse.statusCode() + " " + errorMessageBody);
+                            });
+                        }
+                        log.error("^^^^^^^^^^^^^^^^^^^^^^");
+                        return clientResponse.bodyToMono(BeaconQueryResult.class);
+                    })
+                    .onErrorResume(e -> {
+                        BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
+                        String errorMessage = "Invalid authorization token" + e;
+                        log.error(errorMessage);
+                        beaconQueryResultError.setError(errorMessage);
+                        log.error("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                        log.error("Error making REST request: ");
+                        Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
+                        return errorResult;                    });
+            } catch(FeignException.Unauthorized exception) {
+
+        } catch(Exception exception) {
+            log.error("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + exception.getMessage());
+            return null;
+        }
+        return null;
+    }
+
+    private void handleError(Throwable ex) throws Exception {
+        throw new Exception("Foo bar");
+        //System.out.println("Helper method called: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
     }
 
     private String beaconQueryUrl(String baseUrl, BeaconRequestModel beaconRequest) {
