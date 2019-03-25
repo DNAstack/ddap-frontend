@@ -10,7 +10,7 @@ import { OptionService } from '../options.service';
 export class OptionListComponent implements OnInit {
 
   options: any;
-  error: string = null;
+  error: string;
 
   constructor(public optionService: OptionService) {
   }
@@ -20,8 +20,7 @@ export class OptionListComponent implements OnInit {
       .subscribe((options) => this.options = options);
   }
 
-  updateOptionValue(change) {
-    const { optionKey, newValue } = change;
+  updateOptionValue({ optionKey, newValue }) {
     const newOptions = this.cloneOptions();
     newOptions[optionKey] = newValue;
 
