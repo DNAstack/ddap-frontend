@@ -2,7 +2,9 @@
 @import "~@angular/material/theming";
 
 .ddap-card {
+  vertical-align: top;
   min-width: 20rem;
+  width: calc(30% + 4rem);
   max-width: 30rem;
   height: 20rem;
   display: inline-block;
@@ -32,5 +34,19 @@
   mat-icon {
     float: right;
     margin-right: 0.5rem;
+  }
+}
+
+@media (max-width: 1600px) {
+  .ddap-card {
+    min-width: 20rem;
+    width: calc(50% - 4rem);
+  }
+}
+
+@media (max-width: 1024px) {
+  .ddap-card {
+    min-width: 20rem;
+    width: calc(100% - 2rem);
   }
 }
