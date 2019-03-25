@@ -1,0 +1,45 @@
+<div class="list-content">
+  <mat-accordion>
+    <mat-expansion-panel [disabled]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          option
+        </mat-panel-title>
+        <mat-panel-description>
+          value
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <ng-container *ngFor="let option of options | keyvalue">
+      <mat-expansion-panel (opened)="resetSelection()"
+                           *ngIf="option.key !== 'descriptors'">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ getDescriptorFor(option.key).label }}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ option.value }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>{{ getDescriptorFor(option.key).description }}</p>
+        <mat-form-field appearance="outline">
+          <mat-label>New value</mat-label>
+          <input matInput
+                 [placeholder]="option.value"
+                 [(ngModel)]="newOptionValue">
+        </mat-form-field>
+        <mat-error *ngIf="error">
+          {{ error }}
+        </mat-error>
+        <mat-action-row>
+          <button (click)="submitted.emit({ optionKey: option.key, newValue: newOptionValue })"
+                  mat-button
+                  color="primary"
+                  class="uppercase">
+            Update Value
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </ng-container>
+  </mat-accordion>
+</div>
