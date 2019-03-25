@@ -1065,47 +1065,45 @@
       }
     }
   },
-  "options": {
-    "readOnlyMasterRealm": true,
-    "gcp": {
-      "managedKeysMaxRequestedTtl": "7d",
-      "managedKeysPerAccount": 8,
-      "serviceAccountProject": "craigv-codelab"
-    },
-    "descriptors": {
-      "gcp.managedKeysMaxRequestedTtl": {
-        "label": "GCP Managed Keys Maximum Requested TTL",
-        "description": "The maximum TTL of a requested access token on GCP and this setting is used in conjunction with managedKeysPerAccount to set up managed access key rotation policies within DAM (disabled by default)",
-        "regexp": "^[0-9]+[smhdw]$",
-        "type": "string:duration",
-        "min": "2h",
-        "max": "180d"
+  "options":{
+    "readOnlyMasterRealm":true,
+    "gcpManagedKeysMaxRequestedTtl":"7d",
+    "gcpManagedKeysPerAccount":8,
+    "gcpServiceAccountProject":"craigv-codelab",
+    "descriptors":{
+      "gcpManagedKeysMaxRequestedTtl":{
+        "label":"GCP Managed Keys Maximum Requested TTL",
+        "description":"The maximum TTL of a requested access token on GCP and this setting is used in conjunction with managedKeysPerAccount to set up managed access key rotation policies within DAM (disabled by default)",
+        "regexp":"^[0-9]+[smhdw]$",
+        "type":"string:duration",
+        "min":"2h",
+        "max":"180d"
       },
-      "gcp.managedKeysPerAccount": {
-        "label": "GCP Managed Keys Per Account",
-        "description": "GCP allows up to 10 access keys of more than 1h to be active per account and this option allows DAM to manage a subset of these keys",
-        "type": "int",
-        "min": "0",
-        "max": "10"
+      "gcpManagedKeysPerAccount":{
+        "label":"GCP Managed Keys Per Account",
+        "description":"GCP allows up to 10 access keys of more than 1h to be active per account and this option allows DAM to manage a subset of these keys",
+        "type":"int",
+        "min":"0",
+        "max":"10"
       },
-      "gcp.serviceAccountProject": {
-        "label": "GCP Service Account Project",
-        "description": "The GCP Project ID where service accounts will be created by DAM and where DAM has permissions to create these service accounts (not setting this value will disable the service account target adapter)",
-        "regexp": "^[A-Za-z][-A-Za-z0-9]{1,30}[A-Za-z]$",
-        "type": "string"
+      "gcpServiceAccountProject":{
+        "label":"GCP Service Account Project",
+        "description":"The GCP Project ID where service accounts will be created by DAM and where DAM has permissions to create these service accounts (not setting this value will disable the service account target adapter)",
+        "regexp":"^[A-Za-z][-A-Za-z0-9]{1,30}[A-Za-z]$",
+        "type":"string"
       },
-      "readOnlyMasterRealm": {
-        "label": "Read Only Master Realm",
-        "description": "When 'true', the master realm becomes read-only and updates to the configuration must be performed via a config file",
-        "type": "bool",
-        "defaultValue": "false"
+      "readOnlyMasterRealm":{
+        "label":"Read Only Master Realm",
+        "description":"When 'true', the master realm becomes read-only and updates to the configuration must be performed via updating a config file",
+        "type":"bool",
+        "defaultValue":"false"
       },
-      "whitelistedRealms": {
-        "label": "Whitelisted Realms",
-        "description": "By default any realm name can be created, but when this option is populated the DAM will only allow realms on this list to be created (the master realm is allowed implicitly)",
-        "regexp": "^[\\w\\-\\.]+$",
-        "type": "string",
-        "isList": true
+      "whitelistedRealms":{
+        "label":"Whitelisted Realms",
+        "description":"By default any realm name can be created, but when this option is populated the DAM will only allow realms on this list to be created (the master realm is allowed implicitly)",
+        "regexp":"^[\\w\\-\\.]+$",
+        "type":"string",
+        "isList":true
       }
     }
   },
