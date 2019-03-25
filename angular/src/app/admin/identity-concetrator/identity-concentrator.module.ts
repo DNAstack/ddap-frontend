@@ -5,10 +5,15 @@ import { IdentityProvidersModule } from './identity-providers/identity-providers
 import { OptionsModule } from './options/options.module';
 
 @NgModule({
+  declarations: [
+
+  ],
   imports: [
     ClientsModule,
     IdentityProvidersModule,
     OptionsModule,
   ],
 })
-export class IdentityConcentratorModule { }
+export class IdentityConcentratorModule {
+
+}

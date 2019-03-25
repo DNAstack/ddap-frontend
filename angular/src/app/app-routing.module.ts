@@ -4,9 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ACCESS_POLICIES_ROUTES } from './admin/access-policies/access-policies.routes';
 import { CLAIM_DEFINITIONS_ROUTES } from './admin/claim-definitions/claim-definitions.routes';
 import { CLIENT_APPLICATIONS_ROUTES } from './admin/client-applications/client-applications.routes';
-import { CLIENTS_ROUTES } from './admin/identity-concetrator/clients/clients.routes';
-import { IDENTITY_PROVIDERS_ROUTES } from './admin/identity-concetrator/identity-providers/identity-providers.routes';
-import { OPTIONS_ROUTES } from './admin/identity-concetrator/options/options.routes';
+import { IDENTITY_CONCENTRATOR_ROUTES } from './admin/identity-concetrator/identity-concentrator-routing.module';
 import { PASSPORT_ISSUERS_ROUTES } from './admin/passport-issuers/passport-issuers.routes';
 import { PERSONAS_ROUTES } from './admin/personas/personas.routes';
 import { RESOURCES_ROUTES } from './admin/resources/resources.routes';
@@ -26,9 +24,7 @@ const routes: Routes = [
     children: [
       ...DATA_ROUTES,
       ...IDENTITY_ROUTES,
-      ...CLIENTS_ROUTES,
-      ...IDENTITY_PROVIDERS_ROUTES,
-      ...OPTIONS_ROUTES,
+      ...IDENTITY_CONCENTRATOR_ROUTES,
       ...TRUSTED_SOURCES_ROUTES,
       ...CLIENT_APPLICATIONS_ROUTES,
       ...CLAIM_DEFINITIONS_ROUTES,
