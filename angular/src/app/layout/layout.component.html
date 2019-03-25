@@ -56,19 +56,19 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
-            <mat-list-item [routerLink]="['identity-providers']"
+            <mat-list-item [routerLink]="['identity-concentrator', 'identity-providers']"
                            [routerLinkActive]="['active-nav-link']"
                            data-se="nav-ic-identity-providers">
               <mat-icon class="icon icon-identities"></mat-icon>
               <h4 mat-line>Identity Providers</h4>
             </mat-list-item>
-            <mat-list-item [routerLink]="['clients']"
+            <mat-list-item [routerLink]="['identity-concentrator', 'clients']"
                            [routerLinkActive]="['active-nav-link']"
                            data-se="nav-ic-clients">
               <mat-icon class="icon icon-clients"></mat-icon>
               <h4 mat-line>Clients</h4>
             </mat-list-item>
-            <mat-list-item [routerLink]="['options']"
+            <mat-list-item [routerLink]="['identity-concentrator', 'options']"
                            [routerLinkActive]="['active-nav-link']"
                            data-se="nav-ic-options">
               <mat-icon class="icon icon-rules"></mat-icon>
