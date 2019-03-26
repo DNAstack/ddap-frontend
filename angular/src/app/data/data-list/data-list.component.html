@@ -9,11 +9,11 @@
     <mat-card-title>{{ entity.dto.ui.label || 'Unknown' }}</mat-card-title>
     <mat-card-subtitle>{{ entity.dto.ui.description || 'Unknown' }}</mat-card-subtitle>
   </mat-card-header>
-  <div class="ddap-data-image">
-    <img mat-card-image
-         [src]="[entity.dto.ui.imageUrl || randomImageRetriever.getPathToFixedRandomImage(entity.dto.ui.label)]"
-         alt="Photo">
-  </div>
+
+  <img mat-card-image
+       [src]="[entity.dto.ui.imageUrl || randomImageRetriever.getPathToFixedRandomImage(entity.dto.ui.label)]"
+       alt="Photo">
+
   <mat-card-content>
     <p>{{ entity.dto.ui.description || 'Unknown' }}</p>
   </mat-card-content>
