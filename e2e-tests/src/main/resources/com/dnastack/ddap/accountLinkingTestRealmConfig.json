@@ -1,0 +1,287 @@
+{
+  "version": "v0",
+  "revision": "1",
+  "commitTime": 1544824316,
+  "trustedPassportIssuers": {
+    "dbGaP": {
+      "issuer": "https://dbgap.nlm.nih.gov/aa",
+      "translateUsing": "dbgap"
+    },
+    "elixir": {
+      "issuer": "https://login.elixir-czech.org/oidc/",
+      "translateUsing": "elixir"
+    },
+    "ic_dev": {
+      "issuer": "https://ic-dev-dot-craigv-codelab.appspot.com/oidc"
+    },
+    "ic_old": {
+      "issuer": "https://ic-dot-craigv-codelab.appspot.com/oidc"
+    },
+    "ic_prod": {
+      "issuer": "https://ic-prod-dot-craigv-codelab.appspot.com/oidc"
+    },
+    "ic_staging": {
+      "issuer": "https://ic-staging-dot-craigv-codelab.appspot.com/oidc"
+    },
+    "nih": {
+      "issuer": "https://login.nih.org/oidc/",
+      "translateUsing": "dbgap"
+    },
+    "playgroundIC": {
+      "issuer": "https://ic-staging-dot-craigv-codelab.appspot.com/oidc"
+    }
+  },
+  "trustedSources": {
+    "elixir_institutes": {
+      "sources": [
+        "https://ga4gh.elixir-czech.org/claims"
+      ],
+      "claims": [
+        "ga4gh.BonaFide",
+        "^elixir.*$"
+      ]
+    },
+    "eu_universities": {
+      "sources": [
+        "https://uni-heidelberg.de"
+      ],
+      "claims": [
+        "ga4gh.AcceptedTermsAndPolicies",
+        "ga4gh.BonaFide"
+      ]
+    },
+    "nih_institutes": {
+      "sources": [
+        "https://dbgap.nlm.nih.gov/aa",
+        "https://nci.nih.org",
+        "https://institute1.nih.gov",
+        "https://institute2.nih.gov",
+        "https://institute3.nih.gov",
+        "https://institute4.nih.gov"
+      ],
+      "claims": [
+        "^ga4gh.*$",
+        "^nih.*$"
+      ]
+    },
+    "research_companies": {
+      "sources": [
+        "https://ga4gh.google.com/claims",
+        "https://ga4gh.dnastack.com/claims"
+      ],
+      "claims": [
+        "ga4gh.AcceptedTermsAndPolicies",
+        "ga4gh.BonaFide"
+      ]
+    },
+    "the_broad": {
+      "sources": [
+        "https://ga4gh.broadinstitute.org"
+      ]
+    },
+    "us_universities": {
+      "sources": [
+        "https://ga4gh.stanford.edu/claims"
+      ],
+      "claims": [
+        "ga4gh.AcceptedTermsAndPolicies",
+        "ga4gh.BonaFide"
+      ]
+    }
+  },
+  "policies": {},
+  "resources":{},
+  "clients": {
+    "dnastack_fe": {
+      "clientId": "b1aed96d-6367-4313-87a1-65eda4962a76",
+      "ui": {
+        "description": "DDAP Front-End",
+        "label": "DNAstack Front-End"
+      }
+    }
+  },
+  "serviceTemplates": {},
+  "claimDefinitions": {
+    "elixir.AffiliatedCountry": {
+      "ui": {
+        "description": "A ISO 3166 country code that represents the researcher's legal country of origin affiliation",
+        "label": "Elixir Affiliated Country"
+      }
+    },
+    "ga4gh.AcceptedTermsAndPolicies": {
+      "ui": {
+        "description": "The set of unique identifiers in the form of URLs that indicate that a researcher or either organization has acknowledged the specific terms and conditions indicated by the URL",
+        "infoUrl": "https://docs.google.com/document/d/11Wg-uL75ypU5eNu2p_xh9gspmbGtmLzmdq5VfPHBirE/edit#heading=h.pif6raoahha5",
+        "label": "Accepted Terms and Policies"
+      }
+    },
+    "ga4gh.AffiliationAndRole": {
+      "ui": {
+        "description": "The Identity’s roles within affiliated institutions as specified by eduPerson with specific vocabulary extensions",
+        "infoUrl": "https://docs.google.com/document/d/11Wg-uL75ypU5eNu2p_xh9gspmbGtmLzmdq5VfPHBirE/edit#heading=h.vod2g2cjxjmp",
+        "label": "Affiliation and Role"
+      }
+    },
+    "ga4gh.BonaFide": {
+      "ui": {
+        "description": "Unique identifiers in the form of URLs that indicate that the person has been acknowledged to be a researcher",
+        "infoUrl": "https://docs.google.com/document/d/11Wg-uL75ypU5eNu2p_xh9gspmbGtmLzmdq5VfPHBirE/edit#heading=h.jdh4ks6h3zzp",
+        "label": "Bona Fide"
+      }
+    },
+    "ga4gh.ControlledAccessGrants": {
+      "ui": {
+        "description": "A list of datasets or other objects for which controlled access has been granted to this researcher",
+        "infoUrl": "https://docs.google.com/document/d/11Wg-uL75ypU5eNu2p_xh9gspmbGtmLzmdq5VfPHBirE/edit#heading=h.s459xswt1qt3",
+        "label": "Controlled Access Grants"
+      }
+    },
+    "nih.Blacklisted": {
+      "ui": {
+        "description": "Ability to blacklist users that have been tagged with this claim",
+        "label": "NIH Blacklisted from Access"
+      }
+    },
+    "nih.DiscoveryAccess": {
+      "ui": {
+        "description": "A claim that the researcher has been granted special permission to access datasets for discovery purposes",
+        "label": "Custom NIH access level for discovery"
+      }
+    },
+    "nih.HasEraAccount": {
+      "ui": {
+        "description": "Set to 'true' if the researcher as an ERA Commons account",
+        "label": "Has ERA Commons Account"
+      }
+    }
+  },
+  "testPersonas": {
+    "dr_jekyll": {
+      "idToken": {
+        "standardClaims": {
+          "iss": "https://login.elixir-czech.org/oidc/",
+          "sub": "dr_jekyll@faculty.uni-heidelberg.de"
+        },
+        "ga4ghClaims": [
+          {
+            "claimName": "ga4gh.BonaFide",
+            "source": "https://uni-heidelberg.de",
+            "value": "https://www.nature.com/articles/s41431-018-0219-y",
+            "iat": 1550120400,
+            "exp": 2181272400,
+            "by": "peer"
+          },
+          {
+            "claimName": "ga4gh.AcceptedTermsAndPolicies",
+            "source": "https://uni-heidelberg.de",
+            "value": "https://www.nature.com/articles/s41431-018-0219-y",
+            "iat": 1550120402,
+            "exp": 2181272402,
+            "by": "self"
+          }
+        ]
+      },
+      "resources": {},
+      "ui": {
+        "label": "Dr. Jekyll"
+      }
+    },
+    "mr_hyde": {
+      "idToken": {
+        "standardClaims": {
+          "iss": "https://login.nih.org/oidc/",
+          "sub": "mr_hyde@era.nih.gov"
+        },
+        "ga4ghClaims": [
+          {
+            "claimName": "ga4gh.ControlledAccessGrants",
+            "source": "https://dbgap.nlm.nih.gov/aa",
+            "value": "https://dac.nih.gov/datasets/phys000710",
+            "iat": 1550120402,
+            "exp": 2181272402,
+            "by": "dac"
+          }
+        ]
+      },
+      "resources": {},
+      "ui": {
+        "label": "Mr. Hyde"
+      }
+    },
+    "nci_researcher": {
+      "idToken": {
+        "standardClaims": {
+          "iss": "https://login.nih.org/oidc/",
+          "sub": "nci_researcher@nci.nih.gov"
+        },
+        "ga4ghClaims": [
+          {
+            "claimName": "ga4gh.BonaFide",
+            "source": "https://nci.nih.org",
+            "value": "https://www.nature.com/articles/s41431-018-0219-y",
+            "iat": 1550120401,
+            "exp": 2181272401,
+            "by": "signing_official"
+          },
+          {
+            "claimName": "ga4gh.AcceptedTermsAndPolicies",
+            "source": "https://nci.nih.org",
+            "value": "https://www.nature.com/articles/s41431-018-0219-y",
+            "iat": 1550120402,
+            "exp": 2181272402,
+            "by": "self"
+          }
+        ]
+      },
+      "resources": {},
+      "ui": {
+        "label": "NCI Researcher"
+      }
+    }
+  },
+  "options":{
+    "readOnlyMasterRealm":true,
+    "gcpManagedKeysMaxRequestedTtl":"7d",
+    "gcpManagedKeysPerAccount":8,
+    "gcpServiceAccountProject":"craigv-codelab",
+    "descriptors":{
+      "gcpManagedKeysMaxRequestedTtl":{
+        "label":"GCP Managed Keys Maximum Requested TTL",
+        "description":"The maximum TTL of a requested access token on GCP and this setting is used in conjunction with managedKeysPerAccount to set up managed access key rotation policies within DAM (disabled by default)",
+        "regexp":"^[0-9]+[smhdw]$",
+        "type":"string:duration",
+        "min":"2h",
+        "max":"180d"
+      },
+      "gcpManagedKeysPerAccount":{
+        "label":"GCP Managed Keys Per Account",
+        "description":"GCP allows up to 10 access keys of more than 1h to be active per account and this option allows DAM to manage a subset of these keys",
+        "type":"int",
+        "min":"0",
+        "max":"10"
+      },
+      "gcpServiceAccountProject":{
+        "label":"GCP Service Account Project",
+        "description":"The GCP Project ID where service accounts will be created by DAM and where DAM has permissions to create these service accounts (not setting this value will disable the service account target adapter)",
+        "regexp":"^[A-Za-z][-A-Za-z0-9]{1,30}[A-Za-z]$",
+        "type":"string"
+      },
+      "readOnlyMasterRealm":{
+        "label":"Read Only Master Realm",
+        "description":"When 'true', the master realm becomes read-only and updates to the configuration must be performed via updating a config file",
+        "type":"bool",
+        "defaultValue":"false"
+      },
+      "whitelistedRealms":{
+        "label":"Whitelisted Realms",
+        "description":"By default any realm name can be created, but when this option is populated the DAM will only allow realms on this list to be created (the master realm is allowed implicitly)",
+        "regexp":"^[\\w\\-\\.]+$",
+        "type":"string",
+        "isList":true
+      }
+    }
+  },
+  "ui": {
+    "label": "Test realm: Account Linking"
+  }
+}

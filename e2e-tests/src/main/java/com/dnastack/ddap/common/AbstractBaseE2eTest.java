@@ -20,7 +20,9 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.min;
 import static java.lang.String.format;
@@ -95,16 +97,16 @@ public abstract class AbstractBaseE2eTest {
         return resourceTemplate;
     }
 
-    protected String fetchRealPersonaIcToken(String personaName, String realmName) throws IOException {
-        return fetchRealPersonaToken(personaName, "ic_token", realmName);
+    protected String fetchRealPersonaIcToken(String personaName, String realmName, String ... scopes) throws IOException {
+        return fetchRealPersonaToken(personaName, "ic_token", realmName, scopes);
     }
 
     protected String fetchRealPersonaDamToken(String personaName, String realmName) throws IOException {
         return fetchRealPersonaToken(personaName, "dam_token", realmName);
     }
 
-    private String fetchRealPersonaToken(String personaName, String tokenCookieName, String realmName) throws IOException {
-        final CookieStore cookieStore = performPersonaLogin(personaName, realmName);
+    private String fetchRealPersonaToken(String personaName, String tokenCookieName, String realmName, String ... scopes) throws IOException {
+        final CookieStore cookieStore = performPersonaLogin(personaName, realmName, scopes);
 
         BasicClientCookie icTokenCookie = (BasicClientCookie) cookieStore.getCookies().stream()
                 .filter(c -> tokenCookieName.equals(c.getName()))
@@ -126,10 +128,11 @@ public abstract class AbstractBaseE2eTest {
         return icTokenCookie.getValue();
     }
 
-    private static CookieStore performPersonaLogin(String personaName, String realmName) throws IOException {
+    private static CookieStore performPersonaLogin(String personaName, String realmName, String ... scopes) throws IOException {
         final CookieStore cookieStore = new BasicCookieStore();
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpGet request = new HttpGet(format("%s/api/v1alpha/%s/identity/login?persona=%s", DDAP_BASE_URL, realmName, personaName));
+        final String scopeString = (scopes.length == 0) ? "" : "&scope=" + String.join("+", scopes);
+        HttpGet request = new HttpGet(format("%s/api/v1alpha/%s/identity/login?persona=%s%s", DDAP_BASE_URL, realmName, personaName, scopeString));
         request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
 
         HttpResponse response = httpclient.execute(request);

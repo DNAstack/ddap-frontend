@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.beans.PropertyEditorSupport;
@@ -160,10 +159,8 @@ public class IdentityController {
                         return Mono.just(assembleTokenResponse(ddapDataBrowserUrl, tokenResponse));
                     } else if (tokenExchangePurpose == TokenExchangePurpose.LINK) {
                         return finishAccountLinking(
-                                request,
-                                realm,
-                                tokenResponse.getAccessToken(),
-                                request.getCookies().getFirst("ic_token").getValue());
+                                request, tokenResponse.getAccessToken(), request.getCookies().getFirst("ic_token").getValue(), realm
+                        );
                     } else {
                         throw new TokenExchangeException("Unrecognized purpose in token exchange");
                     }
@@ -203,25 +200,20 @@ public class IdentityController {
                 return idpClient.personaLogin(realm, scopes, provider)
                         .doOnError(exception -> log.info("Failed to negotiate persona token at beginning of account linking", exception))
                         .flatMap(tokenResponse -> finishAccountLinking(
-                                request,
-                                realm,
-                                tokenResponse.getIdToken(),
-                                request.getCookies().getFirst("ic_token").getValue()));
+                                request, tokenResponse.getAccessToken(), request.getCookies().getFirst("ic_token").getValue(), realm
+                        ));
             default:
                 return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unrecognized provider type"));
         }
     }
 
     private Mono<ResponseEntity<?>> finishAccountLinking(
-            ServerHttpRequest request,
-            String realm,
-            String newAccountIdToken,
-            String baseAccountIdToken) {
-        String newAccountId = dangerousStopgapExtractSubject(newAccountIdToken);
-        String baseAccountId = dangerousStopgapExtractSubject(baseAccountIdToken);
+            ServerHttpRequest request, String newAccountLinkToken, String baseAccountLinkToken, String realm) {
+        String newAccountId = dangerousStopgapExtractSubject(newAccountLinkToken);
+        String baseAccountId = dangerousStopgapExtractSubject(baseAccountLinkToken);
 
-        return idpClient.linkAccounts(realm, baseAccountId, baseAccountIdToken, newAccountId, newAccountIdToken)
-                .map(accountLinkResponse -> ResponseEntity.ok(accountLinkResponse));
+        return idpClient.linkAccounts(realm, baseAccountId, baseAccountLinkToken, newAccountId, newAccountLinkToken)
+                .map(success -> ResponseEntity.status(307).location(selfLinkToUi(request, realm, "identity")).build());
     }
 
     private String dangerousStopgapExtractSubject(String jwt) {
