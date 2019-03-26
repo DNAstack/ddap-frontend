@@ -18,7 +18,8 @@ import static org.hamcrest.Matchers.*;
  */
 public class BeaconSearchExceptionHandlingTest extends AbstractBaseE2eTest {
 
-    private static final String REALM = generateRealmName(BeaconSearchExceptionHandlingTest.class.getSimpleName());
+    //private static final String REALM = generateRealmName(BeaconSearchExceptionHandlingTest.class.getSimpleName());
+    private static final String REALM = "123";
 
     @Before
     public void setupRealm() throws IOException {
