@@ -76,7 +76,7 @@ public class IdentityController {
                                                       @RequestParam(defaultValue = "ga4gh account_admin") String scope,
                                                       @RequestParam(required = false) String persona) {
 
-        final String state = stateHandler.generateLoginState();
+        final String state = stateHandler.generateLoginState(redirectUri);
 
         if (persona != null) {
             log.debug("Performing direct persona login for {}", persona);
@@ -85,16 +85,7 @@ public class IdentityController {
                     .doOnError(exception -> log.info("Failed to negotiate token", exception));
 
         } else {
-            log.debug("Performing regular login (sending user to IC login page)");
-            final URI postLoginTokenEndpoint;
-            if (redirectUri != null) {
-                postLoginTokenEndpoint = redirectUri;
-                log.debug("Using client-provided redirectUri {}", postLoginTokenEndpoint);
-            } else {
-                postLoginTokenEndpoint = selfLinkToApi(request, realm, "identity/token");
-                log.debug("Using calculated redirectUri {}", postLoginTokenEndpoint);
-            }
-
+            final URI postLoginTokenEndpoint = selfLinkToApi(request, realm, "identity/token");
             final URI loginUri = idpClient.getAuthorizeUrl(realm, state, scope, postLoginTokenEndpoint);
             log.debug("Redirecting to IdP login chooser page {}", loginUri);
 
@@ -154,8 +145,10 @@ public class IdentityController {
         return idpClient.exchangeAuthorizationCodeForTokens(realm, rootLoginRedirectUrl(request, realm), code)
                 .flatMap(tokenResponse -> {
                     TokenExchangePurpose tokenExchangePurpose = stateHandler.parseAndVerify(stateParam, stateFromCookie);
+                    Optional<URI> customDestination = stateHandler.getDestinationAfterLogin(stateParam)
+                            .map(possiblyRelativeUrl -> selfLinkToUi(request, realm, "").resolve(possiblyRelativeUrl));
                     if (tokenExchangePurpose == TokenExchangePurpose.LOGIN) {
-                        final URI ddapDataBrowserUrl = selfLinkToUi(request, realm, "data");
+                        final URI ddapDataBrowserUrl = customDestination.orElseGet(() -> selfLinkToUi(request, realm, "data"));
                         return Mono.just(assembleTokenResponse(ddapDataBrowserUrl, tokenResponse));
                     } else if (tokenExchangePurpose == TokenExchangePurpose.LINK) {
                         return finishAccountLinking(

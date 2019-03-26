@@ -4,6 +4,8 @@ import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.function.Function;
+
 public class ICLoginPage implements HasNavBar {
 
     @Getter
@@ -16,9 +18,9 @@ public class ICLoginPage implements HasNavBar {
         driver.findElement(loginButton);
     }
 
-    public HasNavBar loginAsNciResearcher() {
+    public <T extends HasNavBar> T loginAsNciResearcher(Function<WebDriver, T> pageConstructor) {
         driver.findElement(loginButton).click();
-        return new AnyDdapPage(driver);
+        return pageConstructor.apply(driver);
     }
 
 }

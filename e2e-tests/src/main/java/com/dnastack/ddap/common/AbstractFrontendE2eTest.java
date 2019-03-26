@@ -2,6 +2,7 @@ package com.dnastack.ddap.common;
 
 import static java.lang.String.format;
 
+import com.dnastack.ddap.common.page.AnyDdapPage;
 import com.dnastack.ddap.common.page.HasNavBar;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.frontend.NavbarE2eTest;
@@ -64,7 +65,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
             driver.manage().deleteAllCookies();
         }
         ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsNciResearcher();
+        ddapPage = icLoginPage.loginAsNciResearcher(AnyDdapPage::new);
     }
 
     protected static ICLoginPage startLogin(String realm) {

@@ -2,9 +2,13 @@ package com.dnastack.ddap.frontend;
 
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
+import com.dnastack.ddap.common.page.HasNavBar;
+import com.dnastack.ddap.common.page.ICLoginPage;
+import com.dnastack.ddap.common.page.IdentityPage;
 import com.dnastack.ddap.common.page.NavBar;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
 import java.io.IOException;
@@ -143,11 +147,14 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void verifyIdentity() {
-        ddapPage.getNavBar()
-                .goToAndCheckForTitle(NavBar.NavItem.IDENTITY);
+        driver.findElement(By.xpath("//*[@data-se=\"nav-identity\"]")).click();
 
-        String subject = driver.findElement(By.tagName("mat-card-subtitle")).getText();
-        assertThat(subject, containsString("nci_researcher@nci.nih.gov"));
+        // click through the "log in again" prompt
+        driver.switchTo().alert().accept();
+        ICLoginPage icLoginPage = new ICLoginPage(driver);
+
+        IdentityPage identityPage = icLoginPage.loginAsNciResearcher(IdentityPage::new);
+        assertThat(identityPage.getLinkedIdentities(), contains("nci_researcher@nci.nih.gov"));
     }
 
     @Test

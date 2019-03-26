@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.net.URI;
 import java.sql.Date;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
@@ -24,6 +26,7 @@ import static java.util.Collections.singletonMap;
 @Component
 public class OAuthStateHandler {
 
+    public static final String DESTINATION_AFTER_LOGIN = "destinationAfterLogin";
     private final String tokenAudience;
     private final Duration tokenTtl;
     private final SecretKey tokenSigningKey;
@@ -42,8 +45,9 @@ public class OAuthStateHandler {
                 singletonMap("targetAccount", targetAccountId));
     }
 
-    public String generateLoginState() {
-        return generateState(TokenExchangePurpose.LOGIN, emptyMap());
+    public String generateLoginState(URI destinationAfterLogin) {
+        return generateState(TokenExchangePurpose.LOGIN,
+                singletonMap(DESTINATION_AFTER_LOGIN, destinationAfterLogin));
     }
 
     private String generateState(TokenExchangePurpose purpose, Map<String, Object> additionalClaims) {
@@ -61,14 +65,23 @@ public class OAuthStateHandler {
             throw new InvalidOAuthStateException("Does not match: " + stateStringCookie);
         }
         try {
-            Jws<Claims> state = Jwts.parser()
-                    .requireAudience(tokenAudience)
-                    .setSigningKey(tokenSigningKey)
-                    .parseClaimsJws(stateStringParam);
+            Jws<Claims> state = parseStateToken(stateStringParam);
             String purposeString = state.getBody().get("purpose", String.class);
             return TokenExchangePurpose.valueOf(purposeString);
         } catch (Exception e) {
             throw new InvalidOAuthStateException(e, stateStringParam);
         }
+    }
+
+    private Jws<Claims> parseStateToken(String jwt) {
+        return Jwts.parser()
+                        .requireAudience(tokenAudience)
+                        .setSigningKey(tokenSigningKey)
+                        .parseClaimsJws(jwt);
+    }
+
+    public Optional<URI> getDestinationAfterLogin(String stateToken) {
+        return Optional.ofNullable(parseStateToken(stateToken).getBody().get(DESTINATION_AFTER_LOGIN, String.class))
+                .map(URI::create);
     }
 }

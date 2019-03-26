@@ -12,7 +12,7 @@ import { Profile } from '../identity/profile.model';
 export class LayoutComponent implements OnInit {
 
   profile: Profile = null;
-  realm: string;
+  public realm: string;
 
   constructor(public loader: LoadingBarService,
               private router: Router,
