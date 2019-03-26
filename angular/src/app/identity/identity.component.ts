@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import _get from 'lodash.get';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Account } from './account.model';
@@ -36,7 +37,7 @@ export class IdentityComponent implements OnInit {
   getProvider(account: Account) {
     return this.isAccountPersona(account)
       ? account.profile.name
-      : account.identityProvider.ui.label || account.provider;
+      : _get(account, 'identityProvider.ui.label', account.provider);
   }
 
   getPicture(account: Account) {
