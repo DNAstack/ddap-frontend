@@ -29,7 +29,7 @@ export class IdentityComponent implements OnInit {
   getProvider(account: Account) {
     return this.isAccountPersona(account)
       ? account.profile.name
-      : account.provider;
+      : account.identityProvider.ui.label || account.provider;
   }
 
   getPicture(account: Account) {
