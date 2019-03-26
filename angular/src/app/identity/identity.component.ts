@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
 import { IdentityService } from './identity.service';
+import { LoginLink } from './login-link.model';
 import { personaMetadataExists, personas } from './personas.constants';
 
 @Component({
@@ -15,6 +16,9 @@ export class IdentityComponent implements OnInit {
   accounts: Account[];
   accountsSubscription: Subscription;
 
+  identityProviderLinks: LoginLink[];
+  identityProvidersSubscription: Subscription;
+
   constructor(private identityService: IdentityService) {
 
   }
@@ -24,6 +28,9 @@ export class IdentityComponent implements OnInit {
       .subscribe((identity: Identity) => {
         this.accounts = identity.connectedAccounts;
       });
+    this.identityProvidersSubscription = this.identityService.getIdentityProviderLoginLinks().subscribe((links: LoginLink[]) => {
+      this.identityProviderLinks = links;
+    });
   }
 
   getProvider(account: Account) {

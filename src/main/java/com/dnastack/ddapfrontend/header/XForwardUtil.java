@@ -59,6 +59,18 @@ public class XForwardUtil {
         return getExternalPath(new SpringServerHttpRequestAdapter(request), path);
     }
 
+    /**
+     * Infers the existence of a reverse proxy from 'X-Forwarded-*' headers and returns the hostname
+     * the client originally made this request to.
+     *
+     * @param request Never null. Headers in this request are used to infer reverse proxy setup.
+     * @return The hostname the client originally made this request to, using the values from
+     *          X-Forwarded-* headers if present, or else the literal values from the given request.
+     */
+    public static String getExternalHost(ServerHttpRequest request) {
+        return getExternalHost(new SpringServerHttpRequestAdapter(request));
+    }
+
     private static String getExternalPath(Request request, String path) {
         final int port = getExternalPort(request);
         final String protocol = getExternalProto(request);

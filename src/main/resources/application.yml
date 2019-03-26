@@ -19,6 +19,13 @@ ddap:
     # Default to false so cookies work on http://localhost
     # e2e tests will remind you to set this true in real deployments!
     secure: false
+  state-handler:
+    aud: ${ddap.public-uri}
+    ttl: PT1M
+    signingKey: |
+      VGhlcmUgb25jZSB3YXMgYSBsYW5ndWFnZSBjYWxsZWQgYmFzaApJdCdzIHNlbWFudGljcyB3ZXJlIG9mdGVuIHF1aXRlI
+      HJhc2gKQnV0IGl0IHdvcmtlZCwgbW9yZSBvciBsZXNzCkV2ZW4gdGhvdWdoIGl0J3MgYSBtZXNzClNvIEkgZ3Vlc3MgaX
+      Qgc3RheXMgb3V0IG9mIHRoZSB0cmFzaAo=
 
 spring:
   security:

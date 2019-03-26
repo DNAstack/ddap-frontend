@@ -66,7 +66,8 @@ public class UserTokenCookiePackager {
 
     public enum TokenAudience {
         IC("ic_token"),
-        DAM("dam_token");
+        DAM("dam_token"),
+        OAUTH_STATE("oauth_state");
 
         private String cookieName;
 
