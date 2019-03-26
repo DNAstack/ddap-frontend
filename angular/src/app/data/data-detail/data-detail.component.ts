@@ -35,9 +35,8 @@ export class DataDetailComponent implements OnInit {
       flatMap(params => this.dataService.getResource(params['resourceName']))
     ).subscribe((resource: EntityModel) => {
       this.resource = resource;
-      const resourceName = resource.name;
       this.searchStateService.patch({
-        resource: resourceName,
+        resource: resource.name,
         limitSearch: true,
       });
       this.resourceLabel$ = of(this.resource.dto.ui.label);
