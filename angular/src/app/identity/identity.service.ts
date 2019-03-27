@@ -41,21 +41,36 @@ export class IdentityService {
       );
   }
 
-  getIdentityProviderLoginLinks(params?): Observable<LoginLink[]> {
-    const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
-    return this.getIdentityProviders(params)
+  getPersonas(params = {}): Observable<any> {
+    return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/testPersonas`, {params})
       .pipe(
-        map((idps) => this.convertIdpsToLoginLinks(idps, realmId))
+        pluck('personas')
       );
   }
 
-  private convertIdpsToLoginLinks(idps: object, realm: string): LoginLink[] {
-    return Object.keys(idps)
+  getIdentityProviderLoginLinks(params?): Observable<LoginLink[]> {
+    const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
+    return this.getIdentityProviders(params).zip(this.getPersonas(params))
+      .pipe(
+        map(([idps, personas]) => this.convertToLoginLinks(idps, personas, realmId))
+      );
+  }
+
+  private convertToLoginLinks(idps: object, personas: object, realm: string): LoginLink[] {
+    const externalIdpLinks = Object.keys(idps)
       .map((idp) => {
         return {
           text: idp,
           href: `${environment.ddapApiUrl}/${realm}/identity/link?provider=${idp}`,
         };
       });
+    const personaLinks = Object.keys(personas)
+      .map((persona) => {
+        return {
+          text: `${persona} (persona)`,
+          href: `${environment.ddapApiUrl}/${realm}/identity/link?provider=${persona}&type=persona`,
+        };
+      });
+    return [...externalIdpLinks, ...personaLinks];
   }
 }
