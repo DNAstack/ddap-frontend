@@ -48,14 +48,9 @@
       </table>
     </div>
     <div class="ddap-column">
-      <mat-list>
-        <mat-list-item *ngFor="let view of views" class="ddap-data-view">
-          <ddap-resource-views [view]="view.dto"
-                               [error]="accessError"
-                               (accessRequested)="getAccess(view.name)">
-          </ddap-resource-views>
-        </mat-list-item>
-      </mat-list>
+      <ddap-resource-view-group [views]="views"
+                                [resource]="resource">
+      </ddap-resource-view-group>
     </div>
   </div>
 </div>

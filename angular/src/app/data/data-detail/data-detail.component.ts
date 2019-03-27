@@ -22,7 +22,6 @@ export class DataDetailComponent implements OnInit {
   resourceLabel$: Observable<string>;
   searchOpened = false;
   views: any;
-  accessError: any = null;
   resource: EntityModel;
 
   constructor(private route: ActivatedRoute,
@@ -44,14 +43,6 @@ export class DataDetailComponent implements OnInit {
     });
   }
 
-  getAccess(viewName) {
-    this.dataService.getAccessRequestToken(this.resource.name, viewName)
-      .subscribe(
-        (response) => this.mutateViewWithTokenAndUrl(viewName, response),
-        (error) => this.accessError = error
-      );
-  }
-
   limitSearchChange($event) {
     this.limitSearch = $event.checked;
     this.searchStateService.patch({
@@ -61,20 +52,6 @@ export class DataDetailComponent implements OnInit {
 
   searchOpenedChange($event) {
     this.searchOpened = $event;
-  }
-
-  private mutateViewWithTokenAndUrl(viewName, response) {
-    const { account, token } = response;
-    const view = this.resource.dto.views[viewName];
-
-    view.account = account;
-    view.token = token;
-
-    // tslint:disable-next-line
-    const viewAccessUrl = view!.interfaces['http:gcp:gs']!.uri![0];
-    if (viewAccessUrl) {
-      view.url = `${viewAccessUrl}/o?access_token=${token}`;
-    }
   }
 
   private getViews(resource: EntityModel): EntityModel[] {
