@@ -78,7 +78,7 @@ class BeaconResource {
         Collection<String> resourceNameList = resourceList.getResources().keySet();
 
         Flux<ExternalBeaconQueryResult> fluxResult = Flux.empty();
-        for (String resourceName: resourceNameList) {
+        for (String resourceName : resourceNameList) {
             Flux<ExternalBeaconQueryResult> externalBeaconQueryResultFlux =
                     handleBeaconQueryForResource(resourceName, beaconRequest, request, realm);
             fluxResult = Flux.merge(fluxResult, externalBeaconQueryResultFlux);
@@ -104,59 +104,25 @@ class BeaconResource {
 
         // find all the views with beacon URLs
         Stream<ViewToken> beaconViewTokens = resource.getViews().entrySet().stream()
-                                                   .flatMap(entry -> processResourceBeacons(resourceId,
-                                                                                            realm,
-                                                                                            damToken.get(),
-                                                                                            entry));
+                .flatMap(entry -> processResourceBeacons(resourceId,
+                        realm,
+                        damToken.get(),
+                        entry));
 
         Stream<Flux<ExternalBeaconQueryResult>> beaconRequests = beaconViewTokens.map(viewToken -> {
             log.debug("About to query: {} beacon at {}", viewToken.getViewId(), viewToken.getUrl());
             // TODO DISCO-2038 Handle errors and unauthorized requests
-            final Mono<BeaconQueryResult> beaconQueryResponse = beaconQuery(beaconRequest, viewToken).doOnError(e -> {
-                log.error("Beacon query response error: ", e);
-            }).doOnCancel(() -> {
-                log.error("Stream got cancelled!");
-                }
-            ).doAfterTerminate(() -> {
-                log.error("Stream got terminated");
-            })
-                    .map(k ->
-                    {
-                        log.error("Result is: " + k);
-                        return k;
-                    });
-
-//            beaconQueryResponse.log().subscribe(System.out::println);
-            log.error("Before: &&&");
-            try {
-                //BeaconQueryResult beaconQueryResult = beaconQueryResponse.block();
-
-
-            } catch (Throwable ex) {
-                log.error("Foobar12334", ex);
-
-            }
-//            log.error("%%%: " + beaconQueryResult);
-
-
-            final Mono<BeaconInfo> beaconInfoResponse = beaconInfo().doOnError(e -> {
-                log.error("Beacon info response error:", e);
-            });
+            final Mono<BeaconQueryResult> beaconQueryResponse = beaconQuery(beaconRequest, viewToken);
+            final Mono<BeaconInfo> beaconInfoResponse = beaconInfo();
             return Flux.zip(
-                beaconInfoResponse,
-                beaconQueryResponse,
-                (info, result) -> formatBeaconServerPayload(resourceId, info, result)
+                    beaconInfoResponse,
+                    beaconQueryResponse,
+                    (info, result) -> formatBeaconServerPayload(resourceId, info, result)
             );
         });
 
         Flux<ExternalBeaconQueryResult> resultFlux = beaconRequests.reduce(Flux.empty(), Flux::merge);
-        return resultFlux.doOnNext(e -> {
-                log.error("Inside result flux" + e);
-        }).doOnError(e -> {
-            log.error("Error occurred: " + e);
-        }).doOnCancel(() ->{
-                log.debug("Got cancelled!");
-        }).defaultIfEmpty(ExternalBeaconQueryResult.builder().name("Foobar22!!!").build());
+        return resultFlux;
     }
 
     private Stream<? extends ViewToken> processResourceBeacons(String resourceId, String realm, String damToken, Map.Entry<String, DamView> entry) {
@@ -168,14 +134,14 @@ class BeaconResource {
             log.debug("Found beacon interface in view [{}/{}]", resourceId, viewId);
             final Optional<String> foundUri = beaconInterface.getUri().stream().findFirst();
             return foundUri.map(uri -> new ViewToken(viewId,
-                                                     uri,
-                                                     damClient.getAccessTokenForView(
-                                                             damToken,
-                                                             realm,
-                                                             resourceId,
-                                                             viewId).getToken()))
-                           .map(Stream::of)
-                           .orElse(Stream.empty());
+                    uri,
+                    damClient.getAccessTokenForView(
+                            damToken,
+                            realm,
+                            resourceId,
+                            viewId).getToken()))
+                    .map(Stream::of)
+                    .orElse(Stream.empty());
         } else {
             log.debug("No beacon interface found in view [{}/{}]", resourceId, viewId);
             return Stream.of();
@@ -184,67 +150,58 @@ class BeaconResource {
 
     private Mono<BeaconInfo> beaconInfo() {
         return webClient
-                        .get()
-                        .uri("https://beacon.cafevariome.org/")
-                        .exchange()
-                        .flatMap(clientResponse -> clientResponse.bodyToMono(BeaconInfo.class));
+                .get()
+                .uri("https://beacon.cafevariome.org/")
+                .exchange()
+                .flatMap(clientResponse -> clientResponse.bodyToMono(BeaconInfo.class));
     }
 
     private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewToken viewToken) {
-            return webClient
-                    .get()
-                    .uri(beaconQueryUrl(viewToken.getUrl(), beaconRequest))
-                    .header("Authorization",
-                            "Bearer " + viewToken.getToken())
-                    .exchange()
-                    .flatMap(clientResponse -> {
-                        if (clientResponse.statusCode().isError()) {
-                            log.error("Actually entered isError if");
+        return webClient
+                .get()
+                .uri(beaconQueryUrl(viewToken.getUrl(), beaconRequest))
+                .header("Authorization",
+                        "Bearer " + viewToken.getToken())
+                .exchange()
+                .flatMap(clientResponse -> {
+                    if (clientResponse.statusCode().is4xxClientError()) {
+                        return clientResponse.bodyToMono(String.class).flatMap(errorMessageBody -> {
+                            BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
+                            String errorMessage = "Invalid authorization token " + clientResponse.statusCode() + " " + errorMessageBody;
+                            log.error(errorMessage);
+                            beaconQueryResultError.setError(errorMessage);
+                            Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
+                            return errorResult;
+                        });
+                    }
 
-                            return clientResponse.bodyToMono(String.class).flatMap(errorMessageBody -> {
-                                //log.error("Handling error code from client");
-                                //return Mono.error(new Exception("HTTP error response code: " + clientResponse.statusCode() + " " + errorMessageBody));
-                                BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
-                                String errorMessage = "Handling error code from client " + clientResponse.statusCode() + " " + errorMessageBody;
-                                log.error(errorMessage);
-                                beaconQueryResultError.setError(errorMessage);
-                                System.out.println(beaconQueryResultError);
-                                Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
-                                return errorResult;
-                            });
-                        }
-                        log.error("^^^^^^^^^^^^^^^^^^^^^^");
-                        return clientResponse.bodyToMono(BeaconQueryResult.class);
-                    })
-                    .onErrorMap(e -> {
-                        log.error("Bad stuff happened!!!!!!!!");
-                        return new Exception("Something really bad happened: " + e);
-
-                    })
-                    .onErrorResume(e -> {
-                        BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
-                        String errorMessage = "Error making REST request: " + e;
-                        log.error(errorMessage);
-                        beaconQueryResultError.setError(errorMessage);
-                        Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
-                        System.out.println(errorResult.block());
-                        return errorResult;
-                    });
+                    if (clientResponse.statusCode().is5xxServerError()) {
+                        return clientResponse.bodyToMono(String.class).flatMap(errorMessageBody -> {
+                            BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
+                            String errorMessage = "Internal server error occurred " + clientResponse.statusCode() + " " + errorMessageBody;
+                            log.error(errorMessage);
+                            beaconQueryResultError.setError(errorMessage);
+                            Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
+                            return errorResult;
+                        });
+                    }
+                    return clientResponse.bodyToMono(BeaconQueryResult.class);
+                });
     }
 
     private String beaconQueryUrl(String baseUrl, BeaconRequestModel beaconRequest) {
         return format("%s" +
-                              "?assemblyId=%s" +
-                              "&referenceName=%s" +
-                              "&start=%s" +
-                              "&referenceBases=%s" +
-                              "&alternateBases=%s",
-                      baseUrl,
-                      beaconRequest.getAssemblyId(),
-                      beaconRequest.getReferenceName(),
-                      beaconRequest.getStart(),
-                      beaconRequest.getReferenceBases(),
-                      beaconRequest.getAlternateBases());
+                        "?assemblyId=%s" +
+                        "&referenceName=%s" +
+                        "&start=%s" +
+                        "&referenceBases=%s" +
+                        "&alternateBases=%s",
+                baseUrl,
+                beaconRequest.getAssemblyId(),
+                beaconRequest.getReferenceName(),
+                beaconRequest.getStart(),
+                beaconRequest.getReferenceBases(),
+                beaconRequest.getAlternateBases());
     }
 
     private ExternalBeaconQueryResult formatBeaconServerPayload(String resourceId, BeaconInfo infoResponse, BeaconQueryResult queryResponse) {
@@ -252,12 +209,12 @@ class BeaconResource {
 
         log.debug("Zipping {} {}", infoResponse, queryResponse);
         final String beaconName = Optional.ofNullable(infoResponse)
-                                          .map(BeaconInfo::getName)
-                                          .orElse("Unknown");
+                .map(BeaconInfo::getName)
+                .orElse("Unknown");
         final String organizationName = Optional.ofNullable(infoResponse)
-                                                .map(BeaconInfo::getOrganization)
-                                                .map(BeaconOrganization::getName)
-                                                .orElse("Unknown");
+                .map(BeaconInfo::getOrganization)
+                .map(BeaconOrganization::getName)
+                .orElse("Unknown");
 
 
         final Optional<BeaconQueryResult> oQueryResponse = Optional.ofNullable(queryResponse);
@@ -282,12 +239,12 @@ class BeaconResource {
         }
 
         oQueryResponse.map(BeaconQueryResult::getAlleleRequest)
-                      .ifPresent(alleleRequest -> externalResult.getMetadata().put("alleleRequest", alleleRequest));
+                .ifPresent(alleleRequest -> externalResult.getMetadata().put("alleleRequest", alleleRequest));
         oQueryResponse.map(BeaconQueryResult::getDatasetAlleleResponses)
-                      .ifPresent(datasetAlleleResponses -> externalResult.getMetadata().put("datasetAlleleResponses",
-                                                                        datasetAlleleResponses));
+                .ifPresent(datasetAlleleResponses -> externalResult.getMetadata().put("datasetAlleleResponses",
+                        datasetAlleleResponses));
         oQueryResponse.map(BeaconQueryResult::getError)
-                      .ifPresent(error -> externalResult.getMetadata().put("error", error));
+                .ifPresent(error -> externalResult.setError(error.toString()));
 
         return externalResult;
     }

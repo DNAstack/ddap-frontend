@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ExternalBeaconQueryResult {
     private String resource, name, organization;
+    private String error;
     private Boolean exists;
     private Map<String, Object> metadata = new HashMap<>();
     private Map<String, String> info = new HashMap<>();
