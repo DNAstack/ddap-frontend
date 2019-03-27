@@ -44,13 +44,16 @@ export class ResourceViewGroupComponent {
 
   getUrlIfApplicable(viewName: string, token: string): string {
     const view = this.resource.dto.views[viewName];
-    const httpInterfaces = Object.keys(view.interfaces)
-      .filter((key) => key.startsWith('http'));
+    const interfaces = view.interfaces;
+    const httpInterfaces = Object.keys(interfaces)
+      .filter((viewInterface) => viewInterface.startsWith('http'));
 
-    if (httpInterfaces.length) {
-      const viewAccessUrl = _get(view.interfaces, `[${httpInterfaces[0]}].uri[0]`);
-      return `${viewAccessUrl}/o?access_token=${token}`;
+    if (!httpInterfaces.length) {
+      return;
     }
+
+    const viewAccessUrl = _get(interfaces, `[${httpInterfaces[0]}].uri[0]`);
+    return `${viewAccessUrl}/o?access_token=${token}`;
   }
 
 }
