@@ -12,7 +12,7 @@ import { Profile } from '../identity/profile.model';
 export class LayoutComponent implements OnInit {
 
   profile: Profile = null;
-  public realm: string;
+  realm: string;
 
   constructor(public loader: LoadingBarService,
               private router: Router,
@@ -29,6 +29,13 @@ export class LayoutComponent implements OnInit {
     this.activatedRoute.root.firstChild.params.subscribe((params) => {
       this.realm = params.realmId;
     });
+  }
+
+  goToIdentity() {
+    if (confirm('Please sign in again to manage your account')) {
+      const loginUrlSuffix = `login?scope=link+account_admin+ga4gh&redirectUri=/${this.realm}/identity`;
+      window.location.href = `/api/v1alpha/${this.realm}/identity/${loginUrlSuffix}`;
+    }
   }
 
   goToRealm(realm) {

@@ -38,7 +38,7 @@
                       mode="indeterminate">
     </mat-progress-bar>
     <mat-card *ngFor="let idp of identityProviderLinks" class="mat-card-flat">
-      <a href="{{ idp.href }}">{{ idp.text }}</a>
+      <a [href]="idp.href">{{ idp.text }}</a>
     </mat-card>
   </mat-accordion>
 </ddap-main>
