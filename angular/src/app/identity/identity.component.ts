@@ -29,7 +29,9 @@ export class IdentityComponent implements OnInit {
       .subscribe((identity: Identity) => {
         this.accounts = identity.connectedAccounts;
       });
-    this.identityProvidersSubscription = this.identityService.getIdentityProviderLoginLinks().subscribe((links: LoginLink[]) => {
+
+    this.identityProvidersSubscription = this.identityService.getIdentityProviderLoginLinks()
+      .subscribe((links: LoginLink[]) => {
       this.identityProviderLinks = links;
     });
   }

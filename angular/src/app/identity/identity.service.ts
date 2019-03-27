@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { map, pluck, take } from 'rxjs/operators';
+import { map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { realmIdPlaceholder } from '../shared/realm/realm.constant';
@@ -45,16 +45,17 @@ export class IdentityService {
     const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
     return this.getIdentityProviders(params)
       .pipe(
-        take(1),
-        map(idps => this.convertIdpsToLoginLinks(idps, realmId)
-        )
+        map((idps) => this.convertIdpsToLoginLinks(idps, realmId))
       );
   }
 
   private convertIdpsToLoginLinks(idps: object, realm: string): LoginLink[] {
     return Object.keys(idps)
-      .map(key => {
-        return {text: key, href: `${environment.ddapApiUrl}/${realm}/identity/link?provider=${key}`};
+      .map((idp) => {
+        return {
+          text: idp,
+          href: `${environment.ddapApiUrl}/${realm}/identity/link?provider=${idp}`,
+        };
       });
   }
 }
