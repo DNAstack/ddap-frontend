@@ -509,7 +509,7 @@
           "items": [
             {
               "vars": {
-                "url": "http://httpbin.org/status/500"
+                "url": "http://www.mocky.io/v2/5c9a87973500006600d0c6bc"
               }
             }
           ],
@@ -585,7 +585,7 @@
           "items": [
             {
               "vars": {
-                "url": "http://httpbin.org/status/500"
+                "url": "http://www.mocky.io/v2/5c9a87973500006600d0c6bc"
               }
             }
           ],

@@ -114,7 +114,31 @@ class BeaconResource {
             // TODO DISCO-2038 Handle errors and unauthorized requests
             final Mono<BeaconQueryResult> beaconQueryResponse = beaconQuery(beaconRequest, viewToken).doOnError(e -> {
                 log.error("Beacon query response error: ", e);
-            });
+            }).doOnCancel(() -> {
+                log.error("Stream got cancelled!");
+                }
+            ).doAfterTerminate(() -> {
+                log.error("Stream got terminated");
+            })
+                    .map(k ->
+                    {
+                        log.error("Result is: " + k);
+                        return k;
+                    });
+
+//            beaconQueryResponse.log().subscribe(System.out::println);
+            log.error("Before: &&&");
+            try {
+                //BeaconQueryResult beaconQueryResult = beaconQueryResponse.block();
+
+
+            } catch (Throwable ex) {
+                log.error("Foobar12334", ex);
+
+            }
+//            log.error("%%%: " + beaconQueryResult);
+
+
             final Mono<BeaconInfo> beaconInfoResponse = beaconInfo().doOnError(e -> {
                 log.error("Beacon info response error:", e);
             });
@@ -132,7 +156,7 @@ class BeaconResource {
             log.error("Error occurred: " + e);
         }).doOnCancel(() ->{
                 log.debug("Got cancelled!");
-        }).defaultIfEmpty(ExternalBeaconQueryResult.builder().name("Foobar222!!!!").build());
+        }).defaultIfEmpty(ExternalBeaconQueryResult.builder().name("Foobar22!!!").build());
     }
 
     private Stream<? extends ViewToken> processResourceBeacons(String resourceId, String realm, String damToken, Map.Entry<String, DamView> entry) {
@@ -175,13 +199,16 @@ class BeaconResource {
                     .exchange()
                     .flatMap(clientResponse -> {
                         if (clientResponse.statusCode().isError()) {
+                            log.error("Actually entered isError if");
+
                             return clientResponse.bodyToMono(String.class).flatMap(errorMessageBody -> {
                                 //log.error("Handling error code from client");
                                 //return Mono.error(new Exception("HTTP error response code: " + clientResponse.statusCode() + " " + errorMessageBody));
                                 BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
-                                String errorMessage = "Handling error code from client" + clientResponse.statusCode() + " " + errorMessageBody;
+                                String errorMessage = "Handling error code from client " + clientResponse.statusCode() + " " + errorMessageBody;
                                 log.error(errorMessage);
                                 beaconQueryResultError.setError(errorMessage);
+                                System.out.println(beaconQueryResultError);
                                 Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
                                 return errorResult;
                             });
@@ -189,12 +216,18 @@ class BeaconResource {
                         log.error("^^^^^^^^^^^^^^^^^^^^^^");
                         return clientResponse.bodyToMono(BeaconQueryResult.class);
                     })
+                    .onErrorMap(e -> {
+                        log.error("Bad stuff happened!!!!!!!!");
+                        return new Exception("Something really bad happened: " + e);
+
+                    })
                     .onErrorResume(e -> {
                         BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
                         String errorMessage = "Error making REST request: " + e;
                         log.error(errorMessage);
                         beaconQueryResultError.setError(errorMessage);
                         Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
+                        System.out.println(errorResult.block());
                         return errorResult;
                     });
     }
