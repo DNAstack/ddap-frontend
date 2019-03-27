@@ -31,7 +31,8 @@ import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
-import { ResourceViewsComponent } from './resource-views/resource-views.component';
+import { ResourceViewGroupComponent } from './resource-view-group/resource-view-group.component';
+import { ResourceViewItemComponent } from './resource-view-item/resource-view-item.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     MainComponent,
     NavBackComponent,
     ResourceLogoComponent,
-    ResourceViewsComponent,
+    ResourceViewGroupComponent,
+    ResourceViewItemComponent,
     BeaconSearchBarComponent,
     BeaconResultComponent,
     LimitSearchComponent,
@@ -102,7 +104,8 @@ import { ResourceViewsComponent } from './resource-views/resource-views.componen
     BeaconSearchBarComponent,
     BeaconResultComponent,
     ResourceLogoComponent,
-    ResourceViewsComponent,
+    ResourceViewGroupComponent,
+    ResourceViewItemComponent,
     LimitSearchComponent,
   ],
 })

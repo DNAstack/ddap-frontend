@@ -52,10 +52,4 @@ export class DataService {
     );
   }
 
-  getAccessRequestToken(resource, view): any {
-    const viewUrl = `${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resource}/views/${view}/token`;
-    return this.http.get<any>(viewUrl).pipe(
-      map(({account, token}) => ({account, token}))
-    );
-  }
 }

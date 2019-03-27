@@ -1,0 +1,93 @@
+<mat-card>
+  <mat-progress-bar *ngIf="access?.inProgress"
+                    mode="indeterminate">
+  </mat-progress-bar>
+  <mat-card-header class="stretch">
+    <mat-card-title>{{ label || name }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-actions>
+    <button mat-flat-button
+            color="primary"
+            class="uppercase"
+            [matMenuTriggerFor]="appMenu"
+            data-se="get-access-btn"
+            (click)="getAccess()">
+      Access
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+    <mat-menu #appMenu="matMenu"
+              class="access-menu"
+              xPosition="before"
+              yPosition="below">
+      <div *ngIf="!access?.error" >
+        <div class="flex flex--column vertical-center">
+          <div class="flex vertical-center row"
+               *ngIf="access?.account">
+            <mat-form-field class="stretch">
+              <input matInput
+                     readonly
+                     type="text"
+                     [placeholder]="'Account'"
+                     [value]="access?.account">
+            </mat-form-field>
+            <button mat-flat-button
+                    matSuffix
+                    mat-icon-button
+                    ngxClipboard
+                    [cbContent]="access?.account"
+                    matTooltip="Copy to clipboard"
+                    aria-label="Copy to clipboard">
+              <mat-icon class="icon icon-copy"></mat-icon>
+            </button>
+          </div>
+          <div class="flex vertical-center row"
+               *ngIf="(access?.url || access?.token)">
+            <mat-form-field class="stretch">
+              <input matInput
+                     readonly
+                     type="text"
+                     [placeholder]="access?.url ? 'Access url' : 'Access token'"
+                     [value]="access?.url || access?.token">
+            </mat-form-field>
+            <button mat-flat-button
+                    matSuffix
+                    mat-icon-button
+                    ngxClipboard
+                    [cbContent]="access?.url || access?.token"
+                    matTooltip="Copy to clipboard"
+                    aria-label="Copy to clipboard">
+              <mat-icon class="icon icon-copy"></mat-icon>
+            </button>
+          </div>
+        </div>
+        <div>
+          <a *ngIf="access?.url"
+             href="{{access?.url}}"
+             data-se="access-btn"
+             target='_blank'
+             rel='noopener noreferrer'>
+            <button mat-button
+                    color="primary"
+                    class="uppercase">
+              View
+            </button>
+          </a>
+        </div>
+      </div>
+      <div *ngIf="access?.error"
+           class="error-container flex flex--column">
+        <div class="flex flex--row vertical-center">
+          <mat-icon color="warn">warning</mat-icon>
+          <p>Unable to request access token at the moment. Please try again later or contact admin.</p>
+        </div>
+        <div class="error-message">
+          <button mat-button
+                  class="uppercase"
+                  disabled>
+            Send Feedback
+          </button>
+        </div>
+      </div>
+    </mat-menu>
+  </mat-card-actions>
+</mat-card>
