@@ -509,7 +509,7 @@
           "items": [
             {
               "vars": {
-                "url": "http://www.mocky.io/v2/5c9a87973500006600d0c6bc"
+                "url": "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
               }
             }
           ],
@@ -575,22 +575,23 @@
             "application/bam"
           ],
           "roles": {
-            "discovery": {
+            "accessDenied": {
               "policies": [
                 "bona_fide",
                 "ethics"
+
               ]
             }
           },
           "items": [
             {
               "vars": {
-                "url": "http://www.mocky.io/v2/5c9a87973500006600d0c6bc"
+                "url": "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
               }
             }
           ],
           "aud": "https://ga4gh-apis-beacon.dnastack.com",
-          "defaultRole": "discovery",
+          "defaultRole": "accessDenied",
           "ui": {
             "label": "Beacon Discovery Access"
           }
@@ -691,6 +692,18 @@
           "targetScopes": [
             "registered",
             "controlled"
+          ],
+          "damRoleCategories": [
+            "metadata"
+          ],
+          "ui": {
+            "description": "Query genome data and receive metadata results",
+            "label": "Discovery Beacon Search with Metadata"
+          }
+        },
+        "accessDenied": {
+          "targetScopes": [
+            "fakeScope"
           ],
           "damRoleCategories": [
             "metadata"
@@ -938,7 +951,7 @@
         },
         "thousand-genomes": {
           "access": [
-            "discovery-access/discovery"
+            "discovery-access/accessDenied"
           ]
         }
       },
@@ -1044,7 +1057,7 @@
         },
         "thousand-genomes": {
           "access": [
-            "discovery-access/discovery"
+            "discovery-access/accessDenied"
           ]
         }
       },

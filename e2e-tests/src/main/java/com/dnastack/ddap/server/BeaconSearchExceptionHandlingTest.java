@@ -13,13 +13,13 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
 
 /**
- * 1. Make a beacon query that will return an exception from the beacon endpoint.
- * 2. Make sure that you collect all the exceptions and then return a collected response from them.
+ * 1. Test for 4xx error
+ * 2. Test for 5xx error
+ * 3. Test for no server found error
  */
 public class BeaconSearchExceptionHandlingTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(BeaconSearchExceptionHandlingTest.class.getSimpleName());
-    //private static final String REALM = "foobar123";
 
     @Before
     public void setupRealm() throws IOException {
@@ -27,6 +27,7 @@ public class BeaconSearchExceptionHandlingTest extends AbstractBaseE2eTest {
         setupRealmConfig("nci_researcher", realmConfigString, REALM);
     }
 
+    //4xx error test
     @Test
     public void shouldGetTwoResultsForAggregateSearch() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);

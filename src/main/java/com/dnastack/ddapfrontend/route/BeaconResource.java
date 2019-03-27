@@ -164,28 +164,41 @@ class BeaconResource {
                         "Bearer " + viewToken.getToken())
                 .exchange()
                 .flatMap(clientResponse -> {
-                    if (clientResponse.statusCode().is4xxClientError()) {
-                        return clientResponse.bodyToMono(String.class).flatMap(errorMessageBody -> {
-                            BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
-                            String errorMessage = "Invalid authorization token " + clientResponse.statusCode() + " " + errorMessageBody;
-                            log.error(errorMessage);
-                            beaconQueryResultError.setError(errorMessage);
-                            Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
-                            return errorResult;
-                        });
-                    }
 
-                    if (clientResponse.statusCode().is5xxServerError()) {
-                        return clientResponse.bodyToMono(String.class).flatMap(errorMessageBody -> {
-                            BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
-                            String errorMessage = "Internal server error occurred " + clientResponse.statusCode() + " " + errorMessageBody;
-                            log.error(errorMessage);
-                            beaconQueryResultError.setError(errorMessage);
-                            Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
-                            return errorResult;
-                        });
+                    HttpStatus statusCode = clientResponse.statusCode();
+                    if (statusCode.isError()) {
+                        BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
+
+                        if (statusCode.is4xxClientError()) {
+                            return clientResponse.bodyToMono(String.class).flatMap(errorMessageBody -> {
+                                String errorMessage = "Invalid authorization token " + clientResponse.statusCode() + " " + errorMessageBody;
+                                log.error(errorMessage);
+                                beaconQueryResultError.setError(errorMessage);
+                                Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
+                                return errorResult;
+                            });
+                        }
+
+                        if (statusCode.is5xxServerError()) {
+                            return clientResponse.bodyToMono(String.class).flatMap(errorMessageBody -> {
+                                String errorMessage = "Internal server error occurred " + clientResponse.statusCode() + " " + errorMessageBody;
+                                log.error(errorMessage);
+                                beaconQueryResultError.setError(errorMessage);
+                                Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
+                                return errorResult;
+                            });
+                        }
                     }
                     return clientResponse.bodyToMono(BeaconQueryResult.class);
+                })
+                .onErrorResume(e -> {
+                    /* Handle the error case where there was no response from beacon server */
+                    BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
+                    String errorMessage = "Server not found: " + e;
+                    log.error(errorMessage);
+                    beaconQueryResultError.setError(errorMessage);
+                    Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
+                    return errorResult;
                 });
     }
 
