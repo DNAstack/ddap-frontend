@@ -6,7 +6,9 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class NavBar {
     private WebDriver driver;
@@ -77,4 +79,28 @@ public class NavBar {
 
         return new NavBar(driver);
     }
+
+    private WebElement getRealmInput() {
+        return driver.findElement(By.xpath("//*[@data-se=\"realm-input\"]"));
+    }
+
+    public void setRealm(String targetRealm) {
+        WebElement realmInput = getRealmInput();
+        int oldRealmNameLength = getRealm().length();
+        for (int i = 0; i < oldRealmNameLength; i++) {
+            realmInput.sendKeys(Keys.BACK_SPACE);
+        }
+        realmInput.sendKeys(targetRealm, Keys.RETURN);
+    }
+
+    public String getRealm() {
+        WebElement realmInput = getRealmInput();
+        return realmInput.getAttribute("value");
+    }
+
+    public ICLoginPage logOut() {
+        driver.findElement(By.linkText("Log Out")).click();
+        return new ICLoginPage(driver);
+    }
+
 }

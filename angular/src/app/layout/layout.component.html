@@ -21,7 +21,7 @@
                      data-se="nav-account">
         <h4 mat-line>{{ profile?.name || '&nbsp;' }}</h4>
         <a mat-line
-           href="">Log Out</a>
+           [href]="loginPath">Log Out</a>
         <div class="credentials-picture">
           <img matListAvatar
                [src]="profile?.picture || '/assets/images/placeholder_identity.png'"

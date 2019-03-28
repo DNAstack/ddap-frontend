@@ -1,23 +1,24 @@
 package com.dnastack.ddap.frontend;
 
-import static java.lang.String.format;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.page.IdentityPage;
 import com.dnastack.ddap.common.page.NavBar;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+
+import static java.lang.String.format;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @SuppressWarnings("Duplicates")
 public class NavbarE2eTest extends AbstractFrontendE2eTest {
@@ -207,6 +208,29 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         final String usernameXpath = "//*[@data-se='nav-account']//h4[contains(text(), 'NCI Researcher')]";
 
         driver.findElement(By.xpath(usernameXpath)).getText();
+    }
+
+    @Test
+    public void realmSelectorShouldShowCurrentRealm() {
+        assertThat(ddapPage.getNavBar().getRealm(), is(REALM));
+    }
+
+    @Test
+    public void realmSelectorShouldBeAbleToChangeCurrentRealm() {
+        String otherRealm = "test_other_realm_" + System.currentTimeMillis();
+        assertThat("this test is pointless unless we start on a different realm than we're going to!",
+                ddapPage.getNavBar().getRealm(), is(not(otherRealm)));
+
+        ddapPage.getNavBar().setRealm(otherRealm);
+
+        assertThat(ddapPage.getNavBar().getRealm(), is(otherRealm));
+    }
+
+    @Test
+    public void logoutButtonShouldGoToIcLoginForCurrentRealm() {
+        ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
+
+        assertThat(icLoginPage.getRealm(), is(REALM));
     }
 
 }

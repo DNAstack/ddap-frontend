@@ -14,6 +14,7 @@ export class LayoutComponent implements OnInit {
 
   profile: Profile = null;
   realm: string;
+  loginPath: string;
 
   constructor(public loader: LoadingBarService,
               private router: Router,
@@ -29,6 +30,7 @@ export class LayoutComponent implements OnInit {
 
     this.activatedRoute.root.firstChild.params.subscribe((params) => {
       this.realm = params.realmId;
+      this.loginPath = `/api/v1alpha/${this.realm}/identity/login`;
     });
   }
 
