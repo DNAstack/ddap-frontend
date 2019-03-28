@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
 
 /**
@@ -26,7 +25,7 @@ import static java.util.Collections.singletonMap;
 @Component
 public class OAuthStateHandler {
 
-    public static final String DESTINATION_AFTER_LOGIN = "destinationAfterLogin";
+    private static final String DESTINATION_AFTER_LOGIN = "destinationAfterLogin";
     private final String tokenAudience;
     private final Duration tokenTtl;
     private final SecretKey tokenSigningKey;
@@ -62,14 +61,14 @@ public class OAuthStateHandler {
 
     public TokenExchangePurpose parseAndVerify(String stateStringParam, String stateStringCookie) {
         if (!Objects.equals(stateStringParam, stateStringCookie)) {
-            throw new InvalidOAuthStateException("Does not match: " + stateStringCookie);
+            throw new InvalidOAuthStateException("CSRF state cookie mismatch", stateStringCookie);
         }
         try {
             Jws<Claims> state = parseStateToken(stateStringParam);
             String purposeString = state.getBody().get("purpose", String.class);
             return TokenExchangePurpose.valueOf(purposeString);
         } catch (Exception e) {
-            throw new InvalidOAuthStateException(e, stateStringParam);
+            throw new InvalidOAuthStateException("Invalid state token", e, stateStringParam);
         }
     }
 

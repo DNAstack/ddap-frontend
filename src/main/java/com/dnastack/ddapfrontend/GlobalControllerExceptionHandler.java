@@ -28,7 +28,7 @@ public class GlobalControllerExceptionHandler {
         return ResponseEntity
                 .status(400)
                 .header(SET_COOKIE, cookiePackager.clearToken(getExternalHost(request), OAUTH_STATE).toString())
-                .body(new DdapErrorResponse("Invalid state token", 400));
+                .body(new DdapErrorResponse(ex.getMessage(), 400));
     }
 
     @ExceptionHandler(AccountLinkingFailedException.class)

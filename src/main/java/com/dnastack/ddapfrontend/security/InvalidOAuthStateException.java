@@ -10,12 +10,13 @@ public class InvalidOAuthStateException extends RuntimeException {
     @Getter
     private final String stateToken;
 
-    public InvalidOAuthStateException(String stateToken) {
+    InvalidOAuthStateException(String message, String stateToken) {
+        super(message);
         this.stateToken = stateToken;
     }
 
-    public InvalidOAuthStateException(Exception cause, String stateToken) {
-        super(cause);
+    InvalidOAuthStateException(String message, Exception cause, String stateToken) {
+        super(message, cause);
         this.stateToken = stateToken;
     }
 }
