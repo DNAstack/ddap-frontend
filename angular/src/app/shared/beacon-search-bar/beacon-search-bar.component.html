@@ -1,7 +1,7 @@
 <form novalidate
       class="flex vertical-center"
-      (ngSubmit)="onSubmit(search)"
-      [formGroup]="search">
+      (ngSubmit)="onSubmit(searchForm)"
+      [formGroup]="searchForm">
   <mat-form-field class="input-select" appearance="outline">
     <mat-select class="mbat-button-wrapper"
                 name="assembly"
@@ -17,7 +17,7 @@
            matInput
            type="search"
            formControlName="query"
-           [placeholder]="search.get('query').value ? '' : placeholder"
+           [placeholder]="searchForm.get('query').value ? '' : placeholder"
            data-se="search-input">
   </mat-form-field>
   <button color="primary"

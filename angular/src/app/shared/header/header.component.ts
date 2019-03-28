@@ -1,7 +1,5 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { SearchState } from '../search-state.model';
 import { SearchStateService } from '../search-state.service';
 
 @Component({
@@ -9,7 +7,7 @@ import { SearchStateService } from '../search-state.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnDestroy, OnInit {
+export class HeaderComponent {
 
   @Input()
   label: string;
@@ -32,18 +30,10 @@ export class HeaderComponent implements OnDestroy, OnInit {
   @Output()
   searchOpenChange = new EventEmitter<boolean>();
 
-  searchBackLink: any = null;
+  searchBackLink: string = null;
 
-  private searchStateSubscription: Subscription;
-
-  constructor(private searchStateService: SearchStateService) {
-  }
-
-  ngOnInit(): void {
-    this.searchStateSubscription = this.searchStateService.searchState.subscribe((state: SearchState) => {
-      const {backLink} = state;
-      this.searchBackLink = backLink;
-    });
+  constructor(private searchState: SearchStateService) {
+    this.searchBackLink = this.searchState.backLink;
   }
 
   closeSearch() {
@@ -54,9 +44,5 @@ export class HeaderComponent implements OnDestroy, OnInit {
   openSearch() {
     this.searchOpen = true;
     this.searchOpenChange.emit(this.searchOpen);
-  }
-
-  ngOnDestroy(): void {
-    this.searchStateSubscription.unsubscribe();
   }
 }

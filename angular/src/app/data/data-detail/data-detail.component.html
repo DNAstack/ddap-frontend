@@ -7,7 +7,7 @@
 
 <ddap-resource-logo [imageUrl]="resource?.dto?.ui?.imageUrl">
   <ddap-limit-search *ngIf="searchOpened"
-                     [checked]="limitSearch"
+                     [checked]="searchService.limitSearch"
                      (change)="limitSearchChange($event)"
                      class="filter-top-border filter-inline"
                      [resourceName$]="resourceLabel$">
