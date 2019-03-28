@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
+import { BeaconSearchParams } from '../../shared/beacon-search-params.model';
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
-import { SearchState } from '../../shared/search-state.model';
 import { SearchStateService } from '../../shared/search-state.service';
 import { DataService } from '../data.service';
 
@@ -16,20 +15,23 @@ import { DataService } from '../data.service';
   styleUrls: ['./data-search.component.scss'],
   providers: [ImagePlaceholderRetriever, ResourceBeaconService],
 })
-export class DataSearchComponent implements OnInit {
+export class DataSearchComponent implements OnDestroy, OnInit {
 
   realm: string;
-  limitSearch = false;
   resource: string;
   resourceName$:  Observable<string>;
   views: any;
   results: any[];
   resultsAction: Subscription;
 
+  private searchStateSubscription: Subscription;
+  private searchParams: any;
+
   constructor(private activatedRoute: ActivatedRoute,
               private dataService: DataService,
-              private searchStateService: SearchStateService,
-              private beaconService: ResourceBeaconService) {
+              private beaconService: ResourceBeaconService,
+              private router: Router,
+              public searchState: SearchStateService) {
 
     this.activatedRoute
       .root
@@ -43,30 +45,36 @@ export class DataSearchComponent implements OnInit {
   ngOnInit() {
     this.resultsAction = new Subscription();
 
-    this.searchStateService.searchState
-      .pipe(
-        take(1)
-      ).subscribe(
-        (searchState: SearchState) => this.initializeComponentFields(searchState));
+    this.searchStateSubscription = this.activatedRoute.params
+      .subscribe((searchState: BeaconSearchParams) => this.initializeComponentFields(searchState));
+  }
+
+  ngOnDestroy() {
+    this.searchStateSubscription.unsubscribe();
   }
 
   limitSearchChange($event) {
-    this.searchStateService.patch({limitSearch: $event.checked});
+    this.searchState.limitSearch = $event.checked;
+    const searchParams = {
+      ...this.searchParams,
+      limitSearch: this.searchState.limitSearch,
+    };
+    this.router.navigate(['.', searchParams], {relativeTo: this.activatedRoute});
   }
 
-  private initializeComponentFields(searchParams: SearchState) {
-    this.limitSearch = searchParams.limitSearch;
+  private initializeComponentFields(searchParams: BeaconSearchParams) {
     this.resource = searchParams.resource;
     this.resourceName$ = this.dataService.getName(this.resource);
+    this.searchParams = searchParams;
 
     this.queryBeacon(searchParams);
   }
 
-  private queryBeacon(searchParams: SearchState) {
+  private queryBeacon(searchParams: BeaconSearchParams) {
     const { limitSearch, resource  } = searchParams;
-    const beaconResult = this.beaconService.query(searchParams, limitSearch ? resource : null);
+    const beaconResult$ = this.beaconService.query(searchParams, limitSearch ? resource : null);
 
-    this.resultsAction = beaconResult
+    this.resultsAction = beaconResult$
       .subscribe((beaconResponseDto: any) => {
           this.results = beaconResponseDto;
         }

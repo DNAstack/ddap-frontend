@@ -18,7 +18,6 @@ import { DataService } from '../data.service';
 })
 export class DataDetailComponent implements OnInit {
 
-  limitSearch = true;
   resourceLabel$: Observable<string>;
   searchOpened = false;
   views: any;
@@ -26,28 +25,24 @@ export class DataDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private dataService: DataService,
-              private searchStateService: SearchStateService) {
+              public searchService: SearchStateService) {
   }
 
   ngOnInit() {
+    this.searchService.limitSearch = true;
+
     this.route.params.pipe(
       flatMap(params => this.dataService.getResource(params['resourceName']))
     ).subscribe((resource: EntityModel) => {
       this.resource = resource;
-      this.searchStateService.patch({
-        resource: resource.name,
-        limitSearch: true,
-      });
+      this.searchService.resource = resource.name;
       this.resourceLabel$ = of(this.resource.dto.ui.label);
       this.views = this.getViews(this.resource);
     });
   }
 
   limitSearchChange($event) {
-    this.limitSearch = $event.checked;
-    this.searchStateService.patch({
-      limitSearch: this.limitSearch,
-    });
+    this.searchService.limitSearch = $event.checked;
   }
 
   searchOpenedChange($event) {
@@ -59,5 +54,4 @@ export class DataDetailComponent implements OnInit {
       .keys(resource.dto.views)
       .map((key) => new EntityModel(key, resource.dto.views[key]));
   }
-
 }

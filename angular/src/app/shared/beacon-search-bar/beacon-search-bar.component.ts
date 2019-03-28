@@ -1,10 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 import { assemblyIds } from '../assembly.model';
-import { SearchState } from '../search-state.model';
+import { BeaconSearchParams } from '../beacon-search-params.model';
 import { SearchStateService } from '../search-state.service';
 
 import { ValidateVariant } from './variant.validator';
@@ -14,7 +13,7 @@ import { ValidateVariant } from './variant.validator';
   templateUrl: './beacon-search-bar.component.html',
   styleUrls: ['./beacon-search-bar.component.scss'],
 })
-export class BeaconSearchBarComponent implements OnDestroy, OnInit {
+export class BeaconSearchBarComponent implements OnInit {
 
   @Input()
   placeholder: string;
@@ -23,68 +22,49 @@ export class BeaconSearchBarComponent implements OnDestroy, OnInit {
   disabled: boolean;
 
   assemblyIds = assemblyIds;
-  limitSearch = false;
-  search: FormGroup;
-
-  private resource;
-  private searchStateSubscription: Subscription;
+  searchForm: FormGroup;
 
   constructor(private router: Router,
-              private searchStateService: SearchStateService,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private searchState: SearchStateService) {
 
-    this.search = new FormGroup({
+    this.searchForm = new FormGroup({
       assembly: new FormControl(this.assemblyIds[0], [Validators.required]),
       query: new FormControl('', [Validators.required, ValidateVariant]),
     });
   }
 
-  onSubmit({value, valid}: { value: any, valid: boolean }) {
+  onSubmit({value}) {
     const currentRoute = this.router.url;
-    if (currentRoute.endsWith('/data')) {
-      this.searchStateService.patch({
-        limitSearch: false,
-        resource: null,
-        backLink: currentRoute,
-      });
-    } else if (currentRoute.includes('/data/')) {
-      this.searchStateService.patch({
-        backLink: currentRoute,
-      });
+    const resource = this.searchState.resource;
+    const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
+
+    const searchParams: BeaconSearchParams = {
+      ...value,
+      limitSearch: this.searchState.limitSearch,
+    };
+
+    if (resource) {
+      searchParams.resource = resource;
     }
 
-    const resource = this.resource;
-    const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
-    this.router.navigate([realmId, 'data', 'search'], {
-      queryParams: {
-        ...value,
-        resource,
-        limitSearch: this.limitSearch,
-      },
-    });
+    this.searchState.backLink = currentRoute;
+    this.router.navigate([realmId, 'data', 'search', searchParams]);
   }
 
   ngOnInit(): void {
-    this.searchStateSubscription = this.searchStateService.searchState.subscribe((state: SearchState) => {
-      const {assembly, query, resource, limitSearch} = state;
-      this.resource = resource;
-      this.limitSearch = limitSearch;
-
+    this.activatedRoute.params.subscribe(({assembly, query, resource, limitSearch}) => {
       if (assembly) {
-        this.search.patchValue({assembly});
+        this.searchForm.patchValue({assembly});
       }
 
       if (limitSearch) {
-        this.search.patchValue({limitSearch});
+        this.searchForm.patchValue({limitSearch});
       }
 
       if (query) {
-        this.search.patchValue({query});
+        this.searchForm.patchValue({query});
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    this.searchStateSubscription.unsubscribe();
   }
 }

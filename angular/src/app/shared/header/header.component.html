@@ -1,6 +1,7 @@
 <header>
   <ng-template [ngIf]="!searchOpen">
     <button *ngIf="backLink"
+            data-se="back-link"
             mat-icon-button>
       <mat-icon class="icon icon-arrow"
                 [routerLink]="backLink"></mat-icon>
@@ -18,6 +19,7 @@
   <ng-template [ngIf]="searchOpen">
     <button *ngIf="isSearchPage && searchBackLink"
             mat-icon-button
+            data-se="search-back-link"
             [routerLink]="searchBackLink">
       <mat-icon class="icon icon-close"></mat-icon>
     </button>
