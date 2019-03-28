@@ -19,9 +19,9 @@ import static org.junit.Assert.assertEquals;
 /**
  * 1. Test for 4xx error
  */
-public class BeaconSearchExceptionHandlingTest extends AbstractBaseE2eTest {
+public class BeaconSearchUnauthBeaconExceptionHandlingTest extends AbstractBaseE2eTest {
 
-    private static final String REALM = generateRealmName(BeaconSearchExceptionHandlingTest.class.getSimpleName());
+    private static final String REALM = generateRealmName(BeaconSearchUnauthBeaconExceptionHandlingTest.class.getSimpleName());
 
     @Before
     public void setupRealm() throws IOException {

@@ -16,7 +16,7 @@ import static io.restassured.http.ContentType.JSON;
 import static org.junit.Assert.assertEquals;
 
 /**
- * 1. Test for 4xx error
+ * 1. Test for when no server found or no response from a beacon error
  */
 public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractBaseE2eTest {
 
@@ -28,9 +28,8 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
         setupRealmConfig("nci_researcher", realmConfigString, REALM);
     }
 
-    //4xx error test
     @Test
-    public void shouldGetUnauthorized403Error() throws IOException {
+    public void shouldGetNoBeaconServerFoundError() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
 
         /* Run the aggregate search query on the realm */
