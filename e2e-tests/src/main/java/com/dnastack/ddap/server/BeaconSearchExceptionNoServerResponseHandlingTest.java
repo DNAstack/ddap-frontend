@@ -31,8 +31,7 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
     @Test
     public void shouldGetNoBeaconServerFoundError() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-
-        /* Run the aggregate search query on the realm */
+        
         // @formatter:off
         Map<String, Object> result[] = given()
                     .log().method()
