@@ -13,19 +13,18 @@ import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
-import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 
 /**
  * 1. Test for 4xx error
  */
-public class BeaconSearchExceptionHandlingTest extends AbstractBaseE2eTest {
+public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractBaseE2eTest {
 
-    private static final String REALM = generateRealmName(BeaconSearchExceptionHandlingTest.class.getSimpleName());
+    private static final String REALM = generateRealmName(BeaconSearchExceptionNoServerResponseHandlingTest.class.getSimpleName());
 
     @Before
     public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/unauthorizedbeaconerror.json");
+        String realmConfigString = loadTemplate("/com/dnastack/ddap/beaconServerNotFound.json");
         setupRealmConfig("nci_researcher", realmConfigString, REALM);
     }
 
@@ -52,16 +51,16 @@ public class BeaconSearchExceptionHandlingTest extends AbstractBaseE2eTest {
         // @formatter:on
 
         Stream<Map<String, Object>> stream = Arrays.stream(result);
-        String errorMessage = "Invalid authorization token 403 FORBIDDEN REGISTERED requests not accepted.";
+        String errorMessage = "Server not found: java.net.UnknownHostException";
 
         List<Map<String, Object>> beaconResponseList =
                 stream.filter(jsonObj -> {
-                    Boolean isCafeVariome = jsonObj.get("name").equals("Cafe Variome Beacon");
-                    Boolean isCorrectErrorMessage = jsonObj.get("error") != null && jsonObj.get("error").equals(errorMessage);
-                    return isCafeVariome && isCorrectErrorMessage;
+                    String errorMessageReceived = (String) jsonObj.get("error");
+                    Boolean isCorrectErrorMessage = errorMessageReceived.startsWith(errorMessage);
+                    return isCorrectErrorMessage;
                 })
                 .collect(Collectors.toList());
-        assertEquals(beaconResponseList.size(), 1);
+        assertEquals(beaconResponseList.size(), 2);
     }
 
 }
