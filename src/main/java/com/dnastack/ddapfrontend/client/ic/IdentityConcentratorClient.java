@@ -35,21 +35,20 @@ public class IdentityConcentratorClient {
             .build();
 
     public Mono<TokenResponse> exchangeAuthorizationCodeForTokens(String realm, URI redirectUri, String code) {
-        final UriTemplate template = new UriTemplate("{idpBaseUrl}/identity/v1alpha/{realm}/token" +
+        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/token" +
                 "?grant_type=authorization_code" +
                 "&code={code}" +
                 "&redirect_uri={redirectUri}" +
                 "&clientId={clientId}" +
                 "&clientSecret={clientSecret}");
         final Map<String, Object> variables = new HashMap<>();
-        variables.put("idpBaseUrl", idpBaseUrl);
         variables.put("realm", realm);
         variables.put("code", code);
         variables.put("redirectUri", redirectUri);
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
 
-        final URI uri = template.expand(variables);
+        final URI uri = idpBaseUrl.resolve(template.expand(variables));
         return webClient
                 .post()
                 .uri(uri)
@@ -68,20 +67,19 @@ public class IdentityConcentratorClient {
     }
 
     public Mono<TokenResponse> personaLogin(String realm, String scopes, String personaName) {
-        final UriTemplate template = new UriTemplate("{idpBaseUrl}/identity/v1alpha/{realm}/personas/{persona}" +
+        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/personas/{persona}" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}" +
                 "&scope={scopes}");
 
         final Map<String, Object> variables = new HashMap<>();
-        variables.put("idpBaseUrl", idpBaseUrl);
         variables.put("realm", realm);
         variables.put("persona", personaName);
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
         variables.put("scopes", scopes);
 
-        URI uri = template.expand(variables);
+        URI uri = idpBaseUrl.resolve(template.expand(variables));
         Mono<TokenResponse> scopedAccessTokenResponse = webClient
                 .get()
                 .uri(uri)
@@ -97,35 +95,38 @@ public class IdentityConcentratorClient {
     }
 
     private Mono<TokenResponse> getPersonaTokens(String realm, String personaName) {
-        final UriTemplate passportTemplate = new UriTemplate("{idpBaseUrl}/identity/v1alpha/{realm}/passport" +
+        final UriTemplate passportTemplate = new UriTemplate("/identity/v1alpha/{realm}/passport" +
                 "?persona={persona}" +
                 "&client_id={clientId}" +
                 "&client_secret={clientSecret}");
 
         final Map<String, Object> passportVariables = new HashMap<>();
-        passportVariables.put("idpBaseUrl", idpBaseUrl);
         passportVariables.put("realm", realm);
         passportVariables.put("persona", personaName);
         passportVariables.put("clientId", idpClientId);
         passportVariables.put("clientSecret", idpClientSecret);
         return webClient.get()
-                .uri(passportTemplate.expand(passportVariables))
+                .uri(idpBaseUrl.resolve(passportTemplate.expand(passportVariables)))
                 .exchange()
                 .flatMap(res -> res.bodyToMono(TokenResponse.class));
     }
 
     public URI getAuthorizeUrl(String realm, String state, String scopes, URI redirectUri) {
-        final UriTemplate template = new UriTemplate("{idpBaseUrl}/identity/v1alpha/{realm}/authorize?response_type=code&clientId={clientId}&redirect_uri={redirectUri}&state={state}&scope={scope}");
+        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/authorize" +
+                "?response_type=code" +
+                "&clientId={clientId}" +
+                "&redirect_uri={redirectUri}" +
+                "&state={state}" +
+                "&scope={scope}");
 
         final HashMap<String, Object> variables = new HashMap<>();
-        variables.put("idpBaseUrl", idpBaseUrl);
         variables.put("realm", realm);
         variables.put("clientId", idpClientId);
         variables.put("redirectUri", redirectUri);
         variables.put("state", state);
         variables.put("scope", scopes);
 
-        return template.expand(variables);
+        return idpBaseUrl.resolve(template.expand(variables));
     }
 
     /**
@@ -140,14 +141,13 @@ public class IdentityConcentratorClient {
      * @return the calculated absolute URI to send the client's browser to. Never null.
      */
     public URI getDirectLoginUrl(String realm, String state, String scopes, URI redirectUri, String provider) {
-        final UriTemplate template = new UriTemplate("{idpBaseUrl}/identity/v1alpha/{realm}/login/{provider}" +
+        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/login/{provider}" +
                 "?client_id={clientId}" +
                 "&redirect_uri={redirectUri}" +
                 "&scope={scopes}" +
                 "&state={state}");
 
         final HashMap<String, Object> variables = new HashMap<>();
-        variables.put("idpBaseUrl", idpBaseUrl);
         variables.put("realm", realm);
         variables.put("provider", provider);
         variables.put("clientId", idpClientId);
@@ -155,7 +155,7 @@ public class IdentityConcentratorClient {
         variables.put("scopes", scopes);
         variables.put("state", state);
 
-        return template.expand(variables);
+        return idpBaseUrl.resolve(template.expand(variables));
     }
 
     private static boolean contentTypeIsApplicationJson(ClientResponse response) {
@@ -189,20 +189,19 @@ public class IdentityConcentratorClient {
                                      String baseAccountAccessToken,
                                      String newAccountId,
                                      String newAccountLinkToken) {
-        final UriTemplate template = new UriTemplate("{idpBaseUrl}/identity/v1alpha/{realm}/accounts/{accountId}" +
+        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/accounts/{accountId}" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}" +
                 "&link_token={linkToken}");
 
         final Map<String, Object> variables = new HashMap<>();
-        variables.put("idpBaseUrl", idpBaseUrl);
         variables.put("realm", realm);
         variables.put("accountId", baseAccountId);
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
         variables.put("linkToken", newAccountLinkToken);
 
-        URI uri = template.expand(variables);
+        URI uri = idpBaseUrl.resolve(template.expand(variables));
         return webClient
                 .patch()
                 .uri(uri)
