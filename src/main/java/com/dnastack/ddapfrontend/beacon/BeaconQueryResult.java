@@ -7,5 +7,5 @@ public class BeaconQueryResult {
     private Boolean exists;
     private Object alleleRequest;
     private Object datasetAlleleResponses;
-    private Object error;
+    private String error;
 }

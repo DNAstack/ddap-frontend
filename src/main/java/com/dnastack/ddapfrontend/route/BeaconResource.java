@@ -179,7 +179,7 @@ class BeaconResource {
                         if (statusCode.is5xxServerError()) {
                             return clientResponse.bodyToMono(String.class).flatMap(errorMessageBody -> {
                                 String errorMessage = "Internal server error occurred " + clientResponse.statusCode() + " " + errorMessageBody;
-                                log.error(errorMessage);
+                                log.info(errorMessage);
                                 beaconQueryResultError.setError(errorMessage);
                                 Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
                                 return errorResult;
@@ -254,7 +254,7 @@ class BeaconResource {
                 .ifPresent(datasetAlleleResponses -> externalResult.getMetadata().put("datasetAlleleResponses",
                         datasetAlleleResponses));
         oQueryResponse.map(BeaconQueryResult::getError)
-                .ifPresent(error -> externalResult.setError(error.toString()));
+                .ifPresent(error -> externalResult.setError(error));
 
         return externalResult;
     }

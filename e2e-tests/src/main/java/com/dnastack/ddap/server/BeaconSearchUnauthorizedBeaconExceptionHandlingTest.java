@@ -19,17 +19,16 @@ import static org.junit.Assert.assertEquals;
 /**
  * 1. Test for 4xx error
  */
-public class BeaconSearchUnauthBeaconExceptionHandlingTest extends AbstractBaseE2eTest {
+public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends AbstractBaseE2eTest {
 
-    private static final String REALM = generateRealmName(BeaconSearchUnauthBeaconExceptionHandlingTest.class.getSimpleName());
+    private static final String REALM = generateRealmName(BeaconSearchUnauthorizedBeaconExceptionHandlingTest.class.getSimpleName());
 
     @Before
     public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/unauthorizedbeaconerror.json");
+        String realmConfigString = loadTemplate("/com/dnastack/ddap/beaconSearchUnauthorizedBeaconExceptionHandlingTest.json");
         setupRealmConfig("nci_researcher", realmConfigString, REALM);
     }
 
-    //4xx error test
     @Test
     public void shouldGetUnauthorized403Error() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
@@ -39,13 +38,12 @@ public class BeaconSearchUnauthBeaconExceptionHandlingTest extends AbstractBaseE
         Map<String, Object> result[] = given()
                     .log().method()
                     .log().uri()
-                    .when()
+                .when()
                     .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
                     .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
-                    .then()
+                .then()
                     .log().body()
-                    //.log().ifValidationFails()
                     .contentType(JSON)
                     .statusCode(200)
                     .extract().as(Map[].class);
