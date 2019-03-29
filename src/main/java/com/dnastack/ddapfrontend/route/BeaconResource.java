@@ -169,7 +169,7 @@ class BeaconResource {
                         if (statusCode.is4xxClientError()) {
                             return clientResponse.bodyToMono(String.class).flatMap(errorMessageBody -> {
                                 String errorMessage = "Invalid authorization token " + clientResponse.statusCode() + " " + errorMessageBody;
-                                log.error(errorMessage);
+                                log.info(errorMessage);
                                 beaconQueryResultError.setError(errorMessage);
                                 Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
                                 return errorResult;
@@ -192,7 +192,7 @@ class BeaconResource {
                     /* Handle the error case where there was no response from beacon server */
                     BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
                     String errorMessage = "Server not found: " + e;
-                    log.error(errorMessage);
+                    log.warn(errorMessage);
                     beaconQueryResultError.setError(errorMessage);
                     Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
                     return errorResult;
