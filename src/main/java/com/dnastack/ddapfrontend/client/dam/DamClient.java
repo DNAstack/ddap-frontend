@@ -18,7 +18,7 @@ public interface DamClient {
                                       @Param("realm") String realm,
                                       @Param("resourceId") String resourceId);
 
-    @RequestLine("GET /dam/" + API_VERSION + "/{realm}/resources/{resourceId}/views/{viewId}")
+    @RequestLine("GET /dam/" + API_VERSION + "/{realm}/resources/{resourceId}/views/{viewId}/token")
     @Headers("Authorization: Bearer {damToken}")
     LocationAndToken getAccessTokenForView(@Param("damToken") String damToken,
                                            @Param("realm") String realm,
