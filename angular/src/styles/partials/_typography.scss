@@ -41,7 +41,7 @@ h2 {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-trusted-sources:before {
+.icon-claims:before {
   content: "\61";
 }
 .icon-collections:before {
@@ -100,6 +100,27 @@ h2 {
 }
 .icon-settings:before {
   content: "\74";
+}
+.icon-passport:before {
+  content: "\75";
+}
+.icon-apps:before {
+  content: "\76";
+}
+.icon-policies:before {
+  content: "\77";
+}
+.icon-trusted:before {
+  content: "\78";
+}
+.icon-providers:before {
+  content: "\79";
+}
+.icon-globe:before {
+  content: "\7a";
+}
+.icon-none:before {
+  content: "\41";
 }
 
 .text-color--subtle {
