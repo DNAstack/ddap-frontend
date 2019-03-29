@@ -1,6 +1,8 @@
 package com.dnastack.ddap.common.page;
 
 import java.util.List;
+
+import com.dnastack.ddap.common.DdapBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -31,4 +33,12 @@ public class SearchPage extends AnyDdapPage {
         return getDriver().findElements(By.tagName("ddap-beacon-result"));
     }
 
+    public void clickBack() {
+        getDriver().findElement(DdapBy.se("search-back-link"))
+                .click();
+    }
+
+    public void clickLimitSearch() {
+        getDriver().findElement(DdapBy.se("limit-search"));
+    }
 }
