@@ -2,6 +2,7 @@ package com.dnastack.ddap.frontend;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -181,6 +182,33 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         searchPage.clickBack();
 
         driver.findElement(DdapBy.text("Explore Data","h2"));
+    }
+
+    @Test
+    public void testBRCA2SearchLink() {
+        ddapPage.getNavBar()
+                .goTo(NavItem.DATA);
+
+        DataListPage dataListPage = new DataListPage(driver);
+        final DataListItem data = dataListPage.findDataByName("All Of Us");
+        DataDetailPage dataDetailPage = data.clickViewButton();
+        dataDetailPage.assertResourcePage("All Of Us");
+
+        String query = "1 : 1 C > C";
+        SearchPage searchPage = new SearchPage(driver);
+        searchPage.openSearchInput();
+        searchPage.clickLimitSearch();
+        searchPage.submitSearchQuery(query);
+
+        List<WebElement> results = searchPage.getSearchResults();
+        assertThat(results.size(), is(0));
+
+        searchPage.clickBRCA2();
+
+        results = searchPage.getSearchResults();
+        assertThat(results.size(), greaterThanOrEqualTo(2));
+        assertTrue(findFirstElementByCssClass(results, "indicator-green").isPresent());
+        assertFalse(findFirstElementByCssClass(results, "indicator-red").isPresent());
     }
 
     private Optional<WebElement> findFirstElementByCssClass(List<WebElement> results, String cssClass) {
