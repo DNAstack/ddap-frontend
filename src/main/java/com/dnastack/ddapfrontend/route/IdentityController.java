@@ -6,7 +6,7 @@ import com.dnastack.ddapfrontend.client.ic.TokenResponse;
 import com.dnastack.ddapfrontend.security.OAuthStateHandler;
 import com.dnastack.ddapfrontend.security.TokenExchangePurpose;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
-import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.TokenAudience;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -92,7 +92,7 @@ public class IdentityController {
             URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
             ResponseEntity<Object> redirectToLoginPage = ResponseEntity.status(TEMPORARY_REDIRECT)
                     .location(loginUri)
-                    .header(SET_COOKIE, cookiePackager.packageToken(state, cookieDomainPath.getHost(), TokenAudience.OAUTH_STATE).toString())
+                    .header(SET_COOKIE, cookiePackager.packageToken(state, cookieDomainPath.getHost(), CookieKind.OAUTH_STATE).toString())
                     .build();
             return Mono.just(redirectToLoginPage);
         }
@@ -168,7 +168,7 @@ public class IdentityController {
             @RequestParam String provider,
             @RequestParam(defaultValue = "external_idp") AccountLinkingType type) {
 
-        final Optional<String> icToken = cookiePackager.extractToken(request, UserTokenCookiePackager.TokenAudience.IC);
+        final Optional<String> icToken = cookiePackager.extractToken(request, CookieKind.IC);
         if (!icToken.isPresent()) {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
         }
@@ -187,7 +187,7 @@ public class IdentityController {
                 URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
                 return Mono.just(ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
                         .location(idpClient.getDirectLoginUrl(realm, state, scopes, ddapTokenEndpoint, provider))
-                        .header(SET_COOKIE, cookiePackager.packageToken(state, cookieDomainPath.getHost(), TokenAudience.OAUTH_STATE).toString())
+                        .header(SET_COOKIE, cookiePackager.packageToken(state, cookieDomainPath.getHost(), CookieKind.OAUTH_STATE).toString())
                         .build());
             case PERSONA:
                 return idpClient.personaLogin(realm, scopes, provider)
@@ -263,12 +263,14 @@ public class IdentityController {
             throw new IllegalArgumentException("Incomplete token response: missing " + missingItems);
         } else {
             final String publicHost = redirectTo.getHost();
-            final ResponseCookie damTokenCookie = cookiePackager.packageToken(token.getIdToken(), publicHost, TokenAudience.DAM);
-            final ResponseCookie icTokenCookie = cookiePackager.packageToken(token.getAccessToken(), publicHost, TokenAudience.IC);
+            final ResponseCookie damTokenCookie = cookiePackager.packageToken(token.getIdToken(), publicHost, CookieKind.DAM);
+            final ResponseCookie icTokenCookie = cookiePackager.packageToken(token.getAccessToken(), publicHost, CookieKind.IC);
+            final ResponseCookie refreshTokenCookie = cookiePackager.packageToken(token.getRefreshToken(), publicHost, CookieKind.REFRESH);
             return ResponseEntity.status(TEMPORARY_REDIRECT)
                     .location(redirectTo)
                     .header(SET_COOKIE, damTokenCookie.toString())
                     .header(SET_COOKIE, icTokenCookie.toString())
+                    .header(SET_COOKIE, refreshTokenCookie.toString())
                     .build();
         }
     }

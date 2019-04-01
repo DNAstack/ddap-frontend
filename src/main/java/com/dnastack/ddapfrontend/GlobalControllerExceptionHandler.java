@@ -1,7 +1,6 @@
 package com.dnastack.ddapfrontend;
 
 import com.dnastack.ddapfrontend.client.ic.AccountLinkingFailedException;
-import com.dnastack.ddapfrontend.client.ic.TokenExchangeException;
 import com.dnastack.ddapfrontend.security.InvalidOAuthStateException;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import static com.dnastack.ddapfrontend.header.XForwardUtil.getExternalHost;
-import static com.dnastack.ddapfrontend.security.UserTokenCookiePackager.TokenAudience.OAUTH_STATE;
+import static com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind.OAUTH_STATE;
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
 @Slf4j

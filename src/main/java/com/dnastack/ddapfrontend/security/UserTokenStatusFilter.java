@@ -1,7 +1,7 @@
 package com.dnastack.ddapfrontend.security;
 
 import com.dnastack.ddapfrontend.header.XForwardUtil;
-import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.TokenAudience;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -51,7 +51,7 @@ public class UserTokenStatusFilter implements WebFilter {
         final ServerHttpRequest originalRequest = exchange.getRequest();
         final ServerHttpResponse mutableResponse = exchange.getResponse();
 
-        Optional<String> extractedToken = cookiePackager.extractToken(originalRequest, TokenAudience.DAM);
+        Optional<String> extractedToken = cookiePackager.extractToken(originalRequest, CookieKind.DAM);
         boolean haveValidAuth;
 
         if (extractedToken.isPresent()) {
@@ -61,7 +61,7 @@ public class UserTokenStatusFilter implements WebFilter {
                 log.info("Clearing expired token cookie");
                 final String requestUrl = XForwardUtil.getExternalPath(originalRequest, "/");
                 final String cookieHost = URI.create(requestUrl).getHost();
-                mutableResponse.addCookie(cookiePackager.clearToken(cookieHost, TokenAudience.DAM));
+                mutableResponse.addCookie(cookiePackager.clearToken(cookieHost, CookieKind.DAM));
                 haveValidAuth = false;
             } else {
                 haveValidAuth = true;

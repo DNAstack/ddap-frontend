@@ -18,7 +18,7 @@
 package com.dnastack.ddapfrontend.proxy;
 
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
-import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.TokenAudience;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,19 +48,19 @@ public class SetBearerTokenFromCookieGatewayFilterFactory extends AbstractGatewa
 
     @Override
     public List<String> shortcutFieldOrder() {
-        return singletonList("tokenAudience");
+        return singletonList("cookieKind");
     }
 
     @Override
     public GatewayFilter apply(Config config) {
-        requireNonNull(config.getTokenAudience(), "Must specify token audience in filter config.");
+        requireNonNull(config.getCookieKind(), "Must specify token audience in filter config.");
         return (exchange, chain) -> {
             final ServerHttpRequest request = exchange.getRequest();
 
-            Optional<String> extractedToken = cookiePackager.extractToken(request, config.getTokenAudience());
+            Optional<String> extractedToken = cookiePackager.extractToken(request, config.getCookieKind());
 
             if (extractedToken.isPresent()) {
-                log.debug("Including {} token in this request", config.getTokenAudience());
+                log.debug("Including {} token in this request", config.getCookieKind());
                 final String token = extractedToken.get();
 
                 final ServerHttpRequest requestWithDamToken = request.mutate()
@@ -71,7 +71,7 @@ public class SetBearerTokenFromCookieGatewayFilterFactory extends AbstractGatewa
                         .request(requestWithDamToken)
                         .build());
             } else {
-                log.debug("No {} token available for this request", config.getTokenAudience());
+                log.debug("No {} token available for this request", config.getCookieKind());
                 return chain.filter(exchange);
             }
         };
@@ -79,7 +79,7 @@ public class SetBearerTokenFromCookieGatewayFilterFactory extends AbstractGatewa
 
     @Data
     public static class Config {
-        private TokenAudience tokenAudience;
+        private CookieKind cookieKind;
     }
 
 }

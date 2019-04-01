@@ -91,7 +91,7 @@ class BeaconResource {
             ServerHttpRequest request,
             @PathVariable String realm) {
         // find beacons under resourceId in DAM config
-        Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.TokenAudience.DAM);
+        Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         if (!damToken.isPresent()) {
             return Flux.error(new IllegalArgumentException("Authorization token is required"));
         }

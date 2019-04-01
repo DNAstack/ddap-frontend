@@ -26,7 +26,7 @@ public class UserTokenCookiePackager {
      * @return A string that can be used as a bearer token in a request to DAM, or {@code Optional.empty}
      * if the given request doesn't contain a usable token.
      */
-    public Optional<String> extractToken(ServerHttpRequest request, TokenAudience audience) {
+    public Optional<String> extractToken(ServerHttpRequest request, CookieKind audience) {
         return Optional.ofNullable(request.getCookies().getFirst(audience.cookieName()))
                 .map(HttpCookie::getValue);
     }
@@ -40,7 +40,7 @@ public class UserTokenCookiePackager {
      * @param audience The collaborating service that honours the token.
      * @return a cookie that should be sent to the user's browser.
      */
-    public ResponseCookie packageToken(String token, String cookieHost, TokenAudience audience) {
+    public ResponseCookie packageToken(String token, String cookieHost, CookieKind audience) {
         return ResponseCookie.from(audience.cookieName(), token)
                 .domain(cookieHost)
                 .path("/")
@@ -56,7 +56,7 @@ public class UserTokenCookiePackager {
      *                   should match the cookieHost passed to {@link #packageToken} on a previous request.
      * @return a cookie that should be sent to the user's browser to clear their DAM token.
      */
-    public ResponseCookie clearToken(String cookieHost, TokenAudience audience) {
+    public ResponseCookie clearToken(String cookieHost, CookieKind audience) {
         return ResponseCookie.from(audience.cookieName(), "expired")
                 .domain(cookieHost)
                 .path("/")
@@ -64,14 +64,15 @@ public class UserTokenCookiePackager {
                 .build();
     }
 
-    public enum TokenAudience {
+    public enum CookieKind {
         IC("ic_token"),
         DAM("dam_token"),
+        REFRESH("refresh_token"),
         OAUTH_STATE("oauth_state");
 
         private String cookieName;
 
-        TokenAudience(String cookieName) {
+        CookieKind(String cookieName) {
             this.cookieName = cookieName;
         }
 
