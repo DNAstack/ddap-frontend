@@ -3,14 +3,14 @@
 </ddap-header>
 
 <ddap-main>
-  <mat-accordion>
+  <mat-accordion class="ddap-connected-accounts">
     <h2>Connected Accounts</h2>
-    <mat-progress-bar *ngIf="accountsSubscription && !accountsSubscription.closed"
+    <mat-progress-bar *ngIf="connectedAccountsSubscription && !connectedAccountsSubscription.closed"
                       class="ddap-card-loader"
                       mode="indeterminate">
     </mat-progress-bar>
 
-    <mat-expansion-panel *ngFor="let account of accounts">
+    <mat-expansion-panel *ngFor="let account of connectedAccounts">
       <mat-expansion-panel-header collapsedHeight="6rem"
                                   expandedHeight="7rem">
         <mat-card class="mat-card-flat">
@@ -31,14 +31,25 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <mat-accordion>
+  <mat-accordion class="ddap-new-accounts">
     <h2>Connect Another Account</h2>
-    <mat-progress-bar *ngIf="identityProvidersSubscription && !identityProvidersSubscription.closed"
+    <mat-progress-bar *ngIf="availableAccountsSubscription && !availableAccountsSubscription.closed"
                       class="ddap-card-loader"
                       mode="indeterminate">
     </mat-progress-bar>
-    <mat-card *ngFor="let idp of identityProviderLinks" class="mat-card-flat">
-      <a [href]="idp.href">{{ idp.text }}</a>
-    </mat-card>
+    <a *ngFor="let account of availableAccounts"
+       [href]="account.linkUrl">
+      <mat-card>
+        <mat-card-header>
+          <img mat-card-avatar
+               [src]="getPicture(account)"/>
+          <mat-card-title>
+            <span>{{ account.label }}</span>
+            <mat-icon class="icon icon-plus"></mat-icon>
+          </mat-card-title>
+          <mat-card-subtitle *ngIf="isAccountPersona(account)">{{ account.provider }}</mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </a>
   </mat-accordion>
 </ddap-main>
