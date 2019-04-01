@@ -38,6 +38,11 @@ public class SearchPage extends AnyDdapPage {
                 .click();
     }
 
+    public void clickBRCA2() {
+        getDriver().findElement(DdapBy.se("brca2-link"))
+                .click();
+    }
+
     public void clickLimitSearch() {
         getDriver().findElement(DdapBy.se("limit-search"));
     }

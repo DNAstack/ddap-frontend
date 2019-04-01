@@ -65,7 +65,7 @@
     "typescript": "~3.2.4"
   },
   "lint-staged": {
-    "src/**/*.{js,ts,tsx,css,scss,html}": [
+    "src/**/*.{js,ts,tsx,css,scss}": [
       "tslint --fix --format stylish",
       "git add"
     ]
