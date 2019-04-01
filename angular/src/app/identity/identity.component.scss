@@ -1,9 +1,52 @@
+
 mat-card {
-  background: transparent;
-  padding: 0;
+  .mat-card-header {
+    align-items: center;
+  }
 
   .mat-card-avatar {
     width: 4rem;
     height: 4rem;
+    object-fit: fill;
+  }
+
+  .mat-card-subtitle {
+    margin-bottom: 0;
+  }
+
+}
+
+.ddap-connected-accounts {
+  mat-card {
+    background: transparent;
+    padding: 0;
+  }
+}
+
+::ng-deep .ddap-new-accounts {
+  & > h2 {
+    margin-top: 3rem;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  mat-card {
+    margin-bottom: 1rem;
+
+    .mat-card-title {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .mat-card-header-text {
+      flex-grow: 1;
+      margin-right: 0;
+    }
+
+    mat-icon {
+      color: grey;
+    }
   }
 }
