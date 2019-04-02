@@ -1,3 +1,4 @@
+@import "~src/styles/modules/colors";
 
 mat-card {
   .mat-card-header {
@@ -46,7 +47,7 @@ mat-card {
     }
 
     mat-icon {
-      color: grey;
+      color: $color-grey;
     }
   }
 }

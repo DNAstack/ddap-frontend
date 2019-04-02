@@ -63,31 +63,28 @@ export class IdentityService {
   }
 
   private getAccountLinksFromProviders(idps: object, realm: string): AccountLink[] {
-    const accounts = [];
-    for (const idp in idps) {
-      accounts.push({
-        provider: idp,
-        label: _get(idps[idp], 'ui.label', idp),
-        linkUrl: `${environment.ddapApiUrl}/${realm}/identity/link?provider=${idp}`,
+    return Object.entries(idps)
+      .map(([idpKey, idpValue]) => {
+        return {
+          provider: idpKey,
+          label: _get(idpValue, 'ui.label', idpKey),
+          linkUrl: `${environment.ddapApiUrl}/${realm}/identity/link?provider=${idpKey}`,
+        };
       });
-    }
-
-    return accounts;
   }
 
   private getAccountLinksFromPersonas(personas: object, realm: string): AccountLink[] {
-    const accounts = [];
-    for (const persona in personas) {
-      accounts.push({
-        provider: '<persona>',
-        profile: {
-          username: persona,
-        },
-        label: _get(personas[persona], 'ui.label', persona),
-        linkUrl: `${environment.ddapApiUrl}/${realm}/identity/link?provider=${persona}&type=persona`,
+    return Object.entries(personas)
+      .map(([personaKey, personaValue]) => {
+        return {
+          provider: '<persona>',
+          profile: {
+            username: personaKey,
+          },
+          label: _get(personaValue, 'ui.label', personaKey),
+          linkUrl: `${environment.ddapApiUrl}/${realm}/identity/link?provider=${personaKey}&type=persona`,
+        };
       });
-    }
-    return accounts;
   }
 
 }

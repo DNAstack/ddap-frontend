@@ -17,6 +17,7 @@ export const identityProviders = {
   dr_joe_era_commons: {
     imagePath: '/assets/images/era_commons_identity.jpg',
   },
+  defaultImagePath: '/assets/images/placeholder_identity.png',
 };
 
 export const identityProviderMetadataExists = (provider) => {

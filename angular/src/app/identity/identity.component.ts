@@ -58,7 +58,7 @@ export class IdentityComponent implements OnInit {
   private getDefaultProviderPicture(provider: string) {
     return identityProviderMetadataExists(provider)
       ? identityProviders[provider].imagePath
-      : '/assets/images/placeholder_identity.png';
+      : identityProviders.defaultImagePath;
   }
 
 }
