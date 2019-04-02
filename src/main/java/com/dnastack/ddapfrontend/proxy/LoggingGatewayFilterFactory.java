@@ -30,6 +30,8 @@ import org.springframework.web.server.ServerWebExchange;
 
 import java.net.URI;
 
+import static java.lang.String.format;
+
 /**
  * Logs requests and responses going through the gateway.
  */
@@ -45,9 +47,21 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory {
 			logRoutedRequest(exchange);
 			final long startTime = System.currentTimeMillis();
 			return chain.filter(exchange)
-						.doOnCancel(() -> logResponse(exchange, startTime))
-						.doOnTerminate(() -> logResponse(exchange, startTime));
+						.doOnSuccessOrError((value, error) -> {
+							if (error == null) {
+								logResponse(exchange, startTime);
+							} else {
+								logError(exchange, startTime, error);
+							}
+						});
 		};
+	}
+
+	private void logError(ServerWebExchange exchange, long startTime, Throwable error) {
+		final long elapsedTime = System.currentTimeMillis() - startTime;
+		log.info(format("<<< %s exception in %sms",
+						error.getClass().getSimpleName(),
+						elapsedTime), error);
 	}
 
 	private void logRoutedRequest(ServerWebExchange exchange) {

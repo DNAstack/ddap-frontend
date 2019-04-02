@@ -47,6 +47,12 @@ spring:
         - predicates:
             - Path=/dam/**
           filters:
+            - name: TimeoutWithRetry
+              args:
+                maxAttempts: 3
+                baseTimeout: 1000
+                timeoutScalingFactor: 2
+                applicableMethods: GET,HEAD,OPTIONS
             - AddRequestParameter=clientId,${dam.client-id}
             - AddRequestParameter=clientSecret,${dam.client-secret}
             - RemoveRequestHeader=Authorization
@@ -56,6 +62,12 @@ spring:
         - predicates:
             - Path=/identity/**
           filters:
+            - name: TimeoutWithRetry
+              args:
+                maxAttempts: 3
+                baseTimeout: 1000
+                timeoutScalingFactor: 2
+                applicableMethods: GET,HEAD,OPTIONS
             - AddRequestParameter=clientId,${idp.client-id}
             - AddRequestParameter=clientSecret,${idp.client-secret}
             - RemoveRequestHeader=Authorization
