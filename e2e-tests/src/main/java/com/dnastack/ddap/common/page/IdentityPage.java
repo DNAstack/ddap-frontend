@@ -21,9 +21,17 @@ public class IdentityPage implements HasNavBar {
         return driver;
     }
 
+    public List<String> getLinkableIdentities() {
+        return driver.findElement(By.className("ddap-available-accounts"))
+            .findElements(By.tagName("mat-card-subtitle")).stream()
+            .map(WebElement::getText)
+            .collect(Collectors.toList());
+    }
+
     public List<String> getLinkedIdentities() {
-        return driver.findElements(By.tagName("mat-card-subtitle")).stream()
-                .map(WebElement::getText)
-                .collect(Collectors.toList());
+        return driver.findElement(By.className("ddap-connected-accounts"))
+            .findElements(By.tagName("mat-card-subtitle")).stream()
+            .map(WebElement::getText)
+            .collect(Collectors.toList());
     }
 }

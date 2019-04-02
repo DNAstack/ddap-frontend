@@ -2,11 +2,9 @@ package com.dnastack.ddap.frontend;
 
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
-import com.dnastack.ddap.common.page.HasNavBar;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.page.IdentityPage;
 import com.dnastack.ddap.common.page.NavBar;
@@ -21,6 +19,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+@SuppressWarnings("Duplicates")
 public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
     private static final Map<NavBar.NavItem, List<String>> DEFAULT_PAGE_ITEMS = pageItems();
@@ -146,7 +145,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void verifyIdentity() {
+    public void verifyConnectedIdentityAccounts() {
         driver.findElement(By.xpath("//*[@data-se=\"nav-identity\"]")).click();
 
         // click through the "log in again" prompt
@@ -154,7 +153,20 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ICLoginPage icLoginPage = new ICLoginPage(driver);
 
         IdentityPage identityPage = icLoginPage.loginAsNciResearcher(IdentityPage::new);
-        assertThat(identityPage.getLinkedIdentities(), contains("nci_researcher@nci.nih.gov"));
+        assertThat(identityPage.getLinkedIdentities(), hasItem("nci_researcher@nci.nih.gov"));
+    }
+
+    @Test
+    public void verifyAvailableIdentityAccounts() {
+        driver.findElement(By.xpath("//*[@data-se=\"nav-identity\"]")).click();
+
+        // click through the "log in again" prompt
+        driver.switchTo().alert().accept();
+        ICLoginPage icLoginPage = new ICLoginPage(driver);
+
+        IdentityPage identityPage = icLoginPage.loginAsNciResearcher(IdentityPage::new);
+        System.out.println(identityPage.getLinkableIdentities());
+        assertThat(identityPage.getLinkableIdentities(), hasItem("<persona>"));
     }
 
     @Test
