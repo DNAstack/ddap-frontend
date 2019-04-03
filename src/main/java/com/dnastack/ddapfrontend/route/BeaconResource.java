@@ -14,6 +14,9 @@ import com.dnastack.ddapfrontend.client.dam.DamView;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +25,7 @@ import java.util.stream.Stream;
 
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -111,7 +115,12 @@ class BeaconResource {
             // TODO DISCO-2038 Handle errors and unauthorized requests
             final Mono<BeaconQueryResult> beaconQueryResponse = beaconQuery(beaconRequest, viewToken);
             String beaconRootUrl = viewToken.getUrl();
-            final Mono<BeaconInfo> beaconInfoResponse = beaconInfo(beaconRootUrl);
+            Mono<BeaconInfo> beaconInfoResponse = null;
+            try {
+                beaconInfoResponse = beaconInfo(beaconRootUrl);
+            } catch (URISyntaxException | MalformedURLException e) {
+                log.error("Bad beacon url");
+            }
             return Flux.zip(
                     beaconInfoResponse,
                     beaconQueryResponse,
@@ -146,11 +155,15 @@ class BeaconResource {
         }
     }
 
-    private Mono<BeaconInfo> beaconInfo(String rootBeaconUrl) {
+    private Mono<BeaconInfo> beaconInfo(String rootBeaconUrl) throws URISyntaxException, MalformedURLException {
+
+        URIBuilder builder = new URIBuilder(rootBeaconUrl);
+        builder.setPath("beacon/query");
+        URL beaconUrl = builder.build().toURL();
 
         return webClient
                 .get()
-                .uri(rootBeaconUrl)
+                .uri(beaconUrl.toString())
                 .exchange()
                 .flatMap(clientResponse -> clientResponse.bodyToMono(BeaconInfo.class));
     }
