@@ -39,7 +39,7 @@
         <h4 mat-line>My Collections</h4>
       </mat-list-item>
       <mat-list-item (click)="goToIdentity()"
-                     [ngClass]="{'active-nav-link': isIdentityPage()}"
+                     [class.active-nav-link]="isIdentityPage()"
                      data-se="nav-identity">
         <mat-icon class="icon icon-identity"></mat-icon>
         <h4 mat-line>My Identity</h4>
