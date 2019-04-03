@@ -4,7 +4,8 @@
 <ddap-main>
   <p *ngIf="entity?.dto.ui.description">{{ entity?.dto.ui.description }}</p>
 
-  <ddap-json-panel [useTests]="true"
+  <ddap-json-panel *ngIf="entity"
+                   [useTests]="true"
                    [entityService]="entityService"
                    [entity]="entity">
   </ddap-json-panel>

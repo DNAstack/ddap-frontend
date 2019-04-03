@@ -43,10 +43,8 @@ export class ConfigEntityService implements EntityService {
   }
 
   remove(id: string): Observable<any> {
-
     return this.http.delete(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       {headers}
     );
-
   }
 }
