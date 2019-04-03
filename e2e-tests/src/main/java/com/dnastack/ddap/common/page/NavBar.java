@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import java.util.Map;
 
+import com.dnastack.ddap.common.DdapBy;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -68,20 +69,20 @@ public class NavBar {
     }
 
     public NavBar goToAndCheckForTitle(NavItem pageId) {
-        driver.findElement(By.xpath("//*[@data-se=\"" + NAV_SELECTOR.get(pageId) + "\"]")).click();
+        driver.findElement(DdapBy.se(NAV_SELECTOR.get(pageId))).click();
         driver.findElement(By.xpath("//h2[contains(text(), '" + PAGE_TITLE.get(pageId) + "')]"));
 
         return new NavBar(driver);
     }
 
     public NavBar goTo(NavItem pageId) {
-        driver.findElement(By.xpath("//*[@data-se=\"" + NAV_SELECTOR.get(pageId) + "\"]")).click();
+        driver.findElement(DdapBy.se(NAV_SELECTOR.get(pageId))).click();
 
         return new NavBar(driver);
     }
 
     private WebElement getRealmInput() {
-        return driver.findElement(By.xpath("//*[@data-se=\"realm-input\"]"));
+        return driver.findElement(DdapBy.se("realm-input"));
     }
 
     public void setRealm(String targetRealm) {
