@@ -22,6 +22,7 @@ public class ConfigE2eTest extends AbstractBaseE2eTest {
     @Test
     public void doNotAcceptDevCredentials() {
         Assume.assumeFalse("Dev credentials are allowed on localhost", RestAssured.baseURI.startsWith("http://localhost:"));
+        Assume.assumeFalse("Dev credentials are allowed on localhost", RestAssured.baseURI.startsWith("http://host.docker.internal:"));
         given()
             .log().method()
             .log().uri()

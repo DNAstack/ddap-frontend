@@ -116,7 +116,7 @@ public abstract class AbstractBaseE2eTest {
         assertThat(icTokenCookie, notNullValue());
 
         // Require cookies to be marked as secure unless we're testing on localhost
-        if (!DDAP_BASE_URL.startsWith("http://localhost:")) {
+        if (!(DDAP_BASE_URL.startsWith("http://localhost:") || DDAP_BASE_URL.startsWith("http://host.docker.internal:"))) {
             assertThat("It looks like DDAP_COOKIES_SECURE=true isn't set on this deployment",
                     icTokenCookie.containsAttribute("secure"), is(true));
             assertThat(icTokenCookie.getAttribute("secure"), nullValue());
