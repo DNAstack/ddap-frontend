@@ -1,12 +1,25 @@
 package com.dnastack.ddapfrontend.route;
 
+import static java.lang.String.format;
+
 import com.dnastack.ddapfrontend.beacon.BeaconInfo;
 import com.dnastack.ddapfrontend.beacon.BeaconOrganization;
 import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.beacon.ExternalBeaconQueryResult;
-import com.dnastack.ddapfrontend.client.dam.*;
+import com.dnastack.ddapfrontend.client.dam.DamClient;
+import com.dnastack.ddapfrontend.client.dam.DamInterface;
+import com.dnastack.ddapfrontend.client.dam.DamResourceViews;
+import com.dnastack.ddapfrontend.client.dam.DamResources;
+import com.dnastack.ddapfrontend.client.dam.DamView;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,25 +28,38 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import static java.lang.String.format;
 
 
 @Slf4j
 @RestController
 class BeaconResource {
 
-    @Autowired
-    private WebClient webClient;
+    private final WebClient webClient = WebClient.builder()
+            .filter(logRequest())
+            .filter(logResponse())
+            .build();
+
+    private static ExchangeFilterFunction logRequest() {
+        return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
+            log.info(">>> {} {}", clientRequest.method(), clientRequest.url());
+            clientRequest.headers()
+                    .forEach((name, values) -> log.info("  {}: {}", name, values));
+            return Mono.just(clientRequest);
+        });
+    }
+
+    private static ExchangeFilterFunction logResponse() {
+        return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
+            log.info("<<< HTTP {}", clientResponse.rawStatusCode());
+            clientResponse.headers().asHttpHeaders()
+                    .forEach((name, values) -> log.info("  {}: {}", name, values));
+            return Mono.just(clientResponse);
+        });
+    }
 
     @Autowired
     private DamClient damClient;
