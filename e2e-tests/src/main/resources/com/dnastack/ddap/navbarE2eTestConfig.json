@@ -5,11 +5,11 @@
   "trustedPassportIssuers": {
     "dbGaP": {
       "issuer": "https://dbgap.nlm.nih.gov/aa",
-      "translateUsing": "dbgap"
+      "translateUsing": "dbgap_translator"
     },
     "elixir": {
       "issuer": "https://login.elixir-czech.org/oidc/",
-      "translateUsing": "elixir"
+      "translateUsing": "elixir_translator"
     },
     "ic_dev": {
       "issuer": "https://ic-dev-dot-craigv-codelab.appspot.com/oidc"
@@ -25,7 +25,7 @@
     },
     "nih": {
       "issuer": "https://login.nih.org/oidc/",
-      "translateUsing": "dbgap"
+      "translateUsing": "dbgap_translator"
     },
     "playgroundIC": {
       "issuer": "https://ic-staging-dot-craigv-codelab.appspot.com/oidc"
