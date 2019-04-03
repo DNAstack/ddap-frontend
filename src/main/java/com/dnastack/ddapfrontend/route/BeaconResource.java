@@ -110,7 +110,8 @@ class BeaconResource {
             log.debug("About to query: {} beacon at {}", viewToken.getViewId(), viewToken.getUrl());
             // TODO DISCO-2038 Handle errors and unauthorized requests
             final Mono<BeaconQueryResult> beaconQueryResponse = beaconQuery(beaconRequest, viewToken);
-            final Mono<BeaconInfo> beaconInfoResponse = beaconInfo();
+            String beaconRootUrl = viewToken.getUrl();
+            final Mono<BeaconInfo> beaconInfoResponse = beaconInfo(beaconRootUrl);
             return Flux.zip(
                     beaconInfoResponse,
                     beaconQueryResponse,
@@ -145,10 +146,11 @@ class BeaconResource {
         }
     }
 
-    private Mono<BeaconInfo> beaconInfo() {
+    private Mono<BeaconInfo> beaconInfo(String rootBeaconUrl) {
+
         return webClient
                 .get()
-                .uri("https://beacon.cafevariome.org/")
+                .uri(rootBeaconUrl)
                 .exchange()
                 .flatMap(clientResponse -> clientResponse.bodyToMono(BeaconInfo.class));
     }
