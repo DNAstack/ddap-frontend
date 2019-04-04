@@ -72,3 +72,15 @@ ddap-resource-views {
     }
   }
 }
+
+.ddap-resource-views {
+  &.mat-list-base .mat-list-item,
+  &.mat-list-base .mat-list-option {
+    height: auto;
+  }
+
+  ddap-resource-view-item {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}

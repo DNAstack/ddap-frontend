@@ -25,6 +25,10 @@ mat-card {
     top: 0;
     left: 0;
   }
+
+  button.success {
+    background: $success-color;
+  }
 }
 
 ::ng-deep .access-menu {
@@ -58,7 +62,7 @@ mat-card {
       background: $color-faded-grey;
     }
   }
-  
+
   mat-form-field {
     padding-left: 1rem;
     padding-top: 1rem;

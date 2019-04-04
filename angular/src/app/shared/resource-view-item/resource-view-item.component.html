@@ -1,14 +1,15 @@
 <mat-card>
-  <mat-progress-bar *ngIf="access?.inProgress"
+  <mat-progress-bar *ngIf="accessSubscription && !accessSubscription.closed"
                     mode="indeterminate">
   </mat-progress-bar>
   <mat-card-header class="stretch">
-    <mat-card-title>{{ label || name }}</mat-card-title>
+    <mat-card-title>{{ view.dto.ui.label || view.name }}</mat-card-title>
   </mat-card-header>
   <mat-card-actions>
     <button mat-flat-button
             color="primary"
             class="uppercase"
+            [class.success]="access?.token"
             [matMenuTriggerFor]="appMenu"
             data-se="get-access-btn"
             (click)="getAccess()">
@@ -19,10 +20,9 @@
               class="access-menu"
               xPosition="before"
               yPosition="below">
-      <div *ngIf="!access?.error" >
+      <div *ngIf="access; else error">
         <div class="flex flex--column vertical-center">
-          <div class="flex vertical-center row"
-               *ngIf="access?.account">
+          <div class="flex vertical-center row">
             <mat-form-field class="stretch">
               <input matInput
                      readonly
@@ -41,13 +41,13 @@
             </button>
           </div>
           <div class="flex vertical-center row"
-               *ngIf="(access?.url || access?.token)">
+               *ngIf="access?.token">
             <mat-form-field class="stretch">
               <input matInput
                      readonly
                      type="text"
-                     [placeholder]="access?.url ? 'Access url' : 'Access token'"
-                     [value]="access?.url || access?.token">
+                     [placeholder]="'Access token'"
+                     [value]="access?.token">
             </mat-form-field>
             <button mat-flat-button
                     matSuffix
@@ -74,20 +74,23 @@
           </a>
         </div>
       </div>
-      <div *ngIf="access?.error"
-           class="error-container flex flex--column">
-        <div class="flex flex--row vertical-center">
-          <mat-icon color="warn">warning</mat-icon>
-          <p>Unable to request access token at the moment. Please try again later or contact admin.</p>
-        </div>
-        <div class="error-message">
-          <button mat-button
-                  class="uppercase"
-                  disabled>
-            Send Feedback
-          </button>
-        </div>
-      </div>
     </mat-menu>
   </mat-card-actions>
 </mat-card>
+
+<ng-template #error>
+  <div class="error-container flex flex--column"
+       *ngIf="accessSubscription && accessSubscription.closed">
+    <div class="flex flex--row vertical-center">
+      <mat-icon color="warn">warning</mat-icon>
+      <p>Unable to request access token at the moment. Please try again later or contact admin.</p>
+    </div>
+    <div class="error-message">
+      <button mat-button
+              class="uppercase"
+              disabled>
+        Send Feedback
+      </button>
+    </div>
+  </div>
+</ng-template>

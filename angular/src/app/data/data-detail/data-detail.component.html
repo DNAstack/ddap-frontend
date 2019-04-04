@@ -48,9 +48,13 @@
       </table>
     </div>
     <div class="ddap-column">
-      <ddap-resource-view-group [views]="views"
-                                [resource]="resource">
-      </ddap-resource-view-group>
+      <mat-list class="ddap-resource-views">
+        <mat-list-item *ngFor="let view of views">
+          <ddap-resource-view-item [view]="view"
+                                   [resource]="resource">
+          </ddap-resource-view-item>
+        </mat-list-item>
+      </mat-list>
     </div>
   </div>
 </div>

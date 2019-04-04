@@ -31,7 +31,6 @@ import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
-import { ResourceViewGroupComponent } from './resource-view-group/resource-view-group.component';
 import { ResourceViewItemComponent } from './resource-view-item/resource-view-item.component';
 
 @NgModule({
@@ -40,7 +39,6 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     MainComponent,
     NavBackComponent,
     ResourceLogoComponent,
-    ResourceViewGroupComponent,
     ResourceViewItemComponent,
     BeaconSearchBarComponent,
     BeaconResultComponent,
@@ -104,7 +102,6 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     BeaconSearchBarComponent,
     BeaconResultComponent,
     ResourceLogoComponent,
-    ResourceViewGroupComponent,
     ResourceViewItemComponent,
     LimitSearchComponent,
   ],

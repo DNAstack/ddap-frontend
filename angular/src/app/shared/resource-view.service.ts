@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
 import { realmIdPlaceholder } from './realm/realm.constant';
+import { ResourceViewAccess } from './resource-view-access.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +17,16 @@ export class ResourceViewService {
 
   }
 
-  getAccessRequestToken(resource, view): any {
+  getAccessRequestToken(resource: string, view: string): Observable<ResourceViewAccess> {
     const viewUrl = `${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resource}/views/${view}/token`;
     return this.http.get<any>(viewUrl)
       .pipe(
-        map(({account, token}) => ({account, token}))
+        map(({ account, token }) => {
+          return {
+            account,
+            token,
+          };
+        })
       );
   }
 }
