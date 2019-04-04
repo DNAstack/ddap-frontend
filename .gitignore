@@ -1,11 +1,6 @@
 /target/
-ci/impl/target
-ci/e2e-tests/target
 !.mvn/wrapper/maven-wrapper.jar
-
-# per-developer local configuration
 .env
-*-secrets.env
 
 ### STS ###
 .apt_generated
