@@ -1,6 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import _get from 'lodash.get';
+import { Subscription } from 'rxjs/Subscription';
 
-import { ResourceViewAccess } from '../resource-view-group/resource-view-access.model';
+import { EntityModel } from '../../admin/shared/entity.model';
+import { ResourceViewAccess } from '../resource-view-access.model';
+import { ResourceViewService } from '../resource-view.service';
 
 @Component({
   selector: 'ddap-resource-view-item',
@@ -10,19 +14,42 @@ import { ResourceViewAccess } from '../resource-view-group/resource-view-access.
 export class ResourceViewItemComponent {
 
   @Input()
-  label: string;
+  resource: EntityModel;
   @Input()
-  name: string;
-  @Input()
+  view: EntityModel;
+
+  accessSubscription: Subscription;
   access: ResourceViewAccess;
 
-  @Output()
-  accessRequest: EventEmitter<void> = new EventEmitter();
+  constructor(private resourceViewService: ResourceViewService) {
+
+  }
 
   getAccess(): void {
-    if (!this.access || !this.access.token) {
-      this.accessRequest.emit();
+    if (this.access && this.access.token) {
+      return;
     }
+
+    const viewName = this.view.name;
+    this.accessSubscription = this.resourceViewService.getAccessRequestToken(this.resource.name, viewName)
+      .subscribe((access) => {
+        this.access = access;
+        this.access.url = this.getUrlIfApplicable(viewName, access.token);
+      });
+  }
+
+  getUrlIfApplicable(viewName: string, token: string): string {
+    const view = this.resource.dto.views[viewName];
+    const interfaces = view.interfaces;
+    const httpInterfaces = Object.keys(interfaces)
+      .filter((viewInterface) => viewInterface.startsWith('http'));
+
+    if (!httpInterfaces.length) {
+      return;
+    }
+
+    const viewAccessUrl = _get(interfaces, `[${httpInterfaces[0]}].uri[0]`);
+    return `${viewAccessUrl}/o?access_token=${token}`;
   }
 
 }

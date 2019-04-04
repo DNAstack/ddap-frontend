@@ -1,9 +1,0 @@
-<mat-list>
-  <mat-list-item *ngFor="let view of views">
-    <ddap-resource-view-item [label]="view.dto.ui.label"
-                             [name]="view.name"
-                             [access]="viewsAccess[view.name]"
-                             (accessRequest)="getAccess(view.name)">
-    </ddap-resource-view-item>
-  </mat-list-item>
-</mat-list>
