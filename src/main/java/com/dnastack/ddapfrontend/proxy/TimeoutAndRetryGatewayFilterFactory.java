@@ -43,6 +43,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ * Copied and slightly modified from RetryGatewayFilterFactory in spring-cloud-gateway-core:2.1.0.RC2
+ *
+ * Changes from the original are called out in comments with 'CHANGED'.
+ */
 @Slf4j
 @Component
 public class TimeoutAndRetryGatewayFilterFactory extends AbstractGatewayFilterFactory<TimeoutAndRetryGatewayFilterFactory.RetryConfig> {
@@ -129,6 +134,10 @@ public class TimeoutAndRetryGatewayFilterFactory extends AbstractGatewayFilterFa
 
 			// chain.filter returns a Mono<Void>
             Publisher<Void> publisher = chain.filter(exchange)
+											 /*
+											  CHANGED
+											  Sets a timeout for requests of the configured method.
+											  */
                                              .compose(filterChainResult -> {
                                                  if (config.getMethods().contains(exchange.getRequest().getMethod())) {
 													 final int iteration = exchange.getAttributeOrDefault(RETRY_ITERATION_KEY, -1) + 1;
@@ -160,12 +169,14 @@ public class TimeoutAndRetryGatewayFilterFactory extends AbstractGatewayFilterFa
 		};
 	}
 
+	// ADDED
 	static long calculateTimeout(RetryConfig config, double iteration) {
 		final long unboundTimeout = (long) (config.getMinimumTimeout() * Math.pow(config.getTimeoutExponentialScalingBase(),
 																				  iteration));
 		return Math.min(unboundTimeout, config.getMaximumTimeout());
 	}
 
+	// ADDED
 	private Mono<Void> timeout(Mono<Void> filterChainResult, long timeoutInMs) {
 	    /*
 	     Doing `filterChainResult.timeout(timeoutInMs)` breaks retrying,
@@ -189,6 +200,13 @@ public class TimeoutAndRetryGatewayFilterFactory extends AbstractGatewayFilterFa
 		return new ArrayList<>(Arrays.asList(items));
 	}
 
+	/*
+	CHANGED
+	Added configuration for timeout:
+	- timeoutExponentialScalingBase
+	- minimumTimeout
+	- maximumTimeout
+	 */
 	@SuppressWarnings("unchecked")
 	@Data
 	public static class RetryConfig {
