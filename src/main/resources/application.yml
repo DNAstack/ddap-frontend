@@ -40,27 +40,39 @@ spring:
         - predicates:
             - Path=/api/cafevariome/**
           filters:
+            - Logging
             - StripPrefix=2
             - RemoveRequestHeader=Authorization
-            - Logging
           uri: https://beacon.cafevariome.org
         - predicates:
             - Path=/dam/**
           filters:
+            - name: TimeoutAndRetry
+              args:
+                retries: 2
+                minimumTimeout: 1000
+                maximumTimeout: 20000
+                timeoutExponentialScalingBase: 10
+            - Logging
             - AddRequestParameter=clientId,${dam.client-id}
             - AddRequestParameter=clientSecret,${dam.client-secret}
             - RemoveRequestHeader=Authorization
             - SetBearerTokenFromCookie=DAM
-            - Logging
           uri: ${dam.base-url}
         - predicates:
             - Path=/identity/**
           filters:
+            - name: TimeoutAndRetry
+              args:
+                retries: 2
+                minimumTimeout: 1000
+                maximumTimeout: 20000
+                timeoutExponentialScalingBase: 10
+            - Logging
             - AddRequestParameter=clientId,${idp.client-id}
             - AddRequestParameter=clientSecret,${idp.client-secret}
             - RemoveRequestHeader=Authorization
             - SetBearerTokenFromCookie=IC
-            - Logging
           uri: ${idp.base-url}
 logging:
   level:

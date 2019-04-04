@@ -27,6 +27,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
@@ -42,11 +43,15 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory {
 	@Override
 	public GatewayFilter apply(Object config) {
 		return (exchange, chain) -> {
-			logRoutedRequest(exchange);
 			final long startTime = System.currentTimeMillis();
-			return chain.filter(exchange)
-						.doOnCancel(() -> logResponse(exchange, startTime))
-						.doOnTerminate(() -> logResponse(exchange, startTime));
+
+			// Make sure logging request is part of the mono, so that if the request is retried
+			// we will see it again in the logs
+			return Mono.fromRunnable(() -> logRoutedRequest(exchange))
+					   .then(chain.filter(exchange)
+								  .doOnSuccess(value -> logResponse(exchange, startTime))
+								  .doOnError(error -> logError(error, startTime))
+					              .doOnTerminate(() -> logTermination(startTime)));
 		};
 	}
 
@@ -63,8 +68,21 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory {
 		Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
 		URI routeUri = route == null ? UNKNOWN_ROUTE_PLACEHOLDER : route.getUri();
 
-		String requestPathAndQuery = requestUri.getPath() + "?" + requestUri.getQuery();
+		String queryString = requestUri.getQuery() == null ? "" : "?" + requestUri.getQuery();
+		String requestPathAndQuery = requestUri.getPath() + queryString;
+
 		return routeUri.resolve(requestPathAndQuery);
+	}
+
+	private void logTermination(long startTime) {
+		final long elapsedTime = System.currentTimeMillis() - startTime;
+		log.debug("<<< Chain filter mono terminated in {}ms", elapsedTime);
+	}
+
+	private void logError(Throwable error, long startTime) {
+		final long elapsedTime = System.currentTimeMillis() - startTime;
+		log.info("<<< Error occurred in {}ms: {}", elapsedTime, error.getMessage());
+		log.debug("<<< Error details", error);
 	}
 
 	private void logResponse(ServerWebExchange exchange, long startTime) {
