@@ -13,7 +13,8 @@
     "lint:fix": "ng lint --fix",
     "e2e": "ng e2e",
     "build:prod": "npm run build -- --prod",
-    "proto": "./scripts/generate_proto.sh"
+    "proto": "./scripts/generate_proto.sh",
+    "postinstall": "npm run proto"
   },
   "private": true,
   "dependencies": {
