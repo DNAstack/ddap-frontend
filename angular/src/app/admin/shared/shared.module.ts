@@ -19,14 +19,11 @@ import { OptionEditableListComponent } from './option-editable-list/option-edita
   ],
   imports: [
     SharedModule,
-
     NgJsonEditorModule,
   ],
   exports: [
     SharedModule,
-
     NgJsonEditorModule,
-
     JsonPanelComponent,
     EntityListComponent,
     EntityAddComponent,
