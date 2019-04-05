@@ -30,7 +30,7 @@ export class ResourceViewItemComponent {
   }
 
   getAccess(): void {
-    if (this.access && this.access.token) {
+    if ((this.access && this.access.token) || !this.ttlForm.valid) {
       return;
     }
 
