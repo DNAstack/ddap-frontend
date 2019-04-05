@@ -15,6 +15,7 @@ import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
@@ -117,7 +118,7 @@ class BeaconResource {
             String beaconRootUrl = viewToken.getUrl();
             Mono<BeaconInfo> beaconInfoResponse = null;
             try {
-                beaconInfoResponse = beaconInfo(beaconRootUrl);
+                beaconInfoResponse = beaconInfo(new URI(beaconRootUrl), viewToken.getToken());
             } catch (URISyntaxException | MalformedURLException e) {
                 log.error("Bad beacon url");
             }
@@ -155,15 +156,13 @@ class BeaconResource {
         }
     }
 
-    private Mono<BeaconInfo> beaconInfo(String rootBeaconUrl) throws URISyntaxException, MalformedURLException {
+    private Mono<BeaconInfo> beaconInfo(URI rootBeaconUrl, String token) throws URISyntaxException, MalformedURLException {
 
-        URIBuilder builder = new URIBuilder(rootBeaconUrl);
-        builder.setPath("beacon/query");
-        URL beaconUrl = builder.build().toURL();
+        URI beaconUrl = rootBeaconUrl.resolve("/beacon/?access_token=" + token);
 
         return webClient
                 .get()
-                .uri(beaconUrl.toString())
+                .uri(beaconUrl)
                 .exchange()
                 .flatMap(clientResponse -> clientResponse.bodyToMono(BeaconInfo.class));
     }
