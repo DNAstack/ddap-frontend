@@ -14,6 +14,7 @@ import com.dnastack.ddapfrontend.client.dam.DamView;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -164,7 +166,17 @@ class BeaconResource {
                 .get()
                 .uri(beaconUrl)
                 .exchange()
-                .flatMap(clientResponse -> clientResponse.bodyToMono(BeaconInfo.class));
+                .flatMap(clientResponse -> {
+                    if (clientResponse.statusCode().is2xxSuccessful()
+                            && clientResponse.headers().contentType().isPresent()
+                            && clientResponse.headers().contentType().get().isCompatibleWith(MediaType.APPLICATION_JSON)) {
+                        return clientResponse.bodyToMono(BeaconInfo.class);
+                    } else {
+                        return clientResponse.bodyToMono(String.class)
+                                .flatMap(errBody -> Mono.error(new IOException("Couldn't read beacon info response: " + errBody)));
+
+                    }
+                });
     }
 
     private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewToken viewToken) {
