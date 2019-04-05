@@ -29,7 +29,8 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Time unit</mat-label>
-        <mat-select [(value)]="selectedTimeUnit">
+        <mat-select [(value)]="selectedTimeUnit"
+                    [disabled]="access?.token">
           <mat-option value="s">second</mat-option>
           <mat-option value="m">minute</mat-option>
           <mat-option value="h">hour</mat-option>
