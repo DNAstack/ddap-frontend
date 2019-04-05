@@ -1,10 +1,10 @@
 <mat-accordion class="ddap-resource-view-item">
-  <mat-progress-bar mode="indeterminate"
-                    *ngIf="accessSubscription && !accessSubscription.closed">
-  </mat-progress-bar>
   <mat-expansion-panel>
     <mat-expansion-panel-header collapsedHeight="4rem">
-      <mat-card class="mat-card-flat">
+      <mat-progress-bar mode="indeterminate"
+                        *ngIf="accessSubscription && !accessSubscription.closed">
+      </mat-progress-bar>
+      <mat-card>
         <mat-card-header>
           <mat-card-title>{{ view.dto.ui.label || view.name }}</mat-card-title>
         </mat-card-header>
@@ -24,7 +24,7 @@
           Duration must be a positive integer
         </mat-error>
         <mat-error *ngIf="ttlForm.hasError('max')">
-          Duration must be a less than 100
+          Duration must be a less than 1000
         </mat-error>
       </mat-form-field>
       <mat-form-field>

@@ -77,6 +77,10 @@ ddap-resource-views {
   &.mat-list-base .mat-list-item,
   &.mat-list-base .mat-list-option {
     height: auto;
+
+    ::ng-deep .mat-list-item-content {
+      padding: 0;
+    }
   }
 
   ddap-resource-view-item {

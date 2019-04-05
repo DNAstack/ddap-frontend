@@ -7,10 +7,13 @@ h4 {
 
 .ddap-resource-view-item {
   mat-progress-bar {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   ::ng-deep mat-card {
+    background: transparent;
     padding: 0;
 
     & > .mat-card-actions,
