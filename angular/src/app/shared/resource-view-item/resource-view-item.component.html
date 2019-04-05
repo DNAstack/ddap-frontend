@@ -1,11 +1,43 @@
-<mat-card>
-  <mat-progress-bar *ngIf="accessSubscription && !accessSubscription.closed"
-                    mode="indeterminate">
+<mat-accordion class="ddap-resource-view-item">
+  <mat-progress-bar mode="indeterminate"
+                    *ngIf="accessSubscription && !accessSubscription.closed">
   </mat-progress-bar>
-  <mat-card-header class="stretch">
-    <mat-card-title>{{ view.dto.ui.label || view.name }}</mat-card-title>
-  </mat-card-header>
-  <mat-card-actions>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header collapsedHeight="4rem">
+      <mat-card class="mat-card-flat">
+        <mat-card-header>
+          <mat-card-title>{{ view.dto.ui.label || view.name }}</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </mat-expansion-panel-header>
+    <div class="flex">
+      <mat-form-field>
+        <input matInput
+               type="number"
+               min="1"
+               placeholder="Duration of an access token"
+               [formControl]="ttlForm">
+        <mat-error *ngIf="ttlForm.hasError('required')">
+          Duration is required
+        </mat-error>
+        <mat-error *ngIf="ttlForm.hasError('min')">
+          Duration must be a positive integer
+        </mat-error>
+        <mat-error *ngIf="ttlForm.hasError('max')">
+          Duration must be a less than 100
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Time unit</mat-label>
+        <mat-select [(value)]="selectedTimeUnit">
+          <mat-option value="s">second</mat-option>
+          <mat-option value="m">minute</mat-option>
+          <mat-option value="h">hour</mat-option>
+          <mat-option disabled value="d">day</mat-option>
+          <mat-option disabled value="w">week</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <button mat-flat-button
             color="primary"
             class="uppercase"
@@ -16,67 +48,68 @@
       Access
       <mat-icon>keyboard_arrow_down</mat-icon>
     </button>
-    <mat-menu #appMenu="matMenu"
-              class="access-menu"
-              xPosition="before"
-              yPosition="below">
-      <div *ngIf="access; else error">
-        <div class="flex flex--column vertical-center">
-          <div class="flex vertical-center row">
-            <mat-form-field class="stretch">
-              <input matInput
-                     readonly
-                     type="text"
-                     [placeholder]="'Account'"
-                     [value]="access?.account">
-            </mat-form-field>
-            <button mat-flat-button
-                    matSuffix
-                    mat-icon-button
-                    ngxClipboard
-                    [cbContent]="access?.account"
-                    matTooltip="Copy to clipboard"
-                    aria-label="Copy to clipboard">
-              <mat-icon class="icon icon-copy"></mat-icon>
-            </button>
-          </div>
-          <div class="flex vertical-center row"
-               *ngIf="access?.token">
-            <mat-form-field class="stretch">
-              <input matInput
-                     readonly
-                     type="text"
-                     [placeholder]="'Access token'"
-                     [value]="access?.token">
-            </mat-form-field>
-            <button mat-flat-button
-                    matSuffix
-                    mat-icon-button
-                    ngxClipboard
-                    [cbContent]="access?.url || access?.token"
-                    matTooltip="Copy to clipboard"
-                    aria-label="Copy to clipboard">
-              <mat-icon class="icon icon-copy"></mat-icon>
-            </button>
-          </div>
-        </div>
-        <div>
-          <a *ngIf="access?.url"
-             href="{{access?.url}}"
-             data-se="access-btn"
-             target='_blank'
-             rel='noopener noreferrer'>
-            <button mat-button
-                    color="primary"
-                    class="uppercase">
-              View
-            </button>
-          </a>
-        </div>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<mat-menu #appMenu="matMenu"
+          class="access-menu"
+          xPosition="before"
+          yPosition="below">
+  <div *ngIf="access; else error">
+    <div class="flex flex--column vertical-center">
+      <div class="flex vertical-center row">
+        <mat-form-field class="stretch">
+          <input matInput
+                 readonly
+                 type="text"
+                 [placeholder]="'Account'"
+                 [value]="access?.account">
+        </mat-form-field>
+        <button mat-flat-button
+                matSuffix
+                mat-icon-button
+                ngxClipboard
+                [cbContent]="access?.account"
+                matTooltip="Copy to clipboard"
+                aria-label="Copy to clipboard">
+          <mat-icon class="icon icon-copy"></mat-icon>
+        </button>
       </div>
-    </mat-menu>
-  </mat-card-actions>
-</mat-card>
+      <div class="flex vertical-center row"
+           *ngIf="access?.token">
+        <mat-form-field class="stretch">
+          <input matInput
+                 readonly
+                 type="text"
+                 [placeholder]="'Access token'"
+                 [value]="access?.token">
+        </mat-form-field>
+        <button mat-flat-button
+                matSuffix
+                mat-icon-button
+                ngxClipboard
+                [cbContent]="access?.url || access?.token"
+                matTooltip="Copy to clipboard"
+                aria-label="Copy to clipboard">
+          <mat-icon class="icon icon-copy"></mat-icon>
+        </button>
+      </div>
+    </div>
+    <div>
+      <a *ngIf="access?.url"
+         href="{{access?.url}}"
+         data-se="access-btn"
+         target='_blank'
+         rel='noopener noreferrer'>
+        <button mat-button
+                color="primary"
+                class="uppercase">
+          View
+        </button>
+      </a>
+    </div>
+  </div>
+</mat-menu>
 
 <ng-template #error>
   <div class="error-container flex flex--column"

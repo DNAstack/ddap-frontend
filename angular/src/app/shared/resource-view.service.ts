@@ -17,8 +17,8 @@ export class ResourceViewService {
 
   }
 
-  getAccessRequestToken(resource: string, view: string): Observable<ResourceViewAccess> {
-    const viewUrl = `${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resource}/views/${view}/token`;
+  getAccessRequestToken(resource: string, view: string, ttl: string = ''): Observable<ResourceViewAccess> {
+    const viewUrl = `${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resource}/views/${view}/token?ttl=${ttl}`;
     return this.http.get<any>(viewUrl)
       .pipe(
         map(({ account, token }) => {
