@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -22,7 +22,7 @@ export class ResourceViewItemComponent {
   accessSubscription: Subscription;
   access: ResourceViewAccess;
 
-  ttlForm = new FormControl(1, Validators.compose([Validators.required, Validators.min(1), Validators.max(1000)]));
+  ttlForm = new FormControl(1, Validators.compose([Validators.required, Validators.min(1)]));
   selectedTimeUnit = 'h';
 
   constructor(private resourceViewService: ResourceViewService) {
@@ -30,7 +30,8 @@ export class ResourceViewItemComponent {
   }
 
   getAccess(): void {
-    if ((this.access && this.access.token) || !this.ttlForm.valid) {
+    const token = _get(this.access, 'token');
+    if (token || !this.ttlForm.valid) {
       return;
     }
 
