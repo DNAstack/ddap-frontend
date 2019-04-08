@@ -26,12 +26,10 @@
       <p>{{ resource?.dto?.ui?.description }}</p>
       <mat-list class="ddap-resource-metadata">
         <h3 mat-subheader>Additional information</h3>
-        <ng-container *ngFor="let ui of resource?.dto?.ui | keyvalue">
-          <mat-list-item *ngIf="!isUiFieldExcluded(ui.key)">
-            <h4 mat-line>{{ ui.key }}</h4>
-            <p mat-line> {{ ui.value }}</p>
-          </mat-list-item>
-        </ng-container>
+        <mat-list-item *ngFor="let ui of resource?.dto?.ui | keyvalue | metadataFilter">
+          <h4 mat-line>{{ ui.key }}</h4>
+          <p mat-line> {{ ui.value }}</p>
+        </mat-list-item>
       </mat-list>
     </div>
     <div class="ddap-column">
