@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { tap } from 'rxjs/internal/operators/tap';
-import { Observable } from 'rxjs/Observable';
 
 import { dam } from '../../../shared/proto/dam-service';
 import { ClaimDefinitionService } from '../../claim-definitions/claim-definitions.service';
 import { PassportIssuerService } from '../../passport-issuers/passport-issuerss.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { urlPattern } from '../../shared/validator.constants';
 import { PersonaService } from '../personas.service';
 
 @Component({
@@ -19,16 +16,13 @@ import { PersonaService } from '../personas.service';
 export class PersonaManageComponent implements OnInit {
 
   personaForm = this.fb.group({
-    id: ['', Validators.required],
+    id: ['', [Validators.required, Validators.min(3)]],
     label: ['', Validators.required],
-    iss: [{value: '', disabled: true}, Validators.required],
+    iss: ['', Validators.required],
     sub: ['', Validators.required],
     standardClaims: this.fb.array([]),
     ga4ghClaims: this.fb.array([]),
   });
-
-  issuers$: Observable<string[]>;
-  claimNames$: Observable<string[]>;
 
   get standardClaims() {
     return this.personaForm.get('standardClaims') as FormArray;
@@ -48,15 +42,7 @@ export class PersonaManageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.claimNames$ = this.claimDefinitionService
-      .getList(claimDefinition => claimDefinition.name).pipe(
-        tap(() => this.enabledClaimSelects())
-      );
 
-    this.issuers$ = this.passportIssuerService
-      .getList(issuer => issuer.dto.issuer).pipe(
-        tap(() => this.personaForm.controls['iss'].enable())
-      );
   }
 
   removeClaim(index) {
@@ -65,12 +51,12 @@ export class PersonaManageComponent implements OnInit {
 
   addGa4ghClaims() {
     this.ga4ghClaims.insert(0, this.fb.group({
-      claimName: [{value: '', disabled: true}, Validators.required],
-      source: ['', Validators.pattern(urlPattern)],
-      value: ['', Validators.pattern(urlPattern)],
-      iat: ['', [Validators.min(0)]],
-      exp: ['', Validators.min(0)],
-      by: ['', Validators.minLength(2)],
+      claimName: ['', Validators.required],
+      source: ['', Validators.required],
+      value: ['', Validators.required],
+      iat: ['', Validators.required],
+      exp: ['', Validators.required],
+      by: ['', Validators.required],
     }));
   }
 
@@ -91,10 +77,5 @@ export class PersonaManageComponent implements OnInit {
 
     this.personaService.save(id, new ConfigModificationObject(testPersona, {}))
       .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
-  }
-
-  private enabledClaimSelects() {
-    const ga4ghClaims: FormArray = <FormArray> this.personaForm.get('ga4ghClaims');
-    ga4ghClaims.controls.forEach((control) => control.enable());
   }
 }
