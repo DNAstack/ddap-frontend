@@ -16,36 +16,23 @@
 
 <div>
   <p class="ddap-resource-title">
-    {{ resource?.dto?.ui?.description }}
+    {{ resource?.dto?.ui?.owner }}
   </p>
 
   <mat-divider class="ddap-main-divider"></mat-divider>
 
   <div class="ddap-column-panel">
     <div class="ddap-column">
-      <p>
-        Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Integer posuere erat a
-        ante venenatis dapibus posuere velit aliquet. Maecenas faucibus mollis interdum. Maecenas faucibus interdum.
-      </p>
-
-      <table>
-        <tr>
-          <td>Year</td>
-          <td>2016</td>
-        </tr>
-        <tr>
-          <td>Access</td>
-          <td>Public</td>
-        </tr>
-        <tr>
-          <td>Tags</td>
-          <td>Autism, Infants, Research, Teaching Hospital</td>
-        </tr>
-        <tr>
-          <td>Size</td>
-          <td>56 MB</td>
-        </tr>
-      </table>
+      <p>{{ resource?.dto?.ui?.description }}</p>
+      <mat-list class="ddap-resource-metadata">
+        <h3 mat-subheader>Additional information</h3>
+        <ng-container *ngFor="let ui of resource?.dto?.ui | keyvalue">
+          <mat-list-item *ngIf="!isUiFieldExcluded(ui.key)">
+            <h4 mat-line>{{ ui.key }}</h4>
+            <p mat-line> {{ ui.value }}</p>
+          </mat-list-item>
+        </ng-container>
+      </mat-list>
     </div>
     <div class="ddap-column">
       <mat-list class="ddap-resource-views">

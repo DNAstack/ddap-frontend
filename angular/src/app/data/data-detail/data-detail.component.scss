@@ -35,6 +35,10 @@ mat-list.mat-list-base .mat-list-item .mat-list-item-content {
     flex: 1;
     padding: 0 1rem 0 0;
 
+    &:first-child {
+      max-width: 60%;
+    }
+
     &:last-child {
       padding: 0;
     }
@@ -50,6 +54,21 @@ mat-divider.ddap-main-divider {
   border-top-width: 1px;
   background-color: $color-grey;
   margin-bottom: 1rem;
+}
+
+.ddap-resource-metadata {
+  &.mat-list-base .mat-list-item.mat-2-line,
+  &.mat-list-base .mat-list-option.mat-2-line {
+    height: 3rem;
+  }
+
+  .mat-subheader {
+    padding: 0;
+  }
+
+  h4 {
+    text-transform: capitalize;
+  }
 }
 
 ddap-resource-views {
