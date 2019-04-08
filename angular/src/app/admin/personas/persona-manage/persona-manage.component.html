@@ -22,12 +22,14 @@
       <mat-form-field class="col">
         <input matInput
                placeholder="Name*"
-               formControlName="id">
+               formControlName="id"
+               data-se="inp-id">
       </mat-form-field>
       <mat-form-field class="col">
         <input matInput
                placeholder="Display Name*"
-               formControlName="label">
+               formControlName="label"
+               data-se="inp-label">
       </mat-form-field>
     </div>
 
@@ -35,13 +37,15 @@
       <mat-form-field class="col">
         <input matInput
                placeholder="Issuer*"
-               formControlName="iss">
+               formControlName="iss"
+               data-se="inp-iss">
       </mat-form-field>
 
       <mat-form-field class="col">
         <input matInput
                formControlName="sub"
-               placeholder="Subject*">
+               placeholder="Subject*"
+               data-se="inp-sub">
       </mat-form-field>
     </div>
 
@@ -55,6 +59,7 @@
                 color="primary"
                 class="uppercase"
                 type="button"
+                data-se="btn-add-claim"
                 (click)="addGa4ghClaims()">
           Add Claim
         </button>
@@ -74,12 +79,14 @@
           <mat-form-field class="col">
             <input matInput
                    formControlName="claimName"
-                   placeholder="Claim Name*">
+                   placeholder="Claim Name*"
+                   data-se="inp-claimName">
           </mat-form-field>
           <mat-form-field class="col">
             <input matInput
                    formControlName="source"
-                   placeholder="Source*">
+                   placeholder="Source*"
+                   data-se="inp-source">
             <mat-error *ngIf="!ga4ghClaim.get('source').valid && ga4ghClaim.get('source').touched"
                        class="help-block">Please enter a valid URL
             </mat-error>
@@ -89,7 +96,8 @@
         <mat-form-field class="col">
           <input matInput
                  formControlName="value"
-                 placeholder="Value*">
+                 placeholder="Value*"
+                 data-se="inp-value">
           <mat-error *ngIf="!ga4ghClaim.get('value').valid && ga4ghClaim.get('value').touched"
                      class="help-block">Please enter a valid URL
           </mat-error>
@@ -99,12 +107,14 @@
           <mat-form-field class="col">
             <input matInput
                    formControlName="iat"
-                   placeholder="IAT*">
+                   placeholder="IAT*"
+                   data-se="inp-iat">
           </mat-form-field>
           <mat-form-field class="col">
             <input matInput
                    formControlName="exp"
-                   placeholder="EXP*">
+                   placeholder="EXP*"
+                   data-se="inp-exp">
           </mat-form-field>
         </div>
 
@@ -112,7 +122,8 @@
           <mat-form-field class="col w-50">
             <input matInput
                    formControlName="by"
-                   placeholder="By*">
+                   placeholder="By*"
+                   data-se="inp-by">
           </mat-form-field>
         </div>
       </mat-card>
