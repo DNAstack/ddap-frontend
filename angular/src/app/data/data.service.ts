@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
-import { first, map, mergeMap, pluck, tap } from 'rxjs/operators';
+import { map, pluck, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { EntityModel } from '../admin/shared/entity.model';
@@ -37,19 +37,21 @@ export class DataService {
       });
     };
 
-    return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/resources`, {params}).pipe(
-      pluck('resources'),
-      map(EntityModel.objectToMap),
-      map(EntityModel.arrayFromMap),
-      tap(putIntoCache)
-    );
+    return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/resources`, {params})
+      .pipe(
+        pluck('resources'),
+        map(EntityModel.objectToMap),
+        map(EntityModel.arrayFromMap),
+        tap(putIntoCache)
+      );
   }
 
-  getResource(resourceId: string): Observable<EntityModel> {
-    return this.get().pipe(
-      mergeMap((entities: EntityModel[]) => entities),
-      first((resource: EntityModel) => resource.name === resourceId)
-    );
+  getResource(resourceId: string, params = {}): Observable<EntityModel> {
+    return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resourceId}`, {params})
+      .pipe(
+        pluck('resource'),
+        map((resource) => new EntityModel(resourceId, resource))
+      );
   }
 
 }
