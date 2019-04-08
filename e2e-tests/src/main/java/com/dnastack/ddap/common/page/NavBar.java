@@ -81,6 +81,12 @@ public class NavBar {
         return new NavBar(driver);
     }
 
+    public AdminListPage goToAdmin(NavItem pageId) {
+        driver.findElement(DdapBy.se(NAV_SELECTOR.get(pageId))).click();
+
+        return new AdminListPage(driver);
+    }
+
     private WebElement getRealmInput() {
         return driver.findElement(DdapBy.se("realm-input"));
     }
