@@ -17,14 +17,12 @@
                min="1"
                placeholder="Duration of an access token"
                [formControl]="ttlForm">
+        <mat-hint align="start"><strong>Maximum duration is 90 days</strong> </mat-hint>
         <mat-error *ngIf="ttlForm.hasError('required')">
           Duration is required
         </mat-error>
         <mat-error *ngIf="ttlForm.hasError('min')">
           Duration must be a positive integer
-        </mat-error>
-        <mat-error *ngIf="ttlForm.hasError('max')">
-          Duration must be a less than 1000
         </mat-error>
       </mat-form-field>
       <mat-form-field>
@@ -34,8 +32,7 @@
           <mat-option value="s">second</mat-option>
           <mat-option value="m">minute</mat-option>
           <mat-option value="h">hour</mat-option>
-          <mat-option disabled value="d">day</mat-option>
-          <mat-option disabled value="w">week</mat-option>
+          <mat-option value="d">day</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
