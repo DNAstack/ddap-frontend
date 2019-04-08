@@ -1,7 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { nonMetadataFields } from './data-detail.constants';
-
 export const nonMetadataFields = [
   'imageUrl', 'applyUrl', 'infoUrl', 'label', 'owner', 'troubleshootUrl', 'description',
 ];

@@ -10,8 +10,6 @@ import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.servic
 import { SearchStateService } from '../../shared/search-state.service';
 import { DataService } from '../data.service';
 
-import { nonMetadataFields } from './data-detail.constants';
-
 @Component({
   selector: 'ddap-resource-detail',
   templateUrl: './data-detail.component.html',
@@ -49,10 +47,6 @@ export class DataDetailComponent implements OnInit {
 
   searchOpenedChange($event) {
     this.searchOpened = $event;
-  }
-
-  isUiFieldExcluded(uiKey: string): boolean {
-    return nonMetadataFields.includes(uiKey);
   }
 
   private getViews(resource: EntityModel): EntityModel[] {
