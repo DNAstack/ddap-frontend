@@ -13,6 +13,7 @@ table {
   }
 
   td:first-child {
+    text-transform: capitalize;
     padding-right: 3rem;
   }
 }
@@ -34,6 +35,10 @@ mat-list.mat-list-base .mat-list-item .mat-list-item-content {
   > .ddap-column {
     flex: 1;
     padding: 0 1rem 0 0;
+
+    &:first-child {
+      max-width: 60%;
+    }
 
     &:last-child {
       padding: 0;
