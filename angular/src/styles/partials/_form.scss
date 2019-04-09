@@ -37,9 +37,14 @@ form.ddap-form {
 
   mat-card {
     margin-top: 1rem;
+
+    .footer {
+      text-align: right;
+    }
   }
 
   h3 {
+    align-items: center;
     margin-top: 2.5rem;
     display: flex;
 
@@ -49,10 +54,6 @@ form.ddap-form {
       flex-grow: 1;
       margin-left: 1rem;
     }
-  }
-
-  button[mat-icon-button] {
-    float: right;
   }
 }
 
