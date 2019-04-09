@@ -9,6 +9,10 @@
 FROM openjdk:11-jdk-slim AS build
 ARG APP_NAME
 ARG APP_VERSION
+
+RUN apt-get update
+RUN apt-get -y install curl
+
 WORKDIR /build
 
 # Before bringing in project sources, resolve maven dependencies.

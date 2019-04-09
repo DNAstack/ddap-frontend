@@ -19,7 +19,7 @@ mkdir -p ${docker_context_dir}
 cp -rp src .mvn mvnw pom.xml ${docker_context_dir}
 
 mkdir -p ${docker_context_dir}/angular
-cp -rp angular/*.json angular/src ${docker_context_dir}/angular
+cp -rp angular/*.json angular/scripts angular/src ${docker_context_dir}/angular
 
 docker build \
   --build-arg APP_NAME=${app_name} \

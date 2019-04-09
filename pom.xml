@@ -184,7 +184,7 @@
 									<goal>npm</goal>
 								</goals>
 								<configuration>
-									<arguments>install</arguments>
+									<arguments>install --unsafe-perm</arguments>
 								</configuration>
 							</execution>
 							<!-- It will execute command "npm run build:prod" inside "/angular" directory
