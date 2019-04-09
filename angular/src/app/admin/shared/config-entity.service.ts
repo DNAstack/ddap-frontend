@@ -29,13 +29,6 @@ export class ConfigEntityService implements EntityService {
       );
   }
 
-  getList(innerMapFn?): Observable<any[]> {
-    return this.get().pipe(
-      map(EntityModel.arrayFromMap),
-      map(issuerList => innerMapFn ? issuerList.map(innerMapFn) : issuerList)
-    );
-  }
-
   save(id: string, change: ConfigModificationObject): Observable<any> {
     return this.http.post(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       change,
