@@ -3,7 +3,7 @@
   "revision": "1",
   "commitTime": 1544824316,
   "trustedPassportIssuers": {
-    "dbGap": {
+    "dbGaP": {
       "issuer": "https://dbgap.nlm.nih.gov/aa",
       "translateUsing": "dbgap_translator"
     },
