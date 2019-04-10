@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -119,11 +118,16 @@ class BeaconResource {
             final Mono<BeaconQueryResult> beaconQueryResponse = beaconQuery(beaconRequest, viewToken);
             String beaconRootUrl = viewToken.getUrl();
             Mono<BeaconInfo> beaconInfoResponse = null;
+
+            URI beaconRootUri = null;
             try {
-                beaconInfoResponse = beaconInfo(new URI(beaconRootUrl), viewToken.getToken());
-            } catch (URISyntaxException | MalformedURLException e) {
-                log.error("Bad beacon url");
+                beaconRootUri = new URI(beaconRootUrl);
+            } catch (URISyntaxException e) {
+                log.error("Error forming root beacon URI: ", e);
             }
+
+            beaconInfoResponse = beaconInfo(beaconRootUri, viewToken.getToken());
+
             return Flux.zip(
                     beaconInfoResponse,
                     beaconQueryResponse,
@@ -158,9 +162,9 @@ class BeaconResource {
         }
     }
 
-    private Mono<BeaconInfo> beaconInfo(URI rootBeaconUrl, String token) throws URISyntaxException, MalformedURLException {
+    private Mono<BeaconInfo> beaconInfo(URI rootBeaconUri, String token) {
 
-        URI beaconUrl = rootBeaconUrl.resolve("/beacon/?access_token=" + token);
+        URI beaconUrl = rootBeaconUri.resolve("/beacon/?access_token=" + token);
 
         return webClient
                 .get()
@@ -182,7 +186,7 @@ class BeaconResource {
     private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewToken viewToken) {
         return webClient
                 .get()
-                .uri(beaconQueryUrl(viewToken.getUrl(), beaconRequest))
+                .uri(beaconQueryUrl(viewToken.getUrl() + "/beacon/query", beaconRequest))
                 .header("Authorization",
                         "Bearer " + viewToken.getToken())
                 .exchange()
