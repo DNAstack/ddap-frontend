@@ -2,8 +2,13 @@ mat-form-field {
   width: 100%;
 }
 
+.ddap-form-toolbar {
+  margin: auto auto 1rem auto;
+  width: 50%;
+}
+
 form.ddap-form {
-  margin: auto;
+  margin: auto auto 3rem auto;
   width: 50%;
 
   .row, .col {
@@ -58,7 +63,7 @@ form.ddap-form {
 }
 
 @media (max-width: 1600px) {
-  form.ddap-form {
+  form.ddap-form, .ddap-form-toolbar {
     width: 100%;
   }
 }

@@ -13,149 +13,18 @@
 </ddap-header>
 
 <ddap-main>
+  <ddap-persona-form>
 
-  <form class="ddap-form"
-        [formGroup]="personaForm"
-        (ngSubmit)="save()">
+  </ddap-persona-form>
 
-    <div class="row">
-      <mat-form-field class="col">
-        <input matInput
-               placeholder="Name"
-               formControlName="id"
-               data-se="inp-id"
-               required>
-      </mat-form-field>
-      <mat-form-field class="col">
-        <input matInput
-               placeholder="Display Name"
-               formControlName="label"
-               data-se="inp-label"
-               required>
-      </mat-form-field>
-    </div>
-
-    <h3>
-      <mat-icon class="icon icon-claims"></mat-icon>
-
-      <span>Standard Claims</span>
-    </h3>
-
-    <mat-card>
-    <div class="row">
-      <mat-form-field class="col">
-        <input matInput
-               placeholder="Issuer"
-               formControlName="iss"
-               data-se="inp-iss"
-               required>
-      </mat-form-field>
-
-      <mat-form-field class="col">
-        <input matInput
-               formControlName="sub"
-               placeholder="Subject"
-               data-se="inp-sub"
-               required>
-      </mat-form-field>
-    </div>
-    </mat-card>
-
-    <h3>
-      <mat-icon class="icon icon-claims"></mat-icon>
-
-      <span>Global Alliance for Genomics and Health Claims</span>
-
-      <div>
-        <button mat-button
-                color="primary"
-                class="uppercase"
-                type="button"
-                data-se="btn-add-claim"
-                (click)="addGa4ghClaims()">
-          Add Claim
-        </button>
-      </div>
-    </h3>
-
-    <div *ngFor="let ga4ghClaim of ga4ghClaims.controls; let i=index"
-         formArrayName="ga4ghClaims">
-      <mat-card [formGroupName]="i">
-        <div class="row">
-          <mat-form-field class="col">
-            <input matInput
-                   formControlName="claimName"
-                   placeholder="Claim Name"
-                   data-se="inp-claimName"
-                   required>
-          </mat-form-field>
-          <mat-form-field class="col">
-            <input matInput
-                   formControlName="source"
-                   placeholder="Source"
-                   data-se="inp-source"
-                   required>
-            <mat-error *ngIf="!ga4ghClaim.get('source').valid && ga4ghClaim.get('source').touched"
-                       class="help-block">Please enter a valid URL
-            </mat-error>
-          </mat-form-field>
-        </div>
-
-        <mat-form-field class="col">
-          <input matInput
-                 formControlName="value"
-                 placeholder="Value"
-                 data-se="inp-value"
-                 required>
-          <mat-error *ngIf="!ga4ghClaim.get('value').valid && ga4ghClaim.get('value').touched"
-                     class="help-block">Please enter a valid URL
-          </mat-error>
-        </mat-form-field>
-
-        <div class="row">
-          <mat-form-field class="col">
-            <input matInput
-                   formControlName="iat"
-                   placeholder="IAT"
-                   data-se="inp-iat"
-                   required>
-          </mat-form-field>
-          <mat-form-field class="col">
-            <input matInput
-                   formControlName="exp"
-                   placeholder="EXP"
-                   data-se="inp-exp"
-                   required>
-          </mat-form-field>
-        </div>
-
-        <div class="row">
-          <mat-form-field class="col w-50">
-            <input matInput
-                   formControlName="by"
-                   placeholder="By"
-                   data-se="inp-by"
-                   required>
-          </mat-form-field>
-        </div>
-
-        <div class="footer">
-          <button mat-button
-                  type="button"
-                  color="warn"
-                  class="uppercase"
-                  (click)="removeClaim(i)">
-            Remove Claim
-          </button>
-        </div>
-      </mat-card>
-    </div>
-
+  <div class="ddap-form-toolbar">
     <button mat-flat-button
-            type="submit"
+            (click)="save()"
+            data-se="btn-save"
+            type="button"
             color="primary"
             class="uppercase">
       Add Test Persona
     </button>
-  </form>
+  </div>
 </ddap-main>
