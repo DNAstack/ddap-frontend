@@ -54,12 +54,12 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
         List<Map<String, Object>> beaconResponseList =
                 stream.filter(jsonObj -> {
-                    Boolean isCafeVariome = jsonObj.get("name").equals("Cafe Variome Beacon");
+                    Boolean isThousandGenomes = jsonObj.get("resource").equals("thousand-genomes");
                     Boolean isCorrectErrorMessage = jsonObj.get("error") != null && jsonObj.get("error").equals(errorMessage);
-                    return isCafeVariome && isCorrectErrorMessage;
+                    return isThousandGenomes && isCorrectErrorMessage;
                 })
                 .collect(Collectors.toList());
-        assertEquals(beaconResponseList.size(), 1);
+        assertEquals(1, beaconResponseList.size());
     }
 
 }

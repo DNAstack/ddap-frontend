@@ -184,7 +184,14 @@ class BeaconResource {
                 .get()
                 .uri(beaconUrl)
                 .exchange()
-                .flatMap(this::bodyToMonoConvert);
+                .flatMap(this::bodyToMonoConvert)
+                .onErrorResume(e -> {
+                    BeaconInfo beaconInfoError = new BeaconInfo();
+                    String error = "Could not get beacon metadata successfully: " + e;
+                    beaconInfoError.setError(error);
+                    Mono<BeaconInfo> errorResult = Mono.just(beaconInfoError);
+                    return errorResult;
+                });
     }
 
     private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewToken viewToken) {
