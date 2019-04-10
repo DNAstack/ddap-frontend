@@ -5,8 +5,49 @@
 </ddap-header>
 
 <ddap-main>
-  <ddap-entity-list
-    [headerTitle]="'test persona'"
-    [entityList]="personas$">
-  </ddap-entity-list>
+  <mat-accordion>
+    <ng-container *ngFor="let persona of personas$ | async">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header collapsedHeight="5rem">
+          <mat-panel-title>
+            <mat-icon class="icon icon-identity"></mat-icon>
+            <h2>{{ persona.dto.ui.label }}</h2>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-container *ngIf="persona.dto.idToken.standardClaims as standardClaims">
+          <h3 class="flex vertical-center">
+            <mat-icon class="icon icon-claims"></mat-icon>
+            <span>Standard Claims</span>
+          </h3>
+          <ul class="timeline">
+            <li class="event">
+              <h4>{{ standardClaims.iss }}</h4>
+              <p>{{ standardClaims.sub }}</p>
+            </li>
+          </ul>
+        </ng-container>
+        <ng-container *ngIf="persona.dto.idToken.ga4ghClaims as ga4ghClaims">
+          <h3 class="flex vertical-center">
+            <mat-icon class="icon icon-claims"></mat-icon>
+            <span>Global Alliance for Genomics and Health Claims</span>
+          </h3>
+          <ul class="timeline">
+            <li *ngFor="let claim of ga4ghClaims"
+                class="event">
+              <h4>{{ claim.claimName }}</h4>
+              <p>{{ claim.source }}</p>
+            </li>
+          </ul>
+        </ng-container>
+        <mat-action-row>
+          <button mat-button
+                  [routerLink]="[persona.name]"
+                  color="primary"
+                  class="uppercase">
+            View Persona
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </ng-container>
+  </mat-accordion>
 </ddap-main>
