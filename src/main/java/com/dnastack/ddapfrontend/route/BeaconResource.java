@@ -15,10 +15,8 @@ import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +32,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -162,6 +161,21 @@ class BeaconResource {
         }
     }
 
+    private Mono<BeaconInfo> bodyToMonoConvert(ClientResponse clientResponse) {
+
+        boolean is2xxResponse = clientResponse.statusCode().is2xxSuccessful();
+        boolean hasContentType = clientResponse.headers().contentType().isPresent();
+        boolean isJson = clientResponse.headers().contentType().get().isCompatibleWith(MediaType.APPLICATION_JSON);
+
+        if (!is2xxResponse || !hasContentType || !isJson) {
+            return clientResponse.bodyToMono(String.class)
+                    .flatMap(errBody -> Mono.error(new IOException("Couldn't read beacon info response: " + errBody)));
+        }
+
+        return clientResponse.bodyToMono(BeaconInfo.class);
+
+    }
+
     private Mono<BeaconInfo> beaconInfo(URI rootBeaconUri, String token) {
 
         URI beaconUrl = rootBeaconUri.resolve("/beacon/?access_token=" + token);
@@ -170,17 +184,7 @@ class BeaconResource {
                 .get()
                 .uri(beaconUrl)
                 .exchange()
-                .flatMap(clientResponse -> {
-                    if (clientResponse.statusCode().is2xxSuccessful()
-                            && clientResponse.headers().contentType().isPresent()
-                            && clientResponse.headers().contentType().get().isCompatibleWith(MediaType.APPLICATION_JSON)) {
-                        return clientResponse.bodyToMono(BeaconInfo.class);
-                    } else {
-                        return clientResponse.bodyToMono(String.class)
-                                .flatMap(errBody -> Mono.error(new IOException("Couldn't read beacon info response: " + errBody)));
-
-                    }
-                });
+                .flatMap(this::bodyToMonoConvert);
     }
 
     private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewToken viewToken) {
