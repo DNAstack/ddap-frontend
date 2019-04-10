@@ -1,0 +1,53 @@
+$timeline-primary-color: #888888;
+
+$timeline-spacing: 1.5rem;
+
+$timeline-dot: 0.7rem;
+$timeline-line: 0.1rem;
+
+.timeline {
+  position: relative;
+  margin-left: $timeline-spacing;
+  list-style: none;
+  border-left: $timeline-line dashed $timeline-primary-color;
+  padding: $timeline-spacing;
+  text-align: left;
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    padding-top: $timeline-line;
+    font-weight: normal;
+  }
+
+  .event {
+    padding-bottom: ($timeline-spacing * 0.5);
+    margin-bottom: $timeline-spacing;
+    position: relative;
+
+    &:last-of-type {
+      padding-bottom: 0;
+      margin-bottom: 0;
+      border: none;
+    }
+
+    &:after {
+      position: absolute;
+      display: block;
+      top: 0;
+    }
+
+    &:after {
+      left: ($timeline-spacing + $timeline-line + ($timeline-dot * 0.58)) * -1;
+      background: white;
+      border: $timeline-line solid $timeline-primary-color;
+      border-radius: 50%;
+      height: $timeline-dot;
+      width: $timeline-dot;
+      content: "";
+      top: 5px;
+    }
+  }
+}

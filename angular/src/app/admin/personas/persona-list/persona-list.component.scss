@@ -1,0 +1,36 @@
+@import "../../../../styles/modules/colors";
+
+mat-expansion-panel {
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    margin-right: 1rem;
+    border-radius: 50%;
+  }
+
+  p {
+    color: $color-grey;
+  }
+
+  h3 {
+    font-weight: 500;
+  }
+
+  h4 {
+    font-size: 1rem;
+  }
+
+  .mat-expansion-panel-header-title {
+    align-items: center;
+    font-weight: 500;
+
+    .icon {
+      background: $color-grey-light;
+      color: $color-grey;
+    }
+  }
+
+}
