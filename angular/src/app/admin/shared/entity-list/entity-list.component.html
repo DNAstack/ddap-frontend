@@ -13,7 +13,7 @@
     <ng-container *ngFor="let entity of entityList | async">
       <mat-expansion-panel>
         <mat-expansion-panel-header>
-          <mat-panel-title>
+          <mat-panel-title data-se="entity-title">
             {{ getTitle(entity) }}
           </mat-panel-title>
           <mat-panel-description>
