@@ -13,12 +13,13 @@
 </ddap-header>
 
 <ddap-main>
-  <ddap-persona-form>
+  <ddap-persona-form #personaForm>
 
   </ddap-persona-form>
 
   <div class="ddap-form-toolbar">
     <button mat-flat-button
+            [disabled]="!personaForm.personaForm.valid"
             (click)="save()"
             data-se="btn-save"
             type="button"

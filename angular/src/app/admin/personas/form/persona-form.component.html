@@ -78,9 +78,6 @@
                  placeholder="Source"
                  data-se="inp-source"
                  required>
-          <mat-error *ngIf="!ga4ghClaim.get('source').valid && ga4ghClaim.get('source').touched"
-                     class="help-block">Please enter a valid URL
-          </mat-error>
         </mat-form-field>
       </div>
 
@@ -90,9 +87,6 @@
                placeholder="Value"
                data-se="inp-value"
                required>
-        <mat-error *ngIf="!ga4ghClaim.get('value').valid && ga4ghClaim.get('value').touched"
-                   class="help-block">Please enter a valid URL
-        </mat-error>
       </mat-form-field>
 
       <div class="row">
