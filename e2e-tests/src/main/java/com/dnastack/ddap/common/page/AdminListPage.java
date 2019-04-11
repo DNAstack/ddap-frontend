@@ -39,7 +39,7 @@ public class AdminListPage {
         return new AdminManagePage(driver);
     }
 
-    public List<String> getEntityList() {
+    public List<String> getEntityTitles() {
         new WebDriverWait(driver, 5).until(d -> driver.findElement(DdapBy.se("entity-title")).isDisplayed());
 
         return driver.findElements(DdapBy.se("entity-title")).stream()

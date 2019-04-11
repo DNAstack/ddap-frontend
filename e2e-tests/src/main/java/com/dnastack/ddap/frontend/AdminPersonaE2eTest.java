@@ -44,7 +44,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityList(), hasItem("test-persona-name"));
+        assertThat(adminListPage.getEntityTitles(), hasItem("test-persona-name"));
     }
 
     @Test
@@ -52,8 +52,8 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(NavItem.PERSONAS);
 
-        assertThat(adminListPage.getEntityList(), hasItem("John Persona"));
-        assertThat(adminListPage.getEntityList(), not(hasItem("John Edited")));
+        assertThat(adminListPage.getEntityTitles(), hasItem("John Persona"));
+        assertThat(adminListPage.getEntityTitles(), not(hasItem("John Edited")));
 
         AdminManagePage adminManagePage = adminListPage.clickView("John Persona", "View Persona");
 
@@ -74,8 +74,8 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.updateEntity();
 
-        assertThat(adminListPage.getEntityList(), not(hasItem("John Persona")));
-        assertThat(adminListPage.getEntityList(), hasItem("John Edited"));
+        assertThat(adminListPage.getEntityTitles(), not(hasItem("John Persona")));
+        assertThat(adminListPage.getEntityTitles(), hasItem("John Edited"));
     }
 
     @Test
@@ -83,12 +83,12 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(NavItem.PERSONAS);
 
-        assertThat(adminListPage.getEntityList(), hasItem("Undergrad Candice"));
+        assertThat(adminListPage.getEntityTitles(), hasItem("Undergrad Candice"));
 
         AdminManagePage adminManagePage = adminListPage.clickView("Undergrad Candice", "View Persona");
 
         adminListPage = adminManagePage.deleteEntity();
 
-        assertThat(adminListPage.getEntityList(), not(hasItem("Undergrad Candice")));
+        assertThat(adminListPage.getEntityTitles(), not(hasItem("Undergrad Candice")));
     }
 }
