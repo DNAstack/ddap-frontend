@@ -1,24 +1,28 @@
 package com.dnastack.ddap.frontend;
 
+import static java.lang.String.format;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
+import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.page.IdentityPage;
 import com.dnastack.ddap.common.page.NavBar;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.lang.String.format;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 @SuppressWarnings("Duplicates")
 public class NavbarE2eTest extends AbstractFrontendE2eTest {
@@ -72,8 +76,12 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         NavBar.NavItem pageId = NavBar.NavItem.RESOURCES;
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
+
+        AdminListPage resources = new AdminListPage(driver);
+        List<String> resourceTitles = resources.getEntityTitles();
+        assertThat(resourceTitles, hasSize(greaterThan(3)));
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findPanelItemTitle);
+            .forEach(expectedTitle -> assertThat(resourceTitles, hasItem(expectedTitle)));
     }
 
     @Test
@@ -81,8 +89,12 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         NavBar.NavItem pageId = NavBar.NavItem.PERSONAS;
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
+
+        AdminListPage personas = new AdminListPage(driver);
+        List<String> personaTitles = personas.getEntityTitles();
+        assertThat(personaTitles, hasSize(greaterThan(3)));
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findPanelItemTitle);
+            .forEach(expectedTitle -> assertThat(personaTitles, hasItem(expectedTitle)));
     }
 
     @Test
@@ -90,8 +102,12 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         NavBar.NavItem pageId = NavBar.NavItem.CLIENTS;
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
+
+        AdminListPage clients = new AdminListPage(driver);
+        List<String> clientTitles = clients.getEntityTitles();
+        assertThat(clientTitles, hasSize(greaterThan(3)));
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findPanelItemTitle);
+            .forEach(expectedTitle -> assertThat(clientTitles, hasItem(expectedTitle)));
     }
 
     @Test
@@ -99,8 +115,12 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         NavBar.NavItem pageId = NavBar.NavItem.TRUSTED_SOURCES;
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
+
+        AdminListPage trustedSources = new AdminListPage(driver);
+        List<String> trustedSourceTitles = trustedSources.getEntityTitles();
+        assertThat(trustedSourceTitles, hasSize(greaterThan(3)));
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findPanelItemTitle);
+            .forEach(expectedTitle -> assertThat(trustedSourceTitles, hasItem(expectedTitle)));
 
         // make sure the array of sources are displayed too
         findPanelItemDescription("https://ga4gh.elixir-czech.org/claims");
@@ -114,8 +134,12 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         NavBar.NavItem pageId = NavBar.NavItem.DEFINITIONS;
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
+
+        AdminListPage definitions = new AdminListPage(driver);
+        List<String> definitionTitles = definitions.getEntityTitles();
+        assertThat(definitionTitles, hasSize(greaterThan(3)));
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findPanelItemTitle);
+            .forEach(expectedTitle -> assertThat(definitionTitles, hasItem(expectedTitle)));
     }
 
     @Test
@@ -123,17 +147,25 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         NavBar.NavItem pageId = NavBar.NavItem.SERVICE_TEMPLATES;
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
+
+        AdminListPage serviceTemplates = new AdminListPage(driver);
+        List<String> serviceTemplateTitles = serviceTemplates.getEntityTitles();
+        assertThat(serviceTemplateTitles, hasSize(greaterThan(3)));
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findPanelItemTitle);
+            .forEach(expectedTitle -> assertThat(serviceTemplateTitles, hasItem(expectedTitle)));
     }
 
     @Test
-    public void verifyRules() {
+    public void verifyAccessPolicies() {
         NavBar.NavItem pageId = NavBar.NavItem.RULES;
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
+
+        AdminListPage accessPolicies = new AdminListPage(driver);
+        List<String> accessPolicyTitles = accessPolicies.getEntityTitles();
+        assertThat(accessPolicyTitles, hasSize(greaterThan(3)));
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findPanelItemTitle);
+            .forEach(expectedTitle -> assertThat(accessPolicyTitles, hasItem(expectedTitle)));
     }
 
     @Test
@@ -141,8 +173,12 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         NavBar.NavItem pageId = NavBar.NavItem.PASSPORTS;
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
+
+        AdminListPage passports = new AdminListPage(driver);
+        List<String> passportTitles = passports.getEntityTitles();
+        assertThat(passportTitles, hasSize(greaterThan(3)));
         DEFAULT_PAGE_ITEMS.get(pageId)
-                .forEach(this::findPanelItemTitle);
+            .forEach(expectedTitle -> assertThat(passportTitles, hasItem(expectedTitle)));
     }
 
     @Test
