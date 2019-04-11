@@ -1,21 +1,20 @@
 package com.dnastack.ddap.frontend;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
+
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
+import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.IOException;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
-
 @SuppressWarnings("Duplicates")
-public class AdminE2eTest extends AbstractFrontendE2eTest {
+public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
@@ -56,7 +55,7 @@ public class AdminE2eTest extends AbstractFrontendE2eTest {
         assertThat(adminListPage.getEntityList(), hasItem("John Persona"));
         assertThat(adminListPage.getEntityList(), not(hasItem("John Edited")));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("John Persona");
+        AdminManagePage adminManagePage = adminListPage.clickView("John Persona", "View Persona");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), "John Edited");
@@ -86,7 +85,7 @@ public class AdminE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityList(), hasItem("Undergrad Candice"));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("Undergrad Candice");
+        AdminManagePage adminManagePage = adminListPage.clickView("Undergrad Candice", "View Persona");
 
         adminListPage = adminManagePage.deleteEntity();
 
