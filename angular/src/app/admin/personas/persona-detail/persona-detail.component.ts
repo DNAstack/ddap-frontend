@@ -26,11 +26,13 @@ export class PersonaDetailComponent extends EntityDetailBase<PersonaService> imp
     const personaModel: EntityModel = this.personaForm.getEntityModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.entityService.update(this.entity.name, change)
-      .subscribe(() => this.router.navigate(['..'], { relativeTo: this.route }));
+      .subscribe(this.navigateUp);
   }
 
   delete() {
     this.entityService.remove(this.entity.name)
-      .subscribe(() => this.router.navigate(['..'], { relativeTo: this.route }));
+      .subscribe(this.navigateUp);
   }
+
+  private navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
 }
