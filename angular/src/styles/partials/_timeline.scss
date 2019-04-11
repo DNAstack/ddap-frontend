@@ -7,10 +7,9 @@ $timeline-line: 0.1rem;
 
 .timeline {
   position: relative;
-  margin-left: $timeline-spacing;
+  margin: 0 0 0 $timeline-spacing;
   list-style: none;
-  border-left: $timeline-line dashed $timeline-primary-color;
-  padding: $timeline-spacing;
+  padding: 0 $timeline-spacing $timeline-spacing;
   text-align: left;
 
   h1,
@@ -22,15 +21,31 @@ $timeline-line: 0.1rem;
     font-weight: normal;
   }
 
+  &:last-of-type {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
   .event {
     padding-bottom: ($timeline-spacing * 0.5);
     margin-bottom: $timeline-spacing;
     position: relative;
 
+    .line {
+      border-left: $timeline-line dashed $timeline-primary-color;
+      position: absolute;
+      top: 0.5rem;
+      left: -1.6rem;
+      height: 125%;
+    }
+
     &:last-of-type {
       padding-bottom: 0;
       margin-bottom: 0;
-      border: none;
+
+      .line {
+        display: none;
+      }
     }
 
     &:after {
