@@ -9,7 +9,7 @@
     <ng-container *ngFor="let persona of personas$ | async">
       <mat-expansion-panel>
         <mat-expansion-panel-header collapsedHeight="5rem">
-          <mat-panel-title>
+          <mat-panel-title data-se="entity-title">
             <mat-icon class="icon icon-identity"></mat-icon>
             <h2>{{ persona.dto.ui.label }}</h2>
           </mat-panel-title>
