@@ -43,13 +43,14 @@ export class PersonaFormComponent implements OnChanges {
     }
 
     const personaDto: TestPersona = _get(persona, 'currentValue.dto');
+    const standardClaims = _get(personaDto, 'idToken.standardClaims');
     const ga4ghClaims: TestPersona.IGA4GHClaim[] = _get(personaDto, 'idToken.ga4ghClaims', []);
 
     this.personaForm = this.formBuilder.group({
       id: [{value: personaId, disabled: true}, [Validators.required, Validators.min(3)]],
       label: [personaDto.ui.label],
-      iss: [personaDto.idToken.standardClaims.iss, Validators.required],
-      sub: [personaDto.idToken.standardClaims.sub, Validators.required],
+      iss: [standardClaims.iss, Validators.required],
+      sub: [standardClaims.sub, Validators.required],
       ga4ghClaims: this.formBuilder.array(
         ga4ghClaims.map((claim) => this.buildGa4GhClaimGroup(claim))
       ),
@@ -65,18 +66,19 @@ export class PersonaFormComponent implements OnChanges {
   }
 
   getEntityModel(): EntityModel {
-    const id = this.personaForm.value.id;
+
+    const { id, iss, sub, ga4ghClaims, label } = this.personaForm.value;
 
     const testPersona: TestPersona = TestPersona.create({
       idToken: {
         standardClaims: {
-          iss: this.personaForm.value.iss,
-          sub: this.personaForm.value.sub,
+          iss,
+          sub,
         },
-        ga4ghClaims: this.personaForm.value.ga4ghClaims,
+        ga4ghClaims,
       },
       ui: {
-        label: this.personaForm.value.label,
+        label,
       },
     });
 
