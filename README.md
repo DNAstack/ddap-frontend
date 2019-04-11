@@ -19,6 +19,8 @@ fat jar containing all angular assets.
 
 ### Building the Angular App
 
+Make sure that you are running node on version v11 (exact v11.13.0).
+
 From the `angular/` directory run `npm run build:prod` for a production build, or `ng serve` for development.
 
 ### Developing backend and frontend with live reload

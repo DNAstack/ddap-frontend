@@ -17,9 +17,11 @@
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>Greenwich.RC1</spring-cloud.version>
-        <angular.project.location>angular</angular.project.location>
-        <angular.project.nodeinstallation>node_installation</angular.project.nodeinstallation>
-    </properties>
+		<angular.project.location>angular</angular.project.location>
+		<angular.project.nodeinstallation>node_installation</angular.project.nodeinstallation>
+		<node.version>v11.13.0</node.version>
+		<npm.version>6.7.0</npm.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -171,8 +173,8 @@
 									<goal>install-node-and-npm</goal>
 								</goals>
 								<configuration>
-									<nodeVersion>v10.14.2</nodeVersion>
-									<npmVersion>6.4.1</npmVersion>
+									<nodeVersion>${node.version}</nodeVersion>
+									<npmVersion>${npm.version}</npmVersion>
 								</configuration>
 							</execution>
 
