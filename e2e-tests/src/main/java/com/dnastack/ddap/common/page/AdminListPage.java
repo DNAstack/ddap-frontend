@@ -27,12 +27,15 @@ public class AdminListPage {
         return new AdminManagePage(driver);
     }
 
-    public AdminManagePage clickEdit(String resourceName) {
+    public AdminManagePage clickView(String resourceName) {
         driver.findElement(getLine(resourceName))
                 .click();
 
-        driver.findElement(getButton(resourceName, "View"))
-                .click();
+        final WebElement viewButton = driver.findElement(getButton(resourceName, "View"));
+        // need to wait for button to become visible.
+        new WebDriverWait(driver, 5).until(d -> viewButton.isDisplayed());
+
+        viewButton.click();
 
         return new AdminManagePage(driver);
     }

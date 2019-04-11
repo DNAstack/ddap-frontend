@@ -56,7 +56,7 @@ public class AdminE2eTest extends AbstractFrontendE2eTest {
         assertThat(adminListPage.getEntityList(), hasItem("John Persona"));
         assertThat(adminListPage.getEntityList(), not(hasItem("John Edited")));
 
-        AdminManagePage adminManagePage = adminListPage.clickEdit("John Persona");
+        AdminManagePage adminManagePage = adminListPage.clickView("John Persona");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), "John Edited");
@@ -86,7 +86,7 @@ public class AdminE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityList(), hasItem("Undergrad Candice"));
 
-        AdminManagePage adminManagePage = adminListPage.clickEdit("Undergrad Candice");
+        AdminManagePage adminManagePage = adminListPage.clickView("Undergrad Candice");
 
         adminListPage = adminManagePage.deleteEntity();
 
