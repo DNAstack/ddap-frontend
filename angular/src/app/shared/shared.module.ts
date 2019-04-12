@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  MatAutocompleteModule,
   MatButtonModule,
   MatCardModule,
   MatChipsModule,
@@ -53,6 +54,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     ClipboardModule,
     ReactiveFormsModule,
 
+    MatAutocompleteModule,
     MatCardModule,
     MatChipsModule,
     MatProgressBarModule,
@@ -79,6 +81,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     ClipboardModule,
     ReactiveFormsModule,
 
+    MatAutocompleteModule,
     MatCardModule,
     MatChipsModule,
     MatProgressBarModule,
