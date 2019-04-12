@@ -1,6 +1,5 @@
 <form class="ddap-form"
       [formGroup]="personaForm">
-
   <div class="row">
     <mat-form-field class="col">
       <input matInput
@@ -26,10 +25,18 @@
   <mat-card>
     <div class="row">
       <mat-form-field class="col">
+        <mat-autocomplete #issuers="matAutocomplete">
+          <mat-option *ngFor="let option of passportIssuers$ | async"
+                      [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+
         <input matInput
                placeholder="Issuer"
                formControlName="iss"
                data-se="inp-iss"
+               [matAutocomplete]="issuers"
                required>
       </mat-form-field>
 
@@ -61,10 +68,32 @@
 
   <div *ngFor="let ga4ghClaim of ga4ghClaims.controls; let i=index"
        formArrayName="ga4ghClaims">
+    <mat-autocomplete #claims="matAutocomplete">
+      <mat-option *ngFor="let option of claimDefinitions$[ga4ghClaim.value._autocompleteId] | async"
+                  [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+
+    <mat-autocomplete #sources="matAutocomplete">
+      <mat-option *ngFor="let option of trustedSources$[ga4ghClaim.value._autocompleteId] | async"
+                  [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+
+    <mat-autocomplete #values="matAutocomplete">
+      <mat-option *ngFor="let option of values$[ga4ghClaim.value._autocompleteId] | async"
+                  [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+
     <mat-card [formGroupName]="i">
       <div class="row">
         <mat-form-field class="col">
           <input matInput
+                 [matAutocomplete]="claims"
                  formControlName="claimName"
                  placeholder="Claim Name"
                  data-se="inp-claimName"
@@ -72,6 +101,7 @@
         </mat-form-field>
         <mat-form-field class="col">
           <input matInput
+                 [matAutocomplete]="sources"
                  formControlName="source"
                  placeholder="Source"
                  data-se="inp-source"
@@ -81,6 +111,7 @@
 
       <mat-form-field class="col">
         <input matInput
+               [matAutocomplete]="values"
                formControlName="value"
                placeholder="Value"
                data-se="inp-value"
