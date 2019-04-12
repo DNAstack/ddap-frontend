@@ -4,6 +4,9 @@ import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
+import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
+import GetTokenResponse = dam.v1.GetTokenResponse;
+import IGetTokenRequest = dam.v1.IGetTokenRequest;
 import { HttpParamsService } from '../../shared/http-params.service';
 import { dam } from '../../shared/proto/dam-service';
 import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
@@ -18,8 +21,9 @@ import IGetTokenRequest = dam.v1.IGetTokenRequest;
 export class ResourceService extends ConfigEntityService {
 
   constructor(http: HttpClient,
-              private httpParamsService: HttpParamsService) {
-    super(http, 'resources', 'resources');
+              private httpParamsService: HttpParamsService,
+              protected errorHandler: ErrorHandlerService) {
+    super(http, 'resources', 'resources', errorHandler);
   }
 
   getResource(resourceName: string): Observable<EntityModel> {
@@ -35,6 +39,7 @@ export class ResourceService extends ConfigEntityService {
         params: this.httpParamsService.getHttpParamsFrom(tokenRequest),
       }
     ).pipe(
+      this.errorHandler.handleError(),
       map(GetTokenResponse.create)
     );
   }

@@ -19,7 +19,7 @@ import {
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
-  MatSlideToggleModule,
+  MatSlideToggleModule, MatSnackBarModule,
   MatTooltipModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
@@ -83,6 +83,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     MatOptionModule,
     MatProgressSpinnerModule,
     MatSelectModule,
+    MatSnackBarModule,
     MatTooltipModule,
     MatSlideToggleModule,
   ],
@@ -113,6 +114,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     MatOptionModule,
     MatProgressSpinnerModule,
     MatSelectModule,
+    MatSnackBarModule,
     MatTooltipModule,
     MatSlideToggleModule,
 
