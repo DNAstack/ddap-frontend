@@ -6,6 +6,7 @@ import { map, pluck, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { EntityModel } from '../admin/shared/entity.model';
+import { ErrorHandlerService } from '../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 @Injectable({
@@ -15,7 +16,8 @@ export class DataService {
 
   private cache: any = {};
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private errorHandler: ErrorHandlerService) {
 
   }
 
@@ -39,6 +41,7 @@ export class DataService {
 
     return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/resources`, {params})
       .pipe(
+        this.errorHandler.handleError(),
         pluck('resources'),
         map(EntityModel.objectToMap),
         map(EntityModel.arrayFromMap),
@@ -49,6 +52,7 @@ export class DataService {
   getResource(resourceId: string, params = {}): Observable<EntityModel> {
     return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resourceId}`, {params})
       .pipe(
+        this.errorHandler.handleError(),
         pluck('resource'),
         map((resource) => new EntityModel(resourceId, resource))
       );

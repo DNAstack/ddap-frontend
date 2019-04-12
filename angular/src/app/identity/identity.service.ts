@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
+import { ErrorHandlerService } from '../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 import { AccountLink } from './account-link.model';
@@ -20,12 +21,14 @@ const adminAccount = 'admin@nci.nih.gov';
 export class IdentityService {
 
   constructor(private http: HttpClient,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private errorHandler: ErrorHandlerService) {
   }
 
   getIdentity(params = {}): Observable<Identity> {
     return this.http.get<any>(`${environment.idpApiUrl}/${realmIdPlaceholder}/accounts/-`, {params})
       .pipe(
+        this.errorHandler.handleError(),
         pluck('account')
       );
   }
@@ -33,6 +36,7 @@ export class IdentityService {
   getIdentityProviders(params = {}): Observable<any> {
     return this.http.get<any>(`${environment.idpApiUrl}/${realmIdPlaceholder}/identityProviders`, {params})
       .pipe(
+        this.errorHandler.handleError(),
         pluck('identityProviders')
       );
   }
@@ -40,6 +44,7 @@ export class IdentityService {
   getPersonas(params = {}): Observable<any> {
     return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/testPersonas`, {params})
       .pipe(
+        this.errorHandler.handleError(),
         pluck('personas')
       );
   }
