@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
 import { ConfigEntityService } from '../shared/config-entity.service';
 
 @Injectable({
@@ -8,8 +9,8 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 })
 export class ClientApplicationService extends ConfigEntityService {
 
-  constructor(http: HttpClient) {
-    super(http, 'clients', 'clients');
+  constructor(http: HttpClient, protected errorHandler: ErrorHandlerService) {
+    super(http, 'clients', 'clients', errorHandler);
   }
 
 }
