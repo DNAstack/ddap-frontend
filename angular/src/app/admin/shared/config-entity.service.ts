@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { Injector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map, pluck } from 'rxjs/operators';
 
@@ -16,15 +17,18 @@ const headers = HTTP_HEADERS;
 
 export class ConfigEntityService implements EntityService {
 
-   constructor(protected http: HttpClient,
-               protected typeNameInConfig: string,
-               protected typeNameInUrl: string,
-               protected errorHandler: ErrorHandlerService) {
+  protected http: HttpClient;
+  protected errorHandler: ErrorHandlerService;
 
+  constructor(protected injector: Injector,
+              protected typeNameInConfig: string,
+              protected typeNameInUrl: string) {
+    this.http = this.injector.get(HttpClient);
+    this.errorHandler = this.injector.get(ErrorHandlerService);
   }
 
   get(params = {}): Observable<Map<string, EntityModel>> {
-    return this.http.get<ConfigModel>(`${environment.damApiUrl}/${realmIdPlaceholder}/conhfig`, {params})
+    return this.http.get<ConfigModel>(`${environment.damApiUrl}/${realmIdPlaceholder}/config`, {params})
       .pipe(
         this.errorHandler.handleError(),
         pluck(this.typeNameInConfig),
