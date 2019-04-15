@@ -14,6 +14,9 @@ import com.dnastack.ddapfrontend.client.dam.DamView;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,10 +27,12 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -110,7 +115,17 @@ class BeaconResource {
             log.debug("About to query: {} beacon at {}", viewToken.getViewId(), viewToken.getUrl());
             // TODO DISCO-2038 Handle errors and unauthorized requests
             final Mono<BeaconQueryResult> beaconQueryResponse = beaconQuery(beaconRequest, viewToken);
-            final Mono<BeaconInfo> beaconInfoResponse = beaconInfo();
+            String beaconRootUrl = viewToken.getUrl();
+            Mono<BeaconInfo> beaconInfoResponse;
+
+            try {
+                URI beaconRootUri = new URI(beaconRootUrl);
+                beaconInfoResponse = beaconInfo(beaconRootUri, viewToken.getToken());
+            } catch (URISyntaxException e) {
+                log.error("Error forming root beacon URI: ", e);
+                beaconInfoResponse = Mono.error(e);
+            }
+
             return Flux.zip(
                     beaconInfoResponse,
                     beaconQueryResponse,
@@ -145,18 +160,42 @@ class BeaconResource {
         }
     }
 
-    private Mono<BeaconInfo> beaconInfo() {
+    private Mono<BeaconInfo> extractBeaconInfo(ClientResponse clientResponse) {
+
+        boolean is2xxResponse = clientResponse.statusCode().is2xxSuccessful();
+        boolean hasContentTypeJson = clientResponse.headers().contentType().filter(contentType -> contentType.isCompatibleWith(MediaType.APPLICATION_JSON)).isPresent();
+
+        if (!is2xxResponse || !hasContentTypeJson) {
+            return clientResponse.bodyToMono(String.class)
+                    .flatMap(errBody -> Mono.error(new IOException("Couldn't read beacon info response: " + errBody)));
+        }
+
+        return clientResponse.bodyToMono(BeaconInfo.class);
+
+    }
+
+    private Mono<BeaconInfo> beaconInfo(URI rootBeaconUri, String token) {
+
+        URI beaconUrl = rootBeaconUri.resolve("?access_token=" + token);
+
         return webClient
                 .get()
-                .uri("https://beacon.cafevariome.org/")
+                .uri(beaconUrl)
                 .exchange()
-                .flatMap(clientResponse -> clientResponse.bodyToMono(BeaconInfo.class));
+                .flatMap(this::extractBeaconInfo)
+                .onErrorResume(e -> {
+                    BeaconInfo beaconInfoError = new BeaconInfo();
+                    String error = "Could not get beacon metadata successfully: " + e;
+                    beaconInfoError.setError(error);
+                    Mono<BeaconInfo> errorResult = Mono.just(beaconInfoError);
+                    return errorResult;
+                });
     }
 
     private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewToken viewToken) {
         return webClient
                 .get()
-                .uri(beaconQueryUrl(viewToken.getUrl(), beaconRequest))
+                .uri(beaconQueryUrl(viewToken.getUrl() + "/query", beaconRequest))
                 .header("Authorization",
                         "Bearer " + viewToken.getToken())
                 .exchange()
