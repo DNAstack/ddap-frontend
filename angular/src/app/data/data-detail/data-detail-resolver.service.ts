@@ -14,7 +14,7 @@ export class DataDetailResolverService implements Resolve<EntityModel> {
 
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<EntityModel> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<EntityModel> | Observable<never> {
     const resourceName = route.paramMap.get('resourceName');
     return this.dataService.getResource(resourceName);
   }

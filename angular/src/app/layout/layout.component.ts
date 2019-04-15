@@ -15,7 +15,7 @@ import { RealmState } from '../shared/realm/realm.states';
 })
 export class LayoutComponent implements OnInit {
 
-  @Select(RealmState) realm$: Observable<string>;
+  @Select(RealmState) realm$: Observable<any>;
 
   profile: Profile = null;
 
