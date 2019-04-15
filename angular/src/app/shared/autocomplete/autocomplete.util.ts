@@ -15,10 +15,10 @@ export const pluck = (fieldName, fallback) => (array) => array.map(pick(fieldNam
 // A wrapper for a filter function.
 export const filterBy = (filterFn) => (array) => array.filter(filterFn);
 
-// To be unsed in filter function. Assumes there is no other item with the same value to the left of the inspected item.
+// To be used in filter function. Assumes there is no other item with the same value to the left of the inspected item.
 export const isMostLeft = (value, index, self) => self.indexOf(value) === index;
 
-export const isSubstring = (substr) => (value) => value.indexOf(substr) > -1;
+export const includes = (substr) => (value) => value.includes(substr);
 
 // Filters out repetitions from an array.
 export const makeDistinct = filterBy(isMostLeft);
@@ -41,15 +41,15 @@ export const makeDistinct = filterBy(isMostLeft);
  */
 export function filterSource(autocompleteSource$: Observable<string[]>,
                              formInputValue$: Observable<string>): Observable<string[]> {
-  const passportIssuerFn$ = (autocompleteInputValue) => autocompleteSource$.pipe(
-    map(filterBy(isSubstring(autocompleteInputValue)))
+  const filteredSource$ = (autocompleteInputValue) => autocompleteSource$.pipe(
+    map(filterBy(includes(autocompleteInputValue)))
   );
 
   // Concat is used to return all suggestions on the first click.
   return concat(autocompleteSource$, formInputValue$.pipe(
     debounceTime(300),
     distinct(),
-    switchMap(passportIssuerFn$)
+    switchMap(filteredSource$)
   ));
 }
 

@@ -23,7 +23,7 @@ export class PersonaFormComponent implements OnChanges, OnInit {
   persona?: TestPersona = TestPersona.create();
 
   passportIssuers$: Observable<any>;
-  values$: { [s: string]: Observable<any>; } = {};
+  policyValues$: { [s: string]: Observable<any>; } = {};
   claimDefinitions$: { [s: string]: Observable<any>; } = {};
   trustedSources$: { [s: string]: Observable<any>; } = {};
 
@@ -128,20 +128,30 @@ export class PersonaFormComponent implements OnChanges, OnInit {
   }
 
   private buildGa4GhClaimGroupAutocomplete(autocompleteId: string, formGroup: FormGroup) {
+    this.claimDefinitions$[autocompleteId] = this.buildClaimDefinitionAutocomplete(formGroup);
+    this.trustedSources$[autocompleteId] = this.buildTrustedSourcesAutocomplete(formGroup);
+    this.policyValues$[autocompleteId] = this.buildPolicyValuesAutocomplete(formGroup);
+  }
+
+  private buildClaimDefinitionAutocomplete(formGroup: FormGroup) {
     const claimDefinitions$ = this.claimDefinitionService.getList(pick('name')).pipe(
       map(makeDistinct)
     );
 
-    this.claimDefinitions$[autocompleteId] = filterSource(claimDefinitions$, formGroup.get('claimName').valueChanges);
+    return filterSource(claimDefinitions$, formGroup.get('claimName').valueChanges);
+  }
 
+  private buildTrustedSourcesAutocomplete(formGroup: FormGroup) {
     const trustedSources$ = this.trustedSourcesService.getList(pick('dto.sources')).pipe(
       map(flatten),
       map(makeDistinct)
     );
 
-    this.trustedSources$[autocompleteId] = filterSource(trustedSources$, formGroup.get('source').valueChanges);
+     return filterSource(trustedSources$, formGroup.get('source').valueChanges);
+  }
 
-    const values$ = this.accessPolicyService.getList(pick('dto.allow')).pipe(
+  private buildPolicyValuesAutocomplete(formGroup: FormGroup) {
+    const claimValues$ = this.accessPolicyService.getList(pick('dto.allow')).pipe(
       map(pluck('anyTrue', [])),
       map(flatten),
       map(pluck('values', [])),
@@ -149,6 +159,6 @@ export class PersonaFormComponent implements OnChanges, OnInit {
       map(makeDistinct)
     );
 
-    this.values$[autocompleteId] = filterSource(values$, formGroup.get('value').valueChanges);
+    return filterSource(claimValues$, formGroup.get('value').valueChanges);
   }
 }
