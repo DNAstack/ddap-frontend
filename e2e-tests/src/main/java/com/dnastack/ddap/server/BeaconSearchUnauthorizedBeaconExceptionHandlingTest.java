@@ -50,12 +50,12 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
         // @formatter:on
 
         Stream<Map<String, Object>> stream = Arrays.stream(result);
-        String errorMessage = "Invalid authorization token 403 FORBIDDEN REGISTERED requests not accepted.";
+        String errorMessage = "Invalid authorization token";
 
         List<Map<String, Object>> beaconResponseList =
                 stream.filter(jsonObj -> {
                     Boolean isThousandGenomes = jsonObj.get("resource").equals("thousand-genomes");
-                    Boolean isCorrectErrorMessage = jsonObj.get("error") != null && jsonObj.get("error").equals(errorMessage);
+                    Boolean isCorrectErrorMessage = jsonObj.get("error") != null && ((String) jsonObj.get("error")).contains(errorMessage);
                     return isThousandGenomes && isCorrectErrorMessage;
                 })
                 .collect(Collectors.toList());
