@@ -24,7 +24,7 @@ export class ConfigEntityService implements EntityService {
   }
 
   get(params = {}): Observable<Map<string, EntityModel>> {
-    return this.http.get<ConfigModel>(`${environment.damApiUrl}/${realmIdPlaceholder}/conhfig`, {params})
+    return this.http.get<ConfigModel>(`${environment.damApiUrl}/${realmIdPlaceholder}/config`, {params})
       .pipe(
         this.errorHandler.handleError(),
         pluck(this.typeNameInConfig),
