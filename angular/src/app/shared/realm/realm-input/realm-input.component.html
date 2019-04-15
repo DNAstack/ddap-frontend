@@ -1,0 +1,8 @@
+<mat-form-field>
+  <mat-label>Realm</mat-label>
+  <input matInput
+         data-se="realm-input"
+         [value]="(realm$ | async).name"
+         (change)="changeRealm($event.target.value)">
+  <mat-icon matSuffix class="icon icon-edit"></mat-icon>
+</mat-form-field>

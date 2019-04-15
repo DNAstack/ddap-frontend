@@ -15,13 +15,19 @@ import { DATA_ROUTES } from './data/data.routes';
 import { IDENTITY_ROUTES } from './identity/identity.routes';
 import { LayoutComponent } from './layout/layout.component';
 import { defaultRealm } from './shared/realm/realm.constant';
+import { RealmResolver } from './shared/realm/realm.resolver';
 
 const routes: Routes = [
-  {path: '', redirectTo: `/${defaultRealm}/data`, pathMatch: 'full'},
+  {
+    path: '',
+    redirectTo: `/${defaultRealm}/data`,
+    pathMatch: 'full',
+  },
   {path: ':realmId', redirectTo: `/:realmId/data`, pathMatch: 'full'},
   {
     path: ':realmId',
     component: LayoutComponent,
+    resolve: { realmId: RealmResolver },
     children: [
       ...DATA_ROUTES,
       ...IDENTITY_ROUTES,

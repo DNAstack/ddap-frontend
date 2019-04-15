@@ -30,6 +30,7 @@ import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.com
 import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
+import { RealmInputComponent } from './realm/realm-input/realm-input.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
 import { ResourceViewItemComponent } from './resource-view-item/resource-view-item.component';
 
@@ -38,6 +39,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     HeaderComponent,
     MainComponent,
     NavBackComponent,
+    RealmInputComponent,
     ResourceLogoComponent,
     ResourceViewItemComponent,
     BeaconSearchBarComponent,
@@ -101,6 +103,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     NavBackComponent,
     BeaconSearchBarComponent,
     BeaconResultComponent,
+    RealmInputComponent,
     ResourceLogoComponent,
     ResourceViewItemComponent,
     LimitSearchComponent,

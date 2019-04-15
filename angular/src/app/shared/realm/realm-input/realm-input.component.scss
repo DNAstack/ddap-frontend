@@ -1,0 +1,13 @@
+@import "../../../../styles/modules/colors";
+
+mat-form-field {
+  &.mat-form-field {
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    color: $navbar-font-main-color;
+  }
+
+  mat-label {
+    color: $navbar-font-main-color;
+  }
+}

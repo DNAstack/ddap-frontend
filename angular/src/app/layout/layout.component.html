@@ -7,21 +7,14 @@
 
     <mat-nav-list>
       <mat-list-item class="ddap-realm-select">
-        <mat-form-field>
-          <mat-label>Realm</mat-label>
-          <input matInput
-                 data-se="realm-input"
-                 [value]="realm"
-                 (change)="goToRealm($event.target.value)">
-          <mat-icon matSuffix class="icon icon-edit"></mat-icon>
-        </mat-form-field>
+        <ddap-realm-input></ddap-realm-input>
       </mat-list-item>
 
       <mat-list-item class="credentials-username"
                      data-se="nav-account">
         <h4 mat-line>{{ profile?.name || '&nbsp;' }}</h4>
         <a mat-line
-           [href]="loginPath">Log Out</a>
+           [href]="'/api/v1alpha/' + (realm$ | async).name + '/identity/login'">Log Out</a>
         <div class="credentials-picture">
           <img matListAvatar
                [src]="profile?.picture || '/assets/images/placeholder_identity.png'"
