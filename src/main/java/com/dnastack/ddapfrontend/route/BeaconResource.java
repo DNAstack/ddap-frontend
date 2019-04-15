@@ -116,16 +116,15 @@ class BeaconResource {
             // TODO DISCO-2038 Handle errors and unauthorized requests
             final Mono<BeaconQueryResult> beaconQueryResponse = beaconQuery(beaconRequest, viewToken);
             String beaconRootUrl = viewToken.getUrl();
-            Mono<BeaconInfo> beaconInfoResponse = null;
+            Mono<BeaconInfo> beaconInfoResponse;
 
-            URI beaconRootUri = null;
             try {
-                beaconRootUri = new URI(beaconRootUrl);
+                URI beaconRootUri = new URI(beaconRootUrl);
+                beaconInfoResponse = beaconInfo(beaconRootUri, viewToken.getToken());
             } catch (URISyntaxException e) {
                 log.error("Error forming root beacon URI: ", e);
+                beaconInfoResponse = Mono.error(e);
             }
-
-            beaconInfoResponse = beaconInfo(beaconRootUri, viewToken.getToken());
 
             return Flux.zip(
                     beaconInfoResponse,
@@ -161,13 +160,12 @@ class BeaconResource {
         }
     }
 
-    private Mono<BeaconInfo> bodyToMonoConvert(ClientResponse clientResponse) {
+    private Mono<BeaconInfo> extractBeaconInfo(ClientResponse clientResponse) {
 
         boolean is2xxResponse = clientResponse.statusCode().is2xxSuccessful();
-        boolean hasContentType = clientResponse.headers().contentType().isPresent();
-        boolean isJson = clientResponse.headers().contentType().get().isCompatibleWith(MediaType.APPLICATION_JSON);
+        boolean hasContentTypeJson = clientResponse.headers().contentType().filter(contentType -> contentType.isCompatibleWith(MediaType.APPLICATION_JSON)).isPresent();
 
-        if (!is2xxResponse || !hasContentType || !isJson) {
+        if (!is2xxResponse || !hasContentTypeJson) {
             return clientResponse.bodyToMono(String.class)
                     .flatMap(errBody -> Mono.error(new IOException("Couldn't read beacon info response: " + errBody)));
         }
@@ -178,13 +176,13 @@ class BeaconResource {
 
     private Mono<BeaconInfo> beaconInfo(URI rootBeaconUri, String token) {
 
-        URI beaconUrl = rootBeaconUri.resolve("/beacon/?access_token=" + token);
+        URI beaconUrl = rootBeaconUri.resolve("?access_token=" + token);
 
         return webClient
                 .get()
                 .uri(beaconUrl)
                 .exchange()
-                .flatMap(this::bodyToMonoConvert)
+                .flatMap(this::extractBeaconInfo)
                 .onErrorResume(e -> {
                     BeaconInfo beaconInfoError = new BeaconInfo();
                     String error = "Could not get beacon metadata successfully: " + e;
@@ -197,7 +195,7 @@ class BeaconResource {
     private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewToken viewToken) {
         return webClient
                 .get()
-                .uri(beaconQueryUrl(viewToken.getUrl() + "/beacon/query", beaconRequest))
+                .uri(beaconQueryUrl(viewToken.getUrl() + "/query", beaconRequest))
                 .header("Authorization",
                         "Bearer " + viewToken.getToken())
                 .exchange()
