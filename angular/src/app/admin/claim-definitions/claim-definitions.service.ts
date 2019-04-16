@@ -8,7 +8,10 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 export class ClaimDefinitionService extends ConfigEntityService {
 
   constructor(protected injector: Injector) {
-    super(injector, 'claimDefinitions', 'claimDefinitions');
+    super(injector, 'claimDefinitions', 'claimDefinitions', {
+      '=1': 'claim definition',
+      'other': 'claim definitions',
+    });
   }
 
 }

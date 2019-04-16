@@ -22,7 +22,9 @@ export class ConfigEntityService implements EntityService {
 
   constructor(protected injector: Injector,
               protected typeNameInConfig: string,
-              protected typeNameInUrl: string) {
+              protected typeNameInUrl: string,
+              protected label?: object) {
+
     this.http = this.injector.get(HttpClient);
     this.errorHandler = this.injector.get(ErrorHandlerService);
   }
@@ -30,7 +32,7 @@ export class ConfigEntityService implements EntityService {
   get(params = {}): Observable<Map<string, EntityModel>> {
     return this.http.get<ConfigModel>(`${environment.damApiUrl}/${realmIdPlaceholder}/config`, {params})
       .pipe(
-        this.errorHandler.handleError(),
+        this.errorHandler.handleError(`Can't load ${this.label['other'] || this.typeNameInConfig}.`),
         pluck(this.typeNameInConfig),
         map(EntityModel.objectToMap)
       );
@@ -47,7 +49,7 @@ export class ConfigEntityService implements EntityService {
     return this.http.post(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       change,
       {headers}).pipe(
-      this.errorHandler.handleError()
+      this.errorHandler.handleError(`Can't save ${this.label['=0'] || this.typeNameInConfig}.`)
     );
   }
 
@@ -56,7 +58,7 @@ export class ConfigEntityService implements EntityService {
       change,
       {headers}
     ).pipe(
-      this.errorHandler.handleError()
+      this.errorHandler.handleError(`Can't update ${this.label['=0'] || this.typeNameInConfig}.`)
     );
   }
 
@@ -64,7 +66,7 @@ export class ConfigEntityService implements EntityService {
     return this.http.delete(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       {headers}
     ).pipe(
-      this.errorHandler.handleError()
+      this.errorHandler.handleError(`Can't delete ${this.label['=0'] || this.typeNameInConfig}.`)
     );
   }
 }

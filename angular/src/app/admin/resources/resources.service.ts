@@ -13,14 +13,17 @@ import { EntityModel } from '../shared/entity.model';
 export class ResourceService extends ConfigEntityService {
 
   constructor(protected injector: Injector) {
-    super(injector, 'resources', 'resources');
+    super(injector, 'resources', 'resources', {
+      '=1': 'resource',
+      'other': 'resources',
+    });
   }
 
   getAccessRequestToken(resourceId, viewId): Observable<any[]> {
     const viewUrl = `${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resourceId}/views/${viewId}`;
     return this.http.get<any[]>(viewUrl)
       .pipe(
-        this.errorHandler.handleError(),
+        this.errorHandler.handleError(`Can't get access token.`),
         pluck('token')
       );
   }

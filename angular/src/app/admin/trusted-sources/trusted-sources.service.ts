@@ -8,7 +8,10 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 export class TrustedSourcesService extends ConfigEntityService {
 
   constructor(protected injector: Injector) {
-    super(injector, 'trustedSources', 'trustedSources');
+    super(injector, 'trustedSources', 'trustedSources', {
+      '=1': 'trusted sources',
+      'other': 'trusted sources',
+    });
   }
 
 }

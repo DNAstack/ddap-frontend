@@ -8,7 +8,10 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 export class PersonaService extends ConfigEntityService {
 
   constructor(protected injector: Injector) {
-    super(injector, 'testPersonas', 'testPersonas');
+    super(injector, 'testPersonas', 'testPersonas', {
+      '=1': 'test persona',
+      'other': 'test personas',
+    });
   }
 
 }
