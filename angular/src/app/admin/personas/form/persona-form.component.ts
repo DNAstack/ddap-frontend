@@ -27,7 +27,7 @@ export class PersonaFormComponent implements OnChanges, OnInit {
   claimDefinitions$: { [s: string]: Observable<any>; } = {};
   trustedSources$: { [s: string]: Observable<any>; } = {};
 
-  personaForm = this.formBuilder.group({
+  form = this.formBuilder.group({
     id: ['', [Validators.required, Validators.min(3)]],
     label: [''],
     iss: ['', Validators.required],
@@ -36,11 +36,11 @@ export class PersonaFormComponent implements OnChanges, OnInit {
   });
 
   get standardClaims() {
-    return this.personaForm.get('standardClaims') as FormArray;
+    return this.form.get('standardClaims') as FormArray;
   }
 
   get ga4ghClaims() {
-    return this.personaForm.get('ga4ghClaims') as FormArray;
+    return this.form.get('ga4ghClaims') as FormArray;
   }
 
   constructor(private formBuilder: FormBuilder,
@@ -51,9 +51,16 @@ export class PersonaFormComponent implements OnChanges, OnInit {
 
   }
 
+  ngOnInit(): void {
+    const passportIssuers$ = this.passportIssuerService.getList(pick('dto.issuer')).pipe(
+      map(makeDistinct)
+    );
+
+    this.passportIssuers$ = filterSource(passportIssuers$, this.form.get('iss').valueChanges);
+  }
+
   ngOnChanges({persona}: SimpleChanges): void {
     const personaId: string = _get(persona, 'currentValue.name');
-
     if (!personaId) {
       return;
     }
@@ -62,7 +69,7 @@ export class PersonaFormComponent implements OnChanges, OnInit {
     const standardClaims = _get(personaDto, 'idToken.standardClaims');
     const ga4ghClaims: TestPersona.IGA4GHClaim[] = _get(personaDto, 'idToken.ga4ghClaims', []);
 
-    this.personaForm = this.formBuilder.group({
+    this.form = this.formBuilder.group({
       id: [{value: personaId, disabled: true}, [Validators.required, Validators.min(3)]],
       label: [personaDto.ui.label],
       iss: [standardClaims.iss, Validators.required],
@@ -71,14 +78,6 @@ export class PersonaFormComponent implements OnChanges, OnInit {
         ga4ghClaims.map((claim) => this.buildGa4GhClaimGroup(claim))
       ),
     });
-  }
-
-  ngOnInit(): void {
-    const passportIssuers$ = this.passportIssuerService.getList(pick('dto.issuer')).pipe(
-      map(makeDistinct)
-    );
-
-    this.passportIssuers$ = filterSource(passportIssuers$, this.personaForm.get('iss').valueChanges);
   }
 
   removeClaim(index) {
@@ -90,9 +89,7 @@ export class PersonaFormComponent implements OnChanges, OnInit {
   }
 
   getEntityModel(): EntityModel {
-
-    const { id, iss, sub, ga4ghClaims, label } = this.personaForm.value;
-
+    const { id, iss, sub, ga4ghClaims, label } = this.form.value;
     const testPersona: TestPersona = TestPersona.create({
       idToken: {
         standardClaims: {
@@ -111,8 +108,7 @@ export class PersonaFormComponent implements OnChanges, OnInit {
 
   private buildGa4GhClaimGroup({claimName, source, value, iat, exp, by}: TestPersona.IGA4GHClaim): FormGroup {
     const autocompleteId = new Date().getTime().toString();
-
-    const formGroup: FormGroup = this.formBuilder.group({
+    const ga4ghClaimForm: FormGroup = this.formBuilder.group({
       _autocompleteId: autocompleteId,
       claimName: [claimName, Validators.required],
       source: [source, Validators.required],
@@ -122,9 +118,9 @@ export class PersonaFormComponent implements OnChanges, OnInit {
       by: [by, Validators.required],
     });
 
-    this.buildGa4GhClaimGroupAutocomplete(autocompleteId, formGroup);
+    this.buildGa4GhClaimGroupAutocomplete(autocompleteId, ga4ghClaimForm);
 
-    return formGroup;
+    return ga4ghClaimForm;
   }
 
   private buildGa4GhClaimGroupAutocomplete(autocompleteId: string, formGroup: FormGroup) {
