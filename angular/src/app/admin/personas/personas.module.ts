@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MatCheckboxModule } from '@angular/material';
 
 import { AdminSharedModule } from '../shared/shared.module';
 
@@ -16,6 +17,7 @@ import { PersonaManageComponent } from './persona-manage/persona-manage.componen
   ],
   imports: [
     AdminSharedModule,
+    MatCheckboxModule,
   ],
 })
 export class PersonasModule { }

@@ -22,6 +22,14 @@ export class PersonaFormComponent implements OnChanges, OnInit {
   @Input()
   persona?: TestPersona = TestPersona.create();
 
+  /*
+  TODOs
+    * Make this an @Input
+    * Pass in initial assertions for persona
+    * Submit resource changes as part of CMO
+   */
+  initialAssertions: Array<[string, boolean]> = [['res1', true], ['res2', false]];
+
   passportIssuers$: Observable<any>;
   policyValues$: { [s: string]: Observable<any>; } = {};
   claimDefinitions$: { [s: string]: Observable<any>; } = {};
@@ -33,6 +41,7 @@ export class PersonaFormComponent implements OnChanges, OnInit {
     iss: ['', Validators.required],
     sub: ['', Validators.required],
     ga4ghClaims: this.formBuilder.array([]),
+    assertions: this.formBuilder.array([]),
   });
 
   get standardClaims() {
@@ -41,6 +50,10 @@ export class PersonaFormComponent implements OnChanges, OnInit {
 
   get ga4ghClaims() {
     return this.personaForm.get('ga4ghClaims') as FormArray;
+  }
+
+  get assertions() {
+    return this.personaForm.get('assertions') as FormArray;
   }
 
   constructor(private formBuilder: FormBuilder,
@@ -70,6 +83,10 @@ export class PersonaFormComponent implements OnChanges, OnInit {
       ga4ghClaims: this.formBuilder.array(
         ga4ghClaims.map((claim) => this.buildGa4GhClaimGroup(claim))
       ),
+      assertions: this.formBuilder.array(this.initialAssertions.map(assertion => this.formBuilder.group({
+        resource: this.formBuilder.control(assertion[0]),
+        value: this.formBuilder.control(assertion[1]),
+      }))),
     });
   }
 

@@ -1,5 +1,27 @@
 <form class="ddap-form"
       [formGroup]="personaForm">
+  <h3>
+    <mat-icon class="icon icon-claims"></mat-icon>
+    <span>Persona Assertions</span>
+  </h3>
+
+  <div *ngFor="let _ of assertions.controls; let i=index"
+       formArrayName="assertions">
+    <mat-card [formGroupName]="i">
+      <div class="row">
+        <mat-form-field class="col">
+          <input matInput
+                 formControlName="resource"
+                 data-se="assertion-resource-name"
+                 readonly>
+        </mat-form-field>
+        <mat-checkbox class="col"
+                      formControlName="value"
+                      data-se="assertion-value"></mat-checkbox>
+      </div>
+    </mat-card>
+  </div>
+
   <div class="row">
     <mat-form-field class="col">
       <input matInput
