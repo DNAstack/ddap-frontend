@@ -10,20 +10,14 @@
   <div *ngIf="entity">
     <ddap-persona-form #personaForm
                        [persona]="entity">
-
-    </ddap-persona-form>
-
-    <div class="ddap-form-toolbar">
       <button mat-flat-button
-              [disabled]="!personaForm.personaForm.valid"
               (click)="update()"
               data-se="btn-update"
-              type="button"
+              type="submit"
               color="primary"
               class="uppercase">
         Save
       </button>
-
       <button mat-flat-button
               (click)="delete()"
               data-se="btn-delete"
@@ -32,6 +26,6 @@
               class="uppercase">
         Delete
       </button>
-    </div>
+    </ddap-persona-form>
   </div>
 </ddap-main>

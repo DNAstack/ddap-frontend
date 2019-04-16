@@ -14,18 +14,13 @@
 
 <ddap-main>
   <ddap-persona-form #personaForm>
-
-  </ddap-persona-form>
-
-  <div class="ddap-form-toolbar">
     <button mat-flat-button
-            [disabled]="!personaForm.personaForm.valid"
             (click)="save()"
             data-se="btn-save"
-            type="button"
+            type="submit"
             color="primary"
             class="uppercase">
       Add Test Persona
     </button>
-  </div>
+  </ddap-persona-form>
 </ddap-main>

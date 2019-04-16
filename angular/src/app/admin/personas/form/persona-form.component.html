@@ -1,5 +1,6 @@
 <form class="ddap-form"
-      [formGroup]="personaForm">
+      novalidate
+      [formGroup]="form">
   <div class="row">
     <mat-form-field class="col">
       <input matInput
@@ -156,4 +157,6 @@
       </div>
     </mat-card>
   </div>
+
+  <ng-content></ng-content>
 </form>

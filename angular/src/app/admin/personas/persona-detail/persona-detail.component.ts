@@ -23,6 +23,10 @@ export class PersonaDetailComponent extends EntityDetailBase<PersonaService> imp
   }
 
   update() {
+    if (!this.personaForm.form.valid) {
+      return;
+    }
+
     const personaModel: EntityModel = this.personaForm.getEntityModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.entityService.update(this.entity.name, change)

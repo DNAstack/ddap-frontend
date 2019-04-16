@@ -23,9 +23,12 @@ export class PersonaManageComponent {
   }
 
   save() {
+    if (!this.personaForm.form.valid) {
+      return;
+    }
+
     const personaModel: EntityModel = this.personaForm.getEntityModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
-
     this.personaService.save(personaModel.name, change)
       .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }
