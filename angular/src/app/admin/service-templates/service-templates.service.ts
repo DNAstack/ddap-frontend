@@ -8,7 +8,10 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 export class ServiceTemplateService extends ConfigEntityService {
 
   constructor(protected injector: Injector) {
-    super(injector, 'serviceTemplates', 'serviceTemplates');
+    super(injector, 'serviceTemplates', 'serviceTemplates', {
+      '=1': 'service template',
+      'other': 'service templates',
+    });
   }
 
 }
