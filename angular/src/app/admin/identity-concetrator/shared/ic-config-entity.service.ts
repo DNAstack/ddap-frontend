@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { Injector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map, pluck } from 'rxjs/operators';
 
@@ -12,20 +13,24 @@ import { EntityService } from '../../shared/entity.service';
 
 const headers = HTTP_HEADERS;
 
-export class IcConfigEntityService implements EntityService {
+export abstract class IcConfigEntityService implements EntityService {
+  protected http: HttpClient;
+  protected errorHandler: ErrorHandlerService;
 
-  constructor(protected http: HttpClient,
-              protected typeNameInConfig: string,
-              protected typeNameInUrl: string,
-              protected errorHandler: ErrorHandlerService) {
+  protected constructor(protected injector: Injector,
+                        protected typeNameInConfig: string,
+                        protected typeNameInUrl: string,
+                        protected label?: object) {
 
+    this.http = this.injector.get(HttpClient);
+    this.errorHandler = this.injector.get(ErrorHandlerService);
   }
 
   get(params = {}): Observable<Map<string, EntityModel>> {
     return this.http.get<any>(`${environment.idpApiUrl}/${realmIdPlaceholder}/config`,
       {params})
       .pipe(
-        this.errorHandler.handleError(),
+        this.errorHandler.handleError(`Can't load ${this.label['other'] || this.typeNameInConfig}.`),
         pluck(this.typeNameInConfig),
         map(EntityModel.objectToMap)
       );
@@ -35,7 +40,7 @@ export class IcConfigEntityService implements EntityService {
     return this.http.post(`${environment.idpApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       change,
       {headers}).pipe(
-      this.errorHandler.handleError()
+      this.errorHandler.handleError(`Can't save ${this.label['=0'] || this.typeNameInConfig}.`)
     );
   }
 
@@ -44,7 +49,7 @@ export class IcConfigEntityService implements EntityService {
       change,
       {headers}
     ).pipe(
-      this.errorHandler.handleError()
+      this.errorHandler.handleError(`Can't update ${this.label['=0'] || this.typeNameInConfig}.`)
     );
   }
 
@@ -52,7 +57,7 @@ export class IcConfigEntityService implements EntityService {
     return this.http.delete(`${environment.idpApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       {headers}
     ).pipe(
-      this.errorHandler.handleError()
+      this.errorHandler.handleError(`Can't delete ${this.label['=0'] || this.typeNameInConfig}.`)
     );
   }
 }

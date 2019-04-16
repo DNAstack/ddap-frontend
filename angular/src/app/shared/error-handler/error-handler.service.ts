@@ -13,12 +13,16 @@ export class ErrorHandlerService {
 
   }
 
-  handleError<T>(): OperatorFunction<T, T> {
-    return catchError<T, T>((error) => this.openErrorSnack(error));
+  handleError<T>(message?: string): OperatorFunction<T, T> {
+    if (!message) {
+      return catchError<T, T>((error) => this.openErrorSnack(error));
+    }
+
+    return catchError<T, T>(() => this.openErrorSnack({message}));
   }
 
   private openErrorSnack(err): ObservableInput<any> {
-    this.snackBar.open(err.message, 'Error', {
+    this.snackBar.open(err.message, null, {
       panelClass: 'ddap-error',
     });
     throw err;

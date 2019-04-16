@@ -8,6 +8,9 @@ import { ConfigEntityService } from '../shared/config-entity.service';
 export class AccessPolicyService extends ConfigEntityService {
 
   constructor(protected injector: Injector) {
-    super(injector, 'policies', 'policies');
+    super(injector, 'policies', 'policies', {
+      '=1': 'access policy',
+      'other': 'access policies',
+    });
   }
 }
