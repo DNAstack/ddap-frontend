@@ -11,6 +11,7 @@ import { dam } from '../../../shared/proto/dam-service';
 import { AccessPolicyService } from '../../access-policies/access-policies.service';
 import { ClaimDefinitionService } from '../../claim-definitions/claim-definitions.service';
 import { PassportIssuerService } from '../../passport-issuers/passport-issuerss.service';
+import { ResourceService } from '../../resources/resources.service';
 import { EntityModel } from '../../shared/entity.model';
 import { TrustedSourcesService } from '../../trusted-sources/trusted-sources.service';
 
@@ -23,6 +24,7 @@ export class PersonaFormComponent implements OnChanges, OnInit {
   @Input()
   persona?: TestPersona = TestPersona.create();
 
+  resourcesList = [];
   passportIssuers$: Observable<any>;
   policyValues$: { [s: string]: Observable<any>; } = {};
   claimDefinitions$: { [s: string]: Observable<any>; } = {};
@@ -34,7 +36,12 @@ export class PersonaFormComponent implements OnChanges, OnInit {
     iss: ['', Validators.required],
     sub: ['', Validators.required],
     ga4ghClaims: this.formBuilder.array([]),
+    resources: this.formBuilder.group([]),
   });
+
+  get resources() {
+    return this.form.get('resources') as FormGroup;
+  }
 
   get standardClaims() {
     return this.form.get('standardClaims') as FormArray;
@@ -48,7 +55,8 @@ export class PersonaFormComponent implements OnChanges, OnInit {
               private passportIssuerService: PassportIssuerService,
               private claimDefinitionService: ClaimDefinitionService,
               private trustedSourcesService: TrustedSourcesService,
-              private accessPolicyService: AccessPolicyService) {
+              private accessPolicyService: AccessPolicyService,
+              private resourceService: ResourceService) {
 
   }
 
@@ -58,6 +66,8 @@ export class PersonaFormComponent implements OnChanges, OnInit {
     );
 
     this.passportIssuers$ = filterSource(passportIssuers$, this.form.get('iss').valueChanges);
+
+    this.buildResourcesForm(TestPersona.create({}));
   }
 
   ngOnChanges({persona}: SimpleChanges): void {
@@ -78,6 +88,55 @@ export class PersonaFormComponent implements OnChanges, OnInit {
       ga4ghClaims: this.formBuilder.array(
         ga4ghClaims.map((claim) => this.buildGa4GhClaimGroup(claim))
       ),
+      resources: this.formBuilder.group({}),
+    });
+
+    this.buildResourcesForm(personaDto);
+  }
+
+  getViewRolesCombinations(views: object) {
+    const viewEntries = Object.entries(views);
+
+    return viewEntries.reduce((sum, [viewName, viewDto]) => {
+      const roles = Object.keys(viewDto.roles);
+      return [...sum, ...roles.map((role) => `${viewName}/${role}`)];
+    }, []);
+  }
+
+  buildResourcesForm(personaDto: TestPersona) {
+    this.resourceService.getList().pipe(
+      map((resourceList) => {
+        return resourceList.map((resource) => {
+          const name = resource.name;
+          const views = this.getViewRolesCombinations(resource.dto.views);
+
+          return {
+            name,
+            views,
+          };
+        }, []);
+      })
+    ).subscribe(allResourceList => {
+      this.toFormGroup(allResourceList, personaDto);
+      this.resourcesList = allResourceList;
+    });
+  }
+
+  toFormGroup(resourceList, personaDto) {
+    const personaResources = personaDto.resources;
+
+    resourceList.forEach(({name, views}) => {
+      const viewsGroup = {};
+
+      if (views) {
+        views.forEach((view) => {
+          const access = _get(personaResources, `[${name}].access`, []);
+          const isChecked = access.indexOf(view) > -1;
+          viewsGroup[view] = [isChecked];
+        });
+
+        this.resources.registerControl(name, this.formBuilder.group(viewsGroup));
+      }
     });
   }
 
