@@ -184,5 +184,31 @@
     </mat-card>
   </div>
 
+  <h3>
+    <mat-icon class="icon icon-resources"></mat-icon>
+    <span>Resources</span>
+  </h3>
+
+  <div *ngFor="let resource of resourcesList"
+       formGroupName="resources">
+
+    <!--h4></h4-->
+
+    <mat-card>
+      <mat-card-title>
+        {{ resource.name }}
+      </mat-card-title>
+      <div *ngFor="let view of resource.views"
+           class="row"
+           [formGroupName]="resource.name">
+        <div class="col">
+          <mat-slide-toggle [formControlName]="view">
+            {{ view }}
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
   <ng-content></ng-content>
 </form>

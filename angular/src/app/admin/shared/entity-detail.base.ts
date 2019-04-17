@@ -1,5 +1,6 @@
 import { OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { tap } from 'rxjs/internal/operators/tap';
 import { flatMap, map } from 'rxjs/operators';
 
 import { EntityModel } from './entity.model';
