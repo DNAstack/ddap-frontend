@@ -21,6 +21,7 @@ mat-card {
   mat-card {
     background: transparent;
     padding: 0;
+    box-shadow: none;
   }
 }
 
@@ -34,11 +35,15 @@ mat-card {
   }
 
   mat-card {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 
     .mat-card-title {
       display: flex;
       justify-content: space-between;
+
+      &.margin-bottom--0 {
+        margin-bottom: 0;
+      }
     }
 
     .mat-card-header-text {

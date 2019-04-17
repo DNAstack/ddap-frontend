@@ -42,7 +42,7 @@ export class IdentityComponent implements OnInit {
       : _get(account, 'identityProvider.ui.label', account.provider);
   }
 
-  getPicture(account: Account) {
+  getPicture(account: any) {
     const username = _get(account, 'profile.username', account.provider);
     if (this.isAccountPersona(account) && identityProviderMetadataExists(username)) {
       return identityProviders[username].imagePath;
