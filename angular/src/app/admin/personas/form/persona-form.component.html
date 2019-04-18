@@ -177,7 +177,7 @@
                 type="button"
                 color="warn"
                 class="uppercase"
-                (click)="removeClaim(i)">
+                (click)="removeGa4ghClaim(i)">
           Remove Claim
         </button>
       </div>
@@ -186,30 +186,33 @@
 
   <h3>
     <mat-icon class="icon icon-resources"></mat-icon>
-    <span>Resources</span>
+    <span>Resource Access</span>
   </h3>
 
-  <div *ngFor="let resource of resourcesList"
-       formGroupName="resources">
+  <mat-progress-bar *ngIf="!resourcesList.length"
+                    mode="indeterminate">
+  </mat-progress-bar>
 
-    <!--h4></h4-->
-
-    <mat-card>
-      <mat-card-title>
-        {{ resource.name }}
-      </mat-card-title>
-      <div *ngFor="let view of resource.views"
-           class="row"
-           [formGroupName]="resource.name">
-        <div class="col">
-          <mat-slide-toggle [formControlName]="view"
-                            id="{{ resource.name }}/{{ view }}">
-            {{ view }}
-          </mat-slide-toggle>
+  <ng-container *ngIf="resourcesList.length">
+    <div *ngFor="let resource of resourcesList"
+         formGroupName="resources">
+      <mat-card>
+        <mat-card-title>
+          {{ resource.name }}
+        </mat-card-title>
+        <div *ngFor="let access of resource.access"
+             class="row"
+             [formGroupName]="resource.name">
+          <div class="col ddap-access-col">
+            <mat-checkbox [formControlName]="access"
+                          id="{{ resource.name }}/{{ access }}">
+              {{ access }}
+            </mat-checkbox>
+          </div>
         </div>
-      </div>
-    </mat-card>
-  </div>
+      </mat-card>
+    </div>
+  </ng-container>
 
   <ng-content></ng-content>
 </form>
