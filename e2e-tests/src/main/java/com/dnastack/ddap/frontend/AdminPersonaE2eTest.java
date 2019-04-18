@@ -12,6 +12,7 @@ import com.dnastack.ddap.common.page.NavBar.NavItem;
 import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 @SuppressWarnings("Duplicates")
 public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
@@ -90,5 +91,40 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminListPage = adminManagePage.deleteEntity();
 
         assertThat(adminListPage.getEntityTitles(), not(hasItem("Undergrad Candice")));
+    }
+
+    @Test
+    public void deleteAndAddPersona() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                .goToAdmin(NavItem.PERSONAS);
+
+        assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (eRA Commons)"));
+
+        AdminManagePage adminManagePage = adminListPage.clickView("Dr. Joe (eRA Commons)", "View Persona");
+
+        adminListPage = adminManagePage.deleteEntity();
+
+        assertThat(adminListPage.getEntityTitles(), not(hasItem("Dr. Joe (eRA Commons)")));
+
+        adminListPage.clickManage();
+
+        adminManagePage.fillField(DdapBy.se("inp-id"), "dr_joe_era_commons");
+        adminManagePage.fillField(DdapBy.se("inp-label"), "Dr. Joe (eRA Commons)");
+        adminManagePage.fillField(DdapBy.se("inp-iss"), "https://login.nih.org/oidc/");
+        adminManagePage.fillField(DdapBy.se("inp-sub"), "dr_joe@era.nih.gov");
+
+        adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
+        adminManagePage.fillField(DdapBy.se("inp-claimName"), "ga4gh.ControlledAccessGrants");
+        adminManagePage.fillField(DdapBy.se("inp-source"), "https://dbgap.nlm.nih.gov/aa");
+        adminManagePage.fillField(DdapBy.se("inp-value"), "https://dac.nih.gov/datasets/phys000710");
+        adminManagePage.fillField(DdapBy.se("inp-iat"), "1550120402");
+        adminManagePage.fillField(DdapBy.se("inp-exp"), "2181272402");
+        adminManagePage.fillField(DdapBy.se("inp-by"), "dac");
+
+        adminManagePage.clickCheckbox(By.id("thousand-genomes/full-read-access/viewer"));
+
+        adminListPage = adminManagePage.saveEntity();
+
+        assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (eRA Commons)"));
     }
 }
