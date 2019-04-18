@@ -13,7 +13,8 @@
 </ddap-header>
 
 <ddap-main>
-  <ddap-persona-form #personaForm>
+  <ddap-persona-form #personaForm
+                     [persona]="persona">
     <button mat-flat-button
             (click)="save()"
             data-se="btn-save"
