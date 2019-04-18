@@ -106,15 +106,15 @@ export class PersonaFormComponent implements OnChanges, OnInit {
     return new EntityModel(id, testPersona);
   }
 
-  private buildGa4GhClaimGroup({claimName, source, value, iat, exp, by}: TestPersona.IGA4GHClaim): FormGroup {
+  private buildGa4GhClaimGroup({claimName, source, value, asserted, expires, by}: TestPersona.IGA4GHClaim): FormGroup {
     const autocompleteId = new Date().getTime().toString();
     const ga4ghClaimForm: FormGroup = this.formBuilder.group({
       _autocompleteId: autocompleteId,
       claimName: [claimName, Validators.required],
       source: [source, Validators.required],
       value: [value, Validators.required],
-      iat: [iat, Validators.required],
-      exp: [exp, Validators.required],
+      iat: [asserted, Validators.required],
+      exp: [expires, Validators.required],
       by: [by, Validators.required],
     });
 
