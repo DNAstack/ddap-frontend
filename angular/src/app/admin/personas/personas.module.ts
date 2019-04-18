@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { OwlDateTimeModule } from 'ng-pick-datetime';
+import { OwlMomentDateTimeModule } from 'ng-pick-datetime-moment';
 
 import { AdminSharedModule } from '../shared/shared.module';
 
@@ -16,6 +18,9 @@ import { PersonaManageComponent } from './persona-manage/persona-manage.componen
   ],
   imports: [
     AdminSharedModule,
+
+    OwlDateTimeModule,
+    OwlMomentDateTimeModule,
   ],
 })
 export class PersonasModule { }

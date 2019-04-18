@@ -20,6 +20,7 @@ import {
   MatSlideToggleModule,
   MatTooltipModule,
 } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClipboardModule } from 'ngx-clipboard';
 
@@ -52,6 +53,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
 
     CommonModule,
     FormsModule,
+    BrowserModule,
     BrowserAnimationsModule,
     ClipboardModule,
     ReactiveFormsModule,
@@ -79,6 +81,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
 
     CommonModule,
     FormsModule,
+    BrowserModule,
     BrowserAnimationsModule,
     ClipboardModule,
     ReactiveFormsModule,
