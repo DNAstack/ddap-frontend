@@ -3,7 +3,7 @@
 set -e
 set -x
 
-PROTO_FILE=dam_service.proto
+PROTO_FILE=./proto/dam_service.proto
 OUT_FILE=dam-service
 PROTOC_GEN_TS_PATH="./node_modules/.bin/protoc-gen-ts"
 TMP_DIR="./tmp"
