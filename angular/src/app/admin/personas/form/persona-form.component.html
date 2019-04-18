@@ -140,7 +140,9 @@
                  required
                  [owlDateTime]="asserted"
                  [owlDateTimeTrigger]="asserted">
-          <owl-date-time #asserted></owl-date-time>
+          <owl-date-time #asserted
+                         panelClass="datetime-picker">
+          </owl-date-time>
         </mat-form-field>
         <mat-form-field class="col">
           <input matInput
@@ -150,7 +152,9 @@
                  required
                  [owlDateTime]="expires"
                  [owlDateTimeTrigger]="expires">
-          <owl-date-time #expires></owl-date-time>
+          <owl-date-time #expires
+                         panelClass="datetime-picker">
+          </owl-date-time>
         </mat-form-field>
       </div>
 
