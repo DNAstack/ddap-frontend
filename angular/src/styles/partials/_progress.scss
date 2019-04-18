@@ -7,7 +7,7 @@
 }
 
 ddap-root {
-  mat-progress-bar.mat-progress-bar {
+  ng-component > mat-progress-bar.mat-progress-bar {
     position: fixed;
     z-index: 100;
   }

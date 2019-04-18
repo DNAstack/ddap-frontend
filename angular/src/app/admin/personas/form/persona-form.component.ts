@@ -14,10 +14,12 @@ import { PassportIssuerService } from '../../passport-issuers/passport-issuerss.
 import { ResourceService } from '../../resources/resources.service';
 import { EntityModel } from '../../shared/entity.model';
 import { TrustedSourcesService } from '../../trusted-sources/trusted-sources.service';
+import AccessList = dam.v1.AccessList;
 
 @Component({
   selector: 'ddap-persona-form',
   templateUrl: './persona-form.component.html',
+  styleUrls: ['./persona-form.component.scss'],
 })
 export class PersonaFormComponent implements OnChanges {
 
@@ -32,7 +34,7 @@ export class PersonaFormComponent implements OnChanges {
 
   form: FormGroup;
 
-  resourceList$: Observable<any>;
+  private resourceAccess$: Observable<any>;
 
   get resources() {
     return this.form.get('resources') as FormGroup;
@@ -52,18 +54,9 @@ export class PersonaFormComponent implements OnChanges {
               private trustedSourcesService: TrustedSourcesService,
               private accessPolicyService: AccessPolicyService,
               private resourceService: ResourceService) {
-    this.resourceList$ = this.resourceService.getList().pipe(
-      map((resourceList) => {
-        return resourceList.map((resource) => {
-          const name = resource.name;
-          const views = this.getViewRolesCombinations(resource.dto.views);
 
-          return {
-            name,
-            views,
-          };
-        });
-      })
+    this.resourceAccess$ = this.resourceService.getList().pipe(
+      map((resourceList) => this.generateAllAccessModel(resourceList))
     );
   }
 
@@ -72,38 +65,14 @@ export class PersonaFormComponent implements OnChanges {
     const personaDto: TestPersona = _get(persona, 'currentValue.dto', TestPersona.create({}));
 
     this.buildForm(personaId, personaDto);
-
-    const passportIssuers$ = this.passportIssuerService.getList(pick('dto.issuer')).pipe(
-      map(makeDistinct)
-    );
-    this.passportIssuers$ = filterSource(passportIssuers$, this.form.get('iss').valueChanges);
-
-  }
-
-  removeClaim(index) {
-    this.ga4ghClaims.removeAt(index);
   }
 
   addGa4ghClaims() {
     this.ga4ghClaims.insert(0, this.buildGa4GhClaimGroup({}));
   }
 
-  getResourcesModel() {
-    const isViewAllowed = ([accessName, isAllowed]) => isAllowed;
-    const getAccessName = ([accessName, isAllowed]) => accessName;
-
-    return Object.entries(this.form.value.resources)
-      .reduce((sum, [resource, views]) => {
-        const access = Object.entries(views)
-          .filter(isViewAllowed)
-          .map(getAccessName);
-
-        if (access.length) {
-          sum[resource] = {access};
-        }
-
-        return sum;
-      }, {});
+  removeGa4ghClaim(index) {
+    this.ga4ghClaims.removeAt(index);
   }
 
   getEntityModel(): EntityModel {
@@ -137,6 +106,24 @@ export class PersonaFormComponent implements OnChanges {
     };
   }
 
+  private getResourcesModel() {
+    const isViewAllowed = ([_, isAllowed]) => isAllowed;
+    const getAccessName = ([accessName, _]) => accessName;
+
+    return Object.entries(this.form.value.resources)
+      .reduce((sum, [resource, views]) => {
+        const access = Object.entries(views)
+          .filter(isViewAllowed)
+          .map(getAccessName);
+
+        if (access.length) {
+          sum[resource] = {access};
+        }
+
+        return sum;
+      }, {});
+  }
+
   private buildGa4GhClaimGroup({claimName, source, value, asserted, expires, by}: TestPersona.IGA4GHClaim): FormGroup {
     const autocompleteId = new Date().getTime().toString();
     const ga4ghClaimForm: FormGroup = this.formBuilder.group({
@@ -166,6 +153,13 @@ export class PersonaFormComponent implements OnChanges {
     );
 
     return filterSource(claimDefinitions$, formGroup.get('claimName').valueChanges);
+  }
+
+  private buildIssuerAutocomplete() {
+    const passportIssuers$ = this.passportIssuerService.getList(pick('dto.issuer')).pipe(
+      map(makeDistinct)
+    );
+    return filterSource(passportIssuers$, this.form.get('iss').valueChanges);
   }
 
   private buildTrustedSourcesAutocomplete(formGroup: FormGroup) {
@@ -204,11 +198,27 @@ export class PersonaFormComponent implements OnChanges {
       resources: this.formBuilder.group({}),
     });
 
-    this.buildResourcesForm(personaDto);
+    this.buildAccessForm(personaDto);
+
+    this.passportIssuers$ = this.buildIssuerAutocomplete();
   }
 
-  private getViewRolesCombinations(views: object) {
-    const viewEntries = Object.entries(views);
+  private generateAllAccessModel(resourceList): AccessList {
+    return resourceList.map((resource) => this.generateAccessModel(resource));
+  }
+
+  private generateAccessModel(resource) {
+    const name = resource.name;
+    const access = this.getViewRolesCombinations(resource.dto.views);
+
+    return {
+      name,
+      access,
+    };
+  }
+
+  private getViewRolesCombinations(view: object) {
+    const viewEntries = Object.entries(view);
 
     return viewEntries.reduce((sum, [viewName, viewDto]) => {
       const roles = Object.keys(viewDto.roles);
@@ -216,29 +226,31 @@ export class PersonaFormComponent implements OnChanges {
     }, []);
   }
 
-  private buildResourcesForm(personaDto: TestPersona) {
-    this.resourceList$.subscribe(allResourceList => {
+  private buildAccessForm(personaDto: TestPersona) {
+    this.resourceAccess$.subscribe(allResourceList => {
       this.toFormGroup(allResourceList, personaDto);
       this.resourcesList = allResourceList;
     });
   }
 
-  private toFormGroup(resourceList, personaDto) {
+  private toFormGroup(allResourceList, personaDto) {
     const personaResources = personaDto.resources;
 
-    resourceList.forEach(({name, views}) => {
-
-      if (views) {
-        const viewsGroup = views.reduce((sum, view) => {
-          const access = _get(personaResources, `[${name}].access`, []);
-          const isChecked = access.indexOf(view) > -1;
-          sum[view] = [isChecked];
-
-          return sum;
-        }, {});
-
-        this.resources.registerControl(name, this.formBuilder.group(viewsGroup));
+    allResourceList.forEach(({name, access}) => {
+      if (!access) {
+        return;
       }
+
+      const resourceAccessFormGroup = access.reduce((result, view) => {
+        const currentResourceAccess = _get(personaResources, `[${name}].access`, []);
+        const isInCurrentResource = currentResourceAccess.indexOf(view) > -1;
+
+        result[view] = [isInCurrentResource];
+
+        return result;
+      }, {});
+
+      this.resources.registerControl(name, this.formBuilder.group(resourceAccessFormGroup));
     });
   }
 }

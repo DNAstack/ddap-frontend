@@ -62,6 +62,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
 
     MatAutocompleteModule,
     MatCardModule,
+    MatCheckboxModule,
     MatChipsModule,
     MatProgressBarModule,
     MatSidenavModule,
@@ -90,6 +91,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
 
     MatAutocompleteModule,
     MatCardModule,
+    MatCheckboxModule,
     MatChipsModule,
     MatProgressBarModule,
     MatSidenavModule,
