@@ -49,6 +49,10 @@ public class AdminManagePage {
         fillFieldFromDropdown(fieldSelector, null);
     }
 
+    public void clickCheckbox(By checkboxSelector) {
+        driver.findElement(checkboxSelector).click();
+    }
+
     public void clickButton(By selector) {
         driver.findElement(selector).click();
     }

@@ -202,7 +202,8 @@
            class="row"
            [formGroupName]="resource.name">
         <div class="col">
-          <mat-slide-toggle [formControlName]="view">
+          <mat-slide-toggle [formControlName]="view"
+                            id="{{ resource.name }}/{{ view }}">
             {{ view }}
           </mat-slide-toggle>
         </div>
