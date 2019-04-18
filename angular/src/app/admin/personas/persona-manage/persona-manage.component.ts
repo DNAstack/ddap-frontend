@@ -1,6 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import TestPersona = dam.v1.TestPersona;
+import { dam } from '../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
 import { PersonaFormComponent } from '../form/persona-form.component';
@@ -11,15 +13,21 @@ import { PersonaService } from '../personas.service';
   templateUrl: './persona-manage.component.html',
   styleUrls: ['./persona-manage.component.scss'],
 })
-export class PersonaManageComponent {
+export class PersonaManageComponent implements OnInit {
 
   @ViewChild(PersonaFormComponent)
   personaForm: PersonaFormComponent;
+
+  persona: TestPersona;
 
   constructor(private personaService: PersonaService,
               private router: Router,
               private route: ActivatedRoute) {
 
+  }
+
+  ngOnInit(): void {
+    this.persona = TestPersona.create({});
   }
 
   save() {
