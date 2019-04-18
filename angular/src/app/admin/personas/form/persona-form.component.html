@@ -134,17 +134,23 @@
       <div class="row">
         <mat-form-field class="col">
           <input matInput
-                 formControlName="iat"
+                 formControlName="asserted"
                  placeholder="IAT"
                  data-se="inp-iat"
-                 required>
+                 required
+                 [owlDateTime]="asserted"
+                 [owlDateTimeTrigger]="asserted">
+          <owl-date-time #asserted></owl-date-time>
         </mat-form-field>
         <mat-form-field class="col">
           <input matInput
-                 formControlName="exp"
+                 formControlName="expires"
                  placeholder="EXP"
                  data-se="inp-exp"
-                 required>
+                 required
+                 [owlDateTime]="expires"
+                 [owlDateTimeTrigger]="expires">
+          <owl-date-time #expires></owl-date-time>
         </mat-form-field>
       </div>
 

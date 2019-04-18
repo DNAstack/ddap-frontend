@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
+import TestPersona = dam.v1.TestPersona;
+import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -11,7 +13,6 @@ import { ClaimDefinitionService } from '../../claim-definitions/claim-definition
 import { PassportIssuerService } from '../../passport-issuers/passport-issuerss.service';
 import { EntityModel } from '../../shared/entity.model';
 import { TrustedSourcesService } from '../../trusted-sources/trusted-sources.service';
-import TestPersona = dam.v1.TestPersona;
 
 @Component({
   selector: 'ddap-persona-form',
@@ -96,7 +97,7 @@ export class PersonaFormComponent implements OnChanges, OnInit {
           iss,
           sub,
         },
-        ga4ghClaims,
+        ga4ghClaims: ga4ghClaims.map(this.getGa4ghClaimModel),
       },
       ui: {
         label,
@@ -106,6 +107,17 @@ export class PersonaFormComponent implements OnChanges, OnInit {
     return new EntityModel(id, testPersona);
   }
 
+  getGa4ghClaimModel({claimName, source, value, asserted, expires, by}): TestPersona.IGA4GHClaim {
+    return {
+      claimName,
+      source,
+      value,
+      asserted: asserted.unix(),
+      expires: expires.unix(),
+      by,
+    };
+  }
+
   private buildGa4GhClaimGroup({claimName, source, value, asserted, expires, by}: TestPersona.IGA4GHClaim): FormGroup {
     const autocompleteId = new Date().getTime().toString();
     const ga4ghClaimForm: FormGroup = this.formBuilder.group({
@@ -113,8 +125,8 @@ export class PersonaFormComponent implements OnChanges, OnInit {
       claimName: [claimName, Validators.required],
       source: [source, Validators.required],
       value: [value, Validators.required],
-      iat: [asserted, Validators.required],
-      exp: [expires, Validators.required],
+      asserted: [moment.unix(asserted), Validators.required],
+      expires: [moment.unix(expires), Validators.required],
       by: [by, Validators.required],
     });
 
