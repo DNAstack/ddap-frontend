@@ -36,6 +36,7 @@
                 class="event">
               <div class="line"></div>
               <h4>{{ claim.claimName }}</h4>
+              <p>{{ getFormattedExpiresTextFromClaim(claim) }}</p>
               <p>{{ claim.source }}</p>
             </li>
           </ul>

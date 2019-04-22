@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -20,6 +21,18 @@ export class PersonaListComponent implements OnInit {
   ngOnInit() {
     this.personas$ = this.personaService.get()
       .pipe(map(EntityModel.arrayFromMap));
+  }
+
+  getFormattedExpiresTextFromClaim({ expires }) {
+    if (!expires) {
+      return;
+    }
+
+    const timestamp = moment.unix(expires);
+    const relativeTime = timestamp.fromNow();
+    return timestamp.isBefore(moment())
+      ? `Expired ${relativeTime}`
+      : `Expires ${relativeTime}`;
   }
 
 }
