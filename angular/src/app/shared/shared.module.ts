@@ -29,6 +29,7 @@ import { AppRoutingModule } from '../app-routing.module';
 import { BeaconSearchBarComponent } from './beacon-search-bar/beacon-search-bar.component';
 import { LimitSearchComponent } from './beacon-search-bar/limit-search/limit-search.component';
 import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
+import { ClaimGroupComponent } from './claim-group/claim-group.component';
 import { FocusedDirective } from './focused.directive';
 import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
@@ -43,6 +44,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     NavBackComponent,
     ResourceLogoComponent,
     ResourceViewItemComponent,
+    ClaimGroupComponent,
     BeaconSearchBarComponent,
     BeaconResultComponent,
     LimitSearchComponent,
@@ -107,6 +109,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     HeaderComponent,
     MainComponent,
     NavBackComponent,
+    ClaimGroupComponent,
     BeaconSearchBarComponent,
     BeaconResultComponent,
     ResourceLogoComponent,
