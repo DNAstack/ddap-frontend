@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { DataModule } from './data/data.module';
 import { IdentityModule } from './identity/identity.module';
 import { LayoutComponent } from './layout/layout.component';
+import { RealmModule } from './realm/realm.module';
 import { RealmInterceptor } from './shared/realm/realm-interceptor.service';
 import { SharedModule } from './shared/shared.module';
 
@@ -28,6 +29,7 @@ import { SharedModule } from './shared/shared.module';
     AdminModule,
     DataModule,
     IdentityModule,
+    RealmModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: RealmInterceptor, multi: true },

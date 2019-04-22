@@ -14,6 +14,7 @@ import { TRUSTED_SOURCES_ROUTES } from './admin/trusted-sources/trusted-sources.
 import { DATA_ROUTES } from './data/data.routes';
 import { IDENTITY_ROUTES } from './identity/identity.routes';
 import { LayoutComponent } from './layout/layout.component';
+import { REALM_ROUTES } from './realm/realm.routes';
 import { defaultRealm } from './shared/realm/realm.constant';
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
       ...SERVICE_TEMPLATES_ROUTES,
       ...PASSPORT_ISSUERS_ROUTES,
       ...PERSONAS_ROUTES,
+      ...REALM_ROUTES,
       ...RESOURCES_ROUTES,
       ...ACCESS_POLICIES_ROUTES,
       ...OPTIONS_ROUTES,

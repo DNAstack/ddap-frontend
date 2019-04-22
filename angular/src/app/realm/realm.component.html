@@ -1,0 +1,28 @@
+<ddap-header label="Realm Settings"
+             [icon]="'globe'">
+</ddap-header>
+
+<ddap-main>
+  <form class="ddap-form"
+        novalidate
+        [formGroup]="form">
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Realm"
+               formControlName="id"
+               data-se="inp-id"
+               required>
+        <mat-hint>After changing realm you will be redirected to the login page.</mat-hint>
+      </mat-form-field>
+    </div>
+    <button mat-flat-button
+            (click)="changeRealmAndGoToLogin()"
+            data-se="btn-change-realm"
+            type="submit"
+            color="primary"
+            class="uppercase">
+      Change Realm
+    </button>
+  </form>
+</ddap-main>

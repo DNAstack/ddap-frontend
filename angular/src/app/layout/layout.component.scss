@@ -14,9 +14,17 @@ mat-sidenav-container {
 
 :host {
   .ddap-realm-select {
-
     background-color: $navbar-expanded-background;
     height: 4.5rem;
+
+    &,
+    input {
+      cursor: default;
+    }
+
+    mat-icon.icon-edit {
+      cursor: pointer;
+    }
 
     /deep/ .mat-list-item-content {
       padding: 1.5rem;

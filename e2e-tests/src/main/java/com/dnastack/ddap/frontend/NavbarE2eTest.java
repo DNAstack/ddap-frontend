@@ -9,10 +9,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
-import com.dnastack.ddap.common.page.AdminListPage;
-import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.common.page.IdentityPage;
-import com.dnastack.ddap.common.page.NavBar;
+import com.dnastack.ddap.common.page.*;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
 import java.io.IOException;
 import java.util.Arrays;
@@ -257,7 +254,9 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         assertThat("this test is pointless unless we start on a different realm than we're going to!",
                 ddapPage.getNavBar().getRealm(), is(not(otherRealm)));
 
-        ddapPage.getNavBar().setRealm(otherRealm);
+        RealmPage realmPage = ddapPage.getNavBar().goToRealmSettings();
+        ICLoginPage loginPage = realmPage.setRealm(otherRealm);
+        loginPage.loginAsNciResearcher(AnyDdapPage::new);
 
         assertThat(ddapPage.getNavBar().getRealm(), is(otherRealm));
     }

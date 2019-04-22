@@ -87,17 +87,14 @@ public class NavBar {
         return new AdminListPage(driver);
     }
 
-    private WebElement getRealmInput() {
-        return driver.findElement(DdapBy.se("realm-input"));
+    public RealmPage goToRealmSettings() {
+        driver.findElement(DdapBy.se("realm-input-edit")).click();
+
+        return new RealmPage(driver);
     }
 
-    public void setRealm(String targetRealm) {
-        WebElement realmInput = getRealmInput();
-        int oldRealmNameLength = getRealm().length();
-        for (int i = 0; i < oldRealmNameLength; i++) {
-            realmInput.sendKeys(Keys.BACK_SPACE);
-        }
-        realmInput.sendKeys(targetRealm, Keys.RETURN);
+    private WebElement getRealmInput() {
+        return driver.findElement(DdapBy.se("realm-input"));
     }
 
     public String getRealm() {
