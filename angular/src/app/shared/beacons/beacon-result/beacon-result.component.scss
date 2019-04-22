@@ -1,33 +1,49 @@
 @import "../../../../styles/modules/colors";
 
-.metadata-key {
-  flex-basis: 40%;
+.ddap-beacon-result {
+  margin-bottom: 0.5rem;
+
+  mat-card {
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+
+    mat-card-subtitle:last-child {
+      margin-bottom: 0;
+    }
+
+    mat-icon {
+      margin-right: 0.5rem;
+    }
+  }
+
+  mat-list {
+    &.mat-list-base {
+      padding-top: 0;
+    }
+
+    mat-list-item {
+      height: 2rem;
+    }
+  }
+
+  .match-success {
+    color: $success-color;
+  }
+
+  .match-failure {
+    color: $failure-color;
+  }
+
+  .metadata {
+    font-size: 0.9rem;
+
+    h4 {
+      flex-basis: 30%;
+    }
+    span {
+
+    }
+  }
 }
 
-.metadata-value {
-  flex-basis: 60%;
-}
-
-.indicator-green {
-  color: green;
-}
-
-.indicator-red {
-  color: red;
-}
-
-mat-card {
-  margin: 1rem;
-}
-
-mat-panel-title {
-  color: $color-grey;
-}
-
-.mat-expansion-panel {
-  background: $color-faded-grey;
-}
-
-.mat-expansion-panel:not([class*='mat-elevation-z']) {
-  box-shadow: none;
-}

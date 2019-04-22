@@ -28,7 +28,9 @@
   </div>
 
   <ng-template [ngIf]="resultsAction.closed && results?.length">
-    <ddap-beacon-result *ngFor="let beaconResult of results" [beacon]="beaconResult" [realm]="realm">
+    <ddap-beacon-result *ngFor="let beaconResult of results"
+                        [beacon]="beaconResult"
+                        [realm]="realm">
     </ddap-beacon-result>
   </ng-template>
 </ddap-main>
