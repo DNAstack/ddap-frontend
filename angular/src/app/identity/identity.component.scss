@@ -23,6 +23,10 @@ mat-card {
     padding: 0;
     box-shadow: none;
   }
+
+  ::ng-deep h3 {
+    margin-top: 0;
+  }
 }
 
 ::ng-deep .ddap-available-accounts {
