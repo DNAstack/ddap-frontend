@@ -160,11 +160,15 @@
 
       <div class="row">
         <mat-form-field class="col w-50">
-          <input matInput
-                 formControlName="by"
-                 placeholder="By"
-                 data-se="inp-by"
-                 required>
+          <mat-label>By</mat-label>
+          <mat-select formControlName="by"
+                      required
+                      data-se="inp-by">
+            <mat-option value="self">self</mat-option>
+            <mat-option value="peer">peer</mat-option>
+            <mat-option value="so">so</mat-option>
+            <mat-option value="dac">dac</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
 
