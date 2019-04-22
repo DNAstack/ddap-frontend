@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import _get from 'lodash.get';
 import { Subscription } from 'rxjs/Subscription';
 
+import { dam } from '../shared/proto/dam-service';
+
 import { AccountLink } from './account-link.model';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
 import { IdentityService } from './identity.service';
 import { identityProviderMetadataExists, identityProviders } from './providers.constants';
+import IGA4GHClaim = dam.v1.TestPersona.IGA4GHClaim;
+import GA4GHClaim = dam.v1.TestPersona.GA4GHClaim;
 
 @Component({
   templateUrl: './identity.component.html',
@@ -54,6 +58,22 @@ export class IdentityComponent implements OnInit {
   isAccountPersona(account): boolean {
     return account.provider === '<persona>';
   }
+
+  mapToGa4ghClaims(claims): IGA4GHClaim[] {
+    return this.flatten(
+      Object.entries(claims)
+        .map(([key, value]: any) => this.extractClaimsUnderKey(key, value.list))
+    );
+  }
+
+  private extractClaimsUnderKey(claimKey: string, claims: any[]): IGA4GHClaim[] {
+    return claims.map((claim) => {
+      claim.claimName = claimKey;
+      return GA4GHClaim.fromObject(claim);
+    });
+  }
+
+  private flatten = (array) => array.reduce((acc, val) => acc.concat(val), []);
 
   private getDefaultProviderPicture(provider: string) {
     return identityProviderMetadataExists(provider)
