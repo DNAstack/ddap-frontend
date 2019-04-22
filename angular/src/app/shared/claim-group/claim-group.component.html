@@ -1,0 +1,21 @@
+<div>
+  <h3 class="flex vertical-center">
+    <mat-icon class="icon icon-claims"></mat-icon>
+    <span>{{ claimGroupLabel }}</span>
+  </h3>
+  <ul class="timeline" *ngIf="standardClaims">
+    <li class="event">
+      <h4>{{ standardClaims.iss }}</h4>
+      <p>{{ standardClaims.sub }}</p>
+    </li>
+  </ul>
+  <ul class="timeline" *ngIf="ga4ghClaims">
+    <li *ngFor="let claim of ga4ghClaims"
+        class="event">
+      <div class="line"></div>
+      <h4>{{ claim.claimName }}</h4>
+      <p>{{ getFormattedExpiresTextFromClaim(claim) }}</p>
+      <p>{{ claim.source }}</p>
+    </li>
+  </ul>
+</div>

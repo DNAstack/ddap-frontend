@@ -14,33 +14,14 @@
             <h2>{{ persona.dto.ui.label }}</h2>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <ng-container *ngIf="persona.dto.idToken.standardClaims as standardClaims">
-          <h3 class="flex vertical-center">
-            <mat-icon class="icon icon-claims"></mat-icon>
-            <span>Standard Claims</span>
-          </h3>
-          <ul class="timeline">
-            <li class="event">
-              <h4>{{ standardClaims.iss }}</h4>
-              <p>{{ standardClaims.sub }}</p>
-            </li>
-          </ul>
-        </ng-container>
-        <ng-container *ngIf="persona.dto.idToken.ga4ghClaims as ga4ghClaims">
-          <h3 class="flex vertical-center">
-            <mat-icon class="icon icon-claims"></mat-icon>
-            <span>Global Alliance for Genomics and Health Claims</span>
-          </h3>
-          <ul class="timeline">
-            <li *ngFor="let claim of ga4ghClaims"
-                class="event">
-              <div class="line"></div>
-              <h4>{{ claim.claimName }}</h4>
-              <p>{{ getFormattedExpiresTextFromClaim(claim) }}</p>
-              <p>{{ claim.source }}</p>
-            </li>
-          </ul>
-        </ng-container>
+        <ddap-claim-group *ngIf="persona.dto.idToken.standardClaims as standardClaims"
+                          [claimGroupLabel]="'Standard Claims'"
+                          [standardClaims]="standardClaims">
+        </ddap-claim-group>
+        <ddap-claim-group *ngIf="persona.dto.idToken.ga4ghClaims as ga4ghClaims"
+                          [claimGroupLabel]="'Global Alliance for Genomics and Health Claims'"
+                          [ga4ghClaims]="ga4ghClaims">
+        </ddap-claim-group>
         <mat-action-row>
           <button mat-button
                   [routerLink]="[persona.name]"
