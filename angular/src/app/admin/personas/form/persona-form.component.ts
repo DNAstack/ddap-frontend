@@ -106,6 +106,26 @@ export class PersonaFormComponent implements OnChanges {
     };
   }
 
+  invalidateAccessFields({error}) {
+    const personaId = this.form.get('id').value;
+    const resourcesFormGroup = this.form.get('resources');
+    const fieldsToAdd: object = _get(error, `testPersonas[${personaId}].addResources`);
+    const fieldsToRemove: object = _get(error, `testPersonas[${personaId}].removeResources`);
+
+    const setError = ([resourceName, { access }]) => {
+      access.forEach((accessRole) => {
+        const accessRoleCheckbox = resourcesFormGroup.get(resourceName).get(accessRole);
+        accessRoleCheckbox.setErrors({'Doesn\'t match role criteria': true});
+      });
+    };
+
+    Object.entries(fieldsToAdd)
+      .forEach(setError);
+
+    Object.entries(fieldsToRemove)
+      .forEach(setError);
+  }
+
   private getResourcesModel() {
     const isViewAllowed = ([_, isAllowed]) => isAllowed;
     const getAccessName = ([accessName, _]) => accessName;
