@@ -24,8 +24,10 @@ mat-card {
     box-shadow: none;
   }
 
-  ::ng-deep h3 {
-    margin-top: 0;
+  ::ng-deep ddap-claim-group {
+    h3 {
+      margin-top: 0;
+    }
   }
 }
 
