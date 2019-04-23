@@ -4,6 +4,13 @@ import com.dnastack.ddap.common.DdapBy;
 import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.Assert.assertTrue;
 
 public class AdminManagePage {
     @Getter
@@ -19,6 +26,27 @@ public class AdminManagePage {
 
     public void fillField(By fieldSelector, String fieldValue) {
         driver.findElement(fieldSelector).sendKeys(fieldValue);
+    }
+
+    public void fillFieldFromDropdown(By fieldSelector, String fieldValue) {
+        driver.findElement(fieldSelector).click();
+
+        List<WebElement> options = driver.findElements(By.tagName("mat-option"));
+        new WebDriverWait(driver, 5).until(d -> !options.isEmpty());
+
+        if (fieldValue != null) {
+            Optional<WebElement> option = options.stream()
+                    .filter((element) -> element.getText().contains(fieldValue))
+                    .findFirst();
+            assertTrue(option.isPresent());
+            option.get().click();
+        } else {
+            options.get(0).click();
+        }
+    }
+
+    public void fillFieldWithFirstValueFromDropdown(By fieldSelector) {
+        fillFieldFromDropdown(fieldSelector, null);
     }
 
     public void clickButton(By selector) {

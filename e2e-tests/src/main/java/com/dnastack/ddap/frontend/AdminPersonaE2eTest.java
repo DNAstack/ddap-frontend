@@ -37,10 +37,10 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "test-claimName");
         adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
-        adminManagePage.fillField(DdapBy.se("inp-value"), "test-value");
+        adminManagePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-value"));
         adminManagePage.fillField(DdapBy.se("inp-iat"), "123");
         adminManagePage.fillField(DdapBy.se("inp-exp"), "123");
-        adminManagePage.fillField(DdapBy.se("inp-by"), "test-by");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "peer");
 
         adminListPage = adminManagePage.saveEntity();
 
@@ -70,7 +70,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-value"), "test-value");
         adminManagePage.fillField(DdapBy.se("inp-iat"), "123");
         adminManagePage.fillField(DdapBy.se("inp-exp"), "123");
-        adminManagePage.fillField(DdapBy.se("inp-by"), "test-by");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "so");
 
         adminListPage = adminManagePage.updateEntity();
 
