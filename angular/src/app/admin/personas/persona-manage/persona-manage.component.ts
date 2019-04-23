@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import TestPersona = dam.v1.TestPersona;
 import { dam } from '../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
 import { PersonaFormComponent } from '../form/persona-form.component';
 import { PersonaService } from '../personas.service';
+import TestPersona = dam.v1.TestPersona;
 
 @Component({
   selector: 'ddap-persona-manage',
@@ -38,6 +38,7 @@ export class PersonaManageComponent implements OnInit {
     const personaModel: EntityModel = this.personaForm.getEntityModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.personaService.save(personaModel.name, change)
-      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
+      .subscribe(() => this.router.navigate(['../..'], {relativeTo: this.route}),
+        (err) => this.personaForm.invalidateAccessFields(err));
   }
 }
