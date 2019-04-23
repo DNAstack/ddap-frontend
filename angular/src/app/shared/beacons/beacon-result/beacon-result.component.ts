@@ -1,5 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
+import { IdentityService } from '../../../identity/identity.service';
 import { BeaconResponse } from '../beacon-response.model';
 
 @Component({
@@ -7,15 +10,22 @@ import { BeaconResponse } from '../beacon-response.model';
   templateUrl: './beacon-result.component.html',
   styleUrls: ['./beacon-result.component.scss'],
 })
-export class BeaconResultComponent {
+export class BeaconResultComponent implements OnInit {
 
-  @Input()
-  realm: string;
   @Input()
   beacon: BeaconResponse;
 
-  metadataNotEmpty() {
-    return this.beacon.info && Object.keys(this.beacon.info).length > 0;
+  realm: string;
+
+  constructor(private activatedRoute: ActivatedRoute) {
+
+  }
+
+
+  ngOnInit(): void {
+    this.activatedRoute.root.firstChild.params.subscribe((params) => {
+      this.realm = params.realmId;
+    });
   }
 
   getLinkToResource() {

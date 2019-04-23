@@ -17,7 +17,6 @@ import { DataService } from '../data.service';
 })
 export class DataSearchComponent implements OnDestroy, OnInit {
 
-  realm: string;
   resource: string;
   resourceName$:  Observable<string>;
   views: any;
@@ -32,14 +31,6 @@ export class DataSearchComponent implements OnDestroy, OnInit {
               private beaconService: ResourceBeaconService,
               private router: Router,
               public searchState: SearchStateService) {
-
-    this.activatedRoute
-      .root
-      .firstChild
-      .params
-      .subscribe((params) => {
-      this.realm = params.realmId;
-    });
   }
 
   ngOnInit() {
