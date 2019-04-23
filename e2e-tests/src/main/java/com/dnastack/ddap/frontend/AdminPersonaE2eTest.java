@@ -13,6 +13,7 @@ import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 @SuppressWarnings("Duplicates")
 public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
@@ -39,8 +40,8 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "test-claimName");
         adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
         adminManagePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-value"));
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "123");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "123");
+        adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
+        adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "peer");
 
         adminListPage = adminManagePage.saveEntity();
@@ -69,8 +70,8 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "test-claimName");
         adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
         adminManagePage.fillField(DdapBy.se("inp-value"), "test-value");
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "123");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "123");
+        adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
+        adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "so");
 
         adminListPage = adminManagePage.updateEntity();
@@ -117,9 +118,9 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "ga4gh.ControlledAccessGrants");
         adminManagePage.fillField(DdapBy.se("inp-source"), "https://dbgap.nlm.nih.gov/aa");
         adminManagePage.fillField(DdapBy.se("inp-value"), "https://dac.nih.gov/datasets/phys000710");
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "1550120402");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "2181272402");
-        adminManagePage.fillField(DdapBy.se("inp-by"), "dac");
+        adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
+        adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "dac");
 
         adminManagePage.clickCheckbox(By.id("thousand-genomes/full-read-access/viewer"));
 
