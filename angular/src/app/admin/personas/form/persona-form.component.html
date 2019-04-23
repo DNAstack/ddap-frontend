@@ -73,30 +73,30 @@
   <div *ngFor="let ga4ghClaim of ga4ghClaims.controls; let i=index"
        formArrayName="ga4ghClaims">
     <mat-autocomplete #claims="matAutocomplete">
-      <ng-container *ngIf="claimInput.isFocused">
-        <mat-option *ngFor="let option of claimDefinitions$[ga4ghClaim.value._autocompleteId] | async"
-                    [value]="option">
-          {{ option }}
-        </mat-option>
-      </ng-container>
+      <!--      <ng-container *ngIf="claimInput.isFocused"> TODO: https://dnastack.atlassian.net/browse/DISCO-2162 -->
+      <mat-option *ngFor="let option of claimDefinitions$[ga4ghClaim.value._autocompleteId] | async"
+                  [value]="option">
+        {{ option }}
+      </mat-option>
+      <!--      </ng-container>-->
     </mat-autocomplete>
 
     <mat-autocomplete #sources="matAutocomplete">
-      <ng-container *ngIf="sourceInput.isFocused">
-        <mat-option *ngFor="let option of trustedSources$[ga4ghClaim.value._autocompleteId] | async"
-                    [value]="option">
-          {{ option }}
-        </mat-option>
-      </ng-container>
+      <!--      <ng-container *ngIf="sourceInput.isFocused"> TODO: https://dnastack.atlassian.net/browse/DISCO-2162 -->
+      <mat-option *ngFor="let option of trustedSources$[ga4ghClaim.value._autocompleteId] | async"
+                  [value]="option">
+        {{ option }}
+      </mat-option>
+      <!--      </ng-container>-->
     </mat-autocomplete>
 
     <mat-autocomplete #values="matAutocomplete">
-      <ng-container *ngIf="valueInput.isFocused">
-        <mat-option *ngFor="let option of policyValues$[ga4ghClaim.value._autocompleteId] | async"
-                    [value]="option">
-          {{ option }}
-        </mat-option>
-      </ng-container>
+      <!--      <ng-container *ngIf="valueInput.isFocused"> TODO: https://dnastack.atlassian.net/browse/DISCO-2162 -->
+      <mat-option *ngFor="let option of policyValues$[ga4ghClaim.value._autocompleteId] | async"
+                  [value]="option">
+        {{ option }}
+      </mat-option>
+      <!--      </ng-container>-->
     </mat-autocomplete>
 
     <mat-card [formGroupName]="i">
