@@ -57,6 +57,10 @@ public class AdminManagePage {
         driver.findElement(selector).click();
     }
 
+    public void closeAutocompletes() {
+        driver.findElement(By.tagName("h1")).click();
+    }
+
     public AdminListPage saveEntity() {
         driver.findElement(DdapBy.se("btn-save"))
                 .click();
