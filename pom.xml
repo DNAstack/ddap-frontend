@@ -21,6 +21,7 @@
 		<angular.project.nodeinstallation>node_installation</angular.project.nodeinstallation>
 		<node.version>v11.13.0</node.version>
 		<npm.version>6.7.0</npm.version>
+		<protoc.version>3.7.0.2</protoc.version>
 	</properties>
 
 	<dependencies>
@@ -71,6 +72,18 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.10.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+
 		<!-- Feign HTTP Client -->
         <dependency>
             <groupId>io.github.openfeign</groupId>
@@ -93,6 +106,17 @@
 			<groupId>io.github.resilience4j</groupId>
 			<artifactId>resilience4j-retry</artifactId>
 			<version>0.13.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>3.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java-util</artifactId>
+			<version>3.7.1</version>
 		</dependency>
 
 		<!-- Automatically excluded from repackaged archive ("fat jar") by spring-boot-maven-plugin -->
@@ -123,6 +147,11 @@
 				<version>${spring-cloud.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>27.1-jre</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -206,6 +235,47 @@
 								</goals>
 								<configuration>
 									<arguments>run build:prod</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>com.github.os72</groupId>
+						<artifactId>protoc-jar-maven-plugin</artifactId>
+						<version>${protoc.version}</version>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<addProtoSources>all</addProtoSources>
+									<includeMavenTypes>direct</includeMavenTypes>
+									<inputDirectories>
+										<include>${basedir}/src/main/resources/protos</include>
+									</inputDirectories>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>1.4</version>
+						<executions>
+							<execution>
+								<id>test</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>add-source</goal>
+								</goals>
+								<configuration>
+									<sources>
+										<source>${basedir}/target/generated-sources</source>
+									</sources>
 								</configuration>
 							</execution>
 						</executions>

@@ -9,7 +9,7 @@ import static org.hamcrest.Matchers.*;
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import java.io.IOException;
 
-import dam.v1.DamService;
+import dam.v1.e2e.DamService;
 import org.junit.Before;
 import org.junit.Test;
 
