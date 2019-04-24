@@ -44,9 +44,9 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         List<WebElement> results = searchPage.getSearchResults();
         assertThat(results.size(), greaterThanOrEqualTo(2));
 
-        assertTrue(findFirstElementByCssClass(results, "indicator-green").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata-key").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata-value").isPresent());
+
+        assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "metadata").isPresent());
     }
 
     @Test
@@ -61,8 +61,8 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
 
         List<WebElement> results = searchPage.getSearchResults();
         assertThat(results.size(), greaterThanOrEqualTo(2));
-        assertFalse(findFirstElementByCssClass(results, "indicator-green").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "indicator-red").isPresent());
+        assertFalse(findFirstElementByCssClass(results, "match-success").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "match-failure").isPresent());
     }
 
     @Test
@@ -119,9 +119,8 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         List<WebElement> results = searchPage.getSearchResults();
         assertThat(results.size(), greaterThanOrEqualTo(1));
 
-        assertTrue(findFirstElementByCssClass(results, "indicator-green").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata-key").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata-value").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "metadata").isPresent());
     }
 
     @Test
@@ -143,9 +142,8 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         List<WebElement> results = searchPage.getSearchResults();
         assertThat(results.size(), greaterThanOrEqualTo(1));
 
-        assertTrue(findFirstElementByCssClass(results, "indicator-green").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata-key").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata-value").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "metadata").isPresent());
     }
 
     @Test
@@ -163,9 +161,8 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         List<WebElement> results = searchPage.getSearchResults();
         assertThat(results.size(), greaterThanOrEqualTo(2));
 
-        assertTrue(findFirstElementByCssClass(results, "indicator-green").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata-key").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata-value").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "metadata").isPresent());
 
         // Continue with invalid search
 
@@ -174,8 +171,8 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
 
         results = searchPage.getSearchResults();
         assertThat(results.size(), greaterThanOrEqualTo(2));
-        assertFalse(findFirstElementByCssClass(results, "indicator-green").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "indicator-red").isPresent());
+        assertFalse(findFirstElementByCssClass(results, "match-success").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "match-failure").isPresent());
 
         // Go back to data list page
 
@@ -207,8 +204,8 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
 
         results = searchPage.getSearchResults();
         assertThat(results.size(), greaterThanOrEqualTo(2));
-        assertTrue(findFirstElementByCssClass(results, "indicator-green").isPresent());
-        assertFalse(findFirstElementByCssClass(results, "indicator-red").isPresent());
+        assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
+        assertFalse(findFirstElementByCssClass(results, "match-failure").isPresent());
     }
 
     private Optional<WebElement> findFirstElementByCssClass(List<WebElement> results, String cssClass) {
