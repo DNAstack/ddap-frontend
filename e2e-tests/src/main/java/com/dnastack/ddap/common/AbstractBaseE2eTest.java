@@ -1,5 +1,7 @@
 package com.dnastack.ddap.common;
 
+import com.google.protobuf.Message;
+import com.google.protobuf.util.JsonFormat;
 import io.restassured.RestAssured;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
@@ -67,6 +69,17 @@ public abstract class AbstractBaseE2eTest {
         }
         return val;
     }
+
+    protected void validateProtoBuf(String resourceJsonString, Message.Builder builder) {
+
+        try {
+            JsonFormat.parser().merge(resourceJsonString, builder);
+        } catch(Exception e) {
+            throw new IllegalStateException("Failed to parse proto", e);
+        }
+    }
+
+
 
     protected static void setupRealmConfig(String personaName, String config, String realmName) throws IOException {
         final String modificationPayload = format("{ \"item\": %s }", config);

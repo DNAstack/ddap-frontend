@@ -8,6 +8,8 @@ import static org.hamcrest.Matchers.*;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import java.io.IOException;
+
+import dam.v1.DamService;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,6 +21,10 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
     @Before
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/aggregateSearchRealmConfig.json");
+
+        DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
+        validateProtoBuf(realmConfigString, damConfigBuilder);
+
         setupRealmConfig("nci_researcher", realmConfigString, REALM);
     }
 
