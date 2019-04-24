@@ -1,5 +1,6 @@
 package com.dnastack.ddapfrontend.client.dam;
 
+import dam.v1.DamService;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
@@ -27,5 +28,11 @@ public interface DamClient {
                                            @Param("realm") String realm,
                                            @Param("resourceId") String resourceId,
                                            @Param("viewId") String viewid);
+
+    @RequestLine("GET /dam/" + API_VERSION + "/{realm}/config")
+    @Headers("Authorization: Bearer {damToken}")
+    DamService.DamConfig getConfig(@Param("damToken") String damToken,
+                                          @Param("realm") String realm);
+
 
 }

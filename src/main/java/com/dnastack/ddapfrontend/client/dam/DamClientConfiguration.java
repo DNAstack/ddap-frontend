@@ -1,7 +1,11 @@
 package com.dnastack.ddapfrontend.client.dam;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.*;
+import feign.codec.DecodeException;
+import feign.codec.Decoder;
+import feign.codec.Encoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.okhttp.OkHttpClient;
@@ -9,14 +13,21 @@ import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
+import org.springframework.cloud.openfeign.support.SpringDecoder;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 import java.net.SocketTimeoutException;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,8 +40,27 @@ import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause
 @Configuration
 public class DamClientConfiguration {
 
+    //Autowire the message converters.
     @Autowired
-    private ObjectMapper objectMapper;
+    private ObjectFactory<HttpMessageConverters> messageConverters;
+
+    //add the protobuf http message converter
+    @Bean
+    ProtobufHttpMessageConverter protobufHttpMessageConverter() {
+        return new ProtobufHttpMessageConverter();
+    }
+
+    //override the encoder
+    @Bean
+    public Encoder springEncoder(){
+        return new SpringEncoder(this.messageConverters);
+    }
+
+    //override the encoder
+    @Bean
+    public Decoder springDecoder(){
+        return new ResponseEntityDecoder(new SpringDecoder(this.messageConverters));
+    }
 
     private static DamClient retryableClient(int retries,
                                              double timeoutExponentialScalingBase,
@@ -79,6 +109,9 @@ public class DamClientConfiguration {
             @Value("${dam.client-secret}") String clientSecret) {
         Client httpClient = new OkHttpClient();
 
+        ObjectMapper damObjectMapper = new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
         /*
          * We can't dynamically set read timeouts with Feign, so we can't make use of it's built-in
          * retry mechanism. Instead, we use resilience4j to retry and use a different feign client on each
@@ -89,8 +122,8 @@ public class DamClientConfiguration {
             return Feign.builder()
                         .client(httpClient)
                         .options(new Request.Options(connectTimeoutMillis, readTimeoutMillis))
-                        .encoder(new JacksonEncoder(objectMapper))
-                        .decoder(new JacksonDecoder(objectMapper))
+                        .encoder(springEncoder())
+                        .decoder(springDecoder())
                         .logger(new Logger() {
                             @Override
                             protected void log(String configKey, String format, Object... args) {

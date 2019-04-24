@@ -1,0 +1,423 @@
+{
+  "version": "v0",
+  "revision": "1",
+  "commitTime": 1.544824316E9,
+  "trustedSources": {
+    "nih_institutes": {
+      "sources": [
+        "https://dbgap.nlm.nih.gov/aa",
+        "https://nci.nih.org",
+        "https://institute1.nih.gov",
+        "https://institute2.nih.gov",
+        "https://institute3.nih.gov",
+        "https://institute4.nih.gov"
+      ],
+      "claims": [
+        "^ga4gh.*$"
+      ]
+    }
+  },
+  "trustedPassportIssuers": {
+    "dbGaP": {
+      "issuer": "https://dbgap.nlm.nih.gov/aa",
+      "translateUsing": "dbgap_translator"
+    },
+    "elixir": {
+      "issuer": "https://login.elixir-czech.org/oidc/",
+      "translateUsing": "elixir_translator"
+    },
+    "ic_dev": {
+      "issuer": "https://ic-dev-dot-craigv-codelab.appspot.com/oidc"
+    },
+    "ic_old": {
+      "issuer": "https://ic-dot-craigv-codelab.appspot.com/oidc"
+    },
+    "ic_prod": {
+      "issuer": "https://ic-prod-dot-craigv-codelab.appspot.com/oidc"
+    },
+    "ic_staging": {
+      "issuer": "https://ic-staging-dot-craigv-codelab.appspot.com/oidc"
+    },
+    "nih": {
+      "issuer": "https://login.nih.org/oidc/",
+      "translateUsing": "dbgap_translator"
+    },
+    "playgroundIC": {
+      "issuer": "https://ic-staging-dot-craigv-codelab.appspot.com/oidc"
+    }
+  },
+  "policies": {
+    "simplePolicy": {
+      "allow": {
+        "claim": "com.dnastack.test.claim",
+        "values": ["foobar", "foobar2"]
+      }
+    },
+    "allTruePolicy": {
+      "allow": {
+        "allTrue": [{
+          "claim": "com.dnastack.test.claim",
+          "values": ["foobar3"]
+        }]
+      }
+    },
+    "anyTruePolicy": {
+      "allow": {
+        "anyTrue": [{
+          "claim": "com.dnastack.test.claim",
+          "values": ["foobar4"]
+        }]
+      }
+    },
+    "anyAllTruePolicy": {
+      "allow": {
+        "anyTrue": [{
+          "allTrue": [{
+            "claim": "com.dnastack.test.claim",
+            "values": ["foobar5"]
+          }]
+        }]
+      }
+    },
+    "variablePolicy": {
+      "allow": {
+        "claim": "ga4gh.ControlledAccessGrants",
+        "values": [
+          "${DATASETS}"
+        ],
+        "from": [
+          "nih_institutes"
+        ]
+      },
+      "ui": {
+        "description": "Approval from a NIH DAC for the researcher to access specific datasets",
+        "infoUrl": "https://osp.od.nih.gov/scientific-sharing/policy-oversight/",
+        "label": "NIH Data Access Committee Approval"
+      }
+    }
+  },
+  "clients": {
+    "craig_test": {
+      "clientId": "135d6a28-5508-493d-a45d-93f4fe02211b",
+      "ui": {
+        "description": "Direct access by scripts testing Requester Pays billing setups",
+        "label": "Billing Test"
+      }
+    },
+    "dnastack_fe": {
+      "clientId": "b1aed96d-6367-4313-87a1-65eda4962a76",
+      "ui": {
+        "description": "DDAP Front-End",
+        "label": "DNAstack Front-End"
+      }
+    },
+    "test_client": {
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed64",
+      "ui": {
+        "description": "Any other miscellaneous testing or demos",
+        "label": "Test Client"
+      }
+    },
+    "test_page": {
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed65",
+      "ui": {
+        "description": "The Identity Concentrator\u0027s test page can access DAM directly",
+        "label": "IC Test Page"
+      }
+    }
+  },
+
+  "resources": {
+    "dataset_example": {
+      "views": {
+        "bq_read": {
+          "serviceTemplate": "bigquery",
+          "version": "dataset v1",
+          "topic": "FHIR",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-b",
+          "contentTypes": [
+            "text/csv"
+          ],
+          "roles": {
+            "viewer": {
+              "policies": [
+                "variablePolicy(DATASETS=^https?://dac\\.nih\\.gov/datasets/phs000710$,https://dac.nih.gov/datasets/phs000711,https://dac.nih.gov/datasets/phs000712)"
+              ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "project": "dataset-example-project",
+                "table": "dataset-example-table1"
+              }
+            },
+            {
+              "vars": {
+                "project": "dataset-example-project",
+                "table": "dataset-example-table2"
+              }
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "BigQuery Read"
+          }
+        },
+        "gcs_read": {
+          "serviceTemplate": "gcs",
+          "version": "dataset v1",
+          "topic": "FHIR",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-b",
+          "contentTypes": [
+            "application/bam"
+          ],
+          "roles": {
+            "viewer": {
+              "policies": [
+                "variablePolicy(DATASETS=https://dac.nih.gov/datasets/phs000713)"
+              ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "bucket": "dataset-example-bucket1",
+                "project": "dataset-example-project"
+              }
+            },
+            {
+              "vars": {
+                "bucket": "dataset-example-bucket2",
+                "project": "dataset-example-project"
+              }
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "File Read"
+          }
+        }
+      },
+      "maxTokenTtl": "3h",
+      "ui": {
+        "access": "controlled",
+        "applyUrl": "https://www.dataset-example.nih.gov/apply",
+        "description": "Records from U.S. citizens",
+        "imageUrl": "https://cdn2.techworld.com/cmsdata/features/3668601/gp-at-hand-nhs-ai-health-1000x600_thumb800.jpg",
+        "infoUrl": "https://dataset-example.nih.gov",
+        "label": "Dataset Example",
+        "owner": "NIH National Cancer Institute",
+        "size": "50 MB",
+        "tags": "Autism, Infants, Research, Teaching Hospital",
+        "troubleshootUrl": "https://dataset-example.nih.gov/about/dataset-example-program-protocol",
+        "year": "2018"
+      }
+    }
+  },
+
+  "serviceTemplates": {
+    "beacon": {
+      "targetAdapter": "token:jwt:gatekeeper",
+      "itemFormat": "url",
+      "interfaces": {
+        "http:beacon": "${url}"
+      },
+      "roles": {
+        "basic_discovery": {
+          "targetScopes": ["registered"],
+          "damRoleCategories": ["exists"],
+          "ui": {
+            "description": "Query genome data and return \u0027found\u0027 or \u0027not found\u0027 status",
+            "label": "Discovery Beacon Search without Metadata"
+          }
+        },
+        "discovery": {
+          "targetScopes": ["registered", "controlled"],
+          "damRoleCategories": ["metadata"],
+          "ui": {
+            "description": "Query genome data and receive metadata results",
+            "label": "Discovery Beacon Search with Metadata"
+          }
+        }
+      },
+      "ui": {
+        "label": "Beacon Discovery Search"
+      }
+    },
+    "bigquery": {
+      "targetAdapter": "token:gcp:sa",
+      "itemFormat": "bigquery",
+      "interfaces": {
+        "http:gcp:bq": "https://www.googleapis.com/bigquery/v1/projects/${project}"
+      },
+      "roles": {
+        "editor": {
+          "targetRoles": ["roles/bigquery.dataEditor"],
+          "targetScopes": ["https://www.googleapis.com/auth/cloud-platform"],
+          "damRoleCategories": ["metadata", "list", "read", "write"],
+          "ui": {
+            "description": "Query and modify tables and table metadata",
+            "label": "BigQuery Editor"
+          }
+        },
+        "viewer": {
+          "targetRoles": ["roles/BQReader"],
+          "targetScopes": ["https://www.googleapis.com/auth/cloud-platform"],
+          "damRoleCategories": ["metadata", "list", "read"],
+          "ui": {
+            "description": "Query tables and view table metadata",
+            "label": "BigQuery Viewer"
+          }
+        }
+      },
+      "ui": {
+        "label": "Google BigQuery"
+      }
+    },
+    "gcs": {
+      "targetAdapter": "token:gcp:sa",
+      "itemFormat": "gcs",
+      "interfaces": {
+        "gcp:gs": "gs://${bucket}",
+        "http:gcp:gs": "https://www.googleapis.com/storage/v1/b/${bucket}"
+      },
+      "roles": {
+        "creator": {
+          "targetRoles": ["roles/storage.objectCreator"],
+          "damRoleCategories": ["write"],
+          "ui": {
+            "description": "Write files (without read access)",
+            "label": "File Creator"
+          }
+        },
+        "editor": {
+          "targetRoles": ["roles/storage.objectViewer", "roles/storage.objectCreator"],
+          "targetScopes": ["https://www.googleapis.com/auth/cloud-platform"],
+          "damRoleCategories": ["metadata", "list", "read", "write"],
+          "ui": {
+            "description": "Read and write files plus manipulate file metadata",
+            "label": "File Editor"
+          }
+        },
+        "viewer": {
+          "targetRoles": ["roles/storage.objectViewer"],
+          "targetScopes": ["https://www.googleapis.com/auth/cloud-platform"],
+          "damRoleCategories": ["metadata", "list", "read"],
+          "ui": {
+            "description": "List and read files",
+            "label": "File Viewer"
+          }
+        }
+      },
+      "ui": {
+        "label": "Google Cloud Storage"
+      }
+    },
+    "views": {
+      "targetAdapter": "token:aggregate:view",
+      "itemFormat": "view",
+      "roles": {
+        "viewer": {
+          "damRoleCategories": ["metadata", "list", "read"],
+          "ui": {
+            "description": "Offers Viewer access across multiple views",
+            "label": "Viewer"
+          }
+        }
+      },
+      "ui": {
+        "label": "Multiple Resource Views"
+      }
+    }
+  },
+  "claimDefinitions": {
+    "com.dnastack.test.claim": {
+      "ui": {
+        "label": "labelValueFoo"
+      }
+    },
+    "ga4gh.ControlledAccessGrants": {
+      "ui": {
+        "label": "ControlledAccessGrants"
+      }
+    }
+  },
+  "testPersonas": {
+    "nci_researcher": {
+      "idToken": {
+        "standardClaims": {
+          "iss": "https://login.nih.org/oidc/",
+          "sub": "nci_researcher@nci.nih.gov"
+        },
+        "ga4ghClaims": [{
+          "claimName": "ga4gh.BonaFide",
+          "source": "https://nci.nih.org",
+          "value": "https://www.nature.com/articles/s41431-018-0219-y",
+          "asserted": 1.550120401E9,
+          "expires": 2.181272401E9,
+          "by": "signing_official"
+        }, {
+          "claimName": "ga4gh.AcceptedTermsAndPolicies",
+          "source": "https://nci.nih.org",
+          "value": "https://www.nature.com/articles/s41431-018-0219-y",
+          "asserted": 1.550120402E9,
+          "expires": 2.181272402E9,
+          "by": "self"
+        }]
+      },
+      "ui": {
+        "label": "NCI Researcher"
+      }
+    }
+  },
+  "options": {
+    "readOnlyMasterRealm": true,
+    "gcpManagedKeysMaxRequestedTtl": "7d",
+    "gcpManagedKeysPerAccount": 8,
+    "gcpServiceAccountProject": "craigv-codelab",
+    "descriptors": {
+      "gcpManagedKeysMaxRequestedTtl": {
+        "label": "GCP Managed Keys Maximum Requested TTL",
+        "description": "The maximum TTL of a requested access token on GCP and this setting is used in conjunction with managedKeysPerAccount to set up managed access key rotation policies within DAM (disabled by default)",
+        "regexp": "^[0-9]+[smhdw]$",
+        "type": "string:duration",
+        "min": "2h",
+        "max": "180d"
+      },
+      "gcpManagedKeysPerAccount": {
+        "label": "GCP Managed Keys Per Account",
+        "description": "GCP allows up to 10 access keys of more than 1h to be active per account and this option allows DAM to manage a subset of these keys",
+        "type": "int",
+        "min": "0",
+        "max": "10"
+      },
+      "gcpServiceAccountProject": {
+        "label": "GCP Service Account Project",
+        "description": "The GCP Project ID where service accounts will be created by DAM and where DAM has permissions to create these service accounts (not setting this value will disable the service account target adapter)",
+        "regexp": "^[A-Za-z][-A-Za-z0-9]{1,30}[A-Za-z]$",
+        "type": "string"
+      },
+      "readOnlyMasterRealm": {
+        "label": "Read Only Master Realm",
+        "description": "When \u0027true\u0027, the master realm becomes read-only and updates to the configuration must be performed via updating a config file",
+        "type": "bool",
+        "defaultValue": "false"
+      },
+      "whitelistedRealms": {
+        "label": "Whitelisted Realms",
+        "description": "By default any realm name can be created, but when this option is populated the DAM will only allow realms on this list to be created (the master realm is allowed implicitly)",
+        "regexp": "^[\\w\\-\\.]+$",
+        "type": "string",
+        "isList": true
+      }
+    }
+  },
+  "ui": {
+    "label": "Mount Sinai Hospital Autism Repository"
+  }
+}
