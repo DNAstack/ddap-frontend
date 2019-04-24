@@ -1,10 +1,13 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
-import TestPersona = dam.v1.TestPersona;
 import * as moment from 'moment';
+import { of } from 'rxjs/internal/observable/of';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { catchError, debounceTime, map, switchMap, tap } from 'rxjs/operators';
+import TestPersona = dam.v1.TestPersona;
+import AccessList = dam.v1.AccessList;
+import { Subscription } from 'rxjs/Subscription';
 
 import { filterSource, flatten, makeDistinct, pick, pluck } from '../../../shared/autocomplete/autocomplete.util';
 import { dam } from '../../../shared/proto/dam-service';
@@ -12,16 +15,17 @@ import { AccessPolicyService } from '../../access-policies/access-policies.servi
 import { ClaimDefinitionService } from '../../claim-definitions/claim-definitions.service';
 import { PassportIssuerService } from '../../passport-issuers/passport-issuerss.service';
 import { ResourceService } from '../../resources/resources.service';
+import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
 import { TrustedSourcesService } from '../../trusted-sources/trusted-sources.service';
-import AccessList = dam.v1.AccessList;
+import { PersonaService } from '../personas.service';
 
 @Component({
   selector: 'ddap-persona-form',
   templateUrl: './persona-form.component.html',
   styleUrls: ['./persona-form.component.scss'],
 })
-export class PersonaFormComponent implements OnChanges {
+export class PersonaFormComponent implements OnChanges, OnDestroy {
 
   @Input()
   persona?: TestPersona = TestPersona.create();
@@ -34,6 +38,7 @@ export class PersonaFormComponent implements OnChanges {
 
   form: FormGroup;
 
+  private validatorSubscription: Subscription;
   private resourceAccess$: Observable<any>;
 
   get resources() {
@@ -53,6 +58,7 @@ export class PersonaFormComponent implements OnChanges {
               private claimDefinitionService: ClaimDefinitionService,
               private trustedSourcesService: TrustedSourcesService,
               private accessPolicyService: AccessPolicyService,
+              private personaService: PersonaService,
               private resourceService: ResourceService) {
 
     this.resourceAccess$ = this.resourceService.getList().pipe(
@@ -65,6 +71,10 @@ export class PersonaFormComponent implements OnChanges {
     const personaDto: TestPersona = _get(persona, 'currentValue.dto', TestPersona.create({}));
 
     this.buildForm(personaId, personaDto);
+  }
+
+  ngOnDestroy(): void {
+    this.validatorSubscription.unsubscribe();
   }
 
   addGa4ghClaims() {
@@ -109,8 +119,8 @@ export class PersonaFormComponent implements OnChanges {
   invalidateAccessFields({error}) {
     const personaId = this.form.get('id').value;
     const resourcesFormGroup = this.form.get('resources');
-    const fieldsToAdd: object = _get(error, `testPersonas[${personaId}].addResources`);
-    const fieldsToRemove: object = _get(error, `testPersonas[${personaId}].removeResources`);
+    const fieldsToAdd: object = _get(error, `testPersonas[${personaId}].addResources`, []);
+    const fieldsToRemove: object = _get(error, `testPersonas[${personaId}].removeResources`, []);
 
     const setError = ([resourceName, { access }]) => {
       access.forEach((accessRole) => {
@@ -221,6 +231,31 @@ export class PersonaFormComponent implements OnChanges {
     this.buildAccessForm(personaDto);
 
     this.passportIssuers$ = this.buildIssuerAutocomplete();
+
+    if (this.validatorSubscription) {
+      this.validatorSubscription.unsubscribe();
+    }
+
+    this.validatorSubscription = this.form.valueChanges.pipe(
+      debounceTime(300),
+      switchMap( () => {
+        const personaModel: EntityModel = this.getEntityModel();
+        const change = new ConfigModificationObject(personaModel.dto, {
+          dry_run: true,
+        });
+
+        return this.executeDryRunRequest(personaId, change);
+      })
+    ).subscribe();
+  }
+
+  private executeDryRunRequest(personaId: string, change: ConfigModificationObject) {
+    return this.personaService.update(personaId, change).pipe(
+      tap(() => this.makeAccessFieldsValid()),
+      catchError((error) => {
+      this.invalidateAccessFields(error);
+      return of();
+    }));
   }
 
   private generateAllAccessModel(resourceList): AccessList {
@@ -272,5 +307,22 @@ export class PersonaFormComponent implements OnChanges {
 
       this.resources.registerControl(name, this.formBuilder.group(resourceAccessFormGroup));
     });
+  }
+
+  private makeAccessFieldsValid() {
+    const resourcesFormGroup = this.form.get('resources') as FormGroup;
+
+    const clearError = (access: string, resource: FormGroup) => {
+      const accessControl = resource.get(access) as FormControl;
+      accessControl.setErrors(null);
+    };
+
+    Object.keys(resourcesFormGroup.controls)
+      .forEach((resourceName) => {
+        const resource = resourcesFormGroup.get(resourceName) as FormGroup;
+
+        Object.keys(resource.controls)
+          .forEach((accessName) => clearError(accessName, resource));
+      });
   }
 }
