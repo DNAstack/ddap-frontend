@@ -38,7 +38,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
 
   form: FormGroup;
 
-  private validatorSubscription: Subscription;
+  private validatorSubscription: Subscription = new Subscription();
   private resourceAccess$: Observable<any>;
 
   get resources() {
@@ -315,9 +315,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
   }
 
   private setUpAccessValidator(personaId) {
-    if (this.validatorSubscription) {
-      this.validatorSubscription.unsubscribe();
-    }
+    this.validatorSubscription.unsubscribe();
 
     this.validatorSubscription = this.form.valueChanges.pipe(
       debounceTime(300),
