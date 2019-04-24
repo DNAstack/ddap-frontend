@@ -232,21 +232,9 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
 
     this.passportIssuers$ = this.buildIssuerAutocomplete();
 
-    if (this.validatorSubscription) {
-      this.validatorSubscription.unsubscribe();
+    if (personaId) {
+      this.setUpAccessValidator(personaId);
     }
-
-    this.validatorSubscription = this.form.valueChanges.pipe(
-      debounceTime(300),
-      switchMap( () => {
-        const personaModel: EntityModel = this.getEntityModel();
-        const change = new ConfigModificationObject(personaModel.dto, {
-          dry_run: true,
-        });
-
-        return this.executeDryRunRequest(personaId, change);
-      })
-    ).subscribe();
   }
 
   private executeDryRunRequest(personaId: string, change: ConfigModificationObject) {
@@ -324,5 +312,23 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
         Object.keys(resource.controls)
           .forEach((accessName) => clearError(accessName, resource));
       });
+  }
+
+  private setUpAccessValidator(personaId) {
+    if (this.validatorSubscription) {
+      this.validatorSubscription.unsubscribe();
+    }
+
+    this.validatorSubscription = this.form.valueChanges.pipe(
+      debounceTime(300),
+      switchMap( () => {
+        const personaModel: EntityModel = this.getEntityModel();
+        const change = new ConfigModificationObject(personaModel.dto, {
+          dry_run: true,
+        });
+
+        return this.executeDryRunRequest(personaId, change);
+      })
+    ).subscribe();
   }
 }
