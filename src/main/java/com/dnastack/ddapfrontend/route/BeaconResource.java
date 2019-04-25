@@ -74,7 +74,9 @@ class BeaconResource {
     private UserTokenCookiePackager cookiePackager;
 
     @GetMapping(value = "/api/v1alpha/{realm}/resources/search", params = "type=beacon")
-    public Flux<ExternalBeaconQueryResult> handleBeaconQuery(@PathVariable String realm, BeaconRequestModel beaconRequest, ServerHttpRequest request) {
+    public Flux<ExternalBeaconQueryResult> handleBeaconQuery(@PathVariable String realm,
+                                                             BeaconRequestModel beaconRequest,
+                                                             ServerHttpRequest request) {
         DamResources damResourcesResponse = damClient.getResources(realm);
         Map<String, ResourceModel> resources = damResourcesResponse.getResources();
 
@@ -89,7 +91,10 @@ class BeaconResource {
                 .orElse(Flux.empty());
     }
 
-    private Flux<ExternalBeaconQueryResult> handleBeaconQuery(String realm, Map.Entry<String, ResourceModel> resource, BeaconRequestModel beaconRequest, String damToken) {
+    private Flux<ExternalBeaconQueryResult> handleBeaconQuery(String realm,
+                                                              Map.Entry<String, ResourceModel> resource,
+                                                              BeaconRequestModel beaconRequest,
+                                                              String damToken) {
         Map<String, ViewModel> views = resource.getValue().getViews();
         Stream<ViewToken> beaconViewTokens = views.entrySet().stream()
                 .flatMap(entry -> processResourceBeacons(realm, resource.getKey(), entry, damToken));
@@ -116,7 +121,10 @@ class BeaconResource {
         return beaconRequests.reduce(Flux.empty(), Flux::merge);
     }
 
-    private Stream<? extends ViewToken> processResourceBeacons(String realm, String resourceId, Map.Entry<String, ViewModel> view, String damToken) {
+    private Stream<? extends ViewToken> processResourceBeacons(String realm,
+                                                               String resourceId,
+                                                               Map.Entry<String, ViewModel> view,
+                                                               String damToken) {
         Map<String, InterfaceModel> interfaces = view.getValue().getInterfaces();
         if (!interfaces.containsKey(BEACON_INTERFACE)) {
             return Stream.empty();
@@ -135,7 +143,10 @@ class BeaconResource {
     }
 
     @GetMapping(value = "/api/v1alpha/{realm}/resources/{resourceId}/search", params = "type=beacon")
-    public Flux<ExternalBeaconQueryResult> handleBeaconQueryFor(@PathVariable String realm, @PathVariable String resourceId, BeaconRequestModel beaconRequest, ServerHttpRequest request) {
+    public Flux<ExternalBeaconQueryResult> handleBeaconQueryFor(@PathVariable String realm,
+                                                                @PathVariable String resourceId,
+                                                                BeaconRequestModel beaconRequest,
+                                                                ServerHttpRequest request) {
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         if (!damToken.isPresent()) {
             return Flux.error(new IllegalArgumentException("Authorization token is required"));
@@ -150,7 +161,8 @@ class BeaconResource {
     private Mono<BeaconInfo> extractBeaconInfo(ClientResponse clientResponse) {
 
         boolean is2xxResponse = clientResponse.statusCode().is2xxSuccessful();
-        boolean hasContentTypeJson = clientResponse.headers().contentType().filter(contentType -> contentType.isCompatibleWith(MediaType.APPLICATION_JSON)).isPresent();
+        boolean hasContentTypeJson = clientResponse.headers().contentType()
+                .filter(contentType -> contentType.isCompatibleWith(MediaType.APPLICATION_JSON)).isPresent();
 
         if (!is2xxResponse || !hasContentTypeJson) {
             return clientResponse.bodyToMono(String.class)
@@ -240,7 +252,9 @@ class BeaconResource {
                 beaconRequest.getAlternateBases());
     }
 
-    private ExternalBeaconQueryResult formatBeaconServerPayload(Map.Entry<String, ResourceModel> resource, BeaconInfo infoResponse, BeaconQueryResult queryResponse) {
+    private ExternalBeaconQueryResult formatBeaconServerPayload(Map.Entry<String, ResourceModel> resource,
+                                                                BeaconInfo infoResponse,
+                                                                BeaconQueryResult queryResponse) {
         final ExternalBeaconQueryResult externalResult = new ExternalBeaconQueryResult();
 
         log.debug("Zipping {} {}", infoResponse, queryResponse);
