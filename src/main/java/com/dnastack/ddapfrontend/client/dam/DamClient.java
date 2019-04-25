@@ -12,11 +12,14 @@ public interface DamClient {
     DamResources getResources(@Param("realm") String realm);
 
     @RequestLine("GET /dam/" + API_VERSION + "/{realm}/resources/{resourceId}")
-    DamResource getResource(@Param("realm") String realmm, @Param("resourceId") String resourceId);
+    DamResource getResource(@Param("realm") String realmm,
+                            @Param("resourceId") String resourceId);
 
     @RequestLine("GET /dam/" + API_VERSION + "/{realm}/resources/{resourceId}/views")
     @Headers("Authorization: Bearer {damToken}")
-    DamResourceViews getResourceViews(@Param("damToken") String damToken, @Param("realm") String realm, @Param("resourceId") String resourceId);
+    DamResourceViews getResourceViews(@Param("damToken") String damToken,
+                                      @Param("realm") String realm,
+                                      @Param("resourceId") String resourceId);
 
     @RequestLine("GET /dam/" + API_VERSION + "/{realm}/resources/{resourceId}/views/{viewId}/token")
     @Headers("Authorization: Bearer {damToken}")
