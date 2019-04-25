@@ -1,28 +1,18 @@
 package com.dnastack.ddapfrontend.route;
 
-import static java.lang.String.format;
-
 import com.dnastack.ddapfrontend.beacon.BeaconInfo;
 import com.dnastack.ddapfrontend.beacon.BeaconOrganization;
 import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.beacon.ExternalBeaconQueryResult;
 import com.dnastack.ddapfrontend.client.dam.DamClient;
-import com.dnastack.ddapfrontend.client.dam.DamInterface;
-import com.dnastack.ddapfrontend.client.dam.DamResourceViews;
+import com.dnastack.ddapfrontend.client.dam.DamResource;
 import com.dnastack.ddapfrontend.client.dam.DamResources;
-import com.dnastack.ddapfrontend.client.dam.DamView;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
+import com.dnastack.ddapfrontend.model.InterfaceModel;
+import com.dnastack.ddapfrontend.model.ResourceModel;
+import com.dnastack.ddapfrontend.model.ViewModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
-
+import lombok.Builder;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +27,16 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static java.lang.String.format;
 
 
 @Slf4j
@@ -66,60 +66,40 @@ class BeaconResource {
         });
     }
 
+    private static final String BEACON_INTERFACE = "http:beacon";
+
     @Autowired
     private DamClient damClient;
-
     @Autowired
     private UserTokenCookiePackager cookiePackager;
 
     @GetMapping(value = "/api/v1alpha/{realm}/resources/search", params = "type=beacon")
-    public Flux<ExternalBeaconQueryResult> handleBeaconQuery(BeaconRequestModel beaconRequest, ServerHttpRequest request, @PathVariable String realm) {
+    public Flux<ExternalBeaconQueryResult> handleBeaconQuery(@PathVariable String realm, BeaconRequestModel beaconRequest, ServerHttpRequest request) {
+        DamResources damResourcesResponse = damClient.getResources(realm);
+        Map<String, ResourceModel> resources = damResourcesResponse.getResources();
 
-        DamResources resourceList = damClient.getResources(realm);
-
-        Collection<String> resourceNameList = resourceList.getResources().keySet();
-
-        Flux<ExternalBeaconQueryResult> fluxResult = Flux.empty();
-        for (String resourceName : resourceNameList) {
-            Flux<ExternalBeaconQueryResult> externalBeaconQueryResultFlux =
-                    handleBeaconQueryForResource(resourceName, beaconRequest, request, realm);
-            fluxResult = Flux.merge(fluxResult, externalBeaconQueryResultFlux);
-        }
-
-        return fluxResult;
-    }
-
-    @GetMapping(value = "/api/v1alpha/{realm}/resources/{resourceId}/search", params = "type=beacon")
-    public Flux<ExternalBeaconQueryResult> handleBeaconQueryForResource(
-            @PathVariable String resourceId,
-            BeaconRequestModel beaconRequest,
-            ServerHttpRequest request,
-            @PathVariable String realm) {
-        // find beacons under resourceId in DAM config
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         if (!damToken.isPresent()) {
             return Flux.error(new IllegalArgumentException("Authorization token is required"));
         }
 
+        return resources.entrySet().stream()
+                .map(resource -> handleBeaconQuery(realm, resource, beaconRequest, damToken.get()))
+                .reduce(Flux::merge)
+                .orElse(Flux.empty());
+    }
 
-        DamResourceViews resource = damClient.getResourceViews(damToken.get(), realm, resourceId);
-
-        // find all the views with beacon URLs
-        Stream<ViewToken> beaconViewTokens = resource.getViews().entrySet().stream()
-                .flatMap(entry -> processResourceBeacons(resourceId,
-                        realm,
-                        damToken.get(),
-                        entry));
+    private Flux<ExternalBeaconQueryResult> handleBeaconQuery(String realm, Map.Entry<String, ResourceModel> resource, BeaconRequestModel beaconRequest, String damToken) {
+        Map<String, ViewModel> views = resource.getValue().getViews();
+        Stream<ViewToken> beaconViewTokens = views.entrySet().stream()
+                .flatMap(entry -> processResourceBeacons(realm, resource.getKey(), entry, damToken));
 
         Stream<Flux<ExternalBeaconQueryResult>> beaconRequests = beaconViewTokens.map(viewToken -> {
             log.debug("About to query: {} beacon at {}", viewToken.getViewId(), viewToken.getUrl());
             // TODO DISCO-2038 Handle errors and unauthorized requests
-            final Mono<BeaconQueryResult> beaconQueryResponse = beaconQuery(beaconRequest, viewToken);
-            String beaconRootUrl = viewToken.getUrl();
             Mono<BeaconInfo> beaconInfoResponse;
-
             try {
-                URI beaconRootUri = new URI(beaconRootUrl);
+                URI beaconRootUri = new URI(viewToken.getUrl());
                 beaconInfoResponse = beaconInfo(beaconRootUri, viewToken.getToken());
             } catch (URISyntaxException e) {
                 log.error("Error forming root beacon URI: ", e);
@@ -128,36 +108,43 @@ class BeaconResource {
 
             return Flux.zip(
                     beaconInfoResponse,
-                    beaconQueryResponse,
-                    (info, result) -> formatBeaconServerPayload(resourceId, info, result)
+                    beaconQuery(beaconRequest, viewToken),
+                    (info, result) -> formatBeaconServerPayload(resource, info, result)
             );
         });
 
-        Flux<ExternalBeaconQueryResult> resultFlux = beaconRequests.reduce(Flux.empty(), Flux::merge);
-        return resultFlux;
+        return beaconRequests.reduce(Flux.empty(), Flux::merge);
     }
 
-    private Stream<? extends ViewToken> processResourceBeacons(String resourceId, String realm, String damToken, Map.Entry<String, DamView> entry) {
-        String viewId = entry.getKey();
-        DamView view = entry.getValue();
-        Map<String, DamInterface> interfaces = view.getInterfaces();
-        DamInterface beaconInterface = interfaces.get("http:beacon");
-        if (beaconInterface != null) {
-            log.debug("Found beacon interface in view [{}/{}]", resourceId, viewId);
-            final Optional<String> foundUri = beaconInterface.getUri().stream().findFirst();
-            return foundUri.map(uri -> new ViewToken(viewId,
-                    uri,
-                    damClient.getAccessTokenForView(
-                            damToken,
-                            realm,
-                            resourceId,
-                            viewId).getToken()))
-                    .map(Stream::of)
-                    .orElse(Stream.empty());
-        } else {
-            log.debug("No beacon interface found in view [{}/{}]", resourceId, viewId);
-            return Stream.of();
+    private Stream<? extends ViewToken> processResourceBeacons(String realm, String resourceId, Map.Entry<String, ViewModel> view, String damToken) {
+        Map<String, InterfaceModel> interfaces = view.getValue().getInterfaces();
+        if (!interfaces.containsKey(BEACON_INTERFACE)) {
+            return Stream.empty();
         }
+
+        Optional<String> firstUri = interfaces.get("http:beacon")
+                .getUri()
+                .stream()
+                .findFirst();
+        return firstUri.map(uri -> ViewToken.builder()
+                .viewId(view.getKey())
+                .token(damClient.getAccessTokenForView(damToken, realm, resourceId, view.getKey()).getToken())
+                .url(uri)
+                .build())
+                .stream();
+    }
+
+    @GetMapping(value = "/api/v1alpha/{realm}/resources/{resourceId}/search", params = "type=beacon")
+    public Flux<ExternalBeaconQueryResult> handleBeaconQueryFor(@PathVariable String realm, @PathVariable String resourceId, BeaconRequestModel beaconRequest, ServerHttpRequest request) {
+        Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
+        if (!damToken.isPresent()) {
+            return Flux.error(new IllegalArgumentException("Authorization token is required"));
+        }
+
+        DamResource damResourceResponse = damClient.getResource(realm, resourceId);
+        Map.Entry<String, ResourceModel> resource = Map.entry(resourceId, damResourceResponse.getResource());
+
+        return handleBeaconQuery(realm, resource, beaconRequest, damToken.get());
     }
 
     private Mono<BeaconInfo> extractBeaconInfo(ClientResponse clientResponse) {
@@ -253,7 +240,7 @@ class BeaconResource {
                 beaconRequest.getAlternateBases());
     }
 
-    private ExternalBeaconQueryResult formatBeaconServerPayload(String resourceId, BeaconInfo infoResponse, BeaconQueryResult queryResponse) {
+    private ExternalBeaconQueryResult formatBeaconServerPayload(Map.Entry<String, ResourceModel> resource, BeaconInfo infoResponse, BeaconQueryResult queryResponse) {
         final ExternalBeaconQueryResult externalResult = new ExternalBeaconQueryResult();
 
         log.debug("Zipping {} {}", infoResponse, queryResponse);
@@ -270,7 +257,10 @@ class BeaconResource {
 
         final Boolean exists = oQueryResponse.map(BeaconQueryResult::getExists).orElse(null);
 
-        externalResult.setResource(resourceId);
+        externalResult.setResource(Map.of(
+                "name", resource.getKey(),
+                "label", resource.getValue().getLabel()
+        ));
         externalResult.setName(beaconName);
         externalResult.setOrganization(organizationName);
         externalResult.setExists(exists);
@@ -298,6 +288,7 @@ class BeaconResource {
         return externalResult;
     }
 
+    @Builder
     @Value
     private static class ViewToken {
         String viewId;

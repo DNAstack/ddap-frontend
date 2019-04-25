@@ -29,7 +29,7 @@ export class BeaconResultComponent implements OnInit {
   }
 
   getLinkToResource() {
-    return `/${this.realm}/data/${this.beacon.resource}`;
+    return `/${this.realm}/data/${this.beacon.resource.name}`;
   }
 
 }
