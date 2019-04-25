@@ -11,7 +11,7 @@ ARG APP_NAME
 ARG APP_VERSION
 
 RUN apt-get update
-RUN apt-get -y install curl
+RUN apt-get -y install curl libatomic1
 
 WORKDIR /build
 
