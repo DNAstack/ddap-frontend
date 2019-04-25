@@ -19,6 +19,8 @@ import { ConfigModificationObject } from '../../shared/configModificationObject'
 import { EntityModel } from '../../shared/entity.model';
 import { TrustedSourcesService } from '../../trusted-sources/trusted-sources.service';
 import { PersonaService } from '../personas.service';
+import {AutocompleteService} from "../../shared/autocomplete.service";
+import {EmptyObservable} from "rxjs-compat/observable/EmptyObservable";
 
 @Component({
   selector: 'ddap-persona-form',
@@ -59,7 +61,8 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
               private trustedSourcesService: TrustedSourcesService,
               private accessPolicyService: AccessPolicyService,
               private personaService: PersonaService,
-              private resourceService: ResourceService) {
+              private resourceService: ResourceService,
+              private autocompleteService: AutocompleteService) {
 
     this.resourceAccess$ = this.resourceService.getList().pipe(
       map((resourceList) => this.generateAllAccessModel(resourceList))
@@ -202,14 +205,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
   }
 
   private buildPolicyValuesAutocomplete(formGroup: FormGroup) {
-    const claimValues$ = this.accessPolicyService.getList(pick('dto.allow')).pipe(
-      map(pluck('anyTrue', [])),
-      map(flatten),
-      map(pluck('values', [])),
-      map(flatten),
-      map(makeDistinct)
-    );
-
+    const claimValues$ = this.autocompleteService.getClaimDefinitionSuggestions("ga4gh.ControlledAccessGrants");
     return filterSource(claimValues$, formGroup.get('value').valueChanges);
   }
 
