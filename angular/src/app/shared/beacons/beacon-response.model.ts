@@ -1,7 +1,7 @@
 
 export interface BeaconResponse {
 
-  resource: string;
+  resource: {[key: string]: string};
   name: string;
   organization: string;
   exists: boolean;

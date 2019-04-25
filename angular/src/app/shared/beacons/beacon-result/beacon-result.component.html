@@ -3,8 +3,8 @@
                               expandedHeight="8rem">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>{{ beacon.name }}</mat-card-title>
-        <mat-card-subtitle>{{ beacon.organization }}</mat-card-subtitle>
+        <mat-card-title>{{ beacon.resource.label }}</mat-card-title>
+        <mat-card-subtitle>{{ beacon.name }}</mat-card-subtitle>
         <mat-card-subtitle>
           <div *ngIf="beacon.exists; else noMatchingAllele"
                class="flex vertical-center match-success">
