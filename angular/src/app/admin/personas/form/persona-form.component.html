@@ -27,12 +27,12 @@
     <div class="row">
       <mat-form-field class="col">
         <mat-autocomplete #issuers="matAutocomplete">
-          <ng-container *ngIf="issuerInput.isFocused">
+          <!--      <ng-container *ngIf="issuerInput.isFocused"> TODO: https://dnastack.atlassian.net/browse/DISCO-2162 -->
             <mat-option *ngFor="let option of passportIssuers$ | async"
                         [value]="option">
               {{ option }}
             </mat-option>
-          </ng-container>
+          <!--      </ng-container>-->
         </mat-autocomplete>
 
         <input matInput
