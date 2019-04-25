@@ -55,6 +55,8 @@ message Condition {
   string is = 4;
   repeated string values = 5;
   repeated string from = 6;
+  //Added this to work around invalid config.
+  repeated string by = 9;
   repeated Condition all_true = 7;
   repeated Condition any_true = 8;
 }

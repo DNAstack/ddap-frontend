@@ -72,7 +72,8 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
                     .statusCode(200)
                     .body("[0]", equalTo("https://dac.nih.gov/datasets/phs000711"))
                     .body("[1]", equalTo("https://dac.nih.gov/datasets/phs000712"))
-                    .body("[2]", equalTo("https://dac.nih.gov/datasets/phs000713"));
+                    .body("[2]", equalTo("https://dac.nih.gov/datasets/phs000713"))
+                    .body("[3]", equalTo("https://www.foobar.com"));
         // @formatter:on
     }
 

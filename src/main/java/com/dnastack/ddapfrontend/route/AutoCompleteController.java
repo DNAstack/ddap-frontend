@@ -84,8 +84,10 @@ public class AutoCompleteController {
                          return getValuesForVariable(variableName, assignmentList)
                                               .filter(assignmentValue -> !isRegexValue(assignmentValue));
                      }).collect(Collectors.toList());
-        } else {
+        } else if (!isRegexValue(valueOrVariable)) {
             return Collections.singletonList(valueOrVariable);
+        } else {
+            return Collections.emptyList();
         }
     }
 

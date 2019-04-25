@@ -74,7 +74,7 @@
         "anyTrue": [{
           "allTrue": [{
             "claim": "com.dnastack.test.claim",
-            "values": ["foobar5"]
+            "values": ["foobar5", "^.$"]
           }]
         }]
       }
@@ -83,7 +83,8 @@
       "allow": {
         "claim": "ga4gh.ControlledAccessGrants",
         "values": [
-          "${DATASETS}"
+          "${DATASETS}",
+          "https://www.foobar.com"
         ],
         "from": [
           "nih_institutes"
