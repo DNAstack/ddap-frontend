@@ -27,19 +27,19 @@
     <div class="row">
       <mat-form-field class="col">
         <mat-autocomplete #issuers="matAutocomplete">
-          <!--      <ng-container *ngIf="issuerInput.isFocused"> TODO: https://dnastack.atlassian.net/browse/DISCO-2162 -->
+          <ng-container *ngIf="issuerInput.isTouched">
             <mat-option *ngFor="let option of passportIssuers$ | async"
                         [value]="option">
               {{ option }}
             </mat-option>
-          <!--      </ng-container>-->
+          </ng-container>
         </mat-autocomplete>
 
         <input matInput
                placeholder="Issuer"
                formControlName="iss"
                data-se="inp-iss"
-               #issuerInput="isFocused"
+               #issuerInput="ddapInputState"
                [matAutocomplete]="issuers"
                required>
       </mat-form-field>
@@ -73,37 +73,37 @@
   <div *ngFor="let ga4ghClaim of ga4ghClaims.controls; let i=index"
        formArrayName="ga4ghClaims">
     <mat-autocomplete #claims="matAutocomplete">
-      <!--      <ng-container *ngIf="claimInput.isFocused"> TODO: https://dnastack.atlassian.net/browse/DISCO-2162 -->
-      <mat-option *ngFor="let option of claimDefinitions$[ga4ghClaim.value._autocompleteId] | async"
-                  [value]="option">
-        {{ option }}
-      </mat-option>
-      <!--      </ng-container>-->
+      <ng-container *ngIf="claimInput.isTouched">
+        <mat-option *ngFor="let option of claimDefinitions$[ga4ghClaim.value._autocompleteId] | async"
+                    [value]="option">
+          {{ option }}
+        </mat-option>
+      </ng-container>
     </mat-autocomplete>
 
     <mat-autocomplete #sources="matAutocomplete">
-      <!--      <ng-container *ngIf="sourceInput.isFocused"> TODO: https://dnastack.atlassian.net/browse/DISCO-2162 -->
-      <mat-option *ngFor="let option of trustedSources$[ga4ghClaim.value._autocompleteId] | async"
-                  [value]="option">
-        {{ option }}
-      </mat-option>
-      <!--      </ng-container>-->
+      <ng-container *ngIf="sourceInput.isTouched">
+        <mat-option *ngFor="let option of trustedSources$[ga4ghClaim.value._autocompleteId] | async"
+                    [value]="option">
+          {{ option }}
+        </mat-option>
+      </ng-container>
     </mat-autocomplete>
 
     <mat-autocomplete #values="matAutocomplete">
-      <!--      <ng-container *ngIf="valueInput.isFocused"> TODO: https://dnastack.atlassian.net/browse/DISCO-2162 -->
-      <mat-option *ngFor="let option of policyValues$[ga4ghClaim.value._autocompleteId] | async"
-                  [value]="option">
-        {{ option }}
-      </mat-option>
-      <!--      </ng-container>-->
+      <ng-container *ngIf="valueInput.isTouched">
+        <mat-option *ngFor="let option of policyValues$[ga4ghClaim.value._autocompleteId] | async"
+                    [value]="option">
+          {{ option }}
+        </mat-option>
+      </ng-container>
     </mat-autocomplete>
 
     <mat-card [formGroupName]="i">
       <div class="row">
         <mat-form-field class="col">
           <input matInput
-                 #claimInput="isFocused"
+                 #claimInput="ddapInputState"
                  [matAutocomplete]="claims"
                  formControlName="claimName"
                  placeholder="Claim Name"
@@ -112,7 +112,7 @@
         </mat-form-field>
         <mat-form-field class="col">
           <input matInput
-                 #sourceInput="isFocused"
+                 #sourceInput="ddapInputState"
                  [matAutocomplete]="sources"
                  formControlName="source"
                  placeholder="Source"
@@ -123,7 +123,7 @@
 
       <mat-form-field class="col">
         <input matInput
-               #valueInput="isFocused"
+               #valueInput="ddapInputState"
                [matAutocomplete]="values"
                formControlName="value"
                placeholder="Value"
