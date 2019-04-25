@@ -54,7 +54,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
         List<Map<String, Object>> beaconResponseList =
                 stream.filter(jsonObj -> {
-                    Boolean isThousandGenomes = jsonObj.get("resource").equals("thousand-genomes");
+                    Boolean isThousandGenomes = ((Map<String, Object>) jsonObj.get("resource")).get("name").equals("thousand-genomes");
                     Boolean isCorrectErrorMessage = jsonObj.get("error") != null && ((String) jsonObj.get("error")).contains(errorMessage);
                     return isThousandGenomes && isCorrectErrorMessage;
                 })
