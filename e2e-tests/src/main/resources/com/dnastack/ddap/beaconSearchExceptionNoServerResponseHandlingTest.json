@@ -911,9 +911,9 @@
     "administrator": {
       "idToken": {
         "standardClaims": {
-          "iss": "https://login.elixir-czech.org/oidc",
-          "picture": "https://pbs.twimg.com/profile_images/497015367391121408/_cWXo-vA_400x400.jpeg",
-          "sub": "admin@elixir-czech.org"
+          "iss": "https://ic-prod-dot-hcls-data-connect-demo.appspot.com/oidc",
+          "picture": "https://pbs.twimg.com/profile_images/3443048571/ef5062acfce64a7aef1d75b4934fbee6_400x400.png",
+          "sub": "admin@nci.nih.gov"
         }
       },
       "ui": {
