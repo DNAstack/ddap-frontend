@@ -25,7 +25,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(realmConfigString, damConfigBuilder);
 
-        setupRealmConfig("nci_researcher", realmConfigString, REALM);
+        setupRealmConfig("administrator", realmConfigString, REALM);
     }
 
     @Test

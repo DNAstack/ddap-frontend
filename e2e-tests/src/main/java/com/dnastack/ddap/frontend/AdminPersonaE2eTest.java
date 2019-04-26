@@ -6,8 +6,7 @@ import static org.hamcrest.Matchers.not;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
-import com.dnastack.ddap.common.page.AdminListPage;
-import com.dnastack.ddap.common.page.AdminManagePage;
+import com.dnastack.ddap.common.page.*;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
 import java.io.IOException;
 import org.junit.BeforeClass;
@@ -21,7 +20,12 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
         final String testConfig = loadTemplate("/com/dnastack/ddap/navbarE2eTestConfig.json");
-        setupRealmConfig("nci_researcher", testConfig, REALM);
+        setupRealmConfig("administrator", testConfig, REALM);
+    }
+
+    @Override
+    protected HasNavBar login(ICLoginPage icLoginPage) {
+        return icLoginPage.loginAsAdministrator(AnyDdapPage::new);
     }
 
     @Test

@@ -26,7 +26,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
     @Before
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/beaconSearchUnauthorizedBeaconExceptionHandlingTest.json");
-        setupRealmConfig("nci_researcher", realmConfigString, REALM);
+        setupRealmConfig("administrator", realmConfigString, REALM);
     }
 
     @Test

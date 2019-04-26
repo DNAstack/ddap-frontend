@@ -28,7 +28,7 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
     @Before
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/beaconSearchExceptionNoServerResponseHandlingTest.json");
-        setupRealmConfig("nci_researcher", realmConfigString, REALM);
+        setupRealmConfig("administrator", realmConfigString, REALM);
     }
 
     @Test

@@ -65,8 +65,10 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
             driver.manage().deleteAllCookies();
         }
         ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsNciResearcher(AnyDdapPage::new);
+        ddapPage = login(icLoginPage);
     }
+
+    protected abstract HasNavBar login(ICLoginPage icLoginPage);
 
     protected static ICLoginPage startLogin(String realm) {
         driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));

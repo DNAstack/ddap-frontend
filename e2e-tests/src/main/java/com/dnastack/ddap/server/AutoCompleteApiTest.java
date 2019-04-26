@@ -25,12 +25,12 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
         String configJson = loadTemplate("/com/dnastack/ddap/autoCompleteConfig.json");
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(configJson, damConfigBuilder);
-        setupRealmConfig("nci_researcher", configJson, REALM);
+        setupRealmConfig("administrator", configJson, REALM);
     }
 
     @Test
     public void shouldFindSuggestionsForMatchingClaim() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -55,7 +55,7 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldFindSuggestionsForVariableValues() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off

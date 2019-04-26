@@ -10,22 +10,34 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.String.format;
+
 @Slf4j
 public class ICLoginPage implements HasNavBar {
 
     @Getter
     private WebDriver driver;
 
-    private final By loginButton = By.xpath("//a[contains(@href, 'nci_researcher')]");
+    private By personaLoginButton(String persona) {
+        return By.xpath(format("//a[contains(@href, '%s')]", persona));
+    }
 
     public ICLoginPage(WebDriver driver) {
         this.driver = driver;
         log.info("Testing if {} is an IC login page", driver.getCurrentUrl());
-        driver.findElement(loginButton);
+        driver.findElement(personaLoginButton("nci_researcher"));
     }
 
     public <T extends HasNavBar> T loginAsNciResearcher(Function<WebDriver, T> pageConstructor) {
-        driver.findElement(loginButton).click();
+        return loginAsPersona("nci_researcher", pageConstructor);
+    }
+
+    public <T extends HasNavBar> T loginAsAdministrator(Function<WebDriver, T> pageConstructor) {
+        return loginAsPersona("administrator", pageConstructor);
+    }
+
+    private <T extends HasNavBar> T loginAsPersona(String persona, Function<WebDriver, T> pageConstructor) {
+        driver.findElement(personaLoginButton(persona)).click();
         return pageConstructor.apply(driver);
     }
 

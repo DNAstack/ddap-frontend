@@ -86,7 +86,7 @@ public abstract class AbstractBaseE2eTest {
         final CookieStore cookieStore = performPersonaLogin("nci_researcher", realmName);
 
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config?persona=nci_researcher", DDAP_BASE_URL, realmName, personaName));
+        HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config?persona=%s", DDAP_BASE_URL, realmName, personaName));
         request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
         request.setEntity(new StringEntity(modificationPayload));
 
