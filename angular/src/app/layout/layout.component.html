@@ -17,7 +17,8 @@
         </mat-form-field>
       </mat-list-item>
 
-      <mat-list-item class="credentials-username"
+      <mat-list-item *ngIf="profile"
+                     class="credentials-username"
                      data-se="nav-account">
         <a mat-line
            [href]="loginPath">
@@ -48,7 +49,8 @@
       </mat-list-item>
     </mat-nav-list>
 
-    <div class="accordion-wrapper">
+    <div *ngIf="profile"
+         class="accordion-wrapper">
       <mat-accordion [multi]="false">
         <mat-expansion-panel [expanded]="false"
                              data-se="nav-ic-panel">
@@ -163,9 +165,9 @@
           </mat-expansion-panel-header>
         </mat-expansion-panel>
       </mat-accordion>
-    </div>
 
-    <button mat-button class="text-color--subtle text-size--small uppercase">+5 more repositories</button>
+      <button mat-button class="text-color--subtle text-size--small uppercase">+5 more repositories</button>
+    </div>
   </mat-sidenav>
 
   <mat-sidenav-content>
