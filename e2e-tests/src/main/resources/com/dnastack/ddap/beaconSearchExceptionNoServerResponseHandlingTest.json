@@ -23,6 +23,12 @@
     "ic_staging": {
       "issuer": "https://ic-staging-dot-craigv-codelab.appspot.com/oidc"
     },
+    "ic_hlcs_staging": {
+      "issuer": "https://ic-staging-dot-hcls-data-connect-demo.appspot.com/"
+    },
+    "ic_hlcs_prod": {
+      "issuer": "https://ic-prod-dot-hcls-data-connect-demo.appspot.com/"
+    },
     "nih": {
       "issuer": "https://login.nih.org/oidc/",
       "translateUsing": "dbgap_translator"
