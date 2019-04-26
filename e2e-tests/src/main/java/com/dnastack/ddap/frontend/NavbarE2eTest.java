@@ -1,25 +1,22 @@
 package com.dnastack.ddap.frontend;
 
-import static java.lang.String.format;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.page.*;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+
+import static java.lang.String.format;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @SuppressWarnings("Duplicates")
 public class NavbarE2eTest extends AbstractFrontendE2eTest {
@@ -254,14 +251,28 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void realmSelectorShouldBeAbleToChangeCurrentRealm() {
+    public void testRealmChangeAndAcceptConfirmationDialog() {
         String otherRealm = "test_other_realm_" + System.currentTimeMillis();
         assertThat("this test is pointless unless we start on a different realm than we're going to!",
                 ddapPage.getNavBar().getRealm(), is(not(otherRealm)));
 
-        ddapPage.getNavBar().setRealm(otherRealm);
+        ConfirmationRealmChangeDialog confirmationRealmChangeDialog = ddapPage.getNavBar().setRealm(otherRealm);
+        ICLoginPage loginPage = confirmationRealmChangeDialog.confirmChangeRealmDialog();
+        loginPage.loginAsNciResearcher(AnyDdapPage::new);
 
         assertThat(ddapPage.getNavBar().getRealm(), is(otherRealm));
+    }
+
+    @Test
+    public void testRealmChangeAndCancelConfirmationDialog() {
+        String otherRealm = "test_other_realm_" + System.currentTimeMillis();
+        assertThat("this test is pointless unless we start on a different realm than we're going to!",
+                ddapPage.getNavBar().getRealm(), is(not(otherRealm)));
+
+        ConfirmationRealmChangeDialog confirmationRealmChangeDialog = ddapPage.getNavBar().setRealm(otherRealm);
+        AnyDdapPage ddapPage = confirmationRealmChangeDialog.cancelChangeRealmDialog();
+
+        assertThat(ddapPage.getNavBar().getRealm(), is(not(otherRealm)));
     }
 
     @Test
