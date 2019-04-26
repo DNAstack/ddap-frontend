@@ -80,7 +80,6 @@
         </mat-option>
       </ng-container>
     </mat-autocomplete>
-
     <mat-autocomplete #sources="matAutocomplete">
       <ng-container *ngIf="sourceInput.isTouched">
         <mat-option *ngFor="let option of trustedSources$[ga4ghClaim.value._autocompleteId] | async"
@@ -90,16 +89,16 @@
       </ng-container>
     </mat-autocomplete>
 
-    <mat-autocomplete #values="matAutocomplete">
-      <ng-container *ngIf="valueInput.isTouched">
-        <mat-option *ngFor="let option of policyValues$[ga4ghClaim.value._autocompleteId] | async"
-                    [value]="option">
-          {{ option }}
-        </mat-option>
-      </ng-container>
-    </mat-autocomplete>
-
     <mat-card [formGroupName]="i">
+      <mat-autocomplete #values="matAutocomplete">
+        <ng-container *ngIf="valueInput.isTouched">
+          <mat-option *ngFor="let option of getAutocompleteOptionsForValues(i) | async"
+                      [value]="option">
+            {{ option }}
+          </mat-option>
+        </ng-container>
+      </mat-autocomplete>
+
       <div class="row">
         <mat-form-field class="col">
           <input matInput
