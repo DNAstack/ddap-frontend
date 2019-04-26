@@ -220,6 +220,66 @@
         "label": "NIH Discovery Access"
       }
     },
+    "testPolicy": {
+      "allow": {
+        "allTrue": [
+          {
+            "anyTrue": [
+              {
+                "claim": "ga4gh.BonaFide",
+                "values": [
+                  "https://www.nature.com/articles/s41431-018-0219-y",
+                  "https://www.nature.com/articles/s99999-999-9999-z"
+                ],
+                "from": [
+                  "nih_institutes",
+                  "eu_universities",
+                  "us_universities",
+                  "research_companies"
+                ]
+              },
+              {
+                "claim": "nih.DiscoveryAccess",
+                "values": [
+                  "https://nih.gov/access/level1",
+                  "https://nih.gov/access/level2"
+                ],
+                "from": [
+                  "nih_institutes"
+                ]
+              }
+            ]
+          },
+          {
+            "anyTrue": [
+              {
+                "claim": "ga4gh.ControlledAccessGrants",
+                "values": [
+                  "^.*$"
+                ],
+                "from": [
+                  "nih_institutes"
+                ]
+              },
+              {
+                "claim": "test-claimName",
+                "values": [
+                  "https://librarycard.nih.gov/v1"
+                ],
+                "from": [
+                  "nih_institutes"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "ui": {
+        "description": "NIH Discovery Access policy accepting a combination of Bona Fide or special Discovery Access approval in combination with preexisiting grants or library cards",
+        "infoUrl": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5961811/",
+        "label": "NIH Discovery Access"
+      }
+    },
     "ethics": {
       "allow": {
         "claim": "ga4gh.AcceptedTermsAndPolicies",
@@ -842,6 +902,12 @@
   },
   "claimDefinitions": {
     "elixir.AffiliatedCountry": {
+      "ui": {
+        "description": "A ISO 3166 country code that represents the researcher's legal country of origin affiliation",
+        "label": "Elixir Affiliated Country"
+      }
+    },
+    "test-claimName": {
       "ui": {
         "description": "A ISO 3166 country code that represents the researcher's legal country of origin affiliation",
         "label": "Elixir Affiliated Country"
