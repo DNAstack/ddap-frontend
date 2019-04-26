@@ -15,12 +15,11 @@ import { AccessPolicyService } from '../../access-policies/access-policies.servi
 import { ClaimDefinitionService } from '../../claim-definitions/claim-definitions.service';
 import { PassportIssuerService } from '../../passport-issuers/passport-issuerss.service';
 import { ResourceService } from '../../resources/resources.service';
+import { AutocompleteService } from '../../shared/autocomplete.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
 import { TrustedSourcesService } from '../../trusted-sources/trusted-sources.service';
 import { PersonaService } from '../personas.service';
-import {AutocompleteService} from "../../shared/autocomplete.service";
-import {EmptyObservable} from "rxjs-compat/observable/EmptyObservable";
 
 @Component({
   selector: 'ddap-persona-form',
@@ -28,6 +27,18 @@ import {EmptyObservable} from "rxjs-compat/observable/EmptyObservable";
   styleUrls: ['./persona-form.component.scss'],
 })
 export class PersonaFormComponent implements OnChanges, OnDestroy {
+
+  get resources() {
+    return this.form.get('resources') as FormGroup;
+  }
+
+  get standardClaims() {
+    return this.form.get('standardClaims') as FormArray;
+  }
+
+  get ga4ghClaims() {
+    return this.form.get('ga4ghClaims') as FormArray;
+  }
 
   @Input()
   persona?: TestPersona = TestPersona.create();
@@ -42,18 +53,6 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
 
   private validatorSubscription: Subscription = new Subscription();
   private resourceAccess$: Observable<any>;
-
-  get resources() {
-    return this.form.get('resources') as FormGroup;
-  }
-
-  get standardClaims() {
-    return this.form.get('standardClaims') as FormArray;
-  }
-
-  get ga4ghClaims() {
-    return this.form.get('ga4ghClaims') as FormArray;
-  }
 
   constructor(private formBuilder: FormBuilder,
               private passportIssuerService: PassportIssuerService,
@@ -139,6 +138,22 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
       .forEach(setError);
   }
 
+  public getAutocompleteOptionsForValues(index): Observable<string[]> {
+    const formGroup = this.ga4ghClaims.at(index);
+    const { claimName } = formGroup.value;
+
+    if (!claimName || claimName.length === 0) {
+      return;
+    }
+
+    if (!this.policyValues$[claimName]) {
+      const claimValues$ = this.autocompleteService.getClaimDefinitionSuggestions(claimName);
+      this.policyValues$[claimName] = filterSource(claimValues$, formGroup.get('value').valueChanges);
+    }
+
+    return this.policyValues$[claimName];
+  }
+
   private getResourcesModel() {
     const isViewAllowed = ([_, isAllowed]) => isAllowed;
     const getAccessName = ([accessName, _]) => accessName;
@@ -177,7 +192,6 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
   private buildGa4GhClaimGroupAutocomplete(autocompleteId: string, formGroup: FormGroup) {
     this.claimDefinitions$[autocompleteId] = this.buildClaimDefinitionAutocomplete(formGroup);
     this.trustedSources$[autocompleteId] = this.buildTrustedSourcesAutocomplete(formGroup);
-    this.policyValues$[autocompleteId] = this.buildPolicyValuesAutocomplete(formGroup);
   }
 
   private buildClaimDefinitionAutocomplete(formGroup: FormGroup) {
@@ -202,11 +216,6 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
     );
 
      return filterSource(trustedSources$, formGroup.get('source').valueChanges);
-  }
-
-  private buildPolicyValuesAutocomplete(formGroup: FormGroup) {
-    const claimValues$ = this.autocompleteService.getClaimDefinitionSuggestions("ga4gh.ControlledAccessGrants");
-    return filterSource(claimValues$, formGroup.get('value').valueChanges);
   }
 
   private buildForm(personaId: string, personaDto: TestPersona) {
