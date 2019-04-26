@@ -83,7 +83,7 @@ public abstract class AbstractBaseE2eTest {
 
     protected static void setupRealmConfig(String personaName, String config, String realmName) throws IOException {
         final String modificationPayload = format("{ \"item\": %s }", config);
-        final CookieStore cookieStore = performPersonaLogin("nci_researcher", realmName);
+        final CookieStore cookieStore = performPersonaLogin(personaName, realmName);
 
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
         HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config?persona=%s", DDAP_BASE_URL, realmName, personaName));
