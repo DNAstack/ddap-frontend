@@ -41,7 +41,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         map.put(NavBar.NavItem.PASSPORTS,
                 Arrays.asList("dbGaP", "elixir", "playgroundIC"));
         map.put(NavItem.IC_IDENTITY_PROVIDERS,
-                Arrays.asList("Elixir", "eRA Commons", "Google"));
+                Arrays.asList("Elixir", "Google"));
         map.put(NavItem.IC_CLIENTS,
                 Arrays.asList("craig_test", "dnastack_fe", "test_client", "test_page"));
         map.put(NavItem.IC_OPTIONS,
