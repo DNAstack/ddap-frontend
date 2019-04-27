@@ -106,7 +106,7 @@ public class NavBar {
     }
 
     public ICLoginPage logOut() {
-        driver.findElement(By.linkText("Log Out")).click();
+        driver.findElement(DdapBy.se("nav-logout")).click();
         return new ICLoginPage(driver);
     }
 
