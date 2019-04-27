@@ -29,22 +29,9 @@ public class FrontendAssetsRedirector {
     @Value("${ddap.default-realm}")
     private String defaultRealm;
 
-    // FIXME should serve angular app but we need proper login first
-    @GetMapping(path = "/", produces = MediaType.TEXT_HTML_VALUE)
-    public String index(ServerHttpRequest request) {
-        return format("<!DOCTYPE html>\n" +
-                        "<html>\n" +
-                        "<head>\n" +
-                        "  <meta http-equiv=\"refresh\" content=\"0; URL='%s'\">\n" +
-                        "</head>\n" +
-                        "</html>\n",
-                IdentityController.rootLoginRedirectUrl(request, defaultRealm));
-    }
-
     @Bean
     RouterFunction<ServerResponse> angularRoutes() {
         return RouterFunctions.route(GET("/**")
-                        .and(path("/").negate())
                         .and(path("/api/**").negate())
                         .and(path("/dam/**").negate())
                         .and(path("/identity/**").negate())
