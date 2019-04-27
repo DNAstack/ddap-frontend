@@ -17,20 +17,32 @@
         </mat-form-field>
       </mat-list-item>
 
-      <mat-list-item *ngIf="profile"
-                     class="credentials-username"
-                     data-se="nav-account">
-        <a mat-line
-           [href]="loginPath">
+      <a [href]="loginPath" *ngIf="profile">
+        <mat-list-item
+          class="credentials-username"
+          data-se="nav-account">
           <h4 mat-line>{{ profile?.name || '&nbsp;' }}</h4>
-          Log Out
-        </a>
-        <div class="credentials-picture">
-          <img matListAvatar
-               [src]="profile?.picture || '/assets/images/placeholder_identity.png'"
-               alt="Profile picture">
-        </div>
-      </mat-list-item>
+          <span mat-line>Log Out</span>
+          <div class="credentials-picture">
+            <img matListAvatar
+              [src]="profile?.picture || '/assets/images/placeholder_identity.png'"
+                 alt="Profile picture">
+          </div>
+        </mat-list-item>
+      </a>
+      <a [href]="loginPath" *ngIf="!profile">
+        <mat-list-item
+          class="credentials-username"
+          data-se="nav-account">
+          <h4 mat-line>Log In</h4>
+          <div class="credentials-picture">
+            <img matListAvatar
+              [src]="profile?.picture || '/assets/images/placeholder_identity.png'"
+                 alt="Profile picture">
+          </div>
+        </mat-list-item>
+      </a>
+
       <mat-list-item [routerLink]="['data']"
                      [routerLinkActive]="['active-nav-link']"
                      data-se="nav-data">
