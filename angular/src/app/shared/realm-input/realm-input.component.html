@@ -1,0 +1,12 @@
+<form novalidate
+      [formGroup]="form">
+  <mat-form-field>
+    <mat-label>Realm</mat-label>
+    <input matInput
+           data-se="realm-input"
+           formControlName="realm"
+           (change)="openRealmChangeConfirmationDialog()">
+    <mat-error *ngIf="form.get('realm').invalid">Realm name must be 1-46 characters and alphanumeric</mat-error>
+    <mat-icon matSuffix class="icon icon-edit"></mat-icon>
+  </mat-form-field>
+</form>

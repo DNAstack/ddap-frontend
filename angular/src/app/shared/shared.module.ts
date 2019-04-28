@@ -37,6 +37,7 @@ import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
 import { RealmChangeConfirmationDialogComponent } from './realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
+import { RealmInputComponent } from './realm-input/realm-input.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
 import { ResourceViewItemComponent } from './resource-view-item/resource-view-item.component';
 
@@ -52,6 +53,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     BeaconResultComponent,
     LimitSearchComponent,
     FocusedDirective,
+    RealmInputComponent,
     RealmChangeConfirmationDialogComponent,
   ],
   imports: [
@@ -124,6 +126,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     ResourceViewItemComponent,
     LimitSearchComponent,
     FocusedDirective,
+    RealmInputComponent,
     RealmChangeConfirmationDialogComponent,
   ],
 })
