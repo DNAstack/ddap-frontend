@@ -6,16 +6,9 @@
     </header>
 
     <mat-nav-list>
-      <mat-list-item class="ddap-realm-select">
-        <mat-form-field>
-          <mat-label>Realm</mat-label>
-          <input matInput
-                 data-se="realm-input"
-                 [(ngModel)]="realmInputValue"
-                 (change)="openRealmChangeConfirmationDialog($event.target.value)">
-          <mat-icon matSuffix class="icon icon-edit"></mat-icon>
-        </mat-form-field>
-      </mat-list-item>
+      <div class="ddap-realm-select">
+        <ddap-realm-input></ddap-realm-input>
+      </div>
 
       <a [href]="loginPath"
         *ngIf="profile"

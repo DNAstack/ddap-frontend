@@ -1,0 +1,27 @@
+@import "~src/styles/modules/colors";
+
+form {
+  color: $navbar-font-main-color;
+
+  mat-form-field {
+    margin-top: 0.5rem;
+  }
+}
+
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+::ng-deep  .mat-form-field-wrapper {
+
+
+  mat-label {
+    color: $navbar-font-main-color;
+  }
+  .mat-form-field-underline {
+    position: initial;
+  }
+  .mat-form-field-subscript-wrapper {
+    position: relative;
+  }
+}
