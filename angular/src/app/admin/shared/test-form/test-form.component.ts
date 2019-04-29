@@ -9,6 +9,8 @@ import { map, share, take, takeWhile, tap } from 'rxjs/operators';
 
 import { pick } from '../../../shared/autocomplete/autocomplete.util';
 import { PersonaService } from '../../personas/personas.service';
+import { ResourceService } from '../../resources/resources.service';
+import { ConfigModificationObject } from '../configModificationObject';
 
 @Component({
   selector: 'ddap-test-form',
@@ -28,8 +30,10 @@ export class TestFormComponent implements OnChanges {
   form: FormGroup;
 
   private personas$: Observable<any>;
+  private originalTest: any;
 
   constructor(private personaService: PersonaService,
+              private resourceService: ResourceService,
               private formBuilder: FormBuilder) {
     this.personas$ = this.personaService
       .getList(pick('name'))
@@ -39,7 +43,6 @@ export class TestFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-
     const resourceViews = _get(this.resource, 'dto.views', {});
     const viewNames = Object.keys(resourceViews);
 
@@ -79,18 +82,36 @@ export class TestFormComponent implements OnChanges {
 
       this.views = views;
       this.personas = personas;
+
+      if (this.resource.dto) {
+        const change = personas.reduce((sum, persona) => {
+          _set(sum, `modification.testPersonas[${persona}].resources[${this.resource.name}].access`, []);
+          return sum;
+        }, new ConfigModificationObject(this.resource.dto, {
+          dry_run: true,
+        }));
+
+        this.resourceService.update(this.resource.name, change)
+          .subscribe(
+            () => true,
+            (dryRunDto) => this.fillInValues(this.form, personas, views, dryRunDto));
+      }
     });
   }
 
-  nextValue(persona, view) {
-    const oldValue = this.form.get(persona).get(view).value;
-    const newValue = (oldValue === false) ? null : !oldValue;
-    this.form.get(persona).get(view).setValue(newValue);
-    return this.change.emit(this.form.value);
+  fillInValues(form: FormGroup, personas: string[], views: string[], {error}: any) {
+    this.originalTest = error;
+    personas.forEach((persona) => {
+      const accesses = _get(error, `testPersonas[${persona}].resources[${this.resource.name}].access`, []);
+
+      accesses.forEach((access) => {
+        form.get(persona).get(access).setValue(true);
+      });
+    });
   }
 
   toApplyDto() {
-    const result = {};
+    const result = {...this.originalTest};
     const personaList = Object.keys(this.form.value);
 
     personaList.forEach((persona) => {
@@ -98,15 +119,9 @@ export class TestFormComponent implements OnChanges {
       const accesses = Object.keys(personaAccess);
 
       const toAdd = accesses.filter((access) => personaAccess[access] === true);
-      const toRemove = accesses.filter((access) => personaAccess[access] === false);
-
-      if (toAdd.length) {
-        _set(result, `testPersonas[${persona}]['addResources'][${this.resource.name}]['access']`, toAdd);
-      }
-
-      if (toRemove.length) {
-        _set(result, `testPersonas[${persona}]['removeResources'][${this.resource.name}]['access']`, toRemove);
-      }
+      _set(result, `testPersonas[${persona}]['resources'][${this.resource.name}]['access']`, toAdd);
+      _set(result, `testPersonas[${persona}]['addResources']`, undefined);
+      _set(result, `testPersonas[${persona}]['removeResources']`, undefined);
     });
 
     return result;

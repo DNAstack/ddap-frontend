@@ -13,38 +13,8 @@ li {
   cursor: pointer;
   font-size: 1.05rem;
   line-height: 2rem;
-
-  label {
-    cursor: pointer;
-  }
 }
 
-li.dim {
-  color: inherit;
-
-  mat-icon {
-    color: #757575;
-  }
-}
-
-li.invalid {
+mat-checkbox.ng-invalid {
   color: #f44336;
-
-  mat-icon {
-    color: #f44336;
-  }
-}
-
-li.ddap-checkbox {
-  display: flex;
-  align-items: center;
-}
-
-li mat-icon {
-  color: #00a6c3;
-  margin-right: 0.25rem;
-}
-
-/deep/ li .mat-checkbox {
-  display: none;
 }
