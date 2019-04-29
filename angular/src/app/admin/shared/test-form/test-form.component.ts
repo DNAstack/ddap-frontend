@@ -82,6 +82,13 @@ export class TestFormComponent implements OnChanges {
     });
   }
 
+  nextValue(persona, view) {
+    const oldValue = this.form.get(persona).get(view).value;
+    const newValue = (oldValue === false) ? null : !oldValue;
+    this.form.get(persona).get(view).setValue(newValue);
+    return this.change.emit(this.form.value);
+  }
+
   toApplyDto() {
     const result = {};
     const personaList = Object.keys(this.form.value);

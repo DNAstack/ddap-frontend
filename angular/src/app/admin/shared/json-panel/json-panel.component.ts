@@ -71,7 +71,7 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
     this.errorEditorOptions.onEditable = () => false;
 
     this.saveSubscription = this.save$.pipe(
-      debounceTime(500),
+      debounceTime(800),
       switchMap((dryRun) => this.saveResource(dryRun))
     ).subscribe();
   }
@@ -124,7 +124,6 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
         this.error = e.error;
 
         if (this.isResource) {
-          this.testForm.makeFieldsValid();
           this.testForm.validatePersonaFields(e);
         }
 

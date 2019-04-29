@@ -6,14 +6,24 @@
       <h3>{{ view }}</h3>
       <ul>
         <li *ngFor="let persona of personas"
-            [formGroupName]="persona">
-          <mat-checkbox [formControlName]="view"
+            [formGroupName]="persona"
+            class="ddap-checkbox"
+            [class.dim]="form.get(persona).get(view).value === null"
+            [class.invalid]="form.get(persona).get(view).invalid"
+            (click)="nextValue(persona, view)">
+          <mat-icon *ngIf="form.get(persona).get(view).value === null">check_box_outline_blank</mat-icon>
+          <mat-icon *ngIf="form.get(persona).get(view).value === true">add_box</mat-icon>
+          <mat-icon *ngIf="form.get(persona).get(view).value === false">indeterminate_check_box</mat-icon>
+
+          <mat-checkbox [class.foo]="form.get(persona).get(view).value === null"
+                        [formControlName]="view"
                         (change)="emitChange()"
                         color="primary"
                         [indeterminate]="form.get(persona).get(view).value === null"
                         id="{{ view }}/{{ persona }}">
-            {{ persona }}
-          </mat-checkbox>
+                      </mat-checkbox>
+          <label>{{ persona }}</label>
+          <span></span>
         </li>
       </ul>
     </li>

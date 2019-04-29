@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { MAT_CHECKBOX_CLICK_ACTION } from '@angular/material';
+import { MAT_CHECKBOX_CLICK_ACTION, MatButtonToggleModule } from '@angular/material';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 import { SharedModule } from '../../shared/shared.module';
@@ -23,6 +23,7 @@ import { TestFormComponent } from './test-form/test-form.component';
   imports: [
     SharedModule,
     NgJsonEditorModule,
+    MatButtonToggleModule,
   ],
   exports: [
     SharedModule,
