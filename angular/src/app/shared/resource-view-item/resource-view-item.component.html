@@ -51,8 +51,8 @@
 
 <mat-menu #appMenu="matMenu"
           class="access-menu"
-          xPosition="before"
-          yPosition="below">
+          yPosition="above"
+          [overlapTrigger]="false">
   <div *ngIf="access; else error">
     <div class="flex flex--column vertical-center">
       <div class="flex vertical-center row">
