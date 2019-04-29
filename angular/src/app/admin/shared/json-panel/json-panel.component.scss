@@ -5,3 +5,21 @@ button {
 .ddap-test-title {
   margin: 1rem 0;
 }
+
+mat-error {
+  margin-top: 1rem;
+}
+
+h3 {
+  align-items: center;
+  // margin-top: 2.5rem;
+  display: flex;
+
+  font-size: 1.4rem;
+  font-weight: 500;
+  flex-grow: 1;
+}
+
+h3.ddap-test {
+  margin-bottom: 0;
+}
