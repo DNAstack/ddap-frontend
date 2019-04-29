@@ -59,7 +59,7 @@
       </mat-list-item>
     </mat-nav-list>
 
-    <div *ngIf="profile"
+    <div *ngIf="profile && isAdmin"
          class="accordion-wrapper">
       <mat-accordion [multi]="false">
         <mat-expansion-panel [expanded]="false"

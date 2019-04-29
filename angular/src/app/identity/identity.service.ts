@@ -9,8 +9,10 @@ import { environment } from '../../environments/environment';
 import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 import { AccountLink } from './account-link.model';
+import { Account } from './account.model';
 import { Identity } from './identity.model';
-import { Profile } from './profile.model';
+
+const adminAccount = 'admin@nci.nih.gov';
 
 @Injectable({
   providedIn: 'root',
@@ -25,13 +27,6 @@ export class IdentityService {
     return this.http.get<any>(`${environment.idpApiUrl}/${realmIdPlaceholder}/accounts/-`, {params})
       .pipe(
         pluck('account')
-      );
-  }
-
-  getProfile(params?): Observable<Profile> {
-    return this.getIdentity(params)
-      .pipe(
-        pluck('profile')
       );
   }
 
@@ -60,6 +55,11 @@ export class IdentityService {
           ];
         })
       );
+  }
+
+  hasAdminAccount(connectedAccounts: Account[]): boolean {
+    const isAdmin = (account: Account) => account.properties.subject === adminAccount;
+    return connectedAccounts.some(isAdmin);
   }
 
   private getAccountLinksFromProviders(idps: object, realm: string): AccountLink[] {

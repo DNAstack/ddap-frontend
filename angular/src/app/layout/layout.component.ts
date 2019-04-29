@@ -13,6 +13,7 @@ import { Profile } from '../identity/profile.model';
 export class LayoutComponent implements OnInit {
 
   profile: Profile = null;
+  isAdmin = false;
   realm: string;
   loginPath: string;
 
@@ -24,8 +25,9 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.identityService.getProfile().subscribe(profile => {
-      this.profile = profile;
+    this.identityService.getIdentity().subscribe((identity: any) => {
+      this.profile = identity.profile;
+      this.isAdmin = this.identityService.hasAdminAccount(identity.connectedAccounts);
     });
 
     this.activatedRoute.root.firstChild.params.subscribe((params) => {
