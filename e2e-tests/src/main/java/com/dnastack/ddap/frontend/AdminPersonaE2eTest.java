@@ -12,7 +12,6 @@ import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 @SuppressWarnings("Duplicates")
 public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
@@ -24,8 +23,8 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Override
-    protected HasNavBar login(ICLoginPage icLoginPage) {
-        return icLoginPage.loginAsAdministrator(AnyDdapPage::new);
+    protected AdminDdapPage login(ICLoginPage icLoginPage) {
+        return icLoginPage.loginAsAdministrator(AdminDdapPage::new);
     }
 
     @Test

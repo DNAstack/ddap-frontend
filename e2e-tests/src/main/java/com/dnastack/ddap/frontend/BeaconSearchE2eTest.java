@@ -29,7 +29,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Override
-    protected HasNavBar login(ICLoginPage icLoginPage) {
+    protected AnyDdapPage login(ICLoginPage icLoginPage) {
         return icLoginPage.loginAsNciResearcher(AnyDdapPage::new);
     }
 

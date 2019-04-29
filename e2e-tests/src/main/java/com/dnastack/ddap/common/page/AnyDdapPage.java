@@ -1,14 +1,20 @@
 package com.dnastack.ddap.common.page;
 
-import lombok.Getter;
 import org.openqa.selenium.WebDriver;
 
-public class AnyDdapPage implements HasNavBar {
-    @Getter
+public class AnyDdapPage {
+
     private WebDriver driver;
 
     public AnyDdapPage(WebDriver driver) {
         this.driver = driver;
-        getNavBar();
+    }
+
+    protected WebDriver getDriver() {
+        return driver;
+    }
+
+    public NavBar getNavBar() {
+        return new NavBar(getDriver());
     }
 }

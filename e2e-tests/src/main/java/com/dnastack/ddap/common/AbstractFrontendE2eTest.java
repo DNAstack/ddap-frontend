@@ -1,7 +1,6 @@
 package com.dnastack.ddap.common;
 
 import com.dnastack.ddap.common.page.AnyDdapPage;
-import com.dnastack.ddap.common.page.HasNavBar;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.frontend.NavbarE2eTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -28,7 +27,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
 
     protected static WebDriver driver;
     protected static String screenshotDir;
-    protected HasNavBar ddapPage;
+    protected AnyDdapPage ddapPage;
 
     @Rule
     public ScreenShotRule screenShotRule() {
@@ -69,7 +68,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
         ddapPage = login(icLoginPage);
     }
 
-    protected abstract HasNavBar login(ICLoginPage icLoginPage);
+    protected abstract AnyDdapPage login(ICLoginPage icLoginPage);
 
     protected static ICLoginPage startLogin(String realm) {
         driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));

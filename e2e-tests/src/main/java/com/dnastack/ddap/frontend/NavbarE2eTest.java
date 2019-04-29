@@ -66,8 +66,8 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Override
-    protected HasNavBar login(ICLoginPage icLoginPage) {
-        return icLoginPage.loginAsAdministrator(AnyDdapPage::new);
+    protected AnyDdapPage login(ICLoginPage icLoginPage) {
+        return icLoginPage.loginAsAdministrator(AdminDdapPage::new);
     }
 
     @Test

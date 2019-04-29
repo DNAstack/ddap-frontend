@@ -13,9 +13,8 @@ import java.util.regex.Pattern;
 import static java.lang.String.format;
 
 @Slf4j
-public class ICLoginPage implements HasNavBar {
+public class ICLoginPage {
 
-    @Getter
     private WebDriver driver;
 
     private By personaLoginButton(String persona) {
@@ -28,15 +27,15 @@ public class ICLoginPage implements HasNavBar {
         driver.findElement(personaLoginButton("nci_researcher"));
     }
 
-    public <T extends HasNavBar> T loginAsNciResearcher(Function<WebDriver, T> pageConstructor) {
+    public <T extends AnyDdapPage> T loginAsNciResearcher(Function<WebDriver, T> pageConstructor) {
         return loginAsPersona("nci_researcher", pageConstructor);
     }
 
-    public <T extends HasNavBar> T loginAsAdministrator(Function<WebDriver, T> pageConstructor) {
+    public <T extends AdminDdapPage> T loginAsAdministrator(Function<WebDriver, T> pageConstructor) {
         return loginAsPersona("administrator", pageConstructor);
     }
 
-    private <T extends HasNavBar> T loginAsPersona(String persona, Function<WebDriver, T> pageConstructor) {
+    private <T extends AnyDdapPage> T loginAsPersona(String persona, Function<WebDriver, T> pageConstructor) {
         driver.findElement(personaLoginButton(persona)).click();
         return pageConstructor.apply(driver);
     }

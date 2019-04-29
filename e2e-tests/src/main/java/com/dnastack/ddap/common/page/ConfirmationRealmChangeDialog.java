@@ -18,6 +18,6 @@ public class ConfirmationRealmChangeDialog {
 
     public AnyDdapPage cancelChangeRealmDialog() {
         driver.findElement(DdapBy.se("cancel-btn")).click();
-        return new AnyDdapPage(driver);
+        return new AdminDdapPage(driver);
     }
 }
