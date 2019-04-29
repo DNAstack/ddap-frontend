@@ -9,35 +9,43 @@
                [data]="entity?.dto"
                (change)="updateResourceDto($event)"></json-editor>
 
-  <mat-panel-title *ngIf="useTests && state === ViewState.Editing"
+  <mat-error *ngIf="error">
+    <span *ngIf="!error.testPersonas">{{ error }}</span>
+  </mat-error>
+
+  <mat-panel-title *ngIf="useTests && state !== ViewState.Viewing"
                    class="ddap-test-title">
     <h3>Test</h3>
   </mat-panel-title>
-  <json-editor [hidden]="!(useTests && state === ViewState.Editing)"
-               #testEditor
-               [options]="testEditorOptions"
-               [data]="testDto"
-               (change)="updateTestDto($event)"></json-editor>
 
-  <mat-error *ngIf="error">
-    <span *ngIf="!error.modification">{{ error }}</span>
-    <span *ngIf="error.modification">Cannot save, please consider using following dtos:</span>
-  </mat-error>
+  <ng-container *ngIf="!isResource">
+    <json-editor [hidden]="!(useTests && state === ViewState.Editing)"
+                 #testEditor
+                 [options]="testEditorOptions"
+                 [data]="testDto"
+                 (change)="updateTestDto($event)"></json-editor>
+  </ng-container>
 
-  <json-editor *ngIf="error && error.modification && useTests && state === ViewState.Editing"
-               #errorEditor
-               [options]="errorEditorOptions"
-               [data]="error"></json-editor>
+  <ng-container *ngIf="!isResource">
+    <json-editor *ngIf="error && error.testPersonas && useTests && state === ViewState.Editing"
+                 #errorEditor
+                 [options]="errorEditorOptions"
+                 [data]="error"></json-editor>
+  </ng-container>
+
+  <ddap-test-form *ngIf="isResource && state !== ViewState.Viewing"
+                  (change)="validateTest()"
+                  [resource]="entity"></ddap-test-form>
 
   <mat-action-row *ngIf="state !== ViewState.Viewing">
     <button mat-flat-button
             color="primary"
-            (click)="save()"
-            [disabled]="state === ViewState.Submitting">Submit
+            (click)="save()">
+      Submit
     </button>
     <button mat-flat-button
-            (click)="cancel()"
-            [disabled]="state === ViewState.Submitting">Cancel
+            (click)="cancel()">
+      Cancel
     </button>
   </mat-action-row>
   <mat-action-row *ngIf="state === ViewState.Viewing">

@@ -1,0 +1,21 @@
+<form *ngIf="form"
+      novalidate
+      [formGroup]="form">
+  <ul>
+    <li *ngFor="let view of views">
+      <h3>{{ view }}</h3>
+      <ul>
+        <li *ngFor="let persona of personas"
+            [formGroupName]="persona">
+          <mat-checkbox [formControlName]="view"
+                        (change)="emitChange()"
+                        color="primary"
+                        [indeterminate]="form.get(persona).get(view).value === null"
+                        id="{{ view }}/{{ persona }}">
+            {{ persona }}
+          </mat-checkbox>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</form>

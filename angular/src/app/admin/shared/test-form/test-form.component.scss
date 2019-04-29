@@ -1,0 +1,14 @@
+ul {
+  list-style: none;
+  padding: 0;
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+}
+
+mat-checkbox.ng-invalid {
+  color: #f44336;
+}
