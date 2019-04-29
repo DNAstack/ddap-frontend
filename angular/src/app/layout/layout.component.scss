@@ -19,3 +19,9 @@ mat-sidenav-container {
     padding: 0.5rem 1rem;
   }
 }
+
+/deep/ .ddap-logout {
+  span.mat-line {
+    color: $color-grey;
+  }
+}
