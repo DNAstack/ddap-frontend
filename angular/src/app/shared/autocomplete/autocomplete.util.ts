@@ -41,6 +41,7 @@ export const makeDistinct = filterBy(isMostLeft);
  */
 export function filterSource(autocompleteSource$: Observable<string[]>,
                              formInputValue$: Observable<string>): Observable<string[]> {
+
   const filteredSource$ = (autocompleteInputValue) => autocompleteSource$.pipe(
     map(filterBy(includes(autocompleteInputValue)))
   );
