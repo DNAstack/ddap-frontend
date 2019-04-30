@@ -5,21 +5,18 @@ import * as moment from 'moment';
 import { of } from 'rxjs/internal/observable/of';
 import { Observable } from 'rxjs/Observable';
 import { catchError, debounceTime, map, switchMap, tap } from 'rxjs/operators';
-import TestPersona = dam.v1.TestPersona;
-import AccessList = dam.v1.AccessList;
 import { Subscription } from 'rxjs/Subscription';
 
-import { filterSource, flatten, makeDistinct, pick, pluck } from '../../../shared/autocomplete/autocomplete.util';
+import { filterSource } from '../../../shared/autocomplete/autocomplete.util';
 import { dam } from '../../../shared/proto/dam-service';
-import { AccessPolicyService } from '../../access-policies/access-policies.service';
-import { ClaimDefinitionService } from '../../claim-definitions/claim-definitions.service';
-import { PassportIssuerService } from '../../passport-issuers/passport-issuerss.service';
 import { ResourceService } from '../../resources/resources.service';
 import { AutocompleteService } from '../../shared/autocomplete.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
-import { TrustedSourcesService } from '../../trusted-sources/trusted-sources.service';
+import { PersonaAutocompleteService } from '../persona-autocomplete.service';
 import { PersonaService } from '../personas.service';
+import TestPersona = dam.v1.TestPersona;
+import AccessList = dam.v1.AccessList;
 
 @Component({
   selector: 'ddap-persona-form',
@@ -55,13 +52,10 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
   private resourceAccess$: Observable<any>;
 
   constructor(private formBuilder: FormBuilder,
-              private passportIssuerService: PassportIssuerService,
-              private claimDefinitionService: ClaimDefinitionService,
-              private trustedSourcesService: TrustedSourcesService,
-              private accessPolicyService: AccessPolicyService,
               private personaService: PersonaService,
               private resourceService: ResourceService,
-              private autocompleteService: AutocompleteService) {
+              private autocompleteService: AutocompleteService,
+              private personaAutocompleteService: PersonaAutocompleteService) {
 
     this.resourceAccess$ = this.resourceService.getList().pipe(
       map((resourceList) => this.generateAllAccessModel(resourceList))
@@ -190,32 +184,8 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
   }
 
   private buildGa4GhClaimGroupAutocomplete(autocompleteId: string, formGroup: FormGroup) {
-    this.claimDefinitions$[autocompleteId] = this.buildClaimDefinitionAutocomplete(formGroup);
-    this.trustedSources$[autocompleteId] = this.buildTrustedSourcesAutocomplete(formGroup);
-  }
-
-  private buildClaimDefinitionAutocomplete(formGroup: FormGroup) {
-    const claimDefinitions$ = this.claimDefinitionService.getList(pick('name')).pipe(
-      map(makeDistinct)
-    );
-
-    return filterSource(claimDefinitions$, formGroup.get('claimName').valueChanges);
-  }
-
-  private buildIssuerAutocomplete() {
-    const passportIssuers$ = this.passportIssuerService.getList(pick('dto.issuer')).pipe(
-      map(makeDistinct)
-    );
-    return filterSource(passportIssuers$, this.form.get('iss').valueChanges);
-  }
-
-  private buildTrustedSourcesAutocomplete(formGroup: FormGroup) {
-    const trustedSources$ = this.trustedSourcesService.getList(pick('dto.sources')).pipe(
-      map(flatten),
-      map(makeDistinct)
-    );
-
-     return filterSource(trustedSources$, formGroup.get('source').valueChanges);
+    this.claimDefinitions$[autocompleteId] = this.personaAutocompleteService.buildClaimDefinitionAutocomplete(formGroup);
+    this.trustedSources$[autocompleteId] = this.personaAutocompleteService.buildTrustedSourcesAutocomplete(formGroup);
   }
 
   private buildForm(personaId: string, personaDto: TestPersona) {
@@ -235,7 +205,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
 
     this.buildAccessForm(personaDto);
 
-    this.passportIssuers$ = this.buildIssuerAutocomplete();
+    this.passportIssuers$ = this.personaAutocompleteService.buildIssuerAutocomplete(this.form);
 
     if (personaId) {
       this.setUpAccessValidator(personaId);
