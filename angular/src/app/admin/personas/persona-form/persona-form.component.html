@@ -193,25 +193,10 @@
   </mat-progress-bar>
 
   <ng-container *ngIf="resourcesList.length">
-    <div *ngFor="let resource of resourcesList"
-         formGroupName="resources">
-      <mat-card>
-        <mat-card-title>
-          {{ resource.name }}
-        </mat-card-title>
-        <div *ngFor="let access of resource.access"
-             class="row"
-             [formGroupName]="resource.name">
-          <div class="col ddap-access-col">
-            <mat-checkbox [formControlName]="access"
-                          color="primary"
-                          id="{{ resource.name }}/{{ access }}">
-              {{ access }}
-            </mat-checkbox>
-          </div>
-        </div>
-      </mat-card>
-    </div>
+    <ddap-persona-resource-form [resources]="resourcesList"
+                                [form]="resources">
+
+    </ddap-persona-resource-form>
   </ng-container>
 
   <ng-content></ng-content>

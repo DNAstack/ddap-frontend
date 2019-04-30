@@ -1,8 +1,8 @@
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 import * as moment from 'moment';
-import { of } from 'rxjs/internal/observable/of';
+import { EMPTY } from 'rxjs/internal/observable/empty';
 import { Observable } from 'rxjs/Observable';
 import { catchError, debounceTime, map, switchMap, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
@@ -14,6 +14,7 @@ import { AutocompleteService } from '../../shared/autocomplete.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
 import { PersonaAutocompleteService } from '../persona-autocomplete.service';
+import { PersonaResourceFormComponent } from '../persona-resource-form/persona-resource-form.component';
 import { PersonaService } from '../personas.service';
 import TestPersona = dam.v1.TestPersona;
 import AccessList = dam.v1.AccessList;
@@ -25,6 +26,18 @@ import AccessList = dam.v1.AccessList;
 })
 export class PersonaFormComponent implements OnChanges, OnDestroy {
 
+  @Input()
+  persona?: TestPersona = TestPersona.create();
+
+  @ViewChild(PersonaResourceFormComponent)
+  accessForm: PersonaResourceFormComponent;
+
+  form: FormGroup;
+
+  get ga4ghClaims() {
+    return this.form.get('ga4ghClaims') as FormArray;
+  }
+
   get resources() {
     return this.form.get('resources') as FormGroup;
   }
@@ -33,20 +46,12 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
     return this.form.get('standardClaims') as FormArray;
   }
 
-  get ga4ghClaims() {
-    return this.form.get('ga4ghClaims') as FormArray;
-  }
-
-  @Input()
-  persona?: TestPersona = TestPersona.create();
-
   resourcesList = [];
+
   passportIssuers$: Observable<any>;
   policyValues$: { [s: string]: Observable<any>; } = {};
   claimDefinitions$: { [s: string]: Observable<any>; } = {};
   trustedSources$: { [s: string]: Observable<any>; } = {};
-
-  form: FormGroup;
 
   private validatorSubscription: Subscription = new Subscription();
   private resourceAccess$: Observable<any>;
@@ -81,9 +86,9 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
     this.ga4ghClaims.removeAt(index);
   }
 
-  getEntityModel(): EntityModel {
+  getModel(): EntityModel {
     const { id, iss, sub, ga4ghClaims, label } = this.form.value;
-    const resources = this.getResourcesModel();
+    const resources = this.accessForm.getModel();
     const testPersona: TestPersona = TestPersona.create({
       idToken: {
         standardClaims: {
@@ -99,37 +104,6 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
     });
 
     return new EntityModel(id, testPersona);
-  }
-
-  getGa4ghClaimModel({claimName, source, value, asserted, expires, by}): TestPersona.IGA4GHClaim {
-    return {
-      claimName,
-      source,
-      value,
-      asserted: asserted.unix(),
-      expires: expires.unix(),
-      by,
-    };
-  }
-
-  invalidateAccessFields({error}) {
-    const personaId = this.form.get('id').value;
-    const resourcesFormGroup = this.form.get('resources');
-    const fieldsToAdd: object = _get(error, `testPersonas[${personaId}].addResources`, []);
-    const fieldsToRemove: object = _get(error, `testPersonas[${personaId}].removeResources`, []);
-
-    const setError = ([resourceName, { access }]) => {
-      access.forEach((accessRole) => {
-        const accessRoleCheckbox = resourcesFormGroup.get(resourceName).get(accessRole);
-        accessRoleCheckbox.setErrors({'Doesn\'t match role criteria': true});
-      });
-    };
-
-    Object.entries(fieldsToAdd)
-      .forEach(setError);
-
-    Object.entries(fieldsToRemove)
-      .forEach(setError);
   }
 
   public getAutocompleteOptionsForValues(index): Observable<string[]> {
@@ -148,26 +122,9 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
     return this.policyValues$[claimName];
   }
 
-  private getResourcesModel() {
-    const isViewAllowed = ([_, isAllowed]) => isAllowed;
-    const getAccessName = ([accessName, _]) => accessName;
-
-    return Object.entries(this.form.value.resources)
-      .reduce((sum, [resource, views]) => {
-        const access = Object.entries(views)
-          .filter(isViewAllowed)
-          .map(getAccessName);
-
-        if (access.length) {
-          sum[resource] = {access};
-        }
-
-        return sum;
-      }, {});
-  }
-
   private buildGa4GhClaimGroup({claimName, source, value, asserted, expires, by}: TestPersona.IGA4GHClaim): FormGroup {
     const autocompleteId = new Date().getTime().toString();
+
     const ga4ghClaimForm: FormGroup = this.formBuilder.group({
       _autocompleteId: autocompleteId,
       claimName: [claimName, Validators.required],
@@ -189,36 +146,25 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
   }
 
   private buildForm(personaId: string, personaDto: TestPersona) {
-    const standardClaims = _get(personaDto, 'idToken.standardClaims', {});
-    const ga4ghClaims: TestPersona.IGA4GHClaim[] = _get(personaDto, 'idToken.ga4ghClaims', []);
 
-    this.form = this.formBuilder.group({
-      id: [{value: personaId, disabled: !!personaId}, [Validators.required, Validators.min(3)]],
-      label: [personaDto.ui.label],
-      iss: [standardClaims.iss, Validators.required],
-      sub: [standardClaims.sub, Validators.required],
-      ga4ghClaims: this.formBuilder.array(
-        ga4ghClaims.map((claim) => this.buildGa4GhClaimGroup(claim))
-      ),
-      resources: this.formBuilder.group({}),
-    });
-
+    this.form = this.buildMainForm(personaId, personaDto);
     this.buildAccessForm(personaDto);
 
     this.passportIssuers$ = this.personaAutocompleteService.buildIssuerAutocomplete(this.form);
 
     if (personaId) {
-      this.setUpAccessValidator(personaId);
+      this.validatorSubscription.unsubscribe();
+      this.validatorSubscription = this.setUpAccessValidator(personaId);
     }
   }
 
   private executeDryRunRequest(personaId: string, change: ConfigModificationObject) {
     return this.personaService.update(personaId, change).pipe(
-      tap(() => this.makeAccessFieldsValid()),
+      tap(() => this.accessForm.makeAccessFieldsValid()),
       catchError((error) => {
-      this.invalidateAccessFields(error);
-      return of();
-    }));
+        this.accessForm.validateAccessFields(personaId, error);
+        return EMPTY;
+      }));
   }
 
   private generateAllAccessModel(resourceList): AccessList {
@@ -235,6 +181,17 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
     };
   }
 
+  private getGa4ghClaimModel({claimName, source, value, asserted, expires, by}): TestPersona.IGA4GHClaim {
+    return {
+      claimName,
+      source,
+      value,
+      asserted: asserted.unix(),
+      expires: expires.unix(),
+      by,
+    };
+  }
+
   private getViewRolesCombinations(view: object) {
     const viewEntries = Object.entries(view);
 
@@ -244,14 +201,30 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
     }, []);
   }
 
-  private buildAccessForm(personaDto: TestPersona) {
+  private buildMainForm(personaId, personaDto) {
+    const standardClaims = _get(personaDto, 'idToken.standardClaims', {});
+    const ga4ghClaims: TestPersona.IGA4GHClaim[] = _get(personaDto, 'idToken.ga4ghClaims', []);
+
+    return this.formBuilder.group({
+      id: [{value: personaId, disabled: !!personaId}, [Validators.required, Validators.min(3)]],
+      label: [personaDto.ui.label],
+      iss: [standardClaims.iss, Validators.required],
+      sub: [standardClaims.sub, Validators.required],
+      ga4ghClaims: this.formBuilder.array(
+        ga4ghClaims.map((claim) => this.buildGa4GhClaimGroup(claim))
+      ),
+      resources: this.formBuilder.group({}),
+    });
+  }
+
+  private buildAccessForm(personaDto: TestPersona): void {
     this.resourceAccess$.subscribe(allResourceList => {
-      this.toFormGroup(allResourceList, personaDto);
+      this.registerAccessControls(allResourceList, personaDto);
       this.resourcesList = allResourceList;
     });
   }
 
-  private toFormGroup(allResourceList, personaDto) {
+  private registerAccessControls(allResourceList, personaDto) {
     const personaResources = personaDto.resources;
 
     allResourceList.forEach(({name, access}) => {
@@ -272,30 +245,11 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
     });
   }
 
-  private makeAccessFieldsValid() {
-    const resourcesFormGroup = this.form.get('resources') as FormGroup;
-
-    const clearError = (access: string, resource: FormGroup) => {
-      const accessControl = resource.get(access) as FormControl;
-      accessControl.setErrors(null);
-    };
-
-    Object.keys(resourcesFormGroup.controls)
-      .forEach((resourceName) => {
-        const resource = resourcesFormGroup.get(resourceName) as FormGroup;
-
-        Object.keys(resource.controls)
-          .forEach((accessName) => clearError(accessName, resource));
-      });
-  }
-
   private setUpAccessValidator(personaId) {
-    this.validatorSubscription.unsubscribe();
-
-    this.validatorSubscription = this.form.valueChanges.pipe(
+    return this.form.valueChanges.pipe(
       debounceTime(300),
       switchMap( () => {
-        const personaModel: EntityModel = this.getEntityModel();
+        const personaModel: EntityModel = this.getModel();
         const change = new ConfigModificationObject(personaModel.dto, {
           dry_run: true,
         });
