@@ -35,10 +35,10 @@ export class PersonaManageComponent implements OnInit {
       return;
     }
 
-    const personaModel: EntityModel = this.personaForm.getEntityModel();
+    const personaModel: EntityModel = this.personaForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.personaService.save(personaModel.name, change)
       .subscribe(() => this.router.navigate(['../..'], {relativeTo: this.route}),
-        (err) => this.personaForm.invalidateAccessFields(err));
+        (err) => this.personaForm.accessForm.validateAccessFields(personaModel.name, err));
   }
 }

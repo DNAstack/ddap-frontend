@@ -27,10 +27,10 @@ export class PersonaDetailComponent extends EntityDetailBase<PersonaService> imp
       return;
     }
 
-    const personaModel: EntityModel = this.personaForm.getEntityModel();
+    const personaModel: EntityModel = this.personaForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.entityService.update(this.entity.name, change)
-      .subscribe(this.navigateUp, (err) => this.personaForm.invalidateAccessFields(err));
+      .subscribe(this.navigateUp, (err) => this.personaForm.accessForm.validateAccessFields(personaModel.name, err));
   }
 
   delete() {

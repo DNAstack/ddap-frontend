@@ -8,6 +8,7 @@ import { PersonaDetailComponent } from './persona-detail/persona-detail.componen
 import { PersonaFormComponent } from './persona-form/persona-form.component';
 import { PersonaListComponent } from './persona-list/persona-list.component';
 import { PersonaManageComponent } from './persona-manage/persona-manage.component';
+import { PersonaResourceFormComponent } from './persona-resource-form/persona-resource-form.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { PersonaManageComponent } from './persona-manage/persona-manage.componen
     PersonaManageComponent,
     PersonaDetailComponent,
     PersonaFormComponent,
+    PersonaResourceFormComponent,
   ],
   imports: [
     AdminSharedModule,

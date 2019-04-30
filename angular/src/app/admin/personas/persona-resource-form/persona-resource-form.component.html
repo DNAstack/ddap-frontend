@@ -1,0 +1,21 @@
+<ng-container *ngIf="form" [formGroup]="form">
+
+  <div *ngFor="let resource of resources">
+    <mat-card>
+      <mat-card-title>
+        {{ resource.name }}
+      </mat-card-title>
+      <div *ngFor="let access of resource.access"
+           class="row"
+           [formGroupName]="resource.name">
+        <div class="col ddap-access-col">
+          <mat-checkbox [formControlName]="access"
+                        color="primary"
+                        id="{{ resource.name }}/{{ access }}">
+            {{ access }}
+          </mat-checkbox>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</ng-container>
