@@ -1,9 +1,22 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
+import { combineLatest } from 'rxjs/internal/observable/combineLatest';
+import { concat } from 'rxjs/internal/observable/concat';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { Observer } from 'rxjs/Observer';
+import { debounceTime, distinct, map, startWith, switchMap, tap } from 'rxjs/operators';
 
-import { filterSource, flatten, makeDistinct, pick } from '../../shared/autocomplete/autocomplete.util';
+import { environment } from '../../../environments/environment';
+import {
+  filterBy,
+  filterSource,
+  flatten,
+  includes,
+  makeDistinct,
+  pick
+} from '../../shared/autocomplete/autocomplete.util';
+import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
 import { ClaimDefinitionService } from '../claim-definitions/claim-definitions.service';
 import { PassportIssuerService } from '../passport-issuers/passport-issuerss.service';
 import { TrustedSourcesService } from '../trusted-sources/trusted-sources.service';
@@ -15,7 +28,8 @@ export class PersonaAutocompleteService {
 
   constructor(private claimDefinitionService: ClaimDefinitionService,
               private passportIssuerService: PassportIssuerService,
-              private trustedSourcesService: TrustedSourcesService) {
+              private trustedSourcesService: TrustedSourcesService,
+              private http: HttpClient) {
 
   }
 
@@ -31,6 +45,7 @@ export class PersonaAutocompleteService {
     const passportIssuers$ = this.passportIssuerService.getList(pick('dto.issuer')).pipe(
       map(makeDistinct)
     );
+
     return filterSource(passportIssuers$, formGroup.get('iss').valueChanges);
   }
 
@@ -41,5 +56,28 @@ export class PersonaAutocompleteService {
     );
 
     return filterSource(trustedSources$, formGroup.get('source').valueChanges);
+  }
+
+  buildValuesAutocomplete(formGroup: FormGroup): Observable<string[]> {
+    const value$ = formGroup.get('value').valueChanges.pipe(
+      startWith(formGroup.get('value').value)
+    );
+    const claimName$ = formGroup.get('claimName').valueChanges.pipe(
+      startWith(formGroup.get('claimName').value)
+    );
+
+    return combineLatest(value$, claimName$).pipe(
+      switchMap(([value, claimName]) => {
+        return this.getClaimDefinitionSuggestions(claimName).pipe(
+          map(filterBy(includes(value)))
+        );
+      })
+    );
+  }
+
+  private getClaimDefinitionSuggestions(claimName): Observable<string[]> {
+    return this.http.get<string[]>(
+      `${environment.ddapApiUrl}/${realmIdPlaceholder}/autocomplete/claimValue?claimName=${claimName}`, {}
+    );
   }
 }

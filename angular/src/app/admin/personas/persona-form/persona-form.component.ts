@@ -7,10 +7,8 @@ import { Observable } from 'rxjs/Observable';
 import { catchError, debounceTime, map, switchMap, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
-import { filterSource } from '../../../shared/autocomplete/autocomplete.util';
 import { dam } from '../../../shared/proto/dam-service';
 import { ResourceService } from '../../resources/resources.service';
-import { AutocompleteService } from '../../shared/autocomplete.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
 import { PersonaAutocompleteService } from '../persona-autocomplete.service';
@@ -59,7 +57,6 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
   constructor(private formBuilder: FormBuilder,
               private personaService: PersonaService,
               private resourceService: ResourceService,
-              private autocompleteService: AutocompleteService,
               private personaAutocompleteService: PersonaAutocompleteService) {
 
     this.resourceAccess$ = this.resourceService.getList().pipe(
@@ -106,22 +103,6 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
     return new EntityModel(id, testPersona);
   }
 
-  public getAutocompleteOptionsForValues(index): Observable<string[]> {
-    const formGroup = this.ga4ghClaims.at(index);
-    const { claimName } = formGroup.value;
-
-    if (!claimName || claimName.length === 0) {
-      return;
-    }
-
-    if (!this.policyValues$[claimName]) {
-      const claimValues$ = this.autocompleteService.getClaimDefinitionSuggestions(claimName);
-      this.policyValues$[claimName] = filterSource(claimValues$, formGroup.get('value').valueChanges);
-    }
-
-    return this.policyValues$[claimName];
-  }
-
   private buildGa4GhClaimGroup({claimName, source, value, asserted, expires, by}: TestPersona.IGA4GHClaim): FormGroup {
     const autocompleteId = new Date().getTime().toString();
 
@@ -143,6 +124,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
   private buildGa4GhClaimGroupAutocomplete(autocompleteId: string, formGroup: FormGroup) {
     this.claimDefinitions$[autocompleteId] = this.personaAutocompleteService.buildClaimDefinitionAutocomplete(formGroup);
     this.trustedSources$[autocompleteId] = this.personaAutocompleteService.buildTrustedSourcesAutocomplete(formGroup);
+    this.policyValues$[autocompleteId] = this.personaAutocompleteService.buildValuesAutocomplete(formGroup);
   }
 
   private buildForm(personaId: string, personaDto: TestPersona) {
