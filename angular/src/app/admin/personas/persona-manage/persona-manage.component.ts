@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { dam } from '../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
-import { PersonaFormComponent } from '../form/persona-form.component';
+import { PersonaFormComponent } from '../persona-form/persona-form.component';
 import { PersonaService } from '../personas.service';
 import TestPersona = dam.v1.TestPersona;
 

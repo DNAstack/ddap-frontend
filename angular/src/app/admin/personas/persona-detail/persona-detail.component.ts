@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { EntityModel } from '../../shared/entity.model';
-import { PersonaFormComponent } from '../form/persona-form.component';
+import { PersonaFormComponent } from '../persona-form/persona-form.component';
 import { PersonaService } from '../personas.service';
 
 @Component({
