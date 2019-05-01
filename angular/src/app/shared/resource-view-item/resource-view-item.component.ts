@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { AbstractControl, FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 import { Subscription } from 'rxjs/Subscription';
 
+import { ResourceService } from '../../admin/resources/resources.service';
 import { EntityModel } from '../../admin/shared/entity.model';
-import { ResourceViewAccess } from '../resource-view-access.model';
-import { ResourceViewService } from '../resource-view.service';
+import { dam } from '../proto/dam-service';
+import GetTokenResponse = dam.v1.GetTokenResponse;
 
 @Component({
   selector: 'ddap-resource-view-item',
@@ -20,12 +21,13 @@ export class ResourceViewItemComponent {
   view: EntityModel;
 
   accessSubscription: Subscription;
-  access: ResourceViewAccess;
+  access: GetTokenResponse;
+  url?: string;
 
   ttlForm = new FormControl(1, Validators.compose([Validators.required, Validators.min(1)]));
   selectedTimeUnit = 'h';
 
-  constructor(private resourceViewService: ResourceViewService) {
+  constructor(private resourceService: ResourceService) {
 
   }
 
@@ -37,10 +39,10 @@ export class ResourceViewItemComponent {
 
     const viewName = this.view.name;
     const ttl = `${this.ttlForm.value}${this.selectedTimeUnit}`;
-    this.accessSubscription = this.resourceViewService.getAccessRequestToken(this.resource.name, viewName, ttl)
+    this.accessSubscription = this.resourceService.getAccessRequestToken(this.resource.name, viewName, { ttl })
       .subscribe((access) => {
         this.access = access;
-        this.access.url = this.getUrlIfApplicable(viewName, access.token);
+        this.url = this.getUrlIfApplicable(viewName, access.token);
         this.ttlForm.disable();
       });
   }
