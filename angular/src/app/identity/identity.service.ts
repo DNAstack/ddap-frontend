@@ -21,14 +21,14 @@ const adminAccount = 'admin@nci.nih.gov';
 export class IdentityService {
 
   constructor(private http: HttpClient,
-              private activatedRoute: ActivatedRoute,
-              private errorHandler: ErrorHandlerService) {
+              private errorHandler: ErrorHandlerService,
+              private activatedRoute: ActivatedRoute) {
   }
 
   getIdentity(params = {}): Observable<Identity> {
     return this.http.get<any>(`${environment.idpApiUrl}/${realmIdPlaceholder}/accounts/-`, {params})
       .pipe(
-        this.errorHandler.handleError(),
+        this.errorHandler.notifyOnError(`Can't load account's information.`),
         pluck('account')
       );
   }
@@ -36,7 +36,7 @@ export class IdentityService {
   getIdentityProviders(params = {}): Observable<any> {
     return this.http.get<any>(`${environment.idpApiUrl}/${realmIdPlaceholder}/identityProviders`, {params})
       .pipe(
-        this.errorHandler.handleError(),
+        this.errorHandler.notifyOnError(`Can't load identity providers' information.`),
         pluck('identityProviders')
       );
   }
@@ -44,7 +44,7 @@ export class IdentityService {
   getPersonas(params = {}): Observable<any> {
     return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/testPersonas`, {params})
       .pipe(
-        this.errorHandler.handleError(),
+        this.errorHandler.notifyOnError(`Can't load personas' information.`),
         pluck('personas')
       );
   }

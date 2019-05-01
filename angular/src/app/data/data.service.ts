@@ -41,7 +41,7 @@ export class DataService {
 
     return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/resources`, {params})
       .pipe(
-        this.errorHandler.handleError(),
+        this.errorHandler.notifyOnError(`Can't load resources.`),
         pluck('resources'),
         map(EntityModel.objectToMap),
         map(EntityModel.arrayFromMap),
@@ -52,7 +52,7 @@ export class DataService {
   getResource(resourceId: string, params = {}): Observable<EntityModel> {
     return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resourceId}`, {params})
       .pipe(
-        this.errorHandler.handleError(),
+        this.errorHandler.notifyOnError(`Can't load resource ${resourceId}.`),
         pluck('resource'),
         map((resource) => new EntityModel(resourceId, resource))
       );
