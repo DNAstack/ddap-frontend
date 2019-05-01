@@ -86,7 +86,7 @@
                 matSuffix
                 mat-icon-button
                 ngxClipboard
-                [cbContent]="access?.url || access?.token"
+                [cbContent]="url || access?.token"
                 matTooltip="Copy to clipboard"
                 aria-label="Copy to clipboard">
           <mat-icon class="icon icon-copy"></mat-icon>
@@ -94,8 +94,8 @@
       </div>
     </div>
     <div>
-      <a *ngIf="access?.url"
-         href="{{access?.url}}"
+      <a *ngIf="url"
+         href="{{ url }}"
          data-se="access-btn"
          target='_blank'
          rel='noopener noreferrer'>

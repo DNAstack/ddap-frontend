@@ -28,20 +28,6 @@ export class ResourceDetailComponent extends EntityDetailBase<ResourceService> i
     });
   }
 
-  getAccess(viewName) {
-    this.entityService.getAccessRequestToken(this.entity.name, viewName)
-      .subscribe((accessToken) => {
-        this.entity.dto.views[viewName].token = accessToken;
-
-        const view = this.entity.dto.views[viewName];
-        // tslint:disable-next-line
-        const viewAccessUrl = view!.interfaces['http:gcp:gs'];
-        if (viewAccessUrl) {
-          this.entity.dto.views[viewName].url = `${viewAccessUrl}/o?access_token=${accessToken}`;
-        }
-      });
-  }
-
   private getViews(resource: EntityModel) {
     return Object
       .keys(resource.dto.views)

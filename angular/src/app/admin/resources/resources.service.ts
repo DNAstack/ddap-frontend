@@ -1,9 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { map, pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
+import GetTokenResponse = dam.v1.GetTokenResponse;
+import IGetTokenRequest = dam.v1.IGetTokenRequest;
+import { HttpParamsService } from '../../shared/http-params.service';
+import { dam } from '../../shared/proto/dam-service';
 import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
 import { ConfigEntityService } from '../shared/config-entity.service';
 import { EntityModel } from '../shared/entity.model';
@@ -13,16 +17,9 @@ import { EntityModel } from '../shared/entity.model';
 })
 export class ResourceService extends ConfigEntityService {
 
-  constructor(http: HttpClient) {
+  constructor(http: HttpClient,
+              private httpParamsService: HttpParamsService) {
     super(http, 'resources', 'resources');
-  }
-
-  getAccessRequestToken(resourceId, viewId): Observable<any[]> {
-    const viewUrl = `${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resourceId}/views/${viewId}`;
-    return this.http.get<any[]>(viewUrl)
-      .pipe(
-        pluck('token')
-      );
   }
 
   getResource(resourceName: string): Observable<EntityModel> {
@@ -30,4 +27,16 @@ export class ResourceService extends ConfigEntityService {
       map(resources => resources.get(resourceName))
     );
   }
+
+  getAccessRequestToken(resourceId: string, viewId: string, tokenRequest: IGetTokenRequest): Observable<GetTokenResponse> {
+    return this.http.get<GetTokenResponse>(
+      `${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resourceId}/views/${viewId}/token`,
+      {
+        params: this.httpParamsService.getHttpParamsFrom(tokenRequest),
+      }
+    ).pipe(
+      map(GetTokenResponse.create)
+    );
+  }
+
 }
