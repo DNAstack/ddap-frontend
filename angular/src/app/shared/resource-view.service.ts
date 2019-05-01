@@ -23,7 +23,7 @@ export class ResourceViewService {
     const viewUrl = `${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resource}/views/${view}/token?ttl=${ttl}`;
     return this.http.get<any>(viewUrl)
       .pipe(
-        this.errorHandler.handleError(),
+        this.errorHandler.notifyOnError(`Can't obtain access token.`),
         map(({ account, token }) => {
           return {
             account,
