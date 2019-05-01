@@ -17,16 +17,14 @@ const headers = HTTP_HEADERS;
 export class ConfigEntityService implements EntityService {
 
    constructor(protected http: HttpClient,
+               protected errorHandler: ErrorHandlerService,
                protected typeNameInConfig: string,
-               protected typeNameInUrl: string,
-               protected errorHandler: ErrorHandlerService) {
-
+               protected typeNameInUrl: string) {
   }
 
   get(params = {}): Observable<Map<string, EntityModel>> {
     return this.http.get<ConfigModel>(`${environment.damApiUrl}/${realmIdPlaceholder}/config`, {params})
       .pipe(
-        this.errorHandler.handleError(),
         pluck(this.typeNameInConfig),
         map(EntityModel.objectToMap)
       );
@@ -42,8 +40,9 @@ export class ConfigEntityService implements EntityService {
   save(id: string, change: ConfigModificationObject): Observable<any> {
     return this.http.post(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       change,
-      {headers}).pipe(
-      this.errorHandler.handleError()
+      {headers}
+    ).pipe(
+      this.errorHandler.notifyOnError(`Can't save ${id}.`)
     );
   }
 
@@ -52,7 +51,7 @@ export class ConfigEntityService implements EntityService {
       change,
       {headers}
     ).pipe(
-      this.errorHandler.handleError()
+      this.errorHandler.notifyOnError(`Can't update ${id}.`)
     );
   }
 
@@ -60,7 +59,7 @@ export class ConfigEntityService implements EntityService {
     return this.http.delete(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       {headers}
     ).pipe(
-      this.errorHandler.handleError()
+      this.errorHandler.notifyOnError(`Can't remove ${id}.`)
     );
   }
 }

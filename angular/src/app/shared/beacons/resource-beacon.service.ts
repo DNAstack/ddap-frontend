@@ -41,7 +41,7 @@ export class ResourceBeaconService {
       `${environment.ddapApiUrl}/${realmIdPlaceholder}/resources/${resourceId}/search`,
       {params}
     ).pipe(
-      this.errorHandler.handleError()
+      this.errorHandler.notifyOnError(`Can't query beacon for resource ${resourceId}.`)
     );
   }
 
@@ -50,7 +50,7 @@ export class ResourceBeaconService {
       `${environment.ddapApiUrl}/${realmIdPlaceholder}/resources/search`,
       {params}
     ).pipe(
-      this.errorHandler.handleError()
+      this.errorHandler.notifyOnError(`Can't query beacons.`)
     );
   }
 }
