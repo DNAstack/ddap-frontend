@@ -1,24 +1,28 @@
 package com.dnastack.ddap.frontend;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
-
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
-import com.dnastack.ddap.common.page.*;
+import com.dnastack.ddap.common.page.AdminDdapPage;
+import com.dnastack.ddap.common.page.AdminListPage;
+import com.dnastack.ddap.common.page.AdminManagePage;
+import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
-import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
+
+import java.io.IOException;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 
 @SuppressWarnings("Duplicates")
 public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String testConfig = loadTemplate("/com/dnastack/ddap/navbarE2eTestConfig.json");
+        final String testConfig = loadTemplate("/com/dnastack/ddap/adminTestPersonaConfig.json");
         setupRealmConfig("administrator", testConfig, REALM);
     }
 
@@ -40,7 +44,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-sub"), "test-subject");
 
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
-        adminManagePage.fillField(DdapBy.se("inp-claimName"), "test-claimName");
+        adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
         adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
         adminManagePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-value"));
         adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
@@ -105,33 +109,62 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
                 .goToAdmin(NavItem.PERSONAS);
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (eRA Commons)"));
-
         AdminManagePage adminManagePage = adminListPage.clickView("Dr. Joe (eRA Commons)", "View Persona");
-
         adminListPage = adminManagePage.deleteEntity();
-
         assertThat(adminListPage.getEntityTitles(), not(hasItem("Dr. Joe (eRA Commons)")));
 
         adminListPage.clickManage();
 
         adminManagePage.fillField(DdapBy.se("inp-id"), "dr_joe_era_commons");
         adminManagePage.fillField(DdapBy.se("inp-label"), "Dr. Joe (eRA Commons)");
-        adminManagePage.fillField(DdapBy.se("inp-iss"), "https://login.nih.org/oidc/");
+
+        adminManagePage.fillField(DdapBy.se("inp-iss"), "https://login.nih.gov/oidc");
         adminManagePage.fillField(DdapBy.se("inp-sub"), "dr_joe@era.nih.gov");
 
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
-        adminManagePage.fillField(DdapBy.se("inp-claimName"), "ga4gh.ControlledAccessGrants");
+        adminManagePage.fillField(DdapBy.se("inp-claimName"), "AffiliationAndRole");
+        adminManagePage.fillField(DdapBy.se("inp-source"), "https://uni-heidelberg.de");
+        adminManagePage.fillField(DdapBy.se("inp-value"), "faculty@uni-heidelberg.de");
+        adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
+        adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");
+        adminManagePage.closeAutocompletes();
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "so");
+
+        adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
+        adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
         adminManagePage.fillField(DdapBy.se("inp-source"), "https://dbgap.nlm.nih.gov/aa");
-        adminManagePage.fillField(DdapBy.se("inp-value"), "https://dac.nih.gov/datasets/phys000710");
+        adminManagePage.fillField(DdapBy.se("inp-value"), "https://dac.nih.gov/datasets/phs000710");
         adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
         adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");
         adminManagePage.closeAutocompletes();
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "dac");
 
-        adminManagePage.clickCheckbox(By.id("thousand-genomes/full-read-access/viewer"));
+        adminManagePage.clickCheckbox(By.id("dataset_example/bq_read/viewer"));
+        adminManagePage.clickCheckbox(By.id("dataset_example/gcs_read/viewer"));
+        adminManagePage.clickCheckbox(By.id("thousand-genomes/gcs-file-access/viewer"));
 
         adminListPage = adminManagePage.saveEntity();
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (eRA Commons)"));
+    }
+
+    @Test
+    public void verifyAutocompleteClaimValuesChangeOnClaimNameChange() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                .goToAdmin(NavItem.PERSONAS);
+
+        AdminManagePage adminManagePage = adminListPage.clickManage();
+        adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
+
+        adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-value"), "https://dac.nih.gov/datasets/phs000710");
+        adminManagePage.closeAutocompletes();
+
+        adminManagePage.clearField(DdapBy.se("inp-claimName"));
+        adminManagePage.clearField(DdapBy.se("inp-value"));
+
+        adminManagePage.fillField(DdapBy.se("inp-claimName"), "ResearcherStatus");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-value"), "https://www.nature.com/articles/s41431-018-0219-y");
+        adminManagePage.closeAutocompletes();
     }
 }
