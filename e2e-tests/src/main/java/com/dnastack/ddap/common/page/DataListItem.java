@@ -24,12 +24,12 @@ public class DataListItem {
         new WebDriverWait(driver, 5).until(d -> viewButton.isDisplayed());
         viewButton.click();
 
-        return new WebDriverWait(driver, 5).until(d -> new DataDetailPage(d));
+        return new WebDriverWait(driver, 5).until(DataDetailPage::new);
     }
 
     private WebElement getListItem() {
         final WebElement we = driver.findElement(By.xpath(format(
-                "//mat-card[descendant::*[contains(text(), '%s')]]",
+                "//mat-card[descendant::*[contains(text(), '%s') and @class='mat-card-title']]",
                 resourceName)));
         new WebDriverWait(driver, 50).until(d -> we.isDisplayed());
         return we;

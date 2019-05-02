@@ -68,6 +68,12 @@ public class NavBar {
         return new NavBar(driver);
     }
 
+    public DataListPage goToData() {
+        driver.findElement(DdapBy.se(NavItem.DATA.selector)).click();
+
+        return new DataListPage(driver);
+    }
+
     public AdminListPage goToAdmin(NavItem navItem) {
         driver.findElement(DdapBy.se(navItem.selector)).click();
 
