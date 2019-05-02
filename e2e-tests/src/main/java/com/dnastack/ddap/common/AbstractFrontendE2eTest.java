@@ -39,9 +39,9 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
         screenshotDir = optionalEnv("E2E_SCREENSHOT_DIR", "target");
         WebDriverManager.chromedriver().setup(); // 73.0.3683.68
         ChromeOptions options = new ChromeOptions();
-//        if (HEADLESS) {
-//            options.addArguments("headless");
-//        }
+        if (HEADLESS) {
+            options.addArguments("headless");
+        }
         options.addArguments("--disable-gpu");
         options.addArguments("window-size=1200x600");
         options.addArguments("incognito");
