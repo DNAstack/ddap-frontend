@@ -21,7 +21,7 @@ ddap:
     secure: false
   state-handler:
     aud: ${ddap.public-uri}
-    ttl: PT1M
+    ttl: PT10M
     signingKey: |
       VGhlcmUgb25jZSB3YXMgYSBsYW5ndWFnZSBjYWxsZWQgYmFzaApJdCdzIHNlbWFudGljcyB3ZXJlIG9mdGVuIHF1aXRlI
       HJhc2gKQnV0IGl0IHdvcmtlZCwgbW9yZSBvciBsZXNzCkV2ZW4gdGhvdWdoIGl0J3MgYSBtZXNzClNvIEkgZ3Vlc3MgaX
