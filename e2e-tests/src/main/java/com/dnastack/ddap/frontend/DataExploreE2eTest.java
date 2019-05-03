@@ -29,8 +29,8 @@ public class DataExploreE2eTest extends AbstractFrontendE2eTest {
         DataDetailPage thousandGenomesDetailPage = dataListPage.findDataByName("1000 Genomes").clickViewButton();
 
         ExpandedAccessibleViewItem fullFileReadView = thousandGenomesDetailPage.expandViewItem("Full File Read Access");
-        fullFileReadView.requestAccess();
-        assertTrue(fullFileReadView.accessRequestFailed());
+        ViewAccessMenu fullFileReadAccessMenu = fullFileReadView.requestAccess();
+        assertTrue(fullFileReadAccessMenu.accessRequestFailed());
     }
 
     @Test
@@ -39,17 +39,17 @@ public class DataExploreE2eTest extends AbstractFrontendE2eTest {
         DataDetailPage thousandGenomesDetailPage = dataListPage.findDataByName("1000 Genomes").clickViewButton();
 
         ExpandedAccessibleViewItem fullFileReadView = thousandGenomesDetailPage.expandViewItem("Full File Read Access");
-        fullFileReadView.requestAccess();
-        assertTrue(fullFileReadView.accessRequestFailed());
-        fullFileReadView.closeMenu();
+        ViewAccessMenu fullFileReadAccessMenu = fullFileReadView.requestAccess();
+        assertTrue(fullFileReadAccessMenu.accessRequestFailed());
+        fullFileReadAccessMenu.closeMenu();
 
-        fullFileReadView.requestAccess();
-        assertTrue(fullFileReadView.accessRequestFailed());
-        fullFileReadView.closeMenu();
+        fullFileReadAccessMenu = fullFileReadView.requestAccess();
+        assertTrue(fullFileReadAccessMenu.accessRequestFailed());
+        fullFileReadAccessMenu.closeMenu();
 
-        fullFileReadView.requestAccess();
-        assertTrue(fullFileReadView.accessRequestFailed());
-        fullFileReadView.closeMenu();
+        fullFileReadAccessMenu = fullFileReadView.requestAccess();
+        assertTrue(fullFileReadAccessMenu.accessRequestFailed());
+        fullFileReadAccessMenu.closeMenu();
     }
 
     @Test
@@ -58,8 +58,8 @@ public class DataExploreE2eTest extends AbstractFrontendE2eTest {
         DataDetailPage thousandGenomesDetailPage = dataListPage.findDataByName("1000 Genomes").clickViewButton();
 
         ExpandedAccessibleViewItem beaconDiscoveryView = thousandGenomesDetailPage.expandViewItem("Beacon Discovery Access");
-        beaconDiscoveryView.requestAccess();
-        assertFalse(beaconDiscoveryView.accessRequestFailed());
+        ViewAccessMenu beaconDiscoveryAccessMenu = beaconDiscoveryView.requestAccess();
+        assertFalse(beaconDiscoveryAccessMenu.accessRequestFailed());
     }
 
     @Test
@@ -68,14 +68,14 @@ public class DataExploreE2eTest extends AbstractFrontendE2eTest {
         DataDetailPage thousandGenomesDetailPage = dataListPage.findDataByName("1000 Genomes").clickViewButton();
 
         ExpandedAccessibleViewItem fullFileReadView = thousandGenomesDetailPage.expandViewItem("Full File Read Access");
-        fullFileReadView.requestAccess();
-        assertTrue(fullFileReadView.accessRequestFailed());
+        ViewAccessMenu fullFileReadAccessMenu = fullFileReadView.requestAccess();
+        assertTrue(fullFileReadAccessMenu.accessRequestFailed());
 
-        fullFileReadView.closeMenu();
+        fullFileReadAccessMenu.closeMenu();
 
         ExpandedAccessibleViewItem beaconDiscoveryView = thousandGenomesDetailPage.expandViewItem("Beacon Discovery Access");
-        beaconDiscoveryView.requestAccess();
-        assertFalse(beaconDiscoveryView.accessRequestFailed());
+        ViewAccessMenu beaconDiscoveryAccessMenu = beaconDiscoveryView.requestAccess();
+        assertFalse(beaconDiscoveryAccessMenu.accessRequestFailed());
     }
 
 }
