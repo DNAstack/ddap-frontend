@@ -1,6 +1,8 @@
 package com.dnastack.ddap.common.page;
 
+import com.dnastack.ddap.common.DdapBy;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ExpandedAccessibleViewItem {
 
@@ -17,8 +19,9 @@ public class ExpandedAccessibleViewItem {
     }
 
     public void requestAccess() {
-        this.view.findElement(By.xpath(".//*[@data-se = 'get-access-btn']"))
-                .click();
+        WebElement accessBtn = view.findElement(DdapBy.se("get-access-btn"));
+        new WebDriverWait(driver, 10).until(d -> accessBtn.isDisplayed());
+        accessBtn.click();
     }
 
     public void goToAccessLink() {
