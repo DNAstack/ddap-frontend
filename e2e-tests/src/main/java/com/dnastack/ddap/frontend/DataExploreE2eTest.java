@@ -15,7 +15,7 @@ public class DataExploreE2eTest extends AbstractFrontendE2eTest {
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
         final String testConfig = loadTemplate("/com/dnastack/ddap/adminTestPersonaConfig.json");
-        setupRealmConfig("nci_researcher", testConfig, REALM);
+        setupRealmConfig("administrator", testConfig, REALM);
     }
 
     @Override
