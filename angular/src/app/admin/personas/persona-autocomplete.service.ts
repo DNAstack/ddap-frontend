@@ -2,8 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { combineLatest } from 'rxjs/internal/observable/combineLatest';
+import { concat } from 'rxjs/internal/observable/concat';
+import { merge } from 'rxjs/internal/observable/merge';
+import { of } from 'rxjs/internal/observable/of';
 import { Observable } from 'rxjs/Observable';
-import { map, startWith, switchMap } from 'rxjs/operators';
+import { combineAll, concatAll, debounce, debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 import {
@@ -66,8 +69,10 @@ export class PersonaAutocompleteService {
     );
 
     return combineLatest(claimName$, value$).pipe(
+      debounceTime(300),
       switchMap(([claimName, value]) => {
-        return this.getClaimDefinitionSuggestions(claimName).pipe(
+        const currentClaimName = formGroup.get('claimName').value;
+        return this.getClaimDefinitionSuggestions(claimName || currentClaimName).pipe(
           map(filterBy(includes(value)))
         );
       })
