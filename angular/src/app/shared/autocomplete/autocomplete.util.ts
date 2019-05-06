@@ -49,7 +49,6 @@ export function filterSource(autocompleteSource$: Observable<string[]>,
   // Concat is used to return all suggestions on the first click.
   return concat(autocompleteSource$, formInputValue$.pipe(
     debounceTime(300),
-    distinct(),
     switchMap(filteredSource$)
   ));
 }
