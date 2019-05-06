@@ -3,8 +3,10 @@ package com.dnastack.ddap.common.page;
 import com.dnastack.ddap.common.DdapBy;
 import lombok.Getter;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -21,7 +23,9 @@ public class AdminManagePage {
     }
 
     public void clearField(By fieldSelector) {
-        driver.findElement(fieldSelector).clear();
+        String selectAll = Keys.chord(Keys.CONTROL, "a");
+        driver.findElement(fieldSelector).sendKeys(selectAll);
+        driver.findElement(fieldSelector).sendKeys(Keys.DELETE);
     }
 
     public void fillField(By fieldSelector, String fieldValue) {
@@ -32,14 +36,13 @@ public class AdminManagePage {
         driver.findElement(fieldSelector).click();
 
         List<WebElement> options = driver.findElements(By.tagName("mat-option"));
-        new WebDriverWait(driver, 5).until(d -> !options.isEmpty());
 
         if (fieldValue != null) {
-            Optional<WebElement> option = options.stream()
-                    .filter((element) -> element.getText().contains(fieldValue))
-                    .findFirst();
-            assertTrue(option.isPresent());
-            option.get().click();
+            WebElement option = driver.findElement(By.xpath("//mat-option/span[contains(text(), '"+fieldValue+"')]"));
+            new WebDriverWait(driver, 5)
+                    .until(ExpectedConditions.visibilityOf(option));
+
+            option.click();
         } else {
             options.get(0).click();
         }
