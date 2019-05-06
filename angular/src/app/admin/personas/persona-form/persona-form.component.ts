@@ -12,7 +12,7 @@ import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
 import { PersonaAutocompleteService } from '../persona-autocomplete.service';
-import { PersonaResourceFormComponent } from '../persona-resource-form/persona-resource-form.component';
+import { PersonaAccessFormComponent } from '../persona-resource-form/persona-access-form.component';
 import { PersonaService } from '../personas.service';
 import TestPersona = dam.v1.TestPersona;
 import AccessList = dam.v1.AccessList;
@@ -27,8 +27,8 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
   @Input()
   persona?: TestPersona = TestPersona.create();
 
-  @ViewChild(PersonaResourceFormComponent)
-  accessForm: PersonaResourceFormComponent;
+  @ViewChild(PersonaAccessFormComponent)
+  accessForm: PersonaAccessFormComponent;
 
   form: FormGroup;
 
