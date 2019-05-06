@@ -4,10 +4,10 @@ import _get from 'lodash.get';
 
 @Component({
   selector: 'ddap-persona-resource-form',
-  templateUrl: './persona-resource-form.component.html',
-  styleUrls: ['./persona-resource-form.component.scss'],
+  templateUrl: './persona-access-form.component.html',
+  styleUrls: ['./persona-access-form.component.scss'],
 })
-export class PersonaResourceFormComponent {
+export class PersonaAccessFormComponent {
 
   @Input()
   resources: any[];
