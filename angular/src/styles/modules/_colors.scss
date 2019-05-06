@@ -3,6 +3,7 @@
 $primary-color: #00bdd4;
 $success-color: #4CAF50;
 $failure-color: #BD2C18;
+$warn-color: #ffb45f;
 
 $color-grey: #888888;
 $color-grey-light: #E2E2E2;
@@ -56,3 +57,9 @@ $navbar-border: 1px solid $navbar-font-subtle-color;
 
 $progressbar-background: $navbar-font-main-color;
 $progressbar-fill-background: $primary-color;
+
+// Beacon search
+
+$beacon-query-result-match: $success-color;
+$beacon-query-result-no-match: $failure-color;
+$beacon-query-result-error: $warn-color;
