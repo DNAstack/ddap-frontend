@@ -28,15 +28,11 @@
   }
 
   .match-success {
-    color: $beacon-query-result-match;
+    color: $success-color;
   }
 
   .match-failure {
-    color: $beacon-query-result-no-match;
-  }
-
-  .match-error {
-    color: $beacon-query-result-error;
+    color: $failure-color;
   }
 
   .metadata {
@@ -48,11 +44,6 @@
     span {
 
     }
-  }
-
-  .error-content {
-    padding: 0 1rem;
-    margin-top: 0;
   }
 }
 

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import { BeaconSearchParams } from '../../shared/beacon-search-params.model';
-import { BeaconResponse } from '../../shared/beacons/beacon-response.model';
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 import { SearchStateService } from '../../shared/search-state.service';
@@ -21,7 +20,7 @@ export class DataSearchComponent implements OnDestroy, OnInit {
   resource: string;
   resourceName$:  Observable<string>;
   views: any;
-  results: BeaconResponse[];
+  results: any[];
   resultsAction: Subscription;
 
   private searchStateSubscription: Subscription;
