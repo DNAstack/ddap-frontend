@@ -6,5 +6,6 @@ export interface BeaconResponse {
   organization: string;
   exists: boolean;
   info: {[key: string]: string};
+  error: string;
 
 }
