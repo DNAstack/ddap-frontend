@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingBarService } from '@ngx-loading-bar/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { IdentityService } from '../../../identity/identity.service';
 import { BeaconResponse } from '../beacon-response.model';
 
 @Component({

@@ -1,7 +1,7 @@
 import _get from 'lodash.get';
 import { concat } from 'rxjs/internal/observable/concat';
 import { Observable } from 'rxjs/Observable';
-import { debounceTime, distinct, map, switchMap } from 'rxjs/operators';
+import { debounceTime, map, switchMap } from 'rxjs/operators';
 
 // Flattens an array of arrays: [1, [a, b], [c], d] = [1, a, b, c, d]
 export const flatten = (arrays: Array<string>) => [].concat.apply([], arrays);
