@@ -4,13 +4,13 @@ import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
-import GetTokenResponse = dam.v1.GetTokenResponse;
-import IGetTokenRequest = dam.v1.IGetTokenRequest;
 import { HttpParamsService } from '../../shared/http-params.service';
 import { dam } from '../../shared/proto/dam-service';
 import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
 import { ConfigEntityService } from '../shared/config-entity.service';
 import { EntityModel } from '../shared/entity.model';
+import GetTokenResponse = dam.v1.GetTokenResponse;
+import IGetTokenRequest = dam.v1.IGetTokenRequest;
 
 @Injectable({
   providedIn: 'root',

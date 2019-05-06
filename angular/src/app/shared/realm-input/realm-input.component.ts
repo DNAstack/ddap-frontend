@@ -1,11 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 
-import {
-  RealmChangeConfirmationDialogComponent,
-} from '../realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
+import { RealmChangeConfirmationDialogComponent } from '../realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
 
 @Component({
   selector: 'ddap-realm-input',

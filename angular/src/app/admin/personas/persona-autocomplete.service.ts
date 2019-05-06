@@ -2,11 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { combineLatest } from 'rxjs/internal/observable/combineLatest';
-import { concat } from 'rxjs/internal/observable/concat';
-import { merge } from 'rxjs/internal/observable/merge';
-import { of } from 'rxjs/internal/observable/of';
 import { Observable } from 'rxjs/Observable';
-import { combineAll, concatAll, debounce, debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, map, startWith, switchMap } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 import {
