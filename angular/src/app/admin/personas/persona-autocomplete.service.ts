@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { combineLatest } from 'rxjs/internal/observable/combineLatest';
-import { concat } from 'rxjs/internal/observable/concat';
 import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
-import { debounceTime, distinct, map, startWith, switchMap, tap } from 'rxjs/operators';
+import { map, startWith, switchMap } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 import {
@@ -59,15 +57,16 @@ export class PersonaAutocompleteService {
   }
 
   buildValuesAutocomplete(formGroup: FormGroup): Observable<string[]> {
-    const value$ = formGroup.get('value').valueChanges.pipe(
-      startWith(formGroup.get('value').value)
-    );
     const claimName$ = formGroup.get('claimName').valueChanges.pipe(
-      startWith(formGroup.get('claimName').value)
+      startWith('')
     );
 
-    return combineLatest(value$, claimName$).pipe(
-      switchMap(([value, claimName]) => {
+    const value$ = formGroup.get('value').valueChanges.pipe(
+      startWith('')
+    );
+
+    return combineLatest(claimName$, value$).pipe(
+      switchMap(([claimName, value]) => {
         return this.getClaimDefinitionSuggestions(claimName).pipe(
           map(filterBy(includes(value)))
         );
