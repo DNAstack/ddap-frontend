@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import _get from 'lodash.get';
 
 @Component({
-  selector: 'ddap-persona-resource-form',
+  selector: 'ddap-persona-access-form',
   templateUrl: './persona-access-form.component.html',
   styleUrls: ['./persona-access-form.component.scss'],
 })
