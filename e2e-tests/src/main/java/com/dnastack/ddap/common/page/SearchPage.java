@@ -1,12 +1,12 @@
 package com.dnastack.ddap.common.page;
 
-import java.util.List;
-
 import com.dnastack.ddap.common.DdapBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class SearchPage extends AnyDdapPage {
 
@@ -25,8 +25,9 @@ public class SearchPage extends AnyDdapPage {
     }
 
     public void submitSearchQuery(String query) {
-        getDriver().findElement(By.xpath("//*[@data-se=\"" + SEARCH_INPUT_SELECTOR + "\"]"))
-            .sendKeys(query + Keys.ENTER);
+        WebElement searchQueryInput = getDriver().findElement(By.xpath("//*[@data-se=\"" + SEARCH_INPUT_SELECTOR + "\"]"));
+        searchQueryInput.clear();
+        searchQueryInput.sendKeys(query + Keys.ENTER);
     }
 
     public List<WebElement> getSearchResults() {
