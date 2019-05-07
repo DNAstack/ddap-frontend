@@ -1,15 +1,16 @@
 <span>* field is required</span>
-<form #entityForm="ngForm"
-      (ngSubmit)="submitChange()">
+<form [formGroup]="form"
+      novalidate
+      (submit)="submitChange()">
   <mat-form-field data-se="id-field">
     <mat-label>{{ label }} Identifier</mat-label>
     <input id="id"
            name="id"
            required
            matInput
-           #id="ngModel"
-           [(ngModel)]="model.name">
+           formControlName="id">
     <mat-hint>The name by which other config objects refer to this resource</mat-hint>
+    <mat-error *ngIf="form.get('id').invalid">Identifier must be 3-46 characters and alphanumeric</mat-error>
   </mat-form-field>
   <mat-form-field data-se="item-editor">
       <textarea id="item"
@@ -18,15 +19,14 @@
                 matInput
                 [placeholder]="label + ' JSON'"
                 rows="10"
-                #item="ngModel"
-                [(ngModel)]="model.dto">
+                formControlName="dto">
       </textarea>
   </mat-form-field>
   <button type="submit"
           mat-flat-button
           color="primary"
           class="uppercase"
-          [disabled]="!entityForm.form.valid">
+          [disabled]="form.invalid">
     Add {{ label }}
   </button>
 </form>

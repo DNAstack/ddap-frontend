@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { dam } from '../../../shared/proto/dam-service';
 import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { EntityModel } from '../../shared/entity.model';
+import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
 import { PersonaAutocompleteService } from '../persona-autocomplete.service';
 import { PersonaAccessFormComponent } from '../persona-resource-form/persona-access-form.component';
 import { PersonaService } from '../personas.service';
@@ -195,7 +195,9 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
     const ga4ghClaims: TestPersona.IGA4GHClaim[] = _get(personaDto, 'idToken.ga4ghClaims', []);
 
     return this.formBuilder.group({
-      id: [{value: personaId, disabled: !!personaId}, [Validators.required, Validators.min(3)]],
+      id: [{value: personaId, disabled: !!personaId}, [
+        Validators.pattern(nameConstraintPattern),
+      ]],
       label: [personaDto.ui.label],
       iss: [standardClaims.iss, Validators.required],
       sub: [standardClaims.sub, Validators.required],

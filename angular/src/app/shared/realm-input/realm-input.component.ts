@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 
+import { nameConstraintPattern } from '../../admin/shared/entity.model';
 import { RealmChangeConfirmationDialogComponent } from '../realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
 
 @Component({
@@ -26,8 +27,7 @@ export class RealmInputComponent implements OnInit {
       this.realm = params.realmId;
       this.form = this.formBuilder.group({
         realm: [this.realm, [
-          Validators.required,
-          Validators.pattern('^[A-Za-z][-_A-Za-z0-9\.]{1,46}[A-Za-z0-9]$'),
+          Validators.pattern(nameConstraintPattern),
         ]],
       });
     });
