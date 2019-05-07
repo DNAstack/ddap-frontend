@@ -13,6 +13,7 @@ import { PersonaService } from '../personas.service';
   styleUrls: ['./persona-detail.component.scss'],
 })
 export class PersonaDetailComponent extends EntityDetailBase<PersonaService> implements OnInit {
+
   @ViewChild(PersonaFormComponent)
   personaForm: PersonaFormComponent;
 
