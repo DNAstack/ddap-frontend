@@ -13,6 +13,7 @@ import org.openqa.selenium.By;
 
 import java.io.IOException;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
@@ -146,6 +147,21 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminListPage = adminManagePage.saveEntity();
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (eRA Commons)"));
+    }
+
+    @Test
+    public void verifyFormErrorsWithInvalidIdentifier() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                .goToAdmin(NavItem.PERSONAS);
+
+        AdminManagePage adminManagePage = adminListPage.clickManage();
+
+        adminManagePage.fillField(DdapBy.se("inp-id"), "123 invalid name");
+        adminManagePage.fillField(DdapBy.se("inp-label"), "test-persona-name");
+        adminManagePage.fillField(DdapBy.se("inp-iss"), "test-issuer");
+        adminManagePage.fillField(DdapBy.se("inp-sub"), "test-subject");
+
+        assertTrue(adminManagePage.hasErrors());
     }
 
     @Test
