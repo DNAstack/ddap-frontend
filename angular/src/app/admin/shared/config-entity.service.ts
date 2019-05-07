@@ -50,8 +50,6 @@ export class ConfigEntityService implements EntityService {
     return this.http.put(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       change,
       {headers}
-    ).pipe(
-      this.errorHandler.notifyOnError(`Can't update ${id}.`)
     );
   }
 
