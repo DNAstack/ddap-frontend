@@ -187,11 +187,11 @@
     <span>Resource Access</span>
   </h3>
 
-  <mat-progress-bar *ngIf="!resourcesList.length"
+  <mat-progress-bar *ngIf="!resourceAccessSubscription.closed"
                     mode="indeterminate">
   </mat-progress-bar>
 
-  <ng-container *ngIf="resourcesList.length">
+  <ng-container *ngIf="resourceAccessSubscription.closed">
     <ddap-persona-access-form [resources]="resourcesList"
                               [form]="resources">
 

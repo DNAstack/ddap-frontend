@@ -24,12 +24,16 @@ public class AdminManagePage {
 
     public void clearField(By fieldSelector) {
         String selectAll = Keys.chord(Keys.CONTROL, "a");
-        driver.findElement(fieldSelector).sendKeys(selectAll);
-        driver.findElement(fieldSelector).sendKeys(Keys.DELETE);
+        WebElement formInput = driver.findElement(fieldSelector);
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(formInput));
+        formInput.sendKeys(selectAll);
+        formInput.sendKeys(Keys.DELETE);
     }
 
     public void fillField(By fieldSelector, String fieldValue) {
-        driver.findElement(fieldSelector).sendKeys(fieldValue);
+        WebElement formInput = driver.findElement(fieldSelector);
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(formInput));
+        formInput.sendKeys(fieldValue);
     }
 
     public void fillFieldFromDropdown(By fieldSelector, String fieldValue) {

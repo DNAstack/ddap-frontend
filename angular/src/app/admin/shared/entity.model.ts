@@ -3,7 +3,9 @@ export class EntityModel {
 
   static objectToMap(models: object) {
     const map: Map<string, EntityModel> = new Map();
-    Object.keys(models).forEach(name => map.set(name, new EntityModel(name, models[name])));
+    if (models) {
+      Object.keys(models).forEach(name => map.set(name, new EntityModel(name, models[name])));
+    }
     return map;
   }
 
