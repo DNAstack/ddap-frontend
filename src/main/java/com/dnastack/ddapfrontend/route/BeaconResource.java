@@ -12,6 +12,7 @@ import com.dnastack.ddapfrontend.model.InterfaceModel;
 import com.dnastack.ddapfrontend.model.ResourceModel;
 import com.dnastack.ddapfrontend.model.ViewModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
+import feign.FeignException;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +32,7 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -91,55 +89,95 @@ class BeaconResource {
                 .orElse(Flux.empty());
     }
 
+    /**
+     * 1. Get the list of beacons with their names.
+     * 2. Build up a list of beacon responses with their names.
+     * 3. Pass this to getAuthTokens to populate
+     * 4. We finally return this to the user
+     * @param realm
+     * @param resource
+     * @param beaconRequest
+     * @param damToken
+     * @return
+     */
     private Flux<ExternalBeaconQueryResult> handleBeaconQuery(String realm,
                                                               Map.Entry<String, ResourceModel> resource,
                                                               BeaconRequestModel beaconRequest,
                                                               String damToken) {
-        Map<String, ViewModel> views = resource.getValue().getViews();
-        Stream<ViewToken> beaconViewTokens = views.entrySet().stream()
-                .flatMap(entry -> processResourceBeacons(realm, resource.getKey(), entry, damToken));
 
-        Stream<Flux<ExternalBeaconQueryResult>> beaconRequests = beaconViewTokens.map(viewToken -> {
+        Map<String, ViewModel> views = resource.getValue().getViews();
+
+        //String beaconName = views.get("thousand-genomes").toString(); //getUI().getLabel())
+        //Map<String, BeaconInfo> beaconInfoMap = buildBeaconInfoResponseList(realm);
+
+        Flux<ViewToken> beaconViewTokens = Flux.fromIterable(views.entrySet())
+                .flatMap(entry -> getAuthTokens(realm, resource.getKey(), entry, damToken));
+
+        Flux<ExternalBeaconQueryResult> beaconRequests = beaconViewTokens.flatMap(viewToken -> {
             log.debug("About to query: {} beacon at {}", viewToken.getViewId(), viewToken.getUrl());
             // TODO DISCO-2038 Handle errors and unauthorized requests
             Mono<BeaconInfo> beaconInfoResponse;
-            try {
-                URI beaconRootUri = new URI(viewToken.getUrl());
-                beaconInfoResponse = beaconInfo(beaconRootUri, viewToken.getToken());
-            } catch (URISyntaxException e) {
-                log.error("Error forming root beacon URI: ", e);
-                beaconInfoResponse = Mono.error(e);
-            }
 
-            return Flux.zip(
+            URI beaconRootUri = URI.create(viewToken.getUrl());
+            beaconInfoResponse = beaconInfo(beaconRootUri, viewToken.getToken())
+                    .onErrorResume(e -> {
+                        return Mono.just(buildBeaconInfoError(e));
+                    });
+
+            Mono<BeaconQueryResult> queryResultMono = beaconQuery(beaconRequest, viewToken).onErrorResume(e -> {
+                /* Handle the error case where there was no response from beacon server */
+                BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
+                String errorMessage = "Server not found: " + e;
+                log.warn(errorMessage);
+                beaconQueryResultError.setError(errorMessage);
+                Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
+                return errorResult;
+            });
+            Flux<ExternalBeaconQueryResult> zip = Flux.zip(
                     beaconInfoResponse,
-                    beaconQuery(beaconRequest, viewToken),
+                    queryResultMono,
                     (info, result) -> formatBeaconServerPayload(resource, info, result)
             );
+            return zip;
+        })
+        .onErrorResume(fluxError -> {
+            String errorMessage = fluxError.getMessage();
+            log.info("Error occurred while processing view tokens: " + errorMessage);
+            return Flux.just(externalBeaconQueryResultError(fluxError));
         });
 
-        return beaconRequests.reduce(Flux.empty(), Flux::merge);
+        return beaconRequests;
     }
 
-    private Stream<? extends ViewToken> processResourceBeacons(String realm,
-                                                               String resourceId,
-                                                               Map.Entry<String, ViewModel> view,
-                                                               String damToken) {
+    private Flux<ViewToken> getAuthTokens(String realm,
+                                          String resourceId,
+                                          Map.Entry<String, ViewModel> view,
+                                          String damToken) {
         Map<String, InterfaceModel> interfaces = view.getValue().getInterfaces();
         if (!interfaces.containsKey(BEACON_INTERFACE)) {
-            return Stream.empty();
+            return Flux.empty();
         }
 
         Optional<String> firstUri = interfaces.get("http:beacon")
                 .getUri()
                 .stream()
                 .findFirst();
-        return firstUri.map(uri -> ViewToken.builder()
-                .viewId(view.getKey())
-                .token(damClient.getAccessTokenForView(damToken, realm, resourceId, view.getKey()).getToken())
-                .url(uri)
-                .build())
-                .stream();
+
+        try {
+            String token = damClient.getAccessTokenForView(damToken, realm, resourceId, view.getKey()).getToken();
+
+            Optional<ViewToken> viewToken = firstUri.map(uri -> ViewToken.builder()
+                                                                         .viewId(view.getKey())
+                                                                         .token(token)
+                                                                         .url(uri)
+                                                                         .build());
+            return Flux.fromStream(viewToken.stream());
+
+        } catch (FeignException ex) {
+            String beaconName = view.getValue().toString();
+            String errorMessage = "Unable to get the right authorization token: " + beaconName;
+            return Flux.error(new BeaconAuthorizationException(errorMessage));
+        }
     }
 
     @GetMapping(value = "/api/v1alpha/{realm}/resources/{resourceId}/search", params = "type=beacon")
@@ -181,15 +219,23 @@ class BeaconResource {
                 .get()
                 .uri(beaconUrl)
                 .exchange()
-                .flatMap(this::extractBeaconInfo)
-                .onErrorResume(e -> {
-                    BeaconInfo beaconInfoError = new BeaconInfo();
-                    String error = "Could not get beacon metadata successfully: " + e;
-                    beaconInfoError.setError(error);
-                    Mono<BeaconInfo> errorResult = Mono.just(beaconInfoError);
-                    return errorResult;
-                });
+                .flatMap(this::extractBeaconInfo) ;
     }
+
+    private BeaconInfo buildBeaconInfoError(Throwable e) {
+        BeaconInfo beaconInfoError = new BeaconInfo();
+        String error = "Could not get beacon metadata successfully: " + e;
+        beaconInfoError.setError(error);
+        return beaconInfoError;
+    }
+
+    private ExternalBeaconQueryResult externalBeaconQueryResultError(Throwable e) {
+        ExternalBeaconQueryResult externalBeaconQueryResultError = new ExternalBeaconQueryResult();
+        String error = "Could not get beacon external query results: " + e;
+        externalBeaconQueryResultError.setError(error);
+        return externalBeaconQueryResultError;
+    }
+
 
     private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewToken viewToken) {
         return webClient
@@ -225,15 +271,6 @@ class BeaconResource {
                         }
                     }
                     return clientResponse.bodyToMono(BeaconQueryResult.class);
-                })
-                .onErrorResume(e -> {
-                    /* Handle the error case where there was no response from beacon server */
-                    BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
-                    String errorMessage = "Server not found: " + e;
-                    log.warn(errorMessage);
-                    beaconQueryResultError.setError(errorMessage);
-                    Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
-                    return errorResult;
                 });
     }
 
@@ -258,14 +295,6 @@ class BeaconResource {
         final ExternalBeaconQueryResult externalResult = new ExternalBeaconQueryResult();
 
         log.debug("Zipping {} {}", infoResponse, queryResponse);
-        final String beaconName = Optional.ofNullable(infoResponse)
-                .map(BeaconInfo::getName)
-                .orElse("Unknown");
-        final String organizationName = Optional.ofNullable(infoResponse)
-                .map(BeaconInfo::getOrganization)
-                .map(BeaconOrganization::getName)
-                .orElse("Unknown");
-
 
         final Optional<BeaconQueryResult> oQueryResponse = Optional.ofNullable(queryResponse);
 
@@ -275,9 +304,8 @@ class BeaconResource {
                 "name", resource.getKey(),
                 "label", resource.getValue().getLabel()
         ));
-        externalResult.setName(beaconName);
-        externalResult.setOrganization(organizationName);
         externalResult.setExists(exists);
+        externalResult.setBeaconInfo(infoResponse);
 
         Map<String, String> info = new HashMap<>();
         info.put("Allele origin", "Germline");
