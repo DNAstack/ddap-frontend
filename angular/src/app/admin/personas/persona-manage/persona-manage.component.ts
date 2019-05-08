@@ -19,7 +19,7 @@ export class PersonaManageComponent implements OnInit {
   personaForm: PersonaFormComponent;
 
   persona: TestPersona;
-  showValidationError = false;
+  submitted = false;
 
   constructor(private personaService: PersonaService,
               private router: Router,
@@ -32,10 +32,10 @@ export class PersonaManageComponent implements OnInit {
   }
 
   save() {
-    this.showValidationError = false;
+    this.submitted = false;
 
     if (!this.personaForm.form.valid) {
-      this.showValidationError = true;
+      this.submitted = true;
       return;
     }
 

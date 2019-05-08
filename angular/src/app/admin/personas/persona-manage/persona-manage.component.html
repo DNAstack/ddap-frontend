@@ -16,7 +16,7 @@
   <ddap-persona-form #personaForm
                      [persona]="persona">
 
-    <mat-error *ngIf="showValidationError"
+    <mat-error *ngIf="submitted && personaForm.form.invalid"
                class="ddap-form-validation-msg">
       Please fix invalid fields (marked red) before saving the persona.
     </mat-error>
