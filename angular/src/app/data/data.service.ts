@@ -49,13 +49,15 @@ export class DataService {
       );
   }
 
-  getResource(resourceId: string, params = {}): Observable<EntityModel> {
-    return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resourceId}`, {params})
-      .pipe(
-        this.errorHandler.notifyOnError(`Can't load resource ${resourceId}.`),
-        pluck('resource'),
-        map((resource) => new EntityModel(resourceId, resource))
-      );
+  getResource(resourceId: string, realmId = null, params = {}): Observable<EntityModel> {
+    return this.http.get<any>(
+      `${environment.damApiUrl}/${realmId || realmIdPlaceholder}/resources/${resourceId}`,
+      {params}
+    ).pipe(
+      this.errorHandler.notifyOnError(`Can't load resource ${resourceId}.`),
+      pluck('resource'),
+      map((resource) => new EntityModel(resourceId, resource))
+    );
   }
 
 }
