@@ -15,6 +15,12 @@
 <ddap-main>
   <ddap-persona-form #personaForm
                      [persona]="persona">
+
+    <mat-error *ngIf="showValidationError"
+               class="ddap-form-validation-msg">
+      Please fix invalid fields (marked red) before saving the persona.
+    </mat-error>
+
     <button mat-flat-button
             (click)="save()"
             data-se="btn-save"

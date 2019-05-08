@@ -19,6 +19,7 @@ export class PersonaManageComponent implements OnInit {
   personaForm: PersonaFormComponent;
 
   persona: TestPersona;
+  showValidationError = false;
 
   constructor(private personaService: PersonaService,
               private router: Router,
@@ -31,14 +32,19 @@ export class PersonaManageComponent implements OnInit {
   }
 
   save() {
+    this.showValidationError = false;
+
     if (!this.personaForm.form.valid) {
+      this.showValidationError = true;
       return;
     }
 
     const personaModel: EntityModel = this.personaForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.personaService.save(personaModel.name, change)
-      .subscribe(() => this.router.navigate(['../..'], {relativeTo: this.route}),
-        (err) => this.personaForm.accessForm.validateAccessFields(personaModel.name, err));
+      .subscribe(
+        () => this.router.navigate(['../..'], {relativeTo: this.route}),
+        (err) => this.personaForm.accessForm.validateAccessFields(personaModel.name, err)
+      );
   }
 }
