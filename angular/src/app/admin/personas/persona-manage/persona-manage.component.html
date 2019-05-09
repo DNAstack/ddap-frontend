@@ -20,14 +20,16 @@
                class="ddap-form-validation-msg">
       Please fix invalid fields (marked red) before saving the persona.
     </mat-error>
-
-    <button mat-flat-button
-            (click)="save()"
-            data-se="btn-save"
-            type="submit"
-            color="primary"
-            class="uppercase">
-      Add Test Persona
-    </button>
   </ddap-persona-form>
 </ddap-main>
+
+<div class="ddap-form-toolbar">
+  <button mat-flat-button
+          (click)="save()"
+          data-se="btn-save"
+          type="submit"
+          color="primary"
+          class="uppercase">
+    Add Test Persona
+  </button>
+</div>
