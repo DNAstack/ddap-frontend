@@ -35,6 +35,8 @@ import { ClaimGroupComponent } from './claim-group/claim-group.component';
 import { FocusedDirective } from './focused.directive';
 import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
+import { MetadataFilterPipe } from './metadata-list/metadata-filter.pipe';
+import { MetadataListComponent } from './metadata-list/metadata-list.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
 import { RealmChangeConfirmationDialogComponent } from './realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
 import { RealmInputComponent } from './realm-input/realm-input.component';
@@ -55,6 +57,8 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     FocusedDirective,
     RealmInputComponent,
     RealmChangeConfirmationDialogComponent,
+    MetadataListComponent,
+    MetadataFilterPipe,
   ],
   imports: [
     AppRoutingModule,
@@ -130,6 +134,8 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     FocusedDirective,
     RealmInputComponent,
     RealmChangeConfirmationDialogComponent,
+    MetadataListComponent,
+    MetadataFilterPipe,
   ],
 })
 export class SharedModule {

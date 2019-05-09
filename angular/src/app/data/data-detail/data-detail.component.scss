@@ -1,23 +1,6 @@
 @import "~src/styles/modules/colors";
 @import "~@angular/material/theming";
 
-table, p {
-  color: $navbar-font-subtle-color;
-}
-
-table {
-  margin-top: 2rem;
-
-  tr {
-    margin-bottom: 2rem;
-  }
-
-  td:first-child {
-    text-transform: capitalize;
-    padding-right: 3rem;
-  }
-}
-
 mat-list.mat-list-base .mat-list-item .mat-list-item-content {
   padding: 2rem 0;
 
