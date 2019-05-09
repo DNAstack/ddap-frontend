@@ -1,0 +1,12 @@
+<table class="ddap-resource-metadata">
+  <tr *ngFor="let object of metadata | keyvalue | metadataFilter: includeFields">
+    <td>{{ object.key }}</td>
+    <ng-container *ngIf="!object.value.startsWith('http'); else anchorLink">
+      <td>{{ object.value }}</td>
+    </ng-container>
+    <ng-template #anchorLink>
+      <a [href]="object.value">{{ object.value }}</a>
+    </ng-template>
+  </tr>
+</table>
+

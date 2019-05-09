@@ -1,0 +1,25 @@
+@import "../../../styles/modules/colors";
+
+table.ddap-resource-metadata {
+  margin-top: 2rem;
+
+  tr {
+    margin-bottom: 2rem;
+  }
+
+  td:first-child {
+    padding-right: 3rem;
+    color: $color-grey;
+  }
+
+  td {
+    padding-bottom: 1rem;
+    text-transform: capitalize;
+  }
+
+  a {
+    text-transform: lowercase;
+    text-decoration: none;
+    color: $link-color;
+  }
+}
