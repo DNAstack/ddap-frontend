@@ -10,22 +10,26 @@
   <div *ngIf="entity">
     <ddap-persona-form #personaForm
                        [persona]="entity">
-      <button mat-flat-button
-              (click)="update()"
-              data-se="btn-update"
-              type="submit"
-              color="primary"
-              class="uppercase">
-        Save
-      </button>
-      <button mat-flat-button
-              (click)="delete()"
-              data-se="btn-delete"
-              type="button"
-              color="warn"
-              class="uppercase">
-        Delete
-      </button>
     </ddap-persona-form>
   </div>
 </ddap-main>
+
+<div class="ddap-form-toolbar">
+  <button mat-flat-button
+          (click)="delete()"
+          data-se="btn-delete"
+          type="button"
+          color="warn"
+          class="uppercase">
+    Delete
+  </button>
+
+  <button mat-flat-button
+          (click)="update()"
+          data-se="btn-update"
+          type="submit"
+          color="primary"
+          class="uppercase">
+    Save
+  </button>
+</div>

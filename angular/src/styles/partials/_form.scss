@@ -57,6 +57,17 @@ form.ddap-form {
   }
 }
 
+.ddap-form-toolbar {
+  text-align: right;
+  margin-left: -2rem;
+  padding: 1rem 2rem;
+  width: 100%;
+  background: $color-grey-light;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
 @media (max-width: 1600px) {
   form.ddap-form {
     width: 100%;
