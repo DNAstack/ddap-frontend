@@ -47,6 +47,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
         adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
+        adminManagePage.closeAutocompletes();
         adminManagePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-value"));
         adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
         adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");

@@ -2,10 +2,8 @@ package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
 import lombok.Getter;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -34,7 +32,8 @@ public class AdminManagePage {
     }
 
     public void fillFieldFromDropdown(By fieldSelector, String fieldValue) {
-        driver.findElement(fieldSelector).click();
+        WebElement field = driver.findElement(fieldSelector);
+        field.sendKeys(Keys.ENTER);
 
         List<WebElement> options = driver.findElements(By.tagName("mat-option"));
 
@@ -54,11 +53,18 @@ public class AdminManagePage {
     }
 
     public void clickCheckbox(By checkboxSelector) {
-        driver.findElement(checkboxSelector).click();
+        WebElement checkbox = driver.findElement(checkboxSelector);
+
+        this.scrollTo(checkbox);
+
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(checkbox));
+        checkbox.click();
     }
 
     public void clickButton(By selector) {
-        driver.findElement(selector).click();
+        WebElement button = driver.findElement(selector);
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(button));
+        button.click();
     }
 
     public void closeAutocompletes() {
@@ -66,27 +72,33 @@ public class AdminManagePage {
     }
 
     public AdminListPage saveEntity() {
-        driver.findElement(DdapBy.se("btn-save"))
-                .click();
+        this.clickButton(DdapBy.se("btn-save"));
 
         return new AdminListPage(driver);
     }
 
     public AdminListPage updateEntity() {
-        driver.findElement(DdapBy.se("btn-update"))
-                .click();
+        this.clickButton(DdapBy.se("btn-update"));
 
         return new AdminListPage(driver);
     }
 
     public AdminListPage deleteEntity() {
-        driver.findElement(DdapBy.se("btn-delete"))
-                .click();
+        this.clickButton(DdapBy.se("btn-delete"));
 
         return new AdminListPage(driver);
     }
 
     public boolean hasErrors() {
         return !driver.findElements(By.tagName("mat-error")).isEmpty();
+    }
+
+    private void scrollTo(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

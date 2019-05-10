@@ -17,6 +17,7 @@
 <div class="ddap-form-toolbar">
   <button mat-flat-button
           (click)="delete()"
+          [disabled]="!entity"
           data-se="btn-delete"
           type="button"
           color="warn"
@@ -26,6 +27,7 @@
 
   <button mat-flat-button
           (click)="update()"
+          [disabled]="!entity"
           data-se="btn-update"
           type="submit"
           color="primary"
