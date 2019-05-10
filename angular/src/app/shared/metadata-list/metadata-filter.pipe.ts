@@ -20,15 +20,17 @@ export class MetadataFilterPipe implements PipeTransform {
 
     return input
       .filter((keyvalue) => this.shouldBeIncluded(keyvalue.key, includeFields))
-      .map((keyvalue) => {
-        if (keyvalue.key in metadataTranslations) {
-          keyvalue.key = metadataTranslations[keyvalue.key];
-        }
-        return keyvalue;
-      });
+      .map(this.translateMetadataKey);
   }
 
   private shouldBeIncluded = (fieldKey: string, includeFields: string[]) =>
     (includeFields && includeFields.includes(fieldKey)) || !nonMetadataFields.includes(fieldKey)
+
+  private translateMetadataKey(keyvalue: { [key: string]: string }) {
+    if (keyvalue.key in metadataTranslations) {
+      keyvalue.key = metadataTranslations[keyvalue.key];
+    }
+    return keyvalue;
+  }
 
 }
