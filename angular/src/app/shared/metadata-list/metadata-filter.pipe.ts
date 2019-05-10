@@ -28,7 +28,7 @@ export class MetadataFilterPipe implements PipeTransform {
       });
   }
 
-  shouldBeIncluded = (fieldKey: string, includeFields: string[]) =>
+  private shouldBeIncluded = (fieldKey: string, includeFields: string[]) =>
     (includeFields && includeFields.includes(fieldKey)) || !nonMetadataFields.includes(fieldKey)
 
 }
