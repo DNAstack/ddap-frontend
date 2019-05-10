@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import TestPersona = dam.v1.TestPersona;
+import { FormValidationService } from '../../../shared/form-validation.service';
 import { dam } from '../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';
 import { PersonaService } from '../personas.service';
-import TestPersona = dam.v1.TestPersona;
 
 @Component({
   selector: 'ddap-persona-manage',
@@ -23,7 +24,8 @@ export class PersonaManageComponent implements OnInit {
 
   constructor(private personaService: PersonaService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private formValidation: FormValidationService) {
 
   }
 
@@ -35,6 +37,7 @@ export class PersonaManageComponent implements OnInit {
     this.submitted = false;
 
     if (!this.personaForm.form.valid) {
+      this.formValidation.forceValidate(this.personaForm.form);
       this.submitted = true;
       return;
     }

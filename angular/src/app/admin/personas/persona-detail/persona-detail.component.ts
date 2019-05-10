@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { FormValidationService } from '../../../shared/form-validation.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { EntityModel } from '../../shared/entity.model';
@@ -19,12 +20,14 @@ export class PersonaDetailComponent extends EntityDetailBase<PersonaService> imp
 
   constructor(route: ActivatedRoute,
               personaService: PersonaService,
-              private router: Router) {
+              private router: Router,
+              private formValidation: FormValidationService) {
     super(route, personaService, 'personaName');
   }
 
   update() {
     if (!this.personaForm.form.valid) {
+      this.formValidation.forceValidate(this.personaForm.form);
       return;
     }
 
