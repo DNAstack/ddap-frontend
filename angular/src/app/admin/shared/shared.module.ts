@@ -4,6 +4,7 @@ import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 import { SharedModule } from '../../shared/shared.module';
 
+import { AccessTableComponent } from './access-table/access-table.component';
 import { EntityAddComponent } from './entity-add/entity-add.component';
 import { EntityListComponent } from './entity-list/entity-list.component';
 import { EntityManageFormComponent } from './entity-manage-form/entity-manage-form.component';
@@ -18,6 +19,7 @@ import { TestFormComponent } from './test-form/test-form.component';
     EntityAddComponent,
     EntityManageFormComponent,
     OptionEditableListComponent,
+    AccessTableComponent,
     TestFormComponent,
   ],
   imports: [
