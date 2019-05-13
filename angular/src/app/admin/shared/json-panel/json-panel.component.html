@@ -33,6 +33,8 @@
                  [data]="error"></json-editor>
   </ng-container>
 
+  <ddap-access-table [resource]="entity"></ddap-access-table>
+
   <ddap-test-form *ngIf="isResource && state !== ViewState.Viewing"
                   (change)="validateTest()"
                   [resource]="entity"></ddap-test-form>

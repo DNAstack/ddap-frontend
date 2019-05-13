@@ -1,0 +1,21 @@
+<table mat-table *ngIf="access">
+  <thead>
+  <tr>
+    <th>
+      <mat-icon class="icon icon-identity"></mat-icon>
+      Access
+    </th>
+    <th *ngFor="let view of views">{{ view }}</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr *ngFor="let persona of personas">
+    <td>{{ persona }}</td>
+    <td *ngFor="let view of views">
+      <mat-icon *ngIf="hasAccess(persona, view)" color="primary">done</mat-icon>
+      <mat-icon *ngIf="!hasAccess(persona, view)">lock</mat-icon>
+    </td>
+  </tr>
+  </tbody>
+</table>
