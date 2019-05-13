@@ -1,5 +1,10 @@
 server:
-  port: 8085
+  # Google Cloud Run tells us where to listen using the PORT environment variable.
+  # Our k8s deployments use the Spring Boot name, SERVER_PORT.
+  # The following line allows either PORT or SERVER_PORT to specify the port the service listens on.
+  # If neither is specified, the default port will be 8085. This is a good default for local development.
+  # If both are specified (not recommended) SERVER_PORT will take precedence.
+  port: ${PORT:8085}
 
 dam:
   base-url: http://localhost:3000/
