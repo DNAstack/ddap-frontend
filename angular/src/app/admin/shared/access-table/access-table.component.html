@@ -1,21 +1,44 @@
-<table mat-table *ngIf="accessMatrix">
-  <thead>
-  <tr>
-    <th>
-      <mat-icon class="icon icon-identity"></mat-icon>
+<table mat-table
+       [dataSource]="accessDatatable">
+  <ng-container matColumnDef="persona">
+    <th mat-header-cell
+        *matHeaderCellDef>
+      <mat-icon class="icon icon-identity">
+      </mat-icon>
       Access
     </th>
-    <th *ngFor="let view of views">{{ view }}</th>
-  </tr>
-  </thead>
-
-  <tbody>
-  <tr *ngFor="let persona of personas">
-    <td>{{ persona }}</td>
-    <td *ngFor="let view of views">
-      <mat-icon *ngIf="hasAccess(persona, view)" color="primary">done</mat-icon>
-      <mat-icon *ngIf="!hasAccess(persona, view)">lock</mat-icon>
+    <td mat-cell
+        *matCellDef="let element">
+      {{ element.persona }}
     </td>
+  </ng-container>
+
+  <ng-container *ngFor="let access of accessList"
+                [matColumnDef]="access">
+
+    <th mat-header-cell
+        *matHeaderCellDef>
+      {{ access.split('/')[0] }}
+      <br>
+      {{ access.split('/')[1] }}
+    </th>
+    <td mat-cell
+        *matCellDef="let element">
+      <mat-icon *ngIf="element[access]"
+                color="primary">
+        done
+      </mat-icon>
+      <mat-icon *ngIf="!element[access]"
+                class="lock">
+        lock
+      </mat-icon>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row
+      *matHeaderRowDef="displayedColumns">
   </tr>
-  </tbody>
+  <tr mat-row
+      *matRowDef="let row; columns: displayedColumns;">
+  </tr>
 </table>

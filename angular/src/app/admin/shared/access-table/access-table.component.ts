@@ -21,11 +21,11 @@ export class AccessTableComponent implements OnChanges {
   @Input()
   resource: any;
 
-  views: string[];
-  personas: string[];
-  accessMatrix;
+  accessDatatable: any[] = [];
+  displayedColumns = [];
+  accessList = [];
 
-  private personas$: Observable<any>;
+  private readonly personas$: Observable<any>;
 
   constructor(private personaService: PersonaService,
               private resourceService: ResourceService) {
@@ -46,31 +46,30 @@ export class AccessTableComponent implements OnChanges {
     zip(this.personas$, dryRun$, of(accesses)).pipe(
       take(1)
     ).subscribe(([personas, dryRunDto, views]) => {
-      // console.log('test', test);
       this.setAccessMatrixProperties(personas, views, dryRunDto);
       });
   }
 
-  hasAccess(persona, access) {
-    return _get(this.accessMatrix, `[${persona}][${access}]`, false);
+  setAccessMatrixProperties(personas: string[], accessList: string[], {error}: any) {
+    this.accessDatatable = personas
+      .reduce((dataTable, persona) => this.buildAccessMatrix(dataTable, error, persona), []);
+
+    this.accessList = accessList;
+    this.displayedColumns = ['persona', ...accessList];
   }
 
-  setAccessMatrixProperties(personas: string[], views: string[], {error}: any) {
-    this.accessMatrix = personas
-      .reduce((accessMatrix, persona) => this.buildAccessMatrix(error, accessMatrix, persona), {});
+  private buildAccessMatrix(dataTable, error, persona) {
+    const row = {
+      persona: persona,
+    };
 
-    this.views = views;
-    this.personas = personas;
-  }
-
-  private buildAccessMatrix(error, matrix, persona) {
     const accesses = _get(error, `testPersonas[${persona}].resources[${this.resource.name}].access`, []);
-
     accesses.forEach((access) => {
-      _set(matrix, `[${persona}][${access}]`, true);
+      _set(row, `[${access}]`, true);
     });
 
-    return matrix;
+    dataTable.push(row);
+    return dataTable;
   }
 
   private buildAccessList(viewNames, resource): string[] {
@@ -97,8 +96,8 @@ export class AccessTableComponent implements OnChanges {
 
         return this.resourceService.update(this.resource.name, change);
       }),
-      catchError((e) => {
-        return of(e);
+      catchError((errorDto) => {
+        return of(errorDto);
       })
     );
   }
