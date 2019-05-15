@@ -1,0 +1,96 @@
+<form class="ddap-form"
+      novalidate
+      [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Name"
+             formControlName="id"
+             data-se="inp-id"
+             required>
+      <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
+    </mat-form-field>
+  </div>
+
+  <h3>
+    <mat-icon class="icon icon-trusted"></mat-icon>
+    <span>Sources</span>
+
+    <div>
+      <button mat-button
+              color="primary"
+              class="uppercase"
+              type="button"
+              data-se="btn-add-source"
+              (click)="addSource()">
+        Add Source
+      </button>
+    </div>
+  </h3>
+
+  <div *ngFor="let source of sources.controls; let i=index"
+       formArrayName="sources">
+    <mat-card [formGroupName]="i">
+      <div class="row">
+        <mat-form-field class="col">
+          <input matInput
+                 formControlName="source"
+                 placeholder="Source"
+                 data-se="inp-source"
+                 required>
+        </mat-form-field>
+      </div>
+
+      <div class="footer">
+        <button mat-button
+                type="button"
+                color="warn"
+                class="uppercase"
+                (click)="removeSource(i)">
+          Remove Source
+        </button>
+      </div>
+    </mat-card>
+  </div>
+
+  <h3>
+    <mat-icon class="icon icon-claims"></mat-icon>
+    <span>Claims</span>
+
+    <div>
+      <button mat-button
+              color="primary"
+              class="uppercase"
+              type="button"
+              data-se="btn-add-claim"
+              (click)="addClaim()">
+        Add Claim
+      </button>
+    </div>
+  </h3>
+
+  <div *ngFor="let claim of claims.controls; let i=index"
+       formArrayName="claims">
+    <mat-card [formGroupName]="i">
+      <div class="row">
+        <mat-form-field class="col">
+          <input matInput
+                 formControlName="claim"
+                 placeholder="Claim"
+                 data-se="inp-claim"
+                 required>
+        </mat-form-field>
+      </div>
+
+      <div class="footer">
+        <button mat-button
+                type="button"
+                color="warn"
+                class="uppercase"
+                (click)="removeClaim(i)">
+          Remove Claim
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</form>
