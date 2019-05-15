@@ -24,6 +24,7 @@ export class AccessTableComponent implements OnChanges {
   accessDatatable: any[] = [];
   displayedColumns = [];
   accessList = [];
+  viewNameDict = {};
 
   private readonly personas$: Observable<any>;
 
@@ -43,11 +44,22 @@ export class AccessTableComponent implements OnChanges {
     const accesses = this.buildAccessList(viewNames, resource);
     const dryRun$ = this.dryRun(this.personas$);
 
+    this.viewNameDict = this.buildViewNameDict(resource);
+
     zip(this.personas$, dryRun$, of(accesses)).pipe(
       take(1)
     ).subscribe(([personas, dryRunDto, views]) => {
       this.setAccessMatrixProperties(personas, views, dryRunDto);
       });
+  }
+
+  getViewName(access: string) {
+    const viewId = access.split('/')[0];
+    return this.viewNameDict[viewId];
+  }
+
+  getRole(access: string) {
+    return access.split('/')[1];
   }
 
   setAccessMatrixProperties(personas: string[], accessList: string[], {error}: any) {
@@ -82,6 +94,16 @@ export class AccessTableComponent implements OnChanges {
 
       return [...access, ...newAccess];
     }, []);
+  }
+
+  private buildViewNameDict(resource: object): object {
+    const views = _get(resource, 'dto.views');
+    const viewsEntries = Object.entries(views);
+
+    return viewsEntries.reduce((sum, [viewName, viewDto]) => {
+      sum[viewName] = _get(viewDto, 'ui.label');
+      return sum;
+    }, {});
   }
 
   private dryRun(personas$: Observable<any>): Observable<any> {
