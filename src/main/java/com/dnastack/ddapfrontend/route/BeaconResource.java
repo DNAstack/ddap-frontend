@@ -87,17 +87,6 @@ class BeaconResource {
                 .orElse(Flux.empty());
     }
 
-    /**
-     * 1. Get the list of beacons with their names.
-     * 2. Build up a list of beacon responses with their names.
-     * 3. Pass this to getAuthTokens to populate
-     * 4. We finally return this to the user
-     * @param realm
-     * @param resource
-     * @param beaconRequest
-     * @param damToken
-     * @return
-     */
     private Flux<ExternalBeaconQueryResult> handleBeaconQuery(String realm,
                                                               Map.Entry<String, ResourceModel> resource,
                                                               BeaconRequestModel beaconRequest,
