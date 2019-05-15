@@ -1,3 +1,8 @@
 .ddap-form-validation-msg {
   margin-top: 1rem;
+  display: none;
+}
+
+.ddap-form-validation-msg.visible {
+  display: block;
 }
