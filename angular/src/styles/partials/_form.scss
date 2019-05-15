@@ -31,6 +31,10 @@ form.ddap-form {
     }
   }
 
+  mat-form-field input[readonly] {
+    color: $color-grey;
+  }
+
   button[type=submit] {
     margin-top: 2.5rem;
   }

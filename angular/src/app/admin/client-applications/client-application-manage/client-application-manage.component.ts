@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { FormValidationService } from '../../../shared/form-validation.service';
+import { ConfigModificationObject } from '../../shared/configModificationObject';
+import { EntityModel } from '../../shared/entity.model';
+import { ClientApplicationFormComponent } from '../client-application-form/client-application-form.component';
 import { ClientApplicationService } from '../client-applications.service';
 
 @Component({
@@ -10,15 +14,31 @@ import { ClientApplicationService } from '../client-applications.service';
 })
 export class ClientApplicationManageComponent {
 
+  @ViewChild(ClientApplicationFormComponent)
+  clientApplicationForm: ClientApplicationFormComponent;
+
+  submitted = false;
+
   constructor(
     public service: ClientApplicationService,
     private router: Router,
-    private route: ActivatedRoute
-  ) {
+    private route: ActivatedRoute,
+    private formValidation: FormValidationService) {
+
   }
 
-  save(id, change) {
-    this.service.save(id, change)
-      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
+  save() {
+    if (!this.clientApplicationForm.form.valid) {
+      this.formValidation.forceValidate(this.clientApplicationForm.form);
+      this.submitted = true;
+      return;
+    }
+
+    const clientApplication: EntityModel = this.clientApplicationForm.getModel();
+    const change = new ConfigModificationObject(clientApplication.dto, {});
+    this.service.save(clientApplication.name, change)
+      .subscribe(
+        () => this.router.navigate(['../..'], {relativeTo: this.route})
+      );
   }
 }
