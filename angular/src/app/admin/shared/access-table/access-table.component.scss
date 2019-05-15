@@ -18,6 +18,10 @@ table {
       vertical-align: middle;
       color: $color-grey;
     }
+
+    span:last-child {
+      font-weight: 300;
+    }
   }
 
   th:first-child {
