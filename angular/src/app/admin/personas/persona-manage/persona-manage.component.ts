@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import TestPersona = dam.v1.TestPersona;
@@ -18,6 +18,9 @@ export class PersonaManageComponent implements OnInit {
 
   @ViewChild(PersonaFormComponent)
   personaForm: PersonaFormComponent;
+
+  @ViewChild('formError')
+  formError: ElementRef;
 
   persona: TestPersona;
   submitted = false;
@@ -39,6 +42,13 @@ export class PersonaManageComponent implements OnInit {
     if (!this.personaForm.form.valid) {
       this.formValidation.forceValidate(this.personaForm.form);
       this.submitted = true;
+      setTimeout(() => {
+        this.formError.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 0);
+
       return;
     }
 
