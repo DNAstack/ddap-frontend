@@ -1,8 +1,24 @@
-<ddap-header [backLink]="['../..']" label="Add Trusted Source">
+<ddap-header [backLink]="['../..']"
+             label="Add Trusted Source">
 </ddap-header>
 
 <ddap-main>
-  <ddap-entity-manage-form [label]="'Trusted Source'"
-                           (submitted)="save($event.id, $event.change)">
-  </ddap-entity-manage-form>
+  <ddap-trusted-sources-form #sourcesForm>
+
+    <mat-error *ngIf="false"
+               class="ddap-form-validation-msg">
+      Please fix invalid fields (marked red) before saving the persona.
+    </mat-error>
+  </ddap-trusted-sources-form>
 </ddap-main>
+
+<div class="ddap-form-toolbar">
+  <button mat-flat-button
+          (click)="save()"
+          data-se="btn-save"
+          type="submit"
+          color="primary"
+          class="uppercase">
+    Add Trusted Sources
+  </button>
+</div>
