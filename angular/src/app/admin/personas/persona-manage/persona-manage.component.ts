@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import TestPersona = dam.v1.TestPersona;
 import { FormValidationService } from '../../../shared/form-validation.service';
 import { dam } from '../../../shared/proto/dam-service';
+import { ScrollService } from '../../../shared/scroll.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';
@@ -28,7 +29,8 @@ export class PersonaManageComponent implements OnInit {
   constructor(private personaService: PersonaService,
               private router: Router,
               private route: ActivatedRoute,
-              private formValidation: FormValidationService) {
+              private formValidation: FormValidationService,
+              private scroll: ScrollService) {
 
   }
 
@@ -42,13 +44,8 @@ export class PersonaManageComponent implements OnInit {
     if (!this.personaForm.form.valid) {
       this.formValidation.forceValidate(this.personaForm.form);
       this.submitted = true;
-      setTimeout(() => {
-        this.formError.nativeElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      }, 0);
 
+      this.scroll.toElement(this.formError);
       return;
     }
 
