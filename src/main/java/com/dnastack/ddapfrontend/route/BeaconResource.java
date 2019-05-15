@@ -1,7 +1,6 @@
 package com.dnastack.ddapfrontend.route;
 
 import com.dnastack.ddapfrontend.beacon.BeaconInfo;
-import com.dnastack.ddapfrontend.beacon.BeaconOrganization;
 import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.beacon.ExternalBeaconQueryResult;
 import com.dnastack.ddapfrontend.client.dam.DamClient;
@@ -31,7 +30,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
 
 import static java.lang.String.format;
@@ -107,24 +105,29 @@ class BeaconResource {
 
         Map<String, ViewModel> views = resource.getValue().getViews();
 
-        //String beaconName = views.get("thousand-genomes").toString(); //getUI().getLabel())
-        //Map<String, BeaconInfo> beaconInfoMap = buildBeaconInfoResponseList(realm);
+        Flux<ViewTokenResponse> beaconViewTokens = Flux.fromIterable(views.entrySet())
+                                                       .flatMap(entry -> getAuthTokens(realm, resource.getKey(), entry, damToken));
 
-        Flux<ViewToken> beaconViewTokens = Flux.fromIterable(views.entrySet())
-                .flatMap(entry -> getAuthTokens(realm, resource.getKey(), entry, damToken));
-
-        Flux<ExternalBeaconQueryResult> beaconRequests = beaconViewTokens.flatMap(viewToken -> {
-            log.debug("About to query: {} beacon at {}", viewToken.getViewId(), viewToken.getUrl());
+        Flux<ExternalBeaconQueryResult> beaconRequests = beaconViewTokens.flatMap(viewTokenResponse -> {
+            log.debug("About to query: {} beacon at {}", viewTokenResponse.getViewId(), viewTokenResponse.getUrl());
             // TODO DISCO-2038 Handle errors and unauthorized requests
+
+            if (!viewTokenResponse.getToken().isPresent()) {
+                String errorMessage = "No view token found for viewID: " + viewTokenResponse.getViewId();
+                String uiLabel = views.get(viewTokenResponse.getViewId()).getLabel();
+                log.info(errorMessage);
+                return Flux.just(externalBeaconQueryResultError(new Throwable(errorMessage)));
+            }
+
             Mono<BeaconInfo> beaconInfoResponse;
 
-            URI beaconRootUri = URI.create(viewToken.getUrl());
-            beaconInfoResponse = beaconInfo(beaconRootUri, viewToken.getToken())
+            URI beaconRootUri = URI.create(viewTokenResponse.getUrl());
+            beaconInfoResponse = beaconInfo(beaconRootUri, viewTokenResponse.getToken().get())
                     .onErrorResume(e -> {
                         return Mono.just(buildBeaconInfoError(e));
                     });
 
-            Mono<BeaconQueryResult> queryResultMono = beaconQuery(beaconRequest, viewToken).onErrorResume(e -> {
+            Mono<BeaconQueryResult> queryResultMono = beaconQuery(beaconRequest, viewTokenResponse).onErrorResume(e -> {
                 /* Handle the error case where there was no response from beacon server */
                 BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
                 String errorMessage = "Server not found: " + e;
@@ -149,10 +152,10 @@ class BeaconResource {
         return beaconRequests;
     }
 
-    private Flux<ViewToken> getAuthTokens(String realm,
-                                          String resourceId,
-                                          Map.Entry<String, ViewModel> view,
-                                          String damToken) {
+    private Flux<ViewTokenResponse> getAuthTokens(String realm,
+                                                  String resourceId,
+                                                  Map.Entry<String, ViewModel> view,
+                                                  String damToken) {
         Map<String, InterfaceModel> interfaces = view.getValue().getInterfaces();
         if (!interfaces.containsKey(BEACON_INTERFACE)) {
             return Flux.empty();
@@ -166,11 +169,11 @@ class BeaconResource {
         try {
             String token = damClient.getAccessTokenForView(damToken, realm, resourceId, view.getKey()).getToken();
 
-            Optional<ViewToken> viewToken = firstUri.map(uri -> ViewToken.builder()
-                                                                         .viewId(view.getKey())
-                                                                         .token(token)
-                                                                         .url(uri)
-                                                                         .build());
+            Optional<ViewTokenResponse> viewToken = firstUri.map(uri -> ViewTokenResponse.builder()
+                                                                                         .viewId(view.getKey())
+                                                                                         .token(Optional.of(token))
+                                                                                         .url(uri)
+                                                                                         .build());
             return Flux.fromStream(viewToken.stream());
 
         } catch (FeignException ex) {
@@ -237,12 +240,12 @@ class BeaconResource {
     }
 
 
-    private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewToken viewToken) {
+    private Mono<BeaconQueryResult> beaconQuery(BeaconRequestModel beaconRequest, ViewTokenResponse viewTokenResponse) {
         return webClient
                 .get()
-                .uri(beaconQueryUrl(viewToken.getUrl() + "/query", beaconRequest))
+                .uri(beaconQueryUrl(viewTokenResponse.getUrl() + "/query", beaconRequest))
                 .header("Authorization",
-                        "Bearer " + viewToken.getToken())
+                        "Bearer " + viewTokenResponse.getToken())
                 .exchange()
                 .flatMap(clientResponse -> {
 
@@ -332,9 +335,10 @@ class BeaconResource {
 
     @Builder
     @Value
-    private static class ViewToken {
+    private static class ViewTokenResponse {
         String viewId;
         String url;
-        String token;
+        Optional<String> token;
+        Optional<Throwable> error;
     }
 }

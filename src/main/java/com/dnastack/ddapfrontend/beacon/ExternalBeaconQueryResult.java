@@ -14,6 +14,7 @@ import java.util.Map;
 public class ExternalBeaconQueryResult {
     @Nullable
     private BeaconInfo beaconInfo;
+    private String uiLabel;
     private Map<String, String> resource = new HashMap<>();
     private String error;
     private Boolean exists;
