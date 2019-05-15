@@ -1,0 +1,47 @@
+<form class="ddap-form"
+      novalidate
+      [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Name"
+             formControlName="id"
+             data-se="inp-id"
+             [readonly]="clientApplication.name.length > 0"
+             required>
+      <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
+    </mat-form-field>
+    <mat-form-field class="col"
+                    formGroupName="ui">
+      <input matInput
+             placeholder="Display Name"
+             formControlName="label"
+             data-se="inp-label"
+             required>
+    </mat-form-field>
+  </div>
+  <div class="row"
+       formGroupName="ui">
+    <mat-form-field class="col">
+      <textarea matInput
+                placeholder="Description"
+                formControlName="description"
+                data-se="inp-description"
+                required>
+      </textarea>
+    </mat-form-field>
+  </div>
+  <div class="row"
+       *ngIf="clientApplication.dto.clientId">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Client Identifier"
+             formControlName="clientId"
+             data-se="inp-client-id"
+             readonly
+             required>
+    </mat-form-field>
+  </div>
+
+  <ng-content></ng-content>
+</form>
