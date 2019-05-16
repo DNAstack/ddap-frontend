@@ -1,6 +1,7 @@
 package com.dnastack.ddapfrontend.route;
 
 import com.dnastack.ddapfrontend.beacon.BeaconInfo;
+import com.dnastack.ddapfrontend.beacon.BeaconInfoReceived;
 import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.beacon.ExternalBeaconQueryResult;
 import com.dnastack.ddapfrontend.client.dam.DamClient;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -108,13 +110,46 @@ class BeaconResource {
                 return Flux.just(externalBeaconQueryResultError(new Throwable(errorMessage)));
             }
 
-            Mono<BeaconInfo> beaconInfoResponse;
+            Mono<BeaconInfoReceived> beaconInfoReceivedMono;
 
             URI beaconRootUri = URI.create(viewTokenResponse.getUrl());
-            beaconInfoResponse = beaconInfo(beaconRootUri, viewTokenResponse.getToken().get())
+            beaconInfoReceivedMono = beaconInfo(beaconRootUri, viewTokenResponse.getToken().get())
                     .onErrorResume(e -> {
                         return Mono.just(buildBeaconInfoError(e));
                     });
+
+            Mono<BeaconInfo> beaconInfoMono = beaconInfoReceivedMono.map(beaconInfoReceived -> {
+
+                ResourceModel resourceModel = resource.getValue();
+                String orgName, name;
+
+                if (!StringUtils.isEmpty(resourceModel.getLabel())) {
+                    orgName = resourceModel.getLabel();
+                } else if (!StringUtils.isEmpty(beaconInfoReceived.getOrganization().getName())) {
+                    orgName = beaconInfoReceived.getOrganization().getName();
+                } else if (!StringUtils.isEmpty(resource.getKey())) {
+                    orgName = resource.getKey();
+                } else {
+                    orgName = "Unknown";
+                }
+
+                if (!StringUtils.isEmpty(resourceModel.getViews().get(viewTokenResponse.getViewId()).getLabel())) {
+                    name = resourceModel.getViews().get(viewTokenResponse.getViewId()).getLabel();
+                } else if (!StringUtils.isEmpty(beaconInfoReceived.getName())) {
+                    name = beaconInfoReceived.getName();
+                } else if (!StringUtils.isEmpty(viewTokenResponse.getViewId())) {
+                    name = viewTokenResponse.getViewId();
+                } else {
+                    name = "Unknown";
+                }
+
+                BeaconInfo beaconInfo = new BeaconInfo();
+                beaconInfo.setOrganization(orgName);
+                beaconInfo.setName(name);
+
+                return beaconInfo;
+            });
+
 
             Mono<BeaconQueryResult> queryResultMono = beaconQuery(beaconRequest, viewTokenResponse).onErrorResume(e -> {
                 /* Handle the error case where there was no response from beacon server */
@@ -126,7 +161,7 @@ class BeaconResource {
                 return errorResult;
             });
             Flux<ExternalBeaconQueryResult> zip = Flux.zip(
-                    beaconInfoResponse,
+                    beaconInfoMono,
                     queryResultMono,
                     (info, result) -> formatBeaconServerPayload(resource, info, result)
             );
@@ -188,7 +223,7 @@ class BeaconResource {
         return handleBeaconQuery(realm, resource, beaconRequest, damToken.get());
     }
 
-    private Mono<BeaconInfo> extractBeaconInfo(ClientResponse clientResponse) {
+    private Mono<BeaconInfoReceived> extractBeaconInfo(ClientResponse clientResponse) {
 
         boolean is2xxResponse = clientResponse.statusCode().is2xxSuccessful();
         boolean hasContentTypeJson = clientResponse.headers().contentType()
@@ -199,11 +234,11 @@ class BeaconResource {
                     .flatMap(errBody -> Mono.error(new IOException("Couldn't read beacon info response: " + errBody)));
         }
 
-        return clientResponse.bodyToMono(BeaconInfo.class);
+        return clientResponse.bodyToMono(BeaconInfoReceived.class);
 
     }
 
-    private Mono<BeaconInfo> beaconInfo(URI rootBeaconUri, String token) {
+    private Mono<BeaconInfoReceived> beaconInfo(URI rootBeaconUri, String token) {
 
         URI beaconUrl = rootBeaconUri.resolve("?access_token=" + token);
 
@@ -214,8 +249,8 @@ class BeaconResource {
                 .flatMap(this::extractBeaconInfo) ;
     }
 
-    private BeaconInfo buildBeaconInfoError(Throwable e) {
-        BeaconInfo beaconInfoError = new BeaconInfo();
+    private BeaconInfoReceived buildBeaconInfoError(Throwable e) {
+        BeaconInfoReceived beaconInfoError = new BeaconInfoReceived();
         String error = "Could not get beacon metadata successfully: " + e;
         beaconInfoError.setError(error);
         return beaconInfoError;
@@ -327,6 +362,7 @@ class BeaconResource {
     private static class ViewTokenResponse {
         String viewId;
         String url;
+        String resourceId;
         Optional<String> token;
         Optional<Throwable> error;
     }
