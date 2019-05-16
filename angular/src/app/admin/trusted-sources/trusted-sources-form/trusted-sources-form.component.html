@@ -47,11 +47,11 @@
 
   <div *ngFor="let source of sources.controls; let i=index"
        formArrayName="sources">
-    <mat-card [formGroupName]="i">
+    <mat-card>
       <div class="row">
         <mat-form-field class="col">
           <input matInput
-                 formControlName="source"
+                 [formControlName]="i"
                  placeholder="Source"
                  data-se="inp-source"
                  required>
@@ -88,11 +88,11 @@
 
   <div *ngFor="let claim of claims.controls; let i=index"
        formArrayName="claims">
-    <mat-card [formGroupName]="i">
+    <mat-card>
       <div class="row">
         <mat-form-field class="col">
           <input matInput
-                 formControlName="claim"
+                 [formControlName]="i"
                  placeholder="Claim"
                  data-se="inp-claim"
                  required>
@@ -110,4 +110,6 @@
       </div>
     </mat-card>
   </div>
+
+  <ng-content></ng-content>
 </form>

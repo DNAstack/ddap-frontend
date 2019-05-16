@@ -1,8 +1,9 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import _get from 'lodash.get';
 
 import { dam } from '../../../shared/proto/dam-service';
-import { EntityModel } from '../../shared/entity.model';
+import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
 import TrustedSource = dam.v1.TrustedSource;
 
 @Component({
@@ -26,10 +27,14 @@ export class TrustedSourcesFormComponent implements OnChanges, OnDestroy {
   }
 
   constructor(private formBuilder: FormBuilder) {
-    this.form = this.buildForm();
+    this.form = this.buildForm(null, this.trustedSource);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges({trustedSource}: SimpleChanges): void {
+    const sourceId: string = _get(trustedSource, 'currentValue.name', '');
+    const sourceDto: TrustedSource = _get(trustedSource, 'currentValue.dto', TrustedSource.create({}));
+
+    this.form = this.buildForm(sourceId, sourceDto);
   }
 
   ngOnDestroy(): void {
@@ -37,7 +42,7 @@ export class TrustedSourcesFormComponent implements OnChanges, OnDestroy {
 
   addSource(): void {
     this.sources.insert(
-      0, this.formBuilder.group({'source': ['']})
+      0, this.formBuilder.control('')
     );
   }
 
@@ -47,7 +52,7 @@ export class TrustedSourcesFormComponent implements OnChanges, OnDestroy {
 
   addClaim(): void {
     this.claims.insert(
-      0, this.formBuilder.group({'claim': ['']})
+      0, this.formBuilder.control('')
     );
   }
 
@@ -56,10 +61,10 @@ export class TrustedSourcesFormComponent implements OnChanges, OnDestroy {
   }
 
   getModel(): EntityModel {
-    const { id, sources, claims, label, description } = this.form.value;
+    const {id, sources, claims, label, description} = this.form.value;
     const trustedSources = TrustedSource.create({
-      claims: claims.map((claim) => claim.claim),
-      sources: sources.map((source) => source.source),
+      claims,
+      sources,
       ui: {
         label,
         description,
@@ -69,13 +74,18 @@ export class TrustedSourcesFormComponent implements OnChanges, OnDestroy {
     return new EntityModel(id, trustedSources);
   }
 
-  private buildForm() {
+  private buildForm(sourceId: string, {ui, sources, claims}: TrustedSource) {
+    const sourcesForm = this.formBuilder.array(sources || []);
+    const claimsForm = this.formBuilder.array(claims || []);
+
     return this.formBuilder.group({
-        id: [''],
-        label: [''],
-        description: [''],
-        sources: this.formBuilder.array([]),
-        claims: this.formBuilder.array([]),
+        id: [{value: sourceId, disabled: !!sourceId}, [
+          Validators.pattern(nameConstraintPattern),
+        ]],
+        label: [_get(ui, 'label')],
+        description: [_get(ui, 'description')],
+        sources: sourcesForm,
+        claims: claimsForm,
       }
     );
   }
