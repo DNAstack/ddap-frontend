@@ -61,6 +61,12 @@ public class AdminManagePage {
         checkbox.click();
     }
 
+    public void enterButton(By selector) {
+        WebElement button = driver.findElement(selector);
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(button));
+        button.sendKeys(Keys.ENTER);
+    }
+
     public void clickButton(By selector) {
         WebElement button = driver.findElement(selector);
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(button));
