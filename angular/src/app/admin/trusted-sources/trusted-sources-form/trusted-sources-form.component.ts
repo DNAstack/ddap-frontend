@@ -2,8 +2,8 @@ import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
 import { dam } from '../../../shared/proto/dam-service';
-import TrustedSource = dam.v1.TrustedSource;
 import { EntityModel } from '../../shared/entity.model';
+import TrustedSource = dam.v1.TrustedSource;
 
 @Component({
   selector: 'ddap-trusted-sources-form',
@@ -56,10 +56,14 @@ export class TrustedSourcesFormComponent implements OnChanges, OnDestroy {
   }
 
   getModel(): EntityModel {
-    const { id, sources, claims } = this.form.value;
+    const { id, sources, claims, label, description } = this.form.value;
     const trustedSources = TrustedSource.create({
       claims: claims.map((claim) => claim.claim),
       sources: sources.map((source) => source.source),
+      ui: {
+        label,
+        description,
+      },
     });
 
     return new EntityModel(id, trustedSources);
@@ -68,6 +72,8 @@ export class TrustedSourcesFormComponent implements OnChanges, OnDestroy {
   private buildForm() {
     return this.formBuilder.group({
         id: [''],
+        label: [''],
+        description: [''],
         sources: this.formBuilder.array([]),
         claims: this.formBuilder.array([]),
       }
