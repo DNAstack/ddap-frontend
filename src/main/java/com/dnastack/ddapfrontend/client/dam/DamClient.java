@@ -31,8 +31,11 @@ public interface DamClient {
 
     @RequestLine("GET /dam/" + API_VERSION + "/{realm}/config")
     @Headers("Authorization: Bearer {damToken}")
-    DamService.DamConfig getConfig(@Param("damToken") String damToken,
-                                          @Param("realm") String realm);
+    DamService.DamConfig getConfig(@Param("damToken") String damToken, @Param("realm") String realm);
 
+
+    @RequestLine("GET /dam/" + API_VERSION + "/{realm}/targetAdapters")
+    @Headers("Authorization: Bearer {damToken}")
+    DamService.TargetAdaptersResponse getTargetAdapters(@Param("damToken") String damToken, @Param("realm") String realm);
 
 }
