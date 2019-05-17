@@ -136,13 +136,21 @@
   </h3>
 
   <div #views>
-    <ng-container *ngIf="resource.dto && resource.dto.views">
-      <ddap-resource-view-form *ngFor="let view of resource.dto.views | asEntityModel"
-                               [view]="view">
+    <ng-template #viewTemplate
+                 let-view>
+      <ddap-resource-view-form [view]="view">
+        <div class="footer">
+          <button mat-button
+                  type="button"
+                  color="warn"
+                  class="uppercase"
+                  (click)="removeView(view)">
+            Remove View
+          </button>
+        </div>
       </ddap-resource-view-form>
-    </ng-container>
+    </ng-template>
   </div>
-
 
   <ng-content></ng-content>
 </form>
