@@ -21,17 +21,8 @@
       </mat-form-field>
     </ng-container>
   </div>
-  <div class="row">
-    <mat-form-field class="col">
-      <input matInput
-             placeholder="Maximum TTL"
-             formControlName="maxTokenTtl"
-             data-se="inp-max-ttl"
-             required>
-    </mat-form-field>
-  </div>
-  <ng-container formGroupName="ui">
-    <div class="row">
+    <div class="row"
+         formGroupName="ui">
       <mat-form-field class="col">
         <textarea matInput
                   placeholder="Description"
@@ -42,27 +33,38 @@
       </mat-form-field>
     </div>
     <div class="row">
-      <mat-form-field class="col">
+      <mat-form-field class="col"
+                      formGroupName="ui">
         <input matInput
                placeholder="Owner"
                formControlName="owner"
                data-se="inp-owner"
                required>
       </mat-form-field>
-      <!--   TODO: year input -> date picker (year selection only)   -->
       <mat-form-field class="col">
         <input matInput
-               placeholder="Year"
-               formControlName="year"
-               data-se="inp-year">
+               placeholder="Maximum TTL"
+               formControlName="maxTokenTtl"
+               data-se="inp-max-ttl"
+               required>
       </mat-form-field>
     </div>
+  <ng-container formGroupName="ui">
     <div class="row">
+      <!--   TODO: year input -> date picker (year selection only)   -->
       <mat-form-field class="col">
         <input matInput
                placeholder="Access"
                formControlName="access"
                data-se="inp-access">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Year"
+               formControlName="year"
+               data-se="inp-year">
       </mat-form-field>
       <mat-form-field class="col">
         <input matInput
@@ -86,8 +88,7 @@
                type="url"
                placeholder="Image URL"
                formControlName="imageUrl"
-               data-se="inp-image-url"
-               required>
+               data-se="inp-image-url">
       </mat-form-field>
     </div>
     <div class="row">

@@ -53,7 +53,7 @@ form.ddap-form {
 
   h3 {
     align-items: center;
-    margin-top: 2.5rem;
+    margin-top: 2rem;
     display: flex;
 
     > span {
@@ -71,6 +71,10 @@ form.ddap-form {
     &.visible {
       display: block;
     }
+  }
+
+  tag-input {
+    padding-bottom: 1.25rem;
   }
 }
 
