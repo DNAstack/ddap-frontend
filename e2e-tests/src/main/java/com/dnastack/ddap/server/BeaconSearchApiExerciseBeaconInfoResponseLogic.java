@@ -27,11 +27,14 @@ public class BeaconSearchApiExerciseBeaconInfoResponseLogic extends AbstractBase
         setupRealmConfig("administrator", realmConfigString, REALM);
     }
 
+    /**
+     * Test to exercise what happens to Beacon Org and name we get no response for beacon metadata (BeaconInfo)
+     * @throws IOException
+     */
     @Test
     public void exerciseMissingBeaconInfo() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
 
-        /* Run the aggregate search query on the realm */
         // @formatter:off
         given()
                     .log().method()
@@ -50,11 +53,14 @@ public class BeaconSearchApiExerciseBeaconInfoResponseLogic extends AbstractBase
     }
 
 
+    /**
+     * Test to exercise what happens to beacon org and name, when there is a missing ui label and view name
+     * @throws IOException
+     */
     @Test
     public void exerciseMissingUiLabelAndMissingViewnameUiLabel() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
 
-        /* Run the aggregate search query on the realm */
         // @formatter:off
         given()
                     .log().method()
