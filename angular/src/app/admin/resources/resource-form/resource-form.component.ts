@@ -86,7 +86,9 @@ export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
     const view = new EntityModel(viewId,  _get(this.views, viewId, null));
     const _id = new Date().getTime().toString();
     this.viewRefs.push(this.container.createEmbeddedView(
-      this.viewTemplateRef, { $implicit: { ...view, _id } }
+      this.viewTemplateRef,
+      { $implicit: { ...view, _id } },
+      0
     ));
   }
 
