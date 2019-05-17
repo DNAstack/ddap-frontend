@@ -31,6 +31,22 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
+    public void addEmptyTrustedSource() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                .goToAdmin(NavItem.TRUSTED_SOURCES);
+
+        AdminManagePage adminManagePage = adminListPage.clickManage();
+
+        adminManagePage.fillField(DdapBy.se("inp-id"), "empty-source");
+        adminManagePage.fillField(DdapBy.se("inp-label"), "empty-source-name");
+        adminManagePage.fillField(DdapBy.se("inp-description"), "empty-source-desc");
+
+        adminListPage = adminManagePage.saveEntity();
+
+        assertThat(adminListPage.getEntityTitles(), hasItem("empty-source-name"));
+    }
+
+    @Test
     public void addTrustedSource() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(NavItem.TRUSTED_SOURCES);
