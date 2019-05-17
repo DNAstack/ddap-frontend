@@ -17,7 +17,7 @@ import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model
 export class ResourceViewFormComponent implements OnInit, OnDestroy {
 
   @Input()
-  view: EntityModel = new EntityModel('', View.create());
+  view: EntityModel;
 
   viewForm: FormGroup;
   templates: EntityModel[];
@@ -43,6 +43,9 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    if (!this.view || !this.view.name) {
+      this.view = new EntityModel('', View.create());
+    }
     const { name, dto } = this.view;
 
     this.viewForm = this.formBuilder.group({
@@ -72,7 +75,6 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.templatesSubscription.unsubscribe();
-    this.viewForm.reset();
   }
 
   isDefaultRole(roleId: string) {

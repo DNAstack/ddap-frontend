@@ -1,18 +1,18 @@
 import {
+  AfterViewInit, ChangeDetectorRef,
   Component,
-  ComponentFactoryResolver, ComponentRef, Input, OnDestroy,
+  ComponentFactoryResolver, EmbeddedViewRef, Input, OnDestroy,
   OnInit,
-  QueryList,
+  QueryList, TemplateRef,
   ViewChild,
   ViewChildren,
   ViewContainerRef
 } from '@angular/core';
-import { sanitizeHtml } from '@angular/core/src/sanitization/sanitization';
-import { Form, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import _get from 'lodash.get';
 
 import { dam } from '../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
-import { ResourceService } from '../resources.service';
 
 import Resource = dam.v1.Resource;
 import { ResourceViewFormComponent } from './resource-view-form/resource-view-form.component';
@@ -23,21 +23,28 @@ import { ResourceViewFormComponent } from './resource-view-form/resource-view-fo
   styleUrls: ['./resource-form.component.scss'],
   entryComponents: [ResourceViewFormComponent],
 })
-export class ResourceFormComponent implements OnInit, OnDestroy {
+export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input()
   resource?: EntityModel = new EntityModel('', Resource.create());
 
   form: FormGroup;
-  viewRefs: ComponentRef<ResourceViewFormComponent>[] = [];
 
+  viewRefs: EmbeddedViewRef<ResourceViewFormComponent>[] = [];
+  @ViewChild('viewTemplate')
+  viewTemplateRef: TemplateRef<any>;
   @ViewChild('views', { read: ViewContainerRef })
   container: ViewContainerRef;
   @ViewChildren(ResourceViewFormComponent)
   viewChildComponents: QueryList<ResourceViewFormComponent>;
 
   constructor(private formBuilder: FormBuilder,
-              private componentFactoryResolver: ComponentFactoryResolver) {
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private cd: ChangeDetectorRef) {
+  }
+
+  get views() {
+    return _get(this.resource, 'dto.views', {});
   }
 
   ngOnInit(): void {
@@ -64,12 +71,28 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     // this.viewRefs.forEach((view) => view.destroy());
-    this.form.reset();
+    // this.form.reset();
   }
 
-  addView() {
-    const view = this.componentFactoryResolver.resolveComponentFactory(ResourceViewFormComponent);
-    this.viewRefs.push(this.container.createComponent(view));
+  ngAfterViewInit(): void {
+    if (!this.views) {
+      return;
+    }
+    Object.keys(this.views).forEach((viewId) => this.addView(viewId));
+    this.cd.detectChanges();
+  }
+
+  addView(viewId?: string) {
+    const view = new EntityModel(viewId,  _get(this.views, viewId, null));
+    const _id = new Date().getTime().toString();
+    this.viewRefs.push(this.container.createEmbeddedView(
+      this.viewTemplateRef, { $implicit: { ...view, _id } }
+    ));
+  }
+
+  removeView({ _id }: any) {
+    const embeddedView = this.viewRefs.find((component) => component.context['$implicit']._id === _id);
+    embeddedView.destroy();
   }
 
   getModel(): EntityModel {
@@ -109,9 +132,6 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
   }
 
   private getViewChildrenForms(): FormGroup[] {
-    if (!this.viewChildComponents.length) {
-      return this.viewRefs.map(view => view.instance.viewForm);
-    }
     return this.viewChildComponents.map(view => view.viewForm);
   }
 
@@ -127,5 +147,4 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
 
     return roles;
   }
-
 }
