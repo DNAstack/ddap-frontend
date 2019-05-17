@@ -7,8 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
-import io.restassured.mapper.factory.Jackson2ObjectMapperFactory;
-import io.restassured.response.ValidatableResponse;
 import lombok.Data;
 import org.junit.Before;
 import org.junit.Test;
@@ -115,14 +113,13 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
 
     @Test
-    public void linkIcLoginPersonaShouldPassLinkScopeForAccountInIcToken() throws Exception {
+    public void linkAndUnlinkAccount() throws Exception {
         String icTokenJwtBeforeLinking = fetchRealPersonaIcToken("mr_hyde", REALM, "link");
         String baseAccountId = JwtTestUtil.getSubject(icTokenJwtBeforeLinking);
 
-        String requestedScope = "link:" + baseAccountId;
-
+        // Link account
         // @formatter:off
-        ValidatableResponse accountLinkingResponse = given()
+        given()
             .log().method()
             .log().cookies()
             .log().uri()
@@ -159,6 +156,50 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
         assertAccountsContainSubject(connectedAccounts, "mr_hyde@era.nih.gov");
         assertAccountsContainSubject(connectedAccounts, "dr_jekyll@faculty.uni-heidelberg.de");
+
+        // Unlink account
+        String icTokenAfterLinking = fetchRealPersonaIcToken("mr_hyde", REALM);
+        // @formatter:off
+        given().log().method()
+               .log().cookies()
+               .log().uri()
+               .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+               .cookie("ic_token", icTokenAfterLinking)
+               .redirects().follow(false)
+               .when()
+               .delete(ddap("/identity/link/mr_hyde@era.nih.gov"))
+               .then()
+               .log().body()
+               .log().ifValidationFails()
+               .statusCode(200);
+        // @formatter:on
+
+        // check that we can query my account, and that accounts are no-longer linked
+        // @formatter:off
+        connectedAccounts = given()
+                .log().method()
+                .log().cookies()
+                .log().uri()
+                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+                .cookie("ic_token", icTokenAfterLinking)
+                .when()
+                .get(icViaDdap("/accounts/-"))
+                .then()
+                .log().body()
+                .log().ifValidationFails()
+                .statusCode(200)
+                .extract()
+                .jsonPath().getList("account.connectedAccounts", IcConnectedAccount.class);
+        // @formatter:on
+
+        assertAccountsContainSubject(connectedAccounts, "dr_jekyll@faculty.uni-heidelberg.de");
+        assertAccountsDoesNotContainSubject(connectedAccounts, "mr_hyde@era.nih.gov");
+    }
+
+    private void assertAccountsDoesNotContainSubject(List<IcConnectedAccount> connectedAccounts, String subject) {
+        assertThat("Connected accounts missing " + subject + ": " + connectedAccounts,
+                   connectedAccounts.stream().anyMatch(account -> account.getProperties().getSubject().equals(subject)),
+                   is(false));
     }
 
     private void assertAccountsContainSubject(List<IcConnectedAccount> connectedAccounts, String subject) {

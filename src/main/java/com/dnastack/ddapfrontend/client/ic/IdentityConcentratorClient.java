@@ -216,4 +216,35 @@ public class IdentityConcentratorClient {
                     }
                 });
     }
+
+    public Mono<String> unlinkAccount(String realm,
+                                      String accountId,
+                                      String accountAccessToken,
+                                      String subjectName) {
+        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/accounts/{accountId}/subjects/{subjectName}" +
+                                                             "?client_id={clientId}" +
+                                                             "&client_secret={clientSecret}");
+
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("accountId", accountId);
+        variables.put("subjectName", subjectName);
+        variables.put("clientId", idpClientId);
+        variables.put("clientSecret", idpClientSecret);
+
+        URI uri = idpBaseUrl.resolve(template.expand(variables));
+        return webClient
+                .delete()
+                .uri(uri)
+                .header("Authorization", "Bearer " + accountAccessToken)
+                .exchange()
+                .flatMap(response -> {
+                    if (response.statusCode().is2xxSuccessful()) {
+                        return Mono.just(format("Successfully unlinked [%s] from account [%s]", subjectName, accountId));
+                    } else {
+                        return response.bodyToMono(String.class)
+                                       .flatMap(errorMessage -> Mono.error(new AccountLinkingFailedException("Unlink failed: " + errorMessage)));
+                    }
+                });
+    }
 }
