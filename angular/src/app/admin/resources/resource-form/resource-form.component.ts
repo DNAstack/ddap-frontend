@@ -56,7 +56,7 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
         tags: [dto.ui.tags || '', []],
         applyUrl: [dto.ui.applyUrl || '', []], // TODO: url validator
         troubleshootUrl: [dto.ui.troubleshootUrl || '', []], // TODO: url validator
-        imageUrl: [dto.ui.imageUrl || '', [Validators.required]], // TODO: url validator
+        imageUrl: [dto.ui.imageUrl || '', []], // TODO: url validator
         infoUrl: [dto.ui.infoUrl || '', []], // TODO: url validator
       }),
     });

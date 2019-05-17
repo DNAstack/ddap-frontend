@@ -20,23 +20,28 @@
   </div>
   <div class="row">
     <mat-form-field class="col">
-      <mat-label>Service Template</mat-label>
-      <mat-select formControlName="serviceTemplate"
-                  (selectionChange)="serviceTemplateChange()">
-        <mat-option *ngFor="let template of templates"
-                    [value]="template.name">
-          {{ template.dto.ui.label }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div class="row">
-    <mat-form-field class="col">
       <input matInput
              placeholder="Version"
              formControlName="version"
              data-se="inp-view-version"
              required>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Audience"
+             formControlName="aud"
+             data-se="inp-view-aud"
+             required>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Geo Location"
+             formControlName="geoLocation"
+             data-se="inp-view-geolocation">
     </mat-form-field>
     <mat-form-field class="col">
       <input matInput
@@ -60,23 +65,6 @@
     </mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field class="col">
-      <input matInput
-             placeholder="Geo Location"
-             formControlName="geoLocation"
-             data-se="inp-view-geolocation">
-    </mat-form-field>
-  </div>
-  <div class="row">
-    <mat-form-field class="col">
-      <input matInput
-             placeholder="Audience"
-             formControlName="aud"
-             data-se="inp-view-aud"
-             required>
-    </mat-form-field>
-  </div>
-  <div class="row">
     <div class="col">
       <tag-input formControlName="contentTypes"
                  secondaryPlaceholder="Add Content Type"
@@ -87,47 +75,27 @@
     </div>
   </div>
 
-  <ng-container *ngIf="selectedTemplate">
-    <h3>
-      <mat-icon class="icon icon-identity"></mat-icon>
-      <span>Roles</span>
-    </h3>
-
-    <div *ngFor="let role of selectedTemplate.dto.roles | keyvalue">
-      <h4>
-      <span>
-        {{ role.value.ui.label }}
-        <mat-chip-list *ngIf="isDefaultRole(role.key)"
-                       [selectable]="false">
-          <mat-chip>Default</mat-chip>
-        </mat-chip-list>
-      </span>
-        <button *ngIf="!isDefaultRole(role.key)"
-                mat-button
-                color="primary"
-                class="uppercase"
-                type="button"
-                data-se="btn-make-default-role"
-                (click)="makeDefaultRole(role.key)">
-          Make Default
-        </button>
-      </h4>
-      <p>{{ role.value.ui.description }}</p>
-      <div class="row"
-           formGroupName="roles">
-        <div class="col"
-             [formGroupName]="role.key">
-          <tag-input formControlName="policies"
-                     secondaryPlaceholder="Add Policy"
-                     placeholder="+ Policy"
-                     editable="true"
-                     modelAsStrings="true">
-          </tag-input>
-        </div>
-      </div>
-    </div>
-
-    <ng-container *ngIf="viewForm.contains('variables')">
+  <h3>
+    <mat-icon class="icon icon-clients"></mat-icon>
+    <span>Service Template</span>
+  </h3>
+  <div class="row">
+    <mat-form-field class="col">
+      <mat-label>Service Template</mat-label>
+      <mat-select formControlName="serviceTemplate"
+                  (selectionChange)="serviceTemplateChange()"
+                  required>
+        <mat-option *ngFor="let template of templates"
+                    [value]="template.name">
+          {{ template.dto.ui.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="ddap-view-service-template"
+       *ngIf="selectedTemplate">
+    <div class="ddap-view-service-template-variables"
+         *ngIf="viewForm.contains('variables')">
       <h3>
         <mat-icon class="icon icon-settings"></mat-icon>
         <span>Target Adapter Variables</span>
@@ -144,8 +112,47 @@
           </mat-form-field>
         </ng-container>
       </div>
-    </ng-container>
-
-  </ng-container>
+    </div>
+    <div class="ddap-view-service-template-roles">
+      <h3>
+        <mat-icon class="icon icon-identity"></mat-icon>
+        <span>Roles</span>
+      </h3>
+      <p>Single role must be set as default</p>
+      <div *ngFor="let role of selectedTemplate.dto.roles | keyvalue">
+        <h4>
+      <span>
+        {{ role.value.ui.label }}
+        <mat-chip-list *ngIf="isDefaultRole(role.key)"
+                       [selectable]="false">
+          <mat-chip>Default</mat-chip>
+        </mat-chip-list>
+      </span>
+          <button *ngIf="!isDefaultRole(role.key)"
+                  mat-button
+                  color="primary"
+                  class="uppercase"
+                  type="button"
+                  data-se="btn-make-default-role"
+                  (click)="makeDefaultRole(role.key)">
+            Make Default
+          </button>
+        </h4>
+        <p>{{ role.value.ui.description }}</p>
+        <div class="row"
+             formGroupName="roles">
+          <div class="col"
+               [formGroupName]="role.key">
+            <tag-input formControlName="policies"
+                       secondaryPlaceholder="Add Policy"
+                       placeholder="+ Policy"
+                       editable="true"
+                       modelAsStrings="true">
+            </tag-input>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </mat-card>
