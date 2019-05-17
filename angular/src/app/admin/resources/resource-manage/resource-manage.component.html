@@ -2,42 +2,17 @@
 </ddap-header>
 
 <ddap-main>
-  <div class="mat-expansion-panel">
-    <h3>Item</h3>
-    <mat-form-field data-se="id-field">
-      <mat-label>Resource ID</mat-label>
-      <input matInput [(ngModel)]="resourceId">
-      <mat-hint>The name by which other config objects refer to this resource</mat-hint>
-    </mat-form-field>
-    <json-editor #itemEditor
-                 data-se="item-editor"
-                 [options]="itemEditorOptions"
-                 (change)="updateItemDto($event)"></json-editor>
-
-    <h3>Test</h3>
-    <json-editor #testEditor
-                 data-se="test-editor"
-                 [options]="testEditorOptions"
-                 (change)="updateTestDto($event)"></json-editor>
-
-    <div *ngIf="errorDto">
-      <h3>Error</h3>
-      <mat-error>
-        <span *ngIf="!errorDto.modification">{{ errorDto }}</span>
-        <span *ngIf="errorDto.modification">Cannot save, please consider using following DTOs:</span>
-      </mat-error>
-      <json-editor *ngIf="errorDto.modification"
-                   [data]="errorDto"
-                   #errorEditor
-                   [options]="errorEditorOptions"></json-editor>
-
-    </div>
-    <mat-action-row>
-      <button mat-flat-button
-              color="primary"
-              (click)="save()"
-              data-se="create-resource">Add Resource
-      </button>
-    </mat-action-row>
-  </div>
+  <ddap-resource-form #resourceForm>
+  </ddap-resource-form>
 </ddap-main>
+
+<div class="ddap-form-toolbar">
+  <button mat-flat-button
+          (click)="save()"
+          data-se="btn-save"
+          type="submit"
+          color="primary"
+          class="uppercase">
+    Add Resource
+  </button>
+</div>

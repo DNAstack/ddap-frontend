@@ -1,0 +1,146 @@
+<form class="ddap-form"
+      novalidate
+      [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Name"
+             formControlName="id"
+             data-se="inp-id"
+             required>
+      <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
+    </mat-form-field>
+    <ng-container formGroupName="ui">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Display Name"
+               formControlName="label"
+               data-se="inp-label"
+               required>
+      </mat-form-field>
+    </ng-container>
+  </div>
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Maximum TTL"
+             formControlName="maxTokenTtl"
+             data-se="inp-max-ttl"
+             required>
+    </mat-form-field>
+  </div>
+  <ng-container formGroupName="ui">
+    <div class="row">
+      <mat-form-field class="col">
+        <textarea matInput
+                  placeholder="Description"
+                  formControlName="description"
+                  data-se="inp-description"
+                  required>
+        </textarea>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Owner"
+               formControlName="owner"
+               data-se="inp-owner"
+               required>
+      </mat-form-field>
+      <!--   TODO: year input -> date picker (year selection only)   -->
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Year"
+               formControlName="year"
+               data-se="inp-year">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Access"
+               formControlName="access"
+               data-se="inp-access">
+      </mat-form-field>
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Size"
+               formControlName="size"
+               data-se="inp-size">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Tags"
+               formControlName="tags"
+               data-se="inp-tags">
+        <mat-hint>Separate tags by comma</mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               type="url"
+               placeholder="Image URL"
+               formControlName="imageUrl"
+               data-se="inp-image-url"
+               required>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               type="url"
+               placeholder="Information URL"
+               formControlName="infoUrl"
+               data-se="inp-info-url">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               type="url"
+               placeholder="Apply URL"
+               formControlName="applyUrl"
+               data-se="inp-apply-url">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               type="url"
+               placeholder="Troubleshoot URL"
+               formControlName="troubleshootUrl"
+               data-se="inp-troubleshoot-url">
+      </mat-form-field>
+    </div>
+  </ng-container>
+
+  <h3>
+    <mat-icon class="icon icon-views"></mat-icon>
+    <span>Views</span>
+    <div>
+      <button mat-button
+              color="primary"
+              class="uppercase"
+              type="button"
+              data-se="btn-add-view"
+              (click)="addView()">
+        Add View
+      </button>
+    </div>
+  </h3>
+
+  <div #views>
+    <ng-container *ngIf="resource.dto && resource.dto.views">
+      <ddap-resource-view-form *ngFor="let view of resource.dto.views | asEntityModel"
+                               [view]="view">
+      </ddap-resource-view-form>
+    </ng-container>
+  </div>
+
+
+  <ng-content></ng-content>
+</form>

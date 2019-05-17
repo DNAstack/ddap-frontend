@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 
+import { FormValidationService } from '../../../shared/form-validation.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
+import { EntityModel } from '../../shared/entity.model';
+import { ResourceFormComponent } from '../resource-form/resource-form.component';
 import { ResourceService } from '../resources.service';
 
 @Component({
@@ -13,60 +14,31 @@ import { ResourceService } from '../resources.service';
 })
 export class ResourceManageComponent implements OnInit {
 
-  errorDto: any;
-  resourceId: string;
-  item: any;
-  test: any;
-
-  errorEditorOptions: JsonEditorOptions;
-  itemEditorOptions: JsonEditorOptions;
-  testEditorOptions: JsonEditorOptions;
-
-  @ViewChild('errorEditor')
-  errorEditor: JsonEditorComponent;
-
-  @ViewChild('itemEditor')
-  itemEditor: JsonEditorComponent;
-
-  @ViewChild('testEditor')
-  testEditor: JsonEditorComponent;
+  @ViewChild(ResourceFormComponent)
+  resourceForm: ResourceFormComponent;
 
   constructor(public resourceService: ResourceService,
               private router: Router,
-              private route: ActivatedRoute) {
-    this.errorEditorOptions = new JsonEditorDefaults();
-    this.itemEditorOptions = new JsonEditorDefaults();
-    this.testEditorOptions = new JsonEditorDefaults();
+              private route: ActivatedRoute,
+              private formValidation: FormValidationService) {
 
-    this.errorEditorOptions.mode = 'code';
-    this.errorEditorOptions.onEditable = () => false;
-
-    this.itemEditorOptions.mode = 'code';
-    this.testEditorOptions.mode = 'code';
   }
 
   ngOnInit() {
   }
 
   save() {
-    const change = new ConfigModificationObject(this.item, this.test);
+    if (!this.resourceForm.form.valid) {
+      this.formValidation.forceValidate(this.resourceForm.form);
+      return;
+    }
 
-    this.resourceService.save(this.resourceId, change).subscribe(
-      () => this.goToResourceList(),
-      ({error}) => this.errorDto = error
-    );
+    const resourceModel: EntityModel = this.resourceForm.getModel();
+    const change = new ConfigModificationObject(resourceModel.dto, {});
+
+    this.resourceService.save(resourceModel.name, change)
+      .subscribe(this.navigateUp);
   }
 
-  updateItemDto(event: any) {
-    this.item = event;
-  }
-
-  updateTestDto(event: any) {
-    this.test = event;
-  }
-
-  private goToResourceList() {
-    this.router.navigate(['../..'], {relativeTo: this.route});
-  }
-
+  private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
 }
