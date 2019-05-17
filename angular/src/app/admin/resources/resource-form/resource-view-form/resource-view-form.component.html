@@ -4,6 +4,7 @@
       <input matInput
              placeholder="Name"
              formControlName="id"
+             [readonly]="view.name.length > 0"
              data-se="inp-view-id"
              required>
     </mat-form-field>
