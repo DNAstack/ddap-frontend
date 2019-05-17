@@ -24,10 +24,12 @@ import {
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TagInputModule } from 'ngx-chips';
 import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppRoutingModule } from '../app-routing.module';
 
+import { AsEntityModelPipe } from './as-entity-model.pipe';
 import { BeaconSearchBarComponent } from './beacon-search-bar/beacon-search-bar.component';
 import { LimitSearchComponent } from './beacon-search-bar/limit-search/limit-search.component';
 import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
@@ -59,6 +61,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     RealmChangeConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
+    AsEntityModelPipe,
   ],
   imports: [
     AppRoutingModule,
@@ -69,6 +72,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     BrowserAnimationsModule,
     ClipboardModule,
     ReactiveFormsModule,
+    TagInputModule,
 
     MatAutocompleteModule,
     MatCardModule,
@@ -101,6 +105,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     BrowserAnimationsModule,
     ClipboardModule,
     ReactiveFormsModule,
+    TagInputModule,
 
     MatAutocompleteModule,
     MatCardModule,
@@ -138,6 +143,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     RealmChangeConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
+    AsEntityModelPipe,
   ],
 })
 export class SharedModule {

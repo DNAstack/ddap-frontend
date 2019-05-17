@@ -43,7 +43,7 @@ export class TestFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const resourceViews = _get(this.resource, 'dto.views', {});
+    const resourceViews = _get(this.resource, 'dto.viewChildComponents', {});
     const viewNames = Object.keys(resourceViews);
 
     this.views = viewNames.reduce((access, viewName) => {

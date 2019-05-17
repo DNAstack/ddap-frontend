@@ -1,0 +1,23 @@
+h4 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+
+  span {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+
+    mat-chip-list {
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+mat-card h3 {
+  margin-top: 1rem;
+}
+
+p {
+  margin-top: 0;
+}

@@ -1,10 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { flatMap } from 'rxjs/operators';
 
+import { FormValidationService } from '../../../shared/form-validation.service';
+import { dam } from '../../../shared/proto/dam-service';
+import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { EntityModel } from '../../shared/entity.model';
+import { ResourceFormComponent } from '../resource-form/resource-form.component';
 import { ResourceService } from '../resources.service';
+import IConfigRequest = dam.v1.IConfigRequest;
+import ConfigRequest = dam.v1.ConfigRequest;
 
 @Component({
   selector: 'ddap-resource-detail',
@@ -13,9 +19,13 @@ import { ResourceService } from '../resources.service';
 })
 export class ResourceDetailComponent extends EntityDetailBase<ResourceService> implements OnInit {
 
-  views: Array<any>;
+  @ViewChild(ResourceFormComponent)
+  resourceForm: ResourceFormComponent;
 
-  constructor(route: ActivatedRoute, resourceService: ResourceService) {
+  constructor(route: ActivatedRoute,
+              resourceService: ResourceService,
+              private router: Router,
+              private formValidation: FormValidationService) {
     super(route, resourceService, 'resourceName');
   }
 
@@ -24,17 +34,26 @@ export class ResourceDetailComponent extends EntityDetailBase<ResourceService> i
       flatMap(params => this.entityService.getResource(params['resourceName']))
     ).subscribe((resource) => {
       this.entity = resource;
-      this.views = this.getViews(resource);
     });
   }
 
-  private getViews(resource: EntityModel) {
-    return Object
-      .keys(resource.dto.views)
-      .map((key) => {
-        return {
-          ...resource.dto.views[key],
-        };
-      });
+  update() {
+    if (!this.resourceForm.form.valid) {
+      this.formValidation.forceValidate(this.resourceForm.form);
+      return;
+    }
+
+    const resourceModel: EntityModel = this.resourceForm.getModel();
+    const change = new ConfigModificationObject(resourceModel.dto, {});
+    this.entityService.update(this.entity.name, change)
+      .subscribe(this.navigateUp);
   }
+
+  delete() {
+    this.entityService.remove(this.entity.name)
+      .subscribe(this.navigateUp);
+  }
+
+  private navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
+
 }

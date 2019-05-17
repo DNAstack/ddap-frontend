@@ -31,6 +31,10 @@ form.ddap-form {
     }
   }
 
+  .row:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+
   mat-form-field input[readonly] {
     color: $color-grey;
   }
@@ -79,6 +83,7 @@ form.ddap-form {
   position: fixed;
   bottom: 0;
   right: 0;
+  z-index: 99;
 }
 
 @media (max-width: 1600px) {
