@@ -47,6 +47,10 @@ export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
     return _get(this.resource, 'dto.views', {});
   }
 
+  get allForms(): FormGroup[] {
+    return [...this.getViewChildrenForms(), this.form];
+  }
+
   ngOnInit(): void {
     const { name, dto } = this.resource;
 
@@ -131,6 +135,12 @@ export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
         ...rest,
       },
     };
+  }
+
+  isValid() {
+    return this.form.valid && this.viewChildComponents
+      .map((viewComponent) => viewComponent.viewForm.valid)
+      .every((valid => valid === true));
   }
 
   private getViewChildrenForms(): FormGroup[] {

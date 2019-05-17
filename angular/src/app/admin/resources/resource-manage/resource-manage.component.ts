@@ -28,8 +28,8 @@ export class ResourceManageComponent implements OnInit {
   }
 
   save() {
-    if (!this.resourceForm.form.valid) {
-      this.formValidation.forceValidate(this.resourceForm.form);
+    if (!this.resourceForm.isValid()) {
+      this.formValidation.forceValidateMultiple(this.resourceForm.allForms);
       return;
     }
 
