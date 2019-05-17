@@ -1,9 +1,6 @@
 package com.dnastack.ddapfrontend.route;
 
-import com.dnastack.ddapfrontend.beacon.BeaconInfo;
-import com.dnastack.ddapfrontend.beacon.BeaconInfoReceived;
-import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
-import com.dnastack.ddapfrontend.beacon.ExternalBeaconQueryResult;
+import com.dnastack.ddapfrontend.beacon.*;
 import com.dnastack.ddapfrontend.client.dam.DamClient;
 import com.dnastack.ddapfrontend.client.dam.DamResource;
 import com.dnastack.ddapfrontend.client.dam.DamResources;
@@ -123,9 +120,11 @@ class BeaconResource {
                 ResourceModel resourceModel = resource.getValue();
                 String orgName, name;
 
+                BeaconOrganization beaconOrganization = beaconInfoReceived.getOrganization();
+
                 if (!StringUtils.isEmpty(resourceModel.getLabel())) {
                     orgName = resourceModel.getLabel();
-                } else if (!StringUtils.isEmpty(beaconInfoReceived.getOrganization().getName())) {
+                } else if (beaconOrganization != null && !StringUtils.isEmpty(beaconOrganization.getName())) {
                     orgName = beaconInfoReceived.getOrganization().getName();
                 } else if (!StringUtils.isEmpty(resource.getKey())) {
                     orgName = resource.getKey();

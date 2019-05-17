@@ -568,6 +568,81 @@
         "troubleshootUrl": "http://troubleshoot.ga4gh-apis.org"
       }
     },
+    "fake-ga4gh": {
+      "views": {
+        "beacon": {
+          "serviceTemplate": "beacon",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "discovery",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [
+            "application/bam"
+          ],
+          "roles": {
+            "discovery": {
+              "policies": [
+                "bona_fide"
+              ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "url": "http://foobar23"
+              }
+            }
+          ],
+          "aud": "https://ga4gh-apis-beacon.dnastack.com",
+          "defaultRole": "discovery",
+          "ui": {
+            "label": ""
+          }
+        },
+        "gcs_read": {
+          "serviceTemplate": "gcs",
+          "version": "Phase 3",
+          "topic": "variants",
+          "partition": "all",
+          "fidelity": "normalized",
+          "geoLocation": "gcp:na/us/us-central1/us-central1-a",
+          "contentTypes": [
+            "application/bam"
+          ],
+          "roles": {
+            "viewer": {
+              "policies": [
+                "bona_fide",
+                "ethics",
+                "GRU"
+              ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "bucket": "ga4gh-apis-controlled-access",
+                "project": "ga4gh-apis"
+              }
+            }
+          ],
+          "defaultRole": "viewer",
+          "ui": {
+            "label": "File Read"
+          }
+        }
+      },
+      "maxTokenTtl": "1h",
+      "ui": {
+        "applyUrl": "http://apply.ga4gh-apis.org",
+        "description": "Google demo of GA4GH APIs",
+        "imageUrl": "https://www.ebi.ac.uk/sites/ebi.ac.uk/files/groups/external_relations/images/wide-imagery/Global_Alliance_news_logo_780x400_0.jpg",
+        "infoUrl": "http://info.ga4gh-apis.org",
+        "label": "",
+        "troubleshootUrl": "http://troubleshoot.ga4gh-apis.org"
+      }
+    },
     "thousand-genomes": {
       "views": {
         "discovery-access": {
@@ -954,6 +1029,13 @@
             "gcs_read/viewer"
           ]
         },
+        "fake-ga4gh": {
+          "access": [
+            "beacon/discovery",
+            "gcs_read/viewer"
+          ]
+        },
+
         "thousand-genomes": {
           "access": [
             "discovery-access/discovery"
@@ -1052,6 +1134,12 @@
             "bq_read_02/viewer",
             "gcs_read_01/viewer",
             "gcs_read_02/viewer"
+          ]
+        },
+        "fake-ga4gh": {
+          "access": [
+            "beacon/discovery",
+            "gcs_read/viewer"
           ]
         },
         "ga4gh-apis": {

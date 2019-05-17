@@ -29,7 +29,7 @@ public class BeaconSearchApiTest2 extends AbstractBaseE2eTest {
     }
 
     @Test
-    public void missingResourceUiLabel() throws IOException {
+    public void exerciseBeaconInfoOrgAndNameChoosing() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
 
         /* Run the aggregate search query on the realm */
@@ -45,10 +45,13 @@ public class BeaconSearchApiTest2 extends AbstractBaseE2eTest {
                     .log().ifValidationFails()
                     .contentType(JSON)
                     .statusCode(200)
-                    .body("[0].beaconInfo.name", equalTo("Cafe Variome Beacon"))
-                    .body("[0].beaconInfo.organization", equalTo("University of Leicester"))
-                    .body("[1].beaconInfo.name", equalTo("Beacon Discovery Access"))
-                    .body("[1].beaconInfo.organization", equalTo("1000 Genomes"));
+                    .body("[1].beaconInfo.name", equalTo("Cafe Variome Beacon"))
+                    .body("[1].beaconInfo.organization", equalTo("University of Leicester"))
+                    .body("[0].beaconInfo.name", equalTo("beacon"))
+                    .body("[0].beaconInfo.organization", equalTo("fake-ga4gh"))
+                    .body("[2].beaconInfo.name", equalTo("Beacon Discovery Access"))
+                    .body("[2].beaconInfo.organization", equalTo("1000 Genomes"));
         // @formatter:on
     }
+
 }
