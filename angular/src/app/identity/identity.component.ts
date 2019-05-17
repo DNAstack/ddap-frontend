@@ -65,6 +65,10 @@ export class IdentityComponent implements OnInit {
     );
   }
 
+  unlinkConnectedAccount(account: Account) {
+    this.identityService.unlinkConnectedAccount(account);
+  }
+
   private extractClaimsUnderKey(claimKey: string, claims: any[]): GA4GHClaim[] {
     return claims.map((claim) => {
       claim.claimName = claimKey;
@@ -79,5 +83,4 @@ export class IdentityComponent implements OnInit {
       ? identityProviders[provider].imagePath
       : identityProviders.defaultImagePath;
   }
-
 }
