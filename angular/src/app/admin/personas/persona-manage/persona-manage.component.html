@@ -16,8 +16,8 @@
   <ddap-persona-form #personaForm
                      [persona]="persona">
 
-    <mat-error #formError
-               [class.visible]="submitted && personaForm.form.invalid"
+    <mat-error #formMatError
+               [class.visible]="formError.showError"
                class="ddap-form-validation-msg">
       Please fix invalid fields (marked red) before saving the persona.
     </mat-error>

@@ -4,7 +4,8 @@
 
 <ddap-main>
   <ddap-trusted-sources-form>
-    <mat-error *ngIf="submitted && trustedSourcesForm.form.invalid"
+    <mat-error #formMatError
+               [class.visible]="formError.showError"
                class="ddap-form-validation-msg">
       Please fix invalid fields (marked red) before saving the persona.
     </mat-error>

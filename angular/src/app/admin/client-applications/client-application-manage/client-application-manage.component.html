@@ -3,9 +3,10 @@
 
 <ddap-main>
   <ddap-client-application-form #clientApplicationForm>
-    <mat-error *ngIf="submitted && clientApplicationForm.form.invalid"
+    <mat-error #formMatError
+               [class.visible]="formError.showError"
                class="ddap-form-validation-msg">
-      Please fix invalid fields (marked red) before saving the persona.
+      Please fix invalid fields (marked red) before saving the client application.
     </mat-error>
   </ddap-client-application-form>
 </ddap-main>
