@@ -59,6 +59,15 @@ form.ddap-form {
       margin-left: 1rem;
     }
   }
+
+  .ddap-form-validation-msg {
+    margin-top: 1rem;
+    display: none;
+
+    &.visible {
+      display: block;
+    }
+  }
 }
 
 .ddap-form-toolbar {

@@ -1,10 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { FormValidationService } from '../../../shared/form-validation.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { EntityModel } from '../../shared/entity.model';
+import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { ClientApplicationFormComponent } from '../client-application-form/client-application-form.component';
 import { ClientApplicationService } from '../client-applications.service';
 
@@ -12,22 +12,25 @@ import { ClientApplicationService } from '../client-applications.service';
   selector: 'ddap-client-application-detail',
   templateUrl: './client-application-detail.component.html',
   styleUrls: ['./client-application-detail.component.scss'],
+  providers: [FormErrorScrollService],
 })
 export class ClientApplicationDetailComponent extends EntityDetailBase<ClientApplicationService> {
 
   @ViewChild(ClientApplicationFormComponent)
   clientApplicationForm: ClientApplicationFormComponent;
 
+  @ViewChild('formMatError')
+  formErrorElement: ElementRef;
+
   constructor(route: ActivatedRoute,
               service: ClientApplicationService,
               private router: Router,
-              private formValidation: FormValidationService) {
+              public formError: FormErrorScrollService) {
     super(route, service, 'clientName');
   }
 
   update() {
-    if (!this.clientApplicationForm.form.valid) {
-      this.formValidation.forceValidate(this.clientApplicationForm.form);
+    if (!this.formError.validate(this.clientApplicationForm.form, this.formErrorElement)) {
       return;
     }
 

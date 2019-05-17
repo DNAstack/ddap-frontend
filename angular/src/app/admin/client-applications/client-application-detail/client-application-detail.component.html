@@ -10,6 +10,11 @@
   <div *ngIf="entity">
     <ddap-client-application-form #clientApplicationForm
                                   [clientApplication]="entity">
+      <mat-error #formMatError
+                 [class.visible]="formError.showError"
+                 class="ddap-form-validation-msg">
+        Please fix invalid fields (marked red) before saving the persona.
+      </mat-error>
     </ddap-client-application-form>
   </div>
 </ddap-main>

@@ -1,36 +1,34 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import TestPersona = dam.v1.TestPersona;
-import { FormValidationService } from '../../../shared/form-validation.service';
 import { dam } from '../../../shared/proto/dam-service';
-import { ScrollService } from '../../../shared/scroll.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
+import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';
 import { PersonaService } from '../personas.service';
+import TestPersona = dam.v1.TestPersona;
 
 @Component({
   selector: 'ddap-persona-manage',
   templateUrl: './persona-manage.component.html',
   styleUrls: ['./persona-manage.component.scss'],
+  providers: [FormErrorScrollService],
 })
 export class PersonaManageComponent implements OnInit {
 
   @ViewChild(PersonaFormComponent)
   personaForm: PersonaFormComponent;
 
-  @ViewChild('formError')
-  formError: ElementRef;
+  @ViewChild('formMatError')
+  formErrorElement: ElementRef;
 
   persona: TestPersona;
-  submitted = false;
 
   constructor(private personaService: PersonaService,
               private router: Router,
               private route: ActivatedRoute,
-              private formValidation: FormValidationService,
-              private scroll: ScrollService) {
+              public formError: FormErrorScrollService) {
 
   }
 
@@ -39,13 +37,7 @@ export class PersonaManageComponent implements OnInit {
   }
 
   save() {
-    this.submitted = false;
-
-    if (!this.personaForm.form.valid) {
-      this.formValidation.forceValidate(this.personaForm.form);
-      this.submitted = true;
-
-      this.scroll.toElement(this.formError);
+    if (!this.formError.validate(this.personaForm.form, this.formErrorElement)) {
       return;
     }
 

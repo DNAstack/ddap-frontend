@@ -1,10 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { FormValidationService } from '../../../shared/form-validation.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { EntityModel } from '../../shared/entity.model';
+import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { TrustedSourcesFormComponent } from '../trusted-sources-form/trusted-sources-form.component';
 import { TrustedSourcesService } from '../trusted-sources.service';
 
@@ -12,27 +12,27 @@ import { TrustedSourcesService } from '../trusted-sources.service';
   selector: 'ddap-trusted-source-detail',
   templateUrl: './trusted-sources-detail.component.html',
   styleUrls: ['./trusted-sources-detail.component.scss'],
+  providers: [FormErrorScrollService],
 })
 export class TrustedSourcesDetailComponent extends EntityDetailBase<TrustedSourcesService> {
 
   @ViewChild(TrustedSourcesFormComponent)
   trustedSourcesForm: TrustedSourcesFormComponent;
 
-  submitted = false;
+  @ViewChild('formMatError')
+  formErrorElement: ElementRef;
 
   constructor(
     route: ActivatedRoute,
     trustedSourcesService: TrustedSourcesService,
     private router: Router,
-    private formValidation: FormValidationService
+    public formError: FormErrorScrollService
   ) {
     super(route, trustedSourcesService, 'trustedSourceName');
   }
 
   update() {
-    if (!this.trustedSourcesForm.form.valid) {
-      this.formValidation.forceValidate(this.trustedSourcesForm.form);
-      this.submitted = true;
+    if (!this.formError.validate(this.trustedSourcesForm.form, this.formErrorElement)) {
       return;
     }
 
