@@ -7,16 +7,20 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 })
 export class FormValidationService {
 
-  forceValidate(formGroup: FormGroup) {
-    if (!formGroup.controls) {
+  forceValidateMultiple(formGroups: FormGroup[]): void {
+    formGroups.forEach((form) => this.forceValidate(form));
+  }
+
+  forceValidate(form: FormGroup) {
+    if (!form.controls) {
       return;
     }
 
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
+    Object.keys(form.controls).forEach(field => {
+      const control = form.get(field);
       if (control instanceof FormArray) {
-        Object.keys(formGroup.controls).forEach(arrayField => {
-          const arrayControl = formGroup.get(arrayField) as FormGroup;
+        Object.keys(form.controls).forEach(arrayField => {
+          const arrayControl = form.get(arrayField) as FormGroup;
           this.forceValidate(arrayControl);
         });
       } else if (control instanceof FormControl) {
