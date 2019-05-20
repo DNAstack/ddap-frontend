@@ -34,7 +34,9 @@ export class ResourceManageComponent implements OnInit {
     }
 
     const resourceModel: EntityModel = this.resourceForm.getModel();
-    const change = new ConfigModificationObject(resourceModel.dto, {});
+    const applyModel = this.resourceForm.getAccessModel() || {};
+    const change = new ConfigModificationObject(resourceModel.dto, applyModel);
+
 
     this.resourceService.save(resourceModel.name, change)
       .subscribe(this.navigateUp);
