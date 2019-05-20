@@ -6,7 +6,7 @@ import { ConfigModificationObject } from '../../shared/configModificationObject'
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { PassportIssuerFormComponent } from '../passport-issuer-form/passport-issuer-form.component';
-import { PassportIssuerService } from '../passport-issuerss.service';
+import { PassportIssuerService } from '../passport-issuers.service';
 import TrustedPassportIssuer = dam.v1.TrustedPassportIssuer;
 
 @Component({
