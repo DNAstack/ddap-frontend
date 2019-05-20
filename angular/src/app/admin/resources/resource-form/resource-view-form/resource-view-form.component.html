@@ -7,6 +7,7 @@
              [readonly]="view.name.length > 0"
              data-se="inp-view-id"
              required>
+      <mat-error *ngIf="viewForm.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
     </mat-form-field>
     <ng-container formGroupName="ui">
       <mat-form-field class="col">
@@ -109,6 +110,9 @@
                    [required]="!variable.get('optional').value"
                    formControlName="value">
             <mat-hint>{{ variable.get('description').value }}</mat-hint>
+            <mat-error *ngIf="variable.get('value').invalid">
+              {{ variable.get('label').value }} must follow regex pattern {{ variable.get('regexp').value }}
+            </mat-error>
           </mat-form-field>
         </ng-container>
       </div>
