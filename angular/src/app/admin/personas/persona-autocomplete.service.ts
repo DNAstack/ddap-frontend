@@ -16,7 +16,7 @@ import {
 } from '../../shared/autocomplete/autocomplete.util';
 import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
 import { ClaimDefinitionService } from '../claim-definitions/claim-definitions.service';
-import { PassportIssuerService } from '../passport-issuers/passport-issuerss.service';
+import { PassportIssuerService } from '../passport-issuers/passport-issuers.service';
 import { TrustedSourcesService } from '../trusted-sources/trusted-sources.service';
 
 @Injectable({

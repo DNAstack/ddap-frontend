@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { EntityListBase } from '../../shared/entity-list.base';
-import { PassportIssuerService } from '../passport-issuerss.service';
+import { PassportIssuerService } from '../passport-issuers.service';
 
 @Component({
   selector: 'ddap-passport-issuer-list',
