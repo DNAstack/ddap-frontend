@@ -106,13 +106,14 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
     this.getVariablesBySelectedTemplate().subscribe((vars) => {
       const varArray: FormArray = this.formBuilder.array([]);
       Object.entries(vars).forEach(([key, value]: any) => {
+        const { ui, regexp, optional } = value;
         varArray.push(this.formBuilder.group({
           name: [key],
-          label: [value.ui.label],
-          description: [value.ui.description],
-          optional: [value.optional],
-          regexp: [value.regexp],
-          value: [this.getValueForVariable(key)],
+          label: [ui.label],
+          description: [ui.description],
+          optional: [optional],
+          regexp: [regexp],
+          value: [this.getValueForVariable(key), regexp && !optional ? [Validators.pattern(regexp)] : []],
         }));
       });
 
