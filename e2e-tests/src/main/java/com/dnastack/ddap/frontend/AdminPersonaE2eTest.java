@@ -23,7 +23,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String testConfig = loadTemplate("/com/dnastack/ddap/adminTestPersonaConfig.json");
+        final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig("administrator", testConfig, REALM);
     }
 
