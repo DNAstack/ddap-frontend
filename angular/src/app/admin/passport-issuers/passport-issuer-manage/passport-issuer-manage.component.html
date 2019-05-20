@@ -1,8 +1,36 @@
-<ddap-header [backLink]="['../..']" label="Add Passport Issuer">
+<ddap-header [backLink]="['../..']"
+             label="Add Passport Issuer">
+
+  <div>
+    <button mat-flat-button
+            [routerLink]="['json']"
+            disabled
+            color="primary"
+            class="uppercase">
+      Edit JSON
+    </button>
+  </div>
 </ddap-header>
 
 <ddap-main>
-  <ddap-entity-manage-form [label]="'Passport Issuer'"
-                           (submitted)="save($event.id, $event.change)">
-  </ddap-entity-manage-form>
+  <ddap-passport-issuer-form #passportIssuerForm
+                             [passportIssuer]="passportIssuer">
+
+    <mat-error #formMatError
+               [class.visible]="formError.showError"
+               class="ddap-form-validation-msg">
+      Please fix invalid fields (marked red) before saving the persona.
+    </mat-error>
+  </ddap-passport-issuer-form>
 </ddap-main>
+
+<div class="ddap-form-toolbar">
+  <button mat-flat-button
+          (click)="save()"
+          data-se="btn-save"
+          type="submit"
+          color="primary"
+          class="uppercase">
+    Add Test Persona
+  </button>
+</div>
