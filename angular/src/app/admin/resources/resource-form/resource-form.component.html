@@ -153,5 +153,16 @@
     </ng-template>
   </div>
 
+  <div class="ddap-personas-access">
+    <h3>
+      <mat-icon class="icon icon-access"></mat-icon>
+      <span>Access Test for Personas</span>
+    </h3>
+    <json-editor data-se="test-editor"
+                 [options]="testEditorOptions"
+                 (change)="updateTestDto($event)">
+    </json-editor>
+  </div>
+
   <ng-content></ng-content>
 </form>

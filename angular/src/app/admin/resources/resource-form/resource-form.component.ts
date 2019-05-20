@@ -13,9 +13,10 @@ import _get from 'lodash.get';
 
 import { dam } from '../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
+import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 
-import Resource = dam.v1.Resource;
 import { ResourceViewFormComponent } from './resource-view-form/resource-view-form.component';
+import Resource = dam.v1.Resource;
 
 @Component({
   selector: 'ddap-resource-form',
@@ -29,6 +30,8 @@ export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
   resource?: EntityModel = new EntityModel('', Resource.create());
 
   form: FormGroup;
+  test: any;
+  testEditorOptions = new JsonEditorDefaults();
 
   viewRefs: EmbeddedViewRef<ResourceViewFormComponent>[] = [];
   @ViewChild('viewTemplate')
@@ -71,6 +74,8 @@ export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
         infoUrl: [dto.ui.infoUrl || '', []], // TODO: url validator
       }),
     });
+
+    this.testEditorOptions.mode = 'code';
   }
 
   ngOnDestroy(): void {
@@ -84,6 +89,10 @@ export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     Object.keys(this.views).forEach((viewId) => this.addView(viewId));
     this.cd.detectChanges();
+  }
+
+  updateTestDto(event: any) {
+    this.test = event;
   }
 
   addView(viewId?: string) {
@@ -135,6 +144,10 @@ export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
         ...rest,
       },
     };
+  }
+
+  getAccessModel(): any {
+    return this.test;
   }
 
   isValid() {
