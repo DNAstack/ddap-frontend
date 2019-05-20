@@ -7,6 +7,10 @@ public class DdapBy {
         return By.xpath(".//*[@data-se = '" + selector + "']");
     }
 
+    public static By seAndText(String selector, String text) {
+        return By.xpath(".//*[@data-se = '" + selector + "' and @placeholder = '" + text + "']");
+    }
+
     public static By text(String text) {
         return By.xpath("//*[contains(text(), '" + text + "')]");
     }

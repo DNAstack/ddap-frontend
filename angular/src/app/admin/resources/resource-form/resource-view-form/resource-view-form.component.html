@@ -84,6 +84,7 @@
     <mat-form-field class="col">
       <mat-label>Service Template</mat-label>
       <mat-select formControlName="serviceTemplate"
+                  data-se="inp-view-service-template"
                   (selectionChange)="serviceTemplateChange()"
                   required>
         <mat-option *ngFor="let template of templates"
@@ -106,6 +107,7 @@
         <ng-container [formGroupName]="i">
           <mat-form-field class="col">
             <input matInput
+                   data-se="inp-view-target-adapter-variable"
                    [placeholder]="variable.get('label').value"
                    [required]="!variable.get('optional').value"
                    formControlName="value">
@@ -122,7 +124,9 @@
         <mat-icon class="icon icon-identity"></mat-icon>
         <span>Roles</span>
       </h3>
-      <p>Single role must be set as default</p>
+      <mat-error *ngIf="viewForm.get('defaultRole').invalid">
+        Single role must be set as default
+      </mat-error>
       <div *ngFor="let role of selectedTemplate.dto.roles | keyvalue">
         <h4>
       <span>
@@ -137,7 +141,7 @@
                   color="primary"
                   class="uppercase"
                   type="button"
-                  data-se="btn-make-default-role"
+                  [attr.data-se]="'btn-make-default-role-' + role.key"
                   (click)="makeDefaultRole(role.key)">
             Make Default
           </button>
@@ -148,6 +152,7 @@
           <div class="col"
                [formGroupName]="role.key">
             <tag-input formControlName="policies"
+                       [attr.data-se]="'view-role-policies-' + role.key"
                        secondaryPlaceholder="Add Policy"
                        placeholder="+ Policy"
                        editable="true"

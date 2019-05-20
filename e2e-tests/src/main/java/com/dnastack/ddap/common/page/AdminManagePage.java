@@ -3,7 +3,6 @@ package com.dnastack.ddap.common.page;
 import com.dnastack.ddap.common.DdapBy;
 import lombok.Getter;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -50,6 +49,13 @@ public class AdminManagePage {
 
     public void fillFieldWithFirstValueFromDropdown(By fieldSelector) {
         fillFieldFromDropdown(fieldSelector, null);
+    }
+
+    public void fillTagField(By fieldSelector, String value) {
+        WebElement tagInput = driver.findElement(fieldSelector);
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(tagInput));
+        tagInput.click();
+        tagInput.findElement(By.tagName("input")).sendKeys(value, Keys.ENTER);
     }
 
     public void clickCheckbox(By checkboxSelector) {
