@@ -1,0 +1,66 @@
+<form class="ddap-form"
+      novalidate
+      [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Name"
+             formControlName="id"
+             data-se="inp-id"
+             [readonly]="passportIssuer.name && passportIssuer.name.length > 0"
+             required>
+      <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
+    </mat-form-field>
+    <mat-form-field class="col"
+                    formGroupName="ui">
+      <input matInput
+             placeholder="Display Name"
+             formControlName="label"
+             data-se="inp-label">
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col"
+                    formGroupName="ui">
+      <textarea matInput
+                placeholder="Description"
+                formControlName="description"
+                data-se="inp-description">
+      </textarea>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col">
+      <mat-autocomplete #issuers="matAutocomplete">
+        <ng-container *ngIf="issuerInput.isTouched">
+          <mat-option *ngFor="let option of passportIssuers$ | async"
+                      [value]="option">
+            {{ option }}
+          </mat-option>
+        </ng-container>
+      </mat-autocomplete>
+
+      <input matInput
+             placeholder="Issuer"
+             formControlName="issuer"
+             data-se="inp-issuer"
+             #issuerInput="ddapInputState"
+             [matAutocomplete]="issuers"
+             required>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col">
+      <mat-select
+             placeholder="Translate Using"
+             formControlName="translateUsing"
+             data-se="inp-translateUsing">
+        <mat-option *ngFor="let translator of translators$ | async" [value]="translator.id">
+          {{ translator.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <ng-content></ng-content>
+</form>

@@ -39,12 +39,12 @@ export class PersonaAutocompleteService {
     return filterSource(claimDefinitions$, formGroup.get('claimName').valueChanges);
   }
 
-  buildIssuerAutocomplete(formGroup: FormGroup): Observable<string[]> {
+  buildIssuerAutocomplete(formGroup: FormGroup, issuerFieldName = 'iss'): Observable<string[]> {
     const passportIssuers$ = this.passportIssuerService.getList(pick('dto.issuer')).pipe(
       map(makeDistinct)
     );
 
-    return filterSource(passportIssuers$, formGroup.get('iss').valueChanges);
+    return filterSource(passportIssuers$, formGroup.get(issuerFieldName).valueChanges);
   }
 
   buildTrustedSourcesAutocomplete(formGroup: FormGroup): Observable<string[]> {
