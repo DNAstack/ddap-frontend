@@ -10,6 +10,7 @@
   <div *ngIf="entity">
     <ddap-resource-form #resourceForm
                        [resource]="entity">
+      <ddap-access-table [resource]="entity"></ddap-access-table>
     </ddap-resource-form>
   </div>
 </ddap-main>

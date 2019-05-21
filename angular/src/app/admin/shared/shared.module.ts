@@ -35,6 +35,7 @@ import { TestFormComponent } from './test-form/test-form.component';
     EntityAddComponent,
     EntityManageFormComponent,
     OptionEditableListComponent,
+    AccessTableComponent,
   ],
   providers: [
     {provide: MAT_CHECKBOX_CLICK_ACTION, useValue: 'check-indeterminate'},
