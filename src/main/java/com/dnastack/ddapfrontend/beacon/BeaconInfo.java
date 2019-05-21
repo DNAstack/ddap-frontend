@@ -6,5 +6,5 @@ import lombok.Data;
 public class BeaconInfo {
     private String name;
     private String error;
-    private String organization;
+    private BeaconOrganization organization;
 }
