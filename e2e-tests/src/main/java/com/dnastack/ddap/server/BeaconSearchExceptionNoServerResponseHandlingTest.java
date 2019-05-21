@@ -50,7 +50,7 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
                     .extract().as(Map[].class);
         // @formatter:on
 
-        String errorMessage = "Server not found: java.net.UnknownHostException";
+        String errorMessage = "Unable to query beacon: java.net.UnknownHostException";
 
         List<Map<String, Object>> resultMapList = Arrays.asList(result);
         assertEquals(resultMapList.size(), 2);
