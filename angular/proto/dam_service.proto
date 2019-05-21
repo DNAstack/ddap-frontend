@@ -370,7 +370,7 @@ message GetViewRoleResponse {
 message GetTokenRequest {
   string return = 1;
   string data_use = 2;
-  string ttl = 3;
+  int32 ttl = 3;
 }
 
 message GetTokenResponse {
