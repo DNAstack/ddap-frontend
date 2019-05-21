@@ -14,6 +14,7 @@
     "e2e": "ng e2e",
     "build:prod": "npm run build -- --prod",
     "proto": "./scripts/generate_proto.sh",
+    "proto:download": "./scripts/download_proto.sh",
     "postinstall": "npm run proto"
   },
   "private": true,
