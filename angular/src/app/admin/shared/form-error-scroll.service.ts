@@ -1,8 +1,9 @@
 import { ElementRef, Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 
 import { FormValidationService } from '../../shared/form-validation.service';
 import { ScrollService } from '../../shared/scroll.service';
+
+import Form from './form';
 
 @Injectable()
 export class FormErrorScrollService {
@@ -14,9 +15,9 @@ export class FormErrorScrollService {
 
   }
 
-  validate(form: FormGroup, formError: ElementRef): boolean {
-    if (!form.valid) {
-      this.formValidation.forceValidate(form);
+  validate(formComponent: Form, formError: ElementRef): boolean {
+    if (!formComponent.isValid()) {
+      this.formValidation.forceValidateMultiple(formComponent.getAllForms());
       this.scroll.toElement(formError);
       this.showError = true;
 

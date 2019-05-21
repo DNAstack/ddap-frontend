@@ -19,7 +19,7 @@ export class PersonaDetailComponent extends EntityDetailBase<PersonaService> imp
   @ViewChild(PersonaFormComponent)
   personaForm: PersonaFormComponent;
 
-  @ViewChild('formError')
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   constructor(route: ActivatedRoute,
@@ -30,7 +30,7 @@ export class PersonaDetailComponent extends EntityDetailBase<PersonaService> imp
   }
 
   update() {
-    if (!this.formError.validate(this.personaForm.form, this.formErrorElement)) {
+    if (!this.formError.validate(this.personaForm, this.formErrorElement)) {
       return;
     }
 

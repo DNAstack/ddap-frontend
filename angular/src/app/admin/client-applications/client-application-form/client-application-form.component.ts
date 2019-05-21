@@ -4,13 +4,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { dam } from '../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
 import Client = dam.v1.Client;
+import Form from '../../shared/form';
 
 @Component({
   selector: 'ddap-client-application-form',
   templateUrl: './client-application-form.component.html',
   styleUrls: ['./client-application-form.component.scss'],
 })
-export class ClientApplicationFormComponent implements OnInit {
+export class ClientApplicationFormComponent implements OnInit, Form {
 
   @Input()
   clientApplication?: EntityModel = new EntityModel('', Client.create());
@@ -40,6 +41,14 @@ export class ClientApplicationFormComponent implements OnInit {
     });
 
     return new EntityModel(id, clientApplication);
+  }
+
+  getAllForms(): FormGroup[] {
+    return [this.form];
+  }
+
+  isValid(): boolean {
+    return this.form.valid;
   }
 
 }

@@ -11,18 +11,19 @@ import { dam } from '../../../shared/proto/dam-service';
 import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
+import TestPersona = dam.v1.TestPersona;
+import AccessList = dam.v1.AccessList;
+import Form from '../../shared/form';
 import { PersonaAutocompleteService } from '../persona-autocomplete.service';
 import { PersonaAccessFormComponent } from '../persona-resource-form/persona-access-form.component';
 import { PersonaService } from '../personas.service';
-import TestPersona = dam.v1.TestPersona;
-import AccessList = dam.v1.AccessList;
 
 @Component({
   selector: 'ddap-persona-form',
   templateUrl: './persona-form.component.html',
   styleUrls: ['./persona-form.component.scss'],
 })
-export class PersonaFormComponent implements OnChanges, OnDestroy {
+export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
 
   @Input()
   persona?: TestPersona = TestPersona.create();
@@ -83,6 +84,14 @@ export class PersonaFormComponent implements OnChanges, OnDestroy {
 
   removeGa4ghClaim(index) {
     this.ga4ghClaims.removeAt(index);
+  }
+
+  getAllForms(): FormGroup[] {
+    return [this.form];
+  }
+
+  isValid(): boolean {
+    return this.form.valid;
   }
 
   getModel(): EntityModel {

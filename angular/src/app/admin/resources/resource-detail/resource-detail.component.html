@@ -11,6 +11,11 @@
     <ddap-resource-form #resourceForm
                        [resource]="entity">
       <ddap-access-table [resource]="entity"></ddap-access-table>
+      <mat-error #formErrorElement
+                 [class.visible]="formError.showError"
+                 class="ddap-form-validation-msg">
+        Please fix invalid fields (marked red) before saving the persona.
+      </mat-error>
     </ddap-resource-form>
   </div>
 </ddap-main>

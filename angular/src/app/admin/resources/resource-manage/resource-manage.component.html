@@ -3,6 +3,11 @@
 
 <ddap-main>
   <ddap-resource-form #resourceForm>
+    <mat-error #formErrorElement
+               [class.visible]="formError.showError"
+               class="ddap-form-validation-msg">
+      Please fix invalid fields (marked red) before saving the persona.
+    </mat-error>
   </ddap-resource-form>
 </ddap-main>
 

@@ -18,7 +18,7 @@ export class ClientApplicationManageComponent {
   @ViewChild(ClientApplicationFormComponent)
   clientApplicationForm: ClientApplicationFormComponent;
 
-  @ViewChild('formMatError')
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   constructor(
@@ -30,7 +30,7 @@ export class ClientApplicationManageComponent {
   }
 
   save() {
-    if (!this.formError.validate(this.clientApplicationForm.form, this.formErrorElement)) {
+    if (!this.formError.validate(this.clientApplicationForm, this.formErrorElement)) {
       return;
     }
 

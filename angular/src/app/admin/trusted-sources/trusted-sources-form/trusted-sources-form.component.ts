@@ -5,18 +5,14 @@ import _get from 'lodash.get';
 import { dam } from '../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
 import TrustedSource = dam.v1.TrustedSource;
+import Form from '../../shared/form';
 
 @Component({
   selector: 'ddap-trusted-sources-form',
   templateUrl: './trusted-sources-form.component.html',
   styleUrls: ['./trusted-sources-form.component.scss'],
 })
-export class TrustedSourcesFormComponent implements OnChanges, OnDestroy {
-
-  @Input()
-  trustedSource?: TrustedSource = TrustedSource.create({});
-
-  form: FormGroup;
+export class TrustedSourcesFormComponent implements OnChanges, OnDestroy, Form {
 
   get sources() {
     return this.form.get('sources') as FormArray;
@@ -25,6 +21,11 @@ export class TrustedSourcesFormComponent implements OnChanges, OnDestroy {
   get claims() {
     return this.form.get('claims') as FormArray;
   }
+
+  @Input()
+  trustedSource?: TrustedSource = TrustedSource.create({});
+
+  form: FormGroup;
 
   constructor(private formBuilder: FormBuilder) {
     this.form = this.buildForm(null, this.trustedSource);
@@ -72,6 +73,14 @@ export class TrustedSourcesFormComponent implements OnChanges, OnDestroy {
     });
 
     return new EntityModel(id, trustedSources);
+  }
+
+  getAllForms(): FormGroup[] {
+    return [this.form];
+  }
+
+  isValid(): boolean {
+    return this.form.valid;
   }
 
   private buildForm(sourceId: string, {ui, sources, claims}: TrustedSource) {
