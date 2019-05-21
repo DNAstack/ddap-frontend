@@ -21,7 +21,7 @@ public class ViewModel {
     @Override
     public String toString() {
         if (ui == null) {
-            return super.toString();
+            return null;
         }
         return ui.get("label");
     }

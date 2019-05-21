@@ -13,9 +13,9 @@ import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 
-public class BeaconSearchApiExerciseBeaconInfoResponseLogic extends AbstractBaseE2eTest {
+public class ExerciseBeaconInfoResponseTest extends AbstractBaseE2eTest {
 
-    private static final String REALM = generateRealmName(BeaconSearchApiExerciseBeaconInfoResponseLogic.class.getSimpleName());
+    private static final String REALM = generateRealmName(ExerciseBeaconInfoResponseTest.class.getSimpleName());
 
     @Before
     public void setupRealm() throws IOException {

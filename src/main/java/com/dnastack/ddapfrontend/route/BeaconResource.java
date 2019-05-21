@@ -98,7 +98,6 @@ class BeaconResource {
 
         Flux<ExternalBeaconQueryResult> beaconRequests = beaconViewTokens.flatMap(viewTokenResponse -> {
             log.debug("About to query: {} beacon at {}", viewTokenResponse.getViewId(), viewTokenResponse.getUrl());
-            // TODO DISCO-2038 Handle errors and unauthorized requests
 
             if (!viewTokenResponse.getToken().isPresent()) {
                 String errorMessage = "No view token found for viewID: " + viewTokenResponse.getViewId();
@@ -153,8 +152,8 @@ class BeaconResource {
             Mono<BeaconQueryResult> queryResultMono = beaconQuery(beaconRequest, viewTokenResponse).onErrorResume(e -> {
                 /* Handle the error case where there was no response from beacon server */
                 BeaconQueryResult beaconQueryResultError = new BeaconQueryResult();
-                String errorMessage = "Server not found: " + e;
-                log.warn(errorMessage);
+                String errorMessage = "Unable to query beacon: " + e;
+                log.info(errorMessage);
                 beaconQueryResultError.setError(errorMessage);
                 Mono<BeaconQueryResult> errorResult = Mono.just(beaconQueryResultError);
                 return errorResult;
