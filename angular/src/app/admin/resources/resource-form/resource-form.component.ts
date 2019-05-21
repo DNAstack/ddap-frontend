@@ -1,7 +1,7 @@
 import {
   AfterViewInit, ChangeDetectorRef,
   Component,
-  ComponentFactoryResolver, EmbeddedViewRef, Input, OnDestroy,
+  ComponentFactoryResolver, EmbeddedViewRef, Input,
   OnInit,
   QueryList, TemplateRef,
   ViewChild,
@@ -13,10 +13,11 @@ import _get from 'lodash.get';
 
 import { dam } from '../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
+import Resource = dam.v1.Resource;
+import Form from '../../shared/form';
 import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 
 import { ResourceViewFormComponent } from './resource-view-form/resource-view-form.component';
-import Resource = dam.v1.Resource;
 
 @Component({
   selector: 'ddap-resource-form',
@@ -24,7 +25,7 @@ import Resource = dam.v1.Resource;
   styleUrls: ['./resource-form.component.scss'],
   entryComponents: [ResourceViewFormComponent],
 })
-export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
 
   @Input()
   resource?: EntityModel = new EntityModel('', Resource.create());
@@ -50,10 +51,6 @@ export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
     return _get(this.resource, 'dto.views', {});
   }
 
-  get allForms(): FormGroup[] {
-    return [...this.getViewChildrenForms(), this.form];
-  }
-
   ngOnInit(): void {
     const { name, dto } = this.resource;
 
@@ -76,11 +73,6 @@ export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.testEditorOptions.mode = 'code';
-  }
-
-  ngOnDestroy(): void {
-    // this.viewRefs.forEach((view) => view.destroy());
-    // this.form.reset();
   }
 
   ngAfterViewInit(): void {
@@ -156,6 +148,10 @@ export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
       .every((valid => valid === true));
   }
 
+  getAllForms(): FormGroup[] {
+    return [...this.getViewChildrenForms(), this.form];
+  }
+
   private getViewChildrenForms(): FormGroup[] {
     return this.viewChildComponents.map(view => view.viewForm);
   }
@@ -172,4 +168,5 @@ export class ResourceFormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     return roles;
   }
+
 }

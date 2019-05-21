@@ -19,7 +19,7 @@ export class TrustedSourcesDetailComponent extends EntityDetailBase<TrustedSourc
   @ViewChild(TrustedSourcesFormComponent)
   trustedSourcesForm: TrustedSourcesFormComponent;
 
-  @ViewChild('formMatError')
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   constructor(
@@ -32,7 +32,7 @@ export class TrustedSourcesDetailComponent extends EntityDetailBase<TrustedSourc
   }
 
   update() {
-    if (!this.formError.validate(this.trustedSourcesForm.form, this.formErrorElement)) {
+    if (!this.formError.validate(this.trustedSourcesForm, this.formErrorElement)) {
       return;
     }
 

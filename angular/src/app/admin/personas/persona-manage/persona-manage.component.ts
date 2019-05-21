@@ -20,7 +20,7 @@ export class PersonaManageComponent implements OnInit {
   @ViewChild(PersonaFormComponent)
   personaForm: PersonaFormComponent;
 
-  @ViewChild('formMatError')
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   persona: TestPersona;
@@ -37,7 +37,7 @@ export class PersonaManageComponent implements OnInit {
   }
 
   save() {
-    if (!this.formError.validate(this.personaForm.form, this.formErrorElement)) {
+    if (!this.formError.validate(this.personaForm, this.formErrorElement)) {
       return;
     }
 

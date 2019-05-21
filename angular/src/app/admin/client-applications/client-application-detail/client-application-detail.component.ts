@@ -19,7 +19,7 @@ export class ClientApplicationDetailComponent extends EntityDetailBase<ClientApp
   @ViewChild(ClientApplicationFormComponent)
   clientApplicationForm: ClientApplicationFormComponent;
 
-  @ViewChild('formMatError')
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   constructor(route: ActivatedRoute,
@@ -30,7 +30,7 @@ export class ClientApplicationDetailComponent extends EntityDetailBase<ClientApp
   }
 
   update() {
-    if (!this.formError.validate(this.clientApplicationForm.form, this.formErrorElement)) {
+    if (!this.formError.validate(this.clientApplicationForm, this.formErrorElement)) {
       return;
     }
 

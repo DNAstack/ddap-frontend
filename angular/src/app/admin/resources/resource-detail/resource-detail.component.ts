@@ -1,31 +1,31 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { flatMap } from 'rxjs/operators';
 
-import { FormValidationService } from '../../../shared/form-validation.service';
-import { dam } from '../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { EntityModel } from '../../shared/entity.model';
+import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { ResourceFormComponent } from '../resource-form/resource-form.component';
 import { ResourceService } from '../resources.service';
-import IConfigRequest = dam.v1.IConfigRequest;
-import ConfigRequest = dam.v1.ConfigRequest;
 
 @Component({
   selector: 'ddap-resource-detail',
   templateUrl: './resource-detail.component.html',
   styleUrls: ['./resource-detail.component.scss'],
+  providers: [FormErrorScrollService],
 })
 export class ResourceDetailComponent extends EntityDetailBase<ResourceService> implements OnInit {
 
   @ViewChild(ResourceFormComponent)
   resourceForm: ResourceFormComponent;
+  @ViewChild('formErrorElement')
+  formErrorElement: ElementRef;
 
   constructor(route: ActivatedRoute,
               resourceService: ResourceService,
               private router: Router,
-              private formValidation: FormValidationService) {
+              public formError: FormErrorScrollService) {
     super(route, resourceService, 'resourceName');
   }
 
@@ -38,13 +38,14 @@ export class ResourceDetailComponent extends EntityDetailBase<ResourceService> i
   }
 
   update() {
-    if (!this.resourceForm.isValid()) {
-      this.formValidation.forceValidateMultiple(this.resourceForm.allForms);
+    if (!this.formError.validate(this.resourceForm, this.formErrorElement)) {
       return;
     }
 
     const resourceModel: EntityModel = this.resourceForm.getModel();
-    const change = new ConfigModificationObject(resourceModel.dto, {});
+    const applyModel = this.resourceForm.getAccessModel() || {};
+    const change = new ConfigModificationObject(resourceModel.dto, applyModel);
+
     this.entityService.update(this.entity.name, change)
       .subscribe(this.navigateUp);
   }

@@ -18,7 +18,7 @@ export class TrustedSourcesManageComponent {
   @ViewChild(TrustedSourcesFormComponent)
   trustedSourcesForm: TrustedSourcesFormComponent;
 
-  @ViewChild('formMatError')
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   submitted = false;
@@ -33,7 +33,7 @@ export class TrustedSourcesManageComponent {
     const trustedSourcesModel: EntityModel = this.trustedSourcesForm.getModel();
     const change = new ConfigModificationObject(trustedSourcesModel.dto, {});
 
-    if (!this.formError.validate(this.trustedSourcesForm.form, this.formErrorElement)) {
+    if (!this.formError.validate(this.trustedSourcesForm, this.formErrorElement)) {
       return;
     }
 
