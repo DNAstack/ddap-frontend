@@ -3,8 +3,8 @@ package com.dnastack.ddapfrontend.beacon;
 import lombok.Data;
 
 @Data
-public class BeaconInfo {
+public class BeaconInfoReceived {
     private String name;
     private String error;
-    private String organization;
+    private BeaconOrganization organization;
 }

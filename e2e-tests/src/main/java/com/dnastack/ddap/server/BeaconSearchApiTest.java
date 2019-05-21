@@ -45,10 +45,10 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
                     .log().ifValidationFails()
                     .contentType(JSON)
                     .statusCode(200)
-                    .body("[0].name", equalTo("Cafe Variome Beacon"))
-                    .body("[0].organization", equalTo("University of Leicester"))
-                    .body("[1].name", equalTo("Cafe Variome Beacon"))
-                    .body("[1].organization", equalTo("University of Leicester"));
+                    .body("[0].beaconInfo.name", equalTo("Beacon Discovery"))
+                    .body("[0].beaconInfo.organization", equalTo("GA4GH APIs"))
+                    .body("[1].beaconInfo.name", equalTo("Beacon Discovery Access"))
+                    .body("[1].beaconInfo.organization", equalTo("1000 Genomes"));
         // @formatter:on
     }
 
@@ -76,11 +76,43 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
         .then()
             .log().everything()
             .contentType("application/json")
-            .body("[0].name", not(isEmptyOrNullString()))
-            .body("[0].organization", not(isEmptyOrNullString()))
+            .body("[0].beaconInfo.name", not(isEmptyOrNullString()))
+            .body("[0].beaconInfo.organization", not(isEmptyOrNullString()))
             .body("[0].exists", anyOf(nullValue(), instanceOf(boolean.class)))
             .statusCode(200);
         // @formatter:on
     }
+
+    @Test
+    public void missingResourceUiLabel() throws IOException {
+        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+
+        // @formatter:off
+        given()
+            .log().method()
+            .log().cookies()
+            .log().uri()
+            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+            .cookie("dam_token", validPersonaToken)
+        .when()
+            .get(format(
+                    "/api/v1alpha/%s/resources/thousand-genomes/search" +
+                            "?referenceName=13" +
+                            "&start=32936732" +
+                            "&referenceBases=G" +
+                            "&alternateBases=C" +
+                            "&type=beacon" +
+                            "&assemblyId=GRCh37",
+                    REALM))
+        .then()
+            .log().everything()
+            .contentType("application/json")
+            .body("[0].beaconInfo.name", not(isEmptyOrNullString()))
+            .body("[0].beaconInfo.organization", not(isEmptyOrNullString()))
+            .body("[0].exists", anyOf(nullValue(), instanceOf(boolean.class)))
+            .statusCode(200);
+        // @formatter:on
+    }
+
 
 }
