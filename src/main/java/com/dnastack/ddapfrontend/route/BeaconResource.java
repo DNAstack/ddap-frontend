@@ -167,7 +167,7 @@ class BeaconResource {
         })
         .onErrorResume(fluxError -> {
             String errorMessage = fluxError.getMessage();
-            log.info("Error occurred while processing view tokens: " + errorMessage);
+            log.warn("Error occurred while performing beacon query: " + errorMessage);
             return Flux.just(externalBeaconQueryResultError(fluxError));
         });
 
