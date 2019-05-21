@@ -103,7 +103,7 @@ class BeaconResource {
                 String errorMessage = "No view token found for viewID: " + viewTokenResponse.getViewId();
                 String uiLabel = views.get(viewTokenResponse.getViewId()).getLabel();
                 log.info(errorMessage);
-                return Flux.just(externalBeaconQueryResultError(new Throwable(errorMessage)));
+                return Flux.just(externalBeaconQueryResultError(errorMessage));
             }
 
             Mono<BeaconInfoReceived> beaconInfoReceivedMono;
@@ -168,7 +168,7 @@ class BeaconResource {
         .onErrorResume(fluxError -> {
             String errorMessage = fluxError.getMessage();
             log.warn("Error occurred while performing beacon query: " + errorMessage);
-            return Flux.just(externalBeaconQueryResultError(fluxError));
+            return Flux.just(externalBeaconQueryResultError(fluxError.getMessage()));
         });
 
         return beaconRequests;
@@ -254,7 +254,7 @@ class BeaconResource {
         return beaconInfoError;
     }
 
-    private ExternalBeaconQueryResult externalBeaconQueryResultError(Throwable e) {
+    private ExternalBeaconQueryResult externalBeaconQueryResultError(String e) {
         ExternalBeaconQueryResult externalBeaconQueryResultError = new ExternalBeaconQueryResult();
         String error = "Could not get beacon external query results: " + e;
         externalBeaconQueryResultError.setError(error);
