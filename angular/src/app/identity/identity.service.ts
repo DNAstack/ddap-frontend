@@ -67,12 +67,6 @@ export class IdentityService {
     return connectedAccounts.some(isAdmin);
   }
 
-  unlinkConnectedAccount(account: Account) {
-    const subjectName = account.properties.subject;
-    return this.http.delete<any>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/identity/link/${subjectName}`)
-      .subscribe(() => window.location.reload());
-  }
-
   private getAccountLinksFromProviders(idps: object, realm: string): AccountLink[] {
     return Object.entries(idps)
       .map(([idpKey, idpValue]) => {
@@ -97,4 +91,5 @@ export class IdentityService {
         };
       });
   }
+
 }

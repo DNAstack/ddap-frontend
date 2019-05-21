@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -26,7 +25,10 @@ import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.dnastack.ddapfrontend.header.XForwardUtil.getExternalPath;
 import static java.lang.String.format;
@@ -159,29 +161,6 @@ public class IdentityController {
                 .doOnError(exception -> log.info("Failed to negotiate token", exception));
     }
 
-    @DeleteMapping(value = "/link/{subjectName}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<? extends ResponseEntity<?>> unlinkAccount(
-            ServerHttpRequest request,
-            @PathVariable String realm,
-            @PathVariable String subjectName) {
-        final Optional<String> icToken = cookiePackager.extractToken(request, CookieKind.IC);
-        if (icToken.isEmpty()) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
-        }
-
-        final String targetAccountId = dangerousStopgapExtractSubject(icToken.get());
-        if (targetAccountId == null) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is invalid"));
-        }
-
-        final String accountId = dangerousStopgapExtractSubject(icToken.get());
-
-        return idpClient.unlinkAccount(realm, accountId, icToken.get(), subjectName)
-                        .map(message -> ResponseEntity.status(200)
-                                                      // Need to return valid JSON object for angular client
-                                                      .body(Map.of("message", message)));
-    }
-
     @GetMapping("/link")
     public Mono<? extends ResponseEntity<?>> initiateAccountLinking(
             ServerHttpRequest request,
@@ -190,7 +169,7 @@ public class IdentityController {
             @RequestParam(defaultValue = "external_idp") AccountLinkingType type) {
 
         final Optional<String> icToken = cookiePackager.extractToken(request, CookieKind.IC);
-        if (icToken.isEmpty()) {
+        if (!icToken.isPresent()) {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
         }
 
