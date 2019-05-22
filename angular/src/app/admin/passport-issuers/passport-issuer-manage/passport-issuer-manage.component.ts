@@ -36,7 +36,7 @@ export class PassportIssuerManageComponent implements OnInit {
   }
 
   save() {
-    if (!this.formError.validate(this.passportIssuerForm.form, this.formErrorElement)) {
+    if (!this.formError.validate(this.passportIssuerForm, this.formErrorElement)) {
       return;
     }
 

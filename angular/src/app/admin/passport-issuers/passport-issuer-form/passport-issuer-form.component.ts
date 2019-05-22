@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { dam } from '../../../shared/proto/dam-service';
 import { PersonaAutocompleteService } from '../../personas/persona-autocomplete.service';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
+import Form from '../../shared/form';
 import TrustedPassportIssuer = dam.v1.TrustedPassportIssuer;
 import { PassportTranslatorsService } from '../passport-translators.service';
 
@@ -15,7 +16,7 @@ import { PassportTranslatorsService } from '../passport-translators.service';
   styleUrls: ['./passport-issuer-form.component.scss'],
 
 })
-export class PassportIssuerFormComponent implements OnInit {
+export class PassportIssuerFormComponent implements OnInit, Form {
 
   @Input()
   passportIssuer?: EntityModel = new EntityModel('', TrustedPassportIssuer.create());
@@ -57,6 +58,14 @@ export class PassportIssuerFormComponent implements OnInit {
     });
 
     return new EntityModel(id, clientApplication);
+  }
+
+  getAllForms(): FormGroup[] {
+    return [this.form];
+  }
+
+  isValid(): boolean {
+    return this.form.valid;
   }
 
 }

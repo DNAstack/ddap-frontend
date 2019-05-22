@@ -30,7 +30,7 @@ export class PassportIssuerDetailComponent extends EntityDetailBase<PassportIssu
   }
 
   update() {
-    if (!this.formError.validate(this.clientApplicationForm.form, this.formErrorElement)) {
+    if (!this.formError.validate(this.clientApplicationForm, this.formErrorElement)) {
       return;
     }
 
