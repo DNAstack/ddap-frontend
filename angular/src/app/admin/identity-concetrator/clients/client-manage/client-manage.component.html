@@ -3,7 +3,22 @@
 </ddap-header>
 
 <ddap-main>
-  <ddap-entity-manage-form [label]="'Client'"
-                           (submitted)="save($event.id, $event.change)">
-  </ddap-entity-manage-form>
+  <ddap-client-form>
+    <mat-error #formMatError
+               [class.visible]="formError.showError"
+               class="ddap-form-validation-msg">
+      Please fix invalid fields (marked red) before saving the persona.
+    </mat-error>
+  </ddap-client-form>
 </ddap-main>
+
+<div class="ddap-form-toolbar">
+  <button mat-flat-button
+          (click)="save()"
+          data-se="btn-save"
+          type="submit"
+          color="primary"
+          class="uppercase">
+    Add Trusted Sources
+  </button>
+</div>

@@ -1,0 +1,76 @@
+<form class="ddap-form"
+      novalidate
+      [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Client ID"
+             formControlName="clientId"
+             data-se="inp-clientId"
+             [readonly]="model.dto.clientId.length > 0"
+             required>
+      <mat-error *ngIf="form.get('clientId').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
+    </mat-form-field>
+    <mat-form-field class="col"
+                    formGroupName="ui">
+      <input matInput
+             placeholder="Display Name"
+             formControlName="label"
+             data-se="inp-label"
+             required>
+    </mat-form-field>
+  </div>
+  <div class="row"
+       formGroupName="ui">
+    <mat-form-field class="col">
+      <textarea matInput
+                placeholder="Description"
+                formControlName="description"
+                data-se="inp-description"
+                required>
+      </textarea>
+    </mat-form-field>
+  </div>
+
+  <h3>
+    <mat-icon class="icon icon-claims"></mat-icon>
+    <span>Redirect URIs</span>
+
+    <div>
+      <button mat-button
+              color="primary"
+              class="uppercase"
+              type="button"
+              data-se="btn-add-claim"
+              (click)="addRedirectUri()">
+        Add Redirect URI
+      </button>
+    </div>
+  </h3>
+
+  <div *ngFor="let redirectUri of redirectUris.controls; let i=index"
+       formArrayName="redirectUris">
+    <mat-card>
+      <div class="row">
+        <mat-form-field class="col">
+          <input matInput
+                 placeholder="Redirect URI"
+                 [formControlName]="i"
+                 data-se="inp-label">
+        </mat-form-field>
+      </div>
+
+      <div class="footer">
+        <button mat-button
+                type="button"
+                color="warn"
+                class="uppercase"
+                (click)="removeRedirectUri(i)">
+          Remove Claim
+        </button>
+      </div>
+    </mat-card>
+  </div>
+
+  <ng-content></ng-content>
+</form>
