@@ -41,7 +41,8 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-label"), "empty-passport-issuer");
         adminManagePage.fillField(DdapBy.se("inp-description"), "empty-passport-issuer-desc");
 
-        adminManagePage.fillField(DdapBy.se("inp-issuer"), "https://login.nih.gov/oidc");
+        adminManagePage.fillField(DdapBy.se("inp-issuer"), "https://login.elixir-czech.org/oidc");
+        adminManagePage.closeAutocompletes();
 
         adminListPage = adminManagePage.saveEntity();
 
