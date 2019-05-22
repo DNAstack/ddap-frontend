@@ -31,8 +31,6 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
   resource?: EntityModel = new EntityModel('', Resource.create());
 
   form: FormGroup;
-  test: any;
-  testEditorOptions = new JsonEditorDefaults();
 
   viewRefs: EmbeddedViewRef<ResourceViewFormComponent>[] = [];
   @ViewChild('viewTemplate')
@@ -71,8 +69,6 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
         infoUrl: [dto.ui.infoUrl || '', []], // TODO: url validator
       }),
     });
-
-    this.testEditorOptions.mode = 'code';
   }
 
   ngAfterViewInit(): void {
@@ -81,10 +77,6 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
     }
     Object.keys(this.views).forEach((viewId) => this.addView(viewId));
     this.cd.detectChanges();
-  }
-
-  updateTestDto(event: any) {
-    this.test = event;
   }
 
   addView(viewId?: string) {
@@ -136,10 +128,6 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
         ...rest,
       },
     };
-  }
-
-  getAccessModel(): any {
-    return this.test;
   }
 
   isValid() {

@@ -6,6 +6,7 @@ import { ConfigModificationObject } from '../../shared/configModificationObject'
 import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
+import { PersonaResourceAccessComponent } from '../resource-form/persona-resource-access/persona-resource-access.component';
 import { ResourceFormComponent } from '../resource-form/resource-form.component';
 import { ResourceService } from '../resources.service';
 
@@ -21,6 +22,8 @@ export class ResourceDetailComponent extends EntityDetailBase<ResourceService> i
   resourceForm: ResourceFormComponent;
   @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
+  @ViewChild('accessForm')
+  accessForm: PersonaResourceAccessComponent;
 
   constructor(route: ActivatedRoute,
               resourceService: ResourceService,
@@ -43,7 +46,11 @@ export class ResourceDetailComponent extends EntityDetailBase<ResourceService> i
     }
 
     const resourceModel: EntityModel = this.resourceForm.getModel();
-    const applyModel = this.resourceForm.getAccessModel() || {};
+    this.accessForm.dryRun(resourceModel);
+    if (this.accessForm.error) {
+      return;
+    }
+    const applyModel = this.accessForm.getApplyModel() || {};
     const change = new ConfigModificationObject(resourceModel.dto, applyModel);
 
     this.entityService.update(this.entity.name, change)

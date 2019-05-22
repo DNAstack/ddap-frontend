@@ -11,6 +11,7 @@ import { pick } from '../../../shared/autocomplete/autocomplete.util';
 import { PersonaService } from '../../personas/personas.service';
 import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../configModificationObject';
+import { EntityModel } from '../entity.model';
 
 @Component({
   selector: 'ddap-test-form',
@@ -20,8 +21,7 @@ import { ConfigModificationObject } from '../configModificationObject';
 export class TestFormComponent implements OnChanges {
 
   @Input()
-  resource: any;
-
+  resource: EntityModel;
   @Output()
   change: EventEmitter<any> = new EventEmitter();
 
@@ -43,7 +43,7 @@ export class TestFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const resourceViews = _get(this.resource, 'dto.viewChildComponents', {});
+    const resourceViews = _get(this.resource, 'dto.views', {});
     const viewNames = Object.keys(resourceViews);
 
     this.views = viewNames.reduce((access, viewName) => {

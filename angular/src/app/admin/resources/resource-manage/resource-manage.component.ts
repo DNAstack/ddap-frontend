@@ -1,10 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { FormValidationService } from '../../../shared/form-validation.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
+import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 import { ResourceFormComponent } from '../resource-form/resource-form.component';
 import { ResourceService } from '../resources.service';
 
@@ -21,13 +21,18 @@ export class ResourceManageComponent {
   @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
-  submitted = false;
+  test: any;
+  testEditorOptions = new JsonEditorDefaults();
 
   constructor(public resourceService: ResourceService,
               private router: Router,
               private route: ActivatedRoute,
               public formError: FormErrorScrollService) {
+    this.testEditorOptions.mode = 'code';
+  }
 
+  updateTestDto(event: any) {
+    this.test = event;
   }
 
   save() {
@@ -36,7 +41,7 @@ export class ResourceManageComponent {
     }
 
     const resourceModel: EntityModel = this.resourceForm.getModel();
-    const applyModel = this.resourceForm.getAccessModel() || {};
+    const applyModel = this.test || {};
     const change = new ConfigModificationObject(resourceModel.dto, applyModel);
 
     this.resourceService.save(resourceModel.name, change)
