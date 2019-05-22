@@ -10,7 +10,15 @@
   <div *ngIf="entity">
     <ddap-resource-form #resourceForm
                        [resource]="entity">
-      <ddap-access-table [resource]="entity"></ddap-access-table>
+      <div class="ddap-personas-access">
+        <h3>
+          <mat-icon class="icon icon-access"></mat-icon>
+          <span>Access</span>
+        </h3>
+        <ddap-persona-resource-access #accessForm
+                                      [resource]="entity">
+        </ddap-persona-resource-access>
+      </div>
       <mat-error #formErrorElement
                  [class.visible]="formError.showError"
                  class="ddap-form-validation-msg">
