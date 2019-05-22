@@ -22,13 +22,20 @@ export class OptionListComponent implements OnInit {
 
   updateOptionValue({ optionKey, newValue }) {
     const newOptions = this.cloneOptions();
-    newOptions[optionKey] = newValue;
+    const oldValue = newOptions[optionKey];
+    try {
+      const convertedNewValue = typeof oldValue !== 'string' ? JSON.parse(newValue) : newValue;
+      newOptions[optionKey] = convertedNewValue;
 
-    this.optionService.update(newOptions)
-      .subscribe(
-        () => this.options[optionKey] = newValue,
-        ({error}) => this.error = error.substring(error.lastIndexOf(':') + 1)
-      );
+      this.optionService.update(newOptions)
+        .subscribe(
+          () => this.options[optionKey] = convertedNewValue,
+          ({error}) => this.error = error.substring(error.lastIndexOf(':') + 1)
+        );
+    } catch (e) {
+      // The only type of error we expect here a syntax error.
+      this.error = `Syntax error. Value should be a ${typeof oldValue}`;
+    }
   }
 
   private cloneOptions(): object {

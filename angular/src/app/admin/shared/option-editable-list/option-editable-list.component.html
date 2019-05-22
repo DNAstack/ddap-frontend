@@ -14,10 +14,10 @@
       <mat-expansion-panel (opened)="resetSelection()"
                            *ngIf="option.key !== 'descriptors'">
         <mat-expansion-panel-header>
-          <mat-panel-title>
+          <mat-panel-title data-se="option-name">
             {{ getDescriptorFor(option.key).label }}
           </mat-panel-title>
-          <mat-panel-description>
+          <mat-panel-description data-se="option-value">
             {{ option.value }}
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -26,16 +26,18 @@
           <mat-label>New value</mat-label>
           <input matInput
                  [placeholder]="option.value"
-                 [(ngModel)]="newOptionValue">
+                 [(ngModel)]="newOptionValue"
+                 data-se="option-input">
         </mat-form-field>
-        <mat-error *ngIf="error">
+        <mat-error *ngIf="error" data-se="option-error">
           {{ error }}
         </mat-error>
         <mat-action-row>
           <button (click)="submitted.emit({ optionKey: option.key, newValue: newOptionValue })"
                   mat-button
                   color="primary"
-                  class="uppercase">
+                  class="uppercase"
+                  data-se="option-submit">
             Update Value
           </button>
         </mat-action-row>

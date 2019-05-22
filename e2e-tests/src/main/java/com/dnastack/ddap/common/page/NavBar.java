@@ -20,6 +20,7 @@ public class NavBar {
         IC_IDENTITY_PROVIDERS("Identity Providers", "nav-ic-identity-providers"),
         IC_CLIENTS("Clients", "nav-ic-clients"),
         IC_OPTIONS("Options", "nav-ic-options"),
+        OPTIONS("Options", "nav-options"),
         RESOURCES("Resource", "nav-resources"),
         PERSONAS("Test Personas", "nav-test-personas"),
         IDENTITY("My Identity", "nav-identity"),
@@ -78,6 +79,18 @@ public class NavBar {
         driver.findElement(DdapBy.se(navItem.selector)).click();
 
         return new AdminListPage(driver);
+    }
+
+    public AdminOptionPage goToAdminOptionPage(NavItem navItem) {
+        switch (navItem) {
+            case IC_OPTIONS:
+                driver.findElement(By.xpath("//*[@data-se=\"nav-ic-panel\"]")).click();
+            case OPTIONS:
+                driver.findElement(DdapBy.se(navItem.selector)).click();
+                return new AdminOptionPage(driver);
+            default:
+                throw new IllegalArgumentException(String.format("Invalid nav item for option page: %s", navItem));
+        }
     }
 
     private WebElement getRealmInput() {
