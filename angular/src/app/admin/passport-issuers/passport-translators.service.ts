@@ -21,7 +21,6 @@ export class PassportTranslatorsService {
     return this.http.get(`${environment.damApiUrl}/${realmIdPlaceholder}/passportTranslators`)
       .pipe(
         pluck('passportTranslators'),
-        // map(EntityModel.objectToMap),
         map((passportTranslatorsDto) => this.getTranslatorList(passportTranslatorsDto)),
         this.errorHandler.notifyOnError(`Can't load passport translators.`)
       );
