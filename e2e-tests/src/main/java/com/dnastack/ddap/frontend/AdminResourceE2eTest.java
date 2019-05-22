@@ -92,7 +92,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-owner"), "E2E test");
         adminManagePage.fillField(DdapBy.se("inp-max-ttl"), "7d");
 
-        adminManagePage.clickButton(DdapBy.se("btn-add-view"));
+        adminManagePage.enterButton(DdapBy.se("btn-add-view"));
         adminManagePage.fillField(DdapBy.se("inp-view-id"), viewId);
         adminManagePage.fillField(DdapBy.se("inp-view-label"), viewId);
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Phase 3");
@@ -123,7 +123,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-owner"), "E2E test");
         adminManagePage.fillField(DdapBy.se("inp-max-ttl"), "7d");
 
-        adminManagePage.clickButton(DdapBy.se("btn-add-view"));
+        adminManagePage.enterButton(DdapBy.se("btn-add-view"));
         adminManagePage.fillField(DdapBy.se("inp-view-id"), view1Id);
         adminManagePage.fillField(DdapBy.se("inp-view-label"), view1Id);
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Phase 3");
