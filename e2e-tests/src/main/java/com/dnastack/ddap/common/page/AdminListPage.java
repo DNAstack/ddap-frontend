@@ -50,13 +50,13 @@ public class AdminListPage {
     }
 
     private By getLine(String resourceName) {
-        return By.xpath(format("//mat-expansion-panel[descendant::*[contains(text(), '%s') and @class='mat-expansion-panel-header-title']]",
+        return By.xpath(format("//mat-expansion-panel[descendant::*[contains(text(), '%s') and @data-se='entity-title']]",
                 resourceName
         ));
     }
 
     private By getButton(String resourceName, String buttonText) {
-        return By.xpath(format("//mat-expansion-panel[descendant::*[contains(text(), '%s') and @class='mat-expansion-panel-header-title']]//button[descendant::*[contains(text(), '%s')]]",
+        return By.xpath(format("//mat-expansion-panel[descendant::*[contains(text(), '%s') and @data-se='entity-title']]//button[descendant::*[contains(text(), '%s')]]",
                 resourceName,
                 buttonText
         ));

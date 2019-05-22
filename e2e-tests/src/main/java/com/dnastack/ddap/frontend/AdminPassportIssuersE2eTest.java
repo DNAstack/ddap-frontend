@@ -76,7 +76,7 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
         assertThat(adminListPage.getEntityTitles(), hasItem("edit-me"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("full-passport-issu3r")));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("edit-me", "view");
+        AdminManagePage adminManagePage = adminListPage.clickView("edit-me", "View");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), "full-passport-issu3r");
@@ -94,7 +94,7 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem("delete-me"));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("delete-me", "view");
+        AdminManagePage adminManagePage = adminListPage.clickView("delete-me", "View");
 
         adminListPage = adminManagePage.deleteEntity();
 
