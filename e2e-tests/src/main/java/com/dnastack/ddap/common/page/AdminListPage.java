@@ -34,7 +34,7 @@ public class AdminListPage {
 
         final WebElement viewButton = driver.findElement(getButton(resourceName, buttonText));
         // need to wait for button to become visible.
-        new WebDriverWait(driver, 5).until(d -> ExpectedConditions.elementToBeClickable(viewButton));
+        new WebDriverWait(driver, 5).until(d -> viewButton.isDisplayed());
 
         viewButton.click();
 
