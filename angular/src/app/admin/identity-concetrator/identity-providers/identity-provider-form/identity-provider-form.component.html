@@ -1,0 +1,131 @@
+<form class="ddap-form"
+      novalidate
+      [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Name"
+             formControlName="id"
+             data-se="inp-id"
+             required>
+      <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
+    </mat-form-field>
+    <mat-form-field class="col"
+                    formGroupName="ui">
+      <input matInput
+             placeholder="Display Name"
+             formControlName="label"
+             data-se="inp-label">
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col"
+                    formGroupName="ui">
+      <textarea matInput
+                placeholder="Description"
+                formControlName="description"
+                data-se="inp-description">
+      </textarea>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Issuer"
+             formControlName="issuer"
+             data-se="inp-issuer">
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Token URL"
+             formControlName="tokenUrl"
+             data-se="inp-tokenUrl">
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Authorize URL"
+             formControlName="authorizeUrl"
+             data-se="inp-authorizeUrl">
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Response Type"
+             formControlName="responseType"
+             data-se="inp-responseType">
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Client ID"
+             formControlName="clientId"
+             data-se="inp-clientId">
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field class="col">
+      <mat-select
+        placeholder="Translate Using"
+        formControlName="translateUsing"
+        data-se="inp-translateUsing">
+        <mat-option *ngFor="let translator of translators$ | async" [value]="translator.id">
+          {{ translator.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <h3>
+    <mat-icon class="icon icon-claims"></mat-icon>
+    <span>Scopes</span>
+
+    <div>
+      <button mat-button
+              color="primary"
+              class="uppercase"
+              type="button"
+              data-se="btn-add-scope"
+              (click)="addScope()">
+        Add Scope
+      </button>
+    </div>
+  </h3>
+
+  <div *ngFor="let scope of scopes.controls; let i=index"
+       formArrayName="scopes">
+    <mat-card>
+      <div class="row">
+        <mat-form-field class="col">
+          <input matInput
+                 placeholder="Scope"
+                 [formControlName]="i"
+                 data-se="inp-scope">
+        </mat-form-field>
+      </div>
+
+      <div class="footer">
+        <button mat-button
+                type="button"
+                color="warn"
+                class="uppercase"
+                (click)="removeScope(i)">
+          Remove Redirect
+        </button>
+      </div>
+    </mat-card>
+  </div>
+
+  <ng-content></ng-content>
+</form>

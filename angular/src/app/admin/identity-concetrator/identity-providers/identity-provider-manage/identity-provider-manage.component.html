@@ -1,9 +1,36 @@
 <ddap-header [backLink]="['../..']"
              label="Add Identity Provider">
+
+  <div>
+    <button mat-flat-button
+            [routerLink]="['json']"
+            disabled
+            color="primary"
+            class="uppercase">
+      Edit JSON
+    </button>
+  </div>
 </ddap-header>
 
 <ddap-main>
-  <ddap-entity-manage-form [label]="'Identity Provider'"
-                           (submitted)="save($event.id, $event.change)">
-  </ddap-entity-manage-form>
+  <ddap-identity-provider-form #ddapForm
+                               [model]="identityProvider">
+
+    <mat-error #ddapFormError
+               [class.visible]="formError.showError"
+               class="ddap-form-validation-msg">
+      Please fix invalid fields (marked red) before saving the identity provider.
+    </mat-error>
+  </ddap-identity-provider-form>
 </ddap-main>
+
+<div class="ddap-form-toolbar">
+  <button mat-flat-button
+          (click)="save()"
+          data-se="btn-save"
+          type="submit"
+          color="primary"
+          class="uppercase">
+    Add Identity Provider
+  </button>
+</div>
