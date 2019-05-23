@@ -3,6 +3,24 @@
   "revision": "1",
   "commitTime": 1544824316,
   "identityProviders": {
+    "edit-ip-id": {
+      "issuer": "https://www.googleapis.com/oauth2/v4/token",
+      "authorizeUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+      "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
+      "clientId": "2978103516-cmpti2bi0c5rteimvoks1abubdvjrdik.apps.googleusercontent.com",
+      "ui": {
+        "iconUrl": "/identity/static/google_identity.png"
+      }
+    },
+    "delete-ip-id": {
+      "issuer": "https://www.googleapis.com/oauth2/v4/token",
+      "authorizeUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+      "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
+      "clientId": "2978103516-cmpti2bi0c5rteimvoks1abubdvjrdik.apps.googleusercontent.com",
+      "ui": {
+        "iconUrl": "/identity/static/google_identity.png"
+      }
+    },
     "elixir": {
       "issuer": "https://login.elixir-czech.org/oidc",
       "authorizeUrl": "https://login.elixir-czech.org/oidc/authorize",
