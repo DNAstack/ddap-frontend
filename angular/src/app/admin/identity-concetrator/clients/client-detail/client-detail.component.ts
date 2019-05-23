@@ -13,7 +13,6 @@ import { ClientService } from '../clients.service';
   templateUrl: './client-detail.component.html',
   styleUrls: ['./client-detail.component.scss'],
   providers: [FormErrorScrollService],
-
 })
 export class ClientDetailComponent extends EntityDetailBase<ClientService> implements OnInit {
   @ViewChild(ClientFormComponent)
@@ -22,15 +21,15 @@ export class ClientDetailComponent extends EntityDetailBase<ClientService> imple
   @ViewChild('formMatError')
   formErrorElement: ElementRef;
 
-  constructor(route: ActivatedRoute,
-              service: ClientService,
+  constructor(protected route: ActivatedRoute,
+              protected client: ClientService,
               private router: Router,
               public formError: FormErrorScrollService) {
-    super(route, service, 'clientName');
+    super(route, client, 'clientName');
   }
 
   update() {
-    if (!this.formError.validate(this.clientForm.form, this.formErrorElement)) {
+    if (!this.formError.validate(this.clientForm, this.formErrorElement)) {
       return;
     }
 

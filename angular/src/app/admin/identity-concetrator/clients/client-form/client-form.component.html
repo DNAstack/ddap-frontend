@@ -4,20 +4,28 @@
   <div class="row">
     <mat-form-field class="col">
       <input matInput
+             placeholder="Name"
+             formControlName="id"
+             data-se="inp-id"
+             required>
+      <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
              placeholder="Client ID"
              formControlName="clientId"
              data-se="inp-clientId"
              [readonly]="model.dto.clientId.length > 0"
              required>
-      <mat-error *ngIf="form.get('clientId').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
     </mat-form-field>
     <mat-form-field class="col"
                     formGroupName="ui">
       <input matInput
              placeholder="Display Name"
              formControlName="label"
-             data-se="inp-label"
-             required>
+             data-se="inp-label">
     </mat-form-field>
   </div>
   <div class="row"
@@ -26,8 +34,7 @@
       <textarea matInput
                 placeholder="Description"
                 formControlName="description"
-                data-se="inp-description"
-                required>
+                data-se="inp-description">
       </textarea>
     </mat-form-field>
   </div>
@@ -41,7 +48,7 @@
               color="primary"
               class="uppercase"
               type="button"
-              data-se="btn-add-claim"
+              data-se="btn-add-redirect"
               (click)="addRedirectUri()">
         Add Redirect URI
       </button>
@@ -56,7 +63,7 @@
           <input matInput
                  placeholder="Redirect URI"
                  [formControlName]="i"
-                 data-se="inp-label">
+                 data-se="inp-redirect">
         </mat-form-field>
       </div>
 

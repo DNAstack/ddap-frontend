@@ -2,16 +2,17 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 
-import Client = dam.v1.Client;
-import { dam } from '../../../../shared/proto/dam-service';
+import { ic } from '../../../../shared/proto/ic-service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
+import Client = ic.v1.Client;
+import Form from '../../../shared/form';
 
 @Component({
   selector: 'ddap-client-form',
   templateUrl: './client-form.component.html',
   styleUrls: ['./client-form.component.scss'],
 })
-export class ClientFormComponent implements OnInit {
+export class ClientFormComponent implements Form, OnInit {
 
   @Input()
   model?: EntityModel = new EntityModel('', Client.create());
@@ -58,6 +59,14 @@ export class ClientFormComponent implements OnInit {
     });
 
     return new EntityModel(id, clientApplication);
+  }
+
+  getAllForms(): FormGroup[] {
+    return [this.form];
+  }
+
+  isValid(): boolean {
+    return this.form.valid;
   }
 
 }
