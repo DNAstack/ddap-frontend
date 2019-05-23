@@ -122,6 +122,9 @@ h2 {
 .icon-none:before {
   content: "\41";
 }
+.icon-warning:before {
+  content: "\42";
+}
 
 .text-color--subtle {
   color: $navbar-font-subtle-color;
