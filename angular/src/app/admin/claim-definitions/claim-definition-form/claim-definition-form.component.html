@@ -1,0 +1,44 @@
+<form class="ddap-form"
+      novalidate
+      [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             placeholder="Name"
+             formControlName="id"
+             data-se="inp-id"
+             [readonly]="claimDefinition.name.length > 0"
+             required>
+      <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
+    </mat-form-field>
+    <mat-form-field class="col"
+                    formGroupName="ui">
+      <input matInput
+             placeholder="Display Name"
+             formControlName="label"
+             data-se="inp-label"
+             required>
+    </mat-form-field>
+  </div>
+  <ng-container formGroupName="ui">
+    <div class="row">
+      <mat-form-field class="col">
+      <textarea matInput
+                placeholder="Description"
+                formControlName="description"
+                data-se="inp-description">
+      </textarea>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Info URL"
+               formControlName="infoUrl"
+               data-se="inp-infoUrl">
+      </mat-form-field>
+    </div>
+  </ng-container>
+
+  <ng-content></ng-content>
+</form>

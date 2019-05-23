@@ -2,7 +2,22 @@
 </ddap-header>
 
 <ddap-main>
-  <ddap-entity-manage-form [label]="'Claim Definition'"
-                           (submitted)="save($event.id, $event.change)">
-  </ddap-entity-manage-form>
+  <ddap-claim-definition-form #claimDefinitionForm>
+    <mat-error #formErrorElement
+               [class.visible]="formError.showError"
+               class="ddap-form-validation-msg">
+      Please fix invalid fields (marked red) before saving the claim definition.
+    </mat-error>
+  </ddap-claim-definition-form>
 </ddap-main>
+
+<div class="ddap-form-toolbar">
+  <button mat-flat-button
+          (click)="save()"
+          data-se="btn-save"
+          type="submit"
+          color="primary"
+          class="uppercase">
+    Add Claim Definition
+  </button>
+</div>
