@@ -267,7 +267,7 @@ class BeaconResource {
                 .get()
                 .uri(beaconQueryUrl(viewTokenResponse.getUrl() + "/query", beaconRequest))
                 .header("Authorization",
-                        "Bearer " + viewTokenResponse.getToken())
+                        "Bearer " + viewTokenResponse.getToken().get())
                 .exchange()
                 .flatMap(clientResponse -> {
 
