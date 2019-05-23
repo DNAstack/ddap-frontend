@@ -37,7 +37,7 @@ export class ClientFormComponent implements Form, OnInit {
         label: [_get(ui, 'label', '')],
         description: [_get(ui, 'description', ''), [Validators.maxLength(255)]],
       }),
-      clientId: [clientId],
+      clientId: [clientId, [Validators.required]],
       redirectUris: redirectUrisForm,
     });
   }
