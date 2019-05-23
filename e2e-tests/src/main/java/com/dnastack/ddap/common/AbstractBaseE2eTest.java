@@ -22,9 +22,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.stream.Collectors;
 
 import static java.lang.Math.min;
 import static java.lang.String.format;
@@ -38,7 +36,6 @@ public abstract class AbstractBaseE2eTest {
     protected static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
     protected static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
     protected static final String DDAP_TEST_REALM_NAME_PREFIX = requiredEnv("E2E_TEST_REALM");
-    protected static final String IDP_BASE_URL = requiredEnv("E2E_IDP_BASE_URI");
     // Current size limit on realm names in DAM
     public static final int REALM_NAME_LIMIT = 40;
 

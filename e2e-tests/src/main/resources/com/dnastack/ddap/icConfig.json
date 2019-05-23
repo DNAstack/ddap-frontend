@@ -1,11 +1,12 @@
 {
   "version": "v0",
-  "revision": "3",
-  "commitTime": 1553161845.0066564,
+  "revision": "1",
+  "commitTime": 1544824316,
   "identityProviders": {
     "elixir": {
       "issuer": "https://login.elixir-czech.org/oidc",
       "authorizeUrl": "https://login.elixir-czech.org/oidc/authorize",
+      "responseType": "token id_token",
       "tokenUrl": "https://login.elixir-czech.org/oidc/token",
       "scopes": [
         "openid",
@@ -15,15 +16,17 @@
       "translateUsing": "elixir",
       "clientId": "76823614-51a3-4e2a-b17f-142b63c19e88",
       "ui": {
+        "iconUrl": "/identity/static/elixir_identity.png",
         "label": "Elixir"
       }
     },
     "era_commons": {
       "issuer": "https://dbgap.nlm.nih.gov/aa",
       "authorizeUrl": "https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?login=NFL&redirect_to=${REDIRECT_URI}&page=redirect",
-      "tokenUrl": "https://dbgap.ncbi.nlm.nih.gov/aa/jwt/user_passport.cgi?${CODE}",
+      "tokenUrl": "USER_CODE=https://dbgap.ncbi.nlm.nih.gov/aa/jwt/user.cgi?|ID_TOKEN=https://dbgap.ncbi.nlm.nih.gov/aa/jwt/user_passport.cgi?${USER_CODE}",
       "translateUsing": "dbgap",
       "ui": {
+        "iconUrl": "/identity/static/era_commons_identity.jpg",
         "label": "eRA Commons"
       }
     },
@@ -33,31 +36,74 @@
       "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
       "clientId": "2978103516-cmpti2bi0c5rteimvoks1abubdvjrdik.apps.googleusercontent.com",
       "ui": {
+        "iconUrl": "/identity/static/google_identity.png",
         "label": "Google"
       }
     }
   },
   "clients": {
     "edit-client-id": {
-      "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c",
+      "clientId": "1f8ff367-3950-3333-9358-781f9adff70c",
       "redirectUris": [
         "http://localhost:8080",
-        "https://ic-dot-craigv-codelab.appspot.com"
+        "https://ic-dot-hcls-data-connect-demo.appspot.com"
       ]
     },
     "delete-client-id": {
-      "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c",
+      "clientId": "1f8ff367-3950-2222-9358-781f9adff70c",
       "redirectUris": [
         "http://localhost:8080",
-        "https://ic-dot-craigv-codelab.appspot.com"
+        "https://ic-dot-hcls-data-connect-demo.appspot.com"
       ]
     },
     "craig_test": {
       "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c",
       "redirectUris": [
         "http://localhost:8080",
-        "https://ic-dot-craigv-codelab.appspot.com"
+        "https://ic-dot-hcls-data-connect-demo.appspot.com"
       ]
+    },
+    "ddap_dev": {
+      "clientId": "b6bf058f-7904-4b98-8982-d5a7a3a38052",
+      "redirectUris": [
+        "http://localhost:8085/api",
+        "https://ddap-frontend.staging.dnastack.com/api",
+        "https://ddap-frontend.prod.dnastack.com/api",
+        "https://ddap-frontend-candidate.staging.dnastack.com",
+        "https://ddap-frontend-candidate.prod.dnastack.com"
+      ],
+      "ui": {
+        "description": "DDAP Developer environment",
+        "label": "IC DDAP Development"
+      }
+    },
+    "ddap_prod": {
+      "clientId": "d0e75142-ee26-4217-86dd-0b01c9f8f811",
+      "redirectUris": [
+        "http://localhost:8085/api",
+        "https://ddap-frontend.staging.dnastack.com/api",
+        "https://ddap-frontend.prod.dnastack.com/api",
+        "https://ddap-frontend-candidate.staging.dnastack.com",
+        "https://ddap-frontend-candidate.prod.dnastack.com"
+      ],
+      "ui": {
+        "description": "DDAP Production environment",
+        "label": "IC DDAP Production"
+      }
+    },
+    "ddap_staging": {
+      "clientId": "ab7ac98b-fc80-4556-9b4c-0191bce2cdcb",
+      "redirectUris": [
+        "http://localhost:8085/api",
+        "https://ddap-frontend.staging.dnastack.com/api",
+        "https://ddap-frontend.prod.dnastack.com/api",
+        "https://ddap-frontend-candidate.staging.dnastack.com",
+        "https://ddap-frontend-candidate.prod.dnastack.com"
+      ],
+      "ui": {
+        "description": "DDAP Staging environment",
+        "label": "IC DDAP Staging"
+      }
     },
     "dnastack_fe": {
       "clientId": "b1aed96d-6367-4313-87a1-65eda4962a76",
@@ -83,13 +129,114 @@
       ]
     }
   },
+  "accountTags": {
+    "DAM": {
+      "category": "system",
+      "ui": {
+        "description": "User has a System assigned role within a Data Access Manager",
+        "label": "Data Access Manager"
+      }
+    },
+    "GCP": {
+      "category": "platform",
+      "ui": {
+        "description": "User is a target for resource access within GCP",
+        "label": "Google Cloud Platform"
+      }
+    },
+    "IC": {
+      "category": "system",
+      "ui": {
+        "description": "User has a System assigned role within an Identity Concentrator",
+        "label": "Identity Concentrator"
+      }
+    }
+  },
   "options": {
-    "accountNameLength": 20,
-    "defaultPassportTokenTtl": "50m",
-    "maxPassportTokenTtl": "60m",
-    "authCodeTokenTtl": "60m",
+    "accountNameLength": 25,
+    "readOnlyMasterRealm": true,
+    "defaultPassportTokenTtl": "1d",
+    "maxPassportTokenTtl": "1d",
+    "authCodeTokenTtl": "5m",
     "accessTokenTtl": "1d",
     "refreshTokenTtl": "180d",
-    "claimTtlCap": "30d"
+    "claimTtlCap": "180d",
+    "descriptors": {
+      "accessTokenTtl": {
+        "label": "Access Token TTL",
+        "description": "The valid duration of an access token (for authentication and authorization purposes) requested from the login flow of the API",
+        "regexp": "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$",
+        "type": "string:duration",
+        "min": "10s",
+        "max": "180d",
+        "defaultValue": "1h"
+      },
+      "accountNameLength": {
+        "label": "Account Name Length",
+        "description": "The number of characters in a new account name generated by the identity concentrator (previously existing IC accounts are unaffected)",
+        "type": "int",
+        "min": "20",
+        "max": "32",
+        "defaultValue": "25"
+      },
+      "authCodeTokenTtl": {
+        "label": "Authorization Code TTL",
+        "description": "The valid duration of an authorization code requested from the login flow of the API (auth codes must be converted into another token before this expiry)",
+        "regexp": "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$",
+        "type": "string:duration",
+        "min": "10s",
+        "max": "60m",
+        "defaultValue": "10m"
+      },
+      "claimTtlCap": {
+        "label": "Claim TTL Cap",
+        "description": "A maximum duration of how long individual claims can be cached and used before requiring them to be refreshed from the authority issuing the claim",
+        "regexp": "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$",
+        "type": "string:duration",
+        "min": "10s",
+        "max": "180d",
+        "defaultValue": "90d"
+      },
+      "defaultPassportTokenTtl": {
+        "label": "Default Passport Token TTL",
+        "description": "The duration of a passport TTL when no 'ttl' parameter is provided to the token minting endpoint",
+        "regexp": "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$",
+        "type": "string:duration",
+        "min": "10s",
+        "max": "180d",
+        "defaultValue": "10m"
+      },
+      "maxPassportTokenTtl": {
+        "label": "Maximum Passport Token TTL",
+        "description": "Passport requests with a 'ttl' parameter exceeding this value will be refused",
+        "regexp": "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$",
+        "type": "string:duration",
+        "min": "10s",
+        "max": "180d",
+        "defaultValue": "10m"
+      },
+      "readOnlyMasterRealm": {
+        "label": "Read Only Master Realm",
+        "description": "When 'true', the master realm becomes read-only and updates to the configuration must be performed via updating a config file",
+        "type": "bool",
+        "defaultValue": "false"
+      },
+      "refreshTokenTtl": {
+        "label": "Refresh Token TTL",
+        "description": "The valid duration of an refresh token requested from the refresh token flow of the API",
+        "regexp": "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$",
+        "type": "string:duration",
+        "min": "10s",
+        "max": "180d",
+        "defaultValue": "12h"
+      },
+      "whitelistedRealms": {
+        "label": "Whitelisted Realms",
+        "description": "By default any realm name can be created, but when this option is populated the IC will only allow realms on this list to be created (the master realm is allowed implicitly)",
+        "regexp": "^[\\w\\-\\.]+$",
+        "type": "string",
+        "isList": true
+      }
+    }
   }
 }
