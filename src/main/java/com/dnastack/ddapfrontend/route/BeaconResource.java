@@ -9,7 +9,6 @@ import com.dnastack.ddapfrontend.model.InterfaceModel;
 import com.dnastack.ddapfrontend.model.ResourceModel;
 import com.dnastack.ddapfrontend.model.ViewModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
-import feign.FeignException;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -103,7 +102,43 @@ class BeaconResource {
                 String errorMessage = "No view token found for viewID: " + viewTokenResponse.getViewId();
                 String uiLabel = views.get(viewTokenResponse.getViewId()).getLabel();
                 log.info(errorMessage);
-                return Flux.just(externalBeaconQueryResultError(errorMessage));
+
+                String orgName, name;
+                ResourceModel resourceModel = resource.getValue();
+
+                /**
+                 * Implementing the order of priority for choosing org name:
+                 *
+                 * 1. resource.ui.label
+                 * 2. resourceId
+                 * 3. "Unknown"
+                 */
+                if (!StringUtils.isEmpty(resourceModel.getLabel())) {
+                    orgName = resourceModel.getLabel();
+                } else if (!StringUtils.isEmpty(resource.getKey())) {
+                    orgName = resource.getKey();
+                } else {
+                    orgName = "Unknown";
+                }
+
+                /**
+                 * Implementing the order of priority for choosing name:
+                 * 1. resource.viewName.uiLabel
+                 * 2. viewId
+                 * 3. "Unknown"
+                 */
+                if (!StringUtils.isEmpty(resourceModel.getViews().get(viewTokenResponse.getViewId()).getLabel())) {
+                    name = resourceModel.getViews().get(viewTokenResponse.getViewId()).getLabel();
+                } else if (!StringUtils.isEmpty(viewTokenResponse.getViewId())) {
+                    name = viewTokenResponse.getViewId();
+                } else {
+                    name = "Unknown";
+                }
+
+                BeaconInfo beaconInfo = new BeaconInfo();
+                beaconInfo.setOrganization(orgName);
+                beaconInfo.setName(name);
+                return Flux.just(externalBeaconQueryResultError(beaconInfo, errorMessage));
             }
 
             Mono<BeaconInfoReceived> beaconInfoReceivedMono;
@@ -121,16 +156,31 @@ class BeaconResource {
 
                 BeaconOrganization beaconOrganization = beaconInfoReceived.getOrganization();
 
+                /**
+                 * Implementing the order of priority for choosing org name:
+                 *
+                 * 1. resource.ui.label
+                 * 2. /beacon-info->$organization.name
+                 * 3. resourceId
+                 * 4. "Unknown"
+                 */
                 if (!StringUtils.isEmpty(resourceModel.getLabel())) {
                     orgName = resourceModel.getLabel();
                 } else if (beaconOrganization != null && !StringUtils.isEmpty(beaconOrganization.getName())) {
-                    orgName = beaconInfoReceived.getOrganization().getName();
+                    orgName = beaconOrganization.getName();
                 } else if (!StringUtils.isEmpty(resource.getKey())) {
                     orgName = resource.getKey();
                 } else {
                     orgName = "Unknown";
                 }
 
+                /**
+                 * Implementing the order of priority for choosing name:
+                 * 1. resource.viewName.uiLabel
+                 * 2. /beacon-info->$name
+                 * 3. viewId
+                 * 4. "Unknown"
+                 */
                 if (!StringUtils.isEmpty(resourceModel.getViews().get(viewTokenResponse.getViewId()).getLabel())) {
                     name = resourceModel.getViews().get(viewTokenResponse.getViewId()).getLabel();
                 } else if (!StringUtils.isEmpty(beaconInfoReceived.getName())) {
@@ -168,7 +218,7 @@ class BeaconResource {
         .onErrorResume(fluxError -> {
             String errorMessage = fluxError.getMessage();
             log.warn("Error occurred while performing beacon query: " + errorMessage);
-            return Flux.just(externalBeaconQueryResultError(fluxError.getMessage()));
+            return Flux.just(externalBeaconQueryResultError(null, fluxError.getMessage()));
         });
 
         return beaconRequests;
@@ -198,10 +248,16 @@ class BeaconResource {
                                                                                          .build());
             return Flux.fromStream(viewToken.stream());
 
-        } catch (FeignException ex) {
+        } catch (Exception ex) {
             String beaconName = view.getValue().toString();
-            String errorMessage = "Unable to get the right authorization token: " + beaconName;
-            return Flux.error(new BeaconAuthorizationException(errorMessage));
+            log.info("Unable to get the auth token for beacon:" + beaconName);
+            Optional<Throwable> error = Optional.of(ex);
+            ViewTokenResponse viewTokenResponse = ViewTokenResponse.builder().viewId(view.getKey())
+                                                                   .error(error)
+                                                                   .resourceId(resourceId)
+                                                                   .url(firstUri.get())
+                                                                   .build();
+            return Flux.just(viewTokenResponse);
         }
     }
 
@@ -239,6 +295,7 @@ class BeaconResource {
     private Mono<BeaconInfoReceived> beaconInfo(URI rootBeaconUri, String token) {
 
         URI beaconUrl = rootBeaconUri.resolve("?access_token=" + token);
+        log.info("Root beacon url: " + beaconUrl);
 
         return webClient
                 .get()
@@ -254,8 +311,9 @@ class BeaconResource {
         return beaconInfoError;
     }
 
-    private ExternalBeaconQueryResult externalBeaconQueryResultError(String e) {
+    private ExternalBeaconQueryResult externalBeaconQueryResultError(BeaconInfo beaconInfo, String e) {
         ExternalBeaconQueryResult externalBeaconQueryResultError = new ExternalBeaconQueryResult();
+        externalBeaconQueryResultError.setBeaconInfo(beaconInfo);
         String error = "Could not get beacon external query results: " + e;
         externalBeaconQueryResultError.setError(error);
         return externalBeaconQueryResultError;
@@ -361,7 +419,9 @@ class BeaconResource {
         String viewId;
         String url;
         String resourceId;
-        Optional<String> token;
-        Optional<Throwable> error;
+        @Builder.Default
+        Optional<String> token = Optional.empty();
+        @Builder.Default
+        Optional<Throwable> error = Optional.empty();
     }
 }
