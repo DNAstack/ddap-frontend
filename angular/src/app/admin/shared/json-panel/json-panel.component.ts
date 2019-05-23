@@ -146,6 +146,8 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
 
         this.state = ViewState.Viewing;
         this.setEditorMode('view');
+
+        this.navigateBackTolistView();
       })
     );
   }
@@ -165,12 +167,16 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
     this.state = ViewState.Submitting;
     this.entityService.remove(this.entity.name)
       .subscribe(() => {
-      const routeToListView = this.router.url.substring(0, this.router.url.lastIndexOf('/'));
-        this.router.navigate([routeToListView]);
+        this.navigateBackTolistView();
       }, e => {
         this.state = ViewState.Viewing;
         this.error = e.error;
       });
+  }
+
+  private navigateBackTolistView() {
+    const routeToListView = this.router.url.substring(0, this.router.url.lastIndexOf('/'));
+    this.router.navigate([routeToListView]);
   }
 
   private getTestDto() {
