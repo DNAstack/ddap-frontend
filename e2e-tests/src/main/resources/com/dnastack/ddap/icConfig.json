@@ -1,0 +1,95 @@
+{
+  "version": "v0",
+  "revision": "3",
+  "commitTime": 1553161845.0066564,
+  "identityProviders": {
+    "elixir": {
+      "issuer": "https://login.elixir-czech.org/oidc",
+      "authorizeUrl": "https://login.elixir-czech.org/oidc/authorize",
+      "tokenUrl": "https://login.elixir-czech.org/oidc/token",
+      "scopes": [
+        "openid",
+        "profile",
+        "bona_fide_status"
+      ],
+      "translateUsing": "elixir",
+      "clientId": "76823614-51a3-4e2a-b17f-142b63c19e88",
+      "ui": {
+        "label": "Elixir"
+      }
+    },
+    "era_commons": {
+      "issuer": "https://dbgap.nlm.nih.gov/aa",
+      "authorizeUrl": "https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?login=NFL&redirect_to=${REDIRECT_URI}&page=redirect",
+      "tokenUrl": "https://dbgap.ncbi.nlm.nih.gov/aa/jwt/user_passport.cgi?${CODE}",
+      "translateUsing": "dbgap",
+      "ui": {
+        "label": "eRA Commons"
+      }
+    },
+    "google": {
+      "issuer": "https://www.googleapis.com/oauth2/v4/token",
+      "authorizeUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+      "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
+      "clientId": "2978103516-cmpti2bi0c5rteimvoks1abubdvjrdik.apps.googleusercontent.com",
+      "ui": {
+        "label": "Google"
+      }
+    }
+  },
+  "clients": {
+    "edit-client-id": {
+      "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c",
+      "redirectUris": [
+        "http://localhost:8080",
+        "https://ic-dot-craigv-codelab.appspot.com"
+      ]
+    },
+    "delete-client-id": {
+      "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c",
+      "redirectUris": [
+        "http://localhost:8080",
+        "https://ic-dot-craigv-codelab.appspot.com"
+      ]
+    },
+    "craig_test": {
+      "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c",
+      "redirectUris": [
+        "http://localhost:8080",
+        "https://ic-dot-craigv-codelab.appspot.com"
+      ]
+    },
+    "dnastack_fe": {
+      "clientId": "b1aed96d-6367-4313-87a1-65eda4962a76",
+      "redirectUris": [
+        "http://localhost:8085/api",
+        "https://ddap-frontend.staging.dnastack.com/api",
+        "https://ddap-frontend.prod.dnastack.com/api",
+        "https://ddap-frontend-candidate.staging.dnastack.com",
+        "https://ddap-frontend-candidate.prod.dnastack.com"
+      ]
+    },
+    "test_client": {
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed64",
+      "redirectUris": [
+        "/",
+        "http://localhost:8080"
+      ]
+    },
+    "test_page": {
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed65",
+      "redirectUris": [
+        "/"
+      ]
+    }
+  },
+  "options": {
+    "accountNameLength": 20,
+    "defaultPassportTokenTtl": "50m",
+    "maxPassportTokenTtl": "60m",
+    "authCodeTokenTtl": "60m",
+    "accessTokenTtl": "1d",
+    "refreshTokenTtl": "180d",
+    "claimTtlCap": "30d"
+  }
+}

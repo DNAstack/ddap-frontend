@@ -38,6 +38,7 @@ public abstract class AbstractBaseE2eTest {
     protected static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
     protected static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
     protected static final String DDAP_TEST_REALM_NAME_PREFIX = requiredEnv("E2E_TEST_REALM");
+    protected static final String IDP_BASE_URL = requiredEnv("E2E_IDP_BASE_URI");
     // Current size limit on realm names in DAM
     public static final int REALM_NAME_LIMIT = 40;
 
@@ -79,7 +80,22 @@ public abstract class AbstractBaseE2eTest {
         }
     }
 
+    protected static void setupIcConfig(String personaName, String config, String realmName) throws IOException {
+        final String modificationPayload = format("{ \"item\": %s }", config);
+        final CookieStore cookieStore = performPersonaLogin(personaName, realmName);
 
+        final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
+        HttpPut request = new HttpPut(format("%s/identity/v1alpha/%s/config?persona=%s", DDAP_BASE_URL, realmName, personaName));
+        request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
+        request.setEntity(new StringEntity(modificationPayload));
+
+        final HttpResponse response = httpclient.execute(request);
+        String responseBody = EntityUtils.toString(response.getEntity());
+
+        assertThat("Unable to set realm config. Response:\n" + responseBody,
+                response.getStatusLine().getStatusCode(),
+                allOf(greaterThanOrEqualTo(200), lessThan(300)));
+    }
 
     protected static void setupRealmConfig(String personaName, String config, String realmName) throws IOException {
         final String modificationPayload = format("{ \"item\": %s }", config);
