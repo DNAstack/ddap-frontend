@@ -1,11 +1,18 @@
 
 export interface BeaconResponse {
 
-  resource: {[key: string]: string};
-  name: string;
+  beaconInfo: {
+    name: string,
+    resourceLabel: string,
+    resourceId: string,
+    viewId: string
+  };
   organization: string;
   exists: boolean;
   info: {[key: string]: string};
-  error: string;
+  error: {
+    status: number,
+    message: string
+  };
 
 }

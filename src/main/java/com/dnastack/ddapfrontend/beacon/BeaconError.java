@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BeaconInfo {
-    private String name;
-    private String resourceLabel;
-    private String resourceId;
-    private String viewId;
+public class BeaconError {
+    private Integer status;
+    private String message;
 }

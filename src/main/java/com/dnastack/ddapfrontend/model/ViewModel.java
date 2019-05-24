@@ -13,14 +13,6 @@ public class ViewModel {
 
     public String getLabel() {
         if (ui == null) {
-            return super.toString();
-        }
-        return ui.get("label");
-    }
-
-    @Override
-    public String toString() {
-        if (ui == null) {
             return null;
         }
         return ui.get("label");

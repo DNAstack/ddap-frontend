@@ -3,8 +3,8 @@
                               expandedHeight="8rem">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>{{ beacon.resource.label }}</mat-card-title>
-        <mat-card-subtitle>{{ beacon.name }}</mat-card-subtitle>
+        <mat-card-title>{{ beacon.beaconInfo.resourceLabel }}</mat-card-title>
+        <mat-card-subtitle>{{ beacon.beaconInfo.name }}</mat-card-subtitle>
         <mat-card-subtitle>
           <ng-container [ngSwitch]="beacon.exists">
             <div *ngSwitchCase="false"
@@ -20,7 +20,7 @@
             <div *ngSwitchDefault
                  class="flex vertical-center match-error">
               <mat-icon>error</mat-icon>
-              <span *ngIf="beacon.error.includes('403'); else nonPermissionError">
+              <span *ngIf="beacon.error && (beacon.error.status === 401 || beacon.error.status === 403); else nonPermissionError">
                 lack of permissions
               </span>
               <ng-template #nonPermissionError>
@@ -51,5 +51,5 @@
 </mat-expansion-panel>
 
 <ng-template #error>
-  <p class="error-content">{{ beacon.error }}</p>
+  <p class="error-content">{{ beacon.error.message }}</p>
 </ng-template>

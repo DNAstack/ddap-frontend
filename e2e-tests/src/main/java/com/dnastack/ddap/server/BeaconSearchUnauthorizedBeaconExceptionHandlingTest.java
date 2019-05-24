@@ -1,20 +1,23 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import io.restassured.RestAssured;
+import io.restassured.config.ObjectMapperConfig;
+import io.restassured.config.RestAssuredConfig;
+import lombok.Data;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
-import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
+import static java.util.Comparator.comparing;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * 1. Test for 4xx error
@@ -27,15 +30,22 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/beaconSearchUnauthorizedBeaconExceptionHandlingTest.json");
         setupRealmConfig("administrator", realmConfigString, REALM);
+        RestAssured.config = RestAssuredConfig.config()
+                                              .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
+                                                      (cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()
+                                                              .findAndRegisterModules()
+                                                              .configure(
+                                                                      DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                                                                      false)));
     }
 
     @Test
-    public void shouldGetUnauthorized403Error() throws IOException {
+    public void shouldGet403ErrorWhenUsingUnderscopedToken() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        Map<String, Object> result[] = given()
+        BeaconQueryResult[] results = given()
                     .log().method()
                     .log().uri()
                 .when()
@@ -46,20 +56,117 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
                     .log().body()
                     .contentType(JSON)
                     .statusCode(200)
-                    .extract().as(Map[].class);
+                    .extract()
+                    .as(BeaconQueryResult[].class);
         // @formatter:on
 
-        Stream<Map<String, Object>> stream = Arrays.stream(result);
-        String errorMessage = "Invalid authorization token";
+        Arrays.sort(results,
+                    comparing(result -> Optional.ofNullable(result)
+                                                .map(BeaconQueryResult::getBeaconInfo)
+                                                .map(BeaconInfo::getResourceId)
+                                                .orElse(null)));
 
-        List<Map<String, Object>> beaconResponseList =
-                stream.filter(jsonObj -> {
-                    Boolean isThousandGenomes = ((Map<String, Object>) jsonObj.get("resource")).get("name").equals("thousand-genomes");
-                    Boolean isCorrectErrorMessage = jsonObj.get("error") != null && ((String) jsonObj.get("error")).contains(errorMessage);
-                    return isThousandGenomes && isCorrectErrorMessage;
-                })
-                .collect(Collectors.toList());
-        assertEquals(1, beaconResponseList.size());
+        assertThat(results, arrayWithSize(2));
+        assertThat(results[1].exists, nullValue());
+        assertThat(results[1].beaconInfo, notNullValue());
+        assertThat(results[1].beaconInfo.resourceId, equalTo("thousand-genomes"));
+        assertThat(results[1].error, notNullValue());
+        assertThat(results[1].error.status, equalTo(403));
+        assertThat(results[1].error.message, notNullValue());
+    }
+
+    @Test
+    public void shouldGet403WhenUserCannotGetViewToken() throws IOException {
+        String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
+
+        /* Run the aggregate search query on the realm */
+        // @formatter:off
+        BeaconQueryResult[] results = given()
+                .log().method()
+                .log().uri()
+                .when()
+                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+                .cookie("dam_token", validPersonaToken)
+                .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
+                .then()
+                .log().body()
+                .contentType(JSON)
+                .statusCode(200)
+                .extract()
+                .as(BeaconQueryResult[].class);
+        // @formatter:on
+
+        Arrays.sort(results,
+                    comparing(result -> Optional.ofNullable(result)
+                                                .map(BeaconQueryResult::getBeaconInfo)
+                                                .map(BeaconInfo::getResourceId)
+                                                .orElse(null)));
+
+        assertThat(results, arrayWithSize(2));
+        assertThat(results[1].exists, nullValue());
+        assertThat(results[1].beaconInfo, notNullValue());
+        assertThat(results[1].beaconInfo.resourceId, equalTo("thousand-genomes"));
+        assertThat(results[1].error, notNullValue());
+        assertThat(results[1].error.status, equalTo(403));
+        assertThat(results[1].error.message,
+                   allOf(containsString("Forbidden"),
+                         containsString("thousand-genomes"),
+                         containsString("discovery-access")));
+    }
+
+    @Test
+    public void shouldGet401InBeaconResponsesWhenUnauthenticated() {
+        /* Run the aggregate search query on the realm */
+        // @formatter:off
+        BeaconQueryResult[] results = given()
+                .log().method()
+                .log().uri()
+                .when()
+                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+                .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
+                .then()
+                .log().body()
+                .contentType(JSON)
+                .statusCode(200)
+                .extract()
+                .as(BeaconQueryResult[].class);
+        // @formatter:on
+
+        Arrays.sort(results,
+                    comparing(result -> Optional.ofNullable(result)
+                                                .map(BeaconQueryResult::getBeaconInfo)
+                                                .map(BeaconInfo::getResourceId)
+                                                .orElse(null)));
+
+        assertThat(results, arrayWithSize(2));
+        assertThat(results[1].exists, nullValue());
+        assertThat(results[1].beaconInfo, notNullValue());
+        assertThat(results[1].beaconInfo.resourceId, equalTo("thousand-genomes"));
+        assertThat(results[1].error, notNullValue());
+        assertThat(results[1].error.status, equalTo(401));
+        assertThat(results[1].error.message,
+                   allOf(containsString("Unauthenticated"),
+                         containsString("thousand-genomes"),
+                         containsString("discovery-access")));
+    }
+
+    @Data
+    static class BeaconQueryResult {
+        BeaconInfo beaconInfo;
+        Boolean exists;
+        BeaconError error;
+    }
+
+    @Data
+    static class BeaconInfo {
+        String resourceId;
+        String name;
+    }
+
+    @Data
+    static class BeaconError {
+        Integer status;
+        String message;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.dnastack.ddapfrontend.beacon;
+package com.dnastack.ddapfrontend.client.beacon;
 
 import lombok.Data;
 

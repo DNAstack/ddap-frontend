@@ -29,7 +29,7 @@ public class GetBeaconInfoAsAdmin extends AbstractBaseE2eTest {
     /**
      * Test to exercise what happens to Beacon Org and name we get when we make request as a user that doesn't have
      * resource access rights. In this case, we're making request as Administrator and ensure that we still get
-     * beaconInfo name and organization in the response.
+     * beaconInfo name and resourceId in the response.
      * @throws IOException
      */
     @Test
@@ -49,7 +49,7 @@ public class GetBeaconInfoAsAdmin extends AbstractBaseE2eTest {
                     .contentType(JSON)
                     .statusCode(200)
                     .body("[0].beaconInfo.name", equalTo("beacon"))
-                    .body("[0].beaconInfo.organization", equalTo("fake-ga4gh"));
+                    .body("[0].beaconInfo.resourceLabel", equalTo("fake-ga4gh"));
         // @formatter:on
     }
 

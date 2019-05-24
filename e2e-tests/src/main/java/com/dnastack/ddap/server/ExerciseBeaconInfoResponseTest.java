@@ -48,35 +48,8 @@ public class ExerciseBeaconInfoResponseTest extends AbstractBaseE2eTest {
                     .contentType(JSON)
                     .statusCode(200)
                     .body("[0].beaconInfo.name", equalTo("beacon"))
-                    .body("[0].beaconInfo.organization", equalTo("fake-ga4gh"));
+                    .body("[0].beaconInfo.resourceLabel", equalTo("fake-ga4gh"));
         // @formatter:on
     }
-
-
-    /**
-     * Test to exercise what happens to beacon org and name, when there is a missing ui label and view name
-     * @throws IOException
-     */
-    @Test
-    public void exerciseMissingUiLabelAndMissingViewnameUiLabel() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-
-        // @formatter:off
-        given()
-                    .log().method()
-                    .log().uri()
-                    .when()
-                    .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
-                    .cookie("dam_token", validPersonaToken)
-                    .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
-                    .then()
-                    .log().ifValidationFails()
-                    .contentType(JSON)
-                    .statusCode(200)
-                    .body("[1].beaconInfo.name", equalTo("Cafe Variome Beacon"))
-                    .body("[1].beaconInfo.organization", equalTo("University of Leicester"));
-        // @formatter:on
-    }
-
 
 }

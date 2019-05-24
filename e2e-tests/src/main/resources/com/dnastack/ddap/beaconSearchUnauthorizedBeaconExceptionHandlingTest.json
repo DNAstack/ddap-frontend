@@ -592,7 +592,7 @@
           "items": [
             {
               "vars": {
-                "url": "https://gatekeeper-cafe-variome.staging.dnastack.com/"
+                "url": "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon"
               }
             }
           ],

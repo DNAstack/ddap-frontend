@@ -2,7 +2,16 @@ package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import io.restassured.RestAssured;
+import io.restassured.config.ObjectMapperConfig;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.mapper.ObjectMapper;
+import io.restassured.mapper.factory.Jackson2ObjectMapperFactory;
+import lombok.Data;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +24,7 @@ import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -29,6 +39,13 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/beaconSearchExceptionNoServerResponseHandlingTest.json");
         setupRealmConfig("administrator", realmConfigString, REALM);
+        RestAssured.config = RestAssuredConfig.config()
+                                              .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
+                                                      (cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()
+                                                              .findAndRegisterModules()
+                                                              .configure(
+                                                                      DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                                                                      false)));
     }
 
     @Test
@@ -36,7 +53,7 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
 
         // @formatter:off
-        Map<String, Object> result[] = given()
+        BeaconQueryResult[] results = given()
                     .log().method()
                     .log().uri()
                 .when()
@@ -47,19 +64,30 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
                     .log().body()
                     .contentType(JSON)
                     .statusCode(200)
-                    .extract().as(Map[].class);
+                    .extract().as(BeaconQueryResult[].class);
         // @formatter:on
 
-        String errorMessage = "Unable to query beacon: java.net.UnknownHostException";
 
-        List<Map<String, Object>> resultMapList = Arrays.asList(result);
-        assertEquals(resultMapList.size(), 2);
+        assertEquals(results.length, 2);
 
-        resultMapList.forEach(resultMap -> {
-            String errorMessageReceived = (String) resultMap.get("error");
-            assertThat(errorMessageReceived, CoreMatchers.containsString(errorMessage));
-        });
+        final String errorMessage = "Name or service not known";
+        for (BeaconQueryResult result : results) {
+            assertThat(result.getError(), notNullValue());
+            assertThat(result.getError().getStatus(), equalTo(500));
+            assertThat(result.getError().getMessage(), containsString(errorMessage));
+        }
+    }
 
+    @Data
+    static class BeaconQueryResult {
+        Boolean exists;
+        BeaconError error;
+    }
+
+    @Data
+    static class BeaconError {
+        Integer status;
+        String message;
     }
 
 }

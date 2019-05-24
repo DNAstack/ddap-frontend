@@ -46,9 +46,13 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
                     .contentType(JSON)
                     .statusCode(200)
                     .body("[0].beaconInfo.name", equalTo("Beacon Discovery"))
-                    .body("[0].beaconInfo.organization", equalTo("GA4GH APIs"))
+                    .body("[0].beaconInfo.viewId", equalTo("beacon"))
+                    .body("[0].beaconInfo.resourceId", equalTo("ga4gh-apis"))
+                    .body("[0].beaconInfo.resourceLabel", equalTo("GA4GH APIs"))
                     .body("[1].beaconInfo.name", equalTo("Beacon Discovery Access"))
-                    .body("[1].beaconInfo.organization", equalTo("1000 Genomes"));
+                    .body("[1].beaconInfo.viewId", equalTo("discovery-access"))
+                    .body("[1].beaconInfo.resourceId", equalTo("thousand-genomes"))
+                    .body("[1].beaconInfo.resourceLabel", equalTo("1000 Genomes"));
         // @formatter:on
     }
 
@@ -76,8 +80,10 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
         .then()
             .log().everything()
             .contentType("application/json")
-            .body("[0].beaconInfo.name", not(isEmptyOrNullString()))
-            .body("[0].beaconInfo.organization", not(isEmptyOrNullString()))
+            .body("[0].beaconInfo.name", equalTo("Beacon Discovery Access"))
+            .body("[0].beaconInfo.viewId", equalTo("discovery-access"))
+            .body("[0].beaconInfo.resourceId", equalTo("thousand-genomes"))
+            .body("[0].beaconInfo.resourceLabel", equalTo("1000 Genomes"))
             .body("[0].exists", anyOf(nullValue(), instanceOf(boolean.class)))
             .statusCode(200);
         // @formatter:on
@@ -107,8 +113,10 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
         .then()
             .log().everything()
             .contentType("application/json")
-            .body("[0].beaconInfo.name", not(isEmptyOrNullString()))
-            .body("[0].beaconInfo.organization", not(isEmptyOrNullString()))
+            .body("[0].beaconInfo.name", equalTo("Beacon Discovery Access"))
+            .body("[0].beaconInfo.viewId", equalTo("discovery-access"))
+            .body("[0].beaconInfo.resourceId", equalTo("thousand-genomes"))
+            .body("[0].beaconInfo.resourceLabel", equalTo("1000 Genomes"))
             .body("[0].exists", anyOf(nullValue(), instanceOf(boolean.class)))
             .statusCode(200);
         // @formatter:on

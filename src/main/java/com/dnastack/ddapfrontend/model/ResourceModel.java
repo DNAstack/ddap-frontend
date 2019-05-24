@@ -12,7 +12,7 @@ public class ResourceModel {
     private Map<String, ViewModel> views;
 
     public String getLabel() {
-        return this.ui.get("label");
+        return (ui != null) ? this.ui.get("label"): null;
     }
 
 }
