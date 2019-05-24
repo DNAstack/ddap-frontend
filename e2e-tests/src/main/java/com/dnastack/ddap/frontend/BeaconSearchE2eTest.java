@@ -21,6 +21,12 @@ import org.openqa.selenium.WebElement;
 
 @SuppressWarnings("Duplicates")
 public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
+    private static final String REALM = generateRealmName(BeaconSearchE2eTest.class.getSimpleName());
+
+    @Override
+    protected String getRealm() {
+        return REALM;
+    }
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {

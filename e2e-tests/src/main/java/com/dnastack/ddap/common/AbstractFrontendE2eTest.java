@@ -21,7 +21,6 @@ import static java.lang.String.format;
 
 public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
 
-    protected static final String REALM = generateRealmName(NavbarE2eTest.class.getSimpleName());
     protected static final boolean HEADLESS = Boolean.parseBoolean(optionalEnv("HEADLESS", "true"));
     protected static final Pattern URL_PARSE_PATTERN = Pattern.compile("^(https?)://(.*)$");
 
@@ -64,11 +63,13 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
             // Ensure that tests with login work independently of eachother.
             driver.manage().deleteAllCookies();
         }
-        ICLoginPage icLoginPage = startLogin(REALM);
+        ICLoginPage icLoginPage = startLogin(getRealm());
         ddapPage = login(icLoginPage);
     }
 
     protected abstract AnyDdapPage login(ICLoginPage icLoginPage);
+
+    protected abstract String getRealm();
 
     protected static ICLoginPage startLogin(String realm) {
         driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));

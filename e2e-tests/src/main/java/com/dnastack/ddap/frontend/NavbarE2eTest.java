@@ -20,6 +20,12 @@ import static org.hamcrest.Matchers.*;
 
 @SuppressWarnings("Duplicates")
 public class NavbarE2eTest extends AbstractFrontendE2eTest {
+    private static final String REALM = generateRealmName(NavbarE2eTest.class.getSimpleName());
+
+    @Override
+    protected String getRealm() {
+        return REALM;
+    }
 
     private static final Map<NavBar.NavItem, List<String>> DEFAULT_PAGE_ITEMS = pageItems();
     private static final Map<NavBar.NavItem, List<String>> pageItems() {

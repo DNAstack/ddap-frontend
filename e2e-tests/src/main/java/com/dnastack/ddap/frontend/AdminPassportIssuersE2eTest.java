@@ -18,6 +18,12 @@ import static org.hamcrest.Matchers.not;
 
 @SuppressWarnings("Duplicates")
 public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
+    private static final String REALM = generateRealmName(AdminPassportIssuersE2eTest.class.getSimpleName());
+
+    @Override
+    protected String getRealm() {
+        return REALM;
+    }
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {

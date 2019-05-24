@@ -84,7 +84,7 @@ public class NavBar {
     public AdminOptionPage goToAdminOptionPage(NavItem navItem) {
         switch (navItem) {
             case IC_OPTIONS:
-                driver.findElement(By.xpath("//*[@data-se=\"nav-ic-panel\"]")).click();
+                goTo(NavItem.IC_PANEL);
             case OPTIONS:
                 driver.findElement(DdapBy.se(navItem.selector)).click();
                 return new AdminOptionPage(driver);

@@ -16,6 +16,12 @@ import static org.hamcrest.Matchers.hasItem;
 
 @SuppressWarnings("Duplicates")
 public class AdminIcOptionsE2eTest extends AbstractFrontendE2eTest {
+    private static final String REALM = generateRealmName(AdminIcOptionsE2eTest.class.getSimpleName());
+
+    @Override
+    protected String getRealm() {
+        return REALM;
+    }
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
