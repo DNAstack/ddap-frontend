@@ -38,16 +38,6 @@
         "label": "Elixir"
       }
     },
-    "era_commons": {
-      "issuer": "https://dbgap.nlm.nih.gov/aa",
-      "authorizeUrl": "https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?login=NFL&redirect_to=${REDIRECT_URI}&page=redirect",
-      "tokenUrl": "USER_CODE=https://dbgap.ncbi.nlm.nih.gov/aa/jwt/user.cgi?|ID_TOKEN=https://dbgap.ncbi.nlm.nih.gov/aa/jwt/user_passport.cgi?${USER_CODE}",
-      "translateUsing": "dbgap",
-      "ui": {
-        "iconUrl": "/identity/static/era_commons_identity.jpg",
-        "label": "eRA Commons"
-      }
-    },
     "google": {
       "issuer": "https://www.googleapis.com/oauth2/v4/token",
       "authorizeUrl": "https://accounts.google.com/o/oauth2/v2/auth",
