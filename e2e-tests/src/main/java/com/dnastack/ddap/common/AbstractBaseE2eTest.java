@@ -40,11 +40,10 @@ public abstract class AbstractBaseE2eTest {
     public static final int REALM_NAME_LIMIT = 40;
 
     protected static String generateRealmName(String testClassName) {
-        final String fullName = format("%s_%s_%s",
-                                     DDAP_TEST_REALM_NAME_PREFIX,
-                                     testClassName,
-                                     System.currentTimeMillis() % 1000);
-        return fullName.substring(0, min(REALM_NAME_LIMIT, fullName.length()));
+        final String uniqueStamp = String.valueOf(System.currentTimeMillis() % 10000);
+        final String nameWithoutStamp = DDAP_TEST_REALM_NAME_PREFIX + "_" + testClassName;
+        // Always include stamp. Overwrite tail of full name if necessary
+        return nameWithoutStamp.substring(0, min(REALM_NAME_LIMIT - uniqueStamp.length(), nameWithoutStamp.length())) + uniqueStamp;
     }
 
     @Before
