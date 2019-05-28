@@ -259,13 +259,13 @@
             {
               "vars": {
                 "project": "allofus-project",
-                "table": "allofus-table1"
+                "dataset": "allofus-table1"
               }
             },
             {
               "vars": {
                 "project": "allofus-project",
-                "table": "allofus-table2"
+                "dataset": "allofus-table2"
               }
             }
           ],

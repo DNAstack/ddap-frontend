@@ -452,13 +452,13 @@
             {
               "vars": {
                 "project": "dataset-example-project",
-                "table": "dataset-example-table1"
+                "dataset": "dataset-example-table1"
               }
             },
             {
               "vars": {
                 "project": "dataset-example-project",
-                "table": "dataset-example-table2"
+                "dataset": "dataset-example-table2"
               }
             }
           ],

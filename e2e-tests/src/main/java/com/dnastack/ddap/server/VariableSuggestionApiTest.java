@@ -43,8 +43,8 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
                     .statusCode(200)
                     .body("project", notNullValue())
                     .body("project.regexp", notNullValue(String.class))
-                    .body("table", notNullValue())
-                    .body("table.regexp", notNullValue(String.class));
+                    .body("dataset", notNullValue())
+                    .body("dataset.regexp", notNullValue(String.class));
         // @formatter:on
     }
 
