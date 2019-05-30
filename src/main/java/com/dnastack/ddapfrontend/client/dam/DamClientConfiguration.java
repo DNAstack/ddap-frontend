@@ -82,6 +82,8 @@ public class DamClientConfiguration {
                                                               timeout);
                                                       return Proxy.getInvocationHandler(clientProxy)
                                                                   .invoke(o, method, args);
+                                                  } catch (RuntimeException re) {
+                                                      throw re;
                                                   } catch (Throwable throwable) {
                                                       // Have to wrap to match signature (throws Exception) and avoid
                                                       // UndeclaredThrowableException from proxy invocation handler
@@ -97,9 +99,6 @@ public class DamClientConfiguration {
             @Value("${dam.client-id}") String clientId,
             @Value("${dam.client-secret}") String clientSecret) {
         Client httpClient = new OkHttpClient();
-
-        ObjectMapper damObjectMapper = new ObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         /*
          * We can't dynamically set read timeouts with Feign, so we can't make use of it's built-in

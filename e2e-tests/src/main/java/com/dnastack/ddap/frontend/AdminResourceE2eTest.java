@@ -146,7 +146,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-view-aud"), "http://audience-test.com");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-view-service-template"), "Google BigQuery");
         adminManagePage.fillField(DdapBy.seAndText("inp-view-target-adapter-variable", "GCP Project ID"), "test");
-        adminManagePage.fillField(DdapBy.seAndText("inp-view-target-adapter-variable", "BigQuery Table name"), "test");
+        adminManagePage.fillField(DdapBy.seAndText("inp-view-target-adapter-variable", "BigQuery Dataset name"), "test");
         adminManagePage.enterButton(DdapBy.se("btn-make-default-role-editor"));
         adminManagePage.fillTagField(DdapBy.se("view-role-policies-editor"), "discovery_access");
         adminListPage = adminManagePage.saveEntity();

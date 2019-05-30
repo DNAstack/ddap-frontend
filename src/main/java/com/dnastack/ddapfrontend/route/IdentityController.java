@@ -78,7 +78,7 @@ public class IdentityController {
 
         if (persona != null) {
             log.debug("Performing direct persona login for {}", persona);
-            return idpClient.personaLogin(realm, scope, persona)
+            return idpClient.personaLogin(realm, scope, persona, selfLinkToApi(request, realm, ""))
                     .map(tokenResponse -> assembleTokenResponse(selfLinkToUi(request, realm, "data"), tokenResponse))
                     .doOnError(exception -> log.info("Failed to negotiate token", exception));
 
@@ -211,7 +211,7 @@ public class IdentityController {
                         .header(SET_COOKIE, cookiePackager.packageToken(state, cookieDomainPath.getHost(), CookieKind.OAUTH_STATE).toString())
                         .build());
             case PERSONA:
-                return idpClient.personaLogin(realm, scopes, provider)
+                return idpClient.personaLogin(realm, scopes, provider, selfLinkToApi(request, realm, ""))
                         .doOnError(exception -> log.info("Failed to negotiate persona token at beginning of account linking", exception))
                         .flatMap(tokenResponse -> finishAccountLinking(
                                 request, tokenResponse.getAccessToken(), request.getCookies().getFirst("ic_token").getValue(), realm

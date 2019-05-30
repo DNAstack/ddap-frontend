@@ -6,10 +6,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,11 +69,12 @@ public class IdentityConcentratorClient {
         }
     }
 
-    public Mono<TokenResponse> personaLogin(String realm, String scopes, String personaName) {
+    public Mono<TokenResponse> personaLogin(String realm, String scopes, String personaName, URI redirectUri) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/personas/{persona}" +
-                "?client_id={clientId}" +
-                "&client_secret={clientSecret}" +
-                "&scope={scopes}");
+                                                             "?client_id={clientId}" +
+                                                             "&client_secret={clientSecret}" +
+                                                             "&scope={scopes}" +
+                                                             "&redirect_uri={redirectUri}");
 
         final Map<String, Object> variables = new HashMap<>();
         variables.put("realm", realm);
@@ -78,37 +82,30 @@ public class IdentityConcentratorClient {
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
         variables.put("scopes", scopes);
+        variables.put("redirectUri", redirectUri);
 
         URI uri = idpBaseUrl.resolve(template.expand(variables));
-        Mono<TokenResponse> scopedAccessTokenResponse = webClient
+
+        return webClient
                 .get()
                 .uri(uri)
                 .exchange()
-                .flatMap(this::extractIdpTokens);
-
-        Mono<TokenResponse> defaultScopeAllTokensResponse = getPersonaTokens(realm, personaName);
-
-        return Mono.zip(scopedAccessTokenResponse, defaultScopeAllTokensResponse)
-                .map(bothTokens -> bothTokens.getT2().toBuilder()
-                        .accessToken(bothTokens.getT1().getAccessToken())
-                        .build());
-    }
-
-    private Mono<TokenResponse> getPersonaTokens(String realm, String personaName) {
-        final UriTemplate passportTemplate = new UriTemplate("/identity/v1alpha/{realm}/passport" +
-                "?persona={persona}" +
-                "&client_id={clientId}" +
-                "&client_secret={clientSecret}");
-
-        final Map<String, Object> passportVariables = new HashMap<>();
-        passportVariables.put("realm", realm);
-        passportVariables.put("persona", personaName);
-        passportVariables.put("clientId", idpClientId);
-        passportVariables.put("clientSecret", idpClientSecret);
-        return webClient.get()
-                .uri(idpBaseUrl.resolve(passportTemplate.expand(passportVariables)))
-                .exchange()
-                .flatMap(res -> res.bodyToMono(TokenResponse.class));
+                .flatMap(clientResponse -> {
+                   if (clientResponse.statusCode().is3xxRedirection()) {
+                       final String location = clientResponse.headers().header("Location").get(0);
+                       final String code = UriComponentsBuilder.fromHttpUrl(location)
+                                                               .build()
+                                                               .getQueryParams()
+                                                               .getFirst("code");
+                       return Mono.just(code);
+                   } else {
+                       return clientResponse.bodyToMono(String.class)
+                                            .flatMap(body -> Mono.error(new TokenExchangeException(format(
+                                                    "Unexpected result doing persona login: [%s] %s",
+                                                    clientResponse.statusCode(),
+                                                    body))));
+                   }
+                }).flatMap(code -> exchangeAuthorizationCodeForTokens(realm, redirectUri, code));
     }
 
     public URI getAuthorizeUrl(String realm, String state, String scopes, URI redirectUri) {

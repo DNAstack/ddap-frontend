@@ -30,7 +30,7 @@
       "issuer": "https://ic-prod-dot-hcls-data-connect-demo.appspot.com/oidc"
     },
     "nih": {
-      "issuer": "https://login.nih.org/oidc/",
+      "issuer": "https://login.nih.org/oidc",
       "translateUsing": "dbgap_translator"
     },
     "playgroundIC": {
@@ -130,12 +130,6 @@
               "the_broad"
             ]
           }
-        ]
-      },
-      "disallow": {
-        "claim": "nih.Blacklisted",
-        "values": [
-          "true"
         ]
       },
       "ui": {
@@ -967,7 +961,7 @@
     "dr_joe_era_commons": {
       "idToken": {
         "standardClaims": {
-          "iss": "https://login.nih.org/oidc/",
+          "iss": "https://login.nih.org/oidc",
           "sub": "dr_joe@era.nih.gov"
         },
         "ga4ghClaims": [
@@ -1016,7 +1010,7 @@
     "nci_researcher": {
       "idToken": {
         "standardClaims": {
-          "iss": "https://login.nih.org/oidc/",
+          "iss": "https://dbgap.nlm.nih.gov/aa",
           "sub": "nci_researcher@nci.nih.gov"
         },
         "ga4ghClaims": [
