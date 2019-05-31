@@ -1,7 +1,7 @@
 // Base
 
-$primary-color: #00bdd4;
-$success-color: #4CAF50;
+$primary-color: #005f6b;
+$success-color: #2C632C;
 $failure-color: #BD2C18;
 $warn-color: #ffb45f;
 
@@ -17,7 +17,7 @@ $mat-primary-color: (
   200 : #80deea,
   300 : #4dd1e1,
   400 : #26c7da,
-  500 : #00bdd4,
+  500 : #005f6b,
   600 : #00b7cf,
   700 : #00aec9,
   800 : #00a6c3,
@@ -50,8 +50,8 @@ $navbar-main-background: #2b2b2b;
 $navbar-expanded-background: #222322;
 $navbar-selected-background: #000;
 $navbar-font-main-color: #e2e2e2;
-$navbar-font-subtle-color: #585859;
-$navbar-font-accent-color: $primary-color;
+$navbar-font-subtle-color: #aaaaaa;
+$navbar-font-accent-color: #ffffff;
 $navbar-icon-font-main-color: #888888;
 $navbar-border: 1px solid $navbar-font-subtle-color;
 
