@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -65,6 +66,9 @@ public class NavBar {
 
     public NavBar goTo(NavItem navItem) {
         driver.findElement(DdapBy.se(navItem.selector)).click();
+        if (NavItem.IC_PANEL.equals(navItem)) {
+            new WebDriverWait(driver, 5).until(d -> d.findElement(DdapBy.se(NavItem.IC_IDENTITY_PROVIDERS.selector)).isDisplayed());
+        }
 
         return new NavBar(driver);
     }
