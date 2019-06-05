@@ -5608,6 +5608,41 @@ public final class DamService {
         getFromBytes(int index);
 
     /**
+     * <pre>
+     *Added this to work around invalid config.
+     * </pre>
+     *
+     * <code>repeated string by = 9;</code>
+     */
+    java.util.List<java.lang.String>
+        getByList();
+    /**
+     * <pre>
+     *Added this to work around invalid config.
+     * </pre>
+     *
+     * <code>repeated string by = 9;</code>
+     */
+    int getByCount();
+    /**
+     * <pre>
+     *Added this to work around invalid config.
+     * </pre>
+     *
+     * <code>repeated string by = 9;</code>
+     */
+    java.lang.String getBy(int index);
+    /**
+     * <pre>
+     *Added this to work around invalid config.
+     * </pre>
+     *
+     * <code>repeated string by = 9;</code>
+     */
+    com.google.protobuf.ByteString
+        getByBytes(int index);
+
+    /**
      * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
      */
     java.util.List<dam.v1.e2e.DamService.Condition> 
@@ -5673,6 +5708,7 @@ public final class DamService {
       is_ = "";
       values_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       from_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      by_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       allTrue_ = java.util.Collections.emptyList();
       anyTrue_ = java.util.Collections.emptyList();
     }
@@ -5744,21 +5780,30 @@ public final class DamService {
               break;
             }
             case 58: {
-              if (!((mutable_bitField0_ & 0x00000040) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000080) != 0)) {
                 allTrue_ = new java.util.ArrayList<dam.v1.e2e.DamService.Condition>();
-                mutable_bitField0_ |= 0x00000040;
+                mutable_bitField0_ |= 0x00000080;
               }
               allTrue_.add(
                   input.readMessage(dam.v1.e2e.DamService.Condition.parser(), extensionRegistry));
               break;
             }
             case 66: {
-              if (!((mutable_bitField0_ & 0x00000080) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000100) != 0)) {
                 anyTrue_ = new java.util.ArrayList<dam.v1.e2e.DamService.Condition>();
-                mutable_bitField0_ |= 0x00000080;
+                mutable_bitField0_ |= 0x00000100;
               }
               anyTrue_.add(
                   input.readMessage(dam.v1.e2e.DamService.Condition.parser(), extensionRegistry));
+              break;
+            }
+            case 74: {
+              java.lang.String s = input.readStringRequireUtf8();
+              if (!((mutable_bitField0_ & 0x00000040) != 0)) {
+                by_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000040;
+              }
+              by_.add(s);
               break;
             }
             default: {
@@ -5782,11 +5827,14 @@ public final class DamService {
         if (((mutable_bitField0_ & 0x00000020) != 0)) {
           from_ = from_.getUnmodifiableView();
         }
-        if (((mutable_bitField0_ & 0x00000040) != 0)) {
+        if (((mutable_bitField0_ & 0x00000080) != 0)) {
           allTrue_ = java.util.Collections.unmodifiableList(allTrue_);
         }
-        if (((mutable_bitField0_ & 0x00000080) != 0)) {
+        if (((mutable_bitField0_ & 0x00000100) != 0)) {
           anyTrue_ = java.util.Collections.unmodifiableList(anyTrue_);
+        }
+        if (((mutable_bitField0_ & 0x00000040) != 0)) {
+          by_ = by_.getUnmodifiableView();
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -6067,6 +6115,51 @@ public final class DamService {
       return from_.getByteString(index);
     }
 
+    public static final int BY_FIELD_NUMBER = 9;
+    private com.google.protobuf.LazyStringList by_;
+    /**
+     * <pre>
+     *Added this to work around invalid config.
+     * </pre>
+     *
+     * <code>repeated string by = 9;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getByList() {
+      return by_;
+    }
+    /**
+     * <pre>
+     *Added this to work around invalid config.
+     * </pre>
+     *
+     * <code>repeated string by = 9;</code>
+     */
+    public int getByCount() {
+      return by_.size();
+    }
+    /**
+     * <pre>
+     *Added this to work around invalid config.
+     * </pre>
+     *
+     * <code>repeated string by = 9;</code>
+     */
+    public java.lang.String getBy(int index) {
+      return by_.get(index);
+    }
+    /**
+     * <pre>
+     *Added this to work around invalid config.
+     * </pre>
+     *
+     * <code>repeated string by = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getByBytes(int index) {
+      return by_.getByteString(index);
+    }
+
     public static final int ALL_TRUE_FIELD_NUMBER = 7;
     private java.util.List<dam.v1.e2e.DamService.Condition> allTrue_;
     /**
@@ -6175,6 +6268,9 @@ public final class DamService {
       for (int i = 0; i < anyTrue_.size(); i++) {
         output.writeMessage(8, anyTrue_.get(i));
       }
+      for (int i = 0; i < by_.size(); i++) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, by_.getRaw(i));
+      }
       unknownFields.writeTo(output);
     }
 
@@ -6220,6 +6316,14 @@ public final class DamService {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(8, anyTrue_.get(i));
       }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < by_.size(); i++) {
+          dataSize += computeStringSizeNoTag(by_.getRaw(i));
+        }
+        size += dataSize;
+        size += 1 * getByList().size();
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -6241,6 +6345,8 @@ public final class DamService {
           .equals(other.getValuesList())) return false;
       if (!getFromList()
           .equals(other.getFromList())) return false;
+      if (!getByList()
+          .equals(other.getByList())) return false;
       if (!getAllTrueList()
           .equals(other.getAllTrueList())) return false;
       if (!getAnyTrueList()
@@ -6282,6 +6388,10 @@ public final class DamService {
       if (getFromCount() > 0) {
         hash = (37 * hash) + FROM_FIELD_NUMBER;
         hash = (53 * hash) + getFromList().hashCode();
+      }
+      if (getByCount() > 0) {
+        hash = (37 * hash) + BY_FIELD_NUMBER;
+        hash = (53 * hash) + getByList().hashCode();
       }
       if (getAllTrueCount() > 0) {
         hash = (37 * hash) + ALL_TRUE_FIELD_NUMBER;
@@ -6448,15 +6558,17 @@ public final class DamService {
         bitField0_ = (bitField0_ & ~0x00000010);
         from_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000020);
+        by_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000040);
         if (allTrueBuilder_ == null) {
           allTrue_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000040);
+          bitField0_ = (bitField0_ & ~0x00000080);
         } else {
           allTrueBuilder_.clear();
         }
         if (anyTrueBuilder_ == null) {
           anyTrue_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000080);
+          bitField0_ = (bitField0_ & ~0x00000100);
         } else {
           anyTrueBuilder_.clear();
         }
@@ -6510,19 +6622,24 @@ public final class DamService {
           bitField0_ = (bitField0_ & ~0x00000020);
         }
         result.from_ = from_;
+        if (((bitField0_ & 0x00000040) != 0)) {
+          by_ = by_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000040);
+        }
+        result.by_ = by_;
         if (allTrueBuilder_ == null) {
-          if (((bitField0_ & 0x00000040) != 0)) {
+          if (((bitField0_ & 0x00000080) != 0)) {
             allTrue_ = java.util.Collections.unmodifiableList(allTrue_);
-            bitField0_ = (bitField0_ & ~0x00000040);
+            bitField0_ = (bitField0_ & ~0x00000080);
           }
           result.allTrue_ = allTrue_;
         } else {
           result.allTrue_ = allTrueBuilder_.build();
         }
         if (anyTrueBuilder_ == null) {
-          if (((bitField0_ & 0x00000080) != 0)) {
+          if (((bitField0_ & 0x00000100) != 0)) {
             anyTrue_ = java.util.Collections.unmodifiableList(anyTrue_);
-            bitField0_ = (bitField0_ & ~0x00000080);
+            bitField0_ = (bitField0_ & ~0x00000100);
           }
           result.anyTrue_ = anyTrue_;
         } else {
@@ -6602,11 +6719,21 @@ public final class DamService {
           }
           onChanged();
         }
+        if (!other.by_.isEmpty()) {
+          if (by_.isEmpty()) {
+            by_ = other.by_;
+            bitField0_ = (bitField0_ & ~0x00000040);
+          } else {
+            ensureByIsMutable();
+            by_.addAll(other.by_);
+          }
+          onChanged();
+        }
         if (allTrueBuilder_ == null) {
           if (!other.allTrue_.isEmpty()) {
             if (allTrue_.isEmpty()) {
               allTrue_ = other.allTrue_;
-              bitField0_ = (bitField0_ & ~0x00000040);
+              bitField0_ = (bitField0_ & ~0x00000080);
             } else {
               ensureAllTrueIsMutable();
               allTrue_.addAll(other.allTrue_);
@@ -6619,7 +6746,7 @@ public final class DamService {
               allTrueBuilder_.dispose();
               allTrueBuilder_ = null;
               allTrue_ = other.allTrue_;
-              bitField0_ = (bitField0_ & ~0x00000040);
+              bitField0_ = (bitField0_ & ~0x00000080);
               allTrueBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getAllTrueFieldBuilder() : null;
@@ -6632,7 +6759,7 @@ public final class DamService {
           if (!other.anyTrue_.isEmpty()) {
             if (anyTrue_.isEmpty()) {
               anyTrue_ = other.anyTrue_;
-              bitField0_ = (bitField0_ & ~0x00000080);
+              bitField0_ = (bitField0_ & ~0x00000100);
             } else {
               ensureAnyTrueIsMutable();
               anyTrue_.addAll(other.anyTrue_);
@@ -6645,7 +6772,7 @@ public final class DamService {
               anyTrueBuilder_.dispose();
               anyTrueBuilder_ = null;
               anyTrue_ = other.anyTrue_;
-              bitField0_ = (bitField0_ & ~0x00000080);
+              bitField0_ = (bitField0_ & ~0x00000100);
               anyTrueBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getAnyTrueFieldBuilder() : null;
@@ -7219,12 +7346,142 @@ public final class DamService {
         return this;
       }
 
+      private com.google.protobuf.LazyStringList by_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureByIsMutable() {
+        if (!((bitField0_ & 0x00000040) != 0)) {
+          by_ = new com.google.protobuf.LazyStringArrayList(by_);
+          bitField0_ |= 0x00000040;
+         }
+      }
+      /**
+       * <pre>
+       *Added this to work around invalid config.
+       * </pre>
+       *
+       * <code>repeated string by = 9;</code>
+       */
+      public com.google.protobuf.ProtocolStringList
+          getByList() {
+        return by_.getUnmodifiableView();
+      }
+      /**
+       * <pre>
+       *Added this to work around invalid config.
+       * </pre>
+       *
+       * <code>repeated string by = 9;</code>
+       */
+      public int getByCount() {
+        return by_.size();
+      }
+      /**
+       * <pre>
+       *Added this to work around invalid config.
+       * </pre>
+       *
+       * <code>repeated string by = 9;</code>
+       */
+      public java.lang.String getBy(int index) {
+        return by_.get(index);
+      }
+      /**
+       * <pre>
+       *Added this to work around invalid config.
+       * </pre>
+       *
+       * <code>repeated string by = 9;</code>
+       */
+      public com.google.protobuf.ByteString
+          getByBytes(int index) {
+        return by_.getByteString(index);
+      }
+      /**
+       * <pre>
+       *Added this to work around invalid config.
+       * </pre>
+       *
+       * <code>repeated string by = 9;</code>
+       */
+      public Builder setBy(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureByIsMutable();
+        by_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *Added this to work around invalid config.
+       * </pre>
+       *
+       * <code>repeated string by = 9;</code>
+       */
+      public Builder addBy(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureByIsMutable();
+        by_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *Added this to work around invalid config.
+       * </pre>
+       *
+       * <code>repeated string by = 9;</code>
+       */
+      public Builder addAllBy(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureByIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, by_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *Added this to work around invalid config.
+       * </pre>
+       *
+       * <code>repeated string by = 9;</code>
+       */
+      public Builder clearBy() {
+        by_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *Added this to work around invalid config.
+       * </pre>
+       *
+       * <code>repeated string by = 9;</code>
+       */
+      public Builder addByBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        ensureByIsMutable();
+        by_.add(value);
+        onChanged();
+        return this;
+      }
+
       private java.util.List<dam.v1.e2e.DamService.Condition> allTrue_ =
         java.util.Collections.emptyList();
       private void ensureAllTrueIsMutable() {
-        if (!((bitField0_ & 0x00000040) != 0)) {
+        if (!((bitField0_ & 0x00000080) != 0)) {
           allTrue_ = new java.util.ArrayList<dam.v1.e2e.DamService.Condition>(allTrue_);
-          bitField0_ |= 0x00000040;
+          bitField0_ |= 0x00000080;
          }
       }
 
@@ -7374,7 +7631,7 @@ public final class DamService {
       public Builder clearAllTrue() {
         if (allTrueBuilder_ == null) {
           allTrue_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000040);
+          bitField0_ = (bitField0_ & ~0x00000080);
           onChanged();
         } else {
           allTrueBuilder_.clear();
@@ -7451,7 +7708,7 @@ public final class DamService {
           allTrueBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               dam.v1.e2e.DamService.Condition, dam.v1.e2e.DamService.Condition.Builder, dam.v1.e2e.DamService.ConditionOrBuilder>(
                   allTrue_,
-                  ((bitField0_ & 0x00000040) != 0),
+                  ((bitField0_ & 0x00000080) != 0),
                   getParentForChildren(),
                   isClean());
           allTrue_ = null;
@@ -7462,9 +7719,9 @@ public final class DamService {
       private java.util.List<dam.v1.e2e.DamService.Condition> anyTrue_ =
         java.util.Collections.emptyList();
       private void ensureAnyTrueIsMutable() {
-        if (!((bitField0_ & 0x00000080) != 0)) {
+        if (!((bitField0_ & 0x00000100) != 0)) {
           anyTrue_ = new java.util.ArrayList<dam.v1.e2e.DamService.Condition>(anyTrue_);
-          bitField0_ |= 0x00000080;
+          bitField0_ |= 0x00000100;
          }
       }
 
@@ -7614,7 +7871,7 @@ public final class DamService {
       public Builder clearAnyTrue() {
         if (anyTrueBuilder_ == null) {
           anyTrue_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000080);
+          bitField0_ = (bitField0_ & ~0x00000100);
           onChanged();
         } else {
           anyTrueBuilder_.clear();
@@ -7691,7 +7948,7 @@ public final class DamService {
           anyTrueBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               dam.v1.e2e.DamService.Condition, dam.v1.e2e.DamService.Condition.Builder, dam.v1.e2e.DamService.ConditionOrBuilder>(
                   anyTrue_,
-                  ((bitField0_ & 0x00000080) != 0),
+                  ((bitField0_ & 0x00000100) != 0),
                   getParentForChildren(),
                   isClean());
           anyTrue_ = null;
@@ -59595,9 +59852,14 @@ public final class DamService {
         getDataUseBytes();
 
     /**
-     * <code>int32 ttl = 3;</code>
+     * <code>string ttl = 3;</code>
      */
-    int getTtl();
+    java.lang.String getTtl();
+    /**
+     * <code>string ttl = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getTtlBytes();
   }
   /**
    * Protobuf type {@code dam.v1.e2e.GetTokenRequest}
@@ -59614,6 +59876,7 @@ public final class DamService {
     private GetTokenRequest() {
       return_ = "";
       dataUse_ = "";
+      ttl_ = "";
     }
 
     @java.lang.Override
@@ -59652,9 +59915,10 @@ public final class DamService {
               dataUse_ = s;
               break;
             }
-            case 24: {
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
 
-              ttl_ = input.readInt32();
+              ttl_ = s;
               break;
             }
             default: {
@@ -59758,12 +60022,37 @@ public final class DamService {
     }
 
     public static final int TTL_FIELD_NUMBER = 3;
-    private int ttl_;
+    private volatile java.lang.Object ttl_;
     /**
-     * <code>int32 ttl = 3;</code>
+     * <code>string ttl = 3;</code>
      */
-    public int getTtl() {
-      return ttl_;
+    public java.lang.String getTtl() {
+      java.lang.Object ref = ttl_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        ttl_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string ttl = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTtlBytes() {
+      java.lang.Object ref = ttl_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        ttl_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     private byte memoizedIsInitialized = -1;
@@ -59786,8 +60075,8 @@ public final class DamService {
       if (!getDataUseBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, dataUse_);
       }
-      if (ttl_ != 0) {
-        output.writeInt32(3, ttl_);
+      if (!getTtlBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, ttl_);
       }
       unknownFields.writeTo(output);
     }
@@ -59804,9 +60093,8 @@ public final class DamService {
       if (!getDataUseBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, dataUse_);
       }
-      if (ttl_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, ttl_);
+      if (!getTtlBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, ttl_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -59827,8 +60115,8 @@ public final class DamService {
           .equals(other.getReturn())) return false;
       if (!getDataUse()
           .equals(other.getDataUse())) return false;
-      if (getTtl()
-          != other.getTtl()) return false;
+      if (!getTtl()
+          .equals(other.getTtl())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -59845,7 +60133,7 @@ public final class DamService {
       hash = (37 * hash) + DATA_USE_FIELD_NUMBER;
       hash = (53 * hash) + getDataUse().hashCode();
       hash = (37 * hash) + TTL_FIELD_NUMBER;
-      hash = (53 * hash) + getTtl();
+      hash = (53 * hash) + getTtl().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -59983,7 +60271,7 @@ public final class DamService {
 
         dataUse_ = "";
 
-        ttl_ = 0;
+        ttl_ = "";
 
         return this;
       }
@@ -60070,8 +60358,9 @@ public final class DamService {
           dataUse_ = other.dataUse_;
           onChanged();
         }
-        if (other.getTtl() != 0) {
-          setTtl(other.getTtl());
+        if (!other.getTtl().isEmpty()) {
+          ttl_ = other.ttl_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -60240,28 +60529,71 @@ public final class DamService {
         return this;
       }
 
-      private int ttl_ ;
+      private java.lang.Object ttl_ = "";
       /**
-       * <code>int32 ttl = 3;</code>
+       * <code>string ttl = 3;</code>
        */
-      public int getTtl() {
-        return ttl_;
+      public java.lang.String getTtl() {
+        java.lang.Object ref = ttl_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          ttl_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>int32 ttl = 3;</code>
+       * <code>string ttl = 3;</code>
        */
-      public Builder setTtl(int value) {
-        
+      public com.google.protobuf.ByteString
+          getTtlBytes() {
+        java.lang.Object ref = ttl_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ttl_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string ttl = 3;</code>
+       */
+      public Builder setTtl(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         ttl_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 ttl = 3;</code>
+       * <code>string ttl = 3;</code>
        */
       public Builder clearTtl() {
         
-        ttl_ = 0;
+        ttl_ = getDefaultInstance().getTtl();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string ttl = 3;</code>
+       */
+      public Builder setTtlBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        ttl_ = value;
         onChanged();
         return this;
       }
@@ -85774,343 +86106,343 @@ public final class DamService {
       " \001(\t:\0028\001\"\212\001\n\rTrustedSource\022\017\n\007sources\030\001 " +
       "\003(\t\022\016\n\006claims\030\002 \003(\t\022-\n\002ui\030\003 \003(\0132!.dam.v1" +
       ".e2e.TrustedSource.UiEntry\032)\n\007UiEntry\022\013\n" +
-      "\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\310\001\n\tCondit" +
+      "\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\324\001\n\tCondit" +
       "ion\022\017\n\005claim\030\001 \001(\tH\000\022\022\n\010data_use\030\002 \001(\tH\000" +
       "\022\023\n\tuser_list\030\003 \001(\tH\000\022\n\n\002is\030\004 \001(\t\022\016\n\006val" +
-      "ues\030\005 \003(\t\022\014\n\004from\030\006 \003(\t\022\'\n\010all_true\030\007 \003(" +
-      "\0132\025.dam.v1.e2e.Condition\022\'\n\010any_true\030\010 \003" +
-      "(\0132\025.dam.v1.e2e.ConditionB\005\n\003key\"\252\001\n\006Pol" +
-      "icy\022$\n\005allow\030\001 \001(\0132\025.dam.v1.e2e.Conditio" +
-      "n\022\'\n\010disallow\030\002 \001(\0132\025.dam.v1.e2e.Conditi" +
-      "on\022&\n\002ui\030\003 \003(\0132\032.dam.v1.e2e.Policy.UiEnt" +
-      "ry\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(" +
-      "\t:\0028\001\":\n\013PolicyBasis\022\014\n\004name\030\001 \001(\t\022\014\n\004ty" +
-      "pe\030\002 \001(\t\022\017\n\007clauses\030\003 \003(\t\"\340\005\n\004View\022\030\n\020se" +
-      "rvice_template\030\001 \001(\t\022\017\n\007version\030\002 \001(\t\022\r\n" +
-      "\005topic\030\003 \001(\t\022\021\n\tpartition\030\004 \001(\t\022\020\n\010fidel" +
-      "ity\030\005 \001(\t\022\024\n\014geo_location\030\006 \001(\t\022\025\n\rconte" +
-      "nt_types\030\007 \003(\t\022>\n\014access_roles\030\010 \003(\0132!.d" +
-      "am.v1.e2e.View.AccessRolesEntryR\005roles\022$" +
-      "\n\005items\030\t \003(\0132\025.dam.v1.e2e.View.Item\022\013\n\003" +
-      "aud\030\n \001(\t\022\024\n\014default_role\030\013 \001(\t\022$\n\002ui\030\014 " +
-      "\003(\0132\030.dam.v1.e2e.View.UiEntry\022Q\n\023compute" +
-      "d_interfaces\030\r \003(\0132(.dam.v1.e2e.View.Com" +
-      "putedInterfacesEntryR\ninterfaces\032\030\n\tInte" +
-      "rface\022\013\n\003uri\030\001 \003(\t\032b\n\004Item\022-\n\004vars\030\001 \003(\013" +
-      "2\037.dam.v1.e2e.View.Item.VarsEntry\032+\n\tVar" +
-      "sEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032J" +
-      "\n\020AccessRolesEntry\022\013\n\003key\030\001 \001(\t\022%\n\005value" +
-      "\030\002 \001(\0132\026.dam.v1.e2e.AccessRole:\0028\001\032)\n\007Ui" +
-      "Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032U\n" +
-      "\027ComputedInterfacesEntry\022\013\n\003key\030\001 \001(\t\022)\n" +
-      "\005value\030\002 \001(\0132\032.dam.v1.e2e.View.Interface" +
-      ":\0028\001\"\211\002\n\010Resource\022\020\n\010umbrella\030\001 \001(\t\022.\n\005v" +
-      "iews\030\002 \003(\0132\037.dam.v1.e2e.Resource.ViewsEn" +
-      "try\022\017\n\007clients\030\003 \003(\t\022\025\n\rmax_token_ttl\030\004 " +
-      "\001(\t\022(\n\002ui\030\005 \003(\0132\034.dam.v1.e2e.Resource.Ui" +
-      "Entry\032>\n\nViewsEntry\022\013\n\003key\030\001 \001(\t\022\037\n\005valu" +
-      "e\030\002 \001(\0132\020.dam.v1.e2e.View:\0028\001\032)\n\007UiEntry" +
-      "\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\225\001\n\006Cli" +
-      "ent\022\021\n\tclient_id\030\001 \001(\t\022\020\n\010revision\030\002 \001(\003" +
-      "\022\023\n\013commit_time\030\003 \001(\001\022&\n\002ui\030\004 \003(\0132\032.dam." +
-      "v1.e2e.Client.UiEntry\032)\n\007UiEntry\022\013\n\003key\030" +
-      "\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\251\003\n\017ServiceTemp" +
-      "late\022\026\n\016target_adapter\030\001 \001(\t\022\023\n\013item_for" +
-      "mat\030\002 \001(\t\022?\n\ninterfaces\030\003 \003(\0132+.dam.v1.e" +
-      "2e.ServiceTemplate.InterfacesEntry\022K\n\rse" +
-      "rvice_roles\030\004 \003(\0132-.dam.v1.e2e.ServiceTe" +
-      "mplate.ServiceRolesEntryR\005roles\022/\n\002ui\030\005 " +
-      "\003(\0132#.dam.v1.e2e.ServiceTemplate.UiEntry" +
-      "\0321\n\017InterfacesEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005valu" +
-      "e\030\002 \001(\t:\0028\001\032L\n\021ServiceRolesEntry\022\013\n\003key\030" +
-      "\001 \001(\t\022&\n\005value\030\002 \001(\0132\027.dam.v1.e2e.Servic" +
-      "eRole:\0028\001\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005val" +
-      "ue\030\002 \001(\t:\0028\001\"\257\001\n\013ServiceRole\022\024\n\014target_r" +
-      "oles\030\001 \003(\t\022\025\n\rtarget_scopes\030\002 \003(\t\022\033\n\023dam" +
-      "_role_categories\030\003 \003(\t\022+\n\002ui\030\004 \003(\0132\037.dam" +
-      ".v1.e2e.ServiceRole.UiEntry\032)\n\007UiEntry\022\013" +
-      "\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\272\001\n\nAcces" +
-      "sRole\022\020\n\010policies\030\001 \003(\t\022*\n\002ui\030\002 \003(\0132\036.da" +
-      "m.v1.e2e.AccessRole.UiEntry\022C\n\025computed_" +
-      "policy_basis\030\003 \003(\0132\027.dam.v1.e2e.PolicyBa" +
-      "sisR\013policyBasis\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t" +
-      "\022\r\n\005value\030\002 \001(\t:\0028\001\"\253\004\n\rConfigOptions\022\036\n" +
-      "\026read_only_master_realm\030\001 \001(\010\022\032\n\022whiteli" +
-      "sted_realms\030\002 \003(\t\022*\n\"gcp_managed_keys_ma" +
-      "x_requested_ttl\030\003 \001(\t\022$\n\034gcp_managed_key" +
-      "s_per_account\030\004 \001(\005\022#\n\033gcp_service_accou" +
-      "nt_project\030\005 \001(\t\022]\n\024computed_descriptors" +
-      "\030\006 \003(\01322.dam.v1.e2e.ConfigOptions.Comput" +
-      "edDescriptorsEntryR\013descriptors\032\245\001\n\nDesc" +
-      "riptor\022\r\n\005label\030\001 \001(\t\022\023\n\013description\030\002 \001" +
-      "(\t\022\016\n\006regexp\030\003 \001(\t\022\014\n\004type\030\004 \001(\t\022\017\n\007is_l" +
-      "ist\030\005 \001(\010\022\023\n\013enum_values\030\006 \003(\t\022\013\n\003min\030\007 " +
-      "\001(\t\022\013\n\003max\030\010 \001(\t\022\025\n\rdefault_value\030\t \001(\t\032" +
-      "`\n\030ComputedDescriptorsEntry\022\013\n\003key\030\001 \001(\t" +
-      "\0223\n\005value\030\002 \001(\0132$.dam.v1.e2e.ConfigOptio" +
-      "ns.Descriptor:\0028\001\"m\n\017ClaimDefinition\022/\n\002" +
-      "ui\030\002 \003(\0132#.dam.v1.e2e.ClaimDefinition.Ui" +
-      "Entry\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002" +
-      " \001(\t:\0028\001\"\034\n\nAccessList\022\016\n\006access\030\001 \003(\t\"\325" +
-      "\006\n\013TestPersona\022;\n\010id_token\030\001 \001(\0132).dam.v" +
-      "1.e2e.TestPersona.TestIdentityToken\0229\n\tr" +
-      "esources\030\002 \003(\0132&.dam.v1.e2e.TestPersona." +
-      "ResourcesEntry\022+\n\002ui\030\003 \003(\0132\037.dam.v1.e2e." +
-      "TestPersona.UiEntry\032\314\002\n\nGA4GHClaim\022\022\n\ncl" +
-      "aim_name\030\001 \001(\t\022\016\n\006source\030\002 \001(\t\022\r\n\005value\030" +
-      "\003 \001(\t\022\020\n\010asserted\030\004 \001(\001\022\017\n\007expires\030\005 \001(\001" +
-      "\022D\n\tcondition\030\006 \003(\01321.dam.v1.e2e.TestPer" +
-      "sona.GA4GHClaim.ConditionEntry\022\n\n\002by\030\007 \001" +
-      "(\t\0326\n\tCondition\022\016\n\006source\030\001 \001(\t\022\r\n\005value" +
-      "\030\002 \001(\t\022\n\n\002by\030\003 \001(\t\032^\n\016ConditionEntry\022\013\n\003" +
-      "key\030\001 \001(\t\022;\n\005value\030\002 \001(\0132,.dam.v1.e2e.Te" +
-      "stPersona.GA4GHClaim.Condition:\0028\001\032\334\001\n\021T" +
-      "estIdentityToken\022V\n\017standard_claims\030\001 \003(" +
-      "\0132=.dam.v1.e2e.TestPersona.TestIdentityT" +
-      "oken.StandardClaimsEntry\0228\n\014ga4gh_claims" +
-      "\030\002 \003(\0132\".dam.v1.e2e.TestPersona.GA4GHCla" +
-      "im\0325\n\023StandardClaimsEntry\022\013\n\003key\030\001 \001(\t\022\r" +
-      "\n\005value\030\002 \001(\t:\0028\001\032H\n\016ResourcesEntry\022\013\n\003k" +
-      "ey\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.dam.v1.e2e.Acc" +
-      "essList:\0028\001\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005v" +
-      "alue\030\002 \001(\t:\0028\001\"\303\001\n\014HistoryEntry\022\020\n\010revis" +
-      "ion\030\001 \001(\003\022\014\n\004user\030\002 \001(\t\022\023\n\013commit_time\030\003" +
-      " \001(\001\022\014\n\004path\030\004 \001(\t\022\r\n\005query\030\005 \001(\t\022\014\n\004des" +
-      "c\030\006 \001(\t\022\016\n\006method\030\007 \001(\t\022\023\n\013change_type\030\010" +
-      " \001(\t\022\026\n\016original_value\030\t \001(\t\022\026\n\016change_r" +
-      "equest\030\n \001(\t\"M\n\007History\022)\n\007history\030\001 \003(\013" +
-      "2\030.dam.v1.e2e.HistoryEntry\022\027\n\017next_page_" +
-      "token\030\002 \001(\t\"\235\004\n\rTargetAdapter\022\020\n\010platfor" +
-      "m\030\001 \001(\t\022<\n\014requirements\030\002 \001(\0132&.dam.v1.e" +
-      "2e.TargetAdapter.Requirements\0228\n\npropert" +
-      "ies\030\003 \001(\0132$.dam.v1.e2e.TargetAdapter.Pro" +
-      "perties\022@\n\014item_formats\030\004 \003(\0132*.dam.v1.e" +
-      "2e.TargetAdapter.ItemFormatsEntry\022-\n\002ui\030" +
-      "\005 \003(\0132!.dam.v1.e2e.TargetAdapter.UiEntry" +
-      "\032F\n\014Requirements\022\023\n\013target_role\030\001 \001(\010\022\024\n" +
-      "\014target_scope\030\002 \001(\010\022\013\n\003aud\030\003 \001(\010\032R\n\nProp" +
-      "erties\022\024\n\014is_aggregate\030\001 \001(\010\022\031\n\021can_be_a" +
-      "ggregated\030\002 \001(\010\022\023\n\013single_item\030\003 \001(\010\032J\n\020" +
-      "ItemFormatsEntry\022\013\n\003key\030\001 \001(\t\022%\n\005value\030\002" +
-      " \001(\0132\026.dam.v1.e2e.ItemFormat:\0028\001\032)\n\007UiEn" +
-      "try\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\353\001\n\n" +
-      "ItemFormat\0228\n\tvariables\030\001 \003(\0132%.dam.v1.e" +
-      "2e.ItemFormat.VariablesEntry\022*\n\002ui\030\002 \003(\013" +
-      "2\036.dam.v1.e2e.ItemFormat.UiEntry\032L\n\016Vari" +
-      "ablesEntry\022\013\n\003key\030\001 \001(\t\022)\n\005value\030\002 \001(\0132\032" +
-      ".dam.v1.e2e.VariableFormat:\0028\001\032)\n\007UiEntr" +
-      "y\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\215\001\n\016Va" +
-      "riableFormat\022\016\n\006regexp\030\001 \001(\t\022\020\n\010optional" +
-      "\030\002 \001(\010\022.\n\002ui\030\003 \003(\0132\".dam.v1.e2e.Variable" +
-      "Format.UiEntry\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r" +
-      "\n\005value\030\002 \001(\t:\0028\001\"\007\n\005Realm\"\217\001\n\022PassportT" +
-      "ranslator\022\032\n\022compatible_issuers\030\001 \003(\t\0222\n" +
-      "\002ui\030\002 \003(\0132&.dam.v1.e2e.PassportTranslato" +
-      "r.UiEntry\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005val" +
-      "ue\030\002 \001(\t:\0028\001\"\240\r\n\021BackgroundProcess\022\024\n\014pr" +
-      "ocess_name\030\001 \001(\t\022\020\n\010instance\030\002 \001(\t\022\022\n\nst" +
-      "art_time\030\003 \001(\003\022\025\n\rprogress_time\030\004 \001(\003\022\023\n" +
-      "\013finish_time\030\005 \001(\003\022\032\n\022success_start_time" +
-      "\030\006 \001(\003\022\033\n\023success_finish_time\030\007 \001(\003\022\034\n\024s" +
-      "ettings_change_time\030\010 \001(\003\022J\n\017active_proj" +
-      "ects\030\t \003(\01321.dam.v1.e2e.BackgroundProces" +
-      "s.ActiveProjectsEntry\022F\n\ractive_realms\030\n" +
-      " \003(\0132/.dam.v1.e2e.BackgroundProcess.Acti" +
-      "veRealmsEntry\022L\n\020cleanup_projects\030\013 \003(\0132" +
-      "2.dam.v1.e2e.BackgroundProcess.CleanupPr" +
-      "ojectsEntry\022L\n\020dropped_projects\030\014 \003(\01322." +
-      "dam.v1.e2e.BackgroundProcess.DroppedProj" +
-      "ectsEntry\022H\n\016project_status\030\r \003(\01320.dam." +
-      "v1.e2e.BackgroundProcess.ProjectStatusEn" +
-      "try\022<\n\016success_status\030\016 \001(\0132$.dam.v1.e2e" +
-      ".BackgroundProcess.Status\032(\n\005Error\022\021\n\tti" +
-      "mestamp\030\001 \001(\003\022\014\n\004text\030\002 \001(\t\032\203\001\n\006Params\022G" +
-      "\n\nint_params\030\001 \003(\01323.dam.v1.e2e.Backgrou" +
-      "ndProcess.Params.IntParamsEntry\0320\n\016IntPa" +
-      "ramsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028" +
-      "\001\032\250\002\n\006Status\022\022\n\nstart_time\030\001 \001(\003\022\023\n\013fini" +
-      "sh_time\030\002 \001(\003\022\034\n\024last_error_timestamp\030\003 " +
-      "\001(\003\022>\n\005stats\030\004 \003(\0132/.dam.v1.e2e.Backgrou" +
-      "ndProcess.Status.StatsEntry\0223\n\006errors\030\005 " +
-      "\003(\0132#.dam.v1.e2e.BackgroundProcess.Error" +
-      "\0224\n\006params\030\006 \001(\0132$.dam.v1.e2e.Background" +
-      "Process.Params\032,\n\nStatsEntry\022\013\n\003key\030\001 \001(" +
-      "\t\022\r\n\005value\030\002 \001(\003:\0028\001\032R\n\007Project\022\021\n\ttimes" +
-      "tamp\030\001 \001(\003\0224\n\006params\030\002 \001(\0132$.dam.v1.e2e." +
-      "BackgroundProcess.Params\032a\n\005Realm\022\021\n\ttim" +
-      "estamp\030\001 \001(\003\022\017\n\007project\030\002 \001(\t\0224\n\006params\030" +
-      "\003 \001(\0132$.dam.v1.e2e.BackgroundProcess.Par" +
-      "ams\032\\\n\023ActiveProjectsEntry\022\013\n\003key\030\001 \001(\t\022" +
-      "4\n\005value\030\002 \001(\0132%.dam.v1.e2e.BackgroundPr" +
-      "ocess.Project:\0028\001\032X\n\021ActiveRealmsEntry\022\013" +
-      "\n\003key\030\001 \001(\t\0222\n\005value\030\002 \001(\0132#.dam.v1.e2e." +
-      "BackgroundProcess.Realm:\0028\001\0326\n\024CleanupPr" +
-      "ojectsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:" +
-      "\0028\001\0326\n\024DroppedProjectsEntry\022\013\n\003key\030\001 \001(\t" +
-      "\022\r\n\005value\030\002 \001(\003:\0028\001\032Z\n\022ProjectStatusEntr" +
-      "y\022\013\n\003key\030\001 \001(\t\0223\n\005value\030\002 \001(\0132$.dam.v1.e" +
-      "2e.BackgroundProcess.Status:\0028\001\"\020\n\016GetIn" +
-      "foRequest\"E\n\017GetInfoResponse\022\014\n\004name\030\001 \001" +
-      "(\t\022\020\n\010versions\030\002 \003(\t\022\022\n\nstart_time\030\003 \001(\003" +
-      "\"/\n\014RealmRequest\022\037\n\004item\030\001 \001(\0132\021.dam.v1." +
-      "e2e.Realm\"\017\n\rRealmResponse\"6\n\023GetResourc" +
-      "esRequest\022\016\n\006filter\030\001 \001(\t\022\017\n\007include\030\002 \001" +
-      "(\t\"\242\001\n\024GetResourcesResponse\022B\n\tresources" +
-      "\030\001 \003(\0132/.dam.v1.e2e.GetResourcesResponse" +
-      ".ResourcesEntry\032F\n\016ResourcesEntry\022\013\n\003key" +
-      "\030\001 \001(\t\022#\n\005value\030\002 \001(\0132\024.dam.v1.e2e.Resou" +
-      "rce:\0028\001\"\025\n\023GetFlatViewsRequest\"\212\007\n\024GetFl" +
-      "atViewsResponse\022:\n\005views\030\001 \003(\0132+.dam.v1." +
-      "e2e.GetFlatViewsResponse.ViewsEntry\032\334\005\n\010" +
-      "FlatView\022\025\n\rresource_path\030\001 \001(\t\022\020\n\010umbre" +
-      "lla\030\002 \001(\t\022\025\n\rresource_name\030\003 \001(\t\022\021\n\tview" +
-      "_name\030\004 \001(\t\022\021\n\trole_name\030\005 \001(\t\022\026\n\016interf" +
-      "ace_name\030\006 \001(\t\022\025\n\rinterface_uri\030\007 \001(\t\022\024\n" +
-      "\014content_type\030\010 \001(\t\022\017\n\007version\030\t \001(\t\022\r\n\005" +
-      "topic\030\n \001(\t\022\021\n\tpartition\030\013 \001(\t\022\020\n\010fideli" +
-      "ty\030\014 \001(\t\022\024\n\014geo_location\030\r \001(\t\022\026\n\016target" +
-      "_adapter\030\016 \001(\t\022\020\n\010platform\030\017 \001(\t\022\030\n\020plat" +
-      "form_service\030\020 \001(\t\022\025\n\rmax_token_ttl\030\021 \001(" +
-      "\t\022N\n\013resource_ui\030\022 \003(\01329.dam.v1.e2e.GetF" +
-      "latViewsResponse.FlatView.ResourceUiEntr" +
-      "y\022F\n\007view_ui\030\023 \003(\01325.dam.v1.e2e.GetFlatV" +
-      "iewsResponse.FlatView.ViewUiEntry\022F\n\007rol" +
-      "e_ui\030\024 \003(\01325.dam.v1.e2e.GetFlatViewsResp" +
-      "onse.FlatView.RoleUiEntry\0321\n\017ResourceUiE" +
-      "ntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032-\n\013" +
-      "ViewUiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:" +
-      "\0028\001\032-\n\013RoleUiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value" +
-      "\030\002 \001(\t:\0028\001\032W\n\nViewsEntry\022\013\n\003key\030\001 \001(\t\0228\n" +
-      "\005value\030\002 \001(\0132).dam.v1.e2e.GetFlatViewsRe" +
-      "sponse.FlatView:\0028\001\"\024\n\022GetResourceReques" +
-      "t\"M\n\023GetResourceResponse\022&\n\010resource\030\001 \001" +
-      "(\0132\024.dam.v1.e2e.Resource\022\016\n\006access\030\002 \003(\t" +
-      "\"\021\n\017GetViewsRequest\"\232\001\n\020GetViewsResponse" +
-      "\0226\n\005views\030\001 \003(\0132\'.dam.v1.e2e.GetViewsRes" +
-      "ponse.ViewsEntry\022\016\n\006access\030\002 \003(\t\032>\n\nView" +
-      "sEntry\022\013\n\003key\030\001 \001(\t\022\037\n\005value\030\002 \001(\0132\020.dam" +
-      ".v1.e2e.View:\0028\001\"\020\n\016GetViewRequest\"A\n\017Ge" +
-      "tViewResponse\022\036\n\004view\030\001 \001(\0132\020.dam.v1.e2e" +
-      ".View\022\016\n\006access\030\002 \003(\t\"\025\n\023GetViewRolesReq" +
-      "uest\"\250\001\n\024GetViewRolesResponse\022:\n\005roles\030\001" +
-      " \003(\0132+.dam.v1.e2e.GetViewRolesResponse.R" +
-      "olesEntry\022\016\n\006access\030\002 \003(\t\032D\n\nRolesEntry\022" +
-      "\013\n\003key\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.dam.v1.e2e" +
-      ".AccessRole:\0028\001\"\024\n\022GetViewRoleRequest\"K\n" +
-      "\023GetViewRoleResponse\022$\n\004role\030\001 \001(\0132\026.dam" +
-      ".v1.e2e.AccessRole\022\016\n\006access\030\002 \003(\t\"@\n\017Ge" +
-      "tTokenRequest\022\016\n\006return\030\001 \001(\t\022\020\n\010data_us" +
-      "e\030\002 \001(\t\022\013\n\003ttl\030\003 \001(\005\"m\n\020GetTokenResponse" +
-      "\022\014\n\004name\030\001 \001(\t\022\036\n\004view\030\002 \001(\0132\020.dam.v1.e2" +
-      "e.View\022\017\n\007account\030\003 \001(\t\022\r\n\005token\030\004 \001(\t\022\013" +
-      "\n\003ttl\030\005 \001(\t\"\027\n\025GetTestResultsRequest\"\337\004\n" +
-      "\026GetTestResultsResponse\022\017\n\007version\030\001 \001(\t" +
-      "\022\020\n\010revision\030\002 \001(\003\022\021\n\ttimestamp\030\003 \001(\001\022B\n" +
-      "\010personas\030\004 \003(\01320.dam.v1.e2e.GetTestResu" +
-      "ltsResponse.PersonasEntry\022C\n\014test_result" +
-      "s\030\005 \003(\0132-.dam.v1.e2e.GetTestResultsRespo" +
-      "nse.TestResult\0224\n\014modification\030\006 \001(\0132\036.d" +
-      "am.v1.e2e.ConfigModification\022\020\n\010executed" +
-      "\030\007 \001(\005\022\016\n\006passed\030\010 \001(\005\022\r\n\005error\030\t \001(\t\032\324\001" +
-      "\n\nTestResult\022\014\n\004name\030\001 \001(\t\022\016\n\006result\030\002 \001" +
-      "(\t\022O\n\tresources\030\003 \003(\0132<.dam.v1.e2e.GetTe" +
-      "stResultsResponse.TestResult.ResourcesEn" +
-      "try\022\r\n\005error\030\004 \001(\t\032H\n\016ResourcesEntry\022\013\n\003" +
-      "key\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.dam.v1.e2e.Ac" +
-      "cessList:\0028\001\032H\n\rPersonasEntry\022\013\n\003key\030\001 \001" +
-      "(\t\022&\n\005value\030\002 \001(\0132\027.dam.v1.e2e.TestPerso" +
-      "na:\0028\001\"\025\n\023ClientSecretRequest\"&\n\024ClientS" +
-      "ecretResponse\022\016\n\006secret\030\001 \001(\t\"\027\n\025TargetA" +
-      "daptersRequest\"\273\001\n\026TargetAdaptersRespons" +
-      "e\022O\n\017target_adapters\030\001 \003(\01326.dam.v1.e2e." +
-      "TargetAdaptersResponse.TargetAdaptersEnt" +
-      "ry\032P\n\023TargetAdaptersEntry\022\013\n\003key\030\001 \001(\t\022(" +
-      "\n\005value\030\002 \001(\0132\031.dam.v1.e2e.TargetAdapter" +
-      ":\0028\001\"\034\n\032PassportTranslatorsRequest\"\331\001\n\033P" +
-      "assportTranslatorsResponse\022^\n\024passport_t" +
-      "ranslators\030\001 \003(\0132@.dam.v1.e2e.PassportTr" +
-      "anslatorsResponse.PassportTranslatorsEnt" +
-      "ry\032Z\n\030PassportTranslatorsEntry\022\013\n\003key\030\001 " +
-      "\001(\t\022-\n\005value\030\002 \001(\0132\036.dam.v1.e2e.Passport" +
-      "Translator:\0028\001\"\032\n\030DamRoleCategoriesReque" +
-      "st\"v\n\014RoleCategory\022\r\n\005order\030\001 \001(\005\022,\n\002ui\030" +
-      "\002 \003(\0132 .dam.v1.e2e.RoleCategory.UiEntry\032" +
+      "ues\030\005 \003(\t\022\014\n\004from\030\006 \003(\t\022\n\n\002by\030\t \003(\t\022\'\n\010a" +
+      "ll_true\030\007 \003(\0132\025.dam.v1.e2e.Condition\022\'\n\010" +
+      "any_true\030\010 \003(\0132\025.dam.v1.e2e.ConditionB\005\n" +
+      "\003key\"\252\001\n\006Policy\022$\n\005allow\030\001 \001(\0132\025.dam.v1." +
+      "e2e.Condition\022\'\n\010disallow\030\002 \001(\0132\025.dam.v1" +
+      ".e2e.Condition\022&\n\002ui\030\003 \003(\0132\032.dam.v1.e2e." +
+      "Policy.UiEntry\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r" +
+      "\n\005value\030\002 \001(\t:\0028\001\":\n\013PolicyBasis\022\014\n\004name" +
+      "\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\017\n\007clauses\030\003 \003(\t\"\340\005" +
+      "\n\004View\022\030\n\020service_template\030\001 \001(\t\022\017\n\007vers" +
+      "ion\030\002 \001(\t\022\r\n\005topic\030\003 \001(\t\022\021\n\tpartition\030\004 " +
+      "\001(\t\022\020\n\010fidelity\030\005 \001(\t\022\024\n\014geo_location\030\006 " +
+      "\001(\t\022\025\n\rcontent_types\030\007 \003(\t\022>\n\014access_rol" +
+      "es\030\010 \003(\0132!.dam.v1.e2e.View.AccessRolesEn" +
+      "tryR\005roles\022$\n\005items\030\t \003(\0132\025.dam.v1.e2e.V" +
+      "iew.Item\022\013\n\003aud\030\n \001(\t\022\024\n\014default_role\030\013 " +
+      "\001(\t\022$\n\002ui\030\014 \003(\0132\030.dam.v1.e2e.View.UiEntr" +
+      "y\022Q\n\023computed_interfaces\030\r \003(\0132(.dam.v1." +
+      "e2e.View.ComputedInterfacesEntryR\ninterf" +
+      "aces\032\030\n\tInterface\022\013\n\003uri\030\001 \003(\t\032b\n\004Item\022-" +
+      "\n\004vars\030\001 \003(\0132\037.dam.v1.e2e.View.Item.Vars" +
+      "Entry\032+\n\tVarsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value" +
+      "\030\002 \001(\t:\0028\001\032J\n\020AccessRolesEntry\022\013\n\003key\030\001 " +
+      "\001(\t\022%\n\005value\030\002 \001(\0132\026.dam.v1.e2e.AccessRo" +
+      "le:\0028\001\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030" +
+      "\002 \001(\t:\0028\001\032U\n\027ComputedInterfacesEntry\022\013\n\003" +
+      "key\030\001 \001(\t\022)\n\005value\030\002 \001(\0132\032.dam.v1.e2e.Vi" +
+      "ew.Interface:\0028\001\"\211\002\n\010Resource\022\020\n\010umbrell" +
+      "a\030\001 \001(\t\022.\n\005views\030\002 \003(\0132\037.dam.v1.e2e.Reso" +
+      "urce.ViewsEntry\022\017\n\007clients\030\003 \003(\t\022\025\n\rmax_" +
+      "token_ttl\030\004 \001(\t\022(\n\002ui\030\005 \003(\0132\034.dam.v1.e2e" +
+      ".Resource.UiEntry\032>\n\nViewsEntry\022\013\n\003key\030\001" +
+      " \001(\t\022\037\n\005value\030\002 \001(\0132\020.dam.v1.e2e.View:\0028" +
+      "\001\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t" +
+      ":\0028\001\"\225\001\n\006Client\022\021\n\tclient_id\030\001 \001(\t\022\020\n\010re" +
+      "vision\030\002 \001(\003\022\023\n\013commit_time\030\003 \001(\001\022&\n\002ui\030" +
+      "\004 \003(\0132\032.dam.v1.e2e.Client.UiEntry\032)\n\007UiE" +
+      "ntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\251\003\n" +
+      "\017ServiceTemplate\022\026\n\016target_adapter\030\001 \001(\t" +
+      "\022\023\n\013item_format\030\002 \001(\t\022?\n\ninterfaces\030\003 \003(" +
+      "\0132+.dam.v1.e2e.ServiceTemplate.Interface" +
+      "sEntry\022K\n\rservice_roles\030\004 \003(\0132-.dam.v1.e" +
+      "2e.ServiceTemplate.ServiceRolesEntryR\005ro" +
+      "les\022/\n\002ui\030\005 \003(\0132#.dam.v1.e2e.ServiceTemp" +
+      "late.UiEntry\0321\n\017InterfacesEntry\022\013\n\003key\030\001" +
+      " \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032L\n\021ServiceRolesE" +
+      "ntry\022\013\n\003key\030\001 \001(\t\022&\n\005value\030\002 \001(\0132\027.dam.v" +
+      "1.e2e.ServiceRole:\0028\001\032)\n\007UiEntry\022\013\n\003key\030" +
+      "\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\257\001\n\013ServiceRole" +
+      "\022\024\n\014target_roles\030\001 \003(\t\022\025\n\rtarget_scopes\030" +
+      "\002 \003(\t\022\033\n\023dam_role_categories\030\003 \003(\t\022+\n\002ui" +
+      "\030\004 \003(\0132\037.dam.v1.e2e.ServiceRole.UiEntry\032" +
       ")\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\002" +
-      "8\001\"\312\001\n\031DamRoleCategoriesResponse\022Y\n\023dam_" +
-      "role_categories\030\001 \003(\0132<.dam.v1.e2e.DamRo" +
-      "leCategoriesResponse.DamRoleCategoriesEn" +
-      "try\032R\n\026DamRoleCategoriesEntry\022\013\n\003key\030\001 \001" +
-      "(\t\022\'\n\005value\030\002 \001(\0132\030.dam.v1.e2e.RoleCateg" +
-      "ory:\0028\001\"\030\n\026GetTestPersonasRequest\"\261\002\n\027Ge" +
-      "tTestPersonasResponse\022C\n\010personas\030\001 \003(\0132" +
-      "1.dam.v1.e2e.GetTestPersonasResponse.Per" +
-      "sonasEntry\022P\n\017standard_claims\030\002 \003(\01327.da" +
-      "m.v1.e2e.GetTestPersonasResponse.Standar" +
-      "dClaimsEntry\032H\n\rPersonasEntry\022\013\n\003key\030\001 \001" +
-      "(\t\022&\n\005value\030\002 \001(\0132\027.dam.v1.e2e.TestPerso" +
-      "na:\0028\001\0325\n\023StandardClaimsEntry\022\013\n\003key\030\001 \001" +
-      "(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\034\n\032BackgroundProce" +
-      "ssesRequest\"\271\001\n\033BackgroundProcessesRespo" +
-      "nse\022I\n\tprocesses\030\001 \003(\01326.dam.v1.e2e.Back" +
-      "groundProcessesResponse.ProcessesEntry\032O" +
-      "\n\016ProcessesEntry\022\013\n\003key\030\001 \001(\t\022,\n\005value\030\002" +
-      " \001(\0132\035.dam.v1.e2e.BackgroundProcess:\0028\001\"" +
-      "\032\n\030BackgroundProcessRequest\"K\n\031Backgroun" +
-      "dProcessResponse\022.\n\007process\030\001 \001(\0132\035.dam." +
-      "v1.e2e.BackgroundProcess\"\376\005\n\022ConfigModif" +
-      "ication\022\020\n\010revision\030\001 \001(\003\022G\n\rtest_person" +
-      "as\030\002 \003(\01320.dam.v1.e2e.ConfigModification" +
-      ".TestPersonasEntry\022\017\n\007dry_run\030\003 \001(\010\032\222\004\n\023" +
-      "PersonaModification\022T\n\tresources\030\001 \003(\0132A" +
-      ".dam.v1.e2e.ConfigModification.PersonaMo" +
-      "dification.ResourcesEntry\022[\n\radd_resourc" +
-      "es\030\002 \003(\0132D.dam.v1.e2e.ConfigModification" +
-      ".PersonaModification.AddResourcesEntry\022a" +
-      "\n\020remove_resources\030\003 \003(\0132G.dam.v1.e2e.Co" +
-      "nfigModification.PersonaModification.Rem" +
-      "oveResourcesEntry\032H\n\016ResourcesEntry\022\013\n\003k" +
-      "ey\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.dam.v1.e2e.Acc" +
-      "essList:\0028\001\032K\n\021AddResourcesEntry\022\013\n\003key\030" +
-      "\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.dam.v1.e2e.Access" +
-      "List:\0028\001\032N\n\024RemoveResourcesEntry\022\013\n\003key\030" +
-      "\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.dam.v1.e2e.Access" +
-      "List:\0028\001\032g\n\021TestPersonasEntry\022\013\n\003key\030\001 \001" +
-      "(\t\022A\n\005value\030\002 \001(\01322.dam.v1.e2e.ConfigMod" +
-      "ification.PersonaModification:\0028\001\"\020\n\016Con" +
-      "figResponse\"j\n\rConfigRequest\022#\n\004item\030\001 \001" +
-      "(\0132\025.dam.v1.e2e.DamConfig\0224\n\014modificatio" +
-      "n\030\002 \001(\0132\036.dam.v1.e2e.ConfigModification\"" +
-      "q\n\025ConfigResourceRequest\022\"\n\004item\030\001 \001(\0132\024" +
-      ".dam.v1.e2e.Resource\0224\n\014modification\030\002 \001" +
-      "(\0132\036.dam.v1.e2e.ConfigModification\"i\n\021Co" +
-      "nfigViewRequest\022\036\n\004item\030\001 \001(\0132\020.dam.v1.e" +
-      "2e.View\0224\n\014modification\030\002 \001(\0132\036.dam.v1.e" +
-      "2e.ConfigModification\"\213\001\n\"ConfigTrustedP" +
-      "assportIssuerRequest\022/\n\004item\030\001 \001(\0132!.dam" +
-      ".v1.e2e.TrustedPassportIssuer\0224\n\014modific" +
-      "ation\030\002 \001(\0132\036.dam.v1.e2e.ConfigModificat" +
-      "ion\"{\n\032ConfigTrustedSourceRequest\022\'\n\004ite" +
-      "m\030\001 \001(\0132\031.dam.v1.e2e.TrustedSource\0224\n\014mo" +
-      "dification\030\002 \001(\0132\036.dam.v1.e2e.ConfigModi" +
-      "fication\"m\n\023ConfigPolicyRequest\022 \n\004item\030" +
-      "\001 \001(\0132\022.dam.v1.e2e.Policy\0224\n\014modificatio" +
-      "n\030\002 \001(\0132\036.dam.v1.e2e.ConfigModification\"" +
-      "u\n\024ConfigOptionsRequest\022\'\n\004item\030\001 \001(\0132\031." +
-      "dam.v1.e2e.ConfigOptions\0224\n\014modification" +
-      "\030\002 \001(\0132\036.dam.v1.e2e.ConfigModification\"\177" +
-      "\n\034ConfigClaimDefinitionRequest\022)\n\004item\030\001" +
-      " \001(\0132\033.dam.v1.e2e.ClaimDefinition\0224\n\014mod" +
-      "ification\030\002 \001(\0132\036.dam.v1.e2e.ConfigModif" +
-      "ication\"\177\n\034ConfigServiceTemplateRequest\022" +
-      ")\n\004item\030\001 \001(\0132\033.dam.v1.e2e.ServiceTempla" +
-      "te\0224\n\014modification\030\002 \001(\0132\036.dam.v1.e2e.Co" +
-      "nfigModification\"w\n\030ConfigTestPersonaReq" +
-      "uest\022%\n\004item\030\001 \001(\0132\027.dam.v1.e2e.TestPers" +
-      "ona\0224\n\014modification\030\002 \001(\0132\036.dam.v1.e2e.C" +
-      "onfigModification\"m\n\023ConfigClientRequest" +
-      "\022 \n\004item\030\001 \001(\0132\022.dam.v1.e2e.Client\0224\n\014mo" +
-      "dification\030\002 \001(\0132\036.dam.v1.e2e.ConfigModi" +
-      "ficationb\006proto3"
+      "8\001\"\272\001\n\nAccessRole\022\020\n\010policies\030\001 \003(\t\022*\n\002u" +
+      "i\030\002 \003(\0132\036.dam.v1.e2e.AccessRole.UiEntry\022" +
+      "C\n\025computed_policy_basis\030\003 \003(\0132\027.dam.v1." +
+      "e2e.PolicyBasisR\013policyBasis\032)\n\007UiEntry\022" +
+      "\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\253\004\n\rConf" +
+      "igOptions\022\036\n\026read_only_master_realm\030\001 \001(" +
+      "\010\022\032\n\022whitelisted_realms\030\002 \003(\t\022*\n\"gcp_man" +
+      "aged_keys_max_requested_ttl\030\003 \001(\t\022$\n\034gcp" +
+      "_managed_keys_per_account\030\004 \001(\005\022#\n\033gcp_s" +
+      "ervice_account_project\030\005 \001(\t\022]\n\024computed" +
+      "_descriptors\030\006 \003(\01322.dam.v1.e2e.ConfigOp" +
+      "tions.ComputedDescriptorsEntryR\013descript" +
+      "ors\032\245\001\n\nDescriptor\022\r\n\005label\030\001 \001(\t\022\023\n\013des" +
+      "cription\030\002 \001(\t\022\016\n\006regexp\030\003 \001(\t\022\014\n\004type\030\004" +
+      " \001(\t\022\017\n\007is_list\030\005 \001(\010\022\023\n\013enum_values\030\006 \003" +
+      "(\t\022\013\n\003min\030\007 \001(\t\022\013\n\003max\030\010 \001(\t\022\025\n\rdefault_" +
+      "value\030\t \001(\t\032`\n\030ComputedDescriptorsEntry\022" +
+      "\013\n\003key\030\001 \001(\t\0223\n\005value\030\002 \001(\0132$.dam.v1.e2e" +
+      ".ConfigOptions.Descriptor:\0028\001\"m\n\017ClaimDe" +
+      "finition\022/\n\002ui\030\002 \003(\0132#.dam.v1.e2e.ClaimD" +
+      "efinition.UiEntry\032)\n\007UiEntry\022\013\n\003key\030\001 \001(" +
+      "\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\034\n\nAccessList\022\016\n\006ac" +
+      "cess\030\001 \003(\t\"\325\006\n\013TestPersona\022;\n\010id_token\030\001" +
+      " \001(\0132).dam.v1.e2e.TestPersona.TestIdenti" +
+      "tyToken\0229\n\tresources\030\002 \003(\0132&.dam.v1.e2e." +
+      "TestPersona.ResourcesEntry\022+\n\002ui\030\003 \003(\0132\037" +
+      ".dam.v1.e2e.TestPersona.UiEntry\032\314\002\n\nGA4G" +
+      "HClaim\022\022\n\nclaim_name\030\001 \001(\t\022\016\n\006source\030\002 \001" +
+      "(\t\022\r\n\005value\030\003 \001(\t\022\020\n\010asserted\030\004 \001(\001\022\017\n\007e" +
+      "xpires\030\005 \001(\001\022D\n\tcondition\030\006 \003(\01321.dam.v1" +
+      ".e2e.TestPersona.GA4GHClaim.ConditionEnt" +
+      "ry\022\n\n\002by\030\007 \001(\t\0326\n\tCondition\022\016\n\006source\030\001 " +
+      "\001(\t\022\r\n\005value\030\002 \001(\t\022\n\n\002by\030\003 \001(\t\032^\n\016Condit" +
+      "ionEntry\022\013\n\003key\030\001 \001(\t\022;\n\005value\030\002 \001(\0132,.d" +
+      "am.v1.e2e.TestPersona.GA4GHClaim.Conditi" +
+      "on:\0028\001\032\334\001\n\021TestIdentityToken\022V\n\017standard" +
+      "_claims\030\001 \003(\0132=.dam.v1.e2e.TestPersona.T" +
+      "estIdentityToken.StandardClaimsEntry\0228\n\014" +
+      "ga4gh_claims\030\002 \003(\0132\".dam.v1.e2e.TestPers" +
+      "ona.GA4GHClaim\0325\n\023StandardClaimsEntry\022\013\n" +
+      "\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032H\n\016Resourc" +
+      "esEntry\022\013\n\003key\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.da" +
+      "m.v1.e2e.AccessList:\0028\001\032)\n\007UiEntry\022\013\n\003ke" +
+      "y\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\303\001\n\014HistoryEn" +
+      "try\022\020\n\010revision\030\001 \001(\003\022\014\n\004user\030\002 \001(\t\022\023\n\013c" +
+      "ommit_time\030\003 \001(\001\022\014\n\004path\030\004 \001(\t\022\r\n\005query\030" +
+      "\005 \001(\t\022\014\n\004desc\030\006 \001(\t\022\016\n\006method\030\007 \001(\t\022\023\n\013c" +
+      "hange_type\030\010 \001(\t\022\026\n\016original_value\030\t \001(\t" +
+      "\022\026\n\016change_request\030\n \001(\t\"M\n\007History\022)\n\007h" +
+      "istory\030\001 \003(\0132\030.dam.v1.e2e.HistoryEntry\022\027" +
+      "\n\017next_page_token\030\002 \001(\t\"\235\004\n\rTargetAdapte" +
+      "r\022\020\n\010platform\030\001 \001(\t\022<\n\014requirements\030\002 \001(" +
+      "\0132&.dam.v1.e2e.TargetAdapter.Requirement" +
+      "s\0228\n\nproperties\030\003 \001(\0132$.dam.v1.e2e.Targe" +
+      "tAdapter.Properties\022@\n\014item_formats\030\004 \003(" +
+      "\0132*.dam.v1.e2e.TargetAdapter.ItemFormats" +
+      "Entry\022-\n\002ui\030\005 \003(\0132!.dam.v1.e2e.TargetAda" +
+      "pter.UiEntry\032F\n\014Requirements\022\023\n\013target_r" +
+      "ole\030\001 \001(\010\022\024\n\014target_scope\030\002 \001(\010\022\013\n\003aud\030\003" +
+      " \001(\010\032R\n\nProperties\022\024\n\014is_aggregate\030\001 \001(\010" +
+      "\022\031\n\021can_be_aggregated\030\002 \001(\010\022\023\n\013single_it" +
+      "em\030\003 \001(\010\032J\n\020ItemFormatsEntry\022\013\n\003key\030\001 \001(" +
+      "\t\022%\n\005value\030\002 \001(\0132\026.dam.v1.e2e.ItemFormat" +
+      ":\0028\001\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
+      "\001(\t:\0028\001\"\353\001\n\nItemFormat\0228\n\tvariables\030\001 \003(" +
+      "\0132%.dam.v1.e2e.ItemFormat.VariablesEntry" +
+      "\022*\n\002ui\030\002 \003(\0132\036.dam.v1.e2e.ItemFormat.UiE" +
+      "ntry\032L\n\016VariablesEntry\022\013\n\003key\030\001 \001(\t\022)\n\005v" +
+      "alue\030\002 \001(\0132\032.dam.v1.e2e.VariableFormat:\002" +
+      "8\001\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(" +
+      "\t:\0028\001\"\215\001\n\016VariableFormat\022\016\n\006regexp\030\001 \001(\t" +
+      "\022\020\n\010optional\030\002 \001(\010\022.\n\002ui\030\003 \003(\0132\".dam.v1." +
+      "e2e.VariableFormat.UiEntry\032)\n\007UiEntry\022\013\n" +
+      "\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\007\n\005Realm\"\217" +
+      "\001\n\022PassportTranslator\022\032\n\022compatible_issu" +
+      "ers\030\001 \003(\t\0222\n\002ui\030\002 \003(\0132&.dam.v1.e2e.Passp" +
+      "ortTranslator.UiEntry\032)\n\007UiEntry\022\013\n\003key\030" +
+      "\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\240\r\n\021BackgroundP" +
+      "rocess\022\024\n\014process_name\030\001 \001(\t\022\020\n\010instance" +
+      "\030\002 \001(\t\022\022\n\nstart_time\030\003 \001(\003\022\025\n\rprogress_t" +
+      "ime\030\004 \001(\003\022\023\n\013finish_time\030\005 \001(\003\022\032\n\022succes" +
+      "s_start_time\030\006 \001(\003\022\033\n\023success_finish_tim" +
+      "e\030\007 \001(\003\022\034\n\024settings_change_time\030\010 \001(\003\022J\n" +
+      "\017active_projects\030\t \003(\01321.dam.v1.e2e.Back" +
+      "groundProcess.ActiveProjectsEntry\022F\n\ract" +
+      "ive_realms\030\n \003(\0132/.dam.v1.e2e.Background" +
+      "Process.ActiveRealmsEntry\022L\n\020cleanup_pro" +
+      "jects\030\013 \003(\01322.dam.v1.e2e.BackgroundProce" +
+      "ss.CleanupProjectsEntry\022L\n\020dropped_proje" +
+      "cts\030\014 \003(\01322.dam.v1.e2e.BackgroundProcess" +
+      ".DroppedProjectsEntry\022H\n\016project_status\030" +
+      "\r \003(\01320.dam.v1.e2e.BackgroundProcess.Pro" +
+      "jectStatusEntry\022<\n\016success_status\030\016 \001(\0132" +
+      "$.dam.v1.e2e.BackgroundProcess.Status\032(\n" +
+      "\005Error\022\021\n\ttimestamp\030\001 \001(\003\022\014\n\004text\030\002 \001(\t\032" +
+      "\203\001\n\006Params\022G\n\nint_params\030\001 \003(\01323.dam.v1." +
+      "e2e.BackgroundProcess.Params.IntParamsEn" +
+      "try\0320\n\016IntParamsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005va" +
+      "lue\030\002 \001(\003:\0028\001\032\250\002\n\006Status\022\022\n\nstart_time\030\001" +
+      " \001(\003\022\023\n\013finish_time\030\002 \001(\003\022\034\n\024last_error_" +
+      "timestamp\030\003 \001(\003\022>\n\005stats\030\004 \003(\0132/.dam.v1." +
+      "e2e.BackgroundProcess.Status.StatsEntry\022" +
+      "3\n\006errors\030\005 \003(\0132#.dam.v1.e2e.BackgroundP" +
+      "rocess.Error\0224\n\006params\030\006 \001(\0132$.dam.v1.e2" +
+      "e.BackgroundProcess.Params\032,\n\nStatsEntry" +
+      "\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032R\n\007Proj" +
+      "ect\022\021\n\ttimestamp\030\001 \001(\003\0224\n\006params\030\002 \001(\0132$" +
+      ".dam.v1.e2e.BackgroundProcess.Params\032a\n\005" +
+      "Realm\022\021\n\ttimestamp\030\001 \001(\003\022\017\n\007project\030\002 \001(" +
+      "\t\0224\n\006params\030\003 \001(\0132$.dam.v1.e2e.Backgroun" +
+      "dProcess.Params\032\\\n\023ActiveProjectsEntry\022\013" +
+      "\n\003key\030\001 \001(\t\0224\n\005value\030\002 \001(\0132%.dam.v1.e2e." +
+      "BackgroundProcess.Project:\0028\001\032X\n\021ActiveR" +
+      "ealmsEntry\022\013\n\003key\030\001 \001(\t\0222\n\005value\030\002 \001(\0132#" +
+      ".dam.v1.e2e.BackgroundProcess.Realm:\0028\001\032" +
+      "6\n\024CleanupProjectsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005" +
+      "value\030\002 \001(\003:\0028\001\0326\n\024DroppedProjectsEntry\022" +
+      "\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032Z\n\022Proje" +
+      "ctStatusEntry\022\013\n\003key\030\001 \001(\t\0223\n\005value\030\002 \001(" +
+      "\0132$.dam.v1.e2e.BackgroundProcess.Status:" +
+      "\0028\001\"\020\n\016GetInfoRequest\"E\n\017GetInfoResponse" +
+      "\022\014\n\004name\030\001 \001(\t\022\020\n\010versions\030\002 \003(\t\022\022\n\nstar" +
+      "t_time\030\003 \001(\003\"/\n\014RealmRequest\022\037\n\004item\030\001 \001" +
+      "(\0132\021.dam.v1.e2e.Realm\"\017\n\rRealmResponse\"6" +
+      "\n\023GetResourcesRequest\022\016\n\006filter\030\001 \001(\t\022\017\n" +
+      "\007include\030\002 \001(\t\"\242\001\n\024GetResourcesResponse\022" +
+      "B\n\tresources\030\001 \003(\0132/.dam.v1.e2e.GetResou" +
+      "rcesResponse.ResourcesEntry\032F\n\016Resources" +
+      "Entry\022\013\n\003key\030\001 \001(\t\022#\n\005value\030\002 \001(\0132\024.dam." +
+      "v1.e2e.Resource:\0028\001\"\025\n\023GetFlatViewsReque" +
+      "st\"\212\007\n\024GetFlatViewsResponse\022:\n\005views\030\001 \003" +
+      "(\0132+.dam.v1.e2e.GetFlatViewsResponse.Vie" +
+      "wsEntry\032\334\005\n\010FlatView\022\025\n\rresource_path\030\001 " +
+      "\001(\t\022\020\n\010umbrella\030\002 \001(\t\022\025\n\rresource_name\030\003" +
+      " \001(\t\022\021\n\tview_name\030\004 \001(\t\022\021\n\trole_name\030\005 \001" +
+      "(\t\022\026\n\016interface_name\030\006 \001(\t\022\025\n\rinterface_" +
+      "uri\030\007 \001(\t\022\024\n\014content_type\030\010 \001(\t\022\017\n\007versi" +
+      "on\030\t \001(\t\022\r\n\005topic\030\n \001(\t\022\021\n\tpartition\030\013 \001" +
+      "(\t\022\020\n\010fidelity\030\014 \001(\t\022\024\n\014geo_location\030\r \001" +
+      "(\t\022\026\n\016target_adapter\030\016 \001(\t\022\020\n\010platform\030\017" +
+      " \001(\t\022\030\n\020platform_service\030\020 \001(\t\022\025\n\rmax_to" +
+      "ken_ttl\030\021 \001(\t\022N\n\013resource_ui\030\022 \003(\01329.dam" +
+      ".v1.e2e.GetFlatViewsResponse.FlatView.Re" +
+      "sourceUiEntry\022F\n\007view_ui\030\023 \003(\01325.dam.v1." +
+      "e2e.GetFlatViewsResponse.FlatView.ViewUi" +
+      "Entry\022F\n\007role_ui\030\024 \003(\01325.dam.v1.e2e.GetF" +
+      "latViewsResponse.FlatView.RoleUiEntry\0321\n" +
+      "\017ResourceUiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002" +
+      " \001(\t:\0028\001\032-\n\013ViewUiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005" +
+      "value\030\002 \001(\t:\0028\001\032-\n\013RoleUiEntry\022\013\n\003key\030\001 " +
+      "\001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032W\n\nViewsEntry\022\013\n\003" +
+      "key\030\001 \001(\t\0228\n\005value\030\002 \001(\0132).dam.v1.e2e.Ge" +
+      "tFlatViewsResponse.FlatView:\0028\001\"\024\n\022GetRe" +
+      "sourceRequest\"M\n\023GetResourceResponse\022&\n\010" +
+      "resource\030\001 \001(\0132\024.dam.v1.e2e.Resource\022\016\n\006" +
+      "access\030\002 \003(\t\"\021\n\017GetViewsRequest\"\232\001\n\020GetV" +
+      "iewsResponse\0226\n\005views\030\001 \003(\0132\'.dam.v1.e2e" +
+      ".GetViewsResponse.ViewsEntry\022\016\n\006access\030\002" +
+      " \003(\t\032>\n\nViewsEntry\022\013\n\003key\030\001 \001(\t\022\037\n\005value" +
+      "\030\002 \001(\0132\020.dam.v1.e2e.View:\0028\001\"\020\n\016GetViewR" +
+      "equest\"A\n\017GetViewResponse\022\036\n\004view\030\001 \001(\0132" +
+      "\020.dam.v1.e2e.View\022\016\n\006access\030\002 \003(\t\"\025\n\023Get" +
+      "ViewRolesRequest\"\250\001\n\024GetViewRolesRespons" +
+      "e\022:\n\005roles\030\001 \003(\0132+.dam.v1.e2e.GetViewRol" +
+      "esResponse.RolesEntry\022\016\n\006access\030\002 \003(\t\032D\n" +
+      "\nRolesEntry\022\013\n\003key\030\001 \001(\t\022%\n\005value\030\002 \001(\0132" +
+      "\026.dam.v1.e2e.AccessRole:\0028\001\"\024\n\022GetViewRo" +
+      "leRequest\"K\n\023GetViewRoleResponse\022$\n\004role" +
+      "\030\001 \001(\0132\026.dam.v1.e2e.AccessRole\022\016\n\006access" +
+      "\030\002 \003(\t\"@\n\017GetTokenRequest\022\016\n\006return\030\001 \001(" +
+      "\t\022\020\n\010data_use\030\002 \001(\t\022\013\n\003ttl\030\003 \001(\t\"m\n\020GetT" +
+      "okenResponse\022\014\n\004name\030\001 \001(\t\022\036\n\004view\030\002 \001(\013" +
+      "2\020.dam.v1.e2e.View\022\017\n\007account\030\003 \001(\t\022\r\n\005t" +
+      "oken\030\004 \001(\t\022\013\n\003ttl\030\005 \001(\t\"\027\n\025GetTestResult" +
+      "sRequest\"\337\004\n\026GetTestResultsResponse\022\017\n\007v" +
+      "ersion\030\001 \001(\t\022\020\n\010revision\030\002 \001(\003\022\021\n\ttimest" +
+      "amp\030\003 \001(\001\022B\n\010personas\030\004 \003(\01320.dam.v1.e2e" +
+      ".GetTestResultsResponse.PersonasEntry\022C\n" +
+      "\014test_results\030\005 \003(\0132-.dam.v1.e2e.GetTest" +
+      "ResultsResponse.TestResult\0224\n\014modificati" +
+      "on\030\006 \001(\0132\036.dam.v1.e2e.ConfigModification" +
+      "\022\020\n\010executed\030\007 \001(\005\022\016\n\006passed\030\010 \001(\005\022\r\n\005er" +
+      "ror\030\t \001(\t\032\324\001\n\nTestResult\022\014\n\004name\030\001 \001(\t\022\016" +
+      "\n\006result\030\002 \001(\t\022O\n\tresources\030\003 \003(\0132<.dam." +
+      "v1.e2e.GetTestResultsResponse.TestResult" +
+      ".ResourcesEntry\022\r\n\005error\030\004 \001(\t\032H\n\016Resour" +
+      "cesEntry\022\013\n\003key\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.d" +
+      "am.v1.e2e.AccessList:\0028\001\032H\n\rPersonasEntr" +
+      "y\022\013\n\003key\030\001 \001(\t\022&\n\005value\030\002 \001(\0132\027.dam.v1.e" +
+      "2e.TestPersona:\0028\001\"\025\n\023ClientSecretReques" +
+      "t\"&\n\024ClientSecretResponse\022\016\n\006secret\030\001 \001(" +
+      "\t\"\027\n\025TargetAdaptersRequest\"\273\001\n\026TargetAda" +
+      "ptersResponse\022O\n\017target_adapters\030\001 \003(\01326" +
+      ".dam.v1.e2e.TargetAdaptersResponse.Targe" +
+      "tAdaptersEntry\032P\n\023TargetAdaptersEntry\022\013\n" +
+      "\003key\030\001 \001(\t\022(\n\005value\030\002 \001(\0132\031.dam.v1.e2e.T" +
+      "argetAdapter:\0028\001\"\034\n\032PassportTranslatorsR" +
+      "equest\"\331\001\n\033PassportTranslatorsResponse\022^" +
+      "\n\024passport_translators\030\001 \003(\0132@.dam.v1.e2" +
+      "e.PassportTranslatorsResponse.PassportTr" +
+      "anslatorsEntry\032Z\n\030PassportTranslatorsEnt" +
+      "ry\022\013\n\003key\030\001 \001(\t\022-\n\005value\030\002 \001(\0132\036.dam.v1." +
+      "e2e.PassportTranslator:\0028\001\"\032\n\030DamRoleCat" +
+      "egoriesRequest\"v\n\014RoleCategory\022\r\n\005order\030" +
+      "\001 \001(\005\022,\n\002ui\030\002 \003(\0132 .dam.v1.e2e.RoleCateg" +
+      "ory.UiEntry\032)\n\007UiEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005v" +
+      "alue\030\002 \001(\t:\0028\001\"\312\001\n\031DamRoleCategoriesResp" +
+      "onse\022Y\n\023dam_role_categories\030\001 \003(\0132<.dam." +
+      "v1.e2e.DamRoleCategoriesResponse.DamRole" +
+      "CategoriesEntry\032R\n\026DamRoleCategoriesEntr" +
+      "y\022\013\n\003key\030\001 \001(\t\022\'\n\005value\030\002 \001(\0132\030.dam.v1.e" +
+      "2e.RoleCategory:\0028\001\"\030\n\026GetTestPersonasRe" +
+      "quest\"\261\002\n\027GetTestPersonasResponse\022C\n\010per" +
+      "sonas\030\001 \003(\01321.dam.v1.e2e.GetTestPersonas" +
+      "Response.PersonasEntry\022P\n\017standard_claim" +
+      "s\030\002 \003(\01327.dam.v1.e2e.GetTestPersonasResp" +
+      "onse.StandardClaimsEntry\032H\n\rPersonasEntr" +
+      "y\022\013\n\003key\030\001 \001(\t\022&\n\005value\030\002 \001(\0132\027.dam.v1.e" +
+      "2e.TestPersona:\0028\001\0325\n\023StandardClaimsEntr" +
+      "y\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\034\n\032Bac" +
+      "kgroundProcessesRequest\"\271\001\n\033BackgroundPr" +
+      "ocessesResponse\022I\n\tprocesses\030\001 \003(\01326.dam" +
+      ".v1.e2e.BackgroundProcessesResponse.Proc" +
+      "essesEntry\032O\n\016ProcessesEntry\022\013\n\003key\030\001 \001(" +
+      "\t\022,\n\005value\030\002 \001(\0132\035.dam.v1.e2e.Background" +
+      "Process:\0028\001\"\032\n\030BackgroundProcessRequest\"" +
+      "K\n\031BackgroundProcessResponse\022.\n\007process\030" +
+      "\001 \001(\0132\035.dam.v1.e2e.BackgroundProcess\"\376\005\n" +
+      "\022ConfigModification\022\020\n\010revision\030\001 \001(\003\022G\n" +
+      "\rtest_personas\030\002 \003(\01320.dam.v1.e2e.Config" +
+      "Modification.TestPersonasEntry\022\017\n\007dry_ru" +
+      "n\030\003 \001(\010\032\222\004\n\023PersonaModification\022T\n\tresou" +
+      "rces\030\001 \003(\0132A.dam.v1.e2e.ConfigModificati" +
+      "on.PersonaModification.ResourcesEntry\022[\n" +
+      "\radd_resources\030\002 \003(\0132D.dam.v1.e2e.Config" +
+      "Modification.PersonaModification.AddReso" +
+      "urcesEntry\022a\n\020remove_resources\030\003 \003(\0132G.d" +
+      "am.v1.e2e.ConfigModification.PersonaModi" +
+      "fication.RemoveResourcesEntry\032H\n\016Resourc" +
+      "esEntry\022\013\n\003key\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.da" +
+      "m.v1.e2e.AccessList:\0028\001\032K\n\021AddResourcesE" +
+      "ntry\022\013\n\003key\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.dam.v" +
+      "1.e2e.AccessList:\0028\001\032N\n\024RemoveResourcesE" +
+      "ntry\022\013\n\003key\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.dam.v" +
+      "1.e2e.AccessList:\0028\001\032g\n\021TestPersonasEntr" +
+      "y\022\013\n\003key\030\001 \001(\t\022A\n\005value\030\002 \001(\01322.dam.v1.e" +
+      "2e.ConfigModification.PersonaModificatio" +
+      "n:\0028\001\"\020\n\016ConfigResponse\"j\n\rConfigRequest" +
+      "\022#\n\004item\030\001 \001(\0132\025.dam.v1.e2e.DamConfig\0224\n" +
+      "\014modification\030\002 \001(\0132\036.dam.v1.e2e.ConfigM" +
+      "odification\"q\n\025ConfigResourceRequest\022\"\n\004" +
+      "item\030\001 \001(\0132\024.dam.v1.e2e.Resource\0224\n\014modi" +
+      "fication\030\002 \001(\0132\036.dam.v1.e2e.ConfigModifi" +
+      "cation\"i\n\021ConfigViewRequest\022\036\n\004item\030\001 \001(" +
+      "\0132\020.dam.v1.e2e.View\0224\n\014modification\030\002 \001(" +
+      "\0132\036.dam.v1.e2e.ConfigModification\"\213\001\n\"Co" +
+      "nfigTrustedPassportIssuerRequest\022/\n\004item" +
+      "\030\001 \001(\0132!.dam.v1.e2e.TrustedPassportIssue" +
+      "r\0224\n\014modification\030\002 \001(\0132\036.dam.v1.e2e.Con" +
+      "figModification\"{\n\032ConfigTrustedSourceRe" +
+      "quest\022\'\n\004item\030\001 \001(\0132\031.dam.v1.e2e.Trusted" +
+      "Source\0224\n\014modification\030\002 \001(\0132\036.dam.v1.e2" +
+      "e.ConfigModification\"m\n\023ConfigPolicyRequ" +
+      "est\022 \n\004item\030\001 \001(\0132\022.dam.v1.e2e.Policy\0224\n" +
+      "\014modification\030\002 \001(\0132\036.dam.v1.e2e.ConfigM" +
+      "odification\"u\n\024ConfigOptionsRequest\022\'\n\004i" +
+      "tem\030\001 \001(\0132\031.dam.v1.e2e.ConfigOptions\0224\n\014" +
+      "modification\030\002 \001(\0132\036.dam.v1.e2e.ConfigMo" +
+      "dification\"\177\n\034ConfigClaimDefinitionReque" +
+      "st\022)\n\004item\030\001 \001(\0132\033.dam.v1.e2e.ClaimDefin" +
+      "ition\0224\n\014modification\030\002 \001(\0132\036.dam.v1.e2e" +
+      ".ConfigModification\"\177\n\034ConfigServiceTemp" +
+      "lateRequest\022)\n\004item\030\001 \001(\0132\033.dam.v1.e2e.S" +
+      "erviceTemplate\0224\n\014modification\030\002 \001(\0132\036.d" +
+      "am.v1.e2e.ConfigModification\"w\n\030ConfigTe" +
+      "stPersonaRequest\022%\n\004item\030\001 \001(\0132\027.dam.v1." +
+      "e2e.TestPersona\0224\n\014modification\030\002 \001(\0132\036." +
+      "dam.v1.e2e.ConfigModification\"m\n\023ConfigC" +
+      "lientRequest\022 \n\004item\030\001 \001(\0132\022.dam.v1.e2e." +
+      "Client\0224\n\014modification\030\002 \001(\0132\036.dam.v1.e2" +
+      "e.ConfigModificationb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -86213,7 +86545,7 @@ public final class DamService {
     internal_static_dam_v1_e2e_Condition_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_dam_v1_e2e_Condition_descriptor,
-        new java.lang.String[] { "Claim", "DataUse", "UserList", "Is", "Values", "From", "AllTrue", "AnyTrue", "Key", });
+        new java.lang.String[] { "Claim", "DataUse", "UserList", "Is", "Values", "From", "By", "AllTrue", "AnyTrue", "Key", });
     internal_static_dam_v1_e2e_Policy_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_dam_v1_e2e_Policy_fieldAccessorTable = new

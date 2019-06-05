@@ -91,7 +91,7 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
         assertThat(adminListPage.getEntityTitles(), hasItem("edit-client-id"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("edited-client-id")));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("edit-client-id", "View");
+        AdminManagePage adminManagePage = adminListPage.clickView("edit-client-id", "Edit");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), "edited-client-id");
@@ -111,7 +111,7 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem("delete-client-id"));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("delete-client-id", "View");
+        AdminManagePage adminManagePage = adminListPage.clickView("delete-client-id", "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 

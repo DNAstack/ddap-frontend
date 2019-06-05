@@ -82,7 +82,7 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
         assertThat(adminListPage.getEntityTitles(), hasItem("test-source-name"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("test-source-nam3")));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("test-source", "View");
+        AdminManagePage adminManagePage = adminListPage.clickView("test-source", "Edit");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), "test-source-nam3");
@@ -100,7 +100,7 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem("delete_me"));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("delete_me", "View");
+        AdminManagePage adminManagePage = adminListPage.clickView("delete_me", "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 

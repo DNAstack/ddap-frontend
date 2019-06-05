@@ -101,7 +101,7 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
         assertThat(adminListPage.getEntityTitles(), hasItem("edit-ip-id"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("edited-ip-id")));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("edit-ip-id", "View");
+        AdminManagePage adminManagePage = adminListPage.clickView("edit-ip-id", "Edit");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), "edited-ip-id");
@@ -121,7 +121,7 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem("delete-ip-id"));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("delete-ip-id", "View");
+        AdminManagePage adminManagePage = adminListPage.clickView("delete-ip-id", "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 

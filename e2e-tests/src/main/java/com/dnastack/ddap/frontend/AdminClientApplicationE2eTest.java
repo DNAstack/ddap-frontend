@@ -60,7 +60,7 @@ public class AdminClientApplicationE2eTest extends AbstractFrontendE2eTest {
         assertThat(adminListPage.getEntityTitles(), hasItem("DNAstack Front-End"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("DNAstack Front-End Edited")));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("DNAstack Front-End", "View");
+        AdminManagePage adminManagePage = adminListPage.clickView("DNAstack Front-End", "Edit");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), "DNAstack Front-End Edited");
@@ -78,7 +78,7 @@ public class AdminClientApplicationE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Test Client"));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("Test Client", "View");
+        AdminManagePage adminManagePage = adminListPage.clickView("Test Client", "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 

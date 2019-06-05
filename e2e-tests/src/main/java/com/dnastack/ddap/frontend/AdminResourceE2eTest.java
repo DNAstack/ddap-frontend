@@ -167,7 +167,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToDelete));
 
-        AdminManagePage adminManagePage = adminListPage.clickView(resourceToDelete, "View");
+        AdminManagePage adminManagePage = adminListPage.clickView(resourceToDelete, "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 

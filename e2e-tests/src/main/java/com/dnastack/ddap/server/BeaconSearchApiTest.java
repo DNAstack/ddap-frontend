@@ -22,10 +22,6 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
     @Before
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/aggregateSearchRealmConfig.json");
-
-        DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
-        validateProtoBuf(realmConfigString, damConfigBuilder);
-
         setupRealmConfig("administrator", realmConfigString, REALM);
     }
 

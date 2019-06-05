@@ -7,6 +7,7 @@ import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
+import dam.v1.e2e.DamService;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -78,7 +79,7 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
         assertThat(adminListPage.getEntityTitles(), hasItem("Accepted Terms and Policies"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("Accepted Terms and Policies Edited")));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("Accepted Terms and Policies", "View");
+        AdminManagePage adminManagePage = adminListPage.clickView("Accepted Terms and Policies", "Edit");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), "Accepted Terms and Policies Edited");
@@ -96,7 +97,7 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Affiliation and Role"));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("Affiliation and Role", "View");
+        AdminManagePage adminManagePage = adminListPage.clickView("Affiliation and Role", "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 

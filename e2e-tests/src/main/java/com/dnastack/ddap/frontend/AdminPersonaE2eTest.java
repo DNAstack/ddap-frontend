@@ -73,7 +73,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         assertThat(adminListPage.getEntityTitles(), hasItem("John Persona"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("John Edited")));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("John Persona", "View Persona");
+        AdminManagePage adminManagePage = adminListPage.clickView("John Persona", "Edit Persona");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), "John Edited");
@@ -104,7 +104,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Undergrad Candice"));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("Undergrad Candice", "View Persona");
+        AdminManagePage adminManagePage = adminListPage.clickView("Undergrad Candice", "Edit Persona");
 
         adminListPage = adminManagePage.deleteEntity();
 
@@ -117,7 +117,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
                 .goToAdmin(NavItem.PERSONAS);
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (eRA Commons)"));
-        AdminManagePage adminManagePage = adminListPage.clickView("Dr. Joe (eRA Commons)", "View Persona");
+        AdminManagePage adminManagePage = adminListPage.clickView("Dr. Joe (eRA Commons)", "Edit Persona");
         adminListPage = adminManagePage.deleteEntity();
         assertThat(adminListPage.getEntityTitles(), not(hasItem("Dr. Joe (eRA Commons)")));
 

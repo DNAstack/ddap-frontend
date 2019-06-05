@@ -2,6 +2,7 @@ package com.dnastack.ddap.common;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
+import dam.v1.e2e.DamService;
 import io.restassured.RestAssured;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
@@ -67,7 +68,7 @@ public abstract class AbstractBaseE2eTest {
         return val;
     }
 
-    protected void validateProtoBuf(String resourceJsonString, Message.Builder builder) {
+    protected static void validateProtoBuf(String resourceJsonString, Message.Builder builder) {
 
         try {
             JsonFormat.parser().merge(resourceJsonString, builder);
@@ -77,6 +78,9 @@ public abstract class AbstractBaseE2eTest {
     }
 
     protected static void setupIcConfig(String personaName, String config, String realmName) throws IOException {
+        DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
+        validateProtoBuf(config, damConfigBuilder);
+
         final String modificationPayload = format("{ \"item\": %s }", config);
         final CookieStore cookieStore = performPersonaLogin(personaName, realmName);
 
@@ -94,11 +98,14 @@ public abstract class AbstractBaseE2eTest {
     }
 
     protected static void setupRealmConfig(String personaName, String config, String realmName) throws IOException {
+        DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
+        validateProtoBuf(config, damConfigBuilder);
+
         final String modificationPayload = format("{ \"item\": %s }", config);
         final CookieStore cookieStore = performPersonaLogin(personaName, realmName);
 
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config?persona=%s", DDAP_BASE_URL, realmName, personaName));
+        HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config", DDAP_BASE_URL, realmName));
         request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
         request.setEntity(new StringEntity(modificationPayload));
 
