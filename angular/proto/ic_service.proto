@@ -18,13 +18,17 @@ syntax = "proto3";
 // end points to receive requests and returns responses using these messages.
 package ic.v1;
 
+import "common/models/common.proto";
+
+option go_package = "github.com/googlegenomics/ga4gh-identity/ic/api/v1";
+
 message IcConfig {
   string version = 1;
   int64 revision = 2;
   double commit_time = 3;
   map<string, IdentityProvider> identity_providers = 4;
   map<string, Client> clients = 5;
-  map<string, AccountTag> account_tags = 6;
+  map<string, common.models.AccountTag> account_tags = 6;
   ConfigOptions options = 7;
 }
 
@@ -42,11 +46,6 @@ message IdentityProvider {
 message Client {
   string client_id = 1;
   repeated string redirect_uris = 2;
-  map<string, string> ui = 3;
-}
-
-message AccountTag {
-  string category = 1;
   map<string, string> ui = 3;
 }
 
@@ -80,6 +79,12 @@ message IcSecrets {
   double commit_time = 3;
   map<string, string> client_secrets = 4;
   map<string, string> id_provider_secrets = 5;
+
+  message TokenKeys {
+    string private_key = 1;
+    string public_key = 2;
+  }
+  map<string, TokenKeys> token_keys = 6;
 }
 
 message ReadOnlyConfig {
@@ -140,9 +145,9 @@ message AccountClaimList {
 
 message AccountClaim {
   message Condition {
-    string value = 1;
-    string source = 2;
-    string by = 3;
+    repeated string value = 1;
+    repeated string source = 2;
+    repeated string by = 3;
   }
   string value = 1;
   string source = 2;
@@ -283,15 +288,4 @@ message GetPersonasResponse {
     repeated string claim_names = 1;
   }
   map<string, Meta> personas = 1;
-}
-
-message Permissions {
-  message PermissionUser {
-    map<string, int64> roles = 1;
-    repeated string tags = 2;
-  }
-  string version = 1;
-  int64 revision = 2;
-  double commit_time = 3;
-  map<string, PermissionUser> users = 4;
 }

@@ -18,6 +18,8 @@ syntax = "proto3";
 // end points to receive requests and returns responses using these messages.
 package dam.v1;
 
+option go_package = "github.com/googlegenomics/ga4gh-identity/dam/api/v1";
+
 message DamConfig {
   string version = 1;
   int64 revision = 2;
@@ -55,10 +57,9 @@ message Condition {
   string is = 4;
   repeated string values = 5;
   repeated string from = 6;
-  //Added this to work around invalid config.
-  repeated string by = 9;
-  repeated Condition all_true = 7;
-  repeated Condition any_true = 8;
+  repeated string by = 7;
+  repeated Condition all_true = 8;
+  repeated Condition any_true = 9;
 }
 
 message Policy {
@@ -163,9 +164,9 @@ message AccessList {
 message TestPersona {
   message GA4GHClaim {
     message Condition {
-      string source = 1;
-      string value = 2;
-      string by = 3;
+      repeated string source = 1;
+      repeated string value = 2;
+      repeated string by = 3;
     }
     string claim_name = 1;
     string source = 2;

@@ -78,9 +78,6 @@ public abstract class AbstractBaseE2eTest {
     }
 
     protected static void setupIcConfig(String personaName, String config, String realmName) throws IOException {
-        DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
-        validateProtoBuf(config, damConfigBuilder);
-
         final String modificationPayload = format("{ \"item\": %s }", config);
         final CookieStore cookieStore = performPersonaLogin(personaName, realmName);
 

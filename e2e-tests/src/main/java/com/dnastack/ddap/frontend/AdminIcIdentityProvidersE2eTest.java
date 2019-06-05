@@ -81,7 +81,8 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-tokenUrl"), "https://foo.bar.example.com/oidc/token");
         adminManagePage.fillField(DdapBy.se("inp-authorizeUrl"), "https://foo.bar.example.com/oidc/authorize");
         adminManagePage.fillField(DdapBy.se("inp-responseType"), "id_token access_token refresh_token");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-translateUsing"), "dbGaP Passport Translator");
+        // Temporarily remove as allowable values vary between staging and prod
+//        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-translateUsing"), "dbGaP Passport Translator");
 
         adminManagePage.enterButton(DdapBy.se("btn-add-scope"));
         adminManagePage.fillField(DdapBy.se("inp-scope"), "profile");

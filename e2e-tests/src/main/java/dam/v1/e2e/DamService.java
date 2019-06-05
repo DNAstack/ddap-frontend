@@ -5608,84 +5608,68 @@ public final class DamService {
         getFromBytes(int index);
 
     /**
-     * <pre>
-     *Added this to work around invalid config.
-     * </pre>
-     *
-     * <code>repeated string by = 9;</code>
+     * <code>repeated string by = 7;</code>
      */
     java.util.List<java.lang.String>
         getByList();
     /**
-     * <pre>
-     *Added this to work around invalid config.
-     * </pre>
-     *
-     * <code>repeated string by = 9;</code>
+     * <code>repeated string by = 7;</code>
      */
     int getByCount();
     /**
-     * <pre>
-     *Added this to work around invalid config.
-     * </pre>
-     *
-     * <code>repeated string by = 9;</code>
+     * <code>repeated string by = 7;</code>
      */
     java.lang.String getBy(int index);
     /**
-     * <pre>
-     *Added this to work around invalid config.
-     * </pre>
-     *
-     * <code>repeated string by = 9;</code>
+     * <code>repeated string by = 7;</code>
      */
     com.google.protobuf.ByteString
         getByBytes(int index);
 
     /**
-     * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+     * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
      */
     java.util.List<dam.v1.e2e.DamService.Condition> 
         getAllTrueList();
     /**
-     * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+     * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
      */
     dam.v1.e2e.DamService.Condition getAllTrue(int index);
     /**
-     * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+     * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
      */
     int getAllTrueCount();
     /**
-     * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+     * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
      */
     java.util.List<? extends dam.v1.e2e.DamService.ConditionOrBuilder> 
         getAllTrueOrBuilderList();
     /**
-     * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+     * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
      */
     dam.v1.e2e.DamService.ConditionOrBuilder getAllTrueOrBuilder(
         int index);
 
     /**
-     * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+     * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
      */
     java.util.List<dam.v1.e2e.DamService.Condition> 
         getAnyTrueList();
     /**
-     * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+     * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
      */
     dam.v1.e2e.DamService.Condition getAnyTrue(int index);
     /**
-     * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+     * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
      */
     int getAnyTrueCount();
     /**
-     * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+     * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
      */
     java.util.List<? extends dam.v1.e2e.DamService.ConditionOrBuilder> 
         getAnyTrueOrBuilderList();
     /**
-     * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+     * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
      */
     dam.v1.e2e.DamService.ConditionOrBuilder getAnyTrueOrBuilder(
         int index);
@@ -5780,6 +5764,15 @@ public final class DamService {
               break;
             }
             case 58: {
+              java.lang.String s = input.readStringRequireUtf8();
+              if (!((mutable_bitField0_ & 0x00000040) != 0)) {
+                by_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000040;
+              }
+              by_.add(s);
+              break;
+            }
+            case 66: {
               if (!((mutable_bitField0_ & 0x00000080) != 0)) {
                 allTrue_ = new java.util.ArrayList<dam.v1.e2e.DamService.Condition>();
                 mutable_bitField0_ |= 0x00000080;
@@ -5788,22 +5781,13 @@ public final class DamService {
                   input.readMessage(dam.v1.e2e.DamService.Condition.parser(), extensionRegistry));
               break;
             }
-            case 66: {
+            case 74: {
               if (!((mutable_bitField0_ & 0x00000100) != 0)) {
                 anyTrue_ = new java.util.ArrayList<dam.v1.e2e.DamService.Condition>();
                 mutable_bitField0_ |= 0x00000100;
               }
               anyTrue_.add(
                   input.readMessage(dam.v1.e2e.DamService.Condition.parser(), extensionRegistry));
-              break;
-            }
-            case 74: {
-              java.lang.String s = input.readStringRequireUtf8();
-              if (!((mutable_bitField0_ & 0x00000040) != 0)) {
-                by_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000040;
-              }
-              by_.add(s);
               break;
             }
             default: {
@@ -5827,14 +5811,14 @@ public final class DamService {
         if (((mutable_bitField0_ & 0x00000020) != 0)) {
           from_ = from_.getUnmodifiableView();
         }
+        if (((mutable_bitField0_ & 0x00000040) != 0)) {
+          by_ = by_.getUnmodifiableView();
+        }
         if (((mutable_bitField0_ & 0x00000080) != 0)) {
           allTrue_ = java.util.Collections.unmodifiableList(allTrue_);
         }
         if (((mutable_bitField0_ & 0x00000100) != 0)) {
           anyTrue_ = java.util.Collections.unmodifiableList(anyTrue_);
-        }
-        if (((mutable_bitField0_ & 0x00000040) != 0)) {
-          by_ = by_.getUnmodifiableView();
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -6115,115 +6099,99 @@ public final class DamService {
       return from_.getByteString(index);
     }
 
-    public static final int BY_FIELD_NUMBER = 9;
+    public static final int BY_FIELD_NUMBER = 7;
     private com.google.protobuf.LazyStringList by_;
     /**
-     * <pre>
-     *Added this to work around invalid config.
-     * </pre>
-     *
-     * <code>repeated string by = 9;</code>
+     * <code>repeated string by = 7;</code>
      */
     public com.google.protobuf.ProtocolStringList
         getByList() {
       return by_;
     }
     /**
-     * <pre>
-     *Added this to work around invalid config.
-     * </pre>
-     *
-     * <code>repeated string by = 9;</code>
+     * <code>repeated string by = 7;</code>
      */
     public int getByCount() {
       return by_.size();
     }
     /**
-     * <pre>
-     *Added this to work around invalid config.
-     * </pre>
-     *
-     * <code>repeated string by = 9;</code>
+     * <code>repeated string by = 7;</code>
      */
     public java.lang.String getBy(int index) {
       return by_.get(index);
     }
     /**
-     * <pre>
-     *Added this to work around invalid config.
-     * </pre>
-     *
-     * <code>repeated string by = 9;</code>
+     * <code>repeated string by = 7;</code>
      */
     public com.google.protobuf.ByteString
         getByBytes(int index) {
       return by_.getByteString(index);
     }
 
-    public static final int ALL_TRUE_FIELD_NUMBER = 7;
+    public static final int ALL_TRUE_FIELD_NUMBER = 8;
     private java.util.List<dam.v1.e2e.DamService.Condition> allTrue_;
     /**
-     * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+     * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
      */
     public java.util.List<dam.v1.e2e.DamService.Condition> getAllTrueList() {
       return allTrue_;
     }
     /**
-     * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+     * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
      */
     public java.util.List<? extends dam.v1.e2e.DamService.ConditionOrBuilder> 
         getAllTrueOrBuilderList() {
       return allTrue_;
     }
     /**
-     * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+     * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
      */
     public int getAllTrueCount() {
       return allTrue_.size();
     }
     /**
-     * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+     * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
      */
     public dam.v1.e2e.DamService.Condition getAllTrue(int index) {
       return allTrue_.get(index);
     }
     /**
-     * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+     * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
      */
     public dam.v1.e2e.DamService.ConditionOrBuilder getAllTrueOrBuilder(
         int index) {
       return allTrue_.get(index);
     }
 
-    public static final int ANY_TRUE_FIELD_NUMBER = 8;
+    public static final int ANY_TRUE_FIELD_NUMBER = 9;
     private java.util.List<dam.v1.e2e.DamService.Condition> anyTrue_;
     /**
-     * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+     * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
      */
     public java.util.List<dam.v1.e2e.DamService.Condition> getAnyTrueList() {
       return anyTrue_;
     }
     /**
-     * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+     * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
      */
     public java.util.List<? extends dam.v1.e2e.DamService.ConditionOrBuilder> 
         getAnyTrueOrBuilderList() {
       return anyTrue_;
     }
     /**
-     * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+     * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
      */
     public int getAnyTrueCount() {
       return anyTrue_.size();
     }
     /**
-     * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+     * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
      */
     public dam.v1.e2e.DamService.Condition getAnyTrue(int index) {
       return anyTrue_.get(index);
     }
     /**
-     * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+     * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
      */
     public dam.v1.e2e.DamService.ConditionOrBuilder getAnyTrueOrBuilder(
         int index) {
@@ -6262,14 +6230,14 @@ public final class DamService {
       for (int i = 0; i < from_.size(); i++) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 6, from_.getRaw(i));
       }
+      for (int i = 0; i < by_.size(); i++) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, by_.getRaw(i));
+      }
       for (int i = 0; i < allTrue_.size(); i++) {
-        output.writeMessage(7, allTrue_.get(i));
+        output.writeMessage(8, allTrue_.get(i));
       }
       for (int i = 0; i < anyTrue_.size(); i++) {
-        output.writeMessage(8, anyTrue_.get(i));
-      }
-      for (int i = 0; i < by_.size(); i++) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, by_.getRaw(i));
+        output.writeMessage(9, anyTrue_.get(i));
       }
       unknownFields.writeTo(output);
     }
@@ -6308,14 +6276,6 @@ public final class DamService {
         size += dataSize;
         size += 1 * getFromList().size();
       }
-      for (int i = 0; i < allTrue_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, allTrue_.get(i));
-      }
-      for (int i = 0; i < anyTrue_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(8, anyTrue_.get(i));
-      }
       {
         int dataSize = 0;
         for (int i = 0; i < by_.size(); i++) {
@@ -6323,6 +6283,14 @@ public final class DamService {
         }
         size += dataSize;
         size += 1 * getByList().size();
+      }
+      for (int i = 0; i < allTrue_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(8, allTrue_.get(i));
+      }
+      for (int i = 0; i < anyTrue_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(9, anyTrue_.get(i));
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -7354,53 +7322,33 @@ public final class DamService {
          }
       }
       /**
-       * <pre>
-       *Added this to work around invalid config.
-       * </pre>
-       *
-       * <code>repeated string by = 9;</code>
+       * <code>repeated string by = 7;</code>
        */
       public com.google.protobuf.ProtocolStringList
           getByList() {
         return by_.getUnmodifiableView();
       }
       /**
-       * <pre>
-       *Added this to work around invalid config.
-       * </pre>
-       *
-       * <code>repeated string by = 9;</code>
+       * <code>repeated string by = 7;</code>
        */
       public int getByCount() {
         return by_.size();
       }
       /**
-       * <pre>
-       *Added this to work around invalid config.
-       * </pre>
-       *
-       * <code>repeated string by = 9;</code>
+       * <code>repeated string by = 7;</code>
        */
       public java.lang.String getBy(int index) {
         return by_.get(index);
       }
       /**
-       * <pre>
-       *Added this to work around invalid config.
-       * </pre>
-       *
-       * <code>repeated string by = 9;</code>
+       * <code>repeated string by = 7;</code>
        */
       public com.google.protobuf.ByteString
           getByBytes(int index) {
         return by_.getByteString(index);
       }
       /**
-       * <pre>
-       *Added this to work around invalid config.
-       * </pre>
-       *
-       * <code>repeated string by = 9;</code>
+       * <code>repeated string by = 7;</code>
        */
       public Builder setBy(
           int index, java.lang.String value) {
@@ -7413,11 +7361,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <pre>
-       *Added this to work around invalid config.
-       * </pre>
-       *
-       * <code>repeated string by = 9;</code>
+       * <code>repeated string by = 7;</code>
        */
       public Builder addBy(
           java.lang.String value) {
@@ -7430,11 +7374,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <pre>
-       *Added this to work around invalid config.
-       * </pre>
-       *
-       * <code>repeated string by = 9;</code>
+       * <code>repeated string by = 7;</code>
        */
       public Builder addAllBy(
           java.lang.Iterable<java.lang.String> values) {
@@ -7445,11 +7385,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <pre>
-       *Added this to work around invalid config.
-       * </pre>
-       *
-       * <code>repeated string by = 9;</code>
+       * <code>repeated string by = 7;</code>
        */
       public Builder clearBy() {
         by_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -7458,11 +7394,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <pre>
-       *Added this to work around invalid config.
-       * </pre>
-       *
-       * <code>repeated string by = 9;</code>
+       * <code>repeated string by = 7;</code>
        */
       public Builder addByBytes(
           com.google.protobuf.ByteString value) {
@@ -7489,7 +7421,7 @@ public final class DamService {
           dam.v1.e2e.DamService.Condition, dam.v1.e2e.DamService.Condition.Builder, dam.v1.e2e.DamService.ConditionOrBuilder> allTrueBuilder_;
 
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public java.util.List<dam.v1.e2e.DamService.Condition> getAllTrueList() {
         if (allTrueBuilder_ == null) {
@@ -7499,7 +7431,7 @@ public final class DamService {
         }
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public int getAllTrueCount() {
         if (allTrueBuilder_ == null) {
@@ -7509,7 +7441,7 @@ public final class DamService {
         }
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public dam.v1.e2e.DamService.Condition getAllTrue(int index) {
         if (allTrueBuilder_ == null) {
@@ -7519,7 +7451,7 @@ public final class DamService {
         }
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public Builder setAllTrue(
           int index, dam.v1.e2e.DamService.Condition value) {
@@ -7536,7 +7468,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public Builder setAllTrue(
           int index, dam.v1.e2e.DamService.Condition.Builder builderForValue) {
@@ -7550,7 +7482,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public Builder addAllTrue(dam.v1.e2e.DamService.Condition value) {
         if (allTrueBuilder_ == null) {
@@ -7566,7 +7498,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public Builder addAllTrue(
           int index, dam.v1.e2e.DamService.Condition value) {
@@ -7583,7 +7515,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public Builder addAllTrue(
           dam.v1.e2e.DamService.Condition.Builder builderForValue) {
@@ -7597,7 +7529,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public Builder addAllTrue(
           int index, dam.v1.e2e.DamService.Condition.Builder builderForValue) {
@@ -7611,7 +7543,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public Builder addAllAllTrue(
           java.lang.Iterable<? extends dam.v1.e2e.DamService.Condition> values) {
@@ -7626,7 +7558,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public Builder clearAllTrue() {
         if (allTrueBuilder_ == null) {
@@ -7639,7 +7571,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public Builder removeAllTrue(int index) {
         if (allTrueBuilder_ == null) {
@@ -7652,14 +7584,14 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public dam.v1.e2e.DamService.Condition.Builder getAllTrueBuilder(
           int index) {
         return getAllTrueFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public dam.v1.e2e.DamService.ConditionOrBuilder getAllTrueOrBuilder(
           int index) {
@@ -7669,7 +7601,7 @@ public final class DamService {
         }
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public java.util.List<? extends dam.v1.e2e.DamService.ConditionOrBuilder> 
            getAllTrueOrBuilderList() {
@@ -7680,14 +7612,14 @@ public final class DamService {
         }
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public dam.v1.e2e.DamService.Condition.Builder addAllTrueBuilder() {
         return getAllTrueFieldBuilder().addBuilder(
             dam.v1.e2e.DamService.Condition.getDefaultInstance());
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public dam.v1.e2e.DamService.Condition.Builder addAllTrueBuilder(
           int index) {
@@ -7695,7 +7627,7 @@ public final class DamService {
             index, dam.v1.e2e.DamService.Condition.getDefaultInstance());
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition all_true = 7;</code>
+       * <code>repeated .dam.v1.e2e.Condition all_true = 8;</code>
        */
       public java.util.List<dam.v1.e2e.DamService.Condition.Builder> 
            getAllTrueBuilderList() {
@@ -7729,7 +7661,7 @@ public final class DamService {
           dam.v1.e2e.DamService.Condition, dam.v1.e2e.DamService.Condition.Builder, dam.v1.e2e.DamService.ConditionOrBuilder> anyTrueBuilder_;
 
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public java.util.List<dam.v1.e2e.DamService.Condition> getAnyTrueList() {
         if (anyTrueBuilder_ == null) {
@@ -7739,7 +7671,7 @@ public final class DamService {
         }
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public int getAnyTrueCount() {
         if (anyTrueBuilder_ == null) {
@@ -7749,7 +7681,7 @@ public final class DamService {
         }
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public dam.v1.e2e.DamService.Condition getAnyTrue(int index) {
         if (anyTrueBuilder_ == null) {
@@ -7759,7 +7691,7 @@ public final class DamService {
         }
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public Builder setAnyTrue(
           int index, dam.v1.e2e.DamService.Condition value) {
@@ -7776,7 +7708,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public Builder setAnyTrue(
           int index, dam.v1.e2e.DamService.Condition.Builder builderForValue) {
@@ -7790,7 +7722,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public Builder addAnyTrue(dam.v1.e2e.DamService.Condition value) {
         if (anyTrueBuilder_ == null) {
@@ -7806,7 +7738,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public Builder addAnyTrue(
           int index, dam.v1.e2e.DamService.Condition value) {
@@ -7823,7 +7755,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public Builder addAnyTrue(
           dam.v1.e2e.DamService.Condition.Builder builderForValue) {
@@ -7837,7 +7769,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public Builder addAnyTrue(
           int index, dam.v1.e2e.DamService.Condition.Builder builderForValue) {
@@ -7851,7 +7783,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public Builder addAllAnyTrue(
           java.lang.Iterable<? extends dam.v1.e2e.DamService.Condition> values) {
@@ -7866,7 +7798,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public Builder clearAnyTrue() {
         if (anyTrueBuilder_ == null) {
@@ -7879,7 +7811,7 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public Builder removeAnyTrue(int index) {
         if (anyTrueBuilder_ == null) {
@@ -7892,14 +7824,14 @@ public final class DamService {
         return this;
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public dam.v1.e2e.DamService.Condition.Builder getAnyTrueBuilder(
           int index) {
         return getAnyTrueFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public dam.v1.e2e.DamService.ConditionOrBuilder getAnyTrueOrBuilder(
           int index) {
@@ -7909,7 +7841,7 @@ public final class DamService {
         }
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public java.util.List<? extends dam.v1.e2e.DamService.ConditionOrBuilder> 
            getAnyTrueOrBuilderList() {
@@ -7920,14 +7852,14 @@ public final class DamService {
         }
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public dam.v1.e2e.DamService.Condition.Builder addAnyTrueBuilder() {
         return getAnyTrueFieldBuilder().addBuilder(
             dam.v1.e2e.DamService.Condition.getDefaultInstance());
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public dam.v1.e2e.DamService.Condition.Builder addAnyTrueBuilder(
           int index) {
@@ -7935,7 +7867,7 @@ public final class DamService {
             index, dam.v1.e2e.DamService.Condition.getDefaultInstance());
       }
       /**
-       * <code>repeated .dam.v1.e2e.Condition any_true = 8;</code>
+       * <code>repeated .dam.v1.e2e.Condition any_true = 9;</code>
        */
       public java.util.List<dam.v1.e2e.DamService.Condition.Builder> 
            getAnyTrueBuilderList() {
@@ -25597,34 +25529,61 @@ public final class DamService {
           com.google.protobuf.MessageOrBuilder {
 
         /**
-         * <code>string source = 1;</code>
+         * <code>repeated string source = 1;</code>
          */
-        java.lang.String getSource();
+        java.util.List<java.lang.String>
+            getSourceList();
         /**
-         * <code>string source = 1;</code>
+         * <code>repeated string source = 1;</code>
+         */
+        int getSourceCount();
+        /**
+         * <code>repeated string source = 1;</code>
+         */
+        java.lang.String getSource(int index);
+        /**
+         * <code>repeated string source = 1;</code>
          */
         com.google.protobuf.ByteString
-            getSourceBytes();
+            getSourceBytes(int index);
 
         /**
-         * <code>string value = 2;</code>
+         * <code>repeated string value = 2;</code>
          */
-        java.lang.String getValue();
+        java.util.List<java.lang.String>
+            getValueList();
         /**
-         * <code>string value = 2;</code>
+         * <code>repeated string value = 2;</code>
+         */
+        int getValueCount();
+        /**
+         * <code>repeated string value = 2;</code>
+         */
+        java.lang.String getValue(int index);
+        /**
+         * <code>repeated string value = 2;</code>
          */
         com.google.protobuf.ByteString
-            getValueBytes();
+            getValueBytes(int index);
 
         /**
-         * <code>string by = 3;</code>
+         * <code>repeated string by = 3;</code>
          */
-        java.lang.String getBy();
+        java.util.List<java.lang.String>
+            getByList();
         /**
-         * <code>string by = 3;</code>
+         * <code>repeated string by = 3;</code>
+         */
+        int getByCount();
+        /**
+         * <code>repeated string by = 3;</code>
+         */
+        java.lang.String getBy(int index);
+        /**
+         * <code>repeated string by = 3;</code>
          */
         com.google.protobuf.ByteString
-            getByBytes();
+            getByBytes(int index);
       }
       /**
        * Protobuf type {@code dam.v1.e2e.TestPersona.GA4GHClaim.Condition}
@@ -25639,9 +25598,9 @@ public final class DamService {
           super(builder);
         }
         private Condition() {
-          source_ = "";
-          value_ = "";
-          by_ = "";
+          source_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+          value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+          by_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         }
 
         @java.lang.Override
@@ -25670,20 +25629,29 @@ public final class DamService {
                   break;
                 case 10: {
                   java.lang.String s = input.readStringRequireUtf8();
-
-                  source_ = s;
+                  if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                    source_ = new com.google.protobuf.LazyStringArrayList();
+                    mutable_bitField0_ |= 0x00000001;
+                  }
+                  source_.add(s);
                   break;
                 }
                 case 18: {
                   java.lang.String s = input.readStringRequireUtf8();
-
-                  value_ = s;
+                  if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+                    value_ = new com.google.protobuf.LazyStringArrayList();
+                    mutable_bitField0_ |= 0x00000002;
+                  }
+                  value_.add(s);
                   break;
                 }
                 case 26: {
                   java.lang.String s = input.readStringRequireUtf8();
-
-                  by_ = s;
+                  if (!((mutable_bitField0_ & 0x00000004) != 0)) {
+                    by_ = new com.google.protobuf.LazyStringArrayList();
+                    mutable_bitField0_ |= 0x00000004;
+                  }
+                  by_.add(s);
                   break;
                 }
                 default: {
@@ -25701,6 +25669,15 @@ public final class DamService {
             throw new com.google.protobuf.InvalidProtocolBufferException(
                 e).setUnfinishedMessage(this);
           } finally {
+            if (((mutable_bitField0_ & 0x00000001) != 0)) {
+              source_ = source_.getUnmodifiableView();
+            }
+            if (((mutable_bitField0_ & 0x00000002) != 0)) {
+              value_ = value_.getUnmodifiableView();
+            }
+            if (((mutable_bitField0_ & 0x00000004) != 0)) {
+              by_ = by_.getUnmodifiableView();
+            }
             this.unknownFields = unknownFields.build();
             makeExtensionsImmutable();
           }
@@ -25719,105 +25696,90 @@ public final class DamService {
         }
 
         public static final int SOURCE_FIELD_NUMBER = 1;
-        private volatile java.lang.Object source_;
+        private com.google.protobuf.LazyStringList source_;
         /**
-         * <code>string source = 1;</code>
+         * <code>repeated string source = 1;</code>
          */
-        public java.lang.String getSource() {
-          java.lang.Object ref = source_;
-          if (ref instanceof java.lang.String) {
-            return (java.lang.String) ref;
-          } else {
-            com.google.protobuf.ByteString bs = 
-                (com.google.protobuf.ByteString) ref;
-            java.lang.String s = bs.toStringUtf8();
-            source_ = s;
-            return s;
-          }
+        public com.google.protobuf.ProtocolStringList
+            getSourceList() {
+          return source_;
         }
         /**
-         * <code>string source = 1;</code>
+         * <code>repeated string source = 1;</code>
+         */
+        public int getSourceCount() {
+          return source_.size();
+        }
+        /**
+         * <code>repeated string source = 1;</code>
+         */
+        public java.lang.String getSource(int index) {
+          return source_.get(index);
+        }
+        /**
+         * <code>repeated string source = 1;</code>
          */
         public com.google.protobuf.ByteString
-            getSourceBytes() {
-          java.lang.Object ref = source_;
-          if (ref instanceof java.lang.String) {
-            com.google.protobuf.ByteString b = 
-                com.google.protobuf.ByteString.copyFromUtf8(
-                    (java.lang.String) ref);
-            source_ = b;
-            return b;
-          } else {
-            return (com.google.protobuf.ByteString) ref;
-          }
+            getSourceBytes(int index) {
+          return source_.getByteString(index);
         }
 
         public static final int VALUE_FIELD_NUMBER = 2;
-        private volatile java.lang.Object value_;
+        private com.google.protobuf.LazyStringList value_;
         /**
-         * <code>string value = 2;</code>
+         * <code>repeated string value = 2;</code>
          */
-        public java.lang.String getValue() {
-          java.lang.Object ref = value_;
-          if (ref instanceof java.lang.String) {
-            return (java.lang.String) ref;
-          } else {
-            com.google.protobuf.ByteString bs = 
-                (com.google.protobuf.ByteString) ref;
-            java.lang.String s = bs.toStringUtf8();
-            value_ = s;
-            return s;
-          }
+        public com.google.protobuf.ProtocolStringList
+            getValueList() {
+          return value_;
         }
         /**
-         * <code>string value = 2;</code>
+         * <code>repeated string value = 2;</code>
+         */
+        public int getValueCount() {
+          return value_.size();
+        }
+        /**
+         * <code>repeated string value = 2;</code>
+         */
+        public java.lang.String getValue(int index) {
+          return value_.get(index);
+        }
+        /**
+         * <code>repeated string value = 2;</code>
          */
         public com.google.protobuf.ByteString
-            getValueBytes() {
-          java.lang.Object ref = value_;
-          if (ref instanceof java.lang.String) {
-            com.google.protobuf.ByteString b = 
-                com.google.protobuf.ByteString.copyFromUtf8(
-                    (java.lang.String) ref);
-            value_ = b;
-            return b;
-          } else {
-            return (com.google.protobuf.ByteString) ref;
-          }
+            getValueBytes(int index) {
+          return value_.getByteString(index);
         }
 
         public static final int BY_FIELD_NUMBER = 3;
-        private volatile java.lang.Object by_;
+        private com.google.protobuf.LazyStringList by_;
         /**
-         * <code>string by = 3;</code>
+         * <code>repeated string by = 3;</code>
          */
-        public java.lang.String getBy() {
-          java.lang.Object ref = by_;
-          if (ref instanceof java.lang.String) {
-            return (java.lang.String) ref;
-          } else {
-            com.google.protobuf.ByteString bs = 
-                (com.google.protobuf.ByteString) ref;
-            java.lang.String s = bs.toStringUtf8();
-            by_ = s;
-            return s;
-          }
+        public com.google.protobuf.ProtocolStringList
+            getByList() {
+          return by_;
         }
         /**
-         * <code>string by = 3;</code>
+         * <code>repeated string by = 3;</code>
+         */
+        public int getByCount() {
+          return by_.size();
+        }
+        /**
+         * <code>repeated string by = 3;</code>
+         */
+        public java.lang.String getBy(int index) {
+          return by_.get(index);
+        }
+        /**
+         * <code>repeated string by = 3;</code>
          */
         public com.google.protobuf.ByteString
-            getByBytes() {
-          java.lang.Object ref = by_;
-          if (ref instanceof java.lang.String) {
-            com.google.protobuf.ByteString b = 
-                com.google.protobuf.ByteString.copyFromUtf8(
-                    (java.lang.String) ref);
-            by_ = b;
-            return b;
-          } else {
-            return (com.google.protobuf.ByteString) ref;
-          }
+            getByBytes(int index) {
+          return by_.getByteString(index);
         }
 
         private byte memoizedIsInitialized = -1;
@@ -25834,14 +25796,14 @@ public final class DamService {
         @java.lang.Override
         public void writeTo(com.google.protobuf.CodedOutputStream output)
                             throws java.io.IOException {
-          if (!getSourceBytes().isEmpty()) {
-            com.google.protobuf.GeneratedMessageV3.writeString(output, 1, source_);
+          for (int i = 0; i < source_.size(); i++) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 1, source_.getRaw(i));
           }
-          if (!getValueBytes().isEmpty()) {
-            com.google.protobuf.GeneratedMessageV3.writeString(output, 2, value_);
+          for (int i = 0; i < value_.size(); i++) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 2, value_.getRaw(i));
           }
-          if (!getByBytes().isEmpty()) {
-            com.google.protobuf.GeneratedMessageV3.writeString(output, 3, by_);
+          for (int i = 0; i < by_.size(); i++) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 3, by_.getRaw(i));
           }
           unknownFields.writeTo(output);
         }
@@ -25852,14 +25814,29 @@ public final class DamService {
           if (size != -1) return size;
 
           size = 0;
-          if (!getSourceBytes().isEmpty()) {
-            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, source_);
+          {
+            int dataSize = 0;
+            for (int i = 0; i < source_.size(); i++) {
+              dataSize += computeStringSizeNoTag(source_.getRaw(i));
+            }
+            size += dataSize;
+            size += 1 * getSourceList().size();
           }
-          if (!getValueBytes().isEmpty()) {
-            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, value_);
+          {
+            int dataSize = 0;
+            for (int i = 0; i < value_.size(); i++) {
+              dataSize += computeStringSizeNoTag(value_.getRaw(i));
+            }
+            size += dataSize;
+            size += 1 * getValueList().size();
           }
-          if (!getByBytes().isEmpty()) {
-            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, by_);
+          {
+            int dataSize = 0;
+            for (int i = 0; i < by_.size(); i++) {
+              dataSize += computeStringSizeNoTag(by_.getRaw(i));
+            }
+            size += dataSize;
+            size += 1 * getByList().size();
           }
           size += unknownFields.getSerializedSize();
           memoizedSize = size;
@@ -25876,12 +25853,12 @@ public final class DamService {
           }
           dam.v1.e2e.DamService.TestPersona.GA4GHClaim.Condition other = (dam.v1.e2e.DamService.TestPersona.GA4GHClaim.Condition) obj;
 
-          if (!getSource()
-              .equals(other.getSource())) return false;
-          if (!getValue()
-              .equals(other.getValue())) return false;
-          if (!getBy()
-              .equals(other.getBy())) return false;
+          if (!getSourceList()
+              .equals(other.getSourceList())) return false;
+          if (!getValueList()
+              .equals(other.getValueList())) return false;
+          if (!getByList()
+              .equals(other.getByList())) return false;
           if (!unknownFields.equals(other.unknownFields)) return false;
           return true;
         }
@@ -25893,12 +25870,18 @@ public final class DamService {
           }
           int hash = 41;
           hash = (19 * hash) + getDescriptor().hashCode();
-          hash = (37 * hash) + SOURCE_FIELD_NUMBER;
-          hash = (53 * hash) + getSource().hashCode();
-          hash = (37 * hash) + VALUE_FIELD_NUMBER;
-          hash = (53 * hash) + getValue().hashCode();
-          hash = (37 * hash) + BY_FIELD_NUMBER;
-          hash = (53 * hash) + getBy().hashCode();
+          if (getSourceCount() > 0) {
+            hash = (37 * hash) + SOURCE_FIELD_NUMBER;
+            hash = (53 * hash) + getSourceList().hashCode();
+          }
+          if (getValueCount() > 0) {
+            hash = (37 * hash) + VALUE_FIELD_NUMBER;
+            hash = (53 * hash) + getValueList().hashCode();
+          }
+          if (getByCount() > 0) {
+            hash = (37 * hash) + BY_FIELD_NUMBER;
+            hash = (53 * hash) + getByList().hashCode();
+          }
           hash = (29 * hash) + unknownFields.hashCode();
           memoizedHashCode = hash;
           return hash;
@@ -26032,12 +26015,12 @@ public final class DamService {
           @java.lang.Override
           public Builder clear() {
             super.clear();
-            source_ = "";
-
-            value_ = "";
-
-            by_ = "";
-
+            source_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+            bitField0_ = (bitField0_ & ~0x00000001);
+            value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+            bitField0_ = (bitField0_ & ~0x00000002);
+            by_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+            bitField0_ = (bitField0_ & ~0x00000004);
             return this;
           }
 
@@ -26064,8 +26047,21 @@ public final class DamService {
           @java.lang.Override
           public dam.v1.e2e.DamService.TestPersona.GA4GHClaim.Condition buildPartial() {
             dam.v1.e2e.DamService.TestPersona.GA4GHClaim.Condition result = new dam.v1.e2e.DamService.TestPersona.GA4GHClaim.Condition(this);
+            int from_bitField0_ = bitField0_;
+            if (((bitField0_ & 0x00000001) != 0)) {
+              source_ = source_.getUnmodifiableView();
+              bitField0_ = (bitField0_ & ~0x00000001);
+            }
             result.source_ = source_;
+            if (((bitField0_ & 0x00000002) != 0)) {
+              value_ = value_.getUnmodifiableView();
+              bitField0_ = (bitField0_ & ~0x00000002);
+            }
             result.value_ = value_;
+            if (((bitField0_ & 0x00000004) != 0)) {
+              by_ = by_.getUnmodifiableView();
+              bitField0_ = (bitField0_ & ~0x00000004);
+            }
             result.by_ = by_;
             onBuilt();
             return result;
@@ -26115,16 +26111,34 @@ public final class DamService {
 
           public Builder mergeFrom(dam.v1.e2e.DamService.TestPersona.GA4GHClaim.Condition other) {
             if (other == dam.v1.e2e.DamService.TestPersona.GA4GHClaim.Condition.getDefaultInstance()) return this;
-            if (!other.getSource().isEmpty()) {
-              source_ = other.source_;
+            if (!other.source_.isEmpty()) {
+              if (source_.isEmpty()) {
+                source_ = other.source_;
+                bitField0_ = (bitField0_ & ~0x00000001);
+              } else {
+                ensureSourceIsMutable();
+                source_.addAll(other.source_);
+              }
               onChanged();
             }
-            if (!other.getValue().isEmpty()) {
-              value_ = other.value_;
+            if (!other.value_.isEmpty()) {
+              if (value_.isEmpty()) {
+                value_ = other.value_;
+                bitField0_ = (bitField0_ & ~0x00000002);
+              } else {
+                ensureValueIsMutable();
+                value_.addAll(other.value_);
+              }
               onChanged();
             }
-            if (!other.getBy().isEmpty()) {
-              by_ = other.by_;
+            if (!other.by_.isEmpty()) {
+              if (by_.isEmpty()) {
+                by_ = other.by_;
+                bitField0_ = (bitField0_ & ~0x00000004);
+              } else {
+                ensureByIsMutable();
+                by_.addAll(other.by_);
+              }
               onChanged();
             }
             this.mergeUnknownFields(other.unknownFields);
@@ -26155,210 +26169,286 @@ public final class DamService {
             }
             return this;
           }
+          private int bitField0_;
 
-          private java.lang.Object source_ = "";
-          /**
-           * <code>string source = 1;</code>
-           */
-          public java.lang.String getSource() {
-            java.lang.Object ref = source_;
-            if (!(ref instanceof java.lang.String)) {
-              com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
-              java.lang.String s = bs.toStringUtf8();
-              source_ = s;
-              return s;
-            } else {
-              return (java.lang.String) ref;
-            }
+          private com.google.protobuf.LazyStringList source_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+          private void ensureSourceIsMutable() {
+            if (!((bitField0_ & 0x00000001) != 0)) {
+              source_ = new com.google.protobuf.LazyStringArrayList(source_);
+              bitField0_ |= 0x00000001;
+             }
           }
           /**
-           * <code>string source = 1;</code>
+           * <code>repeated string source = 1;</code>
+           */
+          public com.google.protobuf.ProtocolStringList
+              getSourceList() {
+            return source_.getUnmodifiableView();
+          }
+          /**
+           * <code>repeated string source = 1;</code>
+           */
+          public int getSourceCount() {
+            return source_.size();
+          }
+          /**
+           * <code>repeated string source = 1;</code>
+           */
+          public java.lang.String getSource(int index) {
+            return source_.get(index);
+          }
+          /**
+           * <code>repeated string source = 1;</code>
            */
           public com.google.protobuf.ByteString
-              getSourceBytes() {
-            java.lang.Object ref = source_;
-            if (ref instanceof String) {
-              com.google.protobuf.ByteString b = 
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                      (java.lang.String) ref);
-              source_ = b;
-              return b;
-            } else {
-              return (com.google.protobuf.ByteString) ref;
-            }
+              getSourceBytes(int index) {
+            return source_.getByteString(index);
           }
           /**
-           * <code>string source = 1;</code>
+           * <code>repeated string source = 1;</code>
            */
           public Builder setSource(
-              java.lang.String value) {
+              int index, java.lang.String value) {
             if (value == null) {
     throw new NullPointerException();
   }
-  
-            source_ = value;
+  ensureSourceIsMutable();
+            source_.set(index, value);
             onChanged();
             return this;
           }
           /**
-           * <code>string source = 1;</code>
+           * <code>repeated string source = 1;</code>
+           */
+          public Builder addSource(
+              java.lang.String value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureSourceIsMutable();
+            source_.add(value);
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>repeated string source = 1;</code>
+           */
+          public Builder addAllSource(
+              java.lang.Iterable<java.lang.String> values) {
+            ensureSourceIsMutable();
+            com.google.protobuf.AbstractMessageLite.Builder.addAll(
+                values, source_);
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>repeated string source = 1;</code>
            */
           public Builder clearSource() {
-            
-            source_ = getDefaultInstance().getSource();
+            source_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+            bitField0_ = (bitField0_ & ~0x00000001);
             onChanged();
             return this;
           }
           /**
-           * <code>string source = 1;</code>
+           * <code>repeated string source = 1;</code>
            */
-          public Builder setSourceBytes(
+          public Builder addSourceBytes(
               com.google.protobuf.ByteString value) {
             if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-            
-            source_ = value;
+            ensureSourceIsMutable();
+            source_.add(value);
             onChanged();
             return this;
           }
 
-          private java.lang.Object value_ = "";
-          /**
-           * <code>string value = 2;</code>
-           */
-          public java.lang.String getValue() {
-            java.lang.Object ref = value_;
-            if (!(ref instanceof java.lang.String)) {
-              com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
-              java.lang.String s = bs.toStringUtf8();
-              value_ = s;
-              return s;
-            } else {
-              return (java.lang.String) ref;
-            }
+          private com.google.protobuf.LazyStringList value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+          private void ensureValueIsMutable() {
+            if (!((bitField0_ & 0x00000002) != 0)) {
+              value_ = new com.google.protobuf.LazyStringArrayList(value_);
+              bitField0_ |= 0x00000002;
+             }
           }
           /**
-           * <code>string value = 2;</code>
+           * <code>repeated string value = 2;</code>
+           */
+          public com.google.protobuf.ProtocolStringList
+              getValueList() {
+            return value_.getUnmodifiableView();
+          }
+          /**
+           * <code>repeated string value = 2;</code>
+           */
+          public int getValueCount() {
+            return value_.size();
+          }
+          /**
+           * <code>repeated string value = 2;</code>
+           */
+          public java.lang.String getValue(int index) {
+            return value_.get(index);
+          }
+          /**
+           * <code>repeated string value = 2;</code>
            */
           public com.google.protobuf.ByteString
-              getValueBytes() {
-            java.lang.Object ref = value_;
-            if (ref instanceof String) {
-              com.google.protobuf.ByteString b = 
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                      (java.lang.String) ref);
-              value_ = b;
-              return b;
-            } else {
-              return (com.google.protobuf.ByteString) ref;
-            }
+              getValueBytes(int index) {
+            return value_.getByteString(index);
           }
           /**
-           * <code>string value = 2;</code>
+           * <code>repeated string value = 2;</code>
            */
           public Builder setValue(
+              int index, java.lang.String value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureValueIsMutable();
+            value_.set(index, value);
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>repeated string value = 2;</code>
+           */
+          public Builder addValue(
               java.lang.String value) {
             if (value == null) {
     throw new NullPointerException();
   }
-  
-            value_ = value;
+  ensureValueIsMutable();
+            value_.add(value);
             onChanged();
             return this;
           }
           /**
-           * <code>string value = 2;</code>
+           * <code>repeated string value = 2;</code>
+           */
+          public Builder addAllValue(
+              java.lang.Iterable<java.lang.String> values) {
+            ensureValueIsMutable();
+            com.google.protobuf.AbstractMessageLite.Builder.addAll(
+                values, value_);
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>repeated string value = 2;</code>
            */
           public Builder clearValue() {
-            
-            value_ = getDefaultInstance().getValue();
+            value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+            bitField0_ = (bitField0_ & ~0x00000002);
             onChanged();
             return this;
           }
           /**
-           * <code>string value = 2;</code>
+           * <code>repeated string value = 2;</code>
            */
-          public Builder setValueBytes(
+          public Builder addValueBytes(
               com.google.protobuf.ByteString value) {
             if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-            
-            value_ = value;
+            ensureValueIsMutable();
+            value_.add(value);
             onChanged();
             return this;
           }
 
-          private java.lang.Object by_ = "";
-          /**
-           * <code>string by = 3;</code>
-           */
-          public java.lang.String getBy() {
-            java.lang.Object ref = by_;
-            if (!(ref instanceof java.lang.String)) {
-              com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
-              java.lang.String s = bs.toStringUtf8();
-              by_ = s;
-              return s;
-            } else {
-              return (java.lang.String) ref;
-            }
+          private com.google.protobuf.LazyStringList by_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+          private void ensureByIsMutable() {
+            if (!((bitField0_ & 0x00000004) != 0)) {
+              by_ = new com.google.protobuf.LazyStringArrayList(by_);
+              bitField0_ |= 0x00000004;
+             }
           }
           /**
-           * <code>string by = 3;</code>
+           * <code>repeated string by = 3;</code>
+           */
+          public com.google.protobuf.ProtocolStringList
+              getByList() {
+            return by_.getUnmodifiableView();
+          }
+          /**
+           * <code>repeated string by = 3;</code>
+           */
+          public int getByCount() {
+            return by_.size();
+          }
+          /**
+           * <code>repeated string by = 3;</code>
+           */
+          public java.lang.String getBy(int index) {
+            return by_.get(index);
+          }
+          /**
+           * <code>repeated string by = 3;</code>
            */
           public com.google.protobuf.ByteString
-              getByBytes() {
-            java.lang.Object ref = by_;
-            if (ref instanceof String) {
-              com.google.protobuf.ByteString b = 
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                      (java.lang.String) ref);
-              by_ = b;
-              return b;
-            } else {
-              return (com.google.protobuf.ByteString) ref;
-            }
+              getByBytes(int index) {
+            return by_.getByteString(index);
           }
           /**
-           * <code>string by = 3;</code>
+           * <code>repeated string by = 3;</code>
            */
           public Builder setBy(
+              int index, java.lang.String value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureByIsMutable();
+            by_.set(index, value);
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>repeated string by = 3;</code>
+           */
+          public Builder addBy(
               java.lang.String value) {
             if (value == null) {
     throw new NullPointerException();
   }
-  
-            by_ = value;
+  ensureByIsMutable();
+            by_.add(value);
             onChanged();
             return this;
           }
           /**
-           * <code>string by = 3;</code>
+           * <code>repeated string by = 3;</code>
+           */
+          public Builder addAllBy(
+              java.lang.Iterable<java.lang.String> values) {
+            ensureByIsMutable();
+            com.google.protobuf.AbstractMessageLite.Builder.addAll(
+                values, by_);
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>repeated string by = 3;</code>
            */
           public Builder clearBy() {
-            
-            by_ = getDefaultInstance().getBy();
+            by_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+            bitField0_ = (bitField0_ & ~0x00000004);
             onChanged();
             return this;
           }
           /**
-           * <code>string by = 3;</code>
+           * <code>repeated string by = 3;</code>
            */
-          public Builder setByBytes(
+          public Builder addByBytes(
               com.google.protobuf.ByteString value) {
             if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-            
-            by_ = value;
+            ensureByIsMutable();
+            by_.add(value);
             onChanged();
             return this;
           }
@@ -86109,9 +86199,9 @@ public final class DamService {
       "\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\324\001\n\tCondit" +
       "ion\022\017\n\005claim\030\001 \001(\tH\000\022\022\n\010data_use\030\002 \001(\tH\000" +
       "\022\023\n\tuser_list\030\003 \001(\tH\000\022\n\n\002is\030\004 \001(\t\022\016\n\006val" +
-      "ues\030\005 \003(\t\022\014\n\004from\030\006 \003(\t\022\n\n\002by\030\t \003(\t\022\'\n\010a" +
-      "ll_true\030\007 \003(\0132\025.dam.v1.e2e.Condition\022\'\n\010" +
-      "any_true\030\010 \003(\0132\025.dam.v1.e2e.ConditionB\005\n" +
+      "ues\030\005 \003(\t\022\014\n\004from\030\006 \003(\t\022\n\n\002by\030\007 \003(\t\022\'\n\010a" +
+      "ll_true\030\010 \003(\0132\025.dam.v1.e2e.Condition\022\'\n\010" +
+      "any_true\030\t \003(\0132\025.dam.v1.e2e.ConditionB\005\n" +
       "\003key\"\252\001\n\006Policy\022$\n\005allow\030\001 \001(\0132\025.dam.v1." +
       "e2e.Condition\022\'\n\010disallow\030\002 \001(\0132\025.dam.v1" +
       ".e2e.Condition\022&\n\002ui\030\003 \003(\0132\032.dam.v1.e2e." +
@@ -86194,7 +86284,7 @@ public final class DamService {
       "xpires\030\005 \001(\001\022D\n\tcondition\030\006 \003(\01321.dam.v1" +
       ".e2e.TestPersona.GA4GHClaim.ConditionEnt" +
       "ry\022\n\n\002by\030\007 \001(\t\0326\n\tCondition\022\016\n\006source\030\001 " +
-      "\001(\t\022\r\n\005value\030\002 \001(\t\022\n\n\002by\030\003 \001(\t\032^\n\016Condit" +
+      "\003(\t\022\r\n\005value\030\002 \003(\t\022\n\n\002by\030\003 \003(\t\032^\n\016Condit" +
       "ionEntry\022\013\n\003key\030\001 \001(\t\022;\n\005value\030\002 \001(\0132,.d" +
       "am.v1.e2e.TestPersona.GA4GHClaim.Conditi" +
       "on:\0028\001\032\334\001\n\021TestIdentityToken\022V\n\017standard" +
@@ -86442,7 +86532,9 @@ public final class DamService {
       "dam.v1.e2e.ConfigModification\"m\n\023ConfigC" +
       "lientRequest\022 \n\004item\030\001 \001(\0132\022.dam.v1.e2e." +
       "Client\0224\n\014modification\030\002 \001(\0132\036.dam.v1.e2" +
-      "e.ConfigModificationb\006proto3"
+      "e.ConfigModificationB5Z3github.com/googl" +
+      "egenomics/ga4gh-identity/dam/api/v1b\006pro" +
+      "to3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

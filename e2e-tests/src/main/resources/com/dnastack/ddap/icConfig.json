@@ -31,7 +31,6 @@
         "profile",
         "bona_fide_status"
       ],
-      "translateUsing": "elixir",
       "clientId": "76823614-51a3-4e2a-b17f-142b63c19e88",
       "ui": {
         "iconUrl": "/identity/static/elixir_identity.png",
