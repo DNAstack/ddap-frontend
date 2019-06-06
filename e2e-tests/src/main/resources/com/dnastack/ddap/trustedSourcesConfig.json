@@ -1041,8 +1041,8 @@
             "expires": 2181272402,
             "condition": {
               "AffiliationAndRole": {
-                "value": "faculty@uni-heidelberg.de",
-                "by": "so"
+                "value": ["faculty@uni-heidelberg.de"],
+                "by": ["so"]
               }
             },
             "by": "dac"
