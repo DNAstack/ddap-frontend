@@ -59,6 +59,9 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory {
 		ServerHttpRequest request = exchange.getRequest();
 		URI calculatedRoute = calculateRequestRoute(exchange);
 		log.info(">>> {} {}", request.getMethodValue(), calculatedRoute);
+		exchange.getRequest()
+				.getHeaders()
+				.forEach((name, values) -> log.info("  {}: {}", name, values));
 	}
 
 	private URI calculateRequestRoute(ServerWebExchange exchange) {
