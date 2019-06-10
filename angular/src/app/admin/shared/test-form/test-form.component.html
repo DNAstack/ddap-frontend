@@ -5,14 +5,17 @@
     <li *ngFor="let view of views">
       <h3>{{ view }}</h3>
       <ul>
-        <li *ngFor="let persona of personas"
-            [formGroupName]="persona">
-          <mat-checkbox [formControlName]="view"
-                        color="primary"
-                        (change)="emitChange()"
-                        id="{{ view }}/{{ persona }}">
-            {{ persona }}
-          </mat-checkbox>
+        <li *ngFor="let persona of personas">
+          <ng-container *ngIf="form.get(persona) && form.get(persona).get(view)">
+            <ng-container [formGroupName]="persona">
+              <mat-checkbox [formControlName]="view"
+                            color="primary"
+                            (change)="emitChange()"
+                            id="{{ view }}/{{ persona }}">
+                {{ persona }}
+              </mat-checkbox>
+            </ng-container>
+          </ng-container>
         </li>
       </ul>
     </li>

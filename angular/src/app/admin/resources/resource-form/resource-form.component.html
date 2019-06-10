@@ -144,7 +144,7 @@
                   type="button"
                   color="warn"
                   class="uppercase"
-                  data-se="btn-remove-view"
+                  [attr.data-se]="'btn-remove-view-' + view.name"
                   (click)="removeView(view)">
             Remove View
           </button>

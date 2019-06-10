@@ -107,7 +107,7 @@
         <ng-container [formGroupName]="i">
           <mat-form-field class="col">
             <input matInput
-                   data-se="inp-view-target-adapter-variable"
+                   [attr.data-se]="'inp-view-target-adapter-variable-' + variable.get('name').value"
                    [placeholder]="variable.get('label').value"
                    [required]="!variable.get('optional').value"
                    formControlName="value">

@@ -32,6 +32,10 @@ public class AdminManagePage {
 
     public void fillFieldFromDropdown(By fieldSelector, String fieldValue) {
         WebElement field = driver.findElement(fieldSelector);
+
+        new WebDriverWait(driver, 5)
+                .until(ExpectedConditions.visibilityOf(field));
+
         field.sendKeys(Keys.ENTER);
 
         List<WebElement> options = driver.findElements(By.tagName("mat-option"));
@@ -65,6 +69,14 @@ public class AdminManagePage {
 
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(checkbox));
         checkbox.click();
+    }
+
+    public WebElement findCheckedCheckbox(String checkboxId) {
+        WebElement checkbox = driver.findElement(By.xpath("//mat-checkbox[@id='" + checkboxId + "' and contains(@class, 'mat-checkbox-checked')]"));
+
+        this.scrollTo(checkbox);
+
+        return new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(checkbox));
     }
 
     public void enterButton(By selector) {

@@ -120,6 +120,10 @@ export class TestFormComponent implements OnChanges {
   }
 
   toApplyDto() {
+    if (!this.form) {
+      return {};
+    }
+
     const result = {...this.originalTest};
     const personaList = Object.keys(this.form.value);
 
