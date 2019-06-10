@@ -19,7 +19,9 @@ import {
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
-  MatSlideToggleModule, MatSnackBarModule, MatTableModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatTableModule,
   MatTooltipModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';

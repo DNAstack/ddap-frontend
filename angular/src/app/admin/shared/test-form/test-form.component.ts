@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import _get from 'lodash.get';
+import _isEqual from 'lodash.isequal';
 import _set from 'lodash.set';
 import { of } from 'rxjs/internal/observable/of';
 import { zip } from 'rxjs/internal/observable/zip';
@@ -22,6 +23,8 @@ export class TestFormComponent implements OnChanges {
 
   @Input()
   resource: EntityModel;
+  @Input()
+  isNewResource: boolean;
   @Output()
   change: EventEmitter<any> = new EventEmitter();
 
@@ -43,6 +46,10 @@ export class TestFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (_isEqual(changes.resource.currentValue, changes.resource.previousValue)) {
+      return;
+    }
+
     const resourceViews = _get(this.resource, 'dto.views', {});
     const viewNames = Object.keys(resourceViews);
 
@@ -91,10 +98,13 @@ export class TestFormComponent implements OnChanges {
           dry_run: true,
         }));
 
-        this.resourceService.update(this.resource.name, change)
-          .subscribe(
-            () => true,
-            (dryRunDto) => this.fillInValues(this.form, personas, views, dryRunDto));
+        const action$ = this.isNewResource
+          ? this.resourceService.save(this.resource.name, change)
+          : this.resourceService.update(this.resource.name, change);
+        action$.subscribe(
+          () => true,
+          (dryRunDto) => this.fillInValues(this.form, personas, views, dryRunDto)
+        );
       }
     });
   }
@@ -103,7 +113,6 @@ export class TestFormComponent implements OnChanges {
     this.originalTest = error;
     personas.forEach((persona) => {
       const accesses = _get(error, `testPersonas[${persona}].resources[${this.resource.name}].access`, []);
-
       accesses.forEach((access) => {
         form.get(persona).get(access).setValue(true);
       });

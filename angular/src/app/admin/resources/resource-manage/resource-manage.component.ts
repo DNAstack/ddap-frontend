@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
-import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
+import { PersonaResourceAccessComponent } from '../resource-form/persona-resource-access/persona-resource-access.component';
 import { ResourceFormComponent } from '../resource-form/resource-form.component';
 import { ResourceService } from '../resources.service';
 
@@ -20,19 +20,14 @@ export class ResourceManageComponent {
   resourceForm: ResourceFormComponent;
   @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
-
-  test: any;
-  testEditorOptions = new JsonEditorDefaults();
+  @ViewChild('accessForm')
+  accessForm: PersonaResourceAccessComponent;
 
   constructor(public resourceService: ResourceService,
               private router: Router,
               private route: ActivatedRoute,
               public formError: FormErrorScrollService) {
-    this.testEditorOptions.mode = 'code';
-  }
 
-  updateTestDto(event: any) {
-    this.test = event;
   }
 
   save() {
@@ -41,7 +36,7 @@ export class ResourceManageComponent {
     }
 
     const resourceModel: EntityModel = this.resourceForm.getModel();
-    const applyModel = this.test || {};
+    const applyModel = this.accessForm.getApplyModel() || {};
     const change = new ConfigModificationObject(resourceModel.dto, applyModel);
 
     this.resourceService.save(resourceModel.name, change)
