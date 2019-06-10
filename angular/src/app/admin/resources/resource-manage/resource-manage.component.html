@@ -8,10 +8,10 @@
         <mat-icon class="icon icon-access"></mat-icon>
         <span>Access</span>
       </h3>
-      <json-editor data-se="test-editor"
-                   [options]="testEditorOptions"
-                   (change)="updateTestDto($event)">
-      </json-editor>
+      <ddap-persona-resource-access #accessForm
+                                    [isNewResource]="true"
+                                    [resource]="resourceForm.getModel()">
+      </ddap-persona-resource-access>
     </div>
     <mat-error #formErrorElement
                [class.visible]="formError.showError"

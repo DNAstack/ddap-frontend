@@ -113,13 +113,7 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
 
   getViewModel(viewForm: FormGroup) {
     const { id, variables, roles, ...rest } = viewForm.value;
-    const vars: any[] = variables.map((variable) => {
-      return {
-        [variable.name]: variable.value,
-      };
-    }).reduce((previousValue, currentValue) => {
-      return Object.assign(previousValue, currentValue);
-    }, {});
+    const vars = this.getVariables(viewForm);
 
     return {
       [id]: {
@@ -128,6 +122,21 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
         ...rest,
       },
     };
+  }
+
+  getVariables(viewForm: FormGroup) {
+    const { variables } = viewForm.value;
+    if (!variables) {
+      return {};
+    }
+
+    return variables.map((variable) => {
+      return {
+        [variable.name]: variable.value,
+      };
+    }).reduce((previousValue, currentValue) => {
+      return Object.assign(previousValue, currentValue);
+    }, {});
   }
 
   isValid() {
@@ -141,10 +150,17 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
   }
 
   private getViewChildrenForms(): FormGroup[] {
+    if (!this.viewChildComponents) {
+      return [];
+    }
     return this.viewChildComponents.map(view => view.viewForm);
   }
 
   private sanitizeRoles(roles) {
+    if (!roles) {
+      return {};
+    }
+
     const emptyRoles = Object.entries(roles)
       .filter(([_, value]: any) => {
         return value.policies.length < 1;

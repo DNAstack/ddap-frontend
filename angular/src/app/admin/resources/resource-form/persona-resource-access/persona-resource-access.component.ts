@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import _get from 'lodash.get';
 import { of } from 'rxjs/internal/observable/of';
 import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
@@ -18,9 +18,11 @@ export class PersonaResourceAccessComponent {
 
   @Input()
   resource: EntityModel;
+  @Input()
+  isNewResource: boolean;
+
   @ViewChild(TestFormComponent)
   testForm: TestFormComponent;
-
   error: any = null;
   save$: Subject<any> = new Subject();
 
@@ -57,7 +59,10 @@ export class PersonaResourceAccessComponent {
 
     const change = new ConfigModificationObject(_get(changes, 'dto', this.resource.dto), applyModel);
 
-    return this.resourceService.update(this.resource.name, change).pipe(
+    const action$ = this.isNewResource
+      ? this.resourceService.save(this.resource.name, change)
+      : this.resourceService.update(this.resource.name, change);
+    return action$.pipe(
       catchError((e) => {
         this.error = e.error;
         this.testForm.validatePersonaFields(e);
