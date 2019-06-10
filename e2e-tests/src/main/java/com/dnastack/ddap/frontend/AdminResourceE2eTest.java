@@ -9,6 +9,7 @@ import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import java.io.IOException;
 
@@ -27,7 +28,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
+        final String testConfig = loadTemplate("/com/dnastack/ddap/resourcesConfig.json");
         setupRealmConfig("administrator", testConfig, REALM);
     }
 
@@ -88,6 +89,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
                 .goToAdmin(NavItem.RESOURCES);
         String resourceId = "resource-" + System.currentTimeMillis();
         String viewId = "view-" + System.currentTimeMillis();
+        String role = "discovery";
 
         assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
 
@@ -104,21 +106,27 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Phase 3");
         adminManagePage.fillField(DdapBy.se("inp-view-aud"), "http://audience-test.com");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-view-service-template"), "Beacon Discovery Search");
-        adminManagePage.fillField(DdapBy.se("inp-view-target-adapter-variable"), "http://beacon-test.com");
-        adminManagePage.enterButton(DdapBy.se("btn-make-default-role-discovery"));
-        adminManagePage.fillTagField(DdapBy.se("view-role-policies-discovery"), "discovery_access");
+        adminManagePage.fillField(DdapBy.se("inp-view-target-adapter-variable-url"), "http://beacon-test.com");
+        adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + role));
+        adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + role), "ethics");
+
+        adminManagePage.findCheckedCheckbox(viewId + "/" + role + "/dr_joe_elixir");
+        adminManagePage.findCheckedCheckbox(viewId + "/" + role + "/nci_researcher");
+
         adminListPage = adminManagePage.saveEntity();
 
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceId));
     }
 
     @Test
-    public void addResourceAndMultipleView() {
+    public void addResourceAndMultipleViews() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(NavItem.RESOURCES);
         String resourceId = "resource-" + System.currentTimeMillis();
         String view1Id = "view1-" + System.currentTimeMillis();
+        String view1Role = "viewer";
         String view2Id = "view2-" + System.currentTimeMillis();
+        String view2Role = "discovery";
 
         assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
 
@@ -134,30 +142,113 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-view-label"), view1Id);
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Phase 3");
         adminManagePage.fillField(DdapBy.se("inp-view-aud"), "http://audience-test.com");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-view-service-template"), "Beacon Discovery Search");
-        adminManagePage.fillField(DdapBy.se("inp-view-target-adapter-variable"), "http://beacon-test.com");
-        adminManagePage.enterButton(DdapBy.se("btn-make-default-role-discovery"));
-        adminManagePage.fillTagField(DdapBy.se("view-role-policies-discovery"), "discovery_access");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-view-service-template"), "Google Cloud Storage");
+        adminManagePage.fillField(DdapBy.se("inp-view-target-adapter-variable-bucket"), "ga4gh-apis-controlled-access");
+        adminManagePage.fillField(DdapBy.se("inp-view-target-adapter-variable-project"), "ga4gh-apis");
+        adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + view1Role));
+        adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + view1Role), "nih_dac(DATASETS=https://dac.nih.gov/datasets/phs000710)");
 
         adminManagePage.clickButton(DdapBy.se("btn-add-view"));
         adminManagePage.fillField(DdapBy.se("inp-view-id"), view2Id);
         adminManagePage.fillField(DdapBy.se("inp-view-label"), view2Id);
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Version 2");
         adminManagePage.fillField(DdapBy.se("inp-view-aud"), "http://audience-test.com");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-view-service-template"), "Google BigQuery");
-        adminManagePage.fillField(DdapBy.seAndText("inp-view-target-adapter-variable", "GCP Project ID"), "test");
-        adminManagePage.fillField(DdapBy.seAndText("inp-view-target-adapter-variable", "BigQuery Dataset name"), "test");
-        adminManagePage.enterButton(DdapBy.se("btn-make-default-role-editor"));
-        adminManagePage.fillTagField(DdapBy.se("view-role-policies-editor"), "discovery_access");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-view-service-template"), "Beacon Discovery Search");
+        adminManagePage.fillField(DdapBy.se("inp-view-target-adapter-variable-url"), "http://beacon-test.com");
+        adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + view2Role));
+        adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + view2Role), "ethics");
+        adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + view2Role), "bona_fide");
+
+        adminManagePage.findCheckedCheckbox(view1Id + "/" + view1Role + "/dr_joe_era_commons");
+        adminManagePage.findCheckedCheckbox(view1Id + "/" + view1Role + "/nci_researcher");
+        adminManagePage.findCheckedCheckbox(view2Id + "/" + view2Role + "/dr_joe_elixir");
+        adminManagePage.findCheckedCheckbox(view2Id + "/" + view2Role + "/nci_researcher");
+
         adminListPage = adminManagePage.saveEntity();
 
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceId));
     }
 
-    // TODO: editResourceChangeView
-    // TODO: editResourceNoChangesToView
-    // TODO: editResourceRemoveView
-    // TODO: editResourceAddView
+    @Test
+    public void editResourceEditViewMakeNewDefaultRole() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                .goToAdmin(NavItem.RESOURCES);
+        String resourceToEdit = "1000 Genomes";
+        String newDefaultRole = "basic_discovery";
+
+        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+
+        AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit");
+
+        adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
+        adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");
+        adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/dr_joe_era_commons");
+        adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/nci_researcher");
+
+        adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + newDefaultRole));
+        adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + newDefaultRole), "ethics");
+
+        adminManagePage.findCheckedCheckbox("discovery-access/" + newDefaultRole + "/dr_joe_elixir");
+        adminManagePage.findCheckedCheckbox("discovery-access/" + newDefaultRole + "/nci_researcher");
+        adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
+        adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");
+        adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/dr_joe_era_commons");
+        adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/nci_researcher");
+
+        adminListPage = adminManagePage.updateEntity();
+
+        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+    }
+
+    @Test
+    public void editResourceRemoveView() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                .goToAdmin(NavItem.RESOURCES);
+        String resourceToEdit = "1000 Genomes";
+
+        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+
+        AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit");
+
+        adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
+        adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");
+        adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/dr_joe_era_commons");
+        adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/nci_researcher");
+
+        adminManagePage.enterButton(DdapBy.se("btn-remove-view-gcs-file-access"));
+        // workaround to rebuild matrix, matrix is not rebuilt on view removal/addition
+        adminManagePage.clickCheckbox(By.id("discovery-access/discovery/administrator"));
+
+        adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
+        adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");
+
+        adminListPage = adminManagePage.updateEntity();
+
+        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+    }
+
+    @Test
+    public void editResourceNoChangesToView() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                .goToAdmin(NavItem.RESOURCES);
+        String resourceToEdit = "1000 Genomes NOT_EDITED";
+
+        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+
+        AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit");
+
+        adminManagePage.clearField(DdapBy.se("inp-label"));
+        adminManagePage.fillField(DdapBy.se("inp-label"), resourceToEdit + "_EDITED");
+
+        adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
+        adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");
+        adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/dr_joe_era_commons");
+        adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/nci_researcher");
+
+        adminListPage = adminManagePage.updateEntity();
+
+        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit + "_EDITED"));
+    }
 
     @Test
     public void deleteResource() {

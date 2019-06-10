@@ -46,10 +46,6 @@ export class ResourceDetailComponent extends EntityDetailBase<ResourceService> i
     }
 
     const resourceModel: EntityModel = this.resourceForm.getModel();
-    this.accessForm.dryRun(resourceModel);
-    if (this.accessForm.error) {
-      return;
-    }
     const applyModel = this.accessForm.getApplyModel() || {};
     const change = new ConfigModificationObject(resourceModel.dto, applyModel);
 

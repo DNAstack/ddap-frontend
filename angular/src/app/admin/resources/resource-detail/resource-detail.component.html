@@ -17,7 +17,7 @@
         </h3>
         <ddap-persona-resource-access #accessForm
                                       [isNewResource]="false"
-                                      [resource]="entity">
+                                      [resource]="resourceForm.getModel()">
         </ddap-persona-resource-access>
       </div>
       <mat-error #formErrorElement
