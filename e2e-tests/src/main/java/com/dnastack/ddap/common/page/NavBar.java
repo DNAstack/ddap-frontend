@@ -28,7 +28,7 @@ public class NavBar {
         CLIENTS("Client Applications", "nav-client-applications"),
         TRUSTED_SOURCES("Trusted Sources", "nav-trusted-sources"),
         DEFINITIONS("Claim Definitions", "nav-claim-definitions"),
-        SERVICE_TEMPLATES("Service Templates", "nav-service-templates"),
+        SERVICE_DEFINITIONS("Service Definitions", "nav-service-definitions"),
         RULES("Access Policies", "nav-access-policies"),
         PASSPORTS("Passport Issuers", "nav-passport-issuers");
 

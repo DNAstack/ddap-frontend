@@ -8,7 +8,7 @@ import { OptionsModule } from './options/options.module';
 import { PassportIssuersModule } from './passport-issuers/passport-issuers.module';
 import { PersonasModule } from './personas/personas.module';
 import { ResourcesModule } from './resources/resources.module';
-import { ServiceTemplatesModule } from './service-templates/service-templates.module';
+import { ServiceDefinitionsModule } from './service-definitions/service-definitions.module';
 import { TrustedSourcesModule } from './trusted-sources/trusted-sources.module';
 
 @NgModule({
@@ -17,7 +17,7 @@ import { TrustedSourcesModule } from './trusted-sources/trusted-sources.module';
     ClientApplicationsModule,
     ClaimDefinitionsModule,
     IdentityConcentratorModule,
-    ServiceTemplatesModule,
+    ServiceDefinitionsModule,
     PassportIssuersModule,
     PersonasModule,
     ResourcesModule,

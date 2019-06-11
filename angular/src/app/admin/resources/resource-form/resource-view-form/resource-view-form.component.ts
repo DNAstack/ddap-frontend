@@ -6,7 +6,7 @@ import View = dam.v1.View;
 import { Subscription } from 'rxjs/Subscription';
 
 import { dam } from '../../../../shared/proto/dam-service';
-import { ServiceTemplateService } from '../../../service-templates/service-templates.service';
+import { ServiceDefinitionService } from '../../../service-definitions/service-definitions.service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 
 @Component({
@@ -24,7 +24,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   templatesSubscription: Subscription;
 
   constructor(private formBuilder: FormBuilder,
-              private serviceTemplateService: ServiceTemplateService) {
+              private serviceTemplateService: ServiceDefinitionService) {
   }
 
   get serviceTemplate(): string {

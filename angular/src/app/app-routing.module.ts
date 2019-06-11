@@ -9,7 +9,7 @@ import { OPTIONS_ROUTES } from './admin/options/options.routes';
 import { PASSPORT_ISSUERS_ROUTES } from './admin/passport-issuers/passport-issuers.routes';
 import { PERSONAS_ROUTES } from './admin/personas/personas.routes';
 import { RESOURCES_ROUTES } from './admin/resources/resources.routes';
-import { SERVICE_TEMPLATES_ROUTES } from './admin/service-templates/service-templates.routes';
+import { SERVICE_TEMPLATES_ROUTES } from './admin/service-definitions/service-definitions.routes';
 import { TRUSTED_SOURCES_ROUTES } from './admin/trusted-sources/trusted-sources.routes';
 import { DATA_ROUTES } from './data/data.routes';
 import { IDENTITY_ROUTES } from './identity/identity.routes';

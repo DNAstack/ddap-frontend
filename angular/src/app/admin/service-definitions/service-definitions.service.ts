@@ -13,7 +13,7 @@ import { EntityModel } from '../shared/entity.model';
 @Injectable({
   providedIn: 'root',
 })
-export class ServiceTemplateService extends ConfigEntityService {
+export class ServiceDefinitionService extends ConfigEntityService {
 
   constructor(protected http: HttpClient,
               protected errorHandler: ErrorHandlerService) {
@@ -23,7 +23,7 @@ export class ServiceTemplateService extends ConfigEntityService {
   get(params: {} = {}): Observable<Map<string, EntityModel>> {
     return super.get(params)
       .pipe(
-        this.errorHandler.notifyOnError(`Can't load service templates.`)
+        this.errorHandler.notifyOnError(`Can't load service definitions.`)
       );
   }
 

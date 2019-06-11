@@ -40,7 +40,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
                 Arrays.asList("elixir_institutes", "nih_institutes"));
         map.put(NavBar.NavItem.DEFINITIONS,
                 Arrays.asList("Elixir Affiliated Country", "Affiliation and Role"));
-        map.put(NavBar.NavItem.SERVICE_TEMPLATES,
+        map.put(NavBar.NavItem.SERVICE_DEFINITIONS,
                 Arrays.asList("Beacon Discovery Search", "Google BigQuery", "Google Cloud Storage"));
         map.put(NavBar.NavItem.RULES,
                 Arrays.asList("General Research Use", "Bona Fide", "Researcher Ethics Agreement"));
@@ -149,7 +149,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void verifyServiceTemplates() {
-        NavBar.NavItem pageId = NavBar.NavItem.SERVICE_TEMPLATES;
+        NavBar.NavItem pageId = NavBar.NavItem.SERVICE_DEFINITIONS;
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
 
