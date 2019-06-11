@@ -9,7 +9,7 @@
           <ng-container [ngSwitch]="beacon.exists">
             <div *ngSwitchCase="false"
                  class="flex vertical-center match-failure">
-              <mat-icon>clear</mat-icon>
+              <mat-icon class="icon icon-none"></mat-icon>
               <span>no matching allele found</span>
             </div>
             <div *ngSwitchCase="true"
@@ -19,7 +19,7 @@
             </div>
             <div *ngSwitchDefault
                  class="flex vertical-center match-error">
-              <mat-icon>error</mat-icon>
+              <mat-icon class="icon icon-warning"></mat-icon>
               <span *ngIf="beacon.error && (beacon.error.status === 401 || beacon.error.status === 403); else nonPermissionError">
                 lack of permissions
               </span>
