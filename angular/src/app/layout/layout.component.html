@@ -47,10 +47,6 @@
         <mat-icon class="icon icon-explore"></mat-icon>
         <h4 mat-line>Explore Data</h4>
       </mat-list-item>
-      <mat-list-item>
-        <mat-icon class="icon icon-collections"></mat-icon>
-        <h4 mat-line>My Collections</h4>
-      </mat-list-item>
       <mat-list-item (click)="goToIdentity()"
                      [class.active-nav-link]="isIdentityPage()"
                      data-se="nav-identity">
@@ -165,18 +161,7 @@
             </mat-list-item>
           </mat-nav-list>
         </mat-expansion-panel>
-
-        <mat-expansion-panel [expanded]="false">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <span>Human Cell Atlas</span>
-              <span>Sequence Repository</span>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-        </mat-expansion-panel>
       </mat-accordion>
-
-      <button mat-button class="text-color--subtle text-size--small uppercase">+5 more repositories</button>
     </div>
   </mat-sidenav>
 
