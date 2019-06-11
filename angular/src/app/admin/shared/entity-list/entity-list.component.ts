@@ -41,6 +41,6 @@ export class EntityListComponent {
     if (!this.descriptionProperty && !this.descriptionLabel) {
       return;
     }
-    return _get(entity, this.descriptionProperty, entity);
+    return _get(entity, this.descriptionProperty, '');
   }
 }
