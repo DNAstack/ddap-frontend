@@ -21,6 +21,7 @@ export class OptionListComponent implements OnInit {
   }
 
   updateOptionValue({ optionKey, newValue }) {
+    this.error = null;
     const newOptions = this.cloneOptions();
     const oldValue = newOptions[optionKey];
     try {
