@@ -3,10 +3,12 @@ package com.dnastack.ddapfrontend.route;
 import com.dnastack.ddapfrontend.client.ic.IdentityConcentratorClient;
 import com.dnastack.ddapfrontend.client.ic.TokenExchangeException;
 import com.dnastack.ddapfrontend.client.ic.TokenResponse;
+import com.dnastack.ddapfrontend.security.JwtTokenParser;
 import com.dnastack.ddapfrontend.security.OAuthStateHandler;
 import com.dnastack.ddapfrontend.security.TokenExchangePurpose;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -30,6 +32,7 @@ import java.util.*;
 
 import static com.dnastack.ddapfrontend.header.XForwardUtil.getExternalPath;
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static org.springframework.http.HttpStatus.TEMPORARY_REDIRECT;
 
@@ -45,10 +48,10 @@ public class IdentityController {
 
     @Autowired
     private IdentityConcentratorClient idpClient;
-
     @Autowired
     private UserTokenCookiePackager cookiePackager;
-
+    @Autowired
+    private JwtTokenParser jwtTokenParser;
     @Autowired
     OAuthStateHandler stateHandler;
 
@@ -65,6 +68,16 @@ public class IdentityController {
     static URI rootLoginRedirectUrl(ServerHttpRequest request, String realm) {
         return URI.create(getExternalPath(request,
                 format("/api/v1alpha/%s/identity/login", realm)));
+    }
+
+    @GetMapping("/scopes")
+    public Mono<? extends ResponseEntity<?>> whoami(ServerHttpRequest request) {
+        Optional<String> icToken = cookiePackager.extractToken(request, CookieKind.IC);
+        if (icToken.isEmpty()) {
+            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
+        }
+        Optional<JwtSubject> subject = dangerousStopgapExtractSubject(icToken.get());
+        return Mono.just(ResponseEntity.ok().body(subject.get()));
     }
 
     @GetMapping("/login")
@@ -169,12 +182,12 @@ public class IdentityController {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
         }
 
-        final String targetAccountId = dangerousStopgapExtractSubject(icToken.get());
+        final String targetAccountId = dangerousStopgapExtractSubject(icToken.get()).map(JwtSubject::getSub).orElse(null);
         if (targetAccountId == null) {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is invalid"));
         }
 
-        final String accountId = dangerousStopgapExtractSubject(icToken.get());
+        final String accountId = dangerousStopgapExtractSubject(icToken.get()).map(JwtSubject::getSub).orElse(null);
 
         return idpClient.unlinkAccount(realm, accountId, icToken.get(), subjectName)
                         .map(message -> ResponseEntity.status(200)
@@ -194,7 +207,7 @@ public class IdentityController {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
         }
 
-        final String targetAccountId = dangerousStopgapExtractSubject(icToken.get());
+        final String targetAccountId = dangerousStopgapExtractSubject(icToken.get()).map(JwtSubject::getSub).orElse(null);
         if (targetAccountId == null) {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is invalid"));
         }
@@ -223,41 +236,44 @@ public class IdentityController {
 
     private Mono<ResponseEntity<?>> finishAccountLinking(
             ServerHttpRequest request, String newAccountLinkToken, String baseAccountLinkToken, String realm) {
-        String newAccountId = dangerousStopgapExtractSubject(newAccountLinkToken);
-        String baseAccountId = dangerousStopgapExtractSubject(baseAccountLinkToken);
+        String newAccountId = dangerousStopgapExtractSubject(newAccountLinkToken).map(JwtSubject::getSub).orElse(null);
+        String baseAccountId = dangerousStopgapExtractSubject(baseAccountLinkToken).map(JwtSubject::getSub).orElse(null);
 
         return idpClient.linkAccounts(realm, baseAccountId, baseAccountLinkToken, newAccountId, newAccountLinkToken)
                 .map(success -> ResponseEntity.status(307).location(selfLinkToUi(request, realm, "identity")).build());
     }
 
-    private String dangerousStopgapExtractSubject(String jwt) {
+    private String dangerousStopgapParseToken(String jwt) {
         // FIXME [DISCO-1995] huge security hole! we must validate this token properly!
-        final ObjectMapper objectMapper = new ObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         final String[] jwtParts = jwt.split("\\.", -1);
         if (jwtParts.length != 3) {
             log.info("Treating malformed token cookie as missing ({} parts != 3)", jwtParts.length);
             return null;
         }
 
-        final String jsonBody;
         try {
-            jsonBody = new String(Base64.getUrlDecoder().decode(jwtParts[1]), StandardCharsets.UTF_8);
+            return new String(Base64.getUrlDecoder().decode(jwtParts[1]), StandardCharsets.UTF_8);
         } catch (IllegalArgumentException e) {
             log.info("Treating malformed token cookie as missing (couldn't base64 decode body)", e);
             return null;
         }
+    }
+
+    private Optional<JwtSubject> dangerousStopgapExtractSubject(String jwt) {
+        String jsonBody = dangerousStopgapParseToken(jwt);
+        final ObjectMapper objectMapper = new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         final JwtSubject decodedBody;
         try {
             decodedBody = objectMapper.readValue(jsonBody, JwtSubject.class);
         } catch (IOException e) {
             log.info("Treating malformed token cookie as missing (couldn't JSON decode body)", e);
-            return null;
+            return Optional.empty();
         }
 
         log.debug("Decoded token {}", jsonBody);
-        return decodedBody.getSub();
+        return Optional.of(decodedBody);
     }
 
     /**
@@ -316,6 +332,12 @@ public class IdentityController {
     @Data
     private static class JwtSubject {
         String sub;
+        List<String> scope;
+
+        @JsonSetter
+        public void setScope(String scope) {
+            this.scope = asList(scope.split(" "));
+        }
     }
 
 }

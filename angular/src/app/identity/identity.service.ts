@@ -10,6 +10,7 @@ import { ErrorHandlerService } from '../shared/error-handler/error-handler.servi
 import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 import { AccountLink } from './account-link.model';
+import { AccountScope } from './account-scope.model';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
 
@@ -60,6 +61,17 @@ export class IdentityService {
           ];
         })
       );
+  }
+
+  getScopes(params = {}): Observable<AccountScope> {
+    return this.http.get<any>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/identity/scopes`, {params})
+      .pipe(
+        this.errorHandler.notifyOnError(`Can't load account's scopes.`)
+      );
+  }
+
+  hasLinkScope(account: AccountScope): boolean {
+    return account.scope.includes('link');
   }
 
   hasAdminAccount(connectedAccounts: Account[]): boolean {

@@ -61,4 +61,14 @@ mat-card {
       color: $color-grey;
     }
   }
+
+  .connect-account-warning {
+    display: flex;
+    align-items: center;
+    color: $warn-color;
+
+    span {
+      margin-left: 0.5rem;
+    }
+  }
 }

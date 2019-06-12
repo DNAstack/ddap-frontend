@@ -20,6 +20,7 @@ import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+@SuppressWarnings("Duplicates")
 public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(AccountLinkingTest.class.getSimpleName());
@@ -35,6 +36,86 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
                     return om;
                 }
         ));
+    }
+
+    @Test
+    public void testScopes() throws Exception {
+        String requestedScope = "link";
+        String icTokenJwtBeforeLinking = fetchRealPersonaIcToken("mr_hyde", REALM, "");
+
+        // @formatter:off
+        given()
+                .log().method()
+                .log().cookies()
+                .log().uri()
+                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+                .redirects().follow(false)
+                .when()
+                .get(ddap("/identity/login?persona=nci_researcher"))
+                .then()
+                .log().body()
+                .log().ifValidationFails()
+                .statusCode(307)
+                .cookie("ic_token")
+                .extract();
+        // @formatter:on
+
+        // @formatter:off
+        given()
+                .log().method()
+                .log().cookies()
+                .log().uri()
+                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+                .cookie("ic_token", icTokenJwtBeforeLinking)
+                .redirects().follow(false)
+                .when()
+                .get(ddap("/identity/scopes"))
+                .then()
+                .log().body()
+                .log().ifValidationFails()
+                .statusCode(200)
+                .assertThat()
+                .body("scope", not(empty()))
+                .body("scope", not(hasItem(requestedScope)));
+        // @formatter:on
+
+        // @formatter:off
+        given()
+                .log().method()
+                .log().cookies()
+                .log().uri()
+                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+                .redirects().follow(false)
+                .when()
+                .get(ddap("/identity/login?persona=nci_researcher&scope=" + requestedScope))
+                .then()
+                .log().body()
+                .log().ifValidationFails()
+                .statusCode(307)
+                .cookie("ic_token")
+                .extract();
+        // @formatter:on
+
+        icTokenJwtBeforeLinking = fetchRealPersonaIcToken("mr_hyde", REALM, requestedScope);
+
+        // @formatter:off
+        given()
+                .log().method()
+                .log().cookies()
+                .log().uri()
+                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+                .cookie("ic_token", icTokenJwtBeforeLinking)
+                .redirects().follow(false)
+                .when()
+                .get(ddap("/identity/scopes"))
+                .then()
+                .log().body()
+                .log().ifValidationFails()
+                .statusCode(200)
+                .assertThat()
+                .body("scope", not(empty()))
+                .body("scope", hasItem(requestedScope));
+        // @formatter:on
     }
 
     @Test

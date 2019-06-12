@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import GA4GHClaim = dam.v1.TestPersona.GA4GHClaim;
+import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
+import { mergeMap } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
 import { dam } from '../shared/proto/dam-service';
 
 import { AccountLink } from './account-link.model';
+import { AccountScope } from './account-scope.model';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
 import { IdentityService } from './identity.service';
 import { identityProviderMetadataExists, identityProviders } from './providers.constants';
-import GA4GHClaim = dam.v1.TestPersona.GA4GHClaim;
 
 @Component({
   templateUrl: './identity.component.html',
@@ -23,19 +27,39 @@ export class IdentityComponent implements OnInit {
   availableAccounts: AccountLink[];
   availableAccountsSubscription: Subscription;
 
-  constructor(private identityService: IdentityService) {
+  account: AccountScope;
+
+  realm: string;
+  displayScopeWarning = false;
+
+  constructor(private activatedRoute: ActivatedRoute,
+              private identityService: IdentityService) {
 
   }
 
   ngOnInit(): void {
+    this.activatedRoute.root.firstChild.params.subscribe((params) => {
+      this.realm = params.realmId;
+    });
+
+    this.availableAccountsSubscription = this.identityService.getScopes()
+      .pipe(
+        mergeMap((account: AccountScope) => {
+          if (this.identityService.hasLinkScope(account)) {
+            return this.identityService.getAccountLinks();
+          } else {
+            this.displayScopeWarning = true;
+            return EmptyObservable.create();
+          }
+        })
+      )
+      .subscribe((availableAccounts: AccountLink[]) => {
+        this.availableAccounts = availableAccounts;
+      });
+
     this.connectedAccountsSubscription = this.identityService.getIdentity()
       .subscribe((identity: Identity) => {
         this.connectedAccounts = identity.connectedAccounts;
-      });
-
-    this.availableAccountsSubscription = this.identityService.getAccountLinks()
-      .subscribe((availableAccounts: AccountLink[]) => {
-        this.availableAccounts = availableAccounts;
       });
   }
 
@@ -67,6 +91,11 @@ export class IdentityComponent implements OnInit {
 
   unlinkConnectedAccount(account: Account) {
     this.identityService.unlinkConnectedAccount(account);
+  }
+
+  redirectToLoginWithLinkScope() {
+    const loginUrlSuffix = `login?scope=link+account_admin+ga4gh&redirectUri=/${this.realm}/identity`;
+    window.location.href = `/api/v1alpha/${this.realm}/identity/${loginUrlSuffix}`;
   }
 
   private extractClaimsUnderKey(claimKey: string, claims: any[]): GA4GHClaim[] {

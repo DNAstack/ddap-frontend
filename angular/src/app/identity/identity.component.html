@@ -40,6 +40,18 @@
                       class="ddap-card-loader"
                       mode="indeterminate">
     </mat-progress-bar>
+    <div *ngIf="displayScopeWarning">
+      <p class="connect-account-warning">
+        <mat-icon class="icon icon-warning"></mat-icon>
+        <span>You need to click button below to sign in again to connect accounts</span>
+      </p>
+      <button mat-raised-button
+              color="primary"
+              class="uppercase"
+              (click)="redirectToLoginWithLinkScope()">
+        Re-login
+      </button>
+    </div>
     <a *ngFor="let account of availableAccounts"
        [href]="account.linkUrl">
       <mat-card>
