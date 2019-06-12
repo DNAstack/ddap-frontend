@@ -45,6 +45,8 @@ import static org.springframework.http.HttpStatus.TEMPORARY_REDIRECT;
 @RequestMapping("/api/v1alpha/{realm}/identity")
 public class IdentityController {
 
+    private static final String DEFAULT_SCOPES = "ga4gh account_admin identities";
+
     @Autowired
     private IdentityConcentratorClient idpClient;
     @Autowired
@@ -81,7 +83,7 @@ public class IdentityController {
     public Mono<? extends ResponseEntity<?>> apiLogin(ServerHttpRequest request,
                                                       @PathVariable String realm,
                                                       @RequestParam(required = false) URI redirectUri,
-                                                      @RequestParam(defaultValue = "ga4gh account_admin") String scope,
+                                                      @RequestParam(defaultValue = DEFAULT_SCOPES) String scope,
                                                       @RequestParam(required = false) String persona) {
 
         final String state = stateHandler.generateLoginState(redirectUri);

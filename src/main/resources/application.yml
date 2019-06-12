@@ -14,7 +14,6 @@ idp:
   base-url: http://localhost:3001/
   client-id: local-dam-client-id
   client-secret: local-dam-client-secret
-
 ddap:
   public-uri: http://localhost:8085
   default-realm: dnastack
