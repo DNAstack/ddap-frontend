@@ -178,7 +178,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
 
-        AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit");
+        AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
 
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");
@@ -208,7 +208,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
 
-        AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit");
+        AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
 
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");
@@ -235,7 +235,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
 
-        AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit");
+        AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), resourceToEdit + "_EDITED");
@@ -258,7 +258,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToDelete));
 
-        AdminManagePage adminManagePage = adminListPage.clickView(resourceToDelete, "Edit");
+        AdminManagePage adminManagePage = adminListPage.clickView(resourceToDelete, "Edit Resource");
 
         adminListPage = adminManagePage.deleteEntity();
 

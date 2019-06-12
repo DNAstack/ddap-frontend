@@ -1,48 +1,55 @@
 @import "~src/styles/modules/colors";
 
 
-table {
-  td:first-child {
-    width: 100%;
+mat-table {
+  mat-header-cell:first-child,
+  mat-cell:first-child {
+    align-items: start;
+    text-align: left;
+
+    & > div {
+      display: flex;
+      align-items: center;
+
+      span {
+        font-size: 1rem;
+        margin-left: 0.5rem;
+      }
+    }
   }
 
-  th {
-    vertical-align: middle;
+  mat-header-cell,
+  mat-cell {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 
-    &:not(:first-child) {
-      text-align: center;
-      padding: 0.5rem;
-    }
-
-    mat-icon {
-      vertical-align: middle;
-      color: $color-grey;
-    }
-
+  mat-header-cell:not(:first-child) {
     span:last-child {
       font-weight: 300;
     }
   }
 
-  th:first-child {
-    color: inherit;
-    font-size: 1rem;
-  }
-
-  tr.mat-row td {
+  mat-row {
     border-bottom-style: dashed;
   }
 
-  tr:last-child td {
-    border: none;
+  mat-row:last-child {
+    border-bottom: none;
   }
 
-  td:not(:first-child) {
-    padding: 0.5rem;
-    text-align: center;
+  mat-icon {
+    vertical-align: middle;
+    color: $color-grey;
+  }
 
-    mat-icon.lock {
-      color: $color-grey-light;
-    }
+  mat-icon.lock {
+    color: $color-grey-light;
+  }
+
+  mat-icon.tick {
+    color: $success-color;
   }
 }

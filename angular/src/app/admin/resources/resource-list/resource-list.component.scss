@@ -1,0 +1,17 @@
+.ddap-resource-list {
+  mat-panel-description {
+    align-items: center;
+  }
+
+  ddap-metadata-list {
+    padding-right: 1rem;
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    margin-bottom: -1rem;
+    min-width: 25rem;
+    max-width: 25rem;
+  }
+  ddap-access-table {
+    margin-left: 1rem;
+    flex-grow: 1;
+  }
+}

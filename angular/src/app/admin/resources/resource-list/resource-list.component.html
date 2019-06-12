@@ -5,10 +5,32 @@
 </ddap-header>
 
 <ddap-main>
-  <ddap-entity-list
-    [headerTitle]="'resources'"
-    [descriptionProperty]="'ui.description'"
-    [descriptionLabel]="'description'"
-    [entityList]="entities$">
-  </ddap-entity-list>
+  <mat-accordion class="ddap-resource-list">
+    <ng-container *ngFor="let resource of resources$ | async">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header collapsedHeight="5rem">
+          <mat-panel-title>
+            <h3 data-se="entity-title">{{ resource.dto.ui.label }}</h3>
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ resource.dto.ui.description }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="flex">
+          <ddap-metadata-list [metadata]="resource.dto.ui" [includeFields]="['owner']">
+          </ddap-metadata-list>
+          <ddap-access-table [resource]="resource">
+          </ddap-access-table>
+        </div>
+        <mat-action-row>
+          <button mat-button
+                  [routerLink]="[resource.name]"
+                  color="primary"
+                  class="uppercase">
+            Edit Resource
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </ng-container>
+  </mat-accordion>
 </ddap-main>

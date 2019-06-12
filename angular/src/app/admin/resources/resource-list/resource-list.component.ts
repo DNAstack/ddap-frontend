@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 
-import { EntityListBase } from '../../shared/entity-list.base';
+import { EntityModel } from '../../shared/entity.model';
 import { ResourceService } from '../resources.service';
 
 @Component({
@@ -8,10 +10,16 @@ import { ResourceService } from '../resources.service';
   templateUrl: './resource-list.component.html',
   styleUrls: ['./resource-list.component.scss'],
 })
-export class ResourceListComponent extends EntityListBase<ResourceService> {
+export class ResourceListComponent implements OnInit {
 
-  constructor(resourceService: ResourceService) {
-    super(resourceService);
+  resources$: Observable<any[]>;
+
+  constructor(private resourceService: ResourceService) {
+  }
+
+  ngOnInit() {
+    this.resources$ = this.resourceService.get()
+      .pipe(map(EntityModel.arrayFromMap));
   }
 
 }

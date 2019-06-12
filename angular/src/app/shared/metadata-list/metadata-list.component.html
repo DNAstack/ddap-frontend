@@ -5,7 +5,9 @@
       <td>{{ object.value }}</td>
     </ng-container>
     <ng-template #anchorLink>
-      <a [href]="object.value">{{ object.value }}</a>
+      <td>
+        <a [href]="object.value">{{ object.value }}</a>
+      </td>
     </ng-template>
   </tr>
 </table>

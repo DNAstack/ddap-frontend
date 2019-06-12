@@ -1,46 +1,47 @@
-<table mat-table
-       [dataSource]="accessDatatable">
-  <ng-container matColumnDef="persona">
-    <th mat-header-cell
-        *matHeaderCellDef>
-      <mat-icon class="icon icon-identity">
-      </mat-icon>
-      Access
-    </th>
-    <td mat-cell
-        *matCellDef="let element">
-      {{ element.persona }}
-    </td>
-  </ng-container>
+<ng-container *ngIf="personasSubscription && !personasSubscription.closed; else accessTable">
+  <mat-progress-bar class="ddap-card-loader"
+                    mode="indeterminate">
+  </mat-progress-bar>
+</ng-container>
+<ng-template #accessTable>
+  <mat-table [dataSource]="accessDatatable">
+    <ng-container matColumnDef="persona">
+      <mat-header-cell *matHeaderCellDef>
+        <div>
+          <mat-icon class="icon icon-identity"></mat-icon>
+          <span>Access</span>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ getPersonaName(element.persona) }}
+      </mat-cell>
+    </ng-container>
 
-  <ng-container *ngFor="let access of accessList"
-                [matColumnDef]="access">
+    <ng-container *ngFor="let access of accessList"
+                  [matColumnDef]="access">
+      <mat-header-cell *matHeaderCellDef>
+        <span matTooltip="View">{{ getViewName(access) }}</span>
+        <span matTooltip="Role">{{ getRole(access) }}</span>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <mat-icon *ngIf="element[access]"
+                  matTooltip="Access Granted"
+                  class="tick"
+                  color="primary">
+          done
+        </mat-icon>
+        <mat-icon *ngIf="!element[access]"
+                  matTooltip="Access Denied"
+                  class="lock">
+          lock
+        </mat-icon>
+      </mat-cell>
+    </ng-container>
 
-    <th mat-header-cell
-        *matHeaderCellDef>
-      <span>{{ getViewName(access) }}</span>
-      <br>
-      <span>{{ getRole(access) }}</span>
-    </th>
-    <td mat-cell
-        *matCellDef="let element">
-      <mat-icon *ngIf="element[access]"
-                title="Access Granted"
-                color="primary">
-        done
-      </mat-icon>
-      <mat-icon *ngIf="!element[access]"
-                title="Access Denied"
-                class="lock">
-        lock
-      </mat-icon>
-    </td>
-  </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns">
+    </mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+</ng-template>
 
-  <tr mat-header-row
-      *matHeaderRowDef="displayedColumns">
-  </tr>
-  <tr mat-row
-      *matRowDef="let row; columns: displayedColumns;">
-  </tr>
-</table>

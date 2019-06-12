@@ -5,11 +5,12 @@ import { of } from 'rxjs/internal/observable/of';
 import { zip } from 'rxjs/internal/observable/zip';
 import { Observable } from 'rxjs/Observable';
 import { catchError, share, switchMap, take } from 'rxjs/operators';
+import { Subscription } from 'rxjs/Subscription';
 
-import { pick } from '../../../shared/autocomplete/autocomplete.util';
 import { PersonaService } from '../../personas/personas.service';
 import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../configModificationObject';
+import { EntityModel } from '../entity.model';
 
 @Component({
   selector: 'ddap-access-table',
@@ -19,19 +20,20 @@ import { ConfigModificationObject } from '../configModificationObject';
 export class AccessTableComponent implements OnChanges {
 
   @Input()
-  resource: any;
+  resource: EntityModel;
 
   accessDatatable: any[] = [];
   displayedColumns = [];
   accessList = [];
   viewNameDict = {};
 
+  personasSubscription: Subscription;
   private readonly personas$: Observable<any>;
 
   constructor(private personaService: PersonaService,
               private resourceService: ResourceService) {
     this.personas$ = this.personaService
-      .getList(pick('name'))
+      .getList()
       .pipe(
         share()
       );
@@ -46,11 +48,15 @@ export class AccessTableComponent implements OnChanges {
 
     this.viewNameDict = this.buildViewNameDict(resource);
 
-    zip(this.personas$, dryRun$, of(accesses)).pipe(
+    this.personasSubscription = zip(this.personas$, dryRun$, of(accesses)).pipe(
       take(1)
     ).subscribe(([personas, dryRunDto, views]) => {
       this.setAccessMatrixProperties(personas, views, dryRunDto);
       });
+  }
+
+  getPersonaName(persona) {
+    return _get(persona, 'dto.ui.label', persona.name);
   }
 
   getViewName(access: string) {
@@ -62,7 +68,7 @@ export class AccessTableComponent implements OnChanges {
     return access.split('/')[1];
   }
 
-  setAccessMatrixProperties(personas: string[], accessList: string[], {error}: any) {
+  setAccessMatrixProperties(personas: EntityModel[], accessList: string[], {error}: any) {
     this.accessDatatable = personas
       .reduce((dataTable, persona) => this.buildAccessMatrix(dataTable, error, persona), []);
 
@@ -70,12 +76,12 @@ export class AccessTableComponent implements OnChanges {
     this.displayedColumns = ['persona', ...accessList];
   }
 
-  private buildAccessMatrix(dataTable, error, persona) {
+  private buildAccessMatrix(dataTable, error, persona: EntityModel) {
     const row = {
       persona: persona,
     };
 
-    const accesses = _get(error, `testPersonas[${persona}].resources[${this.resource.name}].access`, []);
+    const accesses = _get(error, `testPersonas[${persona.name}].resources[${this.resource.name}].access`, []);
     accesses.forEach((access) => {
       _set(row, `[${access}]`, true);
     });
@@ -109,8 +115,8 @@ export class AccessTableComponent implements OnChanges {
   private dryRun(personas$: Observable<any>): Observable<any> {
     return personas$.pipe(
       switchMap((personas) => {
-        const change = personas.reduce((sum, persona) => {
-          _set(sum, `modification.testPersonas[${persona}].resources[${this.resource.name}].access`, []);
+        const change = personas.reduce((sum, persona: EntityModel) => {
+          _set(sum, `modification.testPersonas[${persona.name}].resources[${this.resource.name}].access`, []);
           return sum;
         }, new ConfigModificationObject(this.resource.dto, {
           dry_run: true,
