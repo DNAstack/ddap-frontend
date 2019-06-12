@@ -3,7 +3,6 @@ package com.dnastack.ddapfrontend.route;
 import com.dnastack.ddapfrontend.client.ic.IdentityConcentratorClient;
 import com.dnastack.ddapfrontend.client.ic.TokenExchangeException;
 import com.dnastack.ddapfrontend.client.ic.TokenResponse;
-import com.dnastack.ddapfrontend.security.JwtTokenParser;
 import com.dnastack.ddapfrontend.security.OAuthStateHandler;
 import com.dnastack.ddapfrontend.security.TokenExchangePurpose;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
@@ -51,8 +50,6 @@ public class IdentityController {
     @Autowired
     private UserTokenCookiePackager cookiePackager;
     @Autowired
-    private JwtTokenParser jwtTokenParser;
-    @Autowired
     OAuthStateHandler stateHandler;
 
     @Value("${ddap.default-realm}")
@@ -71,7 +68,7 @@ public class IdentityController {
     }
 
     @GetMapping("/scopes")
-    public Mono<? extends ResponseEntity<?>> whoami(ServerHttpRequest request) {
+    public Mono<? extends ResponseEntity<?>> getScopes(ServerHttpRequest request) {
         Optional<String> icToken = cookiePackager.extractToken(request, CookieKind.IC);
         if (icToken.isEmpty()) {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
