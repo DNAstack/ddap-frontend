@@ -1,12 +1,15 @@
 package com.dnastack.ddap.frontend;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
+import com.dnastack.ddap.common.DdapBy;
 import com.dnastack.ddap.common.page.*;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -188,24 +191,26 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void verifyConnectedIdentityAccounts() {
-        driver.findElement(By.xpath("//*[@data-se=\"nav-identity\"]")).click();
+        NavBar.NavItem pageId = NavItem.IDENTITY;
+        ddapPage.getNavBar()
+                .goToAndCheckForTitle(pageId);
 
-        // click through the "log in again" prompt
-        driver.switchTo().alert().accept();
-        ICLoginPage icLoginPage = new ICLoginPage(driver);
-
-        IdentityPage identityPage = icLoginPage.loginAsNciResearcher(IdentityPage::new);
-        assertThat(identityPage.getLinkedIdentities(), hasItem("nci_researcher@nci.nih.gov"));
+        IdentityPage identityPage = new IdentityPage(driver);
+        assertThat(identityPage.getLinkedIdentities(), hasItem("admin@nci.nih.gov"));
     }
 
     @Test
     public void verifyAvailableIdentityAccounts() {
-        driver.findElement(By.xpath("//*[@data-se=\"nav-identity\"]")).click();
+        NavBar.NavItem pageId = NavItem.IDENTITY;
+        ddapPage.getNavBar()
+                .goToAndCheckForTitle(pageId);
 
-        // click through the "log in again" prompt
-        driver.switchTo().alert().accept();
+        // click through the "log in again" btn
+        WebElement reloginBtn = driver.findElement(DdapBy.se("btn-relogin"));
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(reloginBtn));
+        reloginBtn.click();
+
         ICLoginPage icLoginPage = new ICLoginPage(driver);
-
         IdentityPage identityPage = icLoginPage.loginAsNciResearcher(IdentityPage::new);
         System.out.println(identityPage.getLinkableIdentities());
         assertThat(identityPage.getLinkableIdentities(), hasItem("<persona>"));
