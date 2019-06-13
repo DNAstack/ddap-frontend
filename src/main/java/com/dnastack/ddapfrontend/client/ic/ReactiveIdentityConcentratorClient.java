@@ -1,6 +1,5 @@
 package com.dnastack.ddapfrontend.client.ic;
 
-import com.dnastack.ddapfrontend.model.AccountModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -43,9 +42,6 @@ public class ReactiveIdentityConcentratorClient {
                         "clientId", idpClientId,
                         "clientSecret", idpClientSecret)
         ));
-
-        AccountModel.Access access = new AccountModel.Access();
-        access.setTarget("IC");
 
         return webClient
                 .get()

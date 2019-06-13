@@ -13,8 +13,6 @@ import { AccountLink } from './account-link.model';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
 
-const adminAccount = 'admin@nci.nih.gov';
-
 @Injectable({
   providedIn: 'root',
 })
