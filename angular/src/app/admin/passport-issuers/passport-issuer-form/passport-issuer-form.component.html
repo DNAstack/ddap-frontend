@@ -51,10 +51,10 @@
   </div>
   <div class="row">
     <mat-form-field class="col">
-      <mat-select
-             placeholder="Translate Using"
-             formControlName="translateUsing"
-             data-se="inp-translateUsing">
+      <mat-select placeholder="Translate Using"
+                  formControlName="translateUsing"
+                  data-se="inp-translateUsing">
+        <mat-option>None</mat-option>
         <mat-option *ngFor="let translator of translators$ | async" [value]="translator.id">
           {{ translator.label }}
         </mat-option>

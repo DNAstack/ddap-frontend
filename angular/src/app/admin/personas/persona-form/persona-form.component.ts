@@ -124,7 +124,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
       value: [value, Validators.required],
       asserted: [moment.unix(asserted), Validators.required],
       expires: [moment.unix(expires), Validators.required],
-      by: [by, Validators.required],
+      by: [by],
     });
 
     this.buildGa4GhClaimGroupAutocomplete(autocompleteId, ga4ghClaimForm);
