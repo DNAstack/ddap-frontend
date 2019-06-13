@@ -1,7 +1,5 @@
 package com.dnastack.ddapfrontend.client.dam;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.*;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
@@ -31,6 +29,8 @@ import java.util.function.IntFunction;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 
+@Deprecated // In favor of ReactiveDamClient
+@SuppressWarnings("Duplicates")
 @Slf4j
 @Configuration
 public class DamClientConfiguration {
@@ -51,21 +51,21 @@ public class DamClientConfiguration {
         return new ResponseEntityDecoder(new SpringDecoder(this.messageConverters));
     }
 
-    private static DamClient retryableClient(int retries,
-                                             double timeoutExponentialScalingBase,
-                                             int minimumTimeout,
-                                             int maximumTimeout,
-                                             IntFunction<DamClient> nonRetryableClientFactory) {
-        final org.slf4j.Logger log = LoggerFactory.getLogger(DamClient.class);
-        final Retry retry = Retry.of(DamClient.class.getSimpleName(),
+    private static FeignDamClient retryableClient(int retries,
+                                                  double timeoutExponentialScalingBase,
+                                                  int minimumTimeout,
+                                                  int maximumTimeout,
+                                                  IntFunction<FeignDamClient> nonRetryableClientFactory) {
+        final org.slf4j.Logger log = LoggerFactory.getLogger(FeignDamClient.class);
+        final Retry retry = Retry.of(FeignDamClient.class.getSimpleName(),
                                      RetryConfig.custom()
                                                 .maxAttempts(retries + 1)
                                                 .waitDuration(Duration.ofMillis(10))
                                                 .retryOnException(raw -> (getMostSpecificCause(raw) instanceof SocketTimeoutException))
                                                 .build());
 
-        return (DamClient) Proxy.newProxyInstance(DamClient.class.getClassLoader(),
-                                          new Class<?>[]{DamClient.class},
+        return (FeignDamClient) Proxy.newProxyInstance(FeignDamClient.class.getClassLoader(),
+                                          new Class<?>[]{FeignDamClient.class},
                                           (Object o, Method method, Object[] args) -> {
                                               final AtomicInteger attemptCounter = new AtomicInteger(1);
 
@@ -94,7 +94,7 @@ public class DamClientConfiguration {
     }
 
     @Bean
-    public DamClient damClient(
+    public FeignDamClient damClient(
             @Value("${dam.base-url}") String url,
             @Value("${dam.client-id}") String clientId,
             @Value("${dam.client-secret}") String clientSecret) {
@@ -105,7 +105,7 @@ public class DamClientConfiguration {
          * retry mechanism. Instead, we use resilience4j to retry and use a different feign client on each
          * attempt so that we can dynamically increase the read timeout.
          */
-        IntFunction<DamClient> nonRetryableClientFactory = readTimeoutMillis -> {
+        IntFunction<FeignDamClient> nonRetryableClientFactory = readTimeoutMillis -> {
             final int connectTimeoutMillis = Math.min((int) SECONDS.toMillis(10), readTimeoutMillis);
             return Feign.builder()
                         .client(httpClient)
@@ -134,7 +134,7 @@ public class DamClientConfiguration {
                         .requestInterceptor(template -> template
                                 .query("clientId", clientId)
                                 .query("clientSecret", clientSecret))
-                        .target(DamClient.class, url);
+                        .target(FeignDamClient.class, url);
         };
 
         // Didn't bother making this configurable because we may have to replace it with reactor web client soon anyway

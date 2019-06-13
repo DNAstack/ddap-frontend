@@ -1,6 +1,6 @@
 package com.dnastack.ddapfrontend.route;
 
-import com.dnastack.ddapfrontend.client.dam.DamClient;
+import com.dnastack.ddapfrontend.client.dam.FeignDamClient;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import dam.v1.DamService;
 import dam.v1.DamService.DamConfig;
@@ -23,7 +23,7 @@ import static java.lang.String.format;
 public class ServiceTemplateVariableResolutionController {
 
     @Autowired
-    private DamClient damClient;
+    private FeignDamClient feignDamClient;
 
     @Autowired
     private UserTokenCookiePackager cookiePackager;
@@ -32,7 +32,7 @@ public class ServiceTemplateVariableResolutionController {
     public Map<String, VariableFormat> resolveVariables(@RequestParam(name = "serviceTemplate") String serviceTemplateId, ServerHttpRequest request, @PathVariable String realm) {
         Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
-        DamConfig damConfig = damClient.getConfig(damToken, realm);
+        DamConfig damConfig = feignDamClient.getConfig(damToken, realm);
         final DamService.ServiceTemplate foundServiceTemplate = damConfig.getServiceTemplatesMap().get(serviceTemplateId);
 
         if (foundServiceTemplate == null) {
@@ -41,7 +41,7 @@ public class ServiceTemplateVariableResolutionController {
             final String targetAdapterId = foundServiceTemplate.getTargetAdapter();
             final String itemFormatId = foundServiceTemplate.getItemFormat();
 
-            final DamService.TargetAdaptersResponse targetAdapters = damClient.getTargetAdapters(damToken, realm);
+            final DamService.TargetAdaptersResponse targetAdapters = feignDamClient.getTargetAdapters(damToken, realm);
             final DamService.TargetAdapter targetAdapter = targetAdapters.getTargetAdaptersMap().get(targetAdapterId);
             final DamService.ItemFormat itemFormat = Optional.ofNullable(targetAdapter)
                                                              .map(ta -> ta.getItemFormatsMap().get(itemFormatId))

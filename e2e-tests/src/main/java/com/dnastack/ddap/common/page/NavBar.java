@@ -45,16 +45,27 @@ public class NavBar {
         this.driver = driver;
 
         // We might not be on an admin page. Only assert basic navbar links
-        Stream.of(NavItem.DATA, NavItem.IDENTITY)
-              .map(navItem -> navItem.title)
-              .forEach(pageTitle -> driver.findElement(By.xpath(format("//*[contains(text(), '%s')]", pageTitle))));
+        assertNonAdminNavBar();
     }
 
     public void assertAdminNavBar() {
         Arrays.stream(NavItem.values())
-              .filter(navItem -> navItem.title != null)
-              .map(navItem -> navItem.title)
-              .forEach(pageTitle -> driver.findElement(By.xpath(format("//*[contains(text(), '%s')]", pageTitle))));
+                .filter(navItem -> navItem.title != null)
+                .forEach(this::findInNavBar);
+    }
+
+    public void assertNonAdminNavBar() {
+        Stream.of(NavItem.DATA, NavItem.IDENTITY)
+                .filter(navItem -> navItem.title != null)
+                .forEach(this::findInNavBar);
+    }
+
+    public WebElement findInNavBar(NavItem item) {
+        return driver.findElement(By.xpath(format("//*[contains(text(), '%s')]", item.title)));
+    }
+
+    public boolean existsInNavBar(NavItem item) {
+        return driver.findElements(By.xpath(format("//*[contains(text(), '%s')]", item.title))).size() > 0;
     }
 
     public NavBar goToAndCheckForTitle(NavItem navItem) {

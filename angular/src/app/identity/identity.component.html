@@ -5,38 +5,40 @@
 <ddap-main>
   <mat-accordion class="ddap-connected-accounts">
     <h2>Connected Accounts</h2>
-    <mat-progress-bar *ngIf="connectedAccountsSubscription && !connectedAccountsSubscription.closed"
+    <mat-progress-bar *ngIf="identitySubscription && !identitySubscription.closed; else connectedAccountsSection"
                       class="ddap-card-loader"
                       mode="indeterminate">
     </mat-progress-bar>
-    <mat-expansion-panel *ngFor="let account of connectedAccounts">
-      <mat-expansion-panel-header collapsedHeight="6rem"
-                                  expandedHeight="6rem">
-        <mat-card>
-          <mat-card-header>
-            <img mat-card-avatar
-                 [src]="getPicture(account)"/>
-            <mat-card-title>{{ getProvider(account) }}</mat-card-title>
-            <mat-card-subtitle>{{ account.properties.subject }}</mat-card-subtitle>
-          </mat-card-header>
-        </mat-card>
-      </mat-expansion-panel-header>
-      <ddap-claim-group *ngIf="account.claims as ga4ghClaims"
-                        [claimGroupLabel]="'Global Alliance for Genomics and Health Claims'"
-                        [ga4ghClaims]="mapToGa4ghClaims(ga4ghClaims)">
-      </ddap-claim-group>
-      <button mat-button
-              color="primary"
-              class="uppercase"
-              (click)="unlinkConnectedAccount(account)">
-        Disconnect
-      </button>
-    </mat-expansion-panel>
+    <ng-template #connectedAccountsSection>
+      <mat-expansion-panel *ngFor="let account of identity.account.connectedAccounts">
+        <mat-expansion-panel-header collapsedHeight="6rem"
+                                    expandedHeight="6rem">
+          <mat-card>
+            <mat-card-header>
+              <img mat-card-avatar
+                   [src]="getPicture(account)"/>
+              <mat-card-title>{{ getProvider(account) }}</mat-card-title>
+              <mat-card-subtitle>{{ account.properties.subject }}</mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </mat-expansion-panel-header>
+        <ddap-claim-group *ngIf="account.claims as ga4ghClaims"
+                          [claimGroupLabel]="'Global Alliance for Genomics and Health Claims'"
+                          [ga4ghClaims]="mapToGa4ghClaims(ga4ghClaims)">
+        </ddap-claim-group>
+        <button mat-button
+                color="primary"
+                class="uppercase"
+                (click)="unlinkConnectedAccount(account)">
+          Disconnect
+        </button>
+      </mat-expansion-panel>
+    </ng-template>
   </mat-accordion>
 
   <mat-accordion class="ddap-available-accounts">
     <h2>Connect Another Account</h2>
-    <mat-progress-bar *ngIf="availableAccountsSubscription && !availableAccountsSubscription.closed"
+    <mat-progress-bar *ngIf="availableAccountsSubscription && !availableAccountsSubscription.closed; else availableAccountsSections"
                       class="ddap-card-loader"
                       mode="indeterminate">
     </mat-progress-bar>
@@ -53,21 +55,23 @@
         Re-login
       </button>
     </div>
-    <a *ngFor="let account of availableAccounts"
-       [href]="account.linkUrl">
-      <mat-card>
-        <mat-card-header>
-          <img mat-card-avatar
-               [src]="getPicture(account)"/>
-          <mat-card-title [class.margin-bottom--0]="!isAccountPersona(account)">
-            <span>{{ account.label }}</span>
-          </mat-card-title>
-          <mat-card-subtitle *ngIf="isAccountPersona(account)">
-            {{ account.provider }}
-          </mat-card-subtitle>
-          <mat-icon class="icon icon-plus"></mat-icon>
-        </mat-card-header>
-      </mat-card>
-    </a>
+    <ng-template #availableAccountsSections>
+      <a *ngFor="let account of availableAccounts"
+         [href]="account.linkUrl">
+        <mat-card>
+          <mat-card-header>
+            <img mat-card-avatar
+                 [src]="getPicture(account)"/>
+            <mat-card-title [class.margin-bottom--0]="!isAccountPersona(account)">
+              <span>{{ account.label }}</span>
+            </mat-card-title>
+            <mat-card-subtitle *ngIf="isAccountPersona(account)">
+              {{ account.provider }}
+            </mat-card-subtitle>
+            <mat-icon class="icon icon-plus"></mat-icon>
+          </mat-card-header>
+        </mat-card>
+      </a>
+    </ng-template>
   </mat-accordion>
 </ddap-main>

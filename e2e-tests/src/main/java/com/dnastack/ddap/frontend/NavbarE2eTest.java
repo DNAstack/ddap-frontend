@@ -250,6 +250,22 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
+    public void verifyAdminAccess() {
+        ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
+        icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+
+        ddapPage.getNavBar()
+                .assertAdminNavBar();
+
+        icLoginPage = ddapPage.getNavBar().logOut();
+        icLoginPage.loginAsPersona("john", AnyDdapPage::new);
+
+        ddapPage.getNavBar()
+                .assertNonAdminNavBar();
+        assertThat(ddapPage.getNavBar().existsInNavBar(NavItem.RESOURCES), is(false));
+    }
+
+    @Test
     public void checkForProfileName() {
         final String usernameXpath = "//*[@data-se='nav-account']//h4[contains(text(), 'Administrator')]";
 

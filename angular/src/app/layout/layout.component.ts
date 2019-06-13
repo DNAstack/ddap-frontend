@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
+import { Identity } from '../identity/identity.model';
 import { IdentityService } from '../identity/identity.service';
 import { Profile } from '../identity/profile.model';
 
@@ -12,7 +13,8 @@ import { Profile } from '../identity/profile.model';
 export class LayoutComponent implements OnInit {
 
   profile: Profile = null;
-  isAdmin = false;
+  isIcAdmin = false;
+  isDamAdmin = false;
   realm: string;
   loginPath: string;
 
@@ -24,9 +26,12 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.identityService.getIdentity().subscribe((identity: any) => {
-      this.profile = identity.profile;
-      this.isAdmin = this.identityService.hasAdminAccount(identity.connectedAccounts);
+    this.identityService.getIdentity().subscribe(({ account, accesses }: Identity) => {
+      this.profile = account.profile;
+
+      const getAccess = (target: string) => accesses.find((access) => access.target === target);
+      this.isDamAdmin = getAccess('DAM').isAdmin;
+      this.isIcAdmin = getAccess('IC').isAdmin;
     });
 
     this.activatedRoute.root.firstChild.params.subscribe((params) => {

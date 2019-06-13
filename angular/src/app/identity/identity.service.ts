@@ -10,7 +10,6 @@ import { ErrorHandlerService } from '../shared/error-handler/error-handler.servi
 import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 import { AccountLink } from './account-link.model';
-import { AccountScope } from './account-scope.model';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
 
@@ -27,10 +26,9 @@ export class IdentityService {
   }
 
   getIdentity(params = {}): Observable<Identity> {
-    return this.http.get<any>(`${environment.idpApiUrl}/${realmIdPlaceholder}/accounts/-`, {params})
+    return this.http.get<any>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/identity`, {params})
       .pipe(
-        this.errorHandler.notifyOnError(`Can't load account's information.`),
-        pluck('account')
+        this.errorHandler.notifyOnError(`Can't load account's information.`)
       );
   }
 
@@ -61,22 +59,6 @@ export class IdentityService {
           ];
         })
       );
-  }
-
-  getScopes(params = {}): Observable<AccountScope> {
-    return this.http.get<any>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/identity/scopes`, {params})
-      .pipe(
-        this.errorHandler.notifyOnError(`Can't load account's scopes.`)
-      );
-  }
-
-  hasLinkScope(account: AccountScope): boolean {
-    return account.scope.includes('link');
-  }
-
-  hasAdminAccount(connectedAccounts: Account[]): boolean {
-    const isAdmin = (account: Account) => account.properties.subject === adminAccount;
-    return connectedAccounts.some(isAdmin);
   }
 
   unlinkConnectedAccount(account: Account) {

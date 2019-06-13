@@ -4,7 +4,7 @@ import com.dnastack.ddapfrontend.beacon.BeaconError;
 import com.dnastack.ddapfrontend.beacon.BeaconInfo;
 import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.client.beacon.BeaconErrorException;
-import com.dnastack.ddapfrontend.client.dam.DamClient;
+import com.dnastack.ddapfrontend.client.dam.FeignDamClient;
 import com.dnastack.ddapfrontend.client.dam.DamResource;
 import com.dnastack.ddapfrontend.client.dam.DamResources;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
@@ -61,7 +61,7 @@ class BeaconResource {
     private static final String BEACON_INTERFACE = "http:beacon";
 
     @Autowired
-    private DamClient damClient;
+    private FeignDamClient feignDamClient;
     @Autowired
     private UserTokenCookiePackager cookiePackager;
 
@@ -70,7 +70,7 @@ class BeaconResource {
                                                          BeaconRequestModel beaconRequest,
                                                          ServerHttpRequest request) {
 
-        DamResources damResourcesResponse = damClient.getResources(realm);
+        DamResources damResourcesResponse = feignDamClient.getResources(realm);
         Map<String, ResourceModel> resources = damResourcesResponse.getResources();
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
 
@@ -83,7 +83,7 @@ class BeaconResource {
                                                               BeaconRequestModel beaconRequest,
                                                               ServerHttpRequest request) {
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
-        DamResource damResourceResponse = damClient.getResource(realm, resourceId);
+        DamResource damResourceResponse = feignDamClient.getResource(realm, resourceId);
         Map.Entry<String, ResourceModel> resource = Map.entry(resourceId, damResourceResponse.getResource());
 
         return maybePerformBeaconQueries(realm, beaconRequest, damToken, Collections.singleton(resource));
@@ -142,7 +142,7 @@ class BeaconResource {
                                                                       String damToken) {
 
         final BeaconInfo beaconInfo = createBeaconInfo(beaconView);
-        final Mono<String> beaconViewToken = Mono.fromSupplier(() -> damClient.getAccessTokenForView(damToken,
+        final Mono<String> beaconViewToken = Mono.fromSupplier(() -> feignDamClient.getAccessTokenForView(damToken,
                                                                                                       realm,
                                                                                                       beaconView
                                                                                                               .getResourceId(),

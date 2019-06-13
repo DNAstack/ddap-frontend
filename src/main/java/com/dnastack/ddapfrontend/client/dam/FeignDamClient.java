@@ -5,7 +5,7 @@ import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 
-public interface DamClient {
+public interface FeignDamClient {
 
     String API_VERSION = "v1alpha";
 

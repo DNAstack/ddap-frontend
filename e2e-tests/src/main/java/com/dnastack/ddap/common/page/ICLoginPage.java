@@ -1,6 +1,5 @@
 package com.dnastack.ddap.common.page;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -35,7 +34,7 @@ public class ICLoginPage {
         return loginAsPersona("administrator", pageConstructor);
     }
 
-    private <T extends AnyDdapPage> T loginAsPersona(String persona, Function<WebDriver, T> pageConstructor) {
+    public <T extends AnyDdapPage> T loginAsPersona(String persona, Function<WebDriver, T> pageConstructor) {
         driver.findElement(personaLoginButton(persona)).click();
         return pageConstructor.apply(driver);
     }

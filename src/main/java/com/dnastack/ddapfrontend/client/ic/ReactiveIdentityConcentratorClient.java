@@ -1,5 +1,6 @@
 package com.dnastack.ddapfrontend.client.ic;
 
+import com.dnastack.ddapfrontend.model.AccountModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,8 +12,6 @@ import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,14 +20,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Slf4j
 @Component
-public class IdentityConcentratorClient {
+public class ReactiveIdentityConcentratorClient {
 
     @Value("${idp.base-url}")
     private URI idpBaseUrl;
-
     @Value("${idp.client-id}")
     private String idpClientId;
-
     @Value("${idp.client-secret}")
     private String idpClientSecret;
 
@@ -36,6 +33,45 @@ public class IdentityConcentratorClient {
             .filter(logRequest())
             .filter(logResponse())
             .build();
+
+    public Mono<Object> getConfig(String realm, String icToken) {
+        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/config" +
+                "?client_id={clientId}" +
+                "&client_secret={clientSecret}");
+        final URI uri = idpBaseUrl.resolve(template.expand(
+                Map.of("realm", realm,
+                        "clientId", idpClientId,
+                        "clientSecret", idpClientSecret)
+        ));
+
+        AccountModel.Access access = new AccountModel.Access();
+        access.setTarget("IC");
+
+        return webClient
+                .get()
+                .uri(uri)
+                .header("Authorization", "Bearer " + icToken)
+                .retrieve()
+                .bodyToMono(Object.class);
+    }
+
+    public Mono<IcAccount> getAccounts(String realm, String icToken) {
+        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/accounts/-" +
+                "?client_id={clientId}" +
+                "&client_secret={clientSecret}");
+        final URI uri = idpBaseUrl.resolve(template.expand(
+                Map.of("realm", realm,
+                        "clientId", idpClientId,
+                        "clientSecret", idpClientSecret)
+        ));
+
+        return webClient
+                .get()
+                .uri(uri)
+                .header("Authorization", "Bearer " + icToken)
+                .retrieve()
+                .bodyToMono(IcAccount.class);
+    }
 
     public Mono<TokenResponse> exchangeAuthorizationCodeForTokens(String realm, URI redirectUri, String code) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/token" +

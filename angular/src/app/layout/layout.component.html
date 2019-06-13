@@ -55,10 +55,11 @@
       </mat-list-item>
     </mat-nav-list>
 
-    <div *ngIf="profile && isAdmin"
+    <div *ngIf="profile"
          class="accordion-wrapper">
       <mat-accordion [multi]="false">
-        <mat-expansion-panel [expanded]="false"
+        <mat-expansion-panel *ngIf="isIcAdmin"
+                             [expanded]="false"
                              data-se="nav-ic-panel">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -88,78 +89,80 @@
         </mat-expansion-panel>
 
         <mat-expansion-panel [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <span>Mount Sinai Hospital</span>
-              <span>Autism Repository</span>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
+          <ng-container *ngIf="isDamAdmin">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span>Mount Sinai Hospital</span>
+                <span>Autism Repository</span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
 
-          <mat-nav-list class="sub-nav">
-            <mat-list-item
-              [routerLink]="['resources']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-resources">
-              <mat-icon class="icon icon-resources"></mat-icon>
-              <h4 mat-line>Resources</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="['access-policies']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-access-policies">
-              <mat-icon class="icon icon-policies"></mat-icon>
-              <h4 mat-line>Access Policies</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="['service-definitions']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-service-definitions">
-              <mat-icon class="icon icon-clients"></mat-icon>
-              <h4 mat-line>Service Definitions</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="['trusted-sources']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-trusted-sources">
-              <mat-icon class="icon icon-trusted"></mat-icon>
-              <h4 mat-line>Trusted Sources</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="['passport-issuers']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-passport-issuers">
-              <mat-icon class="icon icon-passport"></mat-icon>
-              <h4 mat-line>Passport Issuers</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="['claim-definitions']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-claim-definitions">
-              <mat-icon class="icon icon-claims"></mat-icon>
-              <h4 mat-line>Claim Definitions</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="['test-personas']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-test-personas">
-              <mat-icon class="icon icon-tests"></mat-icon>
-              <h4 mat-line>Test Personas</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="['client-applications']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-client-applications">
-              <mat-icon class="icon icon-apps"></mat-icon>
-              <h4 mat-line>Client Applications</h4>
-            </mat-list-item>
-            <mat-list-item
-              [routerLink]="['options']"
-              [routerLinkActive]="['active-nav-link']"
-              data-se="nav-options">
-              <mat-icon class="icon icon-settings"></mat-icon>
-              <h4 mat-line>Options</h4>
-            </mat-list-item>
-          </mat-nav-list>
+            <mat-nav-list class="sub-nav">
+              <mat-list-item
+                [routerLink]="['resources']"
+                [routerLinkActive]="['active-nav-link']"
+                data-se="nav-resources">
+                <mat-icon class="icon icon-resources"></mat-icon>
+                <h4 mat-line>Resources</h4>
+              </mat-list-item>
+              <mat-list-item
+                [routerLink]="['access-policies']"
+                [routerLinkActive]="['active-nav-link']"
+                data-se="nav-access-policies">
+                <mat-icon class="icon icon-policies"></mat-icon>
+                <h4 mat-line>Access Policies</h4>
+              </mat-list-item>
+              <mat-list-item
+                [routerLink]="['service-definitions']"
+                [routerLinkActive]="['active-nav-link']"
+                data-se="nav-service-definitions">
+                <mat-icon class="icon icon-clients"></mat-icon>
+                <h4 mat-line>Service Definitions</h4>
+              </mat-list-item>
+              <mat-list-item
+                [routerLink]="['trusted-sources']"
+                [routerLinkActive]="['active-nav-link']"
+                data-se="nav-trusted-sources">
+                <mat-icon class="icon icon-trusted"></mat-icon>
+                <h4 mat-line>Trusted Sources</h4>
+              </mat-list-item>
+              <mat-list-item
+                [routerLink]="['passport-issuers']"
+                [routerLinkActive]="['active-nav-link']"
+                data-se="nav-passport-issuers">
+                <mat-icon class="icon icon-passport"></mat-icon>
+                <h4 mat-line>Passport Issuers</h4>
+              </mat-list-item>
+              <mat-list-item
+                [routerLink]="['claim-definitions']"
+                [routerLinkActive]="['active-nav-link']"
+                data-se="nav-claim-definitions">
+                <mat-icon class="icon icon-claims"></mat-icon>
+                <h4 mat-line>Claim Definitions</h4>
+              </mat-list-item>
+              <mat-list-item
+                [routerLink]="['test-personas']"
+                [routerLinkActive]="['active-nav-link']"
+                data-se="nav-test-personas">
+                <mat-icon class="icon icon-tests"></mat-icon>
+                <h4 mat-line>Test Personas</h4>
+              </mat-list-item>
+              <mat-list-item
+                [routerLink]="['client-applications']"
+                [routerLinkActive]="['active-nav-link']"
+                data-se="nav-client-applications">
+                <mat-icon class="icon icon-apps"></mat-icon>
+                <h4 mat-line>Client Applications</h4>
+              </mat-list-item>
+              <mat-list-item
+                [routerLink]="['options']"
+                [routerLinkActive]="['active-nav-link']"
+                data-se="nav-options">
+                <mat-icon class="icon icon-settings"></mat-icon>
+                <h4 mat-line>Options</h4>
+              </mat-list-item>
+            </mat-nav-list>
+          </ng-container>
         </mat-expansion-panel>
       </mat-accordion>
     </div>

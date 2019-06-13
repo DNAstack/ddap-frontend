@@ -1,6 +1,6 @@
 package com.dnastack.ddapfrontend.route;
 
-import com.dnastack.ddapfrontend.client.dam.DamClient;
+import com.dnastack.ddapfrontend.client.dam.FeignDamClient;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import dam.v1.DamService;
 import dam.v1.DamService.DamConfig;
@@ -13,16 +13,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.dnastack.ddapfrontend.header.XForwardUtil.getExternalPath;
-import static java.lang.String.format;
-
 @Slf4j
 @RestController
 @RequestMapping("/api/v1alpha/{realm}/autocomplete")
 public class AutoCompleteController {
 
     @Autowired
-    private DamClient damClient;
+    private FeignDamClient feignDamClient;
 
     @Autowired
     private UserTokenCookiePackager cookiePackager;
@@ -37,7 +34,7 @@ public class AutoCompleteController {
         Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
         // TODO catch 401/403 and return 401/403
-        DamConfig damConfig = damClient.getConfig(damToken, realm);
+        DamConfig damConfig = feignDamClient.getConfig(damToken, realm);
 
         Map<String, DamService.Policy> policiesMap = damConfig.getPoliciesMap();
 

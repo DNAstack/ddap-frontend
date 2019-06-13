@@ -2,14 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import GA4GHClaim = dam.v1.TestPersona.GA4GHClaim;
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
-import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
-import { mergeMap } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
 import { dam } from '../shared/proto/dam-service';
 
 import { AccountLink } from './account-link.model';
-import { AccountScope } from './account-scope.model';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
 import { IdentityService } from './identity.service';
@@ -21,13 +18,10 @@ import { identityProviderMetadataExists, identityProviders } from './providers.c
 })
 export class IdentityComponent implements OnInit {
 
-  connectedAccounts: Account[];
-  connectedAccountsSubscription: Subscription;
-
+  identity: Identity;
+  identitySubscription: Subscription;
   availableAccounts: AccountLink[];
   availableAccountsSubscription: Subscription;
-
-  account: AccountScope;
 
   realm: string;
   displayScopeWarning = false;
@@ -42,24 +36,14 @@ export class IdentityComponent implements OnInit {
       this.realm = params.realmId;
     });
 
-    this.availableAccountsSubscription = this.identityService.getScopes()
-      .pipe(
-        mergeMap((account: AccountScope) => {
-          if (this.identityService.hasLinkScope(account)) {
-            return this.identityService.getAccountLinks();
-          } else {
-            this.displayScopeWarning = true;
-            return EmptyObservable.create();
-          }
-        })
-      )
-      .subscribe((availableAccounts: AccountLink[]) => {
-        this.availableAccounts = availableAccounts;
-      });
-
-    this.connectedAccountsSubscription = this.identityService.getIdentity()
+    this.identitySubscription = this.identityService.getIdentity()
       .subscribe((identity: Identity) => {
-        this.connectedAccounts = identity.connectedAccounts;
+        this.identity = identity;
+        if (this.hasLinkScope()) {
+          this.getAvailableAccounts();
+        } else {
+          this.displayScopeWarning = true;
+        }
       });
   }
 
@@ -76,6 +60,14 @@ export class IdentityComponent implements OnInit {
     }
 
     return _get(account, 'profile.picture', this.getDefaultProviderPicture(username));
+  }
+
+  hasLinkScope(): boolean {
+    if (!this.identity) {
+      return false;
+    }
+    const { scopes = [] }  = this.identity;
+    return scopes.includes('link');
   }
 
   isAccountPersona(account): boolean {
@@ -96,6 +88,13 @@ export class IdentityComponent implements OnInit {
   redirectToLoginWithLinkScope() {
     const loginUrlSuffix = `login?scope=link+account_admin+ga4gh&redirectUri=/${this.realm}/identity`;
     window.location.href = `/api/v1alpha/${this.realm}/identity/${loginUrlSuffix}`;
+  }
+
+  private getAvailableAccounts() {
+    this.identityService.getAccountLinks()
+      .subscribe((availableAccounts: AccountLink[]) => {
+        this.availableAccounts = availableAccounts;
+      });
   }
 
   private extractClaimsUnderKey(claimKey: string, claims: any[]): GA4GHClaim[] {

@@ -1,8 +1,11 @@
 package com.dnastack.ddapfrontend.route;
 
-import com.dnastack.ddapfrontend.client.ic.IdentityConcentratorClient;
+import com.dnastack.ddapfrontend.client.AuthAccessTesterClient;
+import com.dnastack.ddapfrontend.client.ic.IcAccount;
+import com.dnastack.ddapfrontend.client.ic.ReactiveIdentityConcentratorClient;
 import com.dnastack.ddapfrontend.client.ic.TokenExchangeException;
 import com.dnastack.ddapfrontend.client.ic.TokenResponse;
+import com.dnastack.ddapfrontend.model.AccountModel;
 import com.dnastack.ddapfrontend.security.OAuthStateHandler;
 import com.dnastack.ddapfrontend.security.TokenExchangePurpose;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
@@ -48,11 +51,13 @@ public class IdentityController {
     private static final String DEFAULT_SCOPES = "ga4gh account_admin identities";
 
     @Autowired
-    private IdentityConcentratorClient idpClient;
+    private ReactiveIdentityConcentratorClient idpClient;
     @Autowired
     private UserTokenCookiePackager cookiePackager;
     @Autowired
-    OAuthStateHandler stateHandler;
+    private OAuthStateHandler stateHandler;
+    @Autowired
+    private AuthAccessTesterClient accessTesterClient;
 
     @Value("${ddap.default-realm}")
     private String defaultRealm;
@@ -67,6 +72,27 @@ public class IdentityController {
     static URI rootLoginRedirectUrl(ServerHttpRequest request, String realm) {
         return URI.create(getExternalPath(request,
                 format("/api/v1alpha/%s/identity/login", realm)));
+    }
+
+    @GetMapping
+    public Mono<? extends ResponseEntity<?>> getIdentity(ServerHttpRequest request, @PathVariable String realm) {
+        Optional<String> icToken = cookiePackager.extractToken(request, CookieKind.IC);
+        Optional<String> damToken = cookiePackager.extractToken(request, CookieKind.DAM);
+        if (icToken.isEmpty() || damToken.isEmpty()) {
+            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
+        }
+
+        Mono<List<AccountModel.Access>> accessesMono = accessTesterClient.determineAccessForUser(realm, damToken.get(), icToken.get());
+        Mono<IcAccount> accountMono = idpClient.getAccounts(realm, icToken.get());
+
+        return Mono.zip(accessesMono, accountMono, (accesses, account) -> {
+            Optional<JwtSubject> subject = dangerousStopgapExtractSubject(icToken.get());
+            return AccountModel.builder()
+                    .account(account.getAccount())
+                    .scopes(subject.get().scope)
+                    .accesses(accesses)
+                    .build();
+        }).flatMap(account -> Mono.just(ResponseEntity.ok().body(account)));
     }
 
     @GetMapping("/scopes")

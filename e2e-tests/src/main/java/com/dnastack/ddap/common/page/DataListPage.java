@@ -1,13 +1,17 @@
 package com.dnastack.ddap.common.page;
 
-import org.openqa.selenium.By;
+import com.dnastack.ddap.common.DdapBy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 public class DataListPage extends AnyDdapPage {
     public DataListPage(WebDriver driver) {
         super(driver);
-        driver.findElement(By.xpath("//h2[contains(text(), 'Explore Data')]"));
-
+        WebElement pageTitle = driver.findElement(DdapBy.se("page-title"));
+        assertThat(pageTitle.getText(), equalTo("Explore Data"));
     }
 
     public DataListItem findDataByName(String resourceName) {
