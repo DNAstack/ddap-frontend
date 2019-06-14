@@ -4,10 +4,7 @@ import com.dnastack.ddap.common.page.AnyDdapPage;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
+import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -58,6 +55,14 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
         }
     }
 
+    @After
+    public void afterEach() {
+        if (driver != null) {
+            // FIXME: this is causing issue where basic auth prompt is displayed during tests, probably race condition
+            // driver.manage().deleteAllCookies(); // Ensure that tests with login work independently of each other.
+        }
+    }
+
     @Before
     public void beforeEach() {
         ICLoginPage icLoginPage = startLogin(getRealm());
@@ -69,7 +74,6 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     protected abstract String getRealm();
 
     protected static ICLoginPage startLogin(String realm) {
-        driver.manage().deleteAllCookies();
         driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));
         return new ICLoginPage(driver);
     }

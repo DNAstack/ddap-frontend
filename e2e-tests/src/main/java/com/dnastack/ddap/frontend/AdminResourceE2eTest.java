@@ -41,7 +41,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
     private void waitForAccessTablesToLoad() {
         new WebDriverWait(driver, 60)
-                .until(ExpectedConditions.numberOfElementsToBeMoreThan(By.tagName("mat-table"), 0));
+                .until(ExpectedConditions.numberOfElementsToBeMoreThan(By.tagName("mat-table"), 3));
     }
 
     @Test
