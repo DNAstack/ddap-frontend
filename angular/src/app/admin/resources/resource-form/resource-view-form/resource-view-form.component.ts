@@ -57,7 +57,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
       partition: [dto.partition || '', []],
       fidelity: [dto.fidelity || '', []],
       geoLocation: [dto.geoLocation || '', []],
-      aud: [dto.aud || '', [Validators.required]],
+      aud: [dto.aud || '', []],
       contentTypes: [dto.contentTypes || '', []],
       ui: this.formBuilder.group({
         label: [dto.ui.label || '', [Validators.required]],
