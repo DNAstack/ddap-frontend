@@ -2,8 +2,8 @@ package com.dnastack.ddap.common;
 
 import com.dnastack.ddap.common.page.AnyDdapPage;
 import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.frontend.NavbarE2eTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 import static java.lang.String.format;
 
+@Slf4j
 public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
 
     protected static final boolean HEADLESS = Boolean.parseBoolean(optionalEnv("HEADLESS", "true"));
@@ -59,10 +60,6 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
 
     @Before
     public void beforeEach() {
-        if (driver != null) {
-            // Ensure that tests with login work independently of eachother.
-            driver.manage().deleteAllCookies();
-        }
         ICLoginPage icLoginPage = startLogin(getRealm());
         ddapPage = login(icLoginPage);
     }
@@ -72,6 +69,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     protected abstract String getRealm();
 
     protected static ICLoginPage startLogin(String realm) {
+        driver.manage().deleteAllCookies();
         driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));
         return new ICLoginPage(driver);
     }

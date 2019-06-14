@@ -10,6 +10,8 @@ import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 
@@ -37,12 +39,18 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         return icLoginPage.loginAsAdministrator(AdminDdapPage::new);
     }
 
+    private void waitForAccessTablesToLoad() {
+        new WebDriverWait(driver, 60)
+                .until(ExpectedConditions.numberOfElementsToBeMoreThan(By.tagName("mat-table"), 0));
+    }
+
     @Test
     public void addResourceWithMinimalFieldsAndNoViews() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(NavItem.RESOURCES);
         String resourceId = "resource-" + System.currentTimeMillis();
 
+        waitForAccessTablesToLoad();
         assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
@@ -62,6 +70,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
                 .goToAdmin(NavItem.RESOURCES);
         String resourceId = "resource-" + System.currentTimeMillis();
 
+        waitForAccessTablesToLoad();
         assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
@@ -91,6 +100,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String viewId = "view-" + System.currentTimeMillis();
         String role = "discovery";
 
+        waitForAccessTablesToLoad();
         assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
@@ -128,6 +138,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String view2Id = "view2-" + System.currentTimeMillis();
         String view2Role = "discovery";
 
+        waitForAccessTablesToLoad();
         assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
@@ -176,6 +187,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String resourceToEdit = "1000 Genomes";
         String newDefaultRole = "basic_discovery";
 
+        waitForAccessTablesToLoad();
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
@@ -206,6 +218,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
                 .goToAdmin(NavItem.RESOURCES);
         String resourceToEdit = "1000 Genomes";
 
+        waitForAccessTablesToLoad();
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
@@ -233,6 +246,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
                 .goToAdmin(NavItem.RESOURCES);
         String resourceToEdit = "1000 Genomes NOT_EDITED";
 
+        waitForAccessTablesToLoad();
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
@@ -256,6 +270,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
                 .goToAdmin(NavItem.RESOURCES);
         String resourceToDelete = "1000 Genomes";
 
+        waitForAccessTablesToLoad();
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToDelete));
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToDelete, "Edit Resource");

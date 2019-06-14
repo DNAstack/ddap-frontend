@@ -34,8 +34,7 @@ public class AdminManagePage {
         WebElement field = driver.findElement(fieldSelector);
 
         new WebDriverWait(driver, 5)
-                .until(ExpectedConditions.visibilityOf(field));
-
+                .until(ExpectedConditions.elementToBeClickable(field));
         field.sendKeys(Keys.ENTER);
 
         List<WebElement> options = driver.findElements(By.tagName("mat-option"));
