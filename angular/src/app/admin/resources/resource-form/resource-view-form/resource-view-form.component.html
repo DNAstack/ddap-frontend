@@ -130,12 +130,8 @@
         <h4>
       <span>
         {{ role.value.ui.label }}
-        <mat-chip-list *ngIf="isDefaultRole(role.key)"
-                       [selectable]="false">
-          <mat-chip>Default</mat-chip>
-        </mat-chip-list>
       </span>
-          <button *ngIf="!isDefaultRole(role.key)"
+          <button *ngIf="!isDefaultRole(role.key); else defaultRole"
                   mat-button
                   color="primary"
                   class="uppercase"
@@ -144,6 +140,14 @@
                   (click)="makeDefaultRole(role.key)">
             Make Default
           </button>
+          <ng-template #defaultRole>
+            <button mat-button
+                    disabled
+                    class="default-role-btn uppercase"
+                    type="button">
+              Default
+            </button>
+          </ng-template>
         </h4>
         <p>{{ role.value.ui.description }}</p>
         <div class="row"
