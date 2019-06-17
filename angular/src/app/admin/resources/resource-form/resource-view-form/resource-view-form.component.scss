@@ -23,10 +23,20 @@ p {
 }
 
 .ddap-view-service-template {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
+  h3 > span {
+    margin-left: 0;
+  }
 
-.mat-button[disabled][disabled].default-role-btn {
-  color: $success-color;
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+  }
+
+  .mat-button[disabled][disabled].default-role-btn {
+    color: $success-color;
+  }
 }

@@ -101,22 +101,25 @@
         <mat-icon class="icon icon-settings"></mat-icon>
         <span>Target Adapter Variables</span>
       </h3>
-      <div class="row" *ngFor="let variable of variableItems.controls; let i=index"
-           formArrayName="variables">
-        <ng-container [formGroupName]="i">
-          <mat-form-field class="col">
-            <input matInput
-                   [attr.data-se]="'inp-view-target-adapter-variable-' + variable.get('name').value"
-                   [placeholder]="variable.get('label').value"
-                   [required]="!variable.get('optional').value"
-                   formControlName="value">
-            <mat-hint>{{ variable.get('description').value }}</mat-hint>
-            <mat-error *ngIf="variable.get('value').invalid">
-              {{ variable.get('label').value }} must follow regex pattern {{ variable.get('regexp').value }}
-            </mat-error>
-          </mat-form-field>
-        </ng-container>
-      </div>
+      <ul class="timeline">
+        <li class="event row" *ngFor="let variable of variableItems.controls; let i=index"
+            formArrayName="variables">
+          <ng-container [formGroupName]="i">
+            <div class="line"></div>
+            <mat-form-field class="col">
+              <input matInput
+                     [attr.data-se]="'inp-view-target-adapter-variable-' + variable.get('name').value"
+                     [placeholder]="variable.get('label').value"
+                     [required]="!variable.get('optional').value"
+                     formControlName="value">
+              <mat-hint>{{ variable.get('description').value }}</mat-hint>
+              <mat-error *ngIf="variable.get('value').invalid">
+                {{ variable.get('label').value }} must follow regex pattern {{ variable.get('regexp').value }}
+              </mat-error>
+            </mat-form-field>
+          </ng-container>
+        </li>
+      </ul>
     </div>
     <div class="ddap-view-service-template-roles">
       <h3>
@@ -126,46 +129,49 @@
       <mat-error *ngIf="viewForm.get('defaultRole').invalid">
         Single role must be set as default
       </mat-error>
-      <div *ngFor="let role of selectedTemplate.dto.roles | keyvalue">
-        <h4>
-      <span>
-        {{ role.value.ui.label }}
-      </span>
-          <button *ngIf="!isDefaultRole(role.key); else defaultRole"
-                  mat-button
-                  color="primary"
-                  class="uppercase"
-                  type="button"
-                  [attr.data-se]="'btn-make-default-role-' + role.key"
-                  (click)="makeDefaultRole(role.key)">
-            Make Default
-          </button>
-          <ng-template #defaultRole>
-            <button mat-button
-                    disabled
-                    class="default-role-btn uppercase"
-                    type="button">
-              Default
+      <ul class="timeline">
+        <li class="event"
+            *ngFor="let role of selectedTemplate.dto.roles | keyvalue">
+          <div class="line"></div>
+          <h4>
+        <span>
+          {{ role.value.ui.label }}
+        </span>
+            <button *ngIf="!isDefaultRole(role.key); else defaultRole"
+                    mat-button
+                    color="primary"
+                    class="uppercase"
+                    type="button"
+                    [attr.data-se]="'btn-make-default-role-' + role.key"
+                    (click)="makeDefaultRole(role.key)">
+              Make Default
             </button>
-          </ng-template>
-        </h4>
-        <p>{{ role.value.ui.description }}</p>
-        <div class="row"
-             formGroupName="roles">
-          <div class="col"
-               [formGroupName]="role.key">
-            <tag-input formControlName="policies"
-                       [attr.data-se]="'view-role-policies-' + role.key"
-                       secondaryPlaceholder="Add Policy"
-                       placeholder="+ Policy"
-                       editable="true"
-                       modelAsStrings="true">
-            </tag-input>
+            <ng-template #defaultRole>
+              <button mat-button
+                      disabled
+                      class="default-role-btn uppercase"
+                      type="button">
+                Default
+              </button>
+            </ng-template>
+          </h4>
+          <p>{{ role.value.ui.description }}</p>
+          <div class="row"
+               formGroupName="roles">
+            <div class="col"
+                 [formGroupName]="role.key">
+              <tag-input formControlName="policies"
+                         [attr.data-se]="'view-role-policies-' + role.key"
+                         secondaryPlaceholder="Add Policy"
+                         placeholder="+ Policy"
+                         editable="true"
+                         modelAsStrings="true">
+              </tag-input>
+            </div>
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
     </div>
   </div>
-
   <ng-content></ng-content>
 </mat-card>
