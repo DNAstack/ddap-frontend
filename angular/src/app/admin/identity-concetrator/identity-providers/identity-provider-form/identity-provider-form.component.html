@@ -45,6 +45,7 @@
              placeholder="Token URL"
              formControlName="tokenUrl"
              data-se="inp-tokenUrl">
+      <mat-error *ngIf="form.get('tokenUrl').hasError('url')">Must start with http:// or https://</mat-error>
     </mat-form-field>
   </div>
 
@@ -54,6 +55,7 @@
              placeholder="Authorize URL"
              formControlName="authorizeUrl"
              data-se="inp-authorizeUrl">
+      <mat-error *ngIf="form.get('authorizeUrl').hasError('url')">Must start with http:// or https://</mat-error>
     </mat-form-field>
   </div>
 

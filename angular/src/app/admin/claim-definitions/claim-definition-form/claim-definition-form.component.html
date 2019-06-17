@@ -36,6 +36,7 @@
                placeholder="Info URL"
                formControlName="infoUrl"
                data-se="inp-infoUrl">
+        <mat-error *ngIf="form.get('ui.infoUrl').hasError('url')">Must start with http:// or https://</mat-error>
       </mat-form-field>
     </div>
   </ng-container>

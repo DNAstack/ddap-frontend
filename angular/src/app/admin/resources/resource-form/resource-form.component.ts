@@ -12,10 +12,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 
 import { dam } from '../../../shared/proto/dam-service';
+import { FormValidators } from '../../../shared/validators';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
 import Resource = dam.v1.Resource;
 import Form from '../../shared/form';
-import { JsonEditorDefaults } from '../../shared/jsonEditorDefaults';
 
 import { ResourceViewFormComponent } from './resource-view-form/resource-view-form.component';
 
@@ -63,10 +63,10 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
         size: [dto.ui.size || '', []],
         year: [dto.ui.year || '', []],
         tags: [dto.ui.tags || '', []],
-        applyUrl: [dto.ui.applyUrl || '', []], // TODO: url validator
-        troubleshootUrl: [dto.ui.troubleshootUrl || '', []], // TODO: url validator
-        imageUrl: [dto.ui.imageUrl || '', []], // TODO: url validator
-        infoUrl: [dto.ui.infoUrl || '', []], // TODO: url validator
+        applyUrl: [dto.ui.applyUrl || '', [FormValidators.url]],
+        troubleshootUrl: [dto.ui.troubleshootUrl || '', [FormValidators.url]],
+        imageUrl: [dto.ui.imageUrl || '', [FormValidators.url]],
+        infoUrl: [dto.ui.infoUrl || '', [FormValidators.url]],
       }),
     });
   }

@@ -4,10 +4,11 @@ import _get from 'lodash.get';
 import { Observable } from 'rxjs/Observable';
 
 import { ic } from '../../../../shared/proto/ic-service';
+import IdentityProvider = ic.v1.IdentityProvider;
+import { FormValidators } from '../../../../shared/validators';
 import { PassportTranslatorsService } from '../../../passport-issuers/passport-translators.service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 import Form from '../../../shared/form';
-import IdentityProvider = ic.v1.IdentityProvider;
 
 @Component({
   selector: 'ddap-identity-provider-form',
@@ -55,8 +56,8 @@ export class IdentityProviderFormComponent implements OnInit, Form {
         description: [_get(ui, 'description', ''), [Validators.maxLength(255)]],
       }),
       issuer: [issuer],
-      tokenUrl: [tokenUrl],
-      authorizeUrl: [authorizeUrl],
+      tokenUrl: [tokenUrl, [FormValidators.url]],
+      authorizeUrl: [authorizeUrl, [FormValidators.url]],
       clientId: [clientId],
       responseType: [responseType],
       translateUsing: [translateUsing],

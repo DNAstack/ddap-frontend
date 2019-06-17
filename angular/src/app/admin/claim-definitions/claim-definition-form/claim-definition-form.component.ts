@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 
 import { dam } from '../../../shared/proto/dam-service';
+import ClaimDefinition = dam.v1.ClaimDefinition;
+import { FormValidators } from '../../../shared/validators';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
 import Form from '../../shared/form';
-import ClaimDefinition = dam.v1.ClaimDefinition;
 
 @Component({
   selector: 'ddap-claim-definition-form',
@@ -32,7 +33,7 @@ export class ClaimDefinitionFormComponent implements OnInit, Form {
       ui: this.formBuilder.group({
         label: [ui.label || '', [Validators.required]],
         description: [ui.description || '', [Validators.maxLength(255)]],
-        infoUrl: [ui.infoUrl || '', []],
+        infoUrl: [ui.infoUrl || '', [FormValidators.url]],
       }),
     });
   }

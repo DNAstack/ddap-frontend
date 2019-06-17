@@ -89,6 +89,7 @@
                placeholder="Image URL"
                formControlName="imageUrl"
                data-se="inp-image-url">
+        <mat-error *ngIf="form.get('ui.imageUrl').hasError('url')">Must start with http:// or https://</mat-error>
       </mat-form-field>
     </div>
     <div class="row">
@@ -98,6 +99,7 @@
                placeholder="Information URL"
                formControlName="infoUrl"
                data-se="inp-info-url">
+        <mat-error *ngIf="form.get('ui.infoUrl').hasError('url')">Must start with http:// or https://</mat-error>
       </mat-form-field>
     </div>
     <div class="row">
@@ -107,6 +109,7 @@
                placeholder="Apply URL"
                formControlName="applyUrl"
                data-se="inp-apply-url">
+        <mat-error *ngIf="form.get('ui.applyUrl').hasError('url')">Must start with http:// or https://</mat-error>
       </mat-form-field>
     </div>
     <div class="row">
@@ -116,6 +119,7 @@
                placeholder="Troubleshoot URL"
                formControlName="troubleshootUrl"
                data-se="inp-troubleshoot-url">
+        <mat-error *ngIf="form.get('ui.troubleshootUrl').hasError('url')">Must start with http:// or https://</mat-error>
       </mat-form-field>
     </div>
   </ng-container>
