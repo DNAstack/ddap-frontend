@@ -7,7 +7,6 @@ import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
-import dam.v1.e2e.DamService;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -64,7 +63,7 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-id"), claimDefId);
         adminManagePage.fillField(DdapBy.se("inp-label"), claimDefId);
         adminManagePage.fillField(DdapBy.se("inp-description"), "This is description");
-        adminManagePage.fillField(DdapBy.se("inp-infoUrl"), "This is info URL");
+        adminManagePage.fillField(DdapBy.se("inp-infoUrl"), "http://this-is-info-url.com");
 
         adminListPage = adminManagePage.saveEntity();
 

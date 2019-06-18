@@ -81,18 +81,21 @@ public class AdminManagePage {
     public void toggleExpansionPanel(String panelId) {
         WebElement panel = driver.findElement(DdapBy.se(panelId));
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(panel));
+        this.scrollTo(panel);
         panel.click();
     }
 
     public void enterButton(By selector) {
         WebElement button = driver.findElement(selector);
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(button));
+        this.scrollTo(button);
         button.sendKeys(Keys.ENTER);
     }
 
     public void clickButton(By selector) {
         WebElement button = driver.findElement(selector);
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(button));
+        this.scrollTo(button);
         button.click();
     }
 
