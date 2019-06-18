@@ -56,7 +56,8 @@
 
   <mat-accordion multi displayMode="flat">
     <mat-expansion-panel *ngFor="let redirectUri of redirectUris.controls; let i=index"
-                         formArrayName="redirectUris">
+                         formArrayName="redirectUris"
+                         [attr.data-se]="'redirect-uri-' + i">
       <mat-expansion-panel-header collapsedHeight="5rem"
                                   expandedHeight="5rem">
         <ng-container *ngIf="redirectUri">

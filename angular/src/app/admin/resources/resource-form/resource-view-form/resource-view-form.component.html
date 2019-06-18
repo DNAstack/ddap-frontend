@@ -1,197 +1,196 @@
-<mat-accordion multi displayMode="flat">
-  <mat-expansion-panel>
-    <mat-expansion-panel-header collapsedHeight="5rem"
-                                expandedHeight="5rem">
-      <mat-panel-title>
-        <mat-icon class="icon icon-views"></mat-icon>
-        <span>{{ viewForm.get('ui.label').value || 'View' }}</span>
-      </mat-panel-title>
-      <mat-panel-description *ngIf="selectedTemplate">
-        ({{ selectedTemplate.dto.ui.label }})
-      </mat-panel-description>
-      <div class="invalid-warning" *ngIf="viewForm.invalid">
-        <mat-icon class="icon icon-warning"
-                  matTooltip="View is invalid">
-        </mat-icon>
-      </div>
-    </mat-expansion-panel-header>
-    <ng-container [formGroup]="viewForm">
-      <div class="row">
-        <mat-form-field class="col">
-          <input matInput
-                 placeholder="Name"
-                 formControlName="id"
-                 [readonly]="view.name.length > 0"
-                 data-se="inp-view-id"
-                 required>
-          <mat-error *ngIf="viewForm.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
-        </mat-form-field>
-        <ng-container formGroupName="ui">
-          <mat-form-field class="col">
-            <input matInput
-                   placeholder="Display Name"
-                   formControlName="label"
-                   data-se="inp-view-label"
-                   required>
-          </mat-form-field>
-        </ng-container>
-      </div>
-      <div class="row">
-        <mat-form-field class="col">
-          <input matInput
-                 placeholder="Version"
-                 formControlName="version"
-                 data-se="inp-view-version"
-                 required>
-        </mat-form-field>
-      </div>
-      <div class="row">
-        <mat-form-field class="col">
-          <input matInput
-                 placeholder="Audience"
-                 formControlName="aud"
-                 data-se="inp-view-aud">
-        </mat-form-field>
-      </div>
-      <div class="row">
-        <mat-form-field class="col">
-          <input matInput
-                 placeholder="Geo Location"
-                 formControlName="geoLocation"
-                 data-se="inp-view-geolocation">
-        </mat-form-field>
-        <mat-form-field class="col">
-          <input matInput
-                 placeholder="Topic"
-                 formControlName="topic"
-                 data-se="inp-view-topic">
-        </mat-form-field>
-      </div>
-      <div class="row">
-        <mat-form-field class="col">
-          <input matInput
-                 placeholder="Partition"
-                 formControlName="partition"
-                 data-se="inp-view-partition">
-        </mat-form-field>
-        <mat-form-field class="col">
-          <input matInput
-                 placeholder="Fidelity"
-                 formControlName="fidelity"
-                 data-se="inp-view-fidelity">
-        </mat-form-field>
-      </div>
-      <div class="row">
-        <div class="col">
-          <tag-input formControlName="contentTypes"
-                     secondaryPlaceholder="Add Content Type"
-                     placeholder="+ Content Type"
-                     editable="true"
-                     modelAsStrings="true">
-          </tag-input>
-        </div>
-      </div>
 
-      <h3>
-        <mat-icon class="icon icon-clients"></mat-icon>
-        <span>Service Template</span>
-      </h3>
-      <div class="row">
+<mat-expansion-panel [attr.data-se]="'view-' + (viewForm.get('id').value || 'new')">
+  <mat-expansion-panel-header collapsedHeight="5rem"
+                              expandedHeight="5rem">
+    <mat-panel-title>
+      <mat-icon class="icon icon-views"></mat-icon>
+      <span>{{ viewForm.get('ui.label').value || 'View' }}</span>
+    </mat-panel-title>
+    <mat-panel-description *ngIf="selectedTemplate">
+      ({{ selectedTemplate.dto.ui.label }})
+    </mat-panel-description>
+    <div class="invalid-warning" *ngIf="viewForm.invalid">
+      <mat-icon class="icon icon-warning"
+                matTooltip="View is invalid">
+      </mat-icon>
+    </div>
+  </mat-expansion-panel-header>
+  <ng-container [formGroup]="viewForm">
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Name"
+               formControlName="id"
+               [readonly]="view.name.length > 0"
+               data-se="inp-view-id"
+               required>
+        <mat-error *ngIf="viewForm.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
+      </mat-form-field>
+      <ng-container formGroupName="ui">
         <mat-form-field class="col">
-          <mat-label>Service Template</mat-label>
-          <mat-select formControlName="serviceTemplate"
-                      data-se="inp-view-service-template"
-                      (selectionChange)="serviceTemplateChange()"
-                      required>
-            <mat-option *ngFor="let template of templates"
-                        [value]="template.name">
-              {{ template.dto.ui.label }}
-            </mat-option>
-          </mat-select>
+          <input matInput
+                 placeholder="Display Name"
+                 formControlName="label"
+                 data-se="inp-view-label"
+                 required>
         </mat-form-field>
+      </ng-container>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Version"
+               formControlName="version"
+               data-se="inp-view-version"
+               required>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Audience"
+               formControlName="aud"
+               data-se="inp-view-aud">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Geo Location"
+               formControlName="geoLocation"
+               data-se="inp-view-geolocation">
+      </mat-form-field>
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Topic"
+               formControlName="topic"
+               data-se="inp-view-topic">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Partition"
+               formControlName="partition"
+               data-se="inp-view-partition">
+      </mat-form-field>
+      <mat-form-field class="col">
+        <input matInput
+               placeholder="Fidelity"
+               formControlName="fidelity"
+               data-se="inp-view-fidelity">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <div class="col">
+        <tag-input formControlName="contentTypes"
+                   secondaryPlaceholder="Add Content Type"
+                   placeholder="+ Content Type"
+                   editable="true"
+                   modelAsStrings="true">
+        </tag-input>
       </div>
-      <div class="ddap-view-service-template"
-           *ngIf="selectedTemplate">
-        <div class="ddap-view-service-template-variables"
-             *ngIf="viewForm.contains('variables')">
-          <h3>
-            <mat-icon class="icon icon-settings"></mat-icon>
-            <span>Target Adapter Variables</span>
-          </h3>
-          <ul class="timeline">
-            <li class="event row" *ngFor="let variable of variableItems.controls; let i=index"
-                formArrayName="variables">
-              <ng-container [formGroupName]="i">
-                <div class="line"></div>
-                <mat-form-field class="col">
-                  <input matInput
-                         [attr.data-se]="'inp-view-target-adapter-variable-' + variable.get('name').value"
-                         [placeholder]="variable.get('label').value"
-                         [required]="!variable.get('optional').value"
-                         formControlName="value">
-                  <mat-hint>{{ variable.get('description').value }}</mat-hint>
-                  <mat-error *ngIf="variable.get('value').invalid">
-                    {{ variable.get('label').value }} must follow regex pattern {{ variable.get('regexp').value }}
-                  </mat-error>
-                </mat-form-field>
-              </ng-container>
-            </li>
-          </ul>
-        </div>
-        <div class="ddap-view-service-template-roles">
-          <h3>
-            <mat-icon class="icon icon-identity"></mat-icon>
-            <span>Roles</span>
-            <mat-error *ngIf="viewForm.get('defaultRole').invalid">
-              Single role must be set as default
-            </mat-error>
-          </h3>
-          <ul class="timeline">
-            <li class="event"
-                *ngFor="let role of selectedTemplate.dto.roles | keyvalue">
+    </div>
+
+    <h3>
+      <mat-icon class="icon icon-clients"></mat-icon>
+      <span>Service Template</span>
+    </h3>
+    <div class="row">
+      <mat-form-field class="col">
+        <mat-label>Service Template</mat-label>
+        <mat-select formControlName="serviceTemplate"
+                    data-se="inp-view-service-template"
+                    (selectionChange)="serviceTemplateChange()"
+                    required>
+          <mat-option *ngFor="let template of templates"
+                      [value]="template.name">
+            {{ template.dto.ui.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="ddap-view-service-template"
+         *ngIf="selectedTemplate">
+      <div class="ddap-view-service-template-variables"
+           *ngIf="viewForm.contains('variables')">
+        <h3>
+          <mat-icon class="icon icon-settings"></mat-icon>
+          <span>Target Adapter Variables</span>
+        </h3>
+        <ul class="timeline">
+          <li class="event row" *ngFor="let variable of variableItems.controls; let i=index"
+              formArrayName="variables">
+            <ng-container [formGroupName]="i">
               <div class="line"></div>
-              <h4>
+              <mat-form-field class="col">
+                <input matInput
+                       [attr.data-se]="'inp-view-target-adapter-variable-' + variable.get('name').value"
+                       [placeholder]="variable.get('label').value"
+                       [required]="!variable.get('optional').value"
+                       formControlName="value">
+                <mat-hint>{{ variable.get('description').value }}</mat-hint>
+                <mat-error *ngIf="variable.get('value').invalid">
+                  {{ variable.get('label').value }} must follow regex pattern {{ variable.get('regexp').value }}
+                </mat-error>
+              </mat-form-field>
+            </ng-container>
+          </li>
+        </ul>
+      </div>
+      <div class="ddap-view-service-template-roles">
+        <h3>
+          <mat-icon class="icon icon-identity"></mat-icon>
+          <span>Roles</span>
+          <mat-error *ngIf="viewForm.get('defaultRole').invalid">
+            Single role must be set as default
+          </mat-error>
+        </h3>
+        <ul class="timeline">
+          <li class="event"
+              *ngFor="let role of selectedTemplate.dto.roles | keyvalue">
+            <div class="line"></div>
+            <h4>
         <span>
           {{ role.value.ui.label }}
         </span>
-                <button *ngIf="!isDefaultRole(role.key); else defaultRole"
-                        mat-button
-                        color="primary"
-                        class="uppercase"
-                        type="button"
-                        [attr.data-se]="'btn-make-default-role-' + role.key"
-                        (click)="makeDefaultRole(role.key)">
-                  Make Default
+              <button *ngIf="!isDefaultRole(role.key); else defaultRole"
+                      mat-button
+                      color="primary"
+                      class="uppercase"
+                      type="button"
+                      [attr.data-se]="'btn-make-default-role-' + role.key"
+                      (click)="makeDefaultRole(role.key)">
+                Make Default
+              </button>
+              <ng-template #defaultRole>
+                <button mat-button
+                        disabled
+                        class="default-role-btn uppercase"
+                        type="button">
+                  Default
                 </button>
-                <ng-template #defaultRole>
-                  <button mat-button
-                          disabled
-                          class="default-role-btn uppercase"
-                          type="button">
-                    Default
-                  </button>
-                </ng-template>
-              </h4>
-              <p>{{ role.value.ui.description }}</p>
-              <div class="row"
-                   formGroupName="roles">
-                <div class="col"
-                     [formGroupName]="role.key">
-                  <tag-input formControlName="policies"
-                             [attr.data-se]="'view-role-policies-' + role.key"
-                             secondaryPlaceholder="Add Policy"
-                             placeholder="+ Policy"
-                             editable="true"
-                             modelAsStrings="true">
-                  </tag-input>
-                </div>
+              </ng-template>
+            </h4>
+            <p>{{ role.value.ui.description }}</p>
+            <div class="row"
+                 formGroupName="roles">
+              <div class="col"
+                   [formGroupName]="role.key">
+                <tag-input formControlName="policies"
+                           [attr.data-se]="'view-role-policies-' + role.key"
+                           secondaryPlaceholder="Add Policy"
+                           placeholder="+ Policy"
+                           editable="true"
+                           modelAsStrings="true">
+                </tag-input>
               </div>
-            </li>
-          </ul>
-        </div>
+            </div>
+          </li>
+        </ul>
       </div>
-      <ng-content></ng-content>
-    </ng-container>
-  </mat-expansion-panel>
-</mat-accordion>
+    </div>
+    <ng-content></ng-content>
+  </ng-container>
+</mat-expansion-panel>
 

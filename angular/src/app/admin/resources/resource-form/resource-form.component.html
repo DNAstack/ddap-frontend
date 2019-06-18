@@ -138,23 +138,25 @@
     </div>
   </h3>
 
-  <div #views>
-    <ng-template #viewTemplate
-                 let-view>
-      <ddap-resource-view-form [view]="view">
-        <div class="footer">
-          <button mat-button
-                  type="button"
-                  color="warn"
-                  class="uppercase"
-                  [attr.data-se]="'btn-remove-view-' + view.name"
-                  (click)="removeView(view)">
-            Remove View
-          </button>
-        </div>
-      </ddap-resource-view-form>
-    </ng-template>
-  </div>
+  <mat-accordion multi displayMode="flat">
+    <div #views>
+      <ng-template #viewTemplate
+                   let-view>
+        <ddap-resource-view-form [view]="view">
+          <div class="footer">
+            <button mat-button
+                    type="button"
+                    color="warn"
+                    class="uppercase"
+                    [attr.data-se]="'btn-remove-view-' + view.name"
+                    (click)="removeView(view)">
+              Remove View
+            </button>
+          </div>
+        </ddap-resource-view-form>
+      </ng-template>
+    </div>
+  </mat-accordion>
 
   <ng-content></ng-content>
 </form>

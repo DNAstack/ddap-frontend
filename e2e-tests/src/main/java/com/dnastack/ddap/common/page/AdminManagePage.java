@@ -78,6 +78,12 @@ public class AdminManagePage {
         return new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(checkbox));
     }
 
+    public void toggleExpansionPanel(String panelId) {
+        WebElement panel = driver.findElement(DdapBy.se(panelId));
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(panel));
+        panel.click();
+    }
+
     public void enterButton(By selector) {
         WebElement button = driver.findElement(selector);
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(button));

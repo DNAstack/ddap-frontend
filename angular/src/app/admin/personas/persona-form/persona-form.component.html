@@ -71,7 +71,8 @@
 
   <mat-accordion multi displayMode="flat">
     <mat-expansion-panel *ngFor="let ga4ghClaim of ga4ghClaims.controls; let i=index"
-                         formArrayName="ga4ghClaims">
+                         formArrayName="ga4ghClaims"
+                         [attr.data-se]="'claim-' + i">
       <mat-expansion-panel-header collapsedHeight="5rem"
                                   expandedHeight="5rem">
         <mat-panel-title>

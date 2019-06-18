@@ -51,6 +51,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-sub"), "test-subject");
 
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
+        adminManagePage.toggleExpansionPanel("claim-0");
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
         adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
         adminManagePage.closeAutocompletes();
@@ -83,6 +84,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-sub"), "test-subject");
 
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
+        adminManagePage.toggleExpansionPanel("claim-0");
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "test-claimName");
         adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
         adminManagePage.fillField(DdapBy.se("inp-value"), "test-value");
@@ -130,6 +132,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-sub"), "dr_joe@era.nih.gov");
 
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
+        adminManagePage.toggleExpansionPanel("claim-0");
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "AffiliationAndRole");
         adminManagePage.fillField(DdapBy.se("inp-source"), "https://uni-heidelberg.de");
         adminManagePage.fillField(DdapBy.se("inp-value"), "faculty@uni-heidelberg.de");
@@ -139,6 +142,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "so");
 
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
+        adminManagePage.toggleExpansionPanel("claim-0");
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
         adminManagePage.fillField(DdapBy.se("inp-source"), "https://dbgap.nlm.nih.gov/aa");
         adminManagePage.fillField(DdapBy.se("inp-value"), "https://dac.nih.gov/datasets/phs000710");
@@ -178,6 +182,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
+        adminManagePage.toggleExpansionPanel("claim-0");
 
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-value"), "https://dac.nih.gov/datasets/phs000710");

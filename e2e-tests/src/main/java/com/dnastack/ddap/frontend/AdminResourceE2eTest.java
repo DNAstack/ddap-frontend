@@ -111,6 +111,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-max-ttl"), "7d");
 
         adminManagePage.enterButton(DdapBy.se("btn-add-view"));
+        adminManagePage.toggleExpansionPanel("view-new");
         adminManagePage.fillField(DdapBy.se("inp-view-id"), viewId);
         adminManagePage.fillField(DdapBy.se("inp-view-label"), viewId);
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Phase 3");
@@ -149,6 +150,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-max-ttl"), "7d");
 
         adminManagePage.enterButton(DdapBy.se("btn-add-view"));
+        adminManagePage.toggleExpansionPanel("view-new");
         adminManagePage.fillField(DdapBy.se("inp-view-id"), view1Id);
         adminManagePage.fillField(DdapBy.se("inp-view-label"), view1Id);
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Phase 3");
@@ -160,6 +162,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + view1Role), "nih_dac(DATASETS=https://dac.nih.gov/datasets/phs000710)");
 
         adminManagePage.clickButton(DdapBy.se("btn-add-view"));
+        adminManagePage.toggleExpansionPanel("view-new");
         adminManagePage.fillField(DdapBy.se("inp-view-id"), view2Id);
         adminManagePage.fillField(DdapBy.se("inp-view-label"), view2Id);
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Version 2");
@@ -191,6 +194,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
+        adminManagePage.toggleExpansionPanel("view-discovery-access");
 
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");
@@ -222,6 +226,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
+        adminManagePage.toggleExpansionPanel("view-gcs-file-access");
 
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");

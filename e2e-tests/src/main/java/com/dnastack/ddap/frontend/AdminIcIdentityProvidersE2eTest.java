@@ -85,6 +85,7 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
 //        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-translateUsing"), "dbGaP Passport Translator");
 
         adminManagePage.enterButton(DdapBy.se("btn-add-scope"));
+        adminManagePage.toggleExpansionPanel("scope-0");
         adminManagePage.fillField(DdapBy.se("inp-scope"), "profile");
 
         adminListPage = adminManagePage.saveEntity();

@@ -46,7 +46,8 @@
 
   <mat-accordion multi displayMode="flat">
     <mat-expansion-panel *ngFor="let source of sources.controls; let i=index"
-                         formArrayName="sources">
+                         formArrayName="sources"
+                         [attr.data-se]="'source-' + i">
       <mat-expansion-panel-header collapsedHeight="5rem"
                                   expandedHeight="5rem">
         <ng-container *ngIf="source">
@@ -100,7 +101,8 @@
 
   <mat-accordion multi displayMode="flat">
     <mat-expansion-panel *ngFor="let claim of claims.controls; let i=index"
-                         formArrayName="claims">
+                         formArrayName="claims"
+                         [attr.data-se]="'claim-' + i">
       <mat-expansion-panel-header collapsedHeight="5rem"
                                   expandedHeight="5rem">
         <ng-container *ngIf="claim">
