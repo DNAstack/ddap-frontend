@@ -43,7 +43,7 @@ export class ClientFormComponent implements Form, OnInit {
   }
 
   addRedirectUri() {
-    this.redirectUris.insert(0, this.formBuilder.control(['']));
+    this.redirectUris.insert(0, this.formBuilder.control('', [Validators.required]));
   }
 
   removeRedirectUri(index: number): void {

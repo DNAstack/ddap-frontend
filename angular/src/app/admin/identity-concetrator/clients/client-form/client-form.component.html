@@ -41,9 +41,7 @@
   </div>
 
   <h3>
-    <mat-icon class="icon icon-claims"></mat-icon>
     <span>Redirect URIs</span>
-
     <div>
       <button mat-button
               color="primary"
@@ -56,9 +54,23 @@
     </div>
   </h3>
 
-  <div *ngFor="let redirectUri of redirectUris.controls; let i=index"
-       formArrayName="redirectUris">
-    <mat-card>
+  <mat-accordion multi displayMode="flat">
+    <mat-expansion-panel *ngFor="let redirectUri of redirectUris.controls; let i=index"
+                         formArrayName="redirectUris">
+      <mat-expansion-panel-header collapsedHeight="5rem"
+                                  expandedHeight="5rem">
+        <ng-container *ngIf="redirectUri">
+          <mat-panel-title>
+            <mat-icon class="icon icon-rules"></mat-icon>
+            <span>{{ redirectUri.value || 'Redirect URI' }}</span>
+          </mat-panel-title>
+          <div class="invalid-warning" *ngIf="redirectUri.invalid">
+            <mat-icon class="icon icon-warning"
+                      matTooltip="Redirect URI is invalid">
+            </mat-icon>
+          </div>
+        </ng-container>
+      </mat-expansion-panel-header>
       <div class="row">
         <mat-form-field class="col">
           <input matInput
@@ -67,7 +79,6 @@
                  data-se="inp-redirect">
         </mat-form-field>
       </div>
-
       <div class="footer">
         <button mat-button
                 type="button"
@@ -77,8 +88,8 @@
           Remove Redirect
         </button>
       </div>
-    </mat-card>
-  </div>
+    </mat-expansion-panel>
+  </mat-accordion>
 
   <ng-content></ng-content>
 </form>
