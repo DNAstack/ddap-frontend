@@ -58,9 +58,8 @@
   <h3>
     <mat-icon class="icon icon-claims"></mat-icon>
     <span>Global Alliance for Genomics and Health Claims</span>
-
     <div>
-      <button mat-button
+      <button mat-flat-button
               color="primary"
               class="uppercase"
               type="button"
@@ -71,8 +70,21 @@
     </div>
   </h3>
 
-  <div *ngFor="let ga4ghClaim of ga4ghClaims.controls; let i=index"
-       formArrayName="ga4ghClaims">
+  <mat-accordion multi displayMode="flat">
+    <mat-expansion-panel *ngFor="let ga4ghClaim of ga4ghClaims.controls; let i=index"
+                         formArrayName="ga4ghClaims">
+      <mat-expansion-panel-header collapsedHeight="5rem"
+                                  expandedHeight="5rem">
+        <mat-panel-title>
+          <mat-icon class="icon icon-views"></mat-icon>
+          <span>{{ ga4ghClaim.get('claimName').value || 'Claim' }}</span>
+        </mat-panel-title>
+        <div class="invalid-warning" *ngIf="ga4ghClaim.invalid">
+          <mat-icon class="icon icon-warning"
+                    matTooltip="Claim is invalid">
+          </mat-icon>
+        </div>
+     </mat-expansion-panel-header>
     <mat-autocomplete #claims="matAutocomplete">
       <ng-container *ngIf="claimInput.isTouched">
         <mat-option *ngFor="let option of claimDefinitions$[ga4ghClaim.value._autocompleteId] | async"
@@ -98,7 +110,7 @@
       </ng-container>
     </mat-autocomplete>
 
-    <mat-card [formGroupName]="i">
+    <ng-container [formGroupName]="i">
       <div class="row">
         <mat-form-field class="col">
           <input matInput
@@ -181,8 +193,9 @@
           Remove Claim
         </button>
       </div>
-    </mat-card>
-  </div>
+    </ng-container>
+    </mat-expansion-panel>
+  </mat-accordion>
 
   <h3>
     <mat-icon class="icon icon-resources"></mat-icon>

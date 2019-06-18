@@ -1,66 +1,41 @@
 @import "../../../../../styles/modules/colors";
 
-h4 {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0;
-
-  span {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-  }
-}
-
-p {
-  margin-top: 0;
-  font-size: 0.9rem;
-  color: $color-grey;
-}
-
-.ddap-view-service-template {
-  h3 > span {
-    margin-left: 0;
-  }
-
-  .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-  }
-
-  .mat-button[disabled][disabled].default-role-btn {
-    color: $success-color;
-  }
-}
-
 mat-accordion {
-  mat-expansion-panel-header {
-    mat-panel-title,
-    mat-panel-description {
+  h4 {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+
+    span {
+      flex-grow: 1;
       display: flex;
       align-items: center;
     }
+  }
 
-    mat-panel-title {
-      font-size: 1.3rem;
+  p {
+    margin-top: 0;
+    font-size: 0.9rem;
+    color: $color-grey;
+  }
 
-      mat-icon {
-        margin-right: 0.5rem;
-      }
+  .ddap-view-service-template {
+    h3 > span {
+      margin-left: 0;
     }
-  }
 
-  mat-expansion-panel {
-    margin-bottom: 0.5rem;
-  }
+    .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+    }
 
-  .invalid-warning {
-    margin-right: 1.5rem;
-    color: $failure-color;
+    .mat-button[disabled][disabled].default-role-btn {
+      color: $success-color;
+    }
   }
 
   .ddap-view-service-template-roles {

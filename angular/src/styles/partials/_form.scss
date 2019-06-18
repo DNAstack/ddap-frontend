@@ -51,6 +51,42 @@ form.ddap-form {
     }
   }
 
+  mat-accordion {
+    mat-expansion-panel-header {
+      mat-panel-title,
+      mat-panel-description {
+        display: flex;
+        align-items: center;
+      }
+
+      mat-panel-title {
+        font-size: 1.1rem;
+
+        mat-icon {
+          margin-right: 0.5rem;
+        }
+      }
+
+      mat-panel-description {
+        font-size: 0.8rem;
+      }
+    }
+
+    mat-expansion-panel {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .invalid-warning {
+      margin-right: 1.5rem;
+      color: $failure-color;
+    }
+  }
+
   h3 {
     align-items: center;
     margin-top: 2rem;
