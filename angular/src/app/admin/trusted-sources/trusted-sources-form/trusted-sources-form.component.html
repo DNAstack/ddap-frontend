@@ -30,9 +30,7 @@
   </div>
 
   <h3>
-    <mat-icon class="icon icon-trusted"></mat-icon>
     <span>Sources</span>
-
     <div>
       <button mat-button
               color="primary"
@@ -46,9 +44,23 @@
   </h3>
   <p>Trusted sources to issue access policy claims</p>
 
-  <div *ngFor="let source of sources.controls; let i=index"
-       formArrayName="sources">
-    <mat-card>
+  <mat-accordion multi displayMode="flat">
+    <mat-expansion-panel *ngFor="let source of sources.controls; let i=index"
+                         formArrayName="sources">
+      <mat-expansion-panel-header collapsedHeight="5rem"
+                                  expandedHeight="5rem">
+        <ng-container *ngIf="source">
+          <mat-panel-title>
+            <mat-icon class="icon icon-trusted"></mat-icon>
+            <span>{{ source.value || 'Source' }}</span>
+          </mat-panel-title>
+          <div class="invalid-warning" *ngIf="source.invalid">
+            <mat-icon class="icon icon-warning"
+                      matTooltip="Source is invalid">
+            </mat-icon>
+          </div>
+        </ng-container>
+      </mat-expansion-panel-header>
       <div class="row">
         <mat-form-field class="col">
           <input matInput
@@ -68,13 +80,11 @@
           Remove Source
         </button>
       </div>
-    </mat-card>
-  </div>
+    </mat-expansion-panel>
+  </mat-accordion>
 
   <h3>
-    <mat-icon class="icon icon-claims"></mat-icon>
     <span>Claims</span>
-
     <div>
       <button mat-button
               color="primary"
@@ -88,9 +98,23 @@
   </h3>
   <p>Trusted claims to be issued from these sources</p>
 
-  <div *ngFor="let claim of claims.controls; let i=index"
-       formArrayName="claims">
-    <mat-card>
+  <mat-accordion multi displayMode="flat">
+    <mat-expansion-panel *ngFor="let claim of claims.controls; let i=index"
+                         formArrayName="claims">
+      <mat-expansion-panel-header collapsedHeight="5rem"
+                                  expandedHeight="5rem">
+        <ng-container *ngIf="claim">
+          <mat-panel-title>
+            <mat-icon class="icon icon-claims"></mat-icon>
+            <span>{{ claim.value || 'Claim' }}</span>
+          </mat-panel-title>
+          <div class="invalid-warning" *ngIf="claim.invalid">
+            <mat-icon class="icon icon-warning"
+                      matTooltip="Claim is invalid">
+            </mat-icon>
+          </div>
+        </ng-container>
+      </mat-expansion-panel-header>
       <div class="row">
         <mat-form-field class="col">
           <input matInput
@@ -110,8 +134,8 @@
           Remove Claim
         </button>
       </div>
-    </mat-card>
-  </div>
+    </mat-expansion-panel>
+  </mat-accordion>
 
   <ng-content></ng-content>
 </form>

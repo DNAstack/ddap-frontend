@@ -56,10 +56,9 @@
   </mat-card>
 
   <h3>
-    <mat-icon class="icon icon-claims"></mat-icon>
     <span>Global Alliance for Genomics and Health Claims</span>
     <div>
-      <button mat-flat-button
+      <button mat-button
               color="primary"
               class="uppercase"
               type="button"
@@ -76,7 +75,7 @@
       <mat-expansion-panel-header collapsedHeight="5rem"
                                   expandedHeight="5rem">
         <mat-panel-title>
-          <mat-icon class="icon icon-views"></mat-icon>
+          <mat-icon class="icon icon-claims"></mat-icon>
           <span>{{ ga4ghClaim.get('claimName').value || 'Claim' }}</span>
         </mat-panel-title>
         <div class="invalid-warning" *ngIf="ga4ghClaim.invalid">
