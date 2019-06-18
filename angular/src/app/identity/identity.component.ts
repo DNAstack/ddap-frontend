@@ -86,7 +86,7 @@ export class IdentityComponent implements OnInit {
   }
 
   redirectToLoginWithLinkScope() {
-    const loginUrlSuffix = `login?scope=link+account_admin+ga4gh&redirectUri=/${this.realm}/identity`;
+    const loginUrlSuffix = `login?scope=link+openid+account_admin+ga4gh+identities&redirectUri=/${this.realm}/identity`;
     window.location.href = `/api/v1alpha/${this.realm}/identity/${loginUrlSuffix}`;
   }
 
