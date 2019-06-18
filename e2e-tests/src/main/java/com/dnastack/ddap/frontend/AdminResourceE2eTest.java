@@ -265,6 +265,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/nci_researcher");
 
         adminListPage = adminManagePage.updateEntity();
+        waitForAccessTablesToLoad();
 
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit + "_EDITED"));
     }
