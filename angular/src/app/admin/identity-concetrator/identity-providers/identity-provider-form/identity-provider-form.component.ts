@@ -66,7 +66,7 @@ export class IdentityProviderFormComponent implements OnInit, Form {
   }
 
   addScope() {
-    this.scopes.insert(0, this.formBuilder.control(['']));
+    this.scopes.insert(0, this.formBuilder.control('', [Validators.required]));
   }
 
   removeScope(index: number): void {

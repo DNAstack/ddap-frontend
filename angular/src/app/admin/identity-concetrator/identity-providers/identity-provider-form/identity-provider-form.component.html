@@ -91,9 +91,7 @@
   </div>
 
   <h3>
-    <mat-icon class="icon icon-claims"></mat-icon>
     <span>Scopes</span>
-
     <div>
       <button mat-button
               color="primary"
@@ -106,9 +104,23 @@
     </div>
   </h3>
 
-  <div *ngFor="let scope of scopes.controls; let i=index"
-       formArrayName="scopes">
-    <mat-card>
+  <mat-accordion multi displayMode="flat">
+    <mat-expansion-panel *ngFor="let scope of scopes.controls; let i=index"
+         formArrayName="scopes">
+      <mat-expansion-panel-header collapsedHeight="5rem"
+                                  expandedHeight="5rem">
+        <ng-container *ngIf="scope">
+          <mat-panel-title>
+            <mat-icon class="icon icon-access"></mat-icon>
+            <span>{{ scope.value || 'Scope' }}</span>
+          </mat-panel-title>
+          <div class="invalid-warning" *ngIf="scope.invalid">
+            <mat-icon class="icon icon-warning"
+                      matTooltip="Scope is invalid">
+            </mat-icon>
+          </div>
+        </ng-container>
+      </mat-expansion-panel-header>
       <div class="row">
         <mat-form-field class="col">
           <input matInput
@@ -117,7 +129,6 @@
                  data-se="inp-scope">
         </mat-form-field>
       </div>
-
       <div class="footer">
         <button mat-button
                 type="button"
@@ -127,8 +138,8 @@
           Remove Scope
         </button>
       </div>
-    </mat-card>
-  </div>
+    </mat-expansion-panel>
+  </mat-accordion>
 
   <ng-content></ng-content>
 </form>
