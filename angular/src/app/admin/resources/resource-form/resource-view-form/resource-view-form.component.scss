@@ -9,10 +9,6 @@ h4 {
     flex-grow: 1;
     display: flex;
     align-items: center;
-
-    mat-chip-list {
-      margin-left: 0.5rem;
-    }
   }
 }
 
@@ -38,5 +34,59 @@ p {
 
   .mat-button[disabled][disabled].default-role-btn {
     color: $success-color;
+  }
+}
+
+mat-accordion {
+  mat-expansion-panel-header {
+    mat-panel-title,
+    mat-panel-description {
+      display: flex;
+      align-items: center;
+    }
+
+    mat-panel-title {
+      font-size: 1.3rem;
+
+      mat-icon {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  mat-expansion-panel {
+    margin-bottom: 0.5rem;
+  }
+
+  .invalid-warning {
+    margin-right: 1.5rem;
+    color: $failure-color;
+  }
+
+  .ddap-view-service-template-roles {
+    h3 {
+      mat-error {
+        margin-right: 1rem;
+      }
+    }
+    .timeline {
+      .event .line {
+        top: 0.8rem;
+      }
+      .event:after {
+        top: 12px;
+      }
+    }
+  }
+
+  .ddap-view-service-template-variables {
+    .timeline {
+      .event .line {
+        top: 1.2rem;
+      }
+      .event:after {
+        top: 19px;
+      }
+    }
   }
 }
