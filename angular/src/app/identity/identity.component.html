@@ -10,7 +10,7 @@
                       mode="indeterminate">
     </mat-progress-bar>
     <ng-template #connectedAccountsSection>
-      <mat-expansion-panel *ngFor="let account of identity.account.connectedAccounts">
+      <mat-expansion-panel *ngFor="let account of identity.account.connectedAccounts as connectedAccounts">
         <mat-expansion-panel-header collapsedHeight="6rem"
                                     expandedHeight="6rem">
           <mat-card>
@@ -27,6 +27,7 @@
                           [ga4ghClaims]="mapToGa4ghClaims(ga4ghClaims)">
         </ddap-claim-group>
         <button mat-button
+                *ngIf="connectedAccounts.length > 1"
                 color="primary"
                 class="uppercase"
                 (click)="unlinkConnectedAccount(account)">
