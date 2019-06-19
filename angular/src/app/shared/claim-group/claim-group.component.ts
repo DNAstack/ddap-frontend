@@ -1,13 +1,15 @@
 import { Component, Input } from '@angular/core';
 import * as moment from 'moment';
 
+import { ClaimDefinitionService } from '../../admin/claim-definitions/claim-definitions.service';
 import { dam } from '../proto/dam-service';
-import IGA4GHClaim = dam.v1.TestPersona.IGA4GHClaim;
+import GA4GHClaim = dam.v1.TestPersona.GA4GHClaim;
 
 @Component({
   selector: 'ddap-claim-group',
   templateUrl: './claim-group.component.html',
   styleUrls: ['./claim-group.component.scss'],
+  providers: [ClaimDefinitionService],
 })
 export class ClaimGroupComponent {
 
@@ -16,9 +18,12 @@ export class ClaimGroupComponent {
   @Input()
   standardClaims: ({ [k: string]: string }|null);
   @Input()
-  ga4ghClaims: IGA4GHClaim[];
+  ga4ghClaims: GA4GHClaim[];
 
-  getFormattedExpiresTextFromClaim({ expires }: IGA4GHClaim) {
+  constructor(public claimService: ClaimDefinitionService) {
+  }
+
+  getFormattedExpiresTextFromClaim({ expires }: GA4GHClaim): string {
     if (!expires) {
       return;
     }
@@ -29,4 +34,5 @@ export class ClaimGroupComponent {
       ? `Expired ${relativeTime}`
       : `Expires ${relativeTime}`;
   }
+
 }

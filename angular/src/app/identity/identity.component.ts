@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Subscription } from 'rxjs/Subscription';
 
+import { ClaimDefinitionService } from '../admin/claim-definitions/claim-definitions.service';
 import { dam } from '../shared/proto/dam-service';
 
 import { AccountLink } from './account-link.model';
@@ -15,6 +16,7 @@ import { identityProviderMetadataExists, identityProviders } from './providers.c
 @Component({
   templateUrl: './identity.component.html',
   styleUrls: ['./identity.component.scss'],
+  providers: [ClaimDefinitionService],
 })
 export class IdentityComponent implements OnInit {
 
@@ -27,7 +29,8 @@ export class IdentityComponent implements OnInit {
   displayScopeWarning = false;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private identityService: IdentityService) {
+              private identityService: IdentityService,
+              private claimService: ClaimDefinitionService) {
 
   }
 
@@ -45,6 +48,16 @@ export class IdentityComponent implements OnInit {
           this.displayScopeWarning = true;
         }
       });
+  }
+
+  hasExpiringClaims(account: Account): boolean {
+    if (!account || !account.claims) {
+      return false;
+    }
+
+    return Object.entries(account.claims).some(([_, value]: any) => {
+      return value.list.some(this.claimService.isExpiring);
+    });
   }
 
   getProvider(account: Account) {
@@ -81,13 +94,17 @@ export class IdentityComponent implements OnInit {
     );
   }
 
-  unlinkConnectedAccount(account: Account) {
+  unlinkConnectedAccount(account: Account): void {
     this.identityService.unlinkConnectedAccount(account);
   }
 
-  redirectToLoginWithLinkScope() {
+  redirectToLoginWithLinkScope(): void {
     const loginUrlSuffix = `login?scope=link+openid+account_admin+ga4gh+identities&redirectUri=/${this.realm}/identity`;
     window.location.href = `/api/v1alpha/${this.realm}/identity/${loginUrlSuffix}`;
+  }
+
+  refreshClaims(account: Account) {
+
   }
 
   private getAvailableAccounts() {

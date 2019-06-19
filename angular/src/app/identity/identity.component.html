@@ -21,14 +21,27 @@
               <mat-card-subtitle>{{ account.properties.subject }}</mat-card-subtitle>
             </mat-card-header>
           </mat-card>
+          <div class="invalid-warning"
+               *ngIf="hasExpiringClaims(account)">
+            <mat-icon class="icon icon-warning"
+                      matTooltip="Some claims are about to expire">
+            </mat-icon>
+          </div>
         </mat-expansion-panel-header>
         <ddap-claim-group *ngIf="account.claims as ga4ghClaims"
                           [claimGroupLabel]="'Global Alliance for Genomics and Health Claims'"
                           [ga4ghClaims]="mapToGa4ghClaims(ga4ghClaims)">
         </ddap-claim-group>
         <button mat-button
-                *ngIf="connectedAccounts.length > 1"
+                *ngIf="hasExpiringClaims(account)"
                 color="primary"
+                class="uppercase"
+                (click)="refreshClaims(account)">
+          Refresh Expiring Claims
+        </button>
+        <button mat-button
+                *ngIf="connectedAccounts.length > 1"
+                color="warn"
                 class="uppercase"
                 (click)="unlinkConnectedAccount(account)">
           Disconnect

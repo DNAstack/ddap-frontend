@@ -24,6 +24,19 @@ mat-card {
     box-shadow: none;
   }
 
+  mat-expansion-panel-header {
+    ::ng-deep .mat-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .invalid-warning {
+        margin-right: 1rem;
+        color: $warn-color;
+      }
+    }
+  }
+
   ::ng-deep ddap-claim-group {
     h3 {
       margin-top: 0;

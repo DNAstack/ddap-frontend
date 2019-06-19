@@ -14,7 +14,13 @@
         class="event">
       <div class="line"></div>
       <h4>{{ claim.claimName }}</h4>
-      <p>{{ getFormattedExpiresTextFromClaim(claim) }}</p>
+      <p class="flex vertical-center">
+        <mat-icon *ngIf="claimService.isExpiring(claim)"
+                  class="icon icon-warning"
+                  matTooltip="Expiring claim">
+        </mat-icon>
+        <span>{{ getFormattedExpiresTextFromClaim(claim) }}</span>
+      </p>
       <p>{{ claim.source }}</p>
     </li>
   </ul>
