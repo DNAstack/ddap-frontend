@@ -3,6 +3,7 @@ package com.dnastack.ddapfrontend.security;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -23,14 +24,29 @@ public class SecurityConfiguration {
         return new ArrayList<>();
     };
 
+    @Profile("!basic-auth")
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain securityWebFilterChainNoAuth(ServerHttpSecurity http) {
+        return http
+                .authorizeExchange()
+                .anyExchange().permitAll()
+                .and()
+                .cors()
+                .and()
+                .csrf().disable()
+                .build();
+    }
+
+    @Profile("basic-auth")
+    @Bean
+    public SecurityWebFilterChain securityWebFilterChainBasicAuth(ServerHttpSecurity http) {
         return http
                 .authorizeExchange()
                 .pathMatchers("/actuator/info**", "/actuator/health**", "/")
                 .permitAll()
                 .and()
-                .authorizeExchange().anyExchange().authenticated()
+                .authorizeExchange()
+                .anyExchange().authenticated()
                 .and()
                 .httpBasic()
                 .and()

@@ -49,4 +49,4 @@ ARG APP_VERSION
 
 COPY --from=0 /build/target/${APP_NAME}*.jar /app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=basic-auth", "app.jar"]

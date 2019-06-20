@@ -29,7 +29,10 @@ _Note_: Order is important.
 
 1. Run frontend build command: `npm run build:dev` (starts a build server that writes changed files to `target/classes/static`)
 or `npm run build:watch` (same functionality, but includes a linter).
-2. Run the spring boot backend in dev mode: `mvn spring-boot:run -P-dev` (`-P-dev` stops maven from running the full frontend build)
+2. Run the spring boot:
+ - in dev mode: `mvn spring-boot:run -Pdev` (`-Pdev` stops maven from running the full frontend build)
+ - with basic auth enabled `mvn spring-boot:run -Pdev -Dspring-boot.run.profiles=basic-auth`
+
 
 ## API Gateway
 
@@ -62,6 +65,11 @@ IDP_CLIENT_SECRET=local-dev-client-secret
 
 ```
 java -jar target/ddap-frontend-0.0.1-SNAPSHOT.jar
+
+OR (if basic auth should be enabled)
+
+java -jar -Dspring.profiles.active=basic-auth target/ddap-frontend-0.0.1-SNAPSHOT.jar
+
 ```
 
 (You will want to set the above DAM_* environment variables to point to a DAM

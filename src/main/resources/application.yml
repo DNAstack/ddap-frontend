@@ -32,10 +32,6 @@ ddap:
       Qgc3RheXMgb3V0IG9mIHRoZSB0cmFzaAo=
 
 spring:
-  security:
-    user:
-      name: "dev"
-      password: "dev"
   cloud:
     gateway:
       routes:
@@ -83,3 +79,12 @@ logging:
     com:
       dnastack:
         ddap: DEBUG
+
+---
+
+spring:
+  profiles: basic-auth
+  security:
+    user:
+      name: "dev"
+      password: "dev"
