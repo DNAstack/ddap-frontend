@@ -1,5 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { filter, flatMap } from 'rxjs/operators';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
@@ -31,17 +33,19 @@ export class ResourceManageComponent {
   }
 
   save() {
-    if (!this.formError.validate(this.resourceForm, this.formErrorElement)) {
-      return;
+    if (this.formError.validate(this.resourceForm, this.formErrorElement)) {
+      const resourceModel: EntityModel = this.resourceForm.getModel();
+      const applyModel = this.accessForm.getApplyModel() || {};
+      const change = new ConfigModificationObject(resourceModel.dto, applyModel);
+
+      return this.resourceService.save(resourceModel.name, change)
+        .subscribe(this.navigateUp, this.showError);
     }
-
-    const resourceModel: EntityModel = this.resourceForm.getModel();
-    const applyModel = this.accessForm.getApplyModel() || {};
-    const change = new ConfigModificationObject(resourceModel.dto, applyModel);
-
-    this.resourceService.save(resourceModel.name, change)
-      .subscribe(this.navigateUp);
   }
 
   private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+  private showError = (error: HttpErrorResponse) => {
+    const message = (error.error instanceof Object) ? JSON.stringify(error.error) : error.error;
+    return this.formError.displayErrorMessage(this.formErrorElement, message);
+  }
 }

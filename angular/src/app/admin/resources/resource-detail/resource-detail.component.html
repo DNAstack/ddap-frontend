@@ -22,8 +22,8 @@
       </div>
       <mat-error #formErrorElement
                  [class.visible]="formError.showError"
-                 class="ddap-form-validation-msg">
-        Please fix invalid fields (marked red) before saving the resource.
+                 class="ddap-form-validation-msg"
+                 [textContent]="formError.message">
       </mat-error>
     </ddap-resource-form>
   </div>

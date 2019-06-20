@@ -12,8 +12,8 @@
                        [persona]="entity">
       <mat-error #formErrorElement
                  [class.visible]="formError.showError"
-                 class="ddap-form-validation-msg">
-        Please fix invalid fields (marked red) before saving the persona.
+                 class="ddap-form-validation-msg"
+                 [textContent]="formError.message">
       </mat-error>
     </ddap-persona-form>
   </div>

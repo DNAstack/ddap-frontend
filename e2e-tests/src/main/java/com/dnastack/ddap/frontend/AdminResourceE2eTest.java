@@ -10,14 +10,14 @@ import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 @SuppressWarnings("Duplicates")
 public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
@@ -184,6 +184,83 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
+    public void createInvalidResourceShowsServerSideError() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                                              .goToAdmin(NavItem.RESOURCES);
+        String resourceId = "resource-" + System.currentTimeMillis();
+        String viewId = "view-" + System.currentTimeMillis();
+        String role = "discovery";
+
+        waitForAccessTablesToLoad();
+        assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
+
+        AdminManagePage adminManagePage = adminListPage.clickManage();
+        adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
+        adminManagePage.fillField(DdapBy.se("inp-label"), resourceId);
+        adminManagePage.fillField(DdapBy.se("inp-description"), "This is description");
+        adminManagePage.fillField(DdapBy.se("inp-owner"), "E2E test");
+        adminManagePage.fillField(DdapBy.se("inp-max-ttl"), "7d");
+
+        adminManagePage.enterButton(DdapBy.se("btn-add-view"));
+        adminManagePage.toggleExpansionPanel("view-new");
+        adminManagePage.fillField(DdapBy.se("inp-view-id"), viewId);
+        adminManagePage.fillField(DdapBy.se("inp-view-label"), viewId);
+        adminManagePage.fillField(DdapBy.se("inp-view-version"), "Phase 3");
+        adminManagePage.fillField(DdapBy.se("inp-view-aud"), "http://audience-test.com");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-view-service-template"), "Beacon Discovery Search");
+        adminManagePage.fillField(DdapBy.se("inp-view-target-adapter-variable-url"), "http://beacon-test.com");
+        adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + role));
+        // This is the invalid part
+        adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + role), "NONEXISTENT_POLICY");
+
+        adminManagePage.clickSave();
+        adminManagePage.assertError(containsString("NONEXISTENT_POLICY"));
+        adminManagePage.assertError(not(startsWith("{")));
+    }
+
+    @Test
+    public void editInvalidResourceShowsServerSideError() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                                              .goToAdmin(NavItem.RESOURCES);
+        String resourceToEdit = "1000 Genomes";
+        String newDefaultRole = "basic_discovery";
+
+        waitForAccessTablesToLoad();
+        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+
+        AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
+        adminManagePage.toggleExpansionPanel("view-discovery-access");
+
+        adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + newDefaultRole));
+        // Invalid part
+        adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + newDefaultRole), "NONEXISTENT_POLICY");
+
+        adminManagePage.clickUpdate();
+        adminManagePage.assertError(containsString("NONEXISTENT_POLICY"));
+        adminManagePage.assertError(not(startsWith("{")));
+    }
+
+    @Test
+    public void editInvalidPersonaAccessShowsValidationMessage() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                                              .goToAdmin(NavItem.RESOURCES);
+        String resourceToEdit = "1000 Genomes";
+
+        waitForAccessTablesToLoad();
+        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+
+        AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
+        final WebElement drJoeCheckbox = adminManagePage.findCheckedCheckbox(
+                "discovery-access/discovery/dr_joe_elixir");
+
+        drJoeCheckbox.click();
+        // If we don't wait, submitting the form will happen before validation can occur.
+        new WebDriverWait(driver, 5).until(d -> drJoeCheckbox.getAttribute("class").contains("ng-invalid"));
+        adminManagePage.clickUpdate();
+        adminManagePage.assertError(containsString("Please fix invalid fields"));
+    }
+
+    @Test
     public void editResourceEditViewMakeNewDefaultRole() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(NavItem.RESOURCES);
@@ -274,7 +351,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     public void deleteResource() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(NavItem.RESOURCES);
-        String resourceToDelete = "1000 Genomes";
+        String resourceToDelete = "Billing Test for GCS and BigQuery";
 
         waitForAccessTablesToLoad();
         assertThat(adminListPage.getEntityTitles(), hasItem(resourceToDelete));
