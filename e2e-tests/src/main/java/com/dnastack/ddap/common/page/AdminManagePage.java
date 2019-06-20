@@ -2,11 +2,14 @@ package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
 import lombok.Getter;
+import org.hamcrest.Matcher;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+
+import static org.junit.Assert.assertThat;
 
 public class AdminManagePage {
     @Getter
@@ -104,15 +107,23 @@ public class AdminManagePage {
     }
 
     public AdminListPage saveEntity() {
-        this.clickButton(DdapBy.se("btn-save"));
+        clickSave();
 
         return new AdminListPage(driver);
     }
 
+    public void clickSave() {
+        this.clickButton(DdapBy.se("btn-save"));
+    }
+
     public AdminListPage updateEntity() {
-        this.clickButton(DdapBy.se("btn-update"));
+        clickUpdate();
 
         return new AdminListPage(driver);
+    }
+
+    public void clickUpdate() {
+        this.clickButton(DdapBy.se("btn-update"));
     }
 
     public AdminListPage deleteEntity() {
@@ -123,6 +134,15 @@ public class AdminManagePage {
 
     public boolean hasErrors() {
         return !driver.findElements(By.tagName("mat-error")).isEmpty();
+    }
+
+    public void assertError(Matcher<String> messageMatcher) {
+        try {
+            final WebElement errorField = new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(By.tagName("mat-error")));
+            assertThat(errorField.getText(), messageMatcher);
+        } catch (NoSuchElementException nsee) {
+            throw new AssertionError("No error tag found.", nsee);
+        }
     }
 
     private void scrollTo(WebElement element) {

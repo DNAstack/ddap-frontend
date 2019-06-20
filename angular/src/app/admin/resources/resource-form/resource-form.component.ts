@@ -1,20 +1,24 @@
 import {
-  AfterViewInit, ChangeDetectorRef,
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
-  ComponentFactoryResolver, EmbeddedViewRef, Input,
+  ComponentFactoryResolver,
+  EmbeddedViewRef,
+  Input,
   OnInit,
-  QueryList, TemplateRef,
+  QueryList,
+  TemplateRef,
   ViewChild,
   ViewChildren,
   ViewContainerRef
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
+import Resource = dam.v1.Resource;
 
 import { dam } from '../../../shared/proto/dam-service';
 import { FormValidators } from '../../../shared/validators';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
-import Resource = dam.v1.Resource;
 import Form from '../../shared/form';
 
 import { ResourceViewFormComponent } from './resource-view-form/resource-view-form.component';

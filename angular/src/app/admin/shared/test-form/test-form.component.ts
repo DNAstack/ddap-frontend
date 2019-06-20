@@ -13,13 +13,14 @@ import { PersonaService } from '../../personas/personas.service';
 import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../configModificationObject';
 import { EntityModel } from '../entity.model';
+import Form from '../form';
 
 @Component({
   selector: 'ddap-test-form',
   templateUrl: './test-form.component.html',
   styleUrls: ['./test-form.component.scss'],
 })
-export class TestFormComponent implements OnChanges {
+export class TestFormComponent implements OnChanges, Form {
 
   @Input()
   resource: EntityModel;
@@ -103,20 +104,22 @@ export class TestFormComponent implements OnChanges {
           : this.resourceService.update(this.resource.name, change);
         action$.subscribe(
           () => true,
-          (dryRunDto) => this.fillInValues(this.form, personas, views, dryRunDto)
+          (dryRunDto) => this.maybeFillInValues(this.form, personas, views, dryRunDto)
         );
       }
     });
   }
 
-  fillInValues(form: FormGroup, personas: string[], views: string[], {error}: any) {
-    this.originalTest = error;
-    personas.forEach((persona) => {
-      const accesses = _get(error, `testPersonas[${persona}].resources[${this.resource.name}].access`, []);
-      accesses.forEach((access) => {
-        form.get(persona).get(access).setValue(true);
+  maybeFillInValues(form: FormGroup, personas: string[], views: string[], {error}: any) {
+    if (this.isConfigModificationObject(error)) {
+      this.originalTest = error;
+      personas.forEach((persona) => {
+        const accesses = _get(error, `testPersonas[${persona}].resources[${this.resource.name}].access`, []);
+        accesses.forEach((access) => {
+          form.get(persona).get(access).setValue(true);
+        });
       });
-    });
+    }
   }
 
   toApplyDto() {
@@ -177,5 +180,17 @@ export class TestFormComponent implements OnChanges {
         Object.keys(accessFormGroup.controls)
           .forEach((persona) => clearError(persona, accessFormGroup));
       });
+  }
+
+  getAllForms(): FormGroup[] {
+    return [this.form];
+  }
+
+  isValid(): boolean {
+    return this.form.valid;
+  }
+
+  private isConfigModificationObject(error: any) {
+    return error instanceof Object && error.testPersonas;
   }
 }

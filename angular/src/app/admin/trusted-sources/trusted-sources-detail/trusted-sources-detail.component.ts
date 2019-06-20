@@ -1,8 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityDetailBase } from '../../shared/entity-detail.base';
+import { EntityFormDetailBase } from '../../shared/entity-form-detail.base';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { TrustedSourcesFormComponent } from '../trusted-sources-form/trusted-sources-form.component';
@@ -14,7 +16,7 @@ import { TrustedSourcesService } from '../trusted-sources.service';
   styleUrls: ['./trusted-sources-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class TrustedSourcesDetailComponent extends EntityDetailBase<TrustedSourcesService> {
+export class TrustedSourcesDetailComponent extends EntityFormDetailBase<TrustedSourcesService> {
 
   @ViewChild(TrustedSourcesFormComponent)
   trustedSourcesForm: TrustedSourcesFormComponent;
@@ -25,10 +27,10 @@ export class TrustedSourcesDetailComponent extends EntityDetailBase<TrustedSourc
   constructor(
     route: ActivatedRoute,
     trustedSourcesService: TrustedSourcesService,
-    private router: Router,
+    protected router: Router,
     public formError: FormErrorScrollService
   ) {
-    super(route, trustedSourcesService, 'trustedSourceName');
+    super(route, router, trustedSourcesService, 'trustedSourceName');
   }
 
   update() {
@@ -38,14 +40,15 @@ export class TrustedSourcesDetailComponent extends EntityDetailBase<TrustedSourc
 
     const trustedSourcesModel: EntityModel = this.trustedSourcesForm.getModel();
     const change = new ConfigModificationObject(trustedSourcesModel.dto, {});
-    this.entityService.update(this.entity.name, change)
-      .subscribe(this.navigateUp);
+    this.doUpdate(this.entity.name, change);
   }
 
   delete() {
-    this.entityService.remove(this.entity.name)
-      .subscribe(this.navigateUp);
+    this.doDelete(this.entity.name);
   }
 
-  private navigateUp = () => this.router.navigate(['..'], {relativeTo: this.route});
+  protected showError = (error: HttpErrorResponse) => {
+    const message = (error.error instanceof Object) ? JSON.stringify(error.error) : error.error;
+    return this.formError.displayErrorMessage(this.formErrorElement, message);
+  }
 }

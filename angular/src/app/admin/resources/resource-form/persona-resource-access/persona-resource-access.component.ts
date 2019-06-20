@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import _get from 'lodash.get';
 import { of } from 'rxjs/internal/observable/of';
 import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
@@ -6,6 +7,7 @@ import { Subject } from 'rxjs/Subject';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
+import Form from '../../../shared/form';
 import { TestFormComponent } from '../../../shared/test-form/test-form.component';
 import { ResourceService } from '../../resources.service';
 
@@ -14,7 +16,7 @@ import { ResourceService } from '../../resources.service';
   templateUrl: './persona-resource-access.component.html',
   styleUrls: ['./persona-resource-access.component.scss'],
 })
-export class PersonaResourceAccessComponent {
+export class PersonaResourceAccessComponent implements Form {
 
   @Input()
   resource: EntityModel;
@@ -48,6 +50,14 @@ export class PersonaResourceAccessComponent {
 
   save(changes: EntityModel) {
     this.save$.next({ changes, isDryRun: false });
+  }
+
+  getAllForms(): FormGroup[] {
+    return this.testForm.getAllForms();
+  }
+
+  isValid(): boolean {
+    return this.testForm.isValid();
   }
 
   private saveResource(changes: object, isDryRun = true) {

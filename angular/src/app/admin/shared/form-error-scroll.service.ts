@@ -9,6 +9,7 @@ import Form from './form';
 export class FormErrorScrollService {
 
   public showError = false;
+  public message: string;
 
   constructor(private formValidation: FormValidationService,
               private scroll: ScrollService) {
@@ -17,9 +18,9 @@ export class FormErrorScrollService {
 
   validate(formComponent: Form, formError: ElementRef): boolean {
     if (!formComponent.isValid()) {
+      const validationErrorMessage = 'Please fix invalid fields (marked red) before saving the resource.';
       this.formValidation.forceValidateMultiple(formComponent.getAllForms());
-      this.scroll.toElement(formError);
-      this.showError = true;
+      this.displayErrorMessage(formError, validationErrorMessage);
 
       return false;
     }
@@ -27,5 +28,11 @@ export class FormErrorScrollService {
     this.showError = false;
 
     return true;
+  }
+
+  displayErrorMessage(formError: ElementRef, validationErrorMessage: string) {
+    this.scroll.toElement(formError);
+    this.showError = true;
+    this.message = validationErrorMessage;
   }
 }
