@@ -81,6 +81,14 @@ public class AdminManagePage {
         return new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(checkbox));
     }
 
+    public WebElement findCheckbox(String checkboxId) {
+        WebElement checkbox = driver.findElement(By.xpath("//mat-checkbox[@id='" + checkboxId + "']"));
+
+        this.scrollTo(checkbox);
+
+        return new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(checkbox));
+    }
+
     public void toggleExpansionPanel(String panelId) {
         WebElement panel = driver.findElement(DdapBy.se(panelId));
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(panel));
