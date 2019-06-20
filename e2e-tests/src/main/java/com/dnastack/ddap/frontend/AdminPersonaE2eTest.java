@@ -10,13 +10,14 @@ import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 @SuppressWarnings("Duplicates")
 public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
@@ -194,5 +195,43 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "ResearcherStatus");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-value"), "https://www.nature.com/articles/s41431-018-0219-y");
         adminManagePage.closeAutocompletes();
+    }
+
+    @Test
+    public void editInvalidPersonaAccessShowsValidationMessage() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                                              .goToAdmin(NavItem.PERSONAS);
+
+        assertThat(adminListPage.getEntityTitles(), hasItem("John Persona"));
+        assertThat(adminListPage.getEntityTitles(), not(hasItem("John Edited")));
+
+        AdminManagePage adminManagePage = adminListPage.clickView("John Persona", "Edit Persona");
+
+        adminManagePage.clearField(DdapBy.se("inp-label"));
+        adminManagePage.fillField(DdapBy.se("inp-label"), "John Edited");
+        adminManagePage.clearField(DdapBy.se("inp-iss"));
+        adminManagePage.fillField(DdapBy.se("inp-iss"), "test-issuer");
+        adminManagePage.clearField(DdapBy.se("inp-sub"));
+        adminManagePage.fillField(DdapBy.se("inp-sub"), "test-subject");
+
+        adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
+        adminManagePage.toggleExpansionPanel("claim-0");
+        adminManagePage.fillField(DdapBy.se("inp-claimName"), "test-claimName");
+        adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
+        adminManagePage.fillField(DdapBy.se("inp-value"), "test-value");
+        adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
+        adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");
+        adminManagePage.closeAutocompletes();
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "so");
+
+        final WebElement ga4ghBeaconCheckbox = adminManagePage.findCheckbox(
+                "ga4gh-apis/beacon/discovery");
+
+        ga4ghBeaconCheckbox.click();
+        // If we don't wait, submitting the form will happen before validation can occur.
+        new WebDriverWait(driver, 5).until(d -> ga4ghBeaconCheckbox.getAttribute("class").contains("ng-invalid"));
+
+        adminManagePage.clickUpdate();
+        adminManagePage.assertError(containsString("Please fix invalid fields"));
     }
 }
