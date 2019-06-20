@@ -103,10 +103,6 @@ export class IdentityComponent implements OnInit {
     window.location.href = `/api/v1alpha/${this.realm}/identity/${loginUrlSuffix}`;
   }
 
-  refreshClaims(account: Account) {
-
-  }
-
   private getAvailableAccounts() {
     this.identityService.getAccountLinks()
       .subscribe((availableAccounts: AccountLink[]) => {
