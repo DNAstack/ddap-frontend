@@ -110,6 +110,7 @@ public class IdentityController {
                                                       @PathVariable String realm,
                                                       @RequestParam(required = false) URI redirectUri,
                                                       @RequestParam(defaultValue = DEFAULT_SCOPES) String scope,
+                                                      @RequestParam(required = false) String loginHint,
                                                       @RequestParam(required = false) String persona) {
 
         final String state = stateHandler.generateLoginState(redirectUri);
@@ -122,7 +123,7 @@ public class IdentityController {
 
         } else {
             final URI postLoginTokenEndpoint = selfLinkToApi(request, realm, "identity/token");
-            final URI loginUri = idpClient.getAuthorizeUrl(realm, state, scope, postLoginTokenEndpoint);
+            final URI loginUri = idpClient.getAuthorizeUrl(realm, state, scope, postLoginTokenEndpoint, loginHint);
             log.debug("Redirecting to IdP login chooser page {}", loginUri);
 
             URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");

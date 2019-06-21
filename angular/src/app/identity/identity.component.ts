@@ -90,8 +90,16 @@ export class IdentityComponent implements OnInit {
   }
 
   redirectToLoginWithLinkScope(): void {
+    window.location.href = this.getLoginUrl();
+  }
+
+  refreshClaims(account: Account): void {
+    window.location.href = `${this.getLoginUrl()}&loginHint=${account.loginHint}`;
+  }
+
+  private getLoginUrl(): string {
     const loginUrlSuffix = `login?scope=link+openid+account_admin+ga4gh+identities&redirectUri=/${this.realm}/identity`;
-    window.location.href = `/api/v1alpha/${this.realm}/identity/${loginUrlSuffix}`;
+    return `/api/v1alpha/${this.realm}/identity/${loginUrlSuffix}`;
   }
 
   private getAvailableAccounts() {

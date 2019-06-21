@@ -140,13 +140,14 @@ public class ReactiveIdentityConcentratorClient {
                 }).flatMap(code -> exchangeAuthorizationCodeForTokens(realm, redirectUri, code));
     }
 
-    public URI getAuthorizeUrl(String realm, String state, String scopes, URI redirectUri) {
+    public URI getAuthorizeUrl(String realm, String state, String scopes, URI redirectUri, String loginHint) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/authorize" +
                 "?response_type=code" +
                 "&clientId={clientId}" +
                 "&redirect_uri={redirectUri}" +
                 "&state={state}" +
-                "&scope={scope}");
+                "&scope={scope}" +
+                "&login_hint={loginHint}");
 
         final HashMap<String, Object> variables = new HashMap<>();
         variables.put("realm", realm);
@@ -154,6 +155,7 @@ public class ReactiveIdentityConcentratorClient {
         variables.put("redirectUri", redirectUri);
         variables.put("state", state);
         variables.put("scope", scopes);
+        variables.put("loginHint", loginHint);
 
         return idpBaseUrl.resolve(template.expand(variables));
     }

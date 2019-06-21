@@ -12,4 +12,5 @@ export interface Account {
     }
   };
   claims?: any;
+  loginHint: string;
 }

@@ -33,6 +33,13 @@
                           [ga4ghAccountClaims]="ga4ghAccountClaims">
         </ddap-claim-group>
         <button mat-button
+                *ngIf="hasExpiringClaims(account)"
+                color="primary"
+                class="uppercase"
+                (click)="refreshClaims(account)">
+          Refresh Expiring Claims
+        </button>
+        <button mat-button
                 *ngIf="connectedAccounts.length > 1"
                 color="warn"
                 class="uppercase"
