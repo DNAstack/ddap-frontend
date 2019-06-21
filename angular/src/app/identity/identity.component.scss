@@ -14,7 +14,6 @@ mat-card {
   .mat-card-subtitle {
     margin-bottom: 0;
   }
-
 }
 
 .ddap-connected-accounts {
@@ -76,9 +75,19 @@ mat-card {
   }
 
   .connect-account-warning {
+
     display: flex;
     align-items: center;
-    color: $warn-color;
+    color: #654404;
+    padding: 5px 5px 5px 15px;
+    border-radius: 10px;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    width: 625px;
+
+    //display: flex;
+    //align-items: center;
+    //color: $warn-color;
 
     span {
       margin-left: 0.5rem;

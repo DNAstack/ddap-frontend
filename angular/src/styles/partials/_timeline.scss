@@ -28,7 +28,7 @@ $timeline-line: 0.1rem;
 
   .event {
     padding-bottom: ($timeline-spacing * 0.5);
-    margin-bottom: $timeline-spacing;
+    margin-bottom: 0;
     position: relative;
 
     .line {
@@ -36,7 +36,7 @@ $timeline-line: 0.1rem;
       position: absolute;
       top: 0.5rem;
       left: -1.6rem;
-      height: 123%;
+      height: 107%;
     }
 
     &:last-of-type {
