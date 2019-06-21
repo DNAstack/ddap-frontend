@@ -127,6 +127,9 @@ h4 {
 .icon-warning:before {
   content: "\42";
 }
+.icon-resource:before {
+  content: "\43";
+}
 
 .text-color--subtle {
   color: $navbar-font-subtle-color;
