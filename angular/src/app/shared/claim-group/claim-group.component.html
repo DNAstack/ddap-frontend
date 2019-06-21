@@ -9,19 +9,40 @@
       <p>{{ standardClaims.sub }}</p>
     </li>
   </ul>
-  <ul class="timeline" *ngIf="ga4ghClaims">
-    <li *ngFor="let claim of ga4ghClaims"
-        class="event">
-      <div class="line"></div>
-      <h4>{{ claim.claimName }}</h4>
-      <p class="flex vertical-center">
-        <mat-icon *ngIf="claimService.isExpiring(claim)"
-                  class="icon icon-warning"
-                  matTooltip="Expiring claim">
-        </mat-icon>
-        <span>{{ getFormattedExpiresTextFromClaim(claim) }}</span>
-      </p>
-      <p>{{ claim.source }}</p>
-    </li>
-  </ul>
+  <ng-container *ngIf="ga4ghClaims then ga4ghClaimsSection; else ga4ghAccountClaimsSection">
+  </ng-container>
+  <ng-template #ga4ghClaimsSection>
+    <ul class="timeline">
+      <li *ngFor="let claim of ga4ghClaims"
+          class="event">
+        <div class="line"></div>
+        <h4>{{ claim.claimName }}</h4>
+        <p class="flex vertical-center">
+          <span>{{ getFormattedExpiresTextFromClaim(claim) }}</span>
+        </p>
+        <p>{{ claim.source }}</p>
+      </li>
+    </ul>
+  </ng-template>
+  <ng-template #ga4ghAccountClaimsSection>
+    <ul class="timeline">
+      <li *ngFor="let accountClaim of ga4ghAccountClaims | keyvalue"
+          class="event">
+        <div class="line"></div>
+        <h4>{{ accountClaim.key }}</h4>
+        <div class="claims">
+          <div class="claim" *ngFor="let claim of accountClaim.value.list">
+            <p class="flex vertical-center">
+              <mat-icon *ngIf="claimService.isExpiring(claim)"
+                        class="icon icon-warning"
+                        matTooltip="Expiring claim">
+              </mat-icon>
+              <span>{{ getFormattedExpiresTextFromAccountClaim(claim) }}</span>
+            </p>
+            <p>{{ claim.source }}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </ng-template>
 </div>

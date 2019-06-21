@@ -145,27 +145,29 @@
       <div class="row">
         <mat-form-field class="col">
           <input matInput
-                 formControlName="asserted"
-                 placeholder="Asserted At"
-                 data-se="inp-iat"
                  required
-                 [owlDateTime]="asserted"
-                 [owlDateTimeTrigger]="asserted">
-          <owl-date-time #asserted
-                         panelClass="datetime-picker">
-          </owl-date-time>
+                 formControlName="assertedDuration"
+                 placeholder="Asserted Duration"
+                 data-se="inp-iat">
+          <mat-error *ngIf="ga4ghClaim.get('assertedDuration').hasError('required')">
+            Duration is required
+          </mat-error>
+          <mat-error *ngIf="ga4ghClaim.get('assertedDuration').hasError('duration')">
+            Duration must be in form <i>(number)(s|m|h|d|w)</i> (e.g. 30d)
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="col">
           <input matInput
-                 formControlName="expires"
-                 placeholder="Expires At"
-                 data-se="inp-exp"
                  required
-                 [owlDateTime]="expires"
-                 [owlDateTimeTrigger]="expires">
-          <owl-date-time #expires
-                         panelClass="datetime-picker">
-          </owl-date-time>
+                 formControlName="expiresDuration"
+                 placeholder="Expires Duration"
+                 data-se="inp-exp">
+          <mat-error *ngIf="ga4ghClaim.get('expiresDuration').hasError('required')">
+            Duration is required
+          </mat-error>
+          <mat-error *ngIf="ga4ghClaim.get('expiresDuration').hasError('duration')">
+            Duration must be in form (number)(s|m|h|d|w), e.g. <i>30d</i>
+          </mat-error>
         </mat-form-field>
       </div>
 

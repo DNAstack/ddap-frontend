@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import GA4GHClaim = dam.v1.TestPersona.GA4GHClaim;
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Subscription } from 'rxjs/Subscription';
 
 import { ClaimDefinitionService } from '../admin/claim-definitions/claim-definitions.service';
-import { dam } from '../shared/proto/dam-service';
 
 import { AccountLink } from './account-link.model';
 import { Account } from './account.model';
@@ -87,13 +85,6 @@ export class IdentityComponent implements OnInit {
     return account.provider === '<persona>';
   }
 
-  mapToGa4ghClaims(claims): GA4GHClaim[] {
-    return this.flatten(
-      Object.entries(claims)
-        .map(([key, value]: any) => this.extractClaimsUnderKey(key, value.list))
-    );
-  }
-
   unlinkConnectedAccount(account: Account): void {
     this.identityService.unlinkConnectedAccount(account);
   }
@@ -109,15 +100,6 @@ export class IdentityComponent implements OnInit {
         this.availableAccounts = availableAccounts;
       });
   }
-
-  private extractClaimsUnderKey(claimKey: string, claims: any[]): GA4GHClaim[] {
-    return claims.map((claim) => {
-      claim.claimName = claimKey;
-      return GA4GHClaim.fromObject(claim);
-    });
-  }
-
-  private flatten = (array) => array.reduce((acc, val) => acc.concat(val), []);
 
   private getDefaultProviderPicture(provider: string) {
     return identityProviderMetadataExists(provider)

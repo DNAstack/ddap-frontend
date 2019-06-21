@@ -1,13 +1,13 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
-import * as moment from 'moment';
 import { EMPTY } from 'rxjs/internal/observable/empty';
 import { Observable } from 'rxjs/Observable';
 import { catchError, debounceTime, map, switchMap, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
 import { dam } from '../../../shared/proto/dam-service';
+import { FormValidators } from '../../../shared/validators';
 import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
@@ -114,7 +114,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
     return new EntityModel(id, testPersona);
   }
 
-  private buildGa4GhClaimGroup({claimName, source, value, asserted, expires, by}: TestPersona.IGA4GHClaim): FormGroup {
+  private buildGa4GhClaimGroup({claimName, source, value, assertedDuration, expiresDuration, by}: TestPersona.IGA4GHClaim): FormGroup {
     const autocompleteId = new Date().getTime().toString();
 
     const ga4ghClaimForm: FormGroup = this.formBuilder.group({
@@ -122,8 +122,8 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
       claimName: [claimName, Validators.required],
       source: [source, Validators.required],
       value: [value, Validators.required],
-      asserted: [moment.unix(asserted), Validators.required],
-      expires: [moment.unix(expires), Validators.required],
+      assertedDuration: [assertedDuration, [Validators.required, FormValidators.duration]],
+      expiresDuration: [expiresDuration, [Validators.required, FormValidators.duration]],
       by: [by],
     });
 
@@ -179,13 +179,13 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
     };
   }
 
-  private getGa4ghClaimModel({claimName, source, value, asserted, expires, by}): TestPersona.IGA4GHClaim {
+  private getGa4ghClaimModel({claimName, source, value, assertedDuration, expiresDuration, by}): TestPersona.IGA4GHClaim {
     return {
       claimName,
       source,
       value,
-      asserted: asserted.unix(),
-      expires: expires.unix(),
+      assertedDuration,
+      expiresDuration,
       by,
     };
   }

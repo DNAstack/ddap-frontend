@@ -24,13 +24,13 @@
           <div class="invalid-warning"
                *ngIf="hasExpiringClaims(account)">
             <mat-icon class="icon icon-warning"
-                      matTooltip="Some claims are about to expire">
+                      matTooltip="Some claims are expired or about to expire">
             </mat-icon>
           </div>
         </mat-expansion-panel-header>
-        <ddap-claim-group *ngIf="account.claims as ga4ghClaims"
+        <ddap-claim-group *ngIf="account.claims as ga4ghAccountClaims"
                           [claimGroupLabel]="'Global Alliance for Genomics and Health Claims'"
-                          [ga4ghClaims]="mapToGa4ghClaims(ga4ghClaims)">
+                          [ga4ghAccountClaims]="ga4ghAccountClaims">
         </ddap-claim-group>
         <button mat-button
                 *ngIf="connectedAccounts.length > 1"

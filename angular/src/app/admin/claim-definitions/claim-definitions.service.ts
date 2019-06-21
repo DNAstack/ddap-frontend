@@ -6,14 +6,13 @@ import { Observable } from 'rxjs/Observable';
 
 import { environment } from '../../../environments/environment';
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
-import { dam } from '../../shared/proto/dam-service';
 import { ic } from '../../shared/proto/ic-service';
 import { ConfigEntityService } from '../shared/config-entity.service';
 import { EntityModel } from '../shared/entity.model';
 
 
 import AccountClaim = ic.v1.AccountClaim;
-import GA4GHClaim = dam.v1.TestPersona.GA4GHClaim;
+import IAccountClaim = ic.v1.IAccountClaim;
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +31,7 @@ export class ClaimDefinitionService extends ConfigEntityService {
       );
   }
 
-  isExpiring({ expires }: GA4GHClaim | AccountClaim): boolean {
+  isExpiring({ expires }: IAccountClaim | AccountClaim): boolean {
     const timestamp = moment.unix(expires);
     const duration = moment.duration(timestamp.diff(moment()));
     const hoursTillExpiration = duration.asHours();
