@@ -25,22 +25,19 @@
   </ng-template>
   <ng-template #ga4ghAccountClaimsSection>
     <ul class="timeline">
-      <li *ngFor="let accountClaim of ga4ghAccountClaims | keyvalue"
-          class="event">
-        <div class="line"></div>
-        <div class="claims">
-          <div class="claim" *ngFor="let claim of accountClaim.value.list">
-            <h4>{{ accountClaim.key }}: <span>{{ claim.value }}</span></h4>
-            <p class="flex vertical-center">
-              <mat-icon *ngIf="claimService.isExpiring(claim)"
-                        class="icon icon-warning"
-                        matTooltip="Expiring claim">
-              </mat-icon>
-              <span>{{ getFormattedExpiresTextFromAccountClaim(claim) }}</span>
-            </p>
-          </div>
-        </div>
-      </li>
+      <ng-container *ngFor="let accountClaim of ga4ghAccountClaims | keyvalue">
+        <li class="event" *ngFor="let claim of accountClaim.value.list">
+          <div class="line"></div>
+          <h4>{{ accountClaim.key }}: <span>{{ claim.value }}</span></h4>
+          <p class="flex vertical-center">
+            <mat-icon *ngIf="claimService.isExpiring(claim)"
+                      class="icon icon-warning"
+                      matTooltip="Expiring claim">
+            </mat-icon>
+            <span>{{ getFormattedExpiresTextFromAccountClaim(claim) }}</span>
+          </p>
+        </li>
+      </ng-container>
     </ul>
   </ng-template>
 </div>
