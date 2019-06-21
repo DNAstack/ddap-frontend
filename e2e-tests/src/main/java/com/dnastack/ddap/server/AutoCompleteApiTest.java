@@ -1,19 +1,15 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
-import com.google.protobuf.util.JsonFormat;
-import dam.v1.e2e.DamService;
+import dam.v1.DamService;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
-import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.*;
 
 
 public class AutoCompleteApiTest extends AbstractBaseE2eTest {

@@ -984,16 +984,16 @@
             "claimName": "ga4gh.BonaFide",
             "source": "https://uni-heidelberg.de",
             "value": "https://www.nature.com/articles/s41431-018-0219-y",
-            "asserted": 1550120400,
-            "expires": 2181272400,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "peer"
           },
           {
             "claimName": "ga4gh.AcceptedTermsAndPolicies",
             "source": "https://uni-heidelberg.de",
             "value": "https://www.nature.com/articles/s41431-018-0219-y",
-            "asserted": 1550120402,
-            "expires": 2181272402,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "self"
           }
         ]
@@ -1041,8 +1041,8 @@
             "claimName": "ga4gh.ControlledAccessGrants",
             "source": "https://dbgap.nlm.nih.gov/aa",
             "value": "https://dac.nih.gov/datasets/phys000710",
-            "asserted": 1550120402,
-            "expires": 2181272402,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "dac"
           }
         ]
@@ -1069,8 +1069,8 @@
             "claimName": "ga4gh.ControlledAccessGrants",
             "source": "https://dbgap.nlm.nih.gov/aa",
             "value": "https://dac.nih.gov/datasets/phys000111",
-            "asserted": 1550120402,
-            "expires": 2181272402,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "dac"
           }
         ]
@@ -1090,16 +1090,16 @@
             "claimName": "ga4gh.BonaFide",
             "source": "https://nci.nih.org",
             "value": "https://www.nature.com/articles/s41431-018-0219-y",
-            "asserted": 1550120401,
-            "expires": 2181272401,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "signing_official"
           },
           {
             "claimName": "ga4gh.AcceptedTermsAndPolicies",
             "source": "https://nci.nih.org",
             "value": "https://www.nature.com/articles/s41431-018-0219-y",
-            "asserted": 1550120402,
-            "expires": 2181272402,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "self"
           }
         ]

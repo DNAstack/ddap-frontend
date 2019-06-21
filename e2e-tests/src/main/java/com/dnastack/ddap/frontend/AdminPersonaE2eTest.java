@@ -56,8 +56,8 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
         adminManagePage.closeAutocompletes();
         adminManagePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-value"));
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");
+        adminManagePage.fillField(DdapBy.se("inp-iat"), "1d");
+        adminManagePage.fillField(DdapBy.se("inp-exp"), "30d");
         adminManagePage.closeAutocompletes();
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "peer");
 
@@ -88,8 +88,8 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "test-claimName");
         adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
         adminManagePage.fillField(DdapBy.se("inp-value"), "test-value");
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");
+        adminManagePage.fillField(DdapBy.se("inp-iat"), "1d");
+        adminManagePage.fillField(DdapBy.se("inp-exp"), "30d");
         adminManagePage.closeAutocompletes();
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "so");
 
@@ -136,8 +136,8 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "AffiliationAndRole");
         adminManagePage.fillField(DdapBy.se("inp-source"), "https://uni-heidelberg.de");
         adminManagePage.fillField(DdapBy.se("inp-value"), "faculty@uni-heidelberg.de");
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");
+        adminManagePage.fillField(DdapBy.se("inp-iat"), "1d");
+        adminManagePage.fillField(DdapBy.se("inp-exp"), "30d");
         adminManagePage.closeAutocompletes();
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "so");
 
@@ -146,8 +146,8 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
         adminManagePage.fillField(DdapBy.se("inp-source"), "https://dbgap.nlm.nih.gov/aa");
         adminManagePage.fillField(DdapBy.se("inp-value"), "https://dac.nih.gov/datasets/phs000710");
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");
+        adminManagePage.fillField(DdapBy.se("inp-iat"), "1d");
+        adminManagePage.fillField(DdapBy.se("inp-exp"), "30d");
         adminManagePage.closeAutocompletes();
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "dac");
 

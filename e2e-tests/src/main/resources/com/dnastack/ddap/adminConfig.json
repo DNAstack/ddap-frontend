@@ -968,16 +968,16 @@
             "claimName": "ResearcherStatus",
             "source": "https://uni-heidelberg.de",
             "value": "https://www.nature.com/articles/s41431-018-0219-y",
-            "asserted": 1550120400,
-            "expires": 2181272400,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "peer"
           },
           {
             "claimName": "AcceptedTermsAndPolicies",
             "source": "https://uni-heidelberg.de",
             "value": "https://www.nature.com/articles/s41431-018-0219-y",
-            "asserted": 1550120402,
-            "expires": 2181272402,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "self"
           }
         ]
@@ -1020,16 +1020,16 @@
             "claimName": "AffiliationAndRole",
             "source": "https://uni-heidelberg.de",
             "value": "faculty@uni-heidelberg.de",
-            "asserted": 1550120402,
-            "expires": 2181272402,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "so"
           },
           {
             "claimName": "ControlledAccessGrants",
             "source": "https://dbgap.nlm.nih.gov/aa",
             "value": "https://dac.nih.gov/datasets/phs000710",
-            "asserted": 1550120402,
-            "expires": 2181272402,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "condition": {
               "AffiliationAndRole": {
                 "value": ["faculty@uni-heidelberg.de"],
@@ -1069,8 +1069,8 @@
             "claimName": "ControlledAccessGrants",
             "source": "https://dbgap.nlm.nih.gov/aa",
             "value": "https://dac.nih.gov/datasets/phs000111",
-            "asserted": 1550120402,
-            "expires": 2181272402,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "dac"
           }
         ]
@@ -1091,16 +1091,16 @@
             "claimName": "ResearcherStatus",
             "source": "https://nci.nih.gov",
             "value": "https://www.nature.com/articles/s41431-018-0219-y",
-            "asserted": 1550120401,
-            "expires": 2181272401,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "so"
           },
           {
             "claimName": "AcceptedTermsAndPolicies",
             "source": "https://nci.nih.gov",
             "value": "https://www.nature.com/articles/s41431-018-0219-y",
-            "asserted": 1550120402,
-            "expires": 2181272402,
+            "assertedDuration": "1d",
+            "expiresDuration": "30d",
             "by": "self"
           }
         ]

@@ -1,18 +1,16 @@
 package com.dnastack.ddap.server;
 
+import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
-
-import com.dnastack.ddap.common.AbstractBaseE2eTest;
-import java.io.IOException;
-
-import com.google.protobuf.util.JsonFormat;
-import dam.v1.e2e.DamService;
-import org.junit.Before;
-import org.junit.Test;
 
 
 public class BeaconSearchApiTest extends AbstractBaseE2eTest {

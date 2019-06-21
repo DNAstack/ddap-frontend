@@ -2,7 +2,7 @@ package com.dnastack.ddap.common;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
-import dam.v1.e2e.DamService;
+import dam.v1.DamService;
 import io.restassured.RestAssured;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
@@ -31,6 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.fail;
 
+@SuppressWarnings("Duplicates")
 public abstract class AbstractBaseE2eTest {
 
     protected static final String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");

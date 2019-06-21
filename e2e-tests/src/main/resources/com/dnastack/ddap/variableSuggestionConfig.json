@@ -193,15 +193,15 @@
           "claimName": "ga4gh.BonaFide",
           "source": "https://nci.nih.org",
           "value": "https://www.nature.com/articles/s41431-018-0219-y",
-          "asserted": 1.550120401E9,
-          "expires": 2.181272401E9,
+          "assertedDuration": "1d",
+          "expiresDuration": "30d",
           "by": "signing_official"
         }, {
           "claimName": "ga4gh.AcceptedTermsAndPolicies",
           "source": "https://nci.nih.org",
           "value": "https://www.nature.com/articles/s41431-018-0219-y",
-          "asserted": 1.550120402E9,
-          "expires": 2.181272402E9,
+          "assertedDuration": "1d",
+          "expiresDuration": "30d",
           "by": "self"
         }]
       },
