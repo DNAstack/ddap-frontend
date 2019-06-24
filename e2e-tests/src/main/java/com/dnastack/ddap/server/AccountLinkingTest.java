@@ -40,7 +40,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     @Test
     public void personaLoginShouldHonourRequestedScopes() throws Exception {
-        String requestedScope = "link:ic_" + System.currentTimeMillis();
+        String requestedScope = "openid link:ic_" + System.currentTimeMillis();
 
         // @formatter:off
         String icTokenJwt = given()
@@ -115,7 +115,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     @Test
     public void linkAndUnlinkAccount() throws Exception {
-        String icTokenJwtBeforeLinking = fetchRealPersonaIcToken("mr_hyde", REALM, "link");
+        String icTokenJwtBeforeLinking = fetchRealPersonaIcToken("mr_hyde", REALM, "openid", "link");
         String baseAccountId = JwtTestUtil.getSubject(icTokenJwtBeforeLinking);
 
         // Link account
