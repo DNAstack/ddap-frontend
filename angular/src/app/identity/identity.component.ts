@@ -91,7 +91,10 @@ export class IdentityComponent implements OnInit {
   }
 
   redirectToLoginWithLinkScope(): void {
-    window.location.href = this.getLoginUrl();
+    this.identityStore.getLoginHintForPrimaryAccount()
+      .subscribe((loginHint) => {
+        window.location.href = `${this.getLoginUrl()}&loginHint=${loginHint}`;
+      });
   }
 
   refreshClaims(account: Account): void {

@@ -205,16 +205,14 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAndCheckForTitle(pageId);
 
-        // click through the "log in again" btn
+        IdentityPage identityPage = new IdentityPage(driver);
         WebElement reloginBtn = driver.findElement(DdapBy.se("btn-relogin"));
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(reloginBtn));
         reloginBtn.click();
 
-        ICLoginPage icLoginPage = new ICLoginPage(driver);
-        IdentityPage identityPage = icLoginPage.loginAsNciResearcher(IdentityPage::new);
-        System.out.println(identityPage.getLinkableIdentities());
         assertThat(identityPage.getLinkableIdentities(), hasItem("<persona>"));
     }
+
 
     @Test
     public void verifyICIdentityProviders() {
