@@ -4,7 +4,8 @@
     <header>
       <h1 class="flex flex--column">
         <span>DDAP</span>
-        <span class="sandbox-warning"
+        <span *ngIf="isSandbox"
+              class="sandbox-warning"
               matTooltip="This is sandbox testing environment">
           Sandbox environment
         </span>
@@ -12,7 +13,8 @@
     </header>
 
     <mat-nav-list>
-      <div class="ddap-realm-select">
+      <div *ngIf="isSandbox"
+           class="ddap-realm-select">
         <ddap-realm-input></ddap-realm-input>
       </div>
 

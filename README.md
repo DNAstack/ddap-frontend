@@ -30,8 +30,8 @@ _Note_: Order is important.
 1. Run frontend build command: `npm run build:dev` (starts a build server that writes changed files to `target/classes/static`)
 or `npm run build:watch` (same functionality, but includes a linter).
 2. Run the spring boot:
- - in dev mode: `mvn spring-boot:run -Pdev` (`-Pdev` stops maven from running the full frontend build)
- - with basic auth enabled `mvn spring-boot:run -Pdev -Dspring-boot.run.profiles=basic-auth`
+ - in dev mode: `mvn spring-boot:run -Dconfiguration=staging` (`-Pdev` stops maven from running the full frontend build)
+ - with basic auth enabled `mvn spring-boot:run -Pdev -Dspring-boot.run.profiles=basic-auth -Dconfiguration=staging`
 
 
 ## API Gateway

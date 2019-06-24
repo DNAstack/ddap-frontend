@@ -9,7 +9,7 @@ import { AccountLink } from './account-link.model';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
 import { IdentityService } from './identity.service';
-import IdentityStore from './identity.store';
+import { IdentityStore } from './identity.store';
 import { identityProviderMetadataExists, identityProviders } from './providers.constants';
 
 @Component({

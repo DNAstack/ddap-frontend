@@ -10,7 +10,7 @@ import { IdentityService } from './identity.service';
 @Injectable({
   providedIn: 'root',
 })
-export default class IdentityStore {
+export class IdentityStore {
 
   private _identity: ReplaySubject<Identity> = new ReplaySubject(1);
   // tslint:disable-next-line:member-ordering

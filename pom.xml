@@ -16,6 +16,8 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<!--	One of "prod", "staging"	-->
+		<configuration>${env.configuration}</configuration>
 		<angular.project.location>angular</angular.project.location>
 		<angular.project.nodeinstallation>node_installation</angular.project.nodeinstallation>
 		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
@@ -287,7 +289,7 @@
 									<goal>npm</goal>
 								</goals>
 								<configuration>
-									<arguments>run build:prod</arguments>
+									<arguments>run build:${configuration}</arguments>
 								</configuration>
 							</execution>
 						</executions>

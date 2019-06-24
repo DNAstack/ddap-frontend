@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-import IdentityStore from '../../identity/identity.store';
+import { IdentityStore } from '../../identity/identity.store';
 
 import { RealmChangeConfirmationDialogModel } from './realm-change-confirmation-dialog.model';
 

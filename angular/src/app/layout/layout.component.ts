@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
+import { environment } from '../../environments/environment';
 import { Identity } from '../identity/identity.model';
-import IdentityStore from '../identity/identity.store';
+import { IdentityStore } from '../identity/identity.store';
 import { Profile } from '../identity/profile.model';
 
 @Component({
@@ -12,6 +13,7 @@ import { Profile } from '../identity/profile.model';
 })
 export class LayoutComponent implements OnInit {
 
+  isSandbox: boolean = environment.sandbox;
   profile: Profile = null;
   isIcAdmin = false;
   isDamAdmin = false;
