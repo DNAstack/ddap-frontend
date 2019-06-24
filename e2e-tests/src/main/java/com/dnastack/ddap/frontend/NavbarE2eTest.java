@@ -286,8 +286,8 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         // Login happens automatically because we are using personas and we hint to the IC how to log us in to the new realm.
         AnyDdapPage anyPage = confirmationRealmChangeDialog.confirmChangeRealmDialog();
 
-        // If we don't wrap this there is a race condition before input field is reset.
-        new WebDriverWait(driver, 2)
+        // Wrap this with large timeout because redirect to IC and back happens here
+        new WebDriverWait(driver, 10)
                 .ignoring(AssertionError.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(d -> {
@@ -305,8 +305,8 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ConfirmationRealmChangeDialog confirmationRealmChangeDialog = ddapPage.getNavBar().setRealm(otherRealm);
         AnyDdapPage ddapPage = confirmationRealmChangeDialog.cancelChangeRealmDialog();
 
-        // If we don't wrap this there is a race condition before input field is reset.
-        new WebDriverWait(driver, 2)
+        // Wrap this with large timeout because redirect to IC and back happens here
+        new WebDriverWait(driver, 10)
                 .ignoring(AssertionError.class)
                 .until(d -> {
                     assertThat(ddapPage.getNavBar().getRealm(), is(not(otherRealm)));
