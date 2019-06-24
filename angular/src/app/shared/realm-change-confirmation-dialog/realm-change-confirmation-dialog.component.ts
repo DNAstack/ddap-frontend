@@ -1,6 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
+import IdentityStore from '../../identity/identity.store';
+
 import { RealmChangeConfirmationDialogModel } from './realm-change-confirmation-dialog.model';
 
 @Component({
@@ -11,7 +13,8 @@ import { RealmChangeConfirmationDialogModel } from './realm-change-confirmation-
 export class RealmChangeConfirmationDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<RealmChangeConfirmationDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: RealmChangeConfirmationDialogModel) {
+              @Inject(MAT_DIALOG_DATA) public data: RealmChangeConfirmationDialogModel,
+              private identityStore: IdentityStore) {
     dialogRef.afterClosed().subscribe(acknowledged => {
       if (acknowledged) {
         this.changeRealmAndGoToLogin();
@@ -20,7 +23,10 @@ export class RealmChangeConfirmationDialogComponent {
   }
 
   private changeRealmAndGoToLogin() {
-    window.location.href = `/api/v1alpha/${this.data.realm}/identity/login`;
+    this.identityStore.getLoginHintForPrimaryAccount()
+      .subscribe((loginHint) => {
+        window.location.href = `/api/v1alpha/${this.data.realm}/identity/login?loginHint=${loginHint}`;
+      });
   }
 
 }

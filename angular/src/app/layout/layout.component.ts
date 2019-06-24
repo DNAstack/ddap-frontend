@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
 import { Identity } from '../identity/identity.model';
-import { IdentityService } from '../identity/identity.service';
+import IdentityStore from '../identity/identity.store';
 import { Profile } from '../identity/profile.model';
 
 @Component({
@@ -21,12 +21,12 @@ export class LayoutComponent implements OnInit {
   constructor(public loader: LoadingBarService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
-              private identityService: IdentityService) {
+              private identityStore: IdentityStore) {
 
   }
 
   ngOnInit() {
-    this.identityService.getIdentity().subscribe(({ account, accesses }: Identity) => {
+    this.identityStore.getIdentity().subscribe(({ account, accesses }: Identity) => {
       this.profile = account.profile;
 
       const getAccess = (target: string) => accesses.find((access) => access.target === target);

@@ -9,6 +9,7 @@ import { AccountLink } from './account-link.model';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
 import { IdentityService } from './identity.service';
+import IdentityStore from './identity.store';
 import { identityProviderMetadataExists, identityProviders } from './providers.constants';
 
 @Component({
@@ -19,7 +20,6 @@ import { identityProviderMetadataExists, identityProviders } from './providers.c
 export class IdentityComponent implements OnInit {
 
   identity: Identity;
-  identitySubscription: Subscription;
   availableAccounts: AccountLink[];
   availableAccountsSubscription: Subscription;
 
@@ -28,6 +28,7 @@ export class IdentityComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private identityService: IdentityService,
+              private identityStore: IdentityStore,
               private claimService: ClaimDefinitionService) {
 
   }
@@ -37,7 +38,7 @@ export class IdentityComponent implements OnInit {
       this.realm = params.realmId;
     });
 
-    this.identitySubscription = this.identityService.getIdentity()
+    this.identityStore.identity
       .subscribe((identity: Identity) => {
         this.identity = identity;
         if (this.hasLinkScope()) {
