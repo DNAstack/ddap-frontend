@@ -2,7 +2,13 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="side" [opened]="true" disableClose>
     <header>
-      <h1>DDAP</h1>
+      <h1 class="flex flex--column">
+        <span>DDAP</span>
+        <span class="sandbox-warning"
+              matTooltip="This is sandbox testing environment">
+          Sandbox environment
+        </span>
+      </h1>
     </header>
 
     <mat-nav-list>
