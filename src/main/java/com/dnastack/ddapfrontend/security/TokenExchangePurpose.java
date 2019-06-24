@@ -1,5 +1,5 @@
 package com.dnastack.ddapfrontend.security;
 
 public enum TokenExchangePurpose {
-    LOGIN, LINK
+    LOGIN, LINK, CLI_LOGIN
 }
