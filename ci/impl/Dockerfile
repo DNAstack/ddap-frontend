@@ -9,7 +9,6 @@
 FROM openjdk:11-jdk-slim AS build
 ARG APP_NAME
 ARG APP_VERSION
-ARG APP_CONFIGURATION
 
 RUN apt-get update
 RUN apt-get -y install curl libatomic1
@@ -35,7 +34,7 @@ ADD target/angular ./angular
 #     org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException: Missing:
 # then update the version number of surefire-junit4 in pom.xml under the
 # dynamicDependencies section of go-offline-maven-plugin configuration.
-RUN ./mvnw -B -o package -Dconfiguration=${APP_CONFIGURATION}
+RUN ./mvnw -B -o package
 
 
 ##
@@ -50,4 +49,4 @@ ARG APP_VERSION
 
 COPY --from=0 /build/target/${APP_NAME}*.jar /app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=basic-auth", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -7,11 +7,12 @@ import java.util.List;
 
 @Builder
 @Data
-public class AccountModel {
+public class IdentityModel {
 
     private Object account;
     private List<String> scopes;
     private List<Access> accesses;
+    private boolean sandbox;
 
     @Data
     public static class Access {

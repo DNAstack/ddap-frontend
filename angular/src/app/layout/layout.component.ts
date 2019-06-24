@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
-import { environment } from '../../environments/environment';
 import { Identity } from '../identity/identity.model';
 import { IdentityStore } from '../identity/identity.store';
 import { Profile } from '../identity/profile.model';
@@ -13,7 +12,7 @@ import { Profile } from '../identity/profile.model';
 })
 export class LayoutComponent implements OnInit {
 
-  isSandbox: boolean = environment.sandbox;
+  isSandbox = false;
   profile: Profile = null;
   isIcAdmin = false;
   isDamAdmin = false;
@@ -28,7 +27,8 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.identityStore.getIdentity().subscribe(({ account, accesses }: Identity) => {
+    this.identityStore.getIdentity().subscribe(({ account, accesses, sandbox }: Identity) => {
+      this.isSandbox = sandbox;
       this.profile = account.profile;
 
       const getAccess = (target: string) => accesses.find((access) => access.target === target);

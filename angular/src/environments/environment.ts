@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  sandbox: true,
   damApiUrl: 'http://localhost:8085/dam/v1alpha',
   ddapApiUrl: 'http://localhost:8085/api/v1alpha',
   idpApiUrl: 'http://localhost:8085/identity/v1alpha',

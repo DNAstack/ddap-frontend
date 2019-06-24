@@ -14,4 +14,5 @@ export interface Identity {
     target: string;
     isAdmin: boolean;
   }];
+  sandbox: boolean;
 }
