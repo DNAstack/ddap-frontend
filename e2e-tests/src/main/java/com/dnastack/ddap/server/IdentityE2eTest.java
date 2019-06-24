@@ -42,7 +42,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
     @Test
     public void testScopes() throws Exception {
         String requestedScope = "link";
-        String icToken = fetchRealPersonaIcToken("mr_hyde", REALM, "");
+        String icToken = fetchRealPersonaIcToken("mr_hyde", REALM, "openid");
         String danToken = fetchRealPersonaDamToken("mr_hyde", REALM);
 
         // @formatter:off
@@ -80,7 +80,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .statusCode(200)
                 .assertThat()
                 .body("scopes", not(empty()))
-                .body("scopes", not(hasItem(requestedScope)));
+                .body("scopes", not(contains("link")));
         // @formatter:on
 
         // @formatter:off
@@ -91,7 +91,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .redirects().follow(false)
                 .when()
-                .get(ddap("/identity/login?persona=nci_researcher&scope=" + requestedScope))
+                .get(ddap("/identity/login?persona=nci_researcher&scope=openid " + requestedScope))
                 .then()
                 .log().body()
                 .log().ifValidationFails()
@@ -100,7 +100,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .extract();
         // @formatter:on
 
-        icToken = fetchRealPersonaIcToken("mr_hyde", REALM, requestedScope);
+        icToken = fetchRealPersonaIcToken("mr_hyde", REALM, "openid", requestedScope);
         danToken = fetchRealPersonaDamToken("mr_hyde", REALM);
 
         // @formatter:off
