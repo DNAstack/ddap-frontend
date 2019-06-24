@@ -242,7 +242,7 @@ public class IdentityController {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is invalid"));
         }
 
-        final String scopes = "account_admin link:" + targetAccountId;
+        final String scopes = format("%s link:%s", DEFAULT_SCOPES, targetAccountId);
         final String state = stateHandler.generateAccountLinkingState(targetAccountId);
 
         switch (type) {
