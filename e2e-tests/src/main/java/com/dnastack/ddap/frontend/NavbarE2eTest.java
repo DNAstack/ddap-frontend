@@ -7,6 +7,7 @@ import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -288,6 +289,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         // If we don't wrap this there is a race condition before input field is reset.
         new WebDriverWait(driver, 2)
                 .ignoring(AssertionError.class)
+                .ignoring(StaleElementReferenceException.class)
                 .until(d -> {
                     assertThat(ddapPage.getNavBar().getRealm(), is(otherRealm));
                     return true;
