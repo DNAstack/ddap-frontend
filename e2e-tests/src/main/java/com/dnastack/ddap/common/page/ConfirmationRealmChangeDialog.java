@@ -11,9 +11,9 @@ public class ConfirmationRealmChangeDialog {
         this.driver = driver;
     }
 
-    public ICLoginPage confirmChangeRealmDialog() {
+    public AnyDdapPage confirmChangeRealmDialog() {
         driver.findElement(DdapBy.se("accept-btn")).click();
-        return new ICLoginPage(driver);
+        return new AnyDdapPage(driver);
     }
 
     public AnyDdapPage cancelChangeRealmDialog() {
