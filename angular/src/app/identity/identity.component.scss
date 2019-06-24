@@ -77,7 +77,12 @@ mat-card {
   .connect-account-warning {
     display: flex;
     align-items: center;
-    color: $warn-color;
+    color: $warn-font-color-alert;
+    border: 0;
+    border-radius: 0;
+    background-color: $warn-background-color-alert;
+    padding: .75rem 1.25rem;
+    margin-bottom: 2rem;
 
     span {
       margin-left: 0.5rem;
