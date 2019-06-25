@@ -17,24 +17,19 @@ idp:
 ddap:
   public-uri: http://localhost:8085
   default-realm: dnastack
-  signingKey: |
-    VGhlcmUgb25jZSB3YXMgYSBsYW5ndWFnZSBjYWxsZWQgYmFzaApJdCdzIHNlbWFudGljcyB3ZXJlIG9mdGVuIHF1aXRlI
-    HJhc2gKQnV0IGl0IHdvcmtlZCwgbW9yZSBvciBsZXNzCkV2ZW4gdGhvdWdoIGl0J3MgYSBtZXNzClNvIEkgZ3Vlc3MgaX
-    Qgc3RheXMgb3V0IG9mIHRoZSB0cmFzaAo=
   cors:
     origins: "http://localhost:4200"
   cookies:
     # Default to false so cookies work on http://localhost
     # e2e tests will remind you to set this true in real deployments!
     secure: false
-  command-line-service:
-    aud: ${ddap.public-uri}
-    ttl: PT10M
-    signingKey: ${ddap.signingKey}
   state-handler:
     aud: ${ddap.public-uri}
     ttl: PT10M
-    signingKey: ${ddap.signingKey}
+    signingKey: |
+      VGhlcmUgb25jZSB3YXMgYSBsYW5ndWFnZSBjYWxsZWQgYmFzaApJdCdzIHNlbWFudGljcyB3ZXJlIG9mdGVuIHF1aXRlI
+      HJhc2gKQnV0IGl0IHdvcmtlZCwgbW9yZSBvciBsZXNzCkV2ZW4gdGhvdWdoIGl0J3MgYSBtZXNzClNvIEkgZ3Vlc3MgaX
+      Qgc3RheXMgb3V0IG9mIHRoZSB0cmFzaAo=
 
 spring:
   cloud:

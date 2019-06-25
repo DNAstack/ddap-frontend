@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.net.URI;
+import java.sql.Date;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Objects;
@@ -23,16 +26,17 @@ import static java.util.Collections.singletonMap;
 public class OAuthStateHandler {
 
     private static final String DESTINATION_AFTER_LOGIN = "destinationAfterLogin";
-    private static final String CLI_SESSION_ID_KEY = "cliSessionId";
-    private final JwtHandler jwtHandler;
+    private final String tokenAudience;
+    private final Duration tokenTtl;
+    private final SecretKey tokenSigningKey;
 
     @Autowired
     public OAuthStateHandler(@Value("${ddap.state-handler.aud}") String tokenAudience,
                              @Value("${ddap.state-handler.ttl}") Duration tokenTtl,
                              @Value("${ddap.state-handler.signingKey}") String tokenSigningKeyBase64) {
-        this.jwtHandler = new JwtHandler(tokenAudience,
-                                         tokenTtl,
-                                         Keys.hmacShaKeyFor(Base64.getMimeDecoder().decode(tokenSigningKeyBase64)));
+        this.tokenAudience = tokenAudience;
+        this.tokenTtl = tokenTtl;
+        this.tokenSigningKey = Keys.hmacShaKeyFor(Base64.getMimeDecoder().decode(tokenSigningKeyBase64));
     }
 
     public String generateAccountLinkingState(String targetAccountId) {
@@ -45,17 +49,14 @@ public class OAuthStateHandler {
                 singletonMap(DESTINATION_AFTER_LOGIN, destinationAfterLogin));
     }
 
-    public String generateCommandLineLoginState(String cliSessionId) {
-        return generateState(TokenExchangePurpose.CLI_LOGIN,
-                             singletonMap(CLI_SESSION_ID_KEY, cliSessionId));
-    }
-
-
     private String generateState(TokenExchangePurpose purpose, Map<String, Object> additionalClaims) {
-        return jwtHandler.createBuilder(JwtHandler.TokenKind.STATE)
-                         .claim("purpose", purpose.toString())
-                         .addClaims(additionalClaims)
-                         .compact();
+        return Jwts.builder()
+                .setAudience(tokenAudience)
+                .setExpiration(Date.from(Instant.now().plus(tokenTtl)))
+                .claim("purpose", purpose.toString())
+                .addClaims(additionalClaims)
+                .signWith(tokenSigningKey)
+                .compact();
     }
 
     public TokenExchangePurpose parseAndVerify(String stateStringParam, String stateStringCookie) {
@@ -72,17 +73,14 @@ public class OAuthStateHandler {
     }
 
     private Jws<Claims> parseStateToken(String jwt) {
-        return jwtHandler.createParser(JwtHandler.TokenKind.STATE)
-                         .parseClaimsJws(jwt);
+        return Jwts.parser()
+                        .requireAudience(tokenAudience)
+                        .setSigningKey(tokenSigningKey)
+                        .parseClaimsJws(jwt);
     }
 
     public Optional<URI> getDestinationAfterLogin(String stateToken) {
         return Optional.ofNullable(parseStateToken(stateToken).getBody().get(DESTINATION_AFTER_LOGIN, String.class))
                 .map(URI::create);
     }
-
-    public Optional<String> extractCliSessionId(String stateToken) {
-        return Optional.ofNullable(parseStateToken(stateToken).getBody().get(CLI_SESSION_ID_KEY, String.class));
-    }
-
 }

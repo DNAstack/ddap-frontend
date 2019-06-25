@@ -1,13 +1,11 @@
 package com.dnastack.ddapfrontend.route;
 
-import com.dnastack.ddapfrontend.cli.CommandLineLoginService;
 import com.dnastack.ddapfrontend.client.AuthAccessTesterClient;
 import com.dnastack.ddapfrontend.client.ic.IcAccount;
 import com.dnastack.ddapfrontend.client.ic.ReactiveIdentityConcentratorClient;
 import com.dnastack.ddapfrontend.client.ic.TokenExchangeException;
 import com.dnastack.ddapfrontend.client.ic.TokenResponse;
 import com.dnastack.ddapfrontend.config.ProfileService;
-import com.dnastack.ddapfrontend.model.CommandLineLoginStartModel;
 import com.dnastack.ddapfrontend.model.IdentityModel;
 import com.dnastack.ddapfrontend.security.OAuthStateHandler;
 import com.dnastack.ddapfrontend.security.TokenExchangePurpose;
@@ -55,8 +53,6 @@ public class IdentityController {
 
     @Autowired
     private ReactiveIdentityConcentratorClient idpClient;
-    @Autowired
-    private CommandLineLoginService commandLineLoginService;
     @Autowired
     private UserTokenCookiePackager cookiePackager;
     @Autowired
@@ -111,15 +107,6 @@ public class IdentityController {
         }
         Optional<JwtSubject> subject = dangerousStopgapExtractSubject(icToken.get());
         return Mono.just(ResponseEntity.ok().body(subject.get()));
-    }
-
-    @GetMapping(path = "/login", params = "user_agent=cli")
-    public Mono<CommandLineLoginStartModel> commandLineLogin(ServerHttpRequest request,
-                                                             @PathVariable String realm,
-                                                             @RequestParam(defaultValue = DEFAULT_SCOPES) String scope) {
-        return Mono.just(commandLineLoginService.initiateCommandLineLogin(selfLinkToApi(request, realm, ""),
-                                                                          realm,
-                                                                          scope));
     }
 
     @GetMapping("/login")
