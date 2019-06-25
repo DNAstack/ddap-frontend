@@ -1,13 +1,12 @@
 package com.dnastack.ddapfrontend.route;
 
-import com.dnastack.ddapfrontend.cli.CommandLineLoginService;
 import com.dnastack.ddapfrontend.client.AuthAccessTesterClient;
 import com.dnastack.ddapfrontend.client.ic.IcAccount;
 import com.dnastack.ddapfrontend.client.ic.ReactiveIdentityConcentratorClient;
 import com.dnastack.ddapfrontend.client.ic.TokenExchangeException;
 import com.dnastack.ddapfrontend.client.ic.TokenResponse;
 import com.dnastack.ddapfrontend.config.ProfileService;
-import com.dnastack.ddapfrontend.model.CommandLineLoginStartModel;
+import com.dnastack.ddapfrontend.http.UriUtil;
 import com.dnastack.ddapfrontend.model.IdentityModel;
 import com.dnastack.ddapfrontend.security.OAuthStateHandler;
 import com.dnastack.ddapfrontend.security.TokenExchangePurpose;
@@ -35,7 +34,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static com.dnastack.ddapfrontend.header.XForwardUtil.getExternalPath;
+import static com.dnastack.ddapfrontend.http.XForwardUtil.getExternalPath;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
@@ -55,8 +54,6 @@ public class IdentityController {
 
     @Autowired
     private ReactiveIdentityConcentratorClient idpClient;
-    @Autowired
-    private CommandLineLoginService commandLineLoginService;
     @Autowired
     private UserTokenCookiePackager cookiePackager;
     @Autowired
@@ -113,15 +110,6 @@ public class IdentityController {
         return Mono.just(ResponseEntity.ok().body(subject.get()));
     }
 
-    @GetMapping(path = "/login", params = "user_agent=cli")
-    public Mono<CommandLineLoginStartModel> commandLineLogin(ServerHttpRequest request,
-                                                             @PathVariable String realm,
-                                                             @RequestParam(defaultValue = DEFAULT_SCOPES) String scope) {
-        return Mono.just(commandLineLoginService.initiateCommandLineLogin(selfLinkToApi(request, realm, ""),
-                                                                          realm,
-                                                                          scope));
-    }
-
     @GetMapping("/login")
     public Mono<? extends ResponseEntity<?>> apiLogin(ServerHttpRequest request,
                                                       @PathVariable String realm,
@@ -134,46 +122,22 @@ public class IdentityController {
 
         if (persona != null) {
             log.debug("Performing direct persona login for {}", persona);
-            return idpClient.personaLogin(realm, scope, persona, selfLinkToApi(request, realm, ""))
-                    .map(tokenResponse -> assembleTokenResponse(selfLinkToUi(request, realm, "data"), tokenResponse))
+            return idpClient.personaLogin(realm, scope, persona, UriUtil.selfLinkToApi(request, realm, ""))
+                    .map(tokenResponse -> assembleTokenResponse(UriUtil.selfLinkToUi(request, realm, "data"), tokenResponse))
                     .doOnError(exception -> log.info("Failed to negotiate token", exception));
 
         } else {
-            final URI postLoginTokenEndpoint = selfLinkToApi(request, realm, "identity/token");
+            final URI postLoginTokenEndpoint = UriUtil.selfLinkToApi(request, realm, "identity/token");
             final URI loginUri = idpClient.getAuthorizeUrl(realm, state, scope, postLoginTokenEndpoint, loginHint);
             log.debug("Redirecting to IdP login chooser page {}", loginUri);
 
-            URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
+            URI cookieDomainPath = UriUtil.selfLinkToApi(request, realm, "identity/token");
             ResponseEntity<Object> redirectToLoginPage = ResponseEntity.status(TEMPORARY_REDIRECT)
                     .location(loginUri)
                     .header(SET_COOKIE, cookiePackager.packageToken(state, cookieDomainPath.getHost(), CookieKind.OAUTH_STATE).toString())
                     .build();
             return Mono.just(redirectToLoginPage);
         }
-    }
-
-    /**
-     * Returns a fully-qualified URL pointing to a UI route in the given realm on this DDAP instance.
-     *
-     * @param request                 the inbound request from the user's browser (for calculating our return address)
-     * @param realm                   the realm name to use in the returned URI
-     * @param pathWithoutLeadingSlash the path component that comes after the realm. Must not begin with a slash.
-     * @return absolute URI of the DDAP token endpoint for the given realm. Never null.
-     */
-    private static URI selfLinkToUi(ServerHttpRequest request, String realm, String pathWithoutLeadingSlash) {
-        return URI.create(getExternalPath(request, format("/%s/%s", realm, pathWithoutLeadingSlash)));
-    }
-
-    /**
-     * Returns a fully-qualified URL pointing to an API resource/endpoint in the given realm on this DDAP instance.
-     *
-     * @param request                 the inbound request from the user's browser (for calculating our return address)
-     * @param realm                   the realm name to use in the returned URI
-     * @param pathWithoutLeadingSlash the path component that comes after the realm. Must not begin with a slash.
-     * @return absolute URI of the DDAP token endpoint for the given realm. Never null.
-     */
-    private static URI selfLinkToApi(ServerHttpRequest request, String realm, String pathWithoutLeadingSlash) {
-        return URI.create(getExternalPath(request, format("/api/v1alpha/%s/%s", realm, pathWithoutLeadingSlash)));
     }
 
     /**
@@ -200,9 +164,9 @@ public class IdentityController {
                 .flatMap(tokenResponse -> {
                     TokenExchangePurpose tokenExchangePurpose = stateHandler.parseAndVerify(stateParam, stateFromCookie);
                     Optional<URI> customDestination = stateHandler.getDestinationAfterLogin(stateParam)
-                            .map(possiblyRelativeUrl -> selfLinkToUi(request, realm, "").resolve(possiblyRelativeUrl));
+                            .map(possiblyRelativeUrl -> UriUtil.selfLinkToUi(request, realm, "").resolve(possiblyRelativeUrl));
                     if (tokenExchangePurpose == TokenExchangePurpose.LOGIN) {
-                        final URI ddapDataBrowserUrl = customDestination.orElseGet(() -> selfLinkToUi(request, realm, "data"));
+                        final URI ddapDataBrowserUrl = customDestination.orElseGet(() -> UriUtil.selfLinkToUi(request, realm, "data"));
                         return Mono.just(assembleTokenResponse(ddapDataBrowserUrl, tokenResponse));
                     } else if (tokenExchangePurpose == TokenExchangePurpose.LINK) {
                         return finishAccountLinking(
@@ -260,14 +224,14 @@ public class IdentityController {
 
         switch (type) {
             case EXTERNAL_IDP:
-                final URI ddapTokenEndpoint = selfLinkToApi(request, realm, "identity/token");
-                URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
+                final URI ddapTokenEndpoint = UriUtil.selfLinkToApi(request, realm, "identity/token");
+                URI cookieDomainPath = UriUtil.selfLinkToApi(request, realm, "identity/token");
                 return Mono.just(ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
                         .location(idpClient.getDirectLoginUrl(realm, state, scopes, ddapTokenEndpoint, provider))
                         .header(SET_COOKIE, cookiePackager.packageToken(state, cookieDomainPath.getHost(), CookieKind.OAUTH_STATE).toString())
                         .build());
             case PERSONA:
-                return idpClient.personaLogin(realm, scopes, provider, selfLinkToApi(request, realm, ""))
+                return idpClient.personaLogin(realm, scopes, provider, UriUtil.selfLinkToApi(request, realm, ""))
                         .doOnError(exception -> log.info("Failed to negotiate persona token at beginning of account linking", exception))
                         .flatMap(tokenResponse -> finishAccountLinking(
                                 request, tokenResponse.getAccessToken(), request.getCookies().getFirst("ic_token").getValue(), realm
@@ -283,7 +247,7 @@ public class IdentityController {
         String baseAccountId = dangerousStopgapExtractSubject(baseAccountLinkToken).map(JwtSubject::getSub).orElse(null);
 
         return idpClient.linkAccounts(realm, baseAccountId, baseAccountLinkToken, newAccountId, newAccountLinkToken)
-                .map(success -> ResponseEntity.status(307).location(selfLinkToUi(request, realm, "identity")).build());
+                .map(success -> ResponseEntity.status(307).location(UriUtil.selfLinkToUi(request, realm, "identity")).build());
     }
 
     private String dangerousStopgapParseToken(String jwt) {

@@ -20,14 +20,14 @@ public class JwtHandler {
         return Jwts.builder()
                    .setAudience(tokenAudience)
                    .setExpiration(Date.from(Instant.now().plus(tokenTtl)))
-                   .claim("tokenKind", kind.name())
+                   .claim("tokenKind", kind.toString().toLowerCase())
                    .signWith(tokenSigningKey);
     }
 
     public JwtParser createParser(TokenKind kind) {
         return Jwts.parser()
                    .requireAudience(tokenAudience)
-                   .require("tokenKind", kind.name())
+                   .require("tokenKind", kind.toString().toLowerCase())
                    .setSigningKey(tokenSigningKey);
     }
 
