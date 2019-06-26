@@ -12,9 +12,6 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
-import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
-import org.springframework.cloud.openfeign.support.SpringDecoder;
-import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,16 +37,12 @@ public class DamClientConfiguration {
     private ObjectFactory<HttpMessageConverters> messageConverters;
 
     //override the encoder
-    @Bean
-    public Encoder springEncoder(){
-        return new SpringEncoder(this.messageConverters);
-    }
+    @Autowired
+    private Encoder springEncoder;
 
     //override the encoder
-    @Bean
-    public Decoder springDecoder(){
-        return new ResponseEntityDecoder(new SpringDecoder(this.messageConverters));
-    }
+    @Autowired
+    private Decoder springDecoder;
 
     private static FeignDamClient retryableClient(int retries,
                                                   double timeoutExponentialScalingBase,
@@ -110,8 +103,8 @@ public class DamClientConfiguration {
             return Feign.builder()
                         .client(httpClient)
                         .options(new Request.Options(connectTimeoutMillis, readTimeoutMillis))
-                        .encoder(springEncoder())
-                        .decoder(springDecoder())
+                        .encoder(springEncoder)
+                        .decoder(springDecoder)
                         .logger(new Logger() {
                             @Override
                             protected void log(String configKey, String format, Object... args) {

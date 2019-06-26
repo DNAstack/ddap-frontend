@@ -1,4 +1,4 @@
-package com.dnastack.ddapfrontend.client.dam;
+package com.dnastack.ddapfrontend.client.dam.model;
 
 import com.dnastack.ddapfrontend.model.ViewModel;
 import lombok.Data;

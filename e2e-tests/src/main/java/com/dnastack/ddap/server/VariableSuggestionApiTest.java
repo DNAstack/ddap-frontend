@@ -31,20 +31,22 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
         /* Run the aggregate search query on the realm */
         // @formatter:off
         given()
-                    .log().method()
-                    .log().uri()
-                    .when()
-                    .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
-                    .cookie("dam_token", validPersonaToken)
-                    .get("/api/v1alpha/" + REALM + "/serviceTemplates/variables?serviceTemplate=bigquery")
-                    .then()
-                    .log().ifValidationFails()
-                    .contentType(JSON)
-                    .statusCode(200)
-                    .body("project", notNullValue())
-                    .body("project.regexp", notNullValue(String.class))
-                    .body("dataset", notNullValue())
-                    .body("dataset.regexp", notNullValue(String.class));
+                .log().method()
+                .log().uri()
+                .when()
+                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+                .cookie("dam_token", validPersonaToken)
+                .pathParam("realm", REALM)
+                .queryParam("serviceTemplate", "bigquery")
+                .get("/api/v1alpha/{realm}/serviceTemplates/variables")
+                .then()
+                .log().ifValidationFails()
+                .contentType(JSON)
+                .statusCode(200)
+                .body("project", notNullValue())
+                .body("project.regexp", notNullValue(String.class))
+                .body("dataset", notNullValue())
+                .body("dataset.regexp", notNullValue(String.class));
         // @formatter:on
     }
 
@@ -60,7 +62,9 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
                 .when()
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("dam_token", validPersonaToken)
-                .get("/api/v1alpha/" + REALM + "/serviceTemplates/variables?serviceTemplate=gcs")
+                .pathParam("realm", REALM)
+                .queryParam("serviceTemplate", "gcs")
+                .get("/api/v1alpha/{realm}/serviceTemplates/variables")
                 .then()
                 .log().ifValidationFails()
                 .contentType(JSON)
@@ -69,6 +73,28 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
                 .body("project.regexp", notNullValue(String.class))
                 .body("bucket", notNullValue())
                 .body("bucket.regexp", notNullValue(String.class));
+        // @formatter:on
+    }
+
+    @Test
+    public void shouldGetBadRequest() throws IOException {
+        String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
+
+        /* Run the aggregate search query on the realm */
+        // @formatter:off
+        given()
+                .log().method()
+                .log().uri()
+                .when()
+                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+                .cookie("dam_token", validPersonaToken)
+                .pathParam("realm", REALM)
+                .queryParam("serviceTemplate", "invalid")
+                .get("/api/v1alpha/{realm}/serviceTemplates/variables")
+                .then()
+                .log().ifValidationFails()
+                .contentType(JSON)
+                .statusCode(400);
         // @formatter:on
     }
 }

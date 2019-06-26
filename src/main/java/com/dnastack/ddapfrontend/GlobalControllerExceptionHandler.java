@@ -32,7 +32,7 @@ public class GlobalControllerExceptionHandler {
                 .body(new DdapErrorResponse(ex.getMessage(), 400));
     }
 
-    @ExceptionHandler({AccountLinkingFailedException.class, CliSessionNotFound.class})
+    @ExceptionHandler({IllegalArgumentException.class, AccountLinkingFailedException.class, CliSessionNotFound.class})
     public ResponseEntity<DdapErrorResponse> handle(RuntimeException ex) {
         return ResponseEntity.status(400).body(new DdapErrorResponse(ex.getMessage(), 400));
     }
