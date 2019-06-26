@@ -2,10 +2,12 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 import View = dam.v1.View;
 import { Subscription } from 'rxjs/Subscription';
 
 import { dam } from '../../../../shared/proto/dam-service';
+import { AccessPolicyService } from '../../../access-policies/access-policies.service';
 import { ServiceDefinitionService } from '../../../service-definitions/service-definitions.service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 
@@ -22,9 +24,11 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   viewForm: FormGroup;
   templates: EntityModel[];
   templatesSubscription: Subscription;
+  policyValues$: Observable<string[]>;
 
   constructor(private formBuilder: FormBuilder,
-              private serviceTemplateService: ServiceDefinitionService) {
+              private serviceTemplateService: ServiceDefinitionService,
+              private accessPoliciesServices: AccessPolicyService) {
   }
 
   get serviceTemplate(): string {
@@ -71,6 +75,13 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
         this.rebuildVariablesForItemsForm();
       }
     });
+
+    this.policyValues$ = this.accessPoliciesServices.getList()
+      .pipe(
+        map((policies: EntityModel[]) => {
+          return policies.map((policy) => policy.name);
+        })
+      );
   }
 
   ngOnDestroy(): void {

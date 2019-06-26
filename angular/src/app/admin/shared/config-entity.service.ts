@@ -30,7 +30,7 @@ export class ConfigEntityService implements EntityService {
       );
   }
 
-  getList(innerMapFn?): Observable<any[]> {
+  getList(innerMapFn?): Observable<EntityModel[]> {
     return this.get().pipe(
       map(EntityModel.arrayFromMap),
       map(issuerList => innerMapFn ? issuerList.map(innerMapFn) : issuerList)

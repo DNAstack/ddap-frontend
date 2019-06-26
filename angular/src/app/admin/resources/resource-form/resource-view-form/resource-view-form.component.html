@@ -175,16 +175,19 @@
             <p>{{ role.value.ui.description }}</p>
             <div class="row"
                  formGroupName="roles">
-              <div class="col"
-                   [formGroupName]="role.key">
-                <tag-input formControlName="policies"
-                           [attr.data-se]="'view-role-policies-' + role.key"
-                           secondaryPlaceholder="Add Policy"
-                           placeholder="+ Policy"
-                           editable="true"
-                           modelAsStrings="true">
-                </tag-input>
-              </div>
+              <ng-container *ngIf="policyValues$ | async as policies">
+                <div class="col"
+                     [formGroupName]="role.key">
+                  <tag-input formControlName="policies"
+                             [attr.data-se]="'view-role-policies-' + role.key"
+                             secondaryPlaceholder="Add Policy"
+                             placeholder="+ Policy"
+                             editable="true"
+                             modelAsStrings="true">
+                    <tag-input-dropdown [autocompleteItems]="policies"></tag-input-dropdown>
+                  </tag-input>
+                </div>
+              </ng-container>
             </div>
           </li>
         </ul>
