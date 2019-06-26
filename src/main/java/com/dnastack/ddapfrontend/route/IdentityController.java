@@ -34,6 +34,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import static com.dnastack.ddapfrontend.http.UriUtil.selfLinkToApi;
 import static com.dnastack.ddapfrontend.http.XForwardUtil.getExternalPath;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
@@ -122,16 +123,16 @@ public class IdentityController {
 
         if (persona != null) {
             log.debug("Performing direct persona login for {}", persona);
-            return idpClient.personaLogin(realm, scope, persona, UriUtil.selfLinkToApi(request, realm, ""))
+            return idpClient.personaLogin(realm, scope, persona, selfLinkToApi(request, realm, ""))
                     .map(tokenResponse -> assembleTokenResponse(UriUtil.selfLinkToUi(request, realm, "data"), tokenResponse))
                     .doOnError(exception -> log.info("Failed to negotiate token", exception));
 
         } else {
-            final URI postLoginTokenEndpoint = UriUtil.selfLinkToApi(request, realm, "identity/token");
+            final URI postLoginTokenEndpoint = selfLinkToApi(request, realm, "identity/token");
             final URI loginUri = idpClient.getAuthorizeUrl(realm, state, scope, postLoginTokenEndpoint, loginHint);
             log.debug("Redirecting to IdP login chooser page {}", loginUri);
 
-            URI cookieDomainPath = UriUtil.selfLinkToApi(request, realm, "identity/token");
+            URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
             ResponseEntity<Object> redirectToLoginPage = ResponseEntity.status(TEMPORARY_REDIRECT)
                     .location(loginUri)
                     .header(SET_COOKIE, cookiePackager.packageToken(state, cookieDomainPath.getHost(), CookieKind.OAUTH_STATE).toString())
@@ -188,7 +189,10 @@ public class IdentityController {
         if (icToken.isEmpty()) {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
         }
-
+        final Optional<String> refreshToken = cookiePackager.extractToken(request, CookieKind.REFRESH);
+        if (refreshToken.isEmpty()) {
+            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
+        }
         final String targetAccountId = dangerousStopgapExtractSubject(icToken.get()).map(JwtSubject::getSub).orElse(null);
         if (targetAccountId == null) {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is invalid"));
@@ -196,10 +200,16 @@ public class IdentityController {
 
         final String accountId = dangerousStopgapExtractSubject(icToken.get()).map(JwtSubject::getSub).orElse(null);
 
-        return idpClient.unlinkAccount(realm, accountId, icToken.get(), subjectName)
-                        .map(message -> ResponseEntity.status(200)
-                                                      // Need to return valid JSON object for angular client
-                                                      .body(Map.of("message", message)));
+        Mono<String> unlinkAccountMono = idpClient.unlinkAccount(realm, accountId, icToken.get(), subjectName);
+        Mono<TokenResponse> refreshAccessTokenMono = idpClient.refreshAccessToken(realm, refreshToken.get());
+
+        return Mono.zip(unlinkAccountMono, refreshAccessTokenMono, ((s, tokenResponse) -> {
+            URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
+            return ResponseEntity.status(200)
+                    .header(SET_COOKIE, cookiePackager.packageToken(tokenResponse.getAccessToken(), cookieDomainPath.getHost(), CookieKind.IC).toString())
+                    .header(SET_COOKIE, cookiePackager.packageToken(tokenResponse.getIdToken(), cookieDomainPath.getHost(), CookieKind.DAM).toString())
+                    .body(Map.of("message", s));
+        }));
     }
 
     @GetMapping("/link")
@@ -224,14 +234,14 @@ public class IdentityController {
 
         switch (type) {
             case EXTERNAL_IDP:
-                final URI ddapTokenEndpoint = UriUtil.selfLinkToApi(request, realm, "identity/token");
-                URI cookieDomainPath = UriUtil.selfLinkToApi(request, realm, "identity/token");
+                final URI ddapTokenEndpoint = selfLinkToApi(request, realm, "identity/token");
+                URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
                 return Mono.just(ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
                         .location(idpClient.getDirectLoginUrl(realm, state, scopes, ddapTokenEndpoint, provider))
                         .header(SET_COOKIE, cookiePackager.packageToken(state, cookieDomainPath.getHost(), CookieKind.OAUTH_STATE).toString())
                         .build());
             case PERSONA:
-                return idpClient.personaLogin(realm, scopes, provider, UriUtil.selfLinkToApi(request, realm, ""))
+                return idpClient.personaLogin(realm, scopes, provider, selfLinkToApi(request, realm, ""))
                         .doOnError(exception -> log.info("Failed to negotiate persona token at beginning of account linking", exception))
                         .flatMap(tokenResponse -> finishAccountLinking(
                                 request, tokenResponse.getAccessToken(), request.getCookies().getFirst("ic_token").getValue(), realm
