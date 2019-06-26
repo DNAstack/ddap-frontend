@@ -36,4 +36,10 @@ public class JwtTestUtil {
         return (String) body.get("sub");
     }
 
+    public static Map<String, Object> getIdentities(String jwt) {
+        Map<String, Object> body = getBody(jwt);
+        assertThat(body, hasKey("identities"));
+        return (Map<String, Object>) body.get("identities");
+    }
+
 }

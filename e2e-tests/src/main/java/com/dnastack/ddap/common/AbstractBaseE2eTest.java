@@ -135,27 +135,32 @@ public abstract class AbstractBaseE2eTest {
         return fetchRealPersonaToken(personaName, "dam_token", realmName);
     }
 
+    protected String fetchRealPersonaRefreshToken(String personaName, String realmName) throws IOException {
+        return fetchRealPersonaToken(personaName, "refresh_token", realmName);
+    }
+
+
     private String fetchRealPersonaToken(String personaName, String tokenCookieName, String realmName, String ... scopes) throws IOException {
         final CookieStore cookieStore = performPersonaLogin(personaName, realmName, scopes);
 
-        BasicClientCookie icTokenCookie = (BasicClientCookie) cookieStore.getCookies().stream()
+        BasicClientCookie tokenCookie = (BasicClientCookie) cookieStore.getCookies().stream()
                 .filter(c -> tokenCookieName.equals(c.getName()))
                 .findFirst()
                 .orElse(null);
 
-        assertThat(icTokenCookie, notNullValue());
+        assertThat(tokenCookie, notNullValue());
 
         // Require cookies to be marked as secure unless we're testing on localhost
         if (!(DDAP_BASE_URL.startsWith("http://localhost:") || DDAP_BASE_URL.startsWith("http://host.docker.internal:"))) {
             assertThat("It looks like DDAP_COOKIES_SECURE=true isn't set on this deployment",
-                    icTokenCookie.containsAttribute("secure"), is(true));
-            assertThat(icTokenCookie.getAttribute("secure"), nullValue());
+                    tokenCookie.containsAttribute("secure"), is(true));
+            assertThat(tokenCookie.getAttribute("secure"), nullValue());
         }
 
-        assertThat(icTokenCookie.containsAttribute("httponly"), is(true));
-        assertThat(icTokenCookie.getAttribute("httponly"), nullValue());
+        assertThat(tokenCookie.containsAttribute("httponly"), is(true));
+        assertThat(tokenCookie.getAttribute("httponly"), nullValue());
 
-        return icTokenCookie.getValue();
+        return tokenCookie.getValue();
     }
 
     private static CookieStore performPersonaLogin(String personaName, String realmName, String ... scopes) throws IOException {

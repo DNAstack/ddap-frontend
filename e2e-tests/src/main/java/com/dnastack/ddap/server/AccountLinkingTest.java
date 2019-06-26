@@ -8,6 +8,7 @@ import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,6 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @SuppressWarnings("Duplicates")
+@Slf4j
 public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(AccountLinkingTest.class.getSimpleName());
@@ -88,20 +90,19 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
     @Test
     public void linkIcLoginExternalAccountShouldPassLinkScopeForAccountInIcToken() throws Exception {
         String icTokenJwt = fetchRealPersonaIcToken("nci_researcher", REALM);
+        String refreshTokenJwt = fetchRealPersonaRefreshToken("nci_researcher", REALM);
         String baseAccountId = JwtTestUtil.getSubject(icTokenJwt);
-
         String requestedScope = "link:" + baseAccountId;
 
         // @formatter:off
         given()
-
             .log().method()
             .log().cookies()
             .log().uri()
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("ic_token", icTokenJwt)
+            .cookie("refresh_token", refreshTokenJwt)
             .redirects().follow(false)
-
         .when()
             .get(ddap("/identity/link?provider=google"))
         .then()
@@ -115,7 +116,8 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     @Test
     public void linkAndUnlinkAccount() throws Exception {
-        String icTokenJwtBeforeLinking = fetchRealPersonaIcToken("mr_hyde", REALM, "openid", "link");
+        String icTokenJwtBeforeLinking = fetchRealPersonaIcToken("mr_hyde", REALM, "openid", "identities", "link");
+        String refreshTokenJwt = fetchRealPersonaRefreshToken("nci_researcher", REALM);
         String baseAccountId = JwtTestUtil.getSubject(icTokenJwtBeforeLinking);
 
         // Link account
@@ -126,6 +128,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
             .log().uri()
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("ic_token", icTokenJwtBeforeLinking)
+                .cookie("refresh_token", refreshTokenJwt)
             .redirects().follow(false)
         .when()
             .get(ddap("/identity/link?provider=dr_jekyll&type=persona"))
@@ -133,9 +136,9 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
             .log().body()
             .log().ifValidationFails()
             .statusCode(307)
+                .header("Set-Cookie", startsWith("dam_token"))
             .header("Location", endsWith("/" + REALM + "/identity"));
         // @formatter:on
-
 
         // check that we can query my account, and that accounts were linked
         // @formatter:off
@@ -166,13 +169,15 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
                .log().uri()
                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                .cookie("ic_token", icTokenAfterLinking)
+                .cookie("refresh_token", refreshTokenJwt)
                .redirects().follow(false)
                .when()
                .delete(ddap("/identity/link/mr_hyde@era.nih.gov"))
                .then()
                .log().body()
                .log().ifValidationFails()
-               .statusCode(200);
+               .statusCode(200)
+                .header("Set-Cookie", startsWith("dam_token"));
         // @formatter:on
 
         // check that we can query my account, and that accounts are no-longer linked
