@@ -92,6 +92,26 @@ public class ReactiveIdentityConcentratorClient {
                 .flatMap(this::extractIdpTokens);
     }
 
+    public Mono<TokenResponse> refreshAccessToken(String realm, String refreshToken) {
+        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/token" +
+                "?grant_type=refresh_token" +
+                "&refresh_token={refreshToken}" +
+                "&clientId={clientId}" +
+                "&clientSecret={clientSecret}");
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("refreshToken", refreshToken);
+        variables.put("clientId", idpClientId);
+        variables.put("clientSecret", idpClientSecret);;
+
+        final URI uri = idpBaseUrl.resolve(template.expand(variables));
+        return webClient
+                .post()
+                .uri(uri)
+                .exchange()
+                .flatMap(this::extractIdpTokens);
+    }
+
     private Mono<TokenResponse> extractIdpTokens(ClientResponse idpTokenResponse) {
         if (idpTokenResponse.statusCode().is2xxSuccessful() && contentTypeIsApplicationJson(idpTokenResponse)) {
             return idpTokenResponse.bodyToMono(TokenResponse.class);
