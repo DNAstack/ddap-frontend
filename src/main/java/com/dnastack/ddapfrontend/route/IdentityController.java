@@ -172,7 +172,7 @@ public class IdentityController {
                     } else if (tokenExchangePurpose == TokenExchangePurpose.LINK) {
                         return finishAccountLinking(
                                 request, tokenResponse.getAccessToken(), request.getCookies().getFirst("ic_token").getValue(), realm
-                        );
+                        ).map(success -> ResponseEntity.status(307).location(UriUtil.selfLinkToUi(request, realm, "identity")).build());
                     } else {
                         throw new TokenExchangeException("Unrecognized purpose in token exchange");
                     }
@@ -203,13 +203,13 @@ public class IdentityController {
         Mono<String> unlinkAccountMono = idpClient.unlinkAccount(realm, accountId, icToken.get(), subjectName);
         Mono<TokenResponse> refreshAccessTokenMono = idpClient.refreshAccessToken(realm, refreshToken.get());
 
-        return Mono.zip(unlinkAccountMono, refreshAccessTokenMono, ((s, tokenResponse) -> {
+        return unlinkAccountMono.then(refreshAccessTokenMono).flatMap((tokenResponse) -> {
             URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
-            return ResponseEntity.status(200)
+            return Mono.just(ResponseEntity.status(200)
                     .header(SET_COOKIE, cookiePackager.packageToken(tokenResponse.getAccessToken(), cookieDomainPath.getHost(), CookieKind.IC).toString())
                     .header(SET_COOKIE, cookiePackager.packageToken(tokenResponse.getIdToken(), cookieDomainPath.getHost(), CookieKind.DAM).toString())
-                    .body(Map.of("message", s));
-        }));
+                    .build());
+        });
     }
 
     @GetMapping("/link")
@@ -223,7 +223,10 @@ public class IdentityController {
         if (icToken.isEmpty()) {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
         }
-
+        final Optional<String> refreshToken = cookiePackager.extractToken(request, CookieKind.REFRESH);
+        if (refreshToken.isEmpty()) {
+            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
+        }
         final String targetAccountId = dangerousStopgapExtractSubject(icToken.get()).map(JwtSubject::getSub).orElse(null);
         if (targetAccountId == null) {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is invalid"));
@@ -231,33 +234,38 @@ public class IdentityController {
 
         final String scopes = format("%s link:%s", DEFAULT_SCOPES, targetAccountId);
         final String state = stateHandler.generateAccountLinkingState(targetAccountId);
+        URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
 
         switch (type) {
             case EXTERNAL_IDP:
                 final URI ddapTokenEndpoint = selfLinkToApi(request, realm, "identity/token");
-                URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
                 return Mono.just(ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
                         .location(idpClient.getDirectLoginUrl(realm, state, scopes, ddapTokenEndpoint, provider))
                         .header(SET_COOKIE, cookiePackager.packageToken(state, cookieDomainPath.getHost(), CookieKind.OAUTH_STATE).toString())
                         .build());
             case PERSONA:
-                return idpClient.personaLogin(realm, scopes, provider, selfLinkToApi(request, realm, ""))
+                Mono<TokenResponse> refreshAccessTokenMono = idpClient.refreshAccessToken(realm, refreshToken.get());
+                Mono<String> linkAccountMono = idpClient.personaLogin(realm, scopes, provider, selfLinkToApi(request, realm, ""))
                         .doOnError(exception -> log.info("Failed to negotiate persona token at beginning of account linking", exception))
                         .flatMap(tokenResponse -> finishAccountLinking(
                                 request, tokenResponse.getAccessToken(), request.getCookies().getFirst("ic_token").getValue(), realm
                         ));
+                return linkAccountMono.then(refreshAccessTokenMono).flatMap((tokenResponse) -> Mono.just(ResponseEntity.status(307)
+                        .location(UriUtil.selfLinkToUi(request, realm, "identity"))
+                        .header(SET_COOKIE, cookiePackager.packageToken(tokenResponse.getAccessToken(), cookieDomainPath.getHost(), CookieKind.IC).toString())
+                        .header(SET_COOKIE, cookiePackager.packageToken(tokenResponse.getIdToken(), cookieDomainPath.getHost(), CookieKind.DAM).toString())
+                        .build()));
             default:
                 return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unrecognized provider type"));
         }
     }
 
-    private Mono<ResponseEntity<?>> finishAccountLinking(
+    private Mono<String> finishAccountLinking(
             ServerHttpRequest request, String newAccountLinkToken, String baseAccountLinkToken, String realm) {
         String newAccountId = dangerousStopgapExtractSubject(newAccountLinkToken).map(JwtSubject::getSub).orElse(null);
         String baseAccountId = dangerousStopgapExtractSubject(baseAccountLinkToken).map(JwtSubject::getSub).orElse(null);
 
-        return idpClient.linkAccounts(realm, baseAccountId, baseAccountLinkToken, newAccountId, newAccountLinkToken)
-                .map(success -> ResponseEntity.status(307).location(UriUtil.selfLinkToUi(request, realm, "identity")).build());
+        return idpClient.linkAccounts(realm, baseAccountId, baseAccountLinkToken, newAccountId, newAccountLinkToken);
     }
 
     private String dangerousStopgapParseToken(String jwt) {
