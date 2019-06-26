@@ -47,6 +47,9 @@ export class IdentityComponent implements OnInit {
           this.displayScopeWarning = true;
         }
       });
+    // FIXME: This is workaround to refresh cookies after externalIdp linking
+    this.identityService.refreshTokens()
+      .subscribe();
   }
 
   hasExpiringClaims(account: Account): boolean {

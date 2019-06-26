@@ -101,16 +101,6 @@ public class IdentityController {
         }).flatMap(account -> Mono.just(ResponseEntity.ok().body(account)));
     }
 
-    @GetMapping("/scopes")
-    public Mono<? extends ResponseEntity<?>> getScopes(ServerHttpRequest request) {
-        Optional<String> icToken = cookiePackager.extractToken(request, CookieKind.IC);
-        if (icToken.isEmpty()) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
-        }
-        Optional<JwtSubject> subject = dangerousStopgapExtractSubject(icToken.get());
-        return Mono.just(ResponseEntity.ok().body(subject.get()));
-    }
-
     @GetMapping("/login")
     public Mono<? extends ResponseEntity<?>> apiLogin(ServerHttpRequest request,
                                                       @PathVariable String realm,
@@ -210,6 +200,23 @@ public class IdentityController {
                     .header(SET_COOKIE, cookiePackager.packageToken(tokenResponse.getIdToken(), cookieDomainPath.getHost(), CookieKind.DAM).toString())
                     .build());
         });
+    }
+
+    @GetMapping("/refresh")
+    public Mono<? extends ResponseEntity<?>> refresh(ServerHttpRequest request, @PathVariable String realm) {
+        final Optional<String> refreshToken = cookiePackager.extractToken(request, CookieKind.REFRESH);
+        if (refreshToken.isEmpty()) {
+            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
+        }
+
+        URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
+        Mono<TokenResponse> refreshAccessTokenMono = idpClient.refreshAccessToken(realm, refreshToken.get());
+
+        return refreshAccessTokenMono.map((tokenResponse) -> ResponseEntity.noContent()
+                .location(UriUtil.selfLinkToUi(request, realm, "identity"))
+                .header(SET_COOKIE, cookiePackager.packageToken(tokenResponse.getAccessToken(), cookieDomainPath.getHost(), CookieKind.IC).toString())
+                .header(SET_COOKIE, cookiePackager.packageToken(tokenResponse.getIdToken(), cookieDomainPath.getHost(), CookieKind.DAM).toString())
+                .build());
     }
 
     @GetMapping("/link")
