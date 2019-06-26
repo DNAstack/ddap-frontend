@@ -2,7 +2,7 @@ package com.dnastack.ddapfrontend.route;
 
 import com.dnastack.ddapfrontend.client.AuthAccessTesterClient;
 import com.dnastack.ddapfrontend.client.ic.IcAccount;
-import com.dnastack.ddapfrontend.client.ic.ReactiveIdentityConcentratorClient;
+import com.dnastack.ddapfrontend.client.ic.ReactiveIcClient;
 import com.dnastack.ddapfrontend.client.ic.TokenExchangeException;
 import com.dnastack.ddapfrontend.client.ic.TokenResponse;
 import com.dnastack.ddapfrontend.config.ProfileService;
@@ -54,7 +54,7 @@ public class IdentityController {
     private static final String DEFAULT_SCOPES = "openid ga4gh account_admin identities";
 
     @Autowired
-    private ReactiveIdentityConcentratorClient idpClient;
+    private ReactiveIcClient idpClient;
     @Autowired
     private UserTokenCookiePackager cookiePackager;
     @Autowired

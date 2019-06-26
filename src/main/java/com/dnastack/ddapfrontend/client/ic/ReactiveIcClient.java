@@ -1,10 +1,10 @@
 package com.dnastack.ddapfrontend.client.ic;
 
+import com.dnastack.ddapfrontend.client.LoggingFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
@@ -19,7 +19,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Slf4j
 @Component
-public class ReactiveIdentityConcentratorClient {
+public class ReactiveIcClient {
 
     @Value("${idp.base-url}")
     private URI idpBaseUrl;
@@ -29,8 +29,8 @@ public class ReactiveIdentityConcentratorClient {
     private String idpClientSecret;
 
     private WebClient webClient = WebClient.builder()
-            .filter(logRequest())
-            .filter(logResponse())
+            .filter(LoggingFilter.logRequest())
+            .filter(LoggingFilter.logResponse())
             .build();
 
     public Mono<Object> getConfig(String realm, String icToken) {
@@ -215,24 +215,6 @@ public class ReactiveIdentityConcentratorClient {
                 .filter(mediaType -> mediaType.isCompatibleWith(
                         APPLICATION_JSON))
                 .isPresent();
-    }
-
-    private static ExchangeFilterFunction logRequest() {
-        return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
-            log.info(">>> {} {}", clientRequest.method(), clientRequest.url());
-            clientRequest.headers()
-                    .forEach((name, values) -> log.info("  {}: {}", name, values));
-            return Mono.just(clientRequest);
-        });
-    }
-
-    private static ExchangeFilterFunction logResponse() {
-        return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
-            log.info("<<< HTTP {}", clientResponse.rawStatusCode());
-            clientResponse.headers().asHttpHeaders()
-                    .forEach((name, values) -> log.info("  {}: {}", name, values));
-            return Mono.just(clientResponse);
-        });
     }
 
     public Mono<String> linkAccounts(String realm,

@@ -1,9 +1,9 @@
 package com.dnastack.ddapfrontend.client.dam;
 
+import com.dnastack.ddapfrontend.client.LoggingFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
@@ -28,27 +28,11 @@ public class ReactiveDamClient {
     }
 
     private static final WebClient webClient = WebClient.builder()
-            .filter(logRequest())
-            .filter(logResponse())
+            .filter(LoggingFilter.logRequest())
+            .filter(LoggingFilter.logResponse())
             .build();
 
-    private static ExchangeFilterFunction logRequest() {
-        return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
-            log.info(">>> {} {}", clientRequest.method(), clientRequest.url());
-            clientRequest.headers()
-                    .forEach((name, values) -> log.info("  {}: {}", name, values));
-            return Mono.just(clientRequest);
-        });
-    }
 
-    private static ExchangeFilterFunction logResponse() {
-        return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
-            log.info("<<< HTTP {}", clientResponse.rawStatusCode());
-            clientResponse.headers().asHttpHeaders()
-                    .forEach((name, values) -> log.info("  {}: {}", name, values));
-            return Mono.just(clientResponse);
-        });
-    }
 
     public Mono<Object> getConfig(String realm, String damToken) {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/config" +

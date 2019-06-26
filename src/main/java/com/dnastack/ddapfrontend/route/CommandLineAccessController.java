@@ -3,7 +3,7 @@ package com.dnastack.ddapfrontend.route;
 import com.dnastack.ddapfrontend.cli.CliLoginStatus;
 import com.dnastack.ddapfrontend.cli.CliSessionNotFound;
 import com.dnastack.ddapfrontend.cli.TokenResponse;
-import com.dnastack.ddapfrontend.client.ic.ReactiveIdentityConcentratorClient;
+import com.dnastack.ddapfrontend.client.ic.ReactiveIcClient;
 import com.dnastack.ddapfrontend.security.BadCredentialsException;
 import com.dnastack.ddapfrontend.security.JwtHandler;
 import com.dnastack.ddapfrontend.security.OAuthStateHandler;
@@ -40,7 +40,7 @@ import static java.lang.String.format;
 public class CommandLineAccessController {
     private static final String DEFAULT_SCOPES = "openid ga4gh account_admin identities";
 
-    private final ReactiveIdentityConcentratorClient icClient;
+    private final ReactiveIcClient icClient;
     private final OAuthStateHandler stateHandler;
     private Duration tokenTtl;
 
@@ -56,7 +56,7 @@ public class CommandLineAccessController {
 
     @Autowired
     public CommandLineAccessController(OAuthStateHandler stateHandler,
-                                       ReactiveIdentityConcentratorClient icClient,
+                                       ReactiveIcClient icClient,
                                        @Value("${ddap.command-line-service.aud}") String tokenAudience,
                                        @Value("${ddap.command-line-service.ttl}") Duration tokenTtl,
                                        @Value("${ddap.command-line-service.signingKey}") String tokenSigningKeyBase64) {

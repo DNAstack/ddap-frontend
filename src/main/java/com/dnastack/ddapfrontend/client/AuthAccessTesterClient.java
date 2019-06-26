@@ -1,7 +1,7 @@
 package com.dnastack.ddapfrontend.client;
 
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
-import com.dnastack.ddapfrontend.client.ic.ReactiveIdentityConcentratorClient;
+import com.dnastack.ddapfrontend.client.ic.ReactiveIcClient;
 import com.dnastack.ddapfrontend.model.IdentityModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class AuthAccessTesterClient {
     @Autowired
     private ReactiveDamClient reactiveDamClient;
     @Autowired
-    private ReactiveIdentityConcentratorClient icClient;
+    private ReactiveIcClient icClient;
 
     public Mono<List<IdentityModel.Access>> determineAccessForUser(String realm, String damToken, String icToken) {
         Mono<IdentityModel.Access> damAccessMono = determineDamAccess(realm, damToken);
