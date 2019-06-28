@@ -70,9 +70,9 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
         assertThat(results[1].exists, nullValue());
         assertThat(results[1].beaconInfo, notNullValue());
         assertThat(results[1].beaconInfo.resourceId, equalTo("thousand-genomes"));
-        assertThat(results[1].error, notNullValue());
-        assertThat(results[1].error.status, equalTo(403));
-        assertThat(results[1].error.message, notNullValue());
+        assertThat(results[1].queryError, notNullValue());
+        assertThat(results[1].queryError.status, equalTo(403));
+        assertThat(results[1].queryError.message, notNullValue());
     }
 
     @Test
@@ -106,9 +106,9 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
         assertThat(results[1].exists, nullValue());
         assertThat(results[1].beaconInfo, notNullValue());
         assertThat(results[1].beaconInfo.resourceId, equalTo("thousand-genomes"));
-        assertThat(results[1].error, notNullValue());
-        assertThat(results[1].error.status, equalTo(403));
-        assertThat(results[1].error.message,
+        assertThat(results[1].queryError, notNullValue());
+        assertThat(results[1].queryError.status, equalTo(403));
+        assertThat(results[1].queryError.message,
                    allOf(containsString("Forbidden"),
                          containsString("thousand-genomes"),
                          containsString("discovery-access")));
@@ -142,9 +142,9 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
         assertThat(results[1].exists, nullValue());
         assertThat(results[1].beaconInfo, notNullValue());
         assertThat(results[1].beaconInfo.resourceId, equalTo("thousand-genomes"));
-        assertThat(results[1].error, notNullValue());
-        assertThat(results[1].error.status, equalTo(401));
-        assertThat(results[1].error.message,
+        assertThat(results[1].queryError, notNullValue());
+        assertThat(results[1].queryError.status, equalTo(401));
+        assertThat(results[1].queryError.message,
                    allOf(containsString("Unauthenticated"),
                          containsString("thousand-genomes"),
                          containsString("discovery-access")));
@@ -154,7 +154,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
     static class BeaconQueryResult {
         BeaconInfo beaconInfo;
         Boolean exists;
-        BeaconError error;
+        BeaconError queryError;
     }
 
     @Data

@@ -37,7 +37,7 @@ public class ReactiveBeaconClient {
                                         return Mono.error(Optional.ofNullable(result.getError())
                                                 .map(error -> new BeaconErrorException(
                                                         error.getErrorCode(),
-                                                        error.getMessage()))
+                                                        error.getErrorMessage()))
                                                 .orElseGet(() -> new BeaconErrorException(
                                                         null,
                                                         null)));
