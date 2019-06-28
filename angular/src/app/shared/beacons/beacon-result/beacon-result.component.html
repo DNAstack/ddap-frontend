@@ -20,7 +20,7 @@
             <div *ngSwitchDefault
                  class="flex vertical-center match-error">
               <mat-icon class="icon icon-warning"></mat-icon>
-              <span *ngIf="beacon.error && (beacon.error.status === 401 || beacon.error.status === 403); else nonPermissionError">
+              <span *ngIf="beacon.queryError && (beacon.queryError.status === 401 || beacon.queryError.status === 403); else nonPermissionError">
                 lack of permissions
               </span>
               <ng-template #nonPermissionError>
@@ -32,13 +32,15 @@
       </mat-card-header>
     </mat-card>
   </mat-expansion-panel-header>
-  <ng-container *ngIf="beacon.info && !beacon.error; else error">
-    <mat-list *ngFor="let item of beacon.info | keyvalue">
-      <mat-list-item class="flex vertical-center metadata">
-        <h4>{{ item.key }}</h4>
-        <span>{{ item.value }}</span>
-      </mat-list-item>
-    </mat-list>
+  <ng-container *ngIf="!beacon.error; else error">
+    <ng-container *ngFor="let dataset of beacon.datasetAlleleResponses">
+      <mat-list *ngFor="let item of dataset.info | keyvalue">
+        <mat-list-item class="flex vertical-center metadata">
+          <h4>{{ item.key }}</h4>
+          <span>{{ item.value }}</span>
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
   </ng-container>
   <mat-action-row>
     <button mat-button
@@ -51,5 +53,5 @@
 </mat-expansion-panel>
 
 <ng-template #error>
-  <p class="error-content">{{ beacon.error.message }}</p>
+  <p class="error-content">{{ beacon.queryError.message }}</p>
 </ng-template>

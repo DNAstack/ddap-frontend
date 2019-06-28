@@ -1,10 +1,8 @@
 package com.dnastack.ddapfrontend.route;
 
-import com.dnastack.ddapfrontend.beacon.BeaconError;
-import com.dnastack.ddapfrontend.beacon.BeaconInfo;
-import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.client.beacon.BeaconErrorException;
 import com.dnastack.ddapfrontend.client.beacon.ReactiveBeaconClient;
+import com.dnastack.ddapfrontend.client.beacon.model.*;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
 import com.dnastack.ddapfrontend.client.dam.model.DamResource;
 import com.dnastack.ddapfrontend.client.dam.model.DamView;
@@ -111,13 +109,13 @@ class BeaconController {
                         beaconView,
                         beaconRequest,
                         token))
-                        .orElseGet(() -> unauthorizedBeaconQueryResult(beaconView)))
+                        .orElseGet(() -> unauthorizedBeaconApiAlleleResponse(beaconView)))
                 .map(Mono::flux)
                 .reduce(Flux::merge)
                 .orElse(Flux.empty());
     }
 
-    private Mono<BeaconQueryResult> unauthorizedBeaconQueryResult(BeaconView beaconView) {
+    private Mono<BeaconQueryResult> unauthorizedBeaconApiAlleleResponse(BeaconView beaconView) {
         final String message = format(
                 "Unauthenticated: Cannot access view [%s/%s]",
                 beaconView.getResourceId(),
@@ -173,47 +171,20 @@ class BeaconController {
     }
 
     private BeaconQueryResult createErrorBeaconResult(BeaconInfo beaconInfo, int errorStatus, String errorMessage) {
-        com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult fallback = new com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult();
+        BeaconQueryResult fallback = new BeaconQueryResult();
         final BeaconQueryResult result = formatBeaconServerPayload(beaconInfo, fallback);
-        result.setError(new BeaconError(errorStatus, errorMessage));
+        result.setQueryError(new BeaconQueryError(errorStatus, errorMessage));
         return result;
     }
 
 
 
     private BeaconQueryResult formatBeaconServerPayload(BeaconInfo infoResponse,
-                                                        com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult queryResponse) {
-        final BeaconQueryResult externalResult = new BeaconQueryResult();
-
+                                                        BeaconQueryResult queryResponse) {
         log.debug("Formatting {} {}", infoResponse, queryResponse);
+        queryResponse.setBeaconInfo(infoResponse);
 
-        final Optional<com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult> oQueryResponse = Optional.ofNullable(queryResponse);
-
-        final Boolean exists = oQueryResponse.map(com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult::getExists).orElse(null);
-
-        externalResult.setExists(exists);
-        externalResult.setBeaconInfo(infoResponse);
-
-        // TODO populate from beacon payload
-        Map<String, String> info = new HashMap<>();
-        info.put("Allele origin", "Germline");
-        info.put("Clinical significance", "Pathogenic");
-        info.put("Clinical significance citations", "PMID:23108138");
-        info.put("Collection method", "Curation");
-        info.put("Condition category", "Disease");
-        info.put("Gene symbol", "BRCA2");
-
-        if (exists != null && exists) {
-            externalResult.setInfo(info);
-        }
-
-        oQueryResponse.map(com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult::getAlleleRequest)
-                .ifPresent(alleleRequest -> externalResult.getMetadata().put("alleleRequest", alleleRequest));
-        oQueryResponse.map(com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult::getDatasetAlleleResponses)
-                .ifPresent(datasetAlleleResponses -> externalResult.getMetadata().put("datasetAlleleResponses",
-                        datasetAlleleResponses));
-
-        return externalResult;
+        return queryResponse;
     }
 
     @Value
