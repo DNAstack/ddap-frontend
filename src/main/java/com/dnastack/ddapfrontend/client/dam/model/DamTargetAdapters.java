@@ -7,6 +7,6 @@ import java.util.Map;
 @Data
 public class DamTargetAdapters {
 
-    Map<String, DamTargetAdapter> targetAdapters;
+    private Map<String, DamTargetAdapter> targetAdapters;
 
 }

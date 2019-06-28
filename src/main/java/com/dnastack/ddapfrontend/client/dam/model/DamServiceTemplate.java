@@ -7,10 +7,10 @@ import java.util.Map;
 @Data
 public class DamServiceTemplate {
 
-    String itemFormat;
-    String targetAdapter;
-    Map<String, Object> interfaces;
-    Map<String, Object> roles;
-    Map<String, Object> ui;
+    private String itemFormat;
+    private String targetAdapter;
+    private Map<String, Object> interfaces;
+    private Map<String, Object> roles;
+    private Map<String, Object> ui;
 
 }

@@ -7,13 +7,13 @@ import java.util.Map;
 @Data
 public class DamConfig {
 
-    Map<String, Object> claimDefinitions;
-    Map<String, Object> clients;
-    Map<String, Object> policies;
-    Map<String, DamResource> resources;
-    Map<String, DamServiceTemplate> serviceTemplates;
-    Map<String, Object> testPersonas;
-    Map<String, Object> trustedPassportIssuers;
-    Map<String, Object> trustedSources;
+    private Map<String, Object> claimDefinitions;
+    private Map<String, Object> clients;
+    private Map<String, DamPolicy> policies;
+    private Map<String, DamResource> resources;
+    private Map<String, DamServiceTemplate> serviceTemplates;
+    private Map<String, Object> testPersonas;
+    private Map<String, Object> trustedPassportIssuers;
+    private Map<String, Object> trustedSources;
 
 }

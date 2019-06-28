@@ -7,6 +7,6 @@ import java.util.Map;
 @Data
 public class DamTargetAdapter {
 
-    Map<String, DamItemFormat> itemFormats;
+    private Map<String, DamItemFormat> itemFormats;
 
 }

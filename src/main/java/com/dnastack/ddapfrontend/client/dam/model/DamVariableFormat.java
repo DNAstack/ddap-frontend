@@ -7,8 +7,8 @@ import java.util.Map;
 @Data
 public class DamVariableFormat {
 
-    String regexp;
-    Boolean optional;
-    Map<String, String> ui;
+    private String regexp;
+    private Boolean optional;
+    private Map<String, String> ui;
 
 }

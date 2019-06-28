@@ -1,13 +1,15 @@
 package com.dnastack.ddapfrontend.route;
 
-import com.dnastack.ddapfrontend.client.dam.FeignDamClient;
+import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
+import com.dnastack.ddapfrontend.client.dam.model.DamCondition;
+import com.dnastack.ddapfrontend.client.dam.model.DamConfig;
+import com.dnastack.ddapfrontend.client.dam.model.DamPolicy;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
-import dam.v1.DamService;
-import dam.v1.DamService.DamConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,62 +20,64 @@ import java.util.stream.Stream;
 @RequestMapping("/api/v1alpha/{realm}/autocomplete")
 public class AutoCompleteController {
 
-    @Autowired
-    private FeignDamClient feignDamClient;
+    private ReactiveDamClient damClient;
+    private UserTokenCookiePackager cookiePackager;
 
     @Autowired
-    private UserTokenCookiePackager cookiePackager;
+    public AutoCompleteController(ReactiveDamClient damClient, UserTokenCookiePackager cookiePackager) {
+        this.damClient = damClient;
+        this.cookiePackager = cookiePackager;
+    }
 
     //Reading the realm config
     //Iterate through realm config policies and find all the values in policies
-    @GetMapping("claimValue")
-    public List<String> getClaimValues(@RequestParam String claimName, ServerHttpRequest request, @PathVariable String realm) {
+    @GetMapping("/claimValue")
+    public Mono<List<String>> getClaimValues(@RequestParam String claimName, ServerHttpRequest request, @PathVariable String realm) {
         List<String> result = new ArrayList<>();
 
         // find beacons under resourceId in DAM config
         Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
         // TODO catch 401/403 and return 401/403
-        DamConfig damConfig = feignDamClient.getConfig(damToken, realm);
-
-        Map<String, DamService.Policy> policiesMap = damConfig.getPoliciesMap();
-
-        for (Map.Entry<String, DamService.Policy> policy : policiesMap.entrySet()) {
-            DamService.Condition allow = policy.getValue().getAllow();
-            DamService.Condition disallow = policy.getValue().getDisallow();
-            result.addAll(getAllContainedValues(claimName, allow, damConfig, policy.getKey()));
-            result.addAll(getAllContainedValues(claimName, disallow, damConfig, policy.getKey()));
-        }
-        Collections.sort(result);
-        return result;
+        return damClient.getConfig(realm, damToken)
+                .flatMap((damConfig) -> {
+                    Map<String, DamPolicy> policies = damConfig.getPolicies();
+                    for (Map.Entry<String, DamPolicy> policy : policies.entrySet()) {
+                        DamCondition allow = policy.getValue().getAllow();
+                        DamCondition disallow = policy.getValue().getDisallow();
+                        if (allow != null) {
+                            result.addAll(getAllContainedValues(claimName, allow, damConfig, policy.getKey()));
+                        }
+                        if (disallow != null) {
+                            result.addAll(getAllContainedValues(claimName, disallow, damConfig, policy.getKey()));
+                        }
+                    }
+                    Collections.sort(result);
+                    return Mono.just(result);
+                });
     }
 
-    private List<String> getAllContainedValues(String claimName, DamService.Condition condition, DamConfig damConfig, String policyName) {
+    private List<String> getAllContainedValues(String claimName, DamCondition condition, DamConfig damConfig, String policyName) {
         Stream<String> directValues;
         if (Objects.equals(claimName, condition.getClaim())) {
-            directValues = condition.getValuesList()
+            directValues = condition.getValues()
                                     .stream()
                                     .flatMap(valueOrVariable -> getParsedVariableValues(valueOrVariable, policyName, damConfig).stream());
         } else {
             directValues = Stream.empty();
         }
 
-        Stream<String> allTrueValues = condition.getAllTrueList().stream().flatMap(cond -> getAllContainedValues(claimName, cond, damConfig, policyName).stream());
-        Stream<String> anyTrueValues = condition.getAnyTrueList().stream().flatMap(cond -> getAllContainedValues(claimName, cond, damConfig, policyName).stream());
-        List<String> collect = Stream.concat(directValues, Stream.concat(allTrueValues, anyTrueValues)).collect(Collectors.toList());
-        return collect;
+        Stream<String> allTrueValues = condition.getAllTrue().stream().flatMap(cond -> getAllContainedValues(claimName, cond, damConfig, policyName).stream());
+        Stream<String> anyTrueValues = condition.getAnyTrue().stream().flatMap(cond -> getAllContainedValues(claimName, cond, damConfig, policyName).stream());
+        return Stream.concat(directValues, Stream.concat(allTrueValues, anyTrueValues)).collect(Collectors.toList());
     }
 
     private List<String> getParsedVariableValues(String valueOrVariable, String policyName, DamConfig damConfig) {
-
         boolean isVariable = valueOrVariable.startsWith("${") && valueOrVariable.endsWith("}");
         if (isVariable) {
-
             //variableName is: "${DATASETS}" cleaned up to "DATASETS"
             String variableName = valueOrVariable.substring(2, valueOrVariable.length() - 1);
-
             return getPoliciesInResourceViews(damConfig)
-
                     //Filter would match something like: variablePolicy(VAR1=value1,value2;VAR2=value3,value4)
                      .filter(resourcePolicyName -> resourcePolicyName.startsWith(policyName + "(") && resourcePolicyName.endsWith(")"))
                      .flatMap(policyValueString -> {
@@ -105,10 +109,10 @@ public class AutoCompleteController {
     }
 
     private Stream<String> getPoliciesInResourceViews(DamConfig damConfig) {
-        return damConfig.getResourcesMap().values().stream()
-                 .flatMap(res -> res.getViewsMap().values().stream())
-                 .flatMap(view -> view.getAccessRolesMap().values().stream())
-                 .flatMap(accessRole -> accessRole.getPoliciesList().stream());
+        return damConfig.getResources().values().stream()
+                .flatMap(res -> res.getViews().values().stream())
+                .flatMap(view -> view.getRoles().values().stream())
+                .flatMap(accessRole -> accessRole.getPolicies().stream());
     }
 
     private boolean isRegexValue(String assignmentValue) {

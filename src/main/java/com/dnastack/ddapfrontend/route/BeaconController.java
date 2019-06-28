@@ -6,11 +6,11 @@ import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.client.beacon.BeaconErrorException;
 import com.dnastack.ddapfrontend.client.beacon.ReactiveBeaconClient;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
+import com.dnastack.ddapfrontend.client.dam.model.DamResource;
+import com.dnastack.ddapfrontend.client.dam.model.DamView;
 import com.dnastack.ddapfrontend.client.dam.model.LocationAndToken;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.model.InterfaceModel;
-import com.dnastack.ddapfrontend.model.ResourceModel;
-import com.dnastack.ddapfrontend.model.ViewModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +19,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -31,7 +32,8 @@ import static java.lang.String.format;
 
 @Slf4j
 @RestController
-class BeaconResource {
+@RequestMapping(value = "/api/v1alpha/{realm}/resources")
+class BeaconController {
 
     private static final String BEACON_INTERFACE = "http:beacon";
 
@@ -40,15 +42,15 @@ class BeaconResource {
     private UserTokenCookiePackager cookiePackager;
 
     @Autowired
-    public BeaconResource(ReactiveBeaconClient beaconClient,
-                          ReactiveDamClient damClient,
-                          UserTokenCookiePackager cookiePackager) {
+    public BeaconController(ReactiveBeaconClient beaconClient,
+                            ReactiveDamClient damClient,
+                            UserTokenCookiePackager cookiePackager) {
         this.beaconClient = beaconClient;
         this.damClient = damClient;
         this.cookiePackager = cookiePackager;
     }
 
-    @GetMapping(value = "/api/v1alpha/{realm}/resources/search", params = "type=beacon")
+    @GetMapping(value = "/search", params = "type=beacon")
     public Flux<BeaconQueryResult> aggregateBeaconSearch(@PathVariable String realm,
                                                          BeaconRequestModel beaconRequest,
                                                          ServerHttpRequest request) {
@@ -56,12 +58,13 @@ class BeaconResource {
         return damClient.getResources(realm)
                 .flux()
                 .flatMap((damResources) -> {
-                    Map<String, ResourceModel> resources = damResources.getResources();
+                    log.info("DAM RE :{}", damResources);
+                    Map<String, DamResource> resources = damResources.getResources();
                     return maybePerformBeaconQueries(realm, beaconRequest, damToken, resources.entrySet());
                 });
     }
 
-    @GetMapping(value = "/api/v1alpha/{realm}/resources/{resourceId}/search", params = "type=beacon")
+    @GetMapping(value = "/{resourceId}/search", params = "type=beacon")
     public Flux<BeaconQueryResult> singleResourceBeaconSearch(@PathVariable String realm,
                                                               @PathVariable String resourceId,
                                                               BeaconRequestModel beaconRequest,
@@ -70,12 +73,13 @@ class BeaconResource {
         return damClient.getResource(realm, resourceId)
                 .flux()
                 .flatMap((damResource) -> {
-                    Map.Entry<String, ResourceModel> resource = Map.entry(resourceId, damResource.getResource());
+                    log.info("DAM RE :{}", damResource);
+                    Map.Entry<String, DamResource> resource = Map.entry(resourceId, damResource);
                     return maybePerformBeaconQueries(realm, beaconRequest, damToken, Collections.singleton(resource));
                 });
     }
 
-    private static Stream<? extends BeaconView> filterBeaconView(Map.Entry<String, ResourceModel> resource) {
+    private static Stream<? extends BeaconView> filterBeaconView(Map.Entry<String, DamResource> resource) {
         return resource.getValue()
                 .getViews()
                 .entrySet()
@@ -101,10 +105,10 @@ class BeaconResource {
     private Flux<BeaconQueryResult> maybePerformBeaconQueries(String realm,
                                                               BeaconRequestModel beaconRequest,
                                                               Optional<String> damToken,
-                                                              Collection<Map.Entry<String, ResourceModel>> resourceEntries) {
+                                                              Collection<Map.Entry<String, DamResource>> resourceEntries) {
         return resourceEntries
                 .stream()
-                .flatMap(BeaconResource::filterBeaconView)
+                .flatMap(BeaconController::filterBeaconView)
                 .map(beaconView -> damToken.map(token -> maybePerformSingleBeaconViewQuery(realm,
                         beaconView,
                         beaconRequest,
@@ -217,9 +221,9 @@ class BeaconResource {
     @Value
     private static class BeaconView {
         String resourceId;
-        ResourceModel resource;
+        DamResource resource;
         String viewId;
-        ViewModel view;
+        DamView view;
         String uri;
     }
 }

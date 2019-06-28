@@ -1,5 +1,6 @@
 package com.dnastack.ddapfrontend.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,7 @@ public class JacksonConfig {
         log.info("Initializing custom changes for jackson object mapper.");
 
         return objectMapper -> {
+            objectMapper.serializationInclusion(JsonInclude.Include.NON_EMPTY);
             objectMapper.failOnUnknownProperties(false);
         };
     }

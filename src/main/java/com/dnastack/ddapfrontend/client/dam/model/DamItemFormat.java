@@ -7,6 +7,6 @@ import java.util.Map;
 @Data
 public class DamItemFormat {
 
-    Map<String, DamVariableFormat> variables;
+    private Map<String, DamVariableFormat> variables;
 
 }

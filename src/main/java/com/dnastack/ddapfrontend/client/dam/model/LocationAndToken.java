@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class LocationAndToken {
     private String name;
-    private DamView view;
+    private View view;
     private String account;
     private String token;
     private String ttl;

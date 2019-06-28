@@ -2,6 +2,7 @@ package com.dnastack.ddapfrontend.client.dam;
 
 import com.dnastack.ddapfrontend.client.LoggingFilter;
 import com.dnastack.ddapfrontend.client.dam.model.*;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -47,7 +49,14 @@ public class ReactiveDamClient {
         return webClient.get()
                 .uri(uri)
                 .retrieve()
-                .bodyToMono(DamResource.class);
+                .bodyToMono(ResourceResponse.class)
+                .map(ResourceResponse::getResource);
+    }
+
+    @Data
+    private static class ResourceResponse {
+        private DamResource resource;
+        private List<String> access;
     }
 
     public Mono<DamResources> getResources(String realm) {
