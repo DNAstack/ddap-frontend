@@ -1,4 +1,4 @@
-package com.dnastack.ddapfrontend.client.ic;
+package com.dnastack.ddapfrontend.client.ic.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -17,6 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenResponse {
+
     @JsonProperty("id_token")
     private String idToken;
     @JsonProperty("access_token")
@@ -36,4 +37,5 @@ public class TokenResponse {
     public Map<String, Object> getAdditionalProperties() {
         return additionalProperties;
     }
+
 }

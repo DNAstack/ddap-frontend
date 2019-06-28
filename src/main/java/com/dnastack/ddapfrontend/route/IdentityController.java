@@ -1,10 +1,10 @@
 package com.dnastack.ddapfrontend.route;
 
 import com.dnastack.ddapfrontend.client.AuthAccessTesterClient;
-import com.dnastack.ddapfrontend.client.ic.IcAccount;
+import com.dnastack.ddapfrontend.client.ic.model.IcAccount;
 import com.dnastack.ddapfrontend.client.ic.ReactiveIcClient;
 import com.dnastack.ddapfrontend.client.ic.TokenExchangeException;
-import com.dnastack.ddapfrontend.client.ic.TokenResponse;
+import com.dnastack.ddapfrontend.client.ic.model.TokenResponse;
 import com.dnastack.ddapfrontend.config.ProfileService;
 import com.dnastack.ddapfrontend.http.UriUtil;
 import com.dnastack.ddapfrontend.model.IdentityModel;

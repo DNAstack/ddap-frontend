@@ -11,6 +11,7 @@ import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,17 @@ public class ReactiveDamClient {
     private String damClientId;
     private String damClientSecret;
 
+    private static final WebClient webClient = WebClient.builder()
+            .filter(LoggingFilter.logRequest())
+            .filter(LoggingFilter.logResponse())
+            .build();
+
+    @Data
+    private static class ResourceResponse {
+        private DamResource resource;
+        private List<String> access;
+    }
+
     public ReactiveDamClient(@Value("${dam.base-url}") URI damBaseUrl,
                              @Value("${dam.client-id}") String damClientId,
                              @Value("${dam.client-secret}") String damClientSecret) {
@@ -30,47 +42,34 @@ public class ReactiveDamClient {
         this.damClientSecret = damClientSecret;
     }
 
-    private static final WebClient webClient = WebClient.builder()
-            .filter(LoggingFilter.logRequest())
-            .filter(LoggingFilter.logResponse())
-            .build();
-
     public Mono<DamResource> getResource(String realm, String resourceId) {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources/{resourceId}" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
-        final URI uri = damBaseUrl.resolve(template.expand(
-                Map.of("realm", realm,
-                        "resourceId", resourceId,
-                        "clientId", damClientId,
-                        "clientSecret", damClientSecret)
-        ));
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("resourceId", resourceId);
+        variables.put("clientId", damClientId);
+        variables.put("clientSecret", damClientSecret);
 
         return webClient.get()
-                .uri(uri)
+                .uri(damBaseUrl.resolve(template.expand(variables)))
                 .retrieve()
                 .bodyToMono(ResourceResponse.class)
                 .map(ResourceResponse::getResource);
-    }
-
-    @Data
-    private static class ResourceResponse {
-        private DamResource resource;
-        private List<String> access;
     }
 
     public Mono<DamResources> getResources(String realm) {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
-        final URI uri = damBaseUrl.resolve(template.expand(
-                Map.of("realm", realm,
-                        "clientId", damClientId,
-                        "clientSecret", damClientSecret)
-        ));
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("clientId", damClientId);
+        variables.put("clientSecret", damClientSecret);
 
         return webClient.get()
-                .uri(uri)
+                .uri(damBaseUrl.resolve(template.expand(variables)))
                 .retrieve()
                 .bodyToMono(DamResources.class);
     }
@@ -79,15 +78,14 @@ public class ReactiveDamClient {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources/{resourceId}/views" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
-        final URI uri = damBaseUrl.resolve(template.expand(
-                Map.of("realm", realm,
-                        "resourceId", resourceId,
-                        "clientId", damClientId,
-                        "clientSecret", damClientSecret)
-        ));
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("resourceId", resourceId);
+        variables.put("clientId", damClientId);
+        variables.put("clientSecret", damClientSecret);
 
         return webClient.get()
-                .uri(uri)
+                .uri(damBaseUrl.resolve(template.expand(variables)))
                 .header("Authorization", "Bearer " + damToken)
                 .retrieve()
                 .bodyToMono(DamResourceViews.class);
@@ -97,16 +95,15 @@ public class ReactiveDamClient {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources/{resourceId}/views/{viewId}/token" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
-        final URI uri = damBaseUrl.resolve(template.expand(
-                Map.of("realm", realm,
-                        "resourceId", resourceId,
-                        "viewId", viewId,
-                        "clientId", damClientId,
-                        "clientSecret", damClientSecret)
-        ));
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("resourceId", resourceId);
+        variables.put("viewId", viewId);
+        variables.put("clientId", damClientId);
+        variables.put("clientSecret", damClientSecret);
 
         return webClient.get()
-                .uri(uri)
+                .uri(damBaseUrl.resolve(template.expand(variables)))
                 .header("Authorization", "Bearer " + damToken)
                 .retrieve()
                 .bodyToMono(LocationAndToken.class);
@@ -116,14 +113,13 @@ public class ReactiveDamClient {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/targetAdapters" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
-        final URI uri = damBaseUrl.resolve(template.expand(
-                Map.of("realm", realm,
-                        "clientId", damClientId,
-                        "clientSecret", damClientSecret)
-        ));
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("clientId", damClientId);
+        variables.put("clientSecret", damClientSecret);
 
         return webClient.get()
-                .uri(uri)
+                .uri(damBaseUrl.resolve(template.expand(variables)))
                 .header("Authorization", "Bearer " + damToken)
                 .retrieve()
                 .bodyToMono(DamTargetAdapters.class);
@@ -133,14 +129,13 @@ public class ReactiveDamClient {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/config" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
-        final URI uri = damBaseUrl.resolve(template.expand(
-                Map.of("realm", realm,
-                        "clientId", damClientId,
-                        "clientSecret", damClientSecret)
-        ));
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("clientId", damClientId);
+        variables.put("clientSecret", damClientSecret);
 
         return webClient.get()
-                .uri(uri)
+                .uri(damBaseUrl.resolve(template.expand(variables)))
                 .header("Authorization", "Bearer " + damToken)
                 .retrieve()
                 .bodyToMono(DamConfig.class);
