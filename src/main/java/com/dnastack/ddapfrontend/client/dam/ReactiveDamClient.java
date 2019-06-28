@@ -34,10 +34,14 @@ public class ReactiveDamClient {
             .build();
 
     public Mono<DamResource> getResource(String realm, String resourceId) {
-        final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources/{resourceId}");
+        final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources/{resourceId}" +
+                "?client_id={clientId}" +
+                "&client_secret={clientSecret}");
         final URI uri = damBaseUrl.resolve(template.expand(
                 Map.of("realm", realm,
-                        "resourceId", resourceId)
+                        "resourceId", resourceId,
+                        "clientId", damClientId,
+                        "clientSecret", damClientSecret)
         ));
 
         return webClient.get()
@@ -47,9 +51,13 @@ public class ReactiveDamClient {
     }
 
     public Mono<DamResources> getResources(String realm) {
-        final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources");
+        final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources" +
+                "?client_id={clientId}" +
+                "&client_secret={clientSecret}");
         final URI uri = damBaseUrl.resolve(template.expand(
-                Map.of("realm", realm)
+                Map.of("realm", realm,
+                        "clientId", damClientId,
+                        "clientSecret", damClientSecret)
         ));
 
         return webClient.get()
