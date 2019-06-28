@@ -58,7 +58,6 @@ class BeaconController {
         return damClient.getResources(realm)
                 .flux()
                 .flatMap((damResources) -> {
-                    log.info("DAM RE :{}", damResources);
                     Map<String, DamResource> resources = damResources.getResources();
                     return maybePerformBeaconQueries(realm, beaconRequest, damToken, resources.entrySet());
                 });
@@ -73,7 +72,6 @@ class BeaconController {
         return damClient.getResource(realm, resourceId)
                 .flux()
                 .flatMap((damResource) -> {
-                    log.info("DAM RE :{}", damResource);
                     Map.Entry<String, DamResource> resource = Map.entry(resourceId, damResource);
                     return maybePerformBeaconQueries(realm, beaconRequest, damToken, Collections.singleton(resource));
                 });
@@ -175,7 +173,7 @@ class BeaconController {
     }
 
     private BeaconQueryResult createErrorBeaconResult(BeaconInfo beaconInfo, int errorStatus, String errorMessage) {
-        com.dnastack.ddapfrontend.client.beacon.BeaconQueryResult fallback = new com.dnastack.ddapfrontend.client.beacon.BeaconQueryResult();
+        com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult fallback = new com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult();
         final BeaconQueryResult result = formatBeaconServerPayload(beaconInfo, fallback);
         result.setError(new BeaconError(errorStatus, errorMessage));
         return result;
@@ -184,14 +182,14 @@ class BeaconController {
 
 
     private BeaconQueryResult formatBeaconServerPayload(BeaconInfo infoResponse,
-                                                        com.dnastack.ddapfrontend.client.beacon.BeaconQueryResult queryResponse) {
+                                                        com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult queryResponse) {
         final BeaconQueryResult externalResult = new BeaconQueryResult();
 
         log.debug("Formatting {} {}", infoResponse, queryResponse);
 
-        final Optional<com.dnastack.ddapfrontend.client.beacon.BeaconQueryResult> oQueryResponse = Optional.ofNullable(queryResponse);
+        final Optional<com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult> oQueryResponse = Optional.ofNullable(queryResponse);
 
-        final Boolean exists = oQueryResponse.map(com.dnastack.ddapfrontend.client.beacon.BeaconQueryResult::getExists).orElse(null);
+        final Boolean exists = oQueryResponse.map(com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult::getExists).orElse(null);
 
         externalResult.setExists(exists);
         externalResult.setBeaconInfo(infoResponse);
@@ -209,9 +207,9 @@ class BeaconController {
             externalResult.setInfo(info);
         }
 
-        oQueryResponse.map(com.dnastack.ddapfrontend.client.beacon.BeaconQueryResult::getAlleleRequest)
+        oQueryResponse.map(com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult::getAlleleRequest)
                 .ifPresent(alleleRequest -> externalResult.getMetadata().put("alleleRequest", alleleRequest));
-        oQueryResponse.map(com.dnastack.ddapfrontend.client.beacon.BeaconQueryResult::getDatasetAlleleResponses)
+        oQueryResponse.map(com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult::getDatasetAlleleResponses)
                 .ifPresent(datasetAlleleResponses -> externalResult.getMetadata().put("datasetAlleleResponses",
                         datasetAlleleResponses));
 

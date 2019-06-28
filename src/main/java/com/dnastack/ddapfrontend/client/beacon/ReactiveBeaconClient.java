@@ -1,15 +1,19 @@
 package com.dnastack.ddapfrontend.client.beacon;
 
 import com.dnastack.ddapfrontend.client.LoggingFilter;
+import com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-
-import static java.lang.String.format;
 
 @Slf4j
 @Component
@@ -27,7 +31,7 @@ public class ReactiveBeaconClient {
                 .exchange()
                 .flatMap(clientResponse -> {
                     if (clientResponse.statusCode().is2xxSuccessful()) {
-                        return clientResponse.bodyToMono(com.dnastack.ddapfrontend.client.beacon.BeaconQueryResult.class)
+                        return clientResponse.bodyToMono(BeaconQueryResult.class)
                                 .flatMap(result -> {
                                     if (result.getExists() == null) {
                                         return Mono.error(Optional.ofNullable(result.getError())
@@ -50,19 +54,26 @@ public class ReactiveBeaconClient {
                 });
     }
 
-    private String getBeaconQueryUrl(String baseUrl, BeaconRequestModel beaconRequest) {
-        return format("%s/query" +
-                        "?assemblyId=%s" +
-                        "&referenceName=%s" +
-                        "&start=%s" +
-                        "&referenceBases=%s" +
-                        "&alternateBases=%s",
-                baseUrl,
-                beaconRequest.getAssemblyId(),
-                beaconRequest.getReferenceName(),
-                beaconRequest.getStart(),
-                beaconRequest.getReferenceBases(),
-                beaconRequest.getAlternateBases());
+    private URI getBeaconQueryUrl(String baseUrl, BeaconRequestModel beaconRequest) {
+        try {
+            final URI beaconBaseUrl = new URI(baseUrl);
+            final UriTemplate template = new UriTemplate("/query" +
+                    "?assemblyId={assemblyId}" +
+                    "&referenceName={referenceName}" +
+                    "&start={start}" +
+                    "&referenceBases={referenceBases}" +
+                    "&alternateBases={alternateBases}");
+            final Map<String, Object> variables = new HashMap<>();
+            variables.put("assemblyId", beaconRequest.getAssemblyId());
+            variables.put("referenceName", beaconRequest.getReferenceName());
+            variables.put("start", beaconRequest.getStart());
+            variables.put("referenceBases", beaconRequest.getReferenceBases());
+            variables.put("alternateBases", beaconRequest.getAlternateBases());
+
+            return beaconBaseUrl.resolve(template.expand(variables));
+        } catch (URISyntaxException e) {
+            throw new BeaconErrorException(500, "Failed to construct beacon URL");
+        }
     }
 
 }

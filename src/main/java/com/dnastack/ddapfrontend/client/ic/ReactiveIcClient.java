@@ -1,6 +1,8 @@
 package com.dnastack.ddapfrontend.client.ic;
 
 import com.dnastack.ddapfrontend.client.LoggingFilter;
+import com.dnastack.ddapfrontend.client.ic.model.IcAccount;
+import com.dnastack.ddapfrontend.client.ic.model.TokenResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,31 +23,34 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @Component
 public class ReactiveIcClient {
 
-    @Value("${idp.base-url}")
     private URI idpBaseUrl;
-    @Value("${idp.client-id}")
     private String idpClientId;
-    @Value("${idp.client-secret}")
     private String idpClientSecret;
 
-    private WebClient webClient = WebClient.builder()
+    private static final WebClient webClient = WebClient.builder()
             .filter(LoggingFilter.logRequest())
             .filter(LoggingFilter.logResponse())
             .build();
+
+    public ReactiveIcClient(@Value("${idp.base-url}") URI idpBaseUrl,
+                            @Value("${idp.client-id}") String idpClientId,
+                            @Value("${idp.client-secret}") String idpClientSecret) {
+        this.idpBaseUrl = idpBaseUrl;
+        this.idpClientId = idpClientId;
+        this.idpClientSecret = idpClientSecret;
+    }
 
     public Mono<Object> getConfig(String realm, String icToken) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/config" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
-        final URI uri = idpBaseUrl.resolve(template.expand(
-                Map.of("realm", realm,
-                        "clientId", idpClientId,
-                        "clientSecret", idpClientSecret)
-        ));
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("clientId", idpClientId);
+        variables.put("clientSecret", idpClientSecret);
 
-        return webClient
-                .get()
-                .uri(uri)
+        return webClient.get()
+                .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .header("Authorization", "Bearer " + icToken)
                 .retrieve()
                 .bodyToMono(Object.class);
@@ -55,15 +60,13 @@ public class ReactiveIcClient {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/accounts/-" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
-        final URI uri = idpBaseUrl.resolve(template.expand(
-                Map.of("realm", realm,
-                        "clientId", idpClientId,
-                        "clientSecret", idpClientSecret)
-        ));
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("clientId", idpClientId);
+        variables.put("clientSecret", idpClientSecret);
 
-        return webClient
-                .get()
-                .uri(uri)
+        return webClient.get()
+                .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .header("Authorization", "Bearer " + icToken)
                 .retrieve()
                 .bodyToMono(IcAccount.class);
@@ -83,10 +86,8 @@ public class ReactiveIcClient {
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
 
-        final URI uri = idpBaseUrl.resolve(template.expand(variables));
-        return webClient
-                .post()
-                .uri(uri)
+        return webClient.post()
+                .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .header("authorization", "Bearer " + code)
                 .exchange()
                 .flatMap(this::extractIdpTokens);
@@ -102,12 +103,10 @@ public class ReactiveIcClient {
         variables.put("realm", realm);
         variables.put("refreshToken", refreshToken);
         variables.put("clientId", idpClientId);
-        variables.put("clientSecret", idpClientSecret);;
+        variables.put("clientSecret", idpClientSecret);
 
-        final URI uri = idpBaseUrl.resolve(template.expand(variables));
-        return webClient
-                .post()
-                .uri(uri)
+        return webClient.post()
+                .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .exchange()
                 .flatMap(this::extractIdpTokens);
     }
@@ -123,40 +122,36 @@ public class ReactiveIcClient {
 
     public Mono<TokenResponse> personaLogin(String realm, String scopes, String personaName, URI redirectUri) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/personas/{persona}" +
-                                                             "?client_id={clientId}" +
-                                                             "&client_secret={clientSecret}" +
-                                                             "&scope={scopes}" +
-                                                             "&redirect_uri={redirectUri}");
-
+                "?client_id={clientId}" +
+                "&client_secret={clientSecret}" +
+                "&scope={scopes}" +
+                "&redirect_uri={redirectUri}");
         final Map<String, Object> variables = new HashMap<>();
         variables.put("realm", realm);
         variables.put("persona", personaName);
-        variables.put("clientId", idpClientId);
-        variables.put("clientSecret", idpClientSecret);
         variables.put("scopes", scopes);
         variables.put("redirectUri", redirectUri);
+        variables.put("clientId", idpClientId);
+        variables.put("clientSecret", idpClientSecret);
 
-        URI uri = idpBaseUrl.resolve(template.expand(variables));
-
-        return webClient
-                .get()
-                .uri(uri)
+        return webClient.get()
+                .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .exchange()
                 .flatMap(clientResponse -> {
-                   if (clientResponse.statusCode().is3xxRedirection()) {
-                       final String location = clientResponse.headers().header("Location").get(0);
-                       final String code = UriComponentsBuilder.fromHttpUrl(location)
-                                                               .build()
-                                                               .getQueryParams()
-                                                               .getFirst("code");
-                       return Mono.just(code);
-                   } else {
-                       return clientResponse.bodyToMono(String.class)
-                                            .flatMap(body -> Mono.error(new TokenExchangeException(format(
-                                                    "Unexpected result doing persona login: [%s] %s",
-                                                    clientResponse.statusCode(),
-                                                    body))));
-                   }
+                    if (clientResponse.statusCode().is3xxRedirection()) {
+                        final String location = clientResponse.headers().header("Location").get(0);
+                        final String code = UriComponentsBuilder.fromHttpUrl(location)
+                                .build()
+                                .getQueryParams()
+                                .getFirst("code");
+                        return Mono.just(code);
+                    } else {
+                        return clientResponse.bodyToMono(String.class)
+                                .flatMap(body -> Mono.error(new TokenExchangeException(format(
+                                        "Unexpected result doing persona login: [%s] %s",
+                                        clientResponse.statusCode(),
+                                        body))));
+                    }
                 }).flatMap(code -> exchangeAuthorizationCodeForTokens(realm, redirectUri, code));
     }
 
@@ -166,16 +161,15 @@ public class ReactiveIcClient {
                 "&clientId={clientId}" +
                 "&redirect_uri={redirectUri}" +
                 "&state={state}" +
-                "&scope={scope}" +
+                "&scope={scopes}" +
                 "&login_hint={loginHint}");
-
-        final HashMap<String, Object> variables = new HashMap<>();
+        final Map<String, Object> variables = new HashMap<>();
         variables.put("realm", realm);
-        variables.put("clientId", idpClientId);
-        variables.put("redirectUri", redirectUri);
         variables.put("state", state);
-        variables.put("scope", scopes);
+        variables.put("scopes", scopes);
+        variables.put("redirectUri", redirectUri);
         variables.put("loginHint", loginHint);
+        variables.put("clientId", idpClientId);
 
         return idpBaseUrl.resolve(template.expand(variables));
     }
@@ -197,14 +191,13 @@ public class ReactiveIcClient {
                 "&redirect_uri={redirectUri}" +
                 "&scope={scopes}" +
                 "&state={state}");
-
-        final HashMap<String, Object> variables = new HashMap<>();
+        final Map<String, Object> variables = new HashMap<>();
         variables.put("realm", realm);
+        variables.put("state", state);
+        variables.put("scopes", scopes);
+        variables.put("redirectUri", redirectUri);
         variables.put("provider", provider);
         variables.put("clientId", idpClientId);
-        variables.put("redirectUri", redirectUri);
-        variables.put("scopes", scopes);
-        variables.put("state", state);
 
         return idpBaseUrl.resolve(template.expand(variables));
     }
@@ -226,18 +219,15 @@ public class ReactiveIcClient {
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}" +
                 "&link_token={linkToken}");
-
         final Map<String, Object> variables = new HashMap<>();
         variables.put("realm", realm);
         variables.put("accountId", baseAccountId);
+        variables.put("linkToken", newAccountLinkToken);
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
-        variables.put("linkToken", newAccountLinkToken);
 
-        URI uri = idpBaseUrl.resolve(template.expand(variables));
-        return webClient
-                .patch()
-                .uri(uri)
+        return webClient.patch()
+                .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .header("Authorization", "Bearer " + baseAccountAccessToken)
                 .exchange()
                 .flatMap(response -> {
@@ -255,9 +245,8 @@ public class ReactiveIcClient {
                                       String accountAccessToken,
                                       String subjectName) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/accounts/{accountId}/subjects/{subjectName}" +
-                                                             "?client_id={clientId}" +
-                                                             "&client_secret={clientSecret}");
-
+                "?client_id={clientId}" +
+                "&client_secret={clientSecret}");
         final Map<String, Object> variables = new HashMap<>();
         variables.put("realm", realm);
         variables.put("accountId", accountId);
@@ -265,10 +254,8 @@ public class ReactiveIcClient {
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
 
-        URI uri = idpBaseUrl.resolve(template.expand(variables));
-        return webClient
-                .delete()
-                .uri(uri)
+        return webClient.delete()
+                .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .header("Authorization", "Bearer " + accountAccessToken)
                 .exchange()
                 .flatMap(response -> {
@@ -276,7 +263,7 @@ public class ReactiveIcClient {
                         return Mono.just(format("Successfully unlinked [%s] from account [%s]", subjectName, accountId));
                     } else {
                         return response.bodyToMono(String.class)
-                                       .flatMap(errorMessage -> Mono.error(new AccountLinkingFailedException("Unlink failed: " + errorMessage)));
+                                .flatMap(errorMessage -> Mono.error(new AccountLinkingFailedException("Unlink failed: " + errorMessage)));
                     }
                 });
     }

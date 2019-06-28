@@ -1,4 +1,4 @@
-package com.dnastack.ddapfrontend.client.ic;
+package com.dnastack.ddapfrontend.client.ic.model;
 
 import lombok.Data;
 
