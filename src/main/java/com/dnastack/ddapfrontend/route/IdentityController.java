@@ -1,7 +1,6 @@
 package com.dnastack.ddapfrontend.route;
 
 import com.dnastack.ddapfrontend.client.AuthAccessTesterClient;
-import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
 import com.dnastack.ddapfrontend.client.ic.IcAccount;
 import com.dnastack.ddapfrontend.client.ic.ReactiveIcClient;
 import com.dnastack.ddapfrontend.client.ic.TokenExchangeException;
@@ -53,9 +52,6 @@ import static org.springframework.http.HttpStatus.TEMPORARY_REDIRECT;
 public class IdentityController {
 
     private static final String DEFAULT_SCOPES = "openid ga4gh account_admin identities";
-
-    @Autowired
-    private ReactiveDamClient damClient;
 
     @Autowired
     private ReactiveIcClient idpClient;

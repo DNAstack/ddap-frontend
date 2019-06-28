@@ -37,17 +37,13 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
                     .cookie("dam_token", validPersonaToken)
                     .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
                     .then()
-                    .log().ifValidationFails()
+                .log().everything()
                     .contentType(JSON)
                     .statusCode(200)
-                    .body("[0].beaconInfo.name", equalTo("Beacon Discovery"))
-                    .body("[0].beaconInfo.viewId", equalTo("beacon"))
-                    .body("[0].beaconInfo.resourceId", equalTo("ga4gh-apis"))
-                    .body("[0].beaconInfo.resourceLabel", equalTo("GA4GH APIs"))
-                    .body("[1].beaconInfo.name", equalTo("Beacon Discovery Access"))
-                    .body("[1].beaconInfo.viewId", equalTo("discovery-access"))
-                    .body("[1].beaconInfo.resourceId", equalTo("thousand-genomes"))
-                    .body("[1].beaconInfo.resourceLabel", equalTo("1000 Genomes"));
+                    .body("beaconInfo.name", containsInAnyOrder("Beacon Discovery", "Beacon Discovery Access"))
+                    .body("beaconInfo.viewId", containsInAnyOrder("beacon", "discovery-access"))
+                    .body("beaconInfo.resourceId", containsInAnyOrder("ga4gh-apis", "thousand-genomes"))
+                    .body("beaconInfo.resourceLabel", containsInAnyOrder("GA4GH APIs", "1000 Genomes"));
         // @formatter:on
     }
 
@@ -116,6 +112,5 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
             .statusCode(200);
         // @formatter:on
     }
-
 
 }
