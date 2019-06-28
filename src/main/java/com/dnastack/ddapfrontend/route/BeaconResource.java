@@ -4,6 +4,7 @@ import com.dnastack.ddapfrontend.beacon.BeaconError;
 import com.dnastack.ddapfrontend.beacon.BeaconInfo;
 import com.dnastack.ddapfrontend.beacon.BeaconQueryResult;
 import com.dnastack.ddapfrontend.client.beacon.BeaconErrorException;
+import com.dnastack.ddapfrontend.client.beacon.ReactiveBeaconClient;
 import com.dnastack.ddapfrontend.client.dam.FeignDamClient;
 import com.dnastack.ddapfrontend.client.dam.model.DamResource;
 import com.dnastack.ddapfrontend.client.dam.model.DamResources;
@@ -20,8 +21,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -35,35 +34,20 @@ import static java.lang.String.format;
 @RestController
 class BeaconResource {
 
-    private final WebClient webClient = WebClient.builder()
-            .filter(logRequest())
-            .filter(logResponse())
-            .build();
-
-    private static ExchangeFilterFunction logRequest() {
-        return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
-            log.info(">>> {} {}", clientRequest.method(), clientRequest.url());
-            clientRequest.headers()
-                    .forEach((name, values) -> log.info("  {}: {}", name, values));
-            return Mono.just(clientRequest);
-        });
-    }
-
-    private static ExchangeFilterFunction logResponse() {
-        return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
-            log.info("<<< HTTP {}", clientResponse.rawStatusCode());
-            clientResponse.headers().asHttpHeaders()
-                    .forEach((name, values) -> log.info("  {}: {}", name, values));
-            return Mono.just(clientResponse);
-        });
-    }
-
     private static final String BEACON_INTERFACE = "http:beacon";
 
-    @Autowired
+    private ReactiveBeaconClient beaconClient;
     private FeignDamClient feignDamClient;
-    @Autowired
     private UserTokenCookiePackager cookiePackager;
+
+    @Autowired
+    public BeaconResource(ReactiveBeaconClient beaconClient,
+                          FeignDamClient feignDamClient,
+                          UserTokenCookiePackager cookiePackager) {
+        this.beaconClient = beaconClient;
+        this.feignDamClient = feignDamClient;
+        this.cookiePackager = cookiePackager;
+    }
 
     @GetMapping(value = "/api/v1alpha/{realm}/resources/search", params = "type=beacon")
     public Flux<BeaconQueryResult> aggregateBeaconSearch(@PathVariable String realm,
@@ -153,7 +137,7 @@ class BeaconResource {
         return beaconViewToken.flatMap(viewToken -> {
             log.debug("About to query: {} beacon at {}", beaconView.getViewId(), beaconView.getUri());
 
-            return doBeaconQuery(beaconRequest, beaconView.getUri(), viewToken)
+            return beaconClient.queryBeacon(beaconRequest, beaconView.getUri(), viewToken)
                     .map(result -> formatBeaconServerPayload(beaconInfo, result))
                     .onErrorResume(BeaconErrorException.class, ex -> {
                         final BeaconQueryResult result = createErrorBeaconResult(beaconInfo,
@@ -194,52 +178,7 @@ class BeaconResource {
         return result;
     }
 
-    private Mono<com.dnastack.ddapfrontend.client.beacon.BeaconQueryResult> doBeaconQuery(BeaconRequestModel beaconRequest, String beaconUrl, String token) {
-        return webClient
-                .get()
-                .uri(beaconQueryUrl(beaconUrl + "/query", beaconRequest))
-                .header("Authorization",
-                        "Bearer " + token)
-                .exchange()
-                .flatMap(clientResponse -> {
-                    if (clientResponse.statusCode().is2xxSuccessful()) {
-                        return clientResponse.bodyToMono(com.dnastack.ddapfrontend.client.beacon.BeaconQueryResult.class)
-                                             .flatMap(result -> {
-                                                 if (result.getExists() == null) {
-                                                     return Mono.error(Optional.ofNullable(result.getError())
-                                                                               .map(error -> new BeaconErrorException(
-                                                                                       error.getErrorCode(),
-                                                                                       error.getMessage()))
-                                                                               .orElseGet(() -> new BeaconErrorException(
-                                                                                       null,
-                                                                                       null)));
-                                                 } else {
-                                                     return Mono.just(result);
-                                                 }
-                                             });
-                    } else {
-                        return clientResponse.bodyToMono(String.class)
-                                             .flatMap(body -> Mono.error(new BeaconErrorException(clientResponse.statusCode()
-                                                                                                                .value(),
-                                                                                                  body)));
-                    }
-                });
-    }
 
-    private String beaconQueryUrl(String baseUrl, BeaconRequestModel beaconRequest) {
-        return format("%s" +
-                        "?assemblyId=%s" +
-                        "&referenceName=%s" +
-                        "&start=%s" +
-                        "&referenceBases=%s" +
-                        "&alternateBases=%s",
-                baseUrl,
-                beaconRequest.getAssemblyId(),
-                beaconRequest.getReferenceName(),
-                beaconRequest.getStart(),
-                beaconRequest.getReferenceBases(),
-                beaconRequest.getAlternateBases());
-    }
 
     private BeaconQueryResult formatBeaconServerPayload(BeaconInfo infoResponse,
                                                         com.dnastack.ddapfrontend.client.beacon.BeaconQueryResult queryResponse) {

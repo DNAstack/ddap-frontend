@@ -1,24 +1,18 @@
 package com.dnastack.ddapfrontend.route;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import static java.lang.String.format;
 import static org.springframework.http.MediaType.TEXT_HTML;
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
-@Slf4j
 @RestController
 public class FrontendAssetsRedirector {
 

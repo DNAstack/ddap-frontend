@@ -105,13 +105,6 @@ public class IdentityController {
         }).flatMap(account -> Mono.just(ResponseEntity.ok().body(account)));
     }
 
-    @GetMapping("/target-test")
-    public Mono<?> testTargetAdapters(ServerHttpRequest request, @PathVariable String realm) {
-        Optional<String> damToken = cookiePackager.extractToken(request, CookieKind.DAM);
-       return damClient.getTargetAdapters(realm, damToken.get());
-    }
-
-
     @GetMapping("/login")
     public Mono<? extends ResponseEntity<?>> apiLogin(ServerHttpRequest request,
                                                       @PathVariable String realm,
