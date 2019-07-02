@@ -1,5 +1,6 @@
 package com.dnastack.ddapfrontend.security;
 
+import com.dnastack.ddapfrontend.security.filter.UserTokenStatusFilter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;

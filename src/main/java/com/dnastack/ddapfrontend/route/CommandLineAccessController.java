@@ -4,6 +4,7 @@ import com.dnastack.ddapfrontend.cli.CliLoginStatus;
 import com.dnastack.ddapfrontend.cli.CliSessionNotFound;
 import com.dnastack.ddapfrontend.cli.TokenResponse;
 import com.dnastack.ddapfrontend.client.ic.ReactiveIcClient;
+import com.dnastack.ddapfrontend.client.ic.ReactiveOAuthClient;
 import com.dnastack.ddapfrontend.security.BadCredentialsException;
 import com.dnastack.ddapfrontend.security.JwtHandler;
 import com.dnastack.ddapfrontend.security.OAuthStateHandler;
@@ -40,6 +41,7 @@ import static java.lang.String.format;
 public class CommandLineAccessController {
     private static final String DEFAULT_SCOPES = "openid ga4gh account_admin identities";
 
+    private final ReactiveOAuthClient oAuthClient;
     private final ReactiveIcClient icClient;
     private final OAuthStateHandler stateHandler;
     private Duration tokenTtl;
@@ -56,10 +58,12 @@ public class CommandLineAccessController {
 
     @Autowired
     public CommandLineAccessController(OAuthStateHandler stateHandler,
+                                       ReactiveOAuthClient oAuthClient,
                                        ReactiveIcClient icClient,
                                        @Value("${ddap.command-line-service.aud}") String tokenAudience,
                                        @Value("${ddap.command-line-service.ttl}") Duration tokenTtl,
                                        @Value("${ddap.command-line-service.signingKey}") String tokenSigningKeyBase64) {
+        this.oAuthClient = oAuthClient;
         this.icClient = icClient;
         this.stateHandler = stateHandler;
         this.tokenTtl = tokenTtl;
@@ -85,7 +89,7 @@ public class CommandLineAccessController {
 
         final URI statusUrl = selfLinkToApi(request, realm, format("cli/login/%s/status", cliSessionId));
         final String state = stateHandler.generateCommandLineLoginState(cliSessionId);
-        final URI webLoginUrl = icClient.getAuthorizeUrl(realm,
+        final URI webLoginUrl = oAuthClient.getAuthorizeUrl(realm,
                                                          state,
                                                          scope,
                                                          selfLinkToApi(request,
@@ -138,7 +142,7 @@ public class CommandLineAccessController {
         if (loginStatus == null) {
             return Mono.error(new CliSessionNotFound(cliSessionId));
         } else {
-            return icClient.exchangeAuthorizationCodeForTokens(realm,
+            return oAuthClient.exchangeAuthorizationCodeForTokens(realm,
                                                                selfLinkToApi(request,
                                                                              realm,
                                                                              ""),

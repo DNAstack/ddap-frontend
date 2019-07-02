@@ -49,6 +49,14 @@ public class UserTokenCookiePackager {
                 .build();
     }
 
+    public ResponseCookie packageToken(String token, CookieKind audience) {
+        return ResponseCookie.from(audience.cookieName(), token)
+                .path("/")
+                .secure(generateSecureCookies)
+                .httpOnly(true)
+                .build();
+    }
+
     /**
      * Produces a cookie that, when set for the given hostname, clears the corresponding security authorization.
      *

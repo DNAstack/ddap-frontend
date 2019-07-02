@@ -53,11 +53,12 @@ class BeaconController {
                                                          BeaconRequestModel beaconRequest,
                                                          ServerHttpRequest request) {
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
+        Optional<String> refreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
         return damClient.getResources(realm)
                 .flux()
                 .flatMap((damResources) -> {
                     Map<String, DamResource> resources = damResources.getResources();
-                    return maybePerformBeaconQueries(realm, beaconRequest, damToken, resources.entrySet());
+                    return maybePerformBeaconQueries(realm, beaconRequest, damToken, refreshToken.get(), resources.entrySet());
                 });
     }
 
@@ -67,11 +68,12 @@ class BeaconController {
                                                               BeaconRequestModel beaconRequest,
                                                               ServerHttpRequest request) {
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
+        Optional<String> refreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
         return damClient.getResource(realm, resourceId)
                 .flux()
                 .flatMap((damResource) -> {
                     Map.Entry<String, DamResource> resource = Map.entry(resourceId, damResource);
-                    return maybePerformBeaconQueries(realm, beaconRequest, damToken, Collections.singleton(resource));
+                    return maybePerformBeaconQueries(realm, beaconRequest, damToken, refreshToken.get(), Collections.singleton(resource));
                 });
     }
 
@@ -101,6 +103,7 @@ class BeaconController {
     private Flux<BeaconQueryResult> maybePerformBeaconQueries(String realm,
                                                               BeaconRequestModel beaconRequest,
                                                               Optional<String> damToken,
+                                                              String refreshToken,
                                                               Collection<Map.Entry<String, DamResource>> resourceEntries) {
         return resourceEntries
                 .stream()
@@ -108,7 +111,8 @@ class BeaconController {
                 .map(beaconView -> damToken.map(token -> maybePerformSingleBeaconViewQuery(realm,
                         beaconView,
                         beaconRequest,
-                        token))
+                        token,
+                        refreshToken))
                         .orElseGet(() -> unauthorizedBeaconApiAlleleResponse(beaconView)))
                 .map(Mono::flux)
                 .reduce(Flux::merge)
@@ -128,10 +132,11 @@ class BeaconController {
     private Mono<BeaconQueryResult> maybePerformSingleBeaconViewQuery(String realm,
                                                                       BeaconView beaconView,
                                                                       BeaconRequestModel beaconRequest,
-                                                                      String damToken) {
+                                                                      String damToken,
+                                                                      String refreshToken) {
 
         final BeaconInfo beaconInfo = createBeaconInfo(beaconView);
-        Mono<LocationAndToken> tokenMono = damClient.getAccessTokenForView(realm, beaconView.getResourceId(), beaconView.getViewId(), damToken);
+        Mono<LocationAndToken> tokenMono = damClient.getAccessTokenForView(realm, beaconView.getResourceId(), beaconView.getViewId(), damToken, refreshToken);
 
         return tokenMono.flatMap(viewToken -> {
             log.debug("About to query: {} beacon at {}", beaconView.getViewId(), beaconView.getUri());
