@@ -1,12 +1,10 @@
 package com.dnastack.ddap.frontend;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
-import com.dnastack.ddap.common.DdapBy;
 import com.dnastack.ddap.common.page.*;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 
@@ -25,7 +23,7 @@ public class AdminDamOptionsE2eTest extends AbstractFrontendE2eTest {
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
         final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", testConfig, REALM);
+        setupRealmConfig("administrator", testConfig, "1", REALM);
     }
 
     @Override

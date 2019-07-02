@@ -95,7 +95,7 @@ public abstract class AbstractBaseE2eTest {
                 allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
 
-    protected static void setupRealmConfig(String personaName, String config, String realmName) throws IOException {
+    protected static void setupRealmConfig(String personaName, String config, String damId, String realmName) throws IOException {
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(config, damConfigBuilder);
 
@@ -103,7 +103,7 @@ public abstract class AbstractBaseE2eTest {
         final CookieStore cookieStore = performPersonaLogin(personaName, realmName);
 
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpPut request = new HttpPut(format("%s/dam/v1alpha/%s/config", DDAP_BASE_URL, realmName));
+        HttpPut request = new HttpPut(format("%s/dam/%s/v1alpha/%s/config", DDAP_BASE_URL, damId, realmName));
         request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
         request.setEntity(new StringEntity(modificationPayload));
 

@@ -5,8 +5,6 @@ import com.dnastack.ddapfrontend.client.WebClientFactory;
 import com.dnastack.ddapfrontend.client.dam.model.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
 
@@ -18,7 +16,6 @@ import java.util.Map;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Slf4j
-@Component
 public class ReactiveDamClient {
 
     private URI damBaseUrl;
@@ -33,9 +30,9 @@ public class ReactiveDamClient {
         private List<String> access;
     }
 
-    public ReactiveDamClient(@Value("${dam.base-url}") URI damBaseUrl,
-                             @Value("${dam.client-id}") String damClientId,
-                             @Value("${dam.client-secret}") String damClientSecret,
+    public ReactiveDamClient(URI damBaseUrl,
+                             String damClientId,
+                             String damClientSecret,
                              WebClientFactory webClientFactory) {
         this.damBaseUrl = damBaseUrl;
         this.damClientId = damClientId;

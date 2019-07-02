@@ -29,7 +29,7 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
     public static void oneTimeSetup() throws IOException {
         final String icConfig = loadTemplate("/com/dnastack/ddap/icConfig.json");
         final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", damConfig, REALM);
+        setupRealmConfig("administrator", damConfig, "1", REALM);
         setupIcConfig("administrator", icConfig, REALM);
     }
 

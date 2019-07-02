@@ -24,7 +24,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
     @Before
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/accountLinkingTestRealmConfig.json");
-        setupRealmConfig("administrator", realmConfigString, REALM);
+        setupRealmConfig("administrator", realmConfigString, "1", REALM);
         RestAssured.config = RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                 (cls, charset) -> {
                     ObjectMapper om = new ObjectMapper().findAndRegisterModules();

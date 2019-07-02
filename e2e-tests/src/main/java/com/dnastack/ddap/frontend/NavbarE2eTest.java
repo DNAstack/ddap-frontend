@@ -72,7 +72,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
         final String testConfig = loadTemplate("/com/dnastack/ddap/navbarE2eTestConfig.json");
-        setupRealmConfig("administrator", testConfig, REALM);
+        setupRealmConfig("administrator", testConfig, "1", REALM);
     }
 
     @Override

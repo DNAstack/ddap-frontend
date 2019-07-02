@@ -23,7 +23,7 @@ public class ExerciseBeaconInfoResponseTest extends AbstractBaseE2eTest {
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(realmConfigString, damConfigBuilder);
 
-        setupRealmConfig("administrator", realmConfigString, REALM);
+        setupRealmConfig("administrator", realmConfigString, "1", REALM);
     }
 
     /**

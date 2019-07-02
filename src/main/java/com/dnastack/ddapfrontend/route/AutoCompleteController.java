@@ -1,12 +1,15 @@
 package com.dnastack.ddapfrontend.route;
 
+import com.dnastack.ddapfrontend.client.dam.DamClientFactory;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
 import com.dnastack.ddapfrontend.client.dam.model.DamCondition;
 import com.dnastack.ddapfrontend.client.dam.model.DamConfig;
 import com.dnastack.ddapfrontend.client.dam.model.DamPolicy;
+import com.dnastack.ddapfrontend.config.Dam;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -20,19 +23,40 @@ import java.util.stream.Stream;
 @RequestMapping("/api/v1alpha/{realm}/autocomplete")
 public class AutoCompleteController {
 
-    private ReactiveDamClient damClient;
+    private DamClientFactory damClientFactory;
     private UserTokenCookiePackager cookiePackager;
+    private Map<String, Dam> dams;
 
     @Autowired
-    public AutoCompleteController(ReactiveDamClient damClient, UserTokenCookiePackager cookiePackager) {
-        this.damClient = damClient;
+    public AutoCompleteController(DamClientFactory damClientFactory,
+                                  UserTokenCookiePackager cookiePackager,
+                                  @Qualifier("dams") Map<String, Dam> dams) {
+        this.damClientFactory = damClientFactory;
         this.cookiePackager = cookiePackager;
+        this.dams = dams;
+    }
+
+    /*
+     * Temporary hack while we work on DISCO-2276
+     */
+    @GetMapping("/claimValue")
+    public Mono<List<String>> getClaimValues(@RequestParam String claimName,
+                                             ServerHttpRequest request,
+                                             @PathVariable String realm) {
+        if (dams.size() != 1) {
+            throw new IllegalArgumentException("Must specify DAM ID when more than one DAM is configured.");
+        }
+
+        return getClaimValues(claimName, request, realm, dams.keySet().iterator().next());
     }
 
     //Reading the realm config
     //Iterate through realm config policies and find all the values in policies
-    @GetMapping("/claimValue")
-    public Mono<List<String>> getClaimValues(@RequestParam String claimName, ServerHttpRequest request, @PathVariable String realm) {
+    @GetMapping("claimValue/{damId}")
+    public Mono<List<String>> getClaimValues(@RequestParam String claimName,
+                                             ServerHttpRequest request,
+                                             @PathVariable String realm,
+                                             @PathVariable String damId) {
         List<String> result = new ArrayList<>();
 
         // find beacons under resourceId in DAM config
@@ -40,9 +64,12 @@ public class AutoCompleteController {
         Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
         String refreshToken = foundRefreshToken.orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
+
+        final ReactiveDamClient damClient = damClientFactory.getDamClient(damId);
+
         // TODO catch 401/403 and return 401/403
         return damClient.getConfig(realm, damToken, refreshToken)
-                .flatMap((damConfig) -> {
+                        .flatMap((damConfig) -> {
                     Map<String, DamPolicy> policies = damConfig.getPolicies();
                     for (Map.Entry<String, DamPolicy> policy : policies.entrySet()) {
                         DamCondition allow = policy.getValue().getAllow();

@@ -27,7 +27,7 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
     @Before
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/beaconSearchExceptionNoServerResponseHandlingTest.json");
-        setupRealmConfig("administrator", realmConfigString, REALM);
+        setupRealmConfig("administrator", realmConfigString, "1", REALM);
         RestAssured.config = RestAssuredConfig.config()
                                               .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                                                       (cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()

@@ -6,10 +6,11 @@ server:
   # If both are specified (not recommended) SERVER_PORT will take precedence.
   port: ${PORT:8085}
 
-dam:
-  base-url: http://localhost:3000/
-  client-id: local-dam-client-id
-  client-secret: local-dam-client-secret
+dams:
+  1:
+    base-url: http://localhost:3000/
+    client-id: local-dam-client-id
+    client-secret: local-dam-client-secret
 idp:
   base-url: http://localhost:3001/
   client-id: local-dam-client-id
@@ -42,6 +43,7 @@ spring:
       routes:
         # NB: If you add a new route here,
         # you may also need to modify com.dnastack.ddapfrontend.route.Router#angluarRoutes
+        # Important: Routes for the DAM are in com.dnastack.ddapfrontend.route.DamRouter
         - predicates:
             - Path=/api/cafevariome/**
           filters:
@@ -49,21 +51,6 @@ spring:
             - StripPrefix=2
             - RemoveRequestHeader=Authorization
           uri: https://beacon.cafevariome.org
-        - predicates:
-            - Path=/dam/**
-          filters:
-            - name: TimeoutAndRetry
-              args:
-                retries: 2
-                minimumTimeout: 1000
-                maximumTimeout: 20000
-                timeoutExponentialScalingBase: 10
-            - Logging
-            - AddRequestParameter=clientId,${dam.client-id}
-            - AddRequestParameter=clientSecret,${dam.client-secret}
-            - RemoveRequestHeader=Authorization
-            - SetBearerTokenFromCookie=DAM
-          uri: ${dam.base-url}
         - predicates:
             - Path=/identity/**
           filters:

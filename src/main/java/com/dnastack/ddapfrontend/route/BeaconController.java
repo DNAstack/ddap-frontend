@@ -2,17 +2,22 @@ package com.dnastack.ddapfrontend.route;
 
 import com.dnastack.ddapfrontend.client.beacon.BeaconErrorException;
 import com.dnastack.ddapfrontend.client.beacon.ReactiveBeaconClient;
-import com.dnastack.ddapfrontend.client.beacon.model.*;
+import com.dnastack.ddapfrontend.client.beacon.model.BeaconInfo;
+import com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryError;
+import com.dnastack.ddapfrontend.client.beacon.model.BeaconQueryResult;
+import com.dnastack.ddapfrontend.client.dam.DamClientFactory;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
 import com.dnastack.ddapfrontend.client.dam.model.DamResource;
 import com.dnastack.ddapfrontend.client.dam.model.DamView;
 import com.dnastack.ddapfrontend.client.dam.model.LocationAndToken;
+import com.dnastack.ddapfrontend.config.Dam;
 import com.dnastack.ddapfrontend.model.BeaconRequestModel;
 import com.dnastack.ddapfrontend.model.InterfaceModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,16 +41,19 @@ class BeaconController {
     private static final String BEACON_INTERFACE = "http:beacon";
 
     private ReactiveBeaconClient beaconClient;
-    private ReactiveDamClient damClient;
+    private DamClientFactory damClientFactory;
     private UserTokenCookiePackager cookiePackager;
+    private Map<String, Dam> dams;
 
     @Autowired
     public BeaconController(ReactiveBeaconClient beaconClient,
-                            ReactiveDamClient damClient,
-                            UserTokenCookiePackager cookiePackager) {
+                            DamClientFactory damClientFactory,
+                            UserTokenCookiePackager cookiePackager,
+                            @Qualifier("dams") Map<String, Dam> dams) {
         this.beaconClient = beaconClient;
-        this.damClient = damClient;
+        this.damClientFactory = damClientFactory;
         this.cookiePackager = cookiePackager;
+        this.dams = dams;
     }
 
     @GetMapping(value = "/search", params = "type=beacon")
@@ -55,26 +63,52 @@ class BeaconController {
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
         String refreshToken = foundRefreshToken.orElse(null);
-        return damClient.getResources(realm)
-                .flux()
-                .flatMap((damResources) -> {
-                    Map<String, DamResource> resources = damResources.getResources();
-                    return maybePerformBeaconQueries(realm, beaconRequest, damToken, refreshToken, resources.entrySet());
-                });
+
+        return Flux.fromStream(damClientFactory.allDamClients())
+                   .flatMap(damClient -> damClient.getResources(realm)
+                                                  .flux()
+                                                  .flatMap((damResources) -> {
+                                                      Map<String, DamResource> resources = damResources.getResources();
+                                                      return maybePerformBeaconQueries(damClient,
+                                                                                       realm,
+                                                                                       beaconRequest,
+                                                                                       damToken,
+                                                                                       refreshToken,
+                                                                                       resources.entrySet());
+                                                  }));
     }
 
-    @GetMapping(value = "/{resourceId}/search", params = "type=beacon")
+    /*
+     * Temporary hack while we work on DISCO-2276
+     */
+    @GetMapping(value = "{resourceId}/search", params = "type=beacon")
     public Flux<BeaconQueryResult> singleResourceBeaconSearch(@PathVariable String realm,
+                                                              @PathVariable String resourceId,
+                                                              BeaconRequestModel beaconRequest,
+                                                              ServerHttpRequest request) {
+        if (dams.size() != 1) {
+            throw new IllegalArgumentException("Must specify DAM ID when more than one DAM is configured.");
+        }
+
+        return singleResourceBeaconSearch(realm, dams.keySet().iterator().next(), resourceId, beaconRequest, request);
+    }
+
+    @GetMapping(value = "{damId}/{resourceId}/search", params = "type=beacon")
+    public Flux<BeaconQueryResult> singleResourceBeaconSearch(@PathVariable String realm,
+                                                              @PathVariable String damId,
                                                               @PathVariable String resourceId,
                                                               BeaconRequestModel beaconRequest,
                                                               ServerHttpRequest request) {
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         Optional<String> refreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
+
+        final ReactiveDamClient damClient = damClientFactory.getDamClient(damId);
+
         return damClient.getResource(realm, resourceId)
                 .flux()
                 .flatMap((damResource) -> {
                     Map.Entry<String, DamResource> resource = Map.entry(resourceId, damResource);
-                    return maybePerformBeaconQueries(realm, beaconRequest, damToken, refreshToken.get(), Collections.singleton(resource));
+                    return maybePerformBeaconQueries(damClient, realm, beaconRequest, damToken, refreshToken.get(), Collections.singleton(resource));
                 });
     }
 
@@ -101,7 +135,8 @@ class BeaconController {
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private Flux<BeaconQueryResult> maybePerformBeaconQueries(String realm,
+    private Flux<BeaconQueryResult> maybePerformBeaconQueries(ReactiveDamClient damClient,
+                                                              String realm,
                                                               BeaconRequestModel beaconRequest,
                                                               Optional<String> damToken,
                                                               String refreshToken,
@@ -109,7 +144,9 @@ class BeaconController {
         return resourceEntries
                 .stream()
                 .flatMap(BeaconController::filterBeaconView)
-                .map(beaconView -> damToken.map(token -> maybePerformSingleBeaconViewQuery(realm,
+                .map(beaconView -> damToken.map(token -> maybePerformSingleBeaconViewQuery(
+                        damClient,
+                        realm,
                         beaconView,
                         beaconRequest,
                         token,
@@ -130,7 +167,8 @@ class BeaconController {
         return Mono.just(createErrorBeaconResult(createBeaconInfo(beaconView), 401, message));
     }
 
-    private Mono<BeaconQueryResult> maybePerformSingleBeaconViewQuery(String realm,
+    private Mono<BeaconQueryResult> maybePerformSingleBeaconViewQuery(ReactiveDamClient damClient,
+                                                                      String realm,
                                                                       BeaconView beaconView,
                                                                       BeaconRequestModel beaconRequest,
                                                                       String damToken,

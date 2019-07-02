@@ -31,7 +31,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
         final String testConfig = loadTemplate("/com/dnastack/ddap/resourcesConfig.json");
-        setupRealmConfig("administrator", testConfig, REALM);
+        setupRealmConfig("administrator", testConfig, "1", REALM);
     }
 
     @Override

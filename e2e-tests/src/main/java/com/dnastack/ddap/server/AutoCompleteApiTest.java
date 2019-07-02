@@ -21,7 +21,7 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
         String configJson = loadTemplate("/com/dnastack/ddap/autoCompleteConfig.json");
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(configJson, damConfigBuilder);
-        setupRealmConfig("administrator", configJson, REALM);
+        setupRealmConfig("administrator", configJson, "1", REALM);
     }
 
     @Test

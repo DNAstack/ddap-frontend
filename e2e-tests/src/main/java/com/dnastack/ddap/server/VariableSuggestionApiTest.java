@@ -21,7 +21,7 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
         String configJson = loadTemplate("/com/dnastack/ddap/variableSuggestionConfig.json");
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(configJson, damConfigBuilder);
-        setupRealmConfig("administrator", configJson, REALM);
+        setupRealmConfig("administrator", configJson, "1", REALM);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.dnastack.ddapfrontend.client;
 
+import com.dnastack.ddapfrontend.client.dam.DamClientFactory;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
 import com.dnastack.ddapfrontend.client.ic.ReactiveIcClient;
 import com.dnastack.ddapfrontend.model.IdentityModel;
@@ -16,19 +17,29 @@ import java.util.List;
 public class AuthAccessTesterClient {
 
     @Autowired
-    private ReactiveDamClient damClient;
+    private DamClientFactory damClientFactory;
     @Autowired
     private ReactiveIcClient icClient;
 
     public Mono<List<IdentityModel.Access>> determineAccessForUser(String realm, String damToken, String icToken, String refreshToken) {
-        Mono<IdentityModel.Access> damAccessMono = determineDamAccess(realm, damToken, refreshToken);
-        Mono<IdentityModel.Access> icAccessMono = determineIcAccess(realm, icToken, refreshToken);
 
-        return Flux.merge(damAccessMono, icAccessMono)
-                .collectList();
+        final Flux<IdentityModel.Access> damAccessFlux =
+                damClientFactory.allDamClients()
+                                .map(damClient -> determineDamAccess(damClient,
+                                                                     realm,
+                                                                     damToken,
+                                                                     refreshToken))
+                                .reduce(Flux.empty(),
+                                        (accum, mono) -> Flux.merge(accum,
+                                                                    mono),
+                                        Flux::merge);
+        final Mono<IdentityModel.Access> icAccessMono = determineIcAccess(realm, icToken, refreshToken);
+
+        return Flux.merge(damAccessFlux, icAccessMono)
+                   .collectList();
     }
 
-    private Mono<IdentityModel.Access> determineDamAccess(String realm, String damToken, String refreshToken) {
+    private Mono<IdentityModel.Access> determineDamAccess(ReactiveDamClient damClient, String realm, String damToken, String refreshToken) {
         IdentityModel.Access damAccess = new IdentityModel.Access();
         damAccess.setTarget("DAM");
         return damClient.getConfig(realm, damToken, refreshToken)
