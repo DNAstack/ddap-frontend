@@ -31,10 +31,12 @@ public class ServiceTemplateVariableResolutionController {
                                                                  @RequestParam(name = "serviceTemplate") String serviceTemplateId,
                                                                  ServerHttpRequest request) {
         Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
+        Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
+        String refreshToken = foundRefreshToken.orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
 
-        return templateService.getServiceTemplate(realm, damToken, serviceTemplateId)
-                .flatMap(serviceTemplate -> templateService.getItemFormatForServiceTemplate(realm, damToken, serviceTemplate)
+        return templateService.getServiceTemplate(realm, damToken, refreshToken, serviceTemplateId)
+                .flatMap(serviceTemplate -> templateService.getItemFormatForServiceTemplate(realm, damToken, refreshToken, serviceTemplate)
                         .map(DamItemFormat::getVariables));
     }
 

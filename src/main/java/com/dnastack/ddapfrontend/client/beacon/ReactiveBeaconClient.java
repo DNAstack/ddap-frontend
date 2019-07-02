@@ -27,7 +27,7 @@ public class ReactiveBeaconClient {
     public Mono<BeaconQueryResult> queryBeacon(BeaconRequestModel beaconRequest, String beaconUrl, String viewAccessToken) {
         return webClient.get()
                 .uri(getBeaconQueryUrl(beaconUrl, beaconRequest))
-                .header("Authorization", "Bearer " + viewAccessToken)
+                .headers(h -> h.setBearerAuth(viewAccessToken))
                 .exchange()
                 .flatMap(clientResponse -> {
                     if (clientResponse.statusCode().is2xxSuccessful()) {
@@ -57,7 +57,7 @@ public class ReactiveBeaconClient {
     private URI getBeaconQueryUrl(String baseUrl, BeaconRequestModel beaconRequest) {
         try {
             final URI beaconBaseUrl = new URI(baseUrl);
-            final UriTemplate template = new UriTemplate("/query" +
+            final UriTemplate template = new UriTemplate("/beacon/query" +
                     "?assemblyId={assemblyId}" +
                     "&referenceName={referenceName}" +
                     "&start={start}" +

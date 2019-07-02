@@ -18,8 +18,8 @@ public class TemplateService {
         this.damClient = damClient;
     }
 
-    public Mono<DamServiceTemplate> getServiceTemplate(String realm, String damToken, String serviceTemplateId) {
-        return damClient.getConfig(realm, damToken)
+    public Mono<DamServiceTemplate> getServiceTemplate(String realm, String damToken, String refreshToken, String serviceTemplateId) {
+        return damClient.getConfig(realm, damToken, refreshToken)
                 .map(DamConfig::getServiceTemplates)
                 .map(serviceTemplates -> {
                     if (!serviceTemplates.containsKey(serviceTemplateId)) {
@@ -29,11 +29,11 @@ public class TemplateService {
                 });
     }
 
-    public Mono<DamItemFormat> getItemFormatForServiceTemplate(String realm, String damToken, DamServiceTemplate serviceTemplate) {
+    public Mono<DamItemFormat> getItemFormatForServiceTemplate(String realm, String damToken, String refreshToken, DamServiceTemplate serviceTemplate) {
         String targetAdapterId = serviceTemplate.getTargetAdapter();
         String itemFormatId = serviceTemplate.getItemFormat();
 
-        return damClient.getTargetAdapters(realm, damToken)
+        return damClient.getTargetAdapters(realm, damToken, refreshToken)
                 .map(targetAdaptersResponse -> {
                     DamTargetAdapter targetAdapter = getDamTargetAdapter(targetAdapterId, targetAdaptersResponse);
                     return getDamItemFormat(targetAdapterId, itemFormatId, targetAdapter);

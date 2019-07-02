@@ -1,13 +1,12 @@
 package com.dnastack.ddapfrontend.client.ic;
 
-import com.dnastack.ddapfrontend.client.LoggingFilter;
+import com.dnastack.ddapfrontend.client.OAuthFilter;
+import com.dnastack.ddapfrontend.client.WebClientFactory;
 import com.dnastack.ddapfrontend.client.ic.model.IcAccount;
 import com.dnastack.ddapfrontend.client.ic.model.TokenResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.ClientResponse;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
@@ -17,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.String.format;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Slf4j
 @Component
@@ -27,20 +26,22 @@ public class ReactiveIcClient {
     private String idpClientId;
     private String idpClientSecret;
 
-    private static final WebClient webClient = WebClient.builder()
-            .filter(LoggingFilter.logRequest())
-            .filter(LoggingFilter.logResponse())
-            .build();
+    private ReactiveOAuthClient oAuthClient;
+    private WebClientFactory webClientFactory;
 
     public ReactiveIcClient(@Value("${idp.base-url}") URI idpBaseUrl,
                             @Value("${idp.client-id}") String idpClientId,
-                            @Value("${idp.client-secret}") String idpClientSecret) {
+                            @Value("${idp.client-secret}") String idpClientSecret,
+                            ReactiveOAuthClient oAuthClient,
+                            WebClientFactory webClientFactory) {
         this.idpBaseUrl = idpBaseUrl;
         this.idpClientId = idpClientId;
         this.idpClientSecret = idpClientSecret;
+        this.oAuthClient = oAuthClient;
+        this.webClientFactory = webClientFactory;
     }
 
-    public Mono<Object> getConfig(String realm, String icToken) {
+    public Mono<Object> getConfig(String realm, String icToken, String refreshToken) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/config" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
@@ -49,14 +50,15 @@ public class ReactiveIcClient {
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
 
-        return webClient.get()
+        return webClientFactory.getWebClient(realm, refreshToken, OAuthFilter.Audience.IC)
+                .get()
                 .uri(idpBaseUrl.resolve(template.expand(variables)))
-                .header("Authorization", "Bearer " + icToken)
+                .header(AUTHORIZATION, "Bearer " + icToken)
                 .retrieve()
                 .bodyToMono(Object.class);
     }
 
-    public Mono<IcAccount> getAccounts(String realm, String icToken) {
+    public Mono<IcAccount> getAccounts(String realm, String icToken, String refreshToken) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/accounts/-" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
@@ -65,59 +67,12 @@ public class ReactiveIcClient {
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
 
-        return webClient.get()
+        return webClientFactory.getWebClient(realm, refreshToken, OAuthFilter.Audience.IC)
+                .get()
                 .uri(idpBaseUrl.resolve(template.expand(variables)))
-                .header("Authorization", "Bearer " + icToken)
+                .header(AUTHORIZATION, "Bearer " + icToken)
                 .retrieve()
                 .bodyToMono(IcAccount.class);
-    }
-
-    public Mono<TokenResponse> exchangeAuthorizationCodeForTokens(String realm, URI redirectUri, String code) {
-        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/token" +
-                "?grant_type=authorization_code" +
-                "&code={code}" +
-                "&redirect_uri={redirectUri}" +
-                "&clientId={clientId}" +
-                "&clientSecret={clientSecret}");
-        final Map<String, Object> variables = new HashMap<>();
-        variables.put("realm", realm);
-        variables.put("code", code);
-        variables.put("redirectUri", redirectUri);
-        variables.put("clientId", idpClientId);
-        variables.put("clientSecret", idpClientSecret);
-
-        return webClient.post()
-                .uri(idpBaseUrl.resolve(template.expand(variables)))
-                .header("authorization", "Bearer " + code)
-                .exchange()
-                .flatMap(this::extractIdpTokens);
-    }
-
-    public Mono<TokenResponse> refreshAccessToken(String realm, String refreshToken) {
-        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/token" +
-                "?grant_type=refresh_token" +
-                "&refresh_token={refreshToken}" +
-                "&clientId={clientId}" +
-                "&clientSecret={clientSecret}");
-        final Map<String, Object> variables = new HashMap<>();
-        variables.put("realm", realm);
-        variables.put("refreshToken", refreshToken);
-        variables.put("clientId", idpClientId);
-        variables.put("clientSecret", idpClientSecret);
-
-        return webClient.post()
-                .uri(idpBaseUrl.resolve(template.expand(variables)))
-                .exchange()
-                .flatMap(this::extractIdpTokens);
-    }
-
-    private Mono<TokenResponse> extractIdpTokens(ClientResponse idpTokenResponse) {
-        if (idpTokenResponse.statusCode().is2xxSuccessful() && contentTypeIsApplicationJson(idpTokenResponse)) {
-            return idpTokenResponse.bodyToMono(TokenResponse.class);
-        } else {
-            return idpTokenResponse.bodyToMono(String.class)
-                    .flatMap(errorBody -> Mono.error(new TokenExchangeException(errorBody)));
-        }
     }
 
     public Mono<TokenResponse> personaLogin(String realm, String scopes, String personaName, URI redirectUri) {
@@ -134,7 +89,8 @@ public class ReactiveIcClient {
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
 
-        return webClient.get()
+        return webClientFactory.getWebClient()
+                .get()
                 .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .exchange()
                 .flatMap(clientResponse -> {
@@ -152,26 +108,7 @@ public class ReactiveIcClient {
                                         clientResponse.statusCode(),
                                         body))));
                     }
-                }).flatMap(code -> exchangeAuthorizationCodeForTokens(realm, redirectUri, code));
-    }
-
-    public URI getAuthorizeUrl(String realm, String state, String scopes, URI redirectUri, String loginHint) {
-        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/authorize" +
-                "?response_type=code" +
-                "&clientId={clientId}" +
-                "&redirect_uri={redirectUri}" +
-                "&state={state}" +
-                "&scope={scopes}" +
-                "&login_hint={loginHint}");
-        final Map<String, Object> variables = new HashMap<>();
-        variables.put("realm", realm);
-        variables.put("state", state);
-        variables.put("scopes", scopes);
-        variables.put("redirectUri", redirectUri);
-        variables.put("loginHint", loginHint);
-        variables.put("clientId", idpClientId);
-
-        return idpBaseUrl.resolve(template.expand(variables));
+                }).flatMap(code -> oAuthClient.exchangeAuthorizationCodeForTokens(realm, redirectUri, code));
     }
 
     /**
@@ -202,19 +139,12 @@ public class ReactiveIcClient {
         return idpBaseUrl.resolve(template.expand(variables));
     }
 
-    private static boolean contentTypeIsApplicationJson(ClientResponse response) {
-        return response.headers()
-                .contentType()
-                .filter(mediaType -> mediaType.isCompatibleWith(
-                        APPLICATION_JSON))
-                .isPresent();
-    }
-
     public Mono<String> linkAccounts(String realm,
                                      String baseAccountId,
                                      String baseAccountAccessToken,
                                      String newAccountId,
-                                     String newAccountLinkToken) {
+                                     String newAccountLinkToken,
+                                     String refreshToken) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/accounts/{accountId}" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}" +
@@ -226,9 +156,10 @@ public class ReactiveIcClient {
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
 
-        return webClient.patch()
+        return webClientFactory.getWebClient(realm, refreshToken, OAuthFilter.Audience.IC)
+                .patch()
                 .uri(idpBaseUrl.resolve(template.expand(variables)))
-                .header("Authorization", "Bearer " + baseAccountAccessToken)
+                .header(AUTHORIZATION, "Bearer " + baseAccountAccessToken)
                 .exchange()
                 .flatMap(response -> {
                     if (response.statusCode().is2xxSuccessful()) {
@@ -243,6 +174,7 @@ public class ReactiveIcClient {
     public Mono<String> unlinkAccount(String realm,
                                       String accountId,
                                       String accountAccessToken,
+                                      String refreshToken,
                                       String subjectName) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/accounts/{accountId}/subjects/{subjectName}" +
                 "?client_id={clientId}" +
@@ -254,9 +186,10 @@ public class ReactiveIcClient {
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
 
-        return webClient.delete()
+        return webClientFactory.getWebClient(realm, refreshToken, OAuthFilter.Audience.IC)
+                .delete()
                 .uri(idpBaseUrl.resolve(template.expand(variables)))
-                .header("Authorization", "Bearer " + accountAccessToken)
+                .header(AUTHORIZATION, "Bearer " + accountAccessToken)
                 .exchange()
                 .flatMap(response -> {
                     if (response.statusCode().is2xxSuccessful()) {

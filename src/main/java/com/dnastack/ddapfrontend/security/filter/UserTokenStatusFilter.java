@@ -1,6 +1,7 @@
-package com.dnastack.ddapfrontend.security;
+package com.dnastack.ddapfrontend.security.filter;
 
 import com.dnastack.ddapfrontend.http.XForwardUtil;
+import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
