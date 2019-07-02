@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { Observable } from 'rxjs/Observable';
+import { repeatWhen } from 'rxjs/operators';
 
 import { Identity } from '../identity/identity.model';
+import { IdentityService } from '../identity/identity.service';
 import { IdentityStore } from '../identity/identity.store';
 import { Profile } from '../identity/profile.model';
+
+const refreshRepeatTimeoutInMs = 3600000;
 
 @Component({
   templateUrl: './layout.component.html',
@@ -22,6 +27,7 @@ export class LayoutComponent implements OnInit {
   constructor(public loader: LoadingBarService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
+              private identityService: IdentityService,
               private identityStore: IdentityStore) {
 
   }
@@ -40,6 +46,17 @@ export class LayoutComponent implements OnInit {
       this.realm = params.realmId;
       this.loginPath = `/api/v1alpha/${this.realm}/identity/login`;
     });
+
+    // Workaround to get fresh cookies
+    this.periodicallyRefreshTokens()
+      .subscribe();
+  }
+
+  private periodicallyRefreshTokens(): Observable<any> {
+    return this.identityService.refreshTokens()
+      .pipe(
+        repeatWhen(() => Observable.interval(refreshRepeatTimeoutInMs))
+      );
   }
 
 }
