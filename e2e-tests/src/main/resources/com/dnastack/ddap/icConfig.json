@@ -9,7 +9,8 @@
       "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
       "clientId": "2978103516-cmpti2bi0c5rteimvoks1abubdvjrdik.apps.googleusercontent.com",
       "ui": {
-        "iconUrl": "/identity/static/google_identity.png"
+        "iconUrl": "/identity/static/google_identity.png",
+        "description": "description"
       }
     },
     "delete-ip-id": {
@@ -18,7 +19,8 @@
       "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
       "clientId": "2978103516-cmpti2bi0c5rteimvoks1abubdvjrdik.apps.googleusercontent.com",
       "ui": {
-        "iconUrl": "/identity/static/google_identity.png"
+        "iconUrl": "/identity/static/google_identity.png",
+        "description": "description"
       }
     },
     "elixir": {
@@ -34,7 +36,8 @@
       "clientId": "76823614-51a3-4e2a-b17f-142b63c19e88",
       "ui": {
         "iconUrl": "/identity/static/elixir_identity.png",
-        "label": "Elixir"
+        "label": "Elixir",
+        "description": "description"
       }
     },
     "google": {
@@ -44,7 +47,8 @@
       "clientId": "2978103516-cmpti2bi0c5rteimvoks1abubdvjrdik.apps.googleusercontent.com",
       "ui": {
         "iconUrl": "/identity/static/google_identity.png",
-        "label": "Google"
+        "label": "Google",
+        "description": "description"
       }
     }
   },
