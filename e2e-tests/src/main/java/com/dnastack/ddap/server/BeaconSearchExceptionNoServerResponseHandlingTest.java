@@ -63,20 +63,20 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
 
         final String errorMessage = "Name or service not known";
         for (BeaconQueryResult result : results) {
-            assertThat(result.getError(), notNullValue());
-            assertThat(result.getError().getStatus(), equalTo(500));
-            assertThat(result.getError().getMessage(), containsString(errorMessage));
+            assertThat(result.getQueryError(), notNullValue());
+            assertThat(result.getQueryError().getStatus(), equalTo(500));
+            assertThat(result.getQueryError().getMessage(), containsString(errorMessage));
         }
     }
 
     @Data
     static class BeaconQueryResult {
         Boolean exists;
-        BeaconError error;
+        BeaconQueryError queryError;
     }
 
     @Data
-    static class BeaconError {
+    static class BeaconQueryError {
         Integer status;
         String message;
     }
