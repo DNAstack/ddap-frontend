@@ -53,20 +53,20 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
     const { name, dto } = this.resource;
 
     this.form = this.formBuilder.group({
-      id: [name || '', [Validators.pattern(nameConstraintPattern)]],
-      maxTokenTtl: [dto.maxTokenTtl || '', [Validators.required]],
+      id: [name, [Validators.pattern(nameConstraintPattern)]],
+      maxTokenTtl: [dto.maxTokenTtl, []],
       ui: this.formBuilder.group({
-        access: [dto.ui.access || '', []],
-        description: [dto.ui.description || '', [Validators.required, Validators.maxLength(255)]],
-        label: [dto.ui.label || '', [Validators.required]],
-        owner: [dto.ui.owner || '', [Validators.required]],
-        size: [dto.ui.size || '', []],
-        year: [dto.ui.year || '', []],
-        tags: [dto.ui.tags || '', []],
-        applyUrl: [dto.ui.applyUrl || '', [FormValidators.url]],
-        troubleshootUrl: [dto.ui.troubleshootUrl || '', [FormValidators.url]],
-        imageUrl: [dto.ui.imageUrl || '', [FormValidators.url]],
-        infoUrl: [dto.ui.infoUrl || '', [FormValidators.url]],
+        access: [dto.ui.access, []],
+        description: [dto.ui.description, [Validators.required, Validators.maxLength(255)]],
+        label: [dto.ui.label, [Validators.required]],
+        owner: [dto.ui.owner, []],
+        size: [dto.ui.size, []],
+        year: [dto.ui.year, []],
+        tags: [dto.ui.tags, []],
+        applyUrl: [dto.ui.applyUrl, [FormValidators.url]],
+        troubleshootUrl: [dto.ui.troubleshootUrl, [FormValidators.url]],
+        imageUrl: [dto.ui.imageUrl, [FormValidators.url]],
+        infoUrl: [dto.ui.infoUrl, [FormValidators.url]],
       }),
     });
   }

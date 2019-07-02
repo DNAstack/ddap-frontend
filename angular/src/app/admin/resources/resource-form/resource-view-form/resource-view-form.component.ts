@@ -53,18 +53,18 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
     const { name, dto } = this.view;
 
     this.viewForm = this.formBuilder.group({
-      id: [name || '', [Validators.pattern(nameConstraintPattern)]],
-      serviceTemplate: [dto.serviceTemplate || '', [Validators.required]],
-      defaultRole: [dto.defaultRole || '', [Validators.required]],
-      version: [dto.version || '', [Validators.required]],
-      topic: [dto.topic || '', []],
-      partition: [dto.partition || '', []],
-      fidelity: [dto.fidelity || '', []],
-      geoLocation: [dto.geoLocation || '', []],
-      aud: [dto.aud || '', []],
-      contentTypes: [dto.contentTypes || '', []],
+      id: [name, [Validators.pattern(nameConstraintPattern)]],
+      serviceTemplate: [dto.serviceTemplate, [Validators.required]],
+      defaultRole: [dto.defaultRole, [Validators.required]],
+      version: [dto.version, [Validators.required]],
+      topic: [dto.topic, []],
+      partition: [dto.partition, []],
+      fidelity: [dto.fidelity, []],
+      geoLocation: [dto.geoLocation, []],
+      aud: [dto.aud, []],
+      contentTypes: [dto.contentTypes, []],
       ui: this.formBuilder.group({
-        label: [dto.ui.label || '', [Validators.required]],
+        label: [dto.ui.label, [Validators.required]],
       }),
     });
 

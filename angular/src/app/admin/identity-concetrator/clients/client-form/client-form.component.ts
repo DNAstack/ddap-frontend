@@ -34,8 +34,8 @@ export class ClientFormComponent implements Form, OnInit {
     this.form = this.formBuilder.group({
       id: [this.model.name || '', [Validators.pattern(nameConstraintPattern)]],
       ui: this.formBuilder.group({
-        label: [_get(ui, 'label', '')],
-        description: [_get(ui, 'description', ''), [Validators.maxLength(255)]],
+        label: [_get(ui, 'label', ''), [Validators.required]],
+        description: [_get(ui, 'description', ''), [Validators.required, Validators.maxLength(255)]],
       }),
       clientId: [clientId, [Validators.required]],
       redirectUris: redirectUrisForm,

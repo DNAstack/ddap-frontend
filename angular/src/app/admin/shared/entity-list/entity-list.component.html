@@ -22,7 +22,10 @@
         </mat-expansion-panel-header>
         <json-editor [options]="editorOptions" [data]="entity.dto"></json-editor>
         <mat-action-row>
-          <button mat-button [routerLink]="[entity.name]">Edit</button>
+          <button mat-button [routerLink]="[entity.name]"
+                  class="uppercase">
+            Edit
+          </button>
         </mat-action-row>
       </mat-expansion-panel>
     </ng-container>

@@ -55,7 +55,7 @@ export class IdentityProviderFormComponent implements OnInit, Form {
         label: [_get(ui, 'label', ''), []],
         description: [_get(ui, 'description', ''), [Validators.maxLength(255)]],
       }),
-      issuer: [issuer],
+      issuer: [issuer, [Validators.required]],
       tokenUrl: [tokenUrl, [FormValidators.url]],
       authorizeUrl: [authorizeUrl, [FormValidators.url]],
       clientId: [clientId],
