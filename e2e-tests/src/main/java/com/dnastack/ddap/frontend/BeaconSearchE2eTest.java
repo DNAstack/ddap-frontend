@@ -1,23 +1,24 @@
 package com.dnastack.ddap.frontend;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
 import com.dnastack.ddap.common.page.*;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("Duplicates")
 public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
@@ -54,7 +55,6 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
 
 
         assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata").isPresent());
     }
 
     @Test
@@ -128,7 +128,6 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         assertThat(results.size(), greaterThanOrEqualTo(1));
 
         assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata").isPresent());
     }
 
     @Test
@@ -151,7 +150,6 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         assertThat(results.size(), greaterThanOrEqualTo(1));
 
         assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata").isPresent());
     }
 
     @Test
@@ -170,7 +168,6 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         assertThat(results.size(), greaterThanOrEqualTo(2));
 
         assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
-        assertTrue(findFirstElementByCssClass(results, "metadata").isPresent());
 
         // Continue with invalid search
 

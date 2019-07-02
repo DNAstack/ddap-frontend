@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 
 public class ExerciseBeaconInfoResponseTest extends AbstractBaseE2eTest {
@@ -33,6 +33,7 @@ public class ExerciseBeaconInfoResponseTest extends AbstractBaseE2eTest {
     @Test
     public void exerciseMissingBeaconInfo() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
 
         // @formatter:off
         given()
@@ -41,13 +42,14 @@ public class ExerciseBeaconInfoResponseTest extends AbstractBaseE2eTest {
                     .when()
                     .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
+                    .cookie("refresh_token", refreshToken)
                     .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
                     .then()
                     .log().ifValidationFails()
                     .contentType(JSON)
                     .statusCode(200)
-                    .body("[0].beaconInfo.name", equalTo("beacon"))
-                    .body("[0].beaconInfo.resourceLabel", equalTo("fake-ga4gh"));
+                .body("beaconInfo.name", containsInAnyOrder("beacon", "beacon", "Beacon Discovery Access"))
+                .body("beaconInfo.resourceLabel", containsInAnyOrder("fake-ga4gh", "ga4gh-apis", "1000 Genomes"));
         // @formatter:on
     }
 

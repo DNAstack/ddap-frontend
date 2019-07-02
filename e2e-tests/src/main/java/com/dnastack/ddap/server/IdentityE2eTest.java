@@ -43,7 +43,8 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
     public void testScopes() throws Exception {
         String requestedScope = "link";
         String icToken = fetchRealPersonaIcToken("mr_hyde", REALM, "openid");
-        String danToken = fetchRealPersonaDamToken("mr_hyde", REALM);
+        String damToken = fetchRealPersonaDamToken("mr_hyde", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("mr_hyde", REALM);
 
         // @formatter:off
         given()
@@ -60,6 +61,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .statusCode(307)
                 .cookie("ic_token")
                 .cookie("dam_token")
+                .cookie("refresh_token")
                 .extract();
         // @formatter:on
 
@@ -70,7 +72,8 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .log().uri()
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
-                .cookie("dam_token", danToken)
+                .cookie("dam_token", damToken)
+                .cookie("refresh_token", refreshToken)
                 .redirects().follow(false)
                 .when()
                 .get(ddap("/identity"))
@@ -101,7 +104,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
         // @formatter:on
 
         icToken = fetchRealPersonaIcToken("mr_hyde", REALM, "openid", requestedScope);
-        danToken = fetchRealPersonaDamToken("mr_hyde", REALM);
+        damToken = fetchRealPersonaDamToken("mr_hyde", REALM);
 
         // @formatter:off
         given()
@@ -110,7 +113,8 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .log().uri()
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
-                .cookie("dam_token", danToken)
+                .cookie("dam_token", damToken)
+                .cookie("refresh_token", refreshToken)
                 .redirects().follow(false)
                 .when()
                 .get(ddap("/identity"))
@@ -129,6 +133,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
         String username = "mr_hyde";
         String icToken = fetchRealPersonaIcToken("mr_hyde", REALM, "");
         String danToken = fetchRealPersonaDamToken("mr_hyde", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("mr_hyde", REALM);
 
         // @formatter:off
         given()
@@ -145,6 +150,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .statusCode(307)
                 .cookie("ic_token")
                 .cookie("dam_token")
+                .cookie("refresh_token")
                 .extract();
         // @formatter:on
 
@@ -156,6 +162,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
                 .cookie("dam_token", danToken)
+                .cookie("refresh_token", refreshToken)
                 .redirects().follow(false)
                 .when()
                 .get(ddap("/identity"))
@@ -175,6 +182,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
     public void testAccessesAsAdmin() throws Exception {
         String icToken = fetchRealPersonaIcToken("administrator", REALM, "");
         String danToken = fetchRealPersonaDamToken("administrator", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("administrator", REALM);
 
         // @formatter:off
         given()
@@ -191,6 +199,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .statusCode(307)
                 .cookie("ic_token")
                 .cookie("dam_token")
+                .cookie("refresh_token")
                 .extract();
         // @formatter:on
 
@@ -202,6 +211,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
                 .cookie("dam_token", danToken)
+                .cookie("refresh_token", refreshToken)
                 .redirects().follow(false)
                 .when()
                 .get(ddap("/identity"))
@@ -220,6 +230,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
     public void testAccessesAsNonAdmin() throws Exception {
         String icToken = fetchRealPersonaIcToken("mr_hyde", REALM, "");
         String danToken = fetchRealPersonaDamToken("mr_hyde", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("mr_hyde", REALM);
 
         // @formatter:off
         given()
@@ -236,6 +247,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .statusCode(307)
                 .cookie("ic_token")
                 .cookie("dam_token")
+                .cookie("refresh_token")
                 .extract();
         // @formatter:on
 
@@ -247,6 +259,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
                 .cookie("dam_token", danToken)
+                .cookie("refresh_token", refreshToken)
                 .redirects().follow(false)
                 .when()
                 .get(ddap("/identity"))

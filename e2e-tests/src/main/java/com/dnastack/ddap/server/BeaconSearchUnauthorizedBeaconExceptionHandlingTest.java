@@ -42,6 +42,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
     @Test
     public void shouldGet403ErrorWhenUsingUnderscopedToken() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -51,6 +52,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
                 .when()
                     .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
+                    .cookie("refresh_token", refreshToken)
                     .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
                 .then()
                     .log().body()
@@ -78,6 +80,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
     @Test
     public void shouldGet403WhenUserCannotGetViewToken() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("administrator", REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -87,6 +90,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
                 .when()
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("dam_token", validPersonaToken)
+                .cookie("refresh_token", refreshToken)
                 .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
                 .then()
                 .log().body()

@@ -1,26 +1,15 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
-import io.restassured.mapper.ObjectMapper;
-import io.restassured.mapper.factory.Jackson2ObjectMapperFactory;
 import lombok.Data;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -51,6 +40,7 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
     @Test
     public void shouldGetNoBeaconServerFoundError() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
 
         // @formatter:off
         BeaconQueryResult[] results = given()
@@ -59,6 +49,7 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
                 .when()
                     .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
+                    .cookie("refresh_token", refreshToken)
                     .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
                 .then()
                     .log().body()

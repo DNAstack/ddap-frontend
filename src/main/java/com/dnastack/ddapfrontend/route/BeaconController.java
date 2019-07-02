@@ -53,12 +53,13 @@ class BeaconController {
                                                          BeaconRequestModel beaconRequest,
                                                          ServerHttpRequest request) {
         Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
-        Optional<String> refreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
+        Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
+        String refreshToken = foundRefreshToken.orElse(null);
         return damClient.getResources(realm)
                 .flux()
                 .flatMap((damResources) -> {
                     Map<String, DamResource> resources = damResources.getResources();
-                    return maybePerformBeaconQueries(realm, beaconRequest, damToken, refreshToken.get(), resources.entrySet());
+                    return maybePerformBeaconQueries(realm, beaconRequest, damToken, refreshToken, resources.entrySet());
                 });
     }
 

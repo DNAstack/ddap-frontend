@@ -26,6 +26,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
     @Test
     public void shouldGetTwoResultsForAggregateSearch() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -35,6 +36,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
                     .when()
                     .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
+                    .cookie("refresh_token", refreshToken)
                     .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
                     .then()
                 .log().everything()
@@ -50,6 +52,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
     @Test
     public void shouldGetOneResultForSingleResourceSearch() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
 
         // @formatter:off
         given()
@@ -58,6 +61,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
             .log().uri()
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
+                .cookie("refresh_token", refreshToken)
         .when()
             .get(format(
                     "/api/v1alpha/%s/resources/thousand-genomes/search" +
@@ -83,6 +87,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
     @Test
     public void missingResourceUiLabel() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
 
         // @formatter:off
         given()
@@ -91,6 +96,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
             .log().uri()
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
+                .cookie("refresh_token", refreshToken)
         .when()
             .get(format(
                     "/api/v1alpha/%s/resources/thousand-genomes/search" +
