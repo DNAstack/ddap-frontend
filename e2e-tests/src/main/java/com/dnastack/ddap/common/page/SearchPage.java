@@ -5,6 +5,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class SearchPage extends AnyDdapPage {
     }
 
     public List<WebElement> getSearchResults() {
+        new WebDriverWait(getDriver(), 60)
+                .until(ExpectedConditions.numberOfElementsToBeMoreThan(By.tagName("ddap-beacon-result"), 0));
         return getDriver().findElements(By.tagName("ddap-beacon-result"));
     }
 

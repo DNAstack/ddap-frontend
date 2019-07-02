@@ -58,7 +58,10 @@
       "redirectUris": [
         "http://localhost:8080",
         "https://ic-dot-hcls-data-connect-demo.appspot.com"
-      ]
+      ],
+      "ui": {
+        "description": "description"
+      }
     },
     "delete-client-id": {
       "clientId": "1f8ff367-3950-2222-9358-781f9adff70c",
