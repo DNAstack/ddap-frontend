@@ -45,4 +45,5 @@ export class ClientManageComponent {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
   }
+
 }

@@ -1,3 +1,5 @@
+import IdentityProvider = ic.v1.IdentityProvider;
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -7,7 +9,6 @@ import { EntityModel } from '../../../shared/entity.model';
 import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
 import { IdentityProviderFormComponent } from '../identity-provider-form/identity-provider-form.component';
 import { IdentityProviderService } from '../identity-providers.service';
-import IdentityProvider = ic.v1.IdentityProvider;
 
 @Component({
   selector: 'ddap-identity-provider-manage',
@@ -20,8 +21,7 @@ export class IdentityProviderManageComponent implements OnInit {
 
   @ViewChild('ddapForm')
   identityProviderForm: IdentityProviderFormComponent;
-
-  @ViewChild('ddapFormError')
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   identityProvider: IdentityProvider;
@@ -44,8 +44,12 @@ export class IdentityProviderManageComponent implements OnInit {
     const personaModel: EntityModel = this.identityProviderForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.identityProviderService.save(personaModel.name, change)
-      .subscribe(
-        () => this.router.navigate(['../..'], {relativeTo: this.route})
-      );
+      .subscribe(this.navigateUp, this.showError);
+  }
+
+  private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+  private showError = ({ error }: HttpErrorResponse) => {
+    const message = (error instanceof Object) ? JSON.stringify(error) : error;
+    return this.formError.displayErrorMessage(this.formErrorElement, message);
   }
 }
