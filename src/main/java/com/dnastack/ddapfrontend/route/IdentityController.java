@@ -126,7 +126,7 @@ public class IdentityController {
         if (persona != null) {
             log.debug("Performing direct persona login for {}", persona);
             return idpClient.personaLogin(realm, scope, persona, selfLinkToApi(request, realm, ""))
-                    .map(tokenResponse -> assembleTokenResponse(UriUtil.selfLinkToUi(request, realm, "data"), tokenResponse))
+                    .map(tokenResponse -> assembleTokenResponse(UriUtil.selfLinkToUi(request, realm, ""), tokenResponse))
                     .doOnError(exception -> log.info("Failed to negotiate token", exception));
 
         } else {
@@ -169,7 +169,7 @@ public class IdentityController {
                     Optional<URI> customDestination = stateHandler.getDestinationAfterLogin(stateParam)
                             .map(possiblyRelativeUrl -> UriUtil.selfLinkToUi(request, realm, "").resolve(possiblyRelativeUrl));
                     if (tokenExchangePurpose == TokenExchangePurpose.LOGIN) {
-                        final URI ddapDataBrowserUrl = customDestination.orElseGet(() -> UriUtil.selfLinkToUi(request, realm, "data"));
+                        final URI ddapDataBrowserUrl = customDestination.orElseGet(() -> UriUtil.selfLinkToUi(request, realm, ""));
                         return Mono.just(assembleTokenResponse(ddapDataBrowserUrl, tokenResponse));
                     } else if (tokenExchangePurpose == TokenExchangePurpose.LINK) {
                         return finishAccountLinking(
