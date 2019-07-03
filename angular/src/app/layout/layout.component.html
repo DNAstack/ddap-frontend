@@ -19,12 +19,13 @@
       </div>
 
       <div *ngIf="profile"
-         class="ddap-logout"
-         data-se="nav-logout">
+         class="ddap-logout">
         <mat-list-item class="credentials-username"
                        data-se="nav-account">
           <h4 mat-line>{{ profile?.name || '&nbsp;' }}</h4>
-          <span mat-line (click)="logout()">Log Out</span>
+          <span mat-line
+                data-se="nav-logout"
+                (click)="logout()">Log Out</span>
           <div class="credentials-picture">
             <img matListAvatar
                  [src]="profile?.picture || '/assets/images/placeholder_identity.png'"
