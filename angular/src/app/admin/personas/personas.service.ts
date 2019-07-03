@@ -16,8 +16,8 @@ export class PersonaService extends ConfigEntityService {
     super(http, errorHandler, 'testPersonas', 'testPersonas');
   }
 
-  get(damId: string, params: {} = {}): Observable<Map<string, EntityModel>> {
-    return super.get(damId, params)
+  get(params: {} = {}): Observable<Map<string, EntityModel>> {
+    return super.get(params)
       .pipe(
         this.errorHandler.notifyOnError(`Can't load personas.`)
       );

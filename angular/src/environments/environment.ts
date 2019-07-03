@@ -4,9 +4,7 @@
 
 export const environment = {
   production: false,
-  damApiUrls: new Map<string, string>([
-    ['1', 'http://localhost:8085/dam/1/v1alpha'],
-  ]),
+  damApiUrl: 'http://localhost:8085/dam/1/v1alpha',
   ddapApiUrl: 'http://localhost:8085/api/v1alpha',
   idpApiUrl: 'http://localhost:8085/identity/v1alpha',
   claimExpirationWarningThresholdInHours: 48,

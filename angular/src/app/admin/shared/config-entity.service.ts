@@ -14,7 +14,7 @@ import { EntityService } from './entity.service';
 
 const headers = HTTP_HEADERS;
 
-export class ConfigEntityService {
+export class ConfigEntityService implements EntityService {
 
    constructor(protected http: HttpClient,
                protected errorHandler: ErrorHandlerService,
@@ -22,65 +22,40 @@ export class ConfigEntityService {
                protected typeNameInUrl: string) {
   }
 
-  get(damId: string, params = {}): Observable<Map<string, EntityModel>> {
-    const damApiUrl = environment.damApiUrls.get(damId);
-    return this.http.get<ConfigModel>(`${damApiUrl}/${realmIdPlaceholder}/config`, {params})
+  get(params = {}): Observable<Map<string, EntityModel>> {
+    return this.http.get<ConfigModel>(`${environment.damApiUrl}/${realmIdPlaceholder}/config`, {params})
       .pipe(
         pluck(this.typeNameInConfig),
         map(EntityModel.objectToMap)
       );
   }
 
-  getList(damId: string, innerMapFn?): Observable<EntityModel[]> {
-    return this.get(damId).pipe(
+  getList(innerMapFn?): Observable<EntityModel[]> {
+    return this.get().pipe(
       map(EntityModel.arrayFromMap),
       map(issuerList => innerMapFn ? issuerList.map(innerMapFn) : issuerList)
     );
   }
 
-  save(damId: string, entityId: string, change: ConfigModificationObject): Observable<any> {
-    const damApiUrl = environment.damApiUrls.get(damId);
-    return this.http.post(`${damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${entityId}`,
+  save(id: string, change: ConfigModificationObject): Observable<any> {
+    return this.http.post(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       change,
       {headers}
     );
   }
 
-  update(damId: string, entityId: string, change: ConfigModificationObject): Observable<any> {
-    const damApiUrl = environment.damApiUrls.get(damId);
-    return this.http.put(`${damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${entityId}`,
+  update(id: string, change: ConfigModificationObject): Observable<any> {
+    return this.http.put(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       change,
       {headers}
     );
   }
 
-  remove(damId: string, entityId: string): Observable<any> {
-    const damApiUrl = environment.damApiUrls.get(damId);
-    return this.http.delete(`${damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${entityId}`,
+  remove(id: string): Observable<any> {
+    return this.http.delete(`${environment.damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
       {headers}
     ).pipe(
-      this.errorHandler.notifyOnError(`Can't remove ${entityId}.`)
+      this.errorHandler.notifyOnError(`Can't remove ${id}.`)
     );
-  }
-
-  asEntityService(damId: string): EntityService {
-     const rawService = this;
-     return new class implements EntityService {
-       get(): Observable<Map<string, EntityModel>> {
-         return rawService.get(damId);
-       }
-
-       remove(entityId: string): Observable<any> {
-         return rawService.remove(damId, entityId);
-       }
-
-       save(entityId: string, change: ConfigModificationObject): Observable<any> {
-         return rawService.save(damId, entityId, change);
-       }
-
-       update(entityId: string, change: ConfigModificationObject): Observable<any> {
-         return rawService.update(damId, entityId, change);
-       }
-     };
   }
 }

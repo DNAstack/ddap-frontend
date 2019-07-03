@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -15,19 +14,12 @@ export class ResourceListComponent implements OnInit {
 
   resources$: Observable<any[]>;
 
-  constructor(private resourceService: ResourceService, private route: ActivatedRoute) {
+  constructor(private resourceService: ResourceService) {
   }
 
   ngOnInit() {
-    this.resources$ = this.resourceService.get(this.routeDamId())
+    this.resources$ = this.resourceService.get()
       .pipe(map(EntityModel.arrayFromMap));
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 
 }

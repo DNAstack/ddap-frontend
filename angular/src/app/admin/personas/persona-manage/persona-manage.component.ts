@@ -43,7 +43,7 @@ export class PersonaManageComponent implements OnInit {
 
     const personaModel: EntityModel = this.personaForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
-    this.personaService.save(this.routeDamId(), personaModel.name, change)
+    this.personaService.save(personaModel.name, change)
       .subscribe(
         this.navigateUp,
         (err) => {
@@ -57,12 +57,5 @@ export class PersonaManageComponent implements OnInit {
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 }

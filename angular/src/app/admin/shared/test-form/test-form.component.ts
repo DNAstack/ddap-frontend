@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import _isEqual from 'lodash.isequal';
 import _set from 'lodash.set';
@@ -39,10 +38,9 @@ export class TestFormComponent implements OnChanges, Form {
 
   constructor(private personaService: PersonaService,
               private resourceService: ResourceService,
-              private formBuilder: FormBuilder,
-              private route: ActivatedRoute) {
+              private formBuilder: FormBuilder) {
     this.personas$ = this.personaService
-      .getList(this.routeDamId(), pick('name'))
+      .getList(pick('name'))
       .pipe(
         share()
       );
@@ -102,8 +100,8 @@ export class TestFormComponent implements OnChanges, Form {
         }));
 
         const action$ = this.isNewResource
-          ? this.resourceService.save(this.routeDamId(), this.resource.name, change)
-          : this.resourceService.update(this.routeDamId(), this.resource.name, change);
+          ? this.resourceService.save(this.resource.name, change)
+          : this.resourceService.update(this.resource.name, change);
         action$.subscribe(
           () => true,
           (dryRunDto) => this.maybeFillInValues(this.form, personas, views, dryRunDto)
@@ -194,12 +192,5 @@ export class TestFormComponent implements OnChanges, Form {
 
   private isConfigModificationObject(error: any) {
     return error instanceof Object && error.testPersonas;
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 }

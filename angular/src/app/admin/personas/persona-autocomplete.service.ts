@@ -31,16 +31,16 @@ export class PersonaAutocompleteService {
 
   }
 
-  buildClaimDefinitionAutocomplete(damId: string, formGroup: FormGroup): Observable<string[]> {
-    const claimDefinitions$ = this.claimDefinitionService.getList(damId, pick('name')).pipe(
+  buildClaimDefinitionAutocomplete(formGroup: FormGroup): Observable<string[]> {
+    const claimDefinitions$ = this.claimDefinitionService.getList(pick('name')).pipe(
       map(makeDistinct)
     );
 
     return filterSource(claimDefinitions$, formGroup.get('claimName').valueChanges);
   }
 
-  buildIssuerAutocomplete(damId: string, formGroup: FormGroup, issuerFieldName = 'iss'): Observable<string[]> {
-    const passportIssuers$ = this.passportIssuerService.getList(damId, pick('dto.issuer')).pipe(
+  buildIssuerAutocomplete(formGroup: FormGroup, issuerFieldName = 'iss'): Observable<string[]> {
+    const passportIssuers$ = this.passportIssuerService.getList(pick('dto.issuer')).pipe(
       map(makeDistinct)
     );
 

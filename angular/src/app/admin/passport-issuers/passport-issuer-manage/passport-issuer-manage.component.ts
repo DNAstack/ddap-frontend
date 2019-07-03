@@ -42,7 +42,7 @@ export class PassportIssuerManageComponent implements OnInit {
 
     const personaModel: EntityModel = this.passportIssuerForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
-    this.passportService.save(this.routeDamId(), personaModel.name, change)
+    this.passportService.save(personaModel.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
@@ -50,13 +50,6 @@ export class PassportIssuerManageComponent implements OnInit {
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 
 }

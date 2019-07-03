@@ -17,9 +17,8 @@ export class PassportTranslatorsService {
               protected errorHandler: ErrorHandlerService) {
   }
 
-  get(damId: string): Observable<object> {
-    const damApiUrl = environment.damApiUrls.get(damId);
-    return this.http.get(`${damApiUrl}/${realmIdPlaceholder}/passportTranslators`)
+  get(): Observable<object> {
+    return this.http.get(`${environment.damApiUrl}/${realmIdPlaceholder}/passportTranslators`)
       .pipe(
         pluck('passportTranslators'),
         map((passportTranslatorsDto) => this.getTranslatorList(passportTranslatorsDto)),

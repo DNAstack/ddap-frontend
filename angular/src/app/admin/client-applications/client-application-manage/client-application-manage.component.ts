@@ -36,7 +36,7 @@ export class ClientApplicationManageComponent {
 
     const clientApplication: EntityModel = this.clientApplicationForm.getModel();
     const change = new ConfigModificationObject(clientApplication.dto, {});
-    this.service.save(this.routeDamId(), clientApplication.name, change)
+    this.service.save(clientApplication.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
@@ -44,13 +44,6 @@ export class ClientApplicationManageComponent {
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 
 }

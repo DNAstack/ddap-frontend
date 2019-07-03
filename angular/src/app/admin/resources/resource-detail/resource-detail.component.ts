@@ -1,10 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { flatMap } from 'rxjs/operators';
+import { filter, flatMap } from 'rxjs/operators';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { DamEntityFormDetailBase } from '../../shared/dam-entity-form-detail.base';
+import { EntityFormDetailBase } from '../../shared/entity-form-detail.base';
 import { EntityModel } from '../../shared/entity.model';
 import { combine } from '../../shared/form';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
@@ -18,7 +18,7 @@ import { ResourceService } from '../resources.service';
   styleUrls: ['./resource-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class ResourceDetailComponent extends DamEntityFormDetailBase<ResourceService> implements OnInit {
+export class ResourceDetailComponent extends EntityFormDetailBase<ResourceService> implements OnInit {
 
   @ViewChild(ResourceFormComponent)
   resourceForm: ResourceFormComponent;
@@ -36,7 +36,7 @@ export class ResourceDetailComponent extends DamEntityFormDetailBase<ResourceSer
 
   ngOnInit() {
     this.route.params.pipe(
-      flatMap(params => this.entityService.getResource(this.routeDamId(), params['resourceName']))
+      flatMap(params => this.entityService.getResource(params['resourceName']))
     ).subscribe((resource) => {
       this.entity = resource;
     });
@@ -53,7 +53,7 @@ export class ResourceDetailComponent extends DamEntityFormDetailBase<ResourceSer
       const resourceModel: EntityModel = this.resourceForm.getModel();
       const applyModel = this.accessForm.getApplyModel() || {};
       const change = new ConfigModificationObject(resourceModel.dto, applyModel);
-      this.entityService.update(this.routeDamId(), this.entity.name, change)
+      this.entityService.update(this.entity.name, change)
         .subscribe(this.navigateUp, this.showError);
     }
   }

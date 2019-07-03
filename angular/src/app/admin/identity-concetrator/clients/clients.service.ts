@@ -16,7 +16,7 @@ export class ClientService extends IcConfigEntityService {
     super(http, errorHandler, 'clients', 'clients');
   }
 
-  get(damId: string, params: {} = {}): Observable<Map<string, EntityModel>> {
+  get(params: {} = {}): Observable<Map<string, EntityModel>> {
     return super.get(params)
       .pipe(
         this.errorHandler.notifyOnError(`Can't load clients.`)

@@ -3,9 +3,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { EntityDetailBase } from '../../../shared/entity-detail.base';
 import { EntityModel } from '../../../shared/entity.model';
 import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
-import { IcEntityDetailBase } from '../../../shared/ic-entity-detail.base';
 import { ClientFormComponent } from '../client-form/client-form.component';
 import { ClientService } from '../clients.service';
 
@@ -15,7 +15,7 @@ import { ClientService } from '../clients.service';
   styleUrls: ['./client-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class ClientDetailComponent extends IcEntityDetailBase<ClientService> implements OnInit {
+export class ClientDetailComponent extends EntityDetailBase<ClientService> implements OnInit {
 
   @ViewChild(ClientFormComponent)
   clientForm: ClientFormComponent;

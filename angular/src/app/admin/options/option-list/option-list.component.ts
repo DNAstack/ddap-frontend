@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { OptionService } from '../options.service';
 
@@ -13,12 +12,11 @@ export class OptionListComponent implements OnInit {
   options: any;
   error: string;
 
-  constructor(public optionService: OptionService,
-              private route: ActivatedRoute) {
+  constructor(public optionService: OptionService) {
   }
 
   ngOnInit() {
-    this.optionService.get(this.routeDamId())
+    this.optionService.get()
       .subscribe((options) => this.options = options);
   }
 
@@ -30,7 +28,7 @@ export class OptionListComponent implements OnInit {
       const convertedNewValue = typeof oldValue !== 'string' ? JSON.parse(newValue) : newValue;
       newOptions[optionKey] = convertedNewValue;
 
-      this.optionService.update(this.routeDamId(), newOptions)
+      this.optionService.update(newOptions)
         .subscribe(
           () => this.options[optionKey] = convertedNewValue,
           ({error}) => this.error = error.substring(error.lastIndexOf(':') + 1)
@@ -39,13 +37,6 @@ export class OptionListComponent implements OnInit {
       // The only type of error we expect here a syntax error.
       this.error = `Syntax error. Value should be a ${typeof oldValue}`;
     }
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 
   private cloneOptions(): object {

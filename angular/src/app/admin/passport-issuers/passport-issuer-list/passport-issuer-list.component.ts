@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
-import { DamEntityListBase } from '../../shared/dam-entity-list.base';
+import { EntityListBase } from '../../shared/entity-list.base';
 import { PassportIssuerService } from '../passport-issuers.service';
 
 @Component({
@@ -9,10 +8,10 @@ import { PassportIssuerService } from '../passport-issuers.service';
   templateUrl: './passport-issuer-list.component.html',
   styleUrls: ['./passport-issuer-list.component.scss'],
 })
-export class PassportIssuerListComponent extends DamEntityListBase<PassportIssuerService> {
+export class PassportIssuerListComponent extends EntityListBase<PassportIssuerService> {
 
-  constructor(passportService: PassportIssuerService, route: ActivatedRoute) {
-    super(passportService, route);
+  constructor(passportService: PassportIssuerService) {
+    super(passportService);
   }
 
 }

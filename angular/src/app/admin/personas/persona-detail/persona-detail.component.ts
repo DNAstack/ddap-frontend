@@ -3,7 +3,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { DamEntityFormDetailBase } from '../../shared/dam-entity-form-detail.base';
+import { EntityDetailBase } from '../../shared/entity-detail.base';
+import { EntityFormDetailBase } from '../../shared/entity-form-detail.base';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';
@@ -15,7 +16,7 @@ import { PersonaService } from '../personas.service';
   styleUrls: ['./persona-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class PersonaDetailComponent extends DamEntityFormDetailBase<PersonaService> implements OnInit {
+export class PersonaDetailComponent extends EntityFormDetailBase<PersonaService> implements OnInit {
 
   @ViewChild(PersonaFormComponent)
   personaForm: PersonaFormComponent;
@@ -36,12 +37,12 @@ export class PersonaDetailComponent extends DamEntityFormDetailBase<PersonaServi
 
     const personaModel: EntityModel = this.personaForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
-    this.entityService.update(this.routeDamId(), this.entity.name, change)
+    this.entityService.update(this.entity.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
-    this.entityService.remove(this.routeDamId(), this.entity.name)
+    this.entityService.remove(this.entity.name)
       .subscribe(this.navigateUp, this.showError);
   }
 

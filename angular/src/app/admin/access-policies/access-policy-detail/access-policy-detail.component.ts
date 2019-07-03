@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { DamEntityDetailBase } from '../../shared/dam-entity-detail.base';
+import { EntityDetailBase } from '../../shared/entity-detail.base';
 import { AccessPolicyService } from '../access-policies.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { AccessPolicyService } from '../access-policies.service';
   templateUrl: './access-policy-detail.component.html',
   styleUrls: ['./access-policy-detail.component.scss'],
 })
-export class AccessPolicDetailComponent extends DamEntityDetailBase<AccessPolicyService> {
+export class AccessPolicDetailComponent extends EntityDetailBase<AccessPolicyService> {
 
   constructor(
     route: ActivatedRoute,

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
-import { DamEntityListBase } from '../../shared/dam-entity-list.base';
+import { EntityListBase } from '../../shared/entity-list.base';
 import { ServiceDefinitionService } from '../service-definitions.service';
 
 @Component({
@@ -9,10 +8,10 @@ import { ServiceDefinitionService } from '../service-definitions.service';
   templateUrl: './service-definition-list.component.html',
   styleUrls: ['./service-definition-list.component.scss'],
 })
-export class ServiceDefinitionListComponent extends DamEntityListBase<ServiceDefinitionService> {
+export class ServiceDefinitionListComponent extends EntityListBase<ServiceDefinitionService> {
 
-  constructor(serviceDefinitionService: ServiceDefinitionService, route: ActivatedRoute) {
-    super(serviceDefinitionService, route);
+  constructor(serviceDefinitionService: ServiceDefinitionService) {
+    super(serviceDefinitionService);
   }
 
 }

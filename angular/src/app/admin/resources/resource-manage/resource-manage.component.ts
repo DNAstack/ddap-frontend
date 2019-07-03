@@ -37,7 +37,7 @@ export class ResourceManageComponent {
       const applyModel = this.accessForm.getApplyModel() || {};
       const change = new ConfigModificationObject(resourceModel.dto, applyModel);
 
-      return this.resourceService.save(this.routeDamId(), resourceModel.name, change)
+      return this.resourceService.save(resourceModel.name, change)
         .subscribe(this.navigateUp, this.showError);
     }
   }
@@ -46,13 +46,6 @@ export class ResourceManageComponent {
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 
 }

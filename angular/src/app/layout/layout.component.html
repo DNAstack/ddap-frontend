@@ -47,8 +47,7 @@
         </mat-list-item>
       </a>
 
-      <!-- FIXME need to pull id from somewhere -->
-      <mat-list-item [routerLink]="['data', '1']"
+      <mat-list-item [routerLink]="['data']"
                      [routerLinkActive]="['active-nav-link']"
                      data-se="nav-data">
         <mat-icon class="icon icon-explore"></mat-icon>
@@ -95,8 +94,7 @@
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <!-- Start DAM navbar -->
-        <mat-expansion-panel *ngFor="let damId of damAdminIds()"
+        <mat-expansion-panel *ngIf="isDamAdmin"
                              [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -107,63 +105,63 @@
 
           <mat-nav-list class="sub-nav">
             <mat-list-item
-              [routerLink]="['dam', damId, 'resources']"
+              [routerLink]="['resources']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-resources">
               <mat-icon class="icon icon-resource"></mat-icon>
               <h4 mat-line>Resources</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damId, 'access-policies']"
+              [routerLink]="['access-policies']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-access-policies">
               <mat-icon class="icon icon-policies"></mat-icon>
               <h4 mat-line>Access Policies</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damId, 'service-definitions']"
+              [routerLink]="['service-definitions']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-service-definitions">
               <mat-icon class="icon icon-clients"></mat-icon>
               <h4 mat-line>Service Definitions</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damId, 'trusted-sources']"
+              [routerLink]="['trusted-sources']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-trusted-sources">
               <mat-icon class="icon icon-trusted"></mat-icon>
               <h4 mat-line>Trusted Sources</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damId, 'passport-issuers']"
+              [routerLink]="['passport-issuers']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-passport-issuers">
               <mat-icon class="icon icon-passport"></mat-icon>
               <h4 mat-line>Passport Issuers</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damId, 'claim-definitions']"
+              [routerLink]="['claim-definitions']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-claim-definitions">
               <mat-icon class="icon icon-claims"></mat-icon>
               <h4 mat-line>Claim Definitions</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damId, 'test-personas']"
+              [routerLink]="['test-personas']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-test-personas">
               <mat-icon class="icon icon-tests"></mat-icon>
               <h4 mat-line>Test Personas</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damId, 'client-applications']"
+              [routerLink]="['client-applications']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-client-applications">
               <mat-icon class="icon icon-apps"></mat-icon>
               <h4 mat-line>Client Applications</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damId, 'options']"
+              [routerLink]="['options']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-options">
               <mat-icon class="icon icon-settings"></mat-icon>
@@ -171,7 +169,6 @@
             </mat-list-item>
           </mat-nav-list>
         </mat-expansion-panel>
-        <!-- End DAM nav panel -->
       </mat-accordion>
     </div>
   </mat-sidenav>

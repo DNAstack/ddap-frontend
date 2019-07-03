@@ -16,8 +16,8 @@ export class ClientApplicationService extends ConfigEntityService {
     super(http, errorHandler, 'clients', 'clients');
   }
 
-  get(damId: string, params: {} = {}): Observable<Map<string, EntityModel>> {
-    return super.get(damId, params)
+  get(params: {} = {}): Observable<Map<string, EntityModel>> {
+    return super.get(params)
       .pipe(
         this.errorHandler.notifyOnError(`Can't load client applications.`)
       );

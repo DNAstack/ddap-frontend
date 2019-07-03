@@ -17,8 +17,8 @@ export class AccessPolicyService extends ConfigEntityService {
   }
 
 
-  get(damId: string, params: {} = {}): Observable<Map<string, EntityModel>> {
-    return super.get(damId, params)
+  get(params: {} = {}): Observable<Map<string, EntityModel>> {
+    return super.get(params)
       .pipe(
         this.errorHandler.notifyOnError(`Can't load access policies.`)
       );

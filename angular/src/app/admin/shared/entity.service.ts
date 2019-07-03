@@ -5,7 +5,7 @@ import { EntityModel } from './entity.model';
 
 export interface EntityService {
   get(): Observable<Map<string, EntityModel>>;
-  save(entityId: string, change: ConfigModificationObject): Observable<any>;
-  update(entityId: string, change: ConfigModificationObject): Observable<any>;
-  remove(entityId: string): Observable<any>;
+  save(id: string, change: ConfigModificationObject): Observable<any>;
+  update(id: string, change: ConfigModificationObject): Observable<any>;
+  remove(id: string): Observable<any>;
 }

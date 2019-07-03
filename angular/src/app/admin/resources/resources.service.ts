@@ -24,17 +24,16 @@ export class ResourceService extends ConfigEntityService {
     super(http, errorHandler, 'resources', 'resources');
   }
 
-  getResource(damId: string, resourceName: string): Observable<EntityModel> {
-    return this.get(damId)
+  getResource(resourceName: string): Observable<EntityModel> {
+    return this.get()
       .pipe(
         map(resources => resources.get(resourceName))
       );
   }
 
-  getAccessRequestToken(damId: string, resourceId: string, viewId: string, tokenRequest: IGetTokenRequest): Observable<GetTokenResponse> {
-    const damApiUrl = environment.damApiUrls.get(damId);
+  getAccessRequestToken(resourceId: string, viewId: string, tokenRequest: IGetTokenRequest): Observable<GetTokenResponse> {
     return this.http.get<GetTokenResponse>(
-      `${damApiUrl}/${realmIdPlaceholder}/resources/${resourceId}/views/${viewId}/token`,
+      `${environment.damApiUrl}/${realmIdPlaceholder}/resources/${resourceId}/views/${viewId}/token`,
       {
         params: this.httpParamsService.getHttpParamsFrom(tokenRequest),
       }

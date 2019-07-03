@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs/Observable';
 
@@ -19,10 +18,6 @@ import Form from '../../../shared/form';
 })
 export class IdentityProviderFormComponent implements OnInit, Form {
 
-  get scopes() {
-    return this.form.get('scopes') as FormArray;
-  }
-
   @Input()
   model?: EntityModel = new EntityModel('', IdentityProvider.create());
 
@@ -30,9 +25,12 @@ export class IdentityProviderFormComponent implements OnInit, Form {
 
   translators$: Observable<any>;
 
+  get scopes() {
+    return this.form.get('scopes') as FormArray;
+  }
+
   constructor(private formBuilder: FormBuilder,
-              private passportTranslators: PassportTranslatorsService,
-              private route: ActivatedRoute) {
+              private passportTranslators: PassportTranslatorsService) {
 
   }
 
@@ -49,7 +47,7 @@ export class IdentityProviderFormComponent implements OnInit, Form {
     } = _get(this.model, 'dto', {});
 
     const scopeForm = this.formBuilder.array(scopes || []);
-    this.translators$ = this.passportTranslators.get(this.routeDamId());
+    this.translators$ = this.passportTranslators.get();
 
     this.form = this.formBuilder.group({
       id: [this.model.name || '', [Validators.required, Validators.pattern(nameConstraintPattern)]],
@@ -108,12 +106,5 @@ export class IdentityProviderFormComponent implements OnInit, Form {
 
   isValid(): boolean {
     return this.form.valid;
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 }
