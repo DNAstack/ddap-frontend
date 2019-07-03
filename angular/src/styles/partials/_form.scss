@@ -118,8 +118,8 @@ form.ddap-form {
 }
 
 .ddap-form-toolbar {
-  text-align: right;
-  margin-left: -2rem;
+  display: flex;
+  align-items: center;
   padding: 1rem 2rem;
   width: 100%;
   background: $color-grey-light;
@@ -127,6 +127,12 @@ form.ddap-form {
   bottom: 0;
   right: 0;
   z-index: 99;
+
+  mat-error {
+    flex: 1;
+    margin-right: 2rem;
+    margin-left: $sidenav-width + 4rem;
+  }
 }
 
 @media (max-width: 1600px) {

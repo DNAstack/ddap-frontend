@@ -4,15 +4,15 @@
 
 <ddap-main>
   <ddap-client-form>
-    <mat-error #formMatError
-               [class.visible]="formError.showError"
-               class="ddap-form-validation-msg">
-      Please fix invalid fields (marked red) before saving the client.
-    </mat-error>
   </ddap-client-form>
 </ddap-main>
 
 <div class="ddap-form-toolbar">
+  <mat-error #formErrorElement
+             [class.visible]="formError.showError"
+             class="ddap-form-validation-msg"
+             [textContent]="formError.message">
+  </mat-error>
   <button mat-flat-button
           (click)="save()"
           data-se="btn-save"

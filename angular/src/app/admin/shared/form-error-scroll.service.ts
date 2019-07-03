@@ -18,7 +18,7 @@ export class FormErrorScrollService {
 
   validate(formComponent: Form, formError: ElementRef): boolean {
     if (!formComponent.isValid()) {
-      const validationErrorMessage = 'Please fix invalid fields (marked red) before saving the resource.';
+      const validationErrorMessage = 'Please fix invalid fields (marked red) before submitting.';
       this.formValidation.forceValidateMultiple(formComponent.getAllForms());
       this.displayErrorMessage(formError, validationErrorMessage);
 

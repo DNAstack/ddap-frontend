@@ -44,8 +44,8 @@ export class ResourceManageComponent {
   }
 
   private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
-  private showError = (error: HttpErrorResponse) => {
-    const message = (error.error instanceof Object) ? JSON.stringify(error.error) : error.error;
+  private showError = ({ error }: HttpErrorResponse) => {
+    const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
   }
 }
