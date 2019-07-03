@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -18,11 +19,8 @@ export class ClientManageComponent {
 
   @ViewChild(ClientFormComponent)
   clientForm: ClientFormComponent;
-
-  @ViewChild('formMatError')
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
-
-  submitted = false;
 
   constructor(private client: ClientService,
               private router: Router,
@@ -31,14 +29,20 @@ export class ClientManageComponent {
   }
 
   save() {
-    const clientModel: EntityModel = this.clientForm.getModel();
-    const change = new ConfigModificationObject(clientModel.dto, {});
-
     if (!this.formError.validate(this.clientForm, this.formErrorElement)) {
       return;
     }
 
+    const clientModel: EntityModel = this.clientForm.getModel();
+    const change = new ConfigModificationObject(clientModel.dto, {});
+
     this.client.save(clientModel.name, change)
-      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
+      .subscribe(this.navigateUp, this.showError);
+  }
+
+  private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+  private showError = ({ error }: HttpErrorResponse) => {
+    const message = (error instanceof Object) ? JSON.stringify(error) : error;
+    return this.formError.displayErrorMessage(this.formErrorElement, message);
   }
 }

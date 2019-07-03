@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -15,10 +16,10 @@ import { ClientService } from '../clients.service';
   providers: [FormErrorScrollService],
 })
 export class ClientDetailComponent extends EntityDetailBase<ClientService> implements OnInit {
+
   @ViewChild(ClientFormComponent)
   clientForm: ClientFormComponent;
-
-  @ViewChild('formMatError')
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   constructor(protected route: ActivatedRoute,
@@ -36,14 +37,18 @@ export class ClientDetailComponent extends EntityDetailBase<ClientService> imple
     const clientApplication: EntityModel = this.clientForm.getModel();
     const change = new ConfigModificationObject(clientApplication.dto, {});
     this.entityService.update(this.entity.name, change)
-      .subscribe(this.navigateUp);
+      .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
     this.entityService.remove(this.entity.name)
-      .subscribe(this.navigateUp);
+      .subscribe(this.navigateUp, this.showError);
   }
 
   private navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
+  private showError = ({ error }: HttpErrorResponse) => {
+    const message = (error instanceof Object) ? JSON.stringify(error) : error;
+    return this.formError.displayErrorMessage(this.formErrorElement, message);
+  }
 
 }

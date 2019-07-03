@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 
 import { ic } from '../../../../shared/proto/ic-service';
+import { FormValidators } from '../../../../shared/validators';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 import Client = ic.v1.Client;
 import Form from '../../../shared/form';
@@ -43,7 +44,9 @@ export class ClientFormComponent implements Form, OnInit {
   }
 
   addRedirectUri() {
-    this.redirectUris.insert(0, this.formBuilder.control('', [Validators.required]));
+    this.redirectUris.insert(0, this.formBuilder.control('', [
+      FormValidators.url, Validators.required,
+    ]));
   }
 
   removeRedirectUri(index: number): void {
