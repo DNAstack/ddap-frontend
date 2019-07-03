@@ -1,3 +1,5 @@
+import TrustedPassportIssuer = dam.v1.TrustedPassportIssuer;
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -7,7 +9,6 @@ import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { PassportIssuerFormComponent } from '../passport-issuer-form/passport-issuer-form.component';
 import { PassportIssuerService } from '../passport-issuers.service';
-import TrustedPassportIssuer = dam.v1.TrustedPassportIssuer;
 
 @Component({
   selector: 'ddap-passport-issuer-manage',
@@ -19,8 +20,7 @@ export class PassportIssuerManageComponent implements OnInit {
 
   @ViewChild(PassportIssuerFormComponent)
   passportIssuerForm: PassportIssuerFormComponent;
-
-  @ViewChild('formMatError')
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   passportIssuer: TrustedPassportIssuer;
@@ -43,8 +43,13 @@ export class PassportIssuerManageComponent implements OnInit {
     const personaModel: EntityModel = this.passportIssuerForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.passportService.save(personaModel.name, change)
-      .subscribe(
-        () => this.router.navigate(['../..'], {relativeTo: this.route})
-      );
+      .subscribe(this.navigateUp, this.showError);
   }
+
+  private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+  private showError = ({ error }: HttpErrorResponse) => {
+    const message = (error instanceof Object) ? JSON.stringify(error) : error;
+    return this.formError.displayErrorMessage(this.formErrorElement, message);
+  }
+
 }
