@@ -10,16 +10,16 @@
   <div *ngIf="entity">
     <ddap-identity-provider-form #ddapForm
                                  [model]="entity">
-      <mat-error #ddapFormError
-                 [class.visible]="formError.showError"
-                 class="ddap-form-validation-msg">
-        Please fix invalid fields (marked red) before saving the identity provider.
-      </mat-error>
     </ddap-identity-provider-form>
   </div>
 </ddap-main>
 
 <div class="ddap-form-toolbar">
+  <mat-error #formErrorElement
+             [class.visible]="formError.showError"
+             class="ddap-form-validation-msg"
+             [textContent]="formError.message">
+  </mat-error>
   <button mat-flat-button
           (click)="delete()"
           [disabled]="!entity"
@@ -29,7 +29,6 @@
           class="uppercase">
     Delete
   </button>
-
   <button mat-flat-button
           (click)="update()"
           [disabled]="!entity"

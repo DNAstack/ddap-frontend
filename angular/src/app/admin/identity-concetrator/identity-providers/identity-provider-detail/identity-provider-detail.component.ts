@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -15,10 +16,10 @@ import { IdentityProviderService } from '../identity-providers.service';
   providers: [FormErrorScrollService],
 })
 export class IdentityProviderDetailComponent extends EntityDetailBase<IdentityProviderService> implements OnInit {
+
   @ViewChild('ddapForm')
   identityProviderForm: IdentityProviderFormComponent;
-
-  @ViewChild('ddapFormError')
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   constructor(route: ActivatedRoute,
@@ -36,13 +37,18 @@ export class IdentityProviderDetailComponent extends EntityDetailBase<IdentityPr
     const clientApplication: EntityModel = this.identityProviderForm.getModel();
     const change = new ConfigModificationObject(clientApplication.dto, {});
     this.entityService.update(this.entity.name, change)
-      .subscribe(this.navigateUp);
+      .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
     this.entityService.remove(this.entity.name)
-      .subscribe(this.navigateUp);
+      .subscribe(this.navigateUp, this.showError);
   }
 
   private navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
+  private showError = ({ error }: HttpErrorResponse) => {
+    const message = (error instanceof Object) ? JSON.stringify(error) : error;
+    return this.formError.displayErrorMessage(this.formErrorElement, message);
+  }
+
 }
