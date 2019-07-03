@@ -20,7 +20,6 @@ export class PersonaDetailComponent extends EntityFormDetailBase<PersonaService>
 
   @ViewChild(PersonaFormComponent)
   personaForm: PersonaFormComponent;
-
   @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
@@ -38,11 +37,13 @@ export class PersonaDetailComponent extends EntityFormDetailBase<PersonaService>
 
     const personaModel: EntityModel = this.personaForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
-    this.doUpdate(this.entity.name, change);
+    this.entityService.update(this.entity.name, change)
+      .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
-    this.doDelete(this.entity.name);
+    this.entityService.remove(this.entity.name)
+      .subscribe(this.navigateUp, this.showError);
   }
 
   protected showError = (error: HttpErrorResponse) => {

@@ -1,3 +1,5 @@
+import TestPersona = dam.v1.TestPersona;
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -7,7 +9,6 @@ import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';
 import { PersonaService } from '../personas.service';
-import TestPersona = dam.v1.TestPersona;
 
 @Component({
   selector: 'ddap-persona-manage',
@@ -19,7 +20,6 @@ export class PersonaManageComponent implements OnInit {
 
   @ViewChild(PersonaFormComponent)
   personaForm: PersonaFormComponent;
-
   @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
@@ -45,8 +45,17 @@ export class PersonaManageComponent implements OnInit {
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.personaService.save(personaModel.name, change)
       .subscribe(
-        () => this.router.navigate(['../..'], {relativeTo: this.route}),
-        (err) => this.personaForm.accessForm.validateAccessFields(personaModel.name, err)
+        this.navigateUp,
+        (err) => {
+          this.personaForm.accessForm.validateAccessFields(personaModel.name, err);
+          this.showError(err);
+        }
       );
+  }
+
+  private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+  private showError = ({ error }: HttpErrorResponse) => {
+    const message = (error instanceof Object) ? JSON.stringify(error) : error;
+    return this.formError.displayErrorMessage(this.formErrorElement, message);
   }
 }
