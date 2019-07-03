@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -18,7 +19,6 @@ export class ClientApplicationDetailComponent extends EntityDetailBase<ClientApp
 
   @ViewChild(ClientApplicationFormComponent)
   clientApplicationForm: ClientApplicationFormComponent;
-
   @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
@@ -37,14 +37,18 @@ export class ClientApplicationDetailComponent extends EntityDetailBase<ClientApp
     const clientApplication: EntityModel = this.clientApplicationForm.getModel();
     const change = new ConfigModificationObject(clientApplication.dto, {});
     this.entityService.update(this.entity.name, change)
-      .subscribe(this.navigateUp);
+      .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
     this.entityService.remove(this.entity.name)
-      .subscribe(this.navigateUp);
+      .subscribe(this.navigateUp, this.showError);
   }
 
   private navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
+  private showError = ({ error }: HttpErrorResponse) => {
+    const message = (error instanceof Object) ? JSON.stringify(error) : error;
+    return this.formError.displayErrorMessage(this.formErrorElement, message);
+  }
 
 }
