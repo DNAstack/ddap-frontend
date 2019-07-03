@@ -1,12 +1,12 @@
 package com.dnastack.ddap.server;
 
-import static io.restassured.RestAssured.given;
-
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import io.restassured.RestAssured;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
+
+import static io.restassured.RestAssured.given;
 
 public class ConfigE2eTest extends AbstractBaseE2eTest {
 
@@ -78,7 +78,7 @@ public class ConfigE2eTest extends AbstractBaseE2eTest {
                 .log().uri()
                 .auth().preemptive().basic(basicUsername, basicPassword)
         .when()
-                .get("/dam/v1alpha/dnastack/resources")
+                .get("/dam/1/v1alpha/dnastack/resources")
         .then()
                 .log().ifValidationFails()
                 .contentType("application/json")
