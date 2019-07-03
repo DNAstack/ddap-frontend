@@ -32,9 +32,9 @@ public class SearchPage extends AnyDdapPage {
         searchQueryInput.sendKeys(query + Keys.ENTER);
     }
 
-    public List<WebElement> getSearchResults() {
-        new WebDriverWait(getDriver(), 60)
-                .until(ExpectedConditions.numberOfElementsToBeMoreThan(By.tagName("ddap-beacon-result"), 0));
+    public List<WebElement> getSearchResults(Integer expectedNumberOfResults) {
+        new WebDriverWait(getDriver(), 15)
+                .until(ExpectedConditions.numberOfElementsToBeMoreThan(By.tagName("ddap-beacon-result"), --expectedNumberOfResults));
         return getDriver().findElements(By.tagName("ddap-beacon-result"));
     }
 

@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -50,9 +49,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         searchPage.openSearchInput();
         searchPage.submitSearchQuery(query);
 
-        List<WebElement> results = searchPage.getSearchResults();
-        assertThat(results.size(), greaterThanOrEqualTo(2));
-
+        List<WebElement> results = searchPage.getSearchResults(2);
 
         assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
     }
@@ -67,8 +64,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         searchPage.openSearchInput();
         searchPage.submitSearchQuery(query);
 
-        List<WebElement> results = searchPage.getSearchResults();
-        assertThat(results.size(), greaterThanOrEqualTo(2));
+        List<WebElement> results = searchPage.getSearchResults(2);
         assertFalse(findFirstElementByCssClass(results, "match-success").isPresent());
         assertTrue(findFirstElementByCssClass(results, "match-failure").isPresent());
     }
@@ -124,8 +120,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         searchPage.clickLimitSearch();
         searchPage.submitSearchQuery(query);
 
-        List<WebElement> results = searchPage.getSearchResults();
-        assertThat(results.size(), greaterThanOrEqualTo(1));
+        List<WebElement> results = searchPage.getSearchResults(1);
 
         assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
     }
@@ -146,8 +141,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         searchPage.clickLimitSearch();
         searchPage.submitSearchQuery(query);
 
-        List<WebElement> results = searchPage.getSearchResults();
-        assertThat(results.size(), greaterThanOrEqualTo(1));
+        List<WebElement> results = searchPage.getSearchResults(1);
 
         assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
     }
@@ -164,8 +158,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
 
         // Start with a valid search
 
-        List<WebElement> results = searchPage.getSearchResults();
-        assertThat(results.size(), greaterThanOrEqualTo(2));
+        List<WebElement> results = searchPage.getSearchResults(2);
 
         assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
 
@@ -174,8 +167,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         query = "1 : 1 T > C";
         searchPage.submitSearchQuery(query);
 
-        results = searchPage.getSearchResults();
-        assertThat(results.size(), greaterThanOrEqualTo(2));
+        results = searchPage.getSearchResults(2);
         assertFalse(findFirstElementByCssClass(results, "match-success").isPresent());
         assertTrue(findFirstElementByCssClass(results, "match-failure").isPresent());
 
@@ -202,13 +194,12 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         searchPage.clickLimitSearch();
         searchPage.submitSearchQuery(query);
 
-        List<WebElement> results = searchPage.getSearchResults();
+        List<WebElement> results = searchPage.getSearchResults(0);
         assertThat(results.size(), is(0));
 
         searchPage.clickBRCA2();
 
-        results = searchPage.getSearchResults();
-        assertThat(results.size(), greaterThanOrEqualTo(2));
+        results = searchPage.getSearchResults(2);
         assertTrue(findFirstElementByCssClass(results, "match-success").isPresent());
         assertFalse(findFirstElementByCssClass(results, "match-failure").isPresent());
     }
