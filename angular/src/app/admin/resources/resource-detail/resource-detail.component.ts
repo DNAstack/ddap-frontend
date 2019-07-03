@@ -33,6 +33,7 @@ export class ResourceDetailComponent extends EntityFormDetailBase<ResourceServic
               public formError: FormErrorScrollService) {
     super(route, router, resourceService, 'resourceName');
   }
+
   ngOnInit() {
     this.route.params.pipe(
       flatMap(params => this.entityService.getResource(params['resourceName']))
@@ -48,11 +49,12 @@ export class ResourceDetailComponent extends EntityFormDetailBase<ResourceServic
   update() {
     const aggregateForm = combine(this.resourceForm, this.accessForm.testForm);
     if (this.formError.validate(aggregateForm, this.formErrorElement)) {
+
       const resourceModel: EntityModel = this.resourceForm.getModel();
       const applyModel = this.accessForm.getApplyModel() || {};
       const change = new ConfigModificationObject(resourceModel.dto, applyModel);
-
-      this.doUpdate(this.entity.name, change);
+      this.entityService.update(this.entity.name, change)
+        .subscribe(this.navigateUp, this.showError);
     }
   }
 

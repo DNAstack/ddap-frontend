@@ -13,15 +13,15 @@
                                     [resource]="resourceForm.getModel()">
       </ddap-persona-resource-access>
     </div>
-    <mat-error #formErrorElement
-               [class.visible]="formError.showError"
-               class="ddap-form-validation-msg"
-               [textContent]="formError.message">
-    </mat-error>
   </ddap-resource-form>
 </ddap-main>
 
 <div class="ddap-form-toolbar">
+  <mat-error #formErrorElement
+             [class.visible]="formError.showError"
+             class="ddap-form-validation-msg"
+             [textContent]="formError.message">
+  </mat-error>
   <button mat-flat-button
           (click)="save()"
           data-se="btn-save"

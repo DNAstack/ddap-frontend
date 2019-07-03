@@ -20,16 +20,16 @@
                                       [resource]="resourceForm.getModel()">
         </ddap-persona-resource-access>
       </div>
-      <mat-error #formErrorElement
-                 [class.visible]="formError.showError"
-                 class="ddap-form-validation-msg"
-                 [textContent]="formError.message">
-      </mat-error>
     </ddap-resource-form>
   </div>
 </ddap-main>
 
 <div class="ddap-form-toolbar">
+  <mat-error #formErrorElement
+             [class.visible]="formError.showError"
+             class="ddap-form-validation-msg"
+             [textContent]="formError.message">
+  </mat-error>
   <button mat-flat-button
           (click)="delete()"
           [disabled]="!entity"
@@ -39,7 +39,6 @@
           class="uppercase">
     Delete
   </button>
-
   <button mat-flat-button
           (click)="update()"
           [disabled]="!entity"
