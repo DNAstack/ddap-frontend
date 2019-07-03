@@ -4,15 +4,15 @@
 
 <ddap-main>
   <ddap-trusted-sources-form>
-    <mat-error #formErrorElement
-               [class.visible]="formError.showError"
-               class="ddap-form-validation-msg">
-      Please fix invalid fields (marked red) before saving the persona.
-    </mat-error>
   </ddap-trusted-sources-form>
 </ddap-main>
 
 <div class="ddap-form-toolbar">
+  <mat-error #formErrorElement
+             [class.visible]="formError.showError"
+             class="ddap-form-validation-msg"
+             [textContent]="formError.message">
+  </mat-error>
   <button mat-flat-button
           (click)="save()"
           data-se="btn-save"

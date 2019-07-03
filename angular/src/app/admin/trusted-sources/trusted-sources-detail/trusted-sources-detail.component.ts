@@ -20,7 +20,6 @@ export class TrustedSourcesDetailComponent extends EntityFormDetailBase<TrustedS
 
   @ViewChild(TrustedSourcesFormComponent)
   trustedSourcesForm: TrustedSourcesFormComponent;
-
   @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
@@ -40,15 +39,17 @@ export class TrustedSourcesDetailComponent extends EntityFormDetailBase<TrustedS
 
     const trustedSourcesModel: EntityModel = this.trustedSourcesForm.getModel();
     const change = new ConfigModificationObject(trustedSourcesModel.dto, {});
-    this.doUpdate(this.entity.name, change);
+    this.entityService.update(this.entity.name, change)
+      .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
-    this.doDelete(this.entity.name);
+    this.entityService.remove(this.entity.name)
+      .subscribe(this.navigateUp, this.showError);
   }
 
-  protected showError = (error: HttpErrorResponse) => {
-    const message = (error.error instanceof Object) ? JSON.stringify(error.error) : error.error;
+  protected showError = ({ error }: HttpErrorResponse) => {
+    const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
   }
 }
