@@ -1,6 +1,5 @@
+import { Location } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-
-import { SearchStateService } from '../search-state.service';
 
 @Component({
   selector: 'ddap-header',
@@ -27,13 +26,13 @@ export class HeaderComponent {
   @Input()
   searchOpen = false;
 
+  @Input()
+  limitSearch = false;
+
   @Output()
   searchOpenChange = new EventEmitter<boolean>();
 
-  searchBackLink: string = null;
-
-  constructor(private searchState: SearchStateService) {
-    this.searchBackLink = this.searchState.backLink;
+  constructor(private location: Location) {
   }
 
   closeSearch() {
@@ -44,5 +43,9 @@ export class HeaderComponent {
   openSearch() {
     this.searchOpen = true;
     this.searchOpenChange.emit(this.searchOpen);
+  }
+
+  back() {
+    this.location.back();
   }
 }

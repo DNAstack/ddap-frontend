@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 
 import { EntityModel } from '../../admin/shared/entity.model';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
@@ -15,7 +16,7 @@ import { DataService } from '../data.service';
 })
 export class DataListComponent implements OnInit {
 
-  resources$: Observable<EntityModel[]>;
+  qualifiedResources$: Observable<{damId: string, entity: EntityModel}[]>;
 
   constructor(
     private dataService: DataService,
@@ -27,7 +28,20 @@ export class DataListComponent implements OnInit {
   ngOnInit() {
     // Needed to reload the data every time the realm in the URL changes (i.e. using the realm selector)
     this.route.parent.params.subscribe(() => {
-      this.resources$ = this.dataService.get();
+      // FIXME need to pull id from params
+      const damId = '1';
+      const qualify: (em: EntityModel) => { damId: string, entity: EntityModel } = (em: EntityModel) => {
+        return {
+          damId: '1',
+          entity: em,
+        };
+      };
+      this.qualifiedResources$ =
+        this.dataService.get(damId)
+          .pipe(
+            map((ems: EntityModel[]) => ems.map(qualify))
+          );
     });
   }
+
 }

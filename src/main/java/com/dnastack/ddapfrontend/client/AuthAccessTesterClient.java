@@ -11,6 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -25,6 +26,7 @@ public class AuthAccessTesterClient {
 
         final Flux<IdentityModel.Access> damAccessFlux =
                 damClientFactory.allDamClients()
+                                .map(Map.Entry::getValue)
                                 .map(damClient -> determineDamAccess(damClient,
                                                                      realm,
                                                                      damToken,

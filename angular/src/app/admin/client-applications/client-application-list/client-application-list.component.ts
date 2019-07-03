@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { EntityListBase } from '../../shared/entity-list.base';
+import { DamEntityListBase } from '../../shared/dam-entity-list.base';
 import { ClientApplicationService } from '../client-applications.service';
 
 @Component({
@@ -8,10 +9,10 @@ import { ClientApplicationService } from '../client-applications.service';
   templateUrl: './client-application-list.component.html',
   styleUrls: ['./client-application-list.component.scss'],
 })
-export class ClientApplicationListComponent extends EntityListBase<ClientApplicationService> {
+export class ClientApplicationListComponent extends DamEntityListBase<ClientApplicationService> {
 
-  constructor(service: ClientApplicationService) {
-    super(service);
+  constructor(service: ClientApplicationService, route: ActivatedRoute) {
+    super(service, route);
   }
 
 }

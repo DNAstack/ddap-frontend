@@ -2,10 +2,10 @@ import { OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { flatMap, map } from 'rxjs/operators';
 
+import { ConfigEntityService } from './config-entity.service';
 import { EntityModel } from './entity.model';
-import { EntityService } from './entity.service';
 
-export class EntityDetailBase<T extends EntityService> implements OnInit {
+export class DamEntityDetailBase<T extends ConfigEntityService> implements OnInit {
   public entity: EntityModel;
 
   constructor(protected route: ActivatedRoute,
@@ -19,7 +19,14 @@ export class EntityDetailBase<T extends EntityService> implements OnInit {
   }
 
   protected getEntity(entityName: string) {
-    return this.entityService.get()
+    return this.entityService.get(this.routeDamId())
       .pipe(map(entities => entities.get(entityName)));
+  }
+
+  protected routeDamId() {
+    return this.route
+      .snapshot
+      .paramMap
+      .get('damId');
   }
 }

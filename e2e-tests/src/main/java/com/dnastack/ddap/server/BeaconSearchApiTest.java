@@ -64,7 +64,8 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
                 .cookie("refresh_token", refreshToken)
         .when()
             .get(format(
-                    "/api/v1alpha/%s/resources/thousand-genomes/search" +
+                    // FIXME make DAM ID environment variable
+                    "/api/v1alpha/%s/resources/1/thousand-genomes/search" +
                             "?referenceName=13" +
                             "&start=32936732" +
                             "&referenceBases=G" +
@@ -99,7 +100,8 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
                 .cookie("refresh_token", refreshToken)
         .when()
             .get(format(
-                    "/api/v1alpha/%s/resources/thousand-genomes/search" +
+                    // FIXME make DAM ID environment variable
+                    "/api/v1alpha/%s/resources/1/thousand-genomes/search" +
                             "?referenceName=13" +
                             "&start=32936732" +
                             "&referenceBases=G" +

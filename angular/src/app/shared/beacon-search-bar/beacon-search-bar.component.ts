@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { EntityModel } from '../../admin/shared/entity.model';
 import { assemblyIds } from '../assembly.model';
 import { BeaconSearchParams } from '../beacon-search-params.model';
-import { SearchStateService } from '../search-state.service';
 
 import { ValidateVariant } from './variant.validator';
 
@@ -21,12 +21,17 @@ export class BeaconSearchBarComponent implements OnInit {
   @Input()
   disabled: boolean;
 
+  @Input()
+  limitSearch = false;
+
+  @Input()
+  replaceUrl = false;
+
   assemblyIds = assemblyIds;
   searchForm: FormGroup;
 
   constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private searchState: SearchStateService) {
+              private activatedRoute: ActivatedRoute) {
 
     this.searchForm = new FormGroup({
       assembly: new FormControl(this.assemblyIds[0], [Validators.required]),
@@ -35,21 +40,26 @@ export class BeaconSearchBarComponent implements OnInit {
   }
 
   onSubmit({value}) {
-    const currentRoute = this.router.url;
-    const resource = this.searchState.resource;
+    const {resource, damId}: {
+      [p: string]: any,
+      resource?: EntityModel,
+      damId?: string
+    } = this.activatedRoute.snapshot.data;
     const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
 
     const searchParams: BeaconSearchParams = {
       ...value,
-      limitSearch: this.searchState.limitSearch,
+      limitSearch: this.limitSearch,
     };
 
-    if (resource) {
-      searchParams.resource = resource;
+    if (resource && resource.name) {
+      searchParams.resource = resource.name;
+    }
+    if (damId) {
+      searchParams.damId = damId;
     }
 
-    this.searchState.backLink = currentRoute;
-    this.router.navigate([realmId, 'data', 'search', searchParams]);
+    this.router.navigate([realmId, 'data', 'search', searchParams], {replaceUrl: this.replaceUrl});
   }
 
   ngOnInit(): void {

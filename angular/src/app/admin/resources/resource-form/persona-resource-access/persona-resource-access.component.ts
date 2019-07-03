@@ -1,5 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { of } from 'rxjs/internal/observable/of';
 import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
@@ -30,7 +31,7 @@ export class PersonaResourceAccessComponent implements Form {
 
   private saveSubscription;
 
-  constructor(private resourceService: ResourceService) {
+  constructor(private resourceService: ResourceService, private route: ActivatedRoute) {
     this.saveSubscription = this.save$.pipe(
       debounceTime(800),
       switchMap(({changes, isDryRun}) => this.saveResource(changes, isDryRun))
@@ -70,8 +71,8 @@ export class PersonaResourceAccessComponent implements Form {
     const change = new ConfigModificationObject(_get(changes, 'dto', this.resource.dto), applyModel);
 
     const action$ = this.isNewResource
-      ? this.resourceService.save(this.resource.name, change)
-      : this.resourceService.update(this.resource.name, change);
+      ? this.resourceService.save(this.routeDamId(), this.resource.name, change)
+      : this.resourceService.update(this.routeDamId(), this.resource.name, change);
     return action$.pipe(
       catchError((e) => {
         this.error = e.error;
@@ -90,5 +91,12 @@ export class PersonaResourceAccessComponent implements Form {
         }
       })
     );
+  }
+
+  private routeDamId() {
+    return this.route
+      .snapshot
+      .paramMap
+      .get('damId');
   }
 }

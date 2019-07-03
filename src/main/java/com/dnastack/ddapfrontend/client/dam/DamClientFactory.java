@@ -36,9 +36,9 @@ public class DamClientFactory {
                                      webClientFactory);
     }
 
-    public Stream<ReactiveDamClient> allDamClients() {
+    public Stream<Map.Entry<String, ReactiveDamClient>> allDamClients() {
         return dams.keySet()
                    .stream()
-                   .map(this::getDamClient);
+                   .map(id -> Map.entry(id, getDamClient(id)));
     }
 }

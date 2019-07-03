@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
+import { zip } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { map, pluck } from 'rxjs/operators';
 
@@ -38,8 +39,9 @@ export class IdentityService {
       );
   }
 
-  getPersonas(params = {}): Observable<any> {
-    return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/testPersonas`, {params})
+  getPersonas(damId: string, params = {}): Observable<any> {
+    const damApiUrl = environment.damApiUrls.get(damId);
+    return this.http.get<any>(`${damApiUrl}/${realmIdPlaceholder}/testPersonas`, {params})
       .pipe(
         this.errorHandler.notifyOnError(`Can't load personas' information.`),
         pluck('personas')
@@ -48,7 +50,17 @@ export class IdentityService {
 
   getAccountLinks(params?): Observable<AccountLink[]> {
     const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
-    return this.getIdentityProviders(params).zip(this.getPersonas(params))
+    const damIds: string[] = Array.from(environment.damApiUrls.keys());
+    const personasFromAllDams: Observable<any>[] = damIds
+      .map((damId: string) => this.getPersonas(damId, params));
+    // Important: zip doesn't take an array directly. Need to spread the array into separate arguments.
+    const mergedPersonas: Observable<any> = zip(...personasFromAllDams)
+      .pipe(
+        map((personas: any[]) => personas.reduce((accum, cur) => Object.assign({}, accum, cur), {}))
+      );
+
+    return this.getIdentityProviders(params)
+      .zip(mergedPersonas)
       .pipe(
         map(([idps, personas]) => {
           return [

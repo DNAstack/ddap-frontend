@@ -1,5 +1,4 @@
 import { HttpClient } from '@angular/common/http';
-import { Injector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map, pluck } from 'rxjs/operators';
 

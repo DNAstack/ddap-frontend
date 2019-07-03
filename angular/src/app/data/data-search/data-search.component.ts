@@ -5,9 +5,8 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { BeaconSearchParams } from '../../shared/beacon-search-params.model';
 import { BeaconResponse } from '../../shared/beacons/beacon-response.model';
-import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
+import { BeaconServiceQuery, ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
-import { SearchStateService } from '../../shared/search-state.service';
 import { DataService } from '../data.service';
 
 @Component({
@@ -23,15 +22,15 @@ export class DataSearchComponent implements OnDestroy, OnInit {
   views: any;
   results: BeaconResponse[];
   resultsAction: Subscription;
+  limitSearch = false;
 
   private searchStateSubscription: Subscription;
-  private searchParams: any;
+  private searchParams: BeaconSearchParams;
 
   constructor(private activatedRoute: ActivatedRoute,
               private dataService: DataService,
               private beaconService: ResourceBeaconService,
-              private router: Router,
-              public searchState: SearchStateService) {
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -46,25 +45,32 @@ export class DataSearchComponent implements OnDestroy, OnInit {
   }
 
   limitSearchChange($event) {
-    this.searchState.limitSearch = $event.checked;
-    const searchParams = {
+    const limitSearch = $event.checked;
+    const searchParams: BeaconSearchParams = {
       ...this.searchParams,
-      limitSearch: this.searchState.limitSearch,
+       // Don't put a boolean into this map, so that we are always pulling out the limitSearch as a string
+      limitSearch: limitSearch + '',
     };
-    this.router.navigate(['.', searchParams], {relativeTo: this.activatedRoute});
+    this.router.navigate(['.', searchParams], {relativeTo: this.activatedRoute, replaceUrl: true});
   }
 
   private initializeComponentFields(searchParams: BeaconSearchParams) {
     this.resource = searchParams.resource;
-    this.resourceName$ = this.dataService.getName(this.resource);
+    if (this.resource) {
+      this.resourceName$ = this.dataService.getName(searchParams.damId, this.resource);
+    }
     this.searchParams = searchParams;
+    this.limitSearch = searchParams.limitSearch === 'true';
+    const queryParams = {
+      ...searchParams,
+      limitSearch: this.limitSearch,
+    };
 
-    this.queryBeacon(searchParams);
+    this.queryBeacon(queryParams);
   }
 
-  private queryBeacon(searchParams: BeaconSearchParams) {
-    const { limitSearch, resource  } = searchParams;
-    const beaconResult$ = this.beaconService.query(searchParams, limitSearch ? resource : null);
+  private queryBeacon(queryParams: BeaconServiceQuery) {
+    const beaconResult$ = this.beaconService.query(queryParams);
 
     this.resultsAction = beaconResult$
       .subscribe((beaconResponseDto: any) => {

@@ -26,7 +26,7 @@ export class BeaconResultComponent implements OnInit {
   }
 
   getLinkToResource() {
-    return `/${this.realm}/data/${this.beacon.beaconInfo.resourceId}`;
+    return `/${this.realm}/data/${this.beacon.beaconInfo.damId}/${this.beacon.beaconInfo.resourceId}`;
   }
 
 }

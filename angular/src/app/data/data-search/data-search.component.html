@@ -6,7 +6,7 @@
 <ddap-main>
   <ddap-limit-search *ngIf="resource"
                      (change)="limitSearchChange($event)"
-                     [checked]="searchState.limitSearch"
+                     [checked]="limitSearch"
                      [resourceName$]="resourceName$">
   </ddap-limit-search>
 

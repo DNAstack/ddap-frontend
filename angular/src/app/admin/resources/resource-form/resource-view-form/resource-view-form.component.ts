@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
@@ -28,7 +29,8 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
 
   constructor(private formBuilder: FormBuilder,
               private serviceTemplateService: ServiceDefinitionService,
-              private accessPoliciesServices: AccessPolicyService) {
+              private accessPoliciesServices: AccessPolicyService,
+              private route: ActivatedRoute) {
   }
 
   get serviceTemplate(): string {
@@ -68,7 +70,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
       }),
     });
 
-    this.templatesSubscription = this.serviceTemplateService.getList().subscribe((templates) => {
+    this.templatesSubscription = this.serviceTemplateService.getList(this.routeDamId()).subscribe((templates) => {
       this.templates = templates;
       if (this.selectedTemplate) {
         this.rebuildPoliciesForRolesForm();
@@ -76,7 +78,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.policyValues$ = this.accessPoliciesServices.getList()
+    this.policyValues$ = this.accessPoliciesServices.getList(this.routeDamId())
       .pipe(
         map((policies: EntityModel[]) => {
           return policies.map((policy) => policy.name);
@@ -145,4 +147,11 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   }
 
   private equalToSelectedTemplateName = (template) => template.name === this.viewForm.get('serviceTemplate').value;
+
+  private routeDamId() {
+    return this.route
+      .snapshot
+      .paramMap
+      .get('damId');
+  }
 }

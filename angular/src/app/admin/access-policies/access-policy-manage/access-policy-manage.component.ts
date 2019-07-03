@@ -15,8 +15,15 @@ export class AccessPolicyManageComponent {
               private route: ActivatedRoute) {
   }
 
-  save(id, change) {
-    this.accessPolicyService.save(id, change)
+  save(entityId, change) {
+    this.accessPolicyService.save(this.routeDamId(), entityId, change)
       .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
+  }
+
+  private routeDamId() {
+    return this.route
+      .snapshot
+      .paramMap
+      .get('damId');
   }
 }

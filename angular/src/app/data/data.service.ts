@@ -21,10 +21,10 @@ export class DataService {
 
   }
 
-  getName(resourceId: string): Observable<string> {
+  getName(damId: string, resourceId: string): Observable<string> {
     const resourceName = this.cache[resourceId];
     if (!resourceName) {
-      return this.getResource(resourceId).pipe(
+      return this.getResource(damId, resourceId).pipe(
         map((entity: EntityModel) => entity.dto.ui.label)
       );
     }
@@ -32,14 +32,15 @@ export class DataService {
     return of(resourceName);
   }
 
-  get(params = {}): Observable<EntityModel[]> {
+  get(damId: string, params = {}): Observable<EntityModel[]> {
+    const damApiUrl = environment.damApiUrls.get(damId);
     const putIntoCache = (resourcesDto: EntityModel[]) => {
       resourcesDto.forEach((resource: EntityModel) => {
         this.cache[resource.name] = resource.dto.ui.label;
       });
     };
 
-    return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/resources`, {params})
+    return this.http.get<any>(`${damApiUrl}/${realmIdPlaceholder}/resources`, {params})
       .pipe(
         this.errorHandler.notifyOnError(`Can't load resources.`),
         pluck('resources'),
@@ -49,9 +50,10 @@ export class DataService {
       );
   }
 
-  getResource(resourceId: string, realmId = null, params = {}): Observable<EntityModel> {
+  getResource(damId: string, resourceId: string, realmId = null, params = {}): Observable<EntityModel> {
+    const damApiUrl = environment.damApiUrls.get(damId);
     return this.http.get<any>(
-      `${environment.damApiUrl}/${realmId || realmIdPlaceholder}/resources/${resourceId}`,
+      `${damApiUrl}/${realmId || realmIdPlaceholder}/resources/${resourceId}`,
       {params}
     ).pipe(
       this.errorHandler.notifyOnError(`Can't load resource ${resourceId}.`),

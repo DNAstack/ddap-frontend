@@ -3,6 +3,7 @@ export interface BeaconResponse {
 
   beaconInfo: {
     name: string,
+    damId: string,
     resourceLabel: string,
     resourceId: string,
     viewId: string
