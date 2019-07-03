@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import { of } from 'rxjs/internal/observable/of';
@@ -31,9 +32,10 @@ export class AccessTableComponent implements OnChanges {
   private readonly personas$: Observable<any>;
 
   constructor(private personaService: PersonaService,
-              private resourceService: ResourceService) {
+              private resourceService: ResourceService,
+              private route: ActivatedRoute) {
     this.personas$ = this.personaService
-      .getList()
+      .getList(this.routeDamId())
       .pipe(
         share()
       );
@@ -122,11 +124,18 @@ export class AccessTableComponent implements OnChanges {
           dry_run: true,
         }));
 
-        return this.resourceService.update(this.resource.name, change);
+        return this.resourceService.update(this.routeDamId(), this.resource.name, change);
       }),
       catchError((errorDto) => {
         return of(errorDto);
       })
     );
+  }
+
+  private routeDamId() {
+    return this.route
+      .snapshot
+      .paramMap
+      .get('damId');
   }
 }

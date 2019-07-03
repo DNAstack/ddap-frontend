@@ -11,13 +11,12 @@ const headers = HTTP_HEADERS;
 export abstract class AbstractConfigOptionService {
 
   protected constructor(protected http: HttpClient,
-                        protected targetApi: string,
                         private errorHandler: ErrorHandlerService) {
 
   }
 
-  get(params = {}): Observable<any[]> {
-    return this.http.get<any>(`${this.targetApi}/${realmIdPlaceholder}/config`,
+  protected _get(targetApi: string, params = {}): Observable<any[]> {
+    return this.http.get<any>(`${targetApi}/${realmIdPlaceholder}/config`,
       {params})
       .pipe(
         this.errorHandler.notifyOnError(`Can't load settings.`),
@@ -25,8 +24,8 @@ export abstract class AbstractConfigOptionService {
       );
   }
 
-  update(newOptions: object): Observable<any> {
-    return this.http.put(`${this.targetApi}/${realmIdPlaceholder}/config/options`,
+  protected _update(targetApi: string, newOptions: object): Observable<any> {
+    return this.http.put(`${targetApi}/${realmIdPlaceholder}/config/options`,
       {item: newOptions},
       {headers}
     ).pipe(

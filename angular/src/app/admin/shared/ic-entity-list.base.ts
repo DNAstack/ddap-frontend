@@ -3,10 +3,11 @@ import { JsonEditorComponent } from 'ang-jsoneditor';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
-import { EntityModel } from './entity.model';
-import { EntityService } from './entity.service';
+import { IcConfigEntityService } from '../identity-concetrator/shared/ic-config-entity.service';
 
-export class EntityListBase<T extends EntityService> implements OnInit {
+import { EntityModel } from './entity.model';
+
+export class IcEntityListBase<T extends IcConfigEntityService> implements OnInit {
   entities$: Observable<EntityModel[]>;
   @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 

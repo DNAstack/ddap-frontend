@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { EntityDetailBase } from '../../shared/entity-detail.base';
+import { DamEntityDetailBase } from '../../shared/dam-entity-detail.base';
 import { ServiceDefinitionService } from '../service-definitions.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { ServiceDefinitionService } from '../service-definitions.service';
   templateUrl: './service-definition-detail.component.html',
   styleUrls: ['./service-definition-detail.component.scss'],
 })
-export class ServiceDefinitionDetailComponent extends EntityDetailBase<ServiceDefinitionService> {
+export class ServiceDefinitionDetailComponent extends DamEntityDetailBase<ServiceDefinitionService> {
 
   constructor(
     route: ActivatedRoute,

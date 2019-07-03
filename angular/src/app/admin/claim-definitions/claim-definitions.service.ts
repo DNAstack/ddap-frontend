@@ -24,8 +24,8 @@ export class ClaimDefinitionService extends ConfigEntityService {
     super(http, errorHandler, 'claimDefinitions', 'claimDefinitions');
   }
 
-  get(params: {} = {}): Observable<Map<string, EntityModel>> {
-    return super.get(params)
+  get(damId: string, params: {} = {}): Observable<Map<string, EntityModel>> {
+    return super.get(damId, params)
       .pipe(
         this.errorHandler.notifyOnError(`Can't load claim definitions.`)
       );

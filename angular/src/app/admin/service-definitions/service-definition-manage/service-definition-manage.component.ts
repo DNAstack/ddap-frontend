@@ -16,7 +16,14 @@ export class ServiceDefinitionManageComponent {
   }
 
   save(id, change) {
-    this.serviceDefinitionService.save(id, change)
+    this.serviceDefinitionService.save(this.routeDamId(), id, change)
       .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
+  }
+
+  private routeDamId() {
+    return this.route
+      .snapshot
+      .paramMap
+      .get('damId');
   }
 }

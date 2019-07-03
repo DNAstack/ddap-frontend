@@ -34,7 +34,7 @@ export class ClaimDefinitionManageComponent {
 
     const personaModel: EntityModel = this.claimDefinitionForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
-    this.definitionService.save(personaModel.name, change)
+    this.definitionService.save(this.routeDamId(), personaModel.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
@@ -42,6 +42,13 @@ export class ClaimDefinitionManageComponent {
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
+  }
+
+  private routeDamId() {
+    return this.route
+      .snapshot
+      .paramMap
+      .get('damId');
   }
 
 }

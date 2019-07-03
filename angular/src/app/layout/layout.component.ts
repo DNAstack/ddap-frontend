@@ -52,6 +52,11 @@ export class LayoutComponent implements OnInit {
       .subscribe();
   }
 
+  damAdminIds(): string[] {
+    // TODO find all DAM admin IDs, and check for which we are admin
+    return (this.isDamAdmin) ? ['1'] : [];
+  }
+
   logout() {
     this.identityService.invalidateTokens()
       .subscribe(() => {

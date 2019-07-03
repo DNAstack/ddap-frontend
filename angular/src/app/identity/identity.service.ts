@@ -38,8 +38,9 @@ export class IdentityService {
       );
   }
 
-  getPersonas(params = {}): Observable<any> {
-    return this.http.get<any>(`${environment.damApiUrl}/${realmIdPlaceholder}/testPersonas`, {params})
+  getPersonas(damId: string, params = {}): Observable<any> {
+    const damApiUrl = environment.damApiUrls.get(damId);
+    return this.http.get<any>(`${damApiUrl}/${realmIdPlaceholder}/testPersonas`, {params})
       .pipe(
         this.errorHandler.notifyOnError(`Can't load personas' information.`),
         pluck('personas')

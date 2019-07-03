@@ -3,7 +3,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { EntityDetailBase } from '../../shared/entity-detail.base';
+import { DamEntityDetailBase } from '../../shared/dam-entity-detail.base';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { ClientApplicationFormComponent } from '../client-application-form/client-application-form.component';
@@ -15,7 +15,7 @@ import { ClientApplicationService } from '../client-applications.service';
   styleUrls: ['./client-application-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class ClientApplicationDetailComponent extends EntityDetailBase<ClientApplicationService> {
+export class ClientApplicationDetailComponent extends DamEntityDetailBase<ClientApplicationService> {
 
   @ViewChild(ClientApplicationFormComponent)
   clientApplicationForm: ClientApplicationFormComponent;
@@ -36,12 +36,12 @@ export class ClientApplicationDetailComponent extends EntityDetailBase<ClientApp
 
     const clientApplication: EntityModel = this.clientApplicationForm.getModel();
     const change = new ConfigModificationObject(clientApplication.dto, {});
-    this.entityService.update(this.entity.name, change)
+    this.entityService.update(this.routeDamId(), this.entity.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
-    this.entityService.remove(this.entity.name)
+    this.entityService.remove(this.routeDamId(), this.entity.name)
       .subscribe(this.navigateUp, this.showError);
   }
 

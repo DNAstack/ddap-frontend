@@ -56,7 +56,8 @@ export class DataSearchComponent implements OnDestroy, OnInit {
 
   private initializeComponentFields(searchParams: BeaconSearchParams) {
     this.resource = searchParams.resource;
-    this.resourceName$ = this.dataService.getName(this.resource);
+    // FIXME need to pull id from params
+    this.resourceName$ = this.dataService.getName('1', this.resource);
     this.searchParams = searchParams;
 
     this.queryBeacon(searchParams);

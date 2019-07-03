@@ -20,8 +20,8 @@ export class ServiceDefinitionService extends ConfigEntityService {
     super(http, errorHandler, 'serviceTemplates', 'serviceTemplates');
   }
 
-  get(params: {} = {}): Observable<Map<string, EntityModel>> {
-    return super.get(params)
+  get(damId: string, params: {} = {}): Observable<Map<string, EntityModel>> {
+    return super.get(damId, params)
       .pipe(
         this.errorHandler.notifyOnError(`Can't load service definitions.`)
       );
