@@ -3,9 +3,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
-import { EntityDetailBase } from '../../../shared/entity-detail.base';
 import { EntityModel } from '../../../shared/entity.model';
 import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
+import { IcEntityDetailBase } from '../../../shared/ic-entity-detail.base';
 import { IdentityProviderFormComponent } from '../identity-provider-form/identity-provider-form.component';
 import { IdentityProviderService } from '../identity-providers.service';
 
@@ -15,7 +15,7 @@ import { IdentityProviderService } from '../identity-providers.service';
   styleUrls: ['./identity-provider-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class IdentityProviderDetailComponent extends EntityDetailBase<IdentityProviderService> implements OnInit {
+export class IdentityProviderDetailComponent extends IcEntityDetailBase<IdentityProviderService> implements OnInit {
 
   @ViewChild('ddapForm')
   identityProviderForm: IdentityProviderFormComponent;

@@ -3,7 +3,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { EntityDetailBase } from '../../shared/entity-detail.base';
+import { DamEntityDetailBase } from '../../shared/dam-entity-detail.base';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { PassportIssuerFormComponent } from '../passport-issuer-form/passport-issuer-form.component';
@@ -15,7 +15,7 @@ import { PassportIssuerService } from '../passport-issuers.service';
   styleUrls: ['./passport-issuer-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class PassportIssuerDetailComponent extends EntityDetailBase<PassportIssuerService> {
+export class PassportIssuerDetailComponent extends DamEntityDetailBase<PassportIssuerService> {
 
   @ViewChild(PassportIssuerFormComponent)
   clientApplicationForm: PassportIssuerFormComponent;
@@ -36,12 +36,12 @@ export class PassportIssuerDetailComponent extends EntityDetailBase<PassportIssu
 
     const clientApplication: EntityModel = this.clientApplicationForm.getModel();
     const change = new ConfigModificationObject(clientApplication.dto, {});
-    this.entityService.update(this.entity.name, change)
+    this.entityService.update(this.routeDamId(), this.entity.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
-    this.entityService.remove(this.entity.name)
+    this.entityService.remove(this.routeDamId(), this.entity.name)
       .subscribe(this.navigateUp, this.showError);
   }
 

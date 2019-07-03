@@ -3,8 +3,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { EntityDetailBase } from '../../shared/entity-detail.base';
-import { EntityFormDetailBase } from '../../shared/entity-form-detail.base';
+import { DamEntityFormDetailBase } from '../../shared/dam-entity-form-detail.base';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { TrustedSourcesFormComponent } from '../trusted-sources-form/trusted-sources-form.component';
@@ -16,7 +15,7 @@ import { TrustedSourcesService } from '../trusted-sources.service';
   styleUrls: ['./trusted-sources-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class TrustedSourcesDetailComponent extends EntityFormDetailBase<TrustedSourcesService> {
+export class TrustedSourcesDetailComponent extends DamEntityFormDetailBase<TrustedSourcesService> {
 
   @ViewChild(TrustedSourcesFormComponent)
   trustedSourcesForm: TrustedSourcesFormComponent;
@@ -39,12 +38,12 @@ export class TrustedSourcesDetailComponent extends EntityFormDetailBase<TrustedS
 
     const trustedSourcesModel: EntityModel = this.trustedSourcesForm.getModel();
     const change = new ConfigModificationObject(trustedSourcesModel.dto, {});
-    this.entityService.update(this.entity.name, change)
+    this.entityService.update(this.routeDamId(), this.entity.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
-    this.entityService.remove(this.entity.name)
+    this.entityService.remove(this.routeDamId(), this.entity.name)
       .subscribe(this.navigateUp, this.showError);
   }
 

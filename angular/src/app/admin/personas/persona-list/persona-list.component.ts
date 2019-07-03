@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -14,12 +15,19 @@ export class PersonaListComponent implements OnInit {
 
   personas$: Observable<any[]>;
 
-  constructor(private personaService: PersonaService) {
+  constructor(private personaService: PersonaService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.personas$ = this.personaService.get()
+    this.personas$ = this.personaService.get(this.routeDamId())
       .pipe(map(EntityModel.arrayFromMap));
+  }
+
+  private routeDamId() {
+    return this.route
+      .snapshot
+      .paramMap
+      .get('damId');
   }
 
 }

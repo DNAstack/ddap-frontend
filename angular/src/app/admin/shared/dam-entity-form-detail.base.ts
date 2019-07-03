@@ -2,11 +2,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 
-import { EntityDetailBase } from './entity-detail.base';
+import { ConfigEntityService } from './config-entity.service';
+import { DamEntityDetailBase } from './dam-entity-detail.base';
 import { EntityModel } from './entity.model';
-import { EntityService } from './entity.service';
 
-export abstract class EntityFormDetailBase<T extends EntityService> extends EntityDetailBase<T> {
+export abstract class DamEntityFormDetailBase<T extends ConfigEntityService> extends DamEntityDetailBase<T> {
   public entity: EntityModel;
 
   protected constructor(protected route: ActivatedRoute,
@@ -17,17 +17,17 @@ export abstract class EntityFormDetailBase<T extends EntityService> extends Enti
   }
 
   protected getEntity(entityName: string) {
-    return this.entityService.get()
+    return this.entityService.get(this.routeDamId())
       .pipe(map(entities => entities.get(entityName)));
   }
 
   protected doDelete(id: string) {
-    this.entityService.remove(id)
+    this.entityService.remove(this.routeDamId(), id)
       .subscribe(this.navigateUp, this.showError);
   }
 
   protected doUpdate(id, change) {
-    this.entityService.update(id, change)
+    this.entityService.update(this.routeDamId(), id, change)
       .subscribe(this.navigateUp, error => this.showError(error));
   }
 

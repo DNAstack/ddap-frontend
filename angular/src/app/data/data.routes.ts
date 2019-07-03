@@ -6,10 +6,10 @@ import { DataResolverService } from './data-resolver.service';
 import { DataSearchComponent } from './data-search/data-search.component';
 
 export const DATA_ROUTES: Routes = [
-  {path: 'data', component: DataListComponent},
-  {path: 'data/search', component: DataSearchComponent},
+  {path: 'data/:damId', component: DataListComponent},
+  {path: 'data/:damId/search', component: DataSearchComponent},
   {
-    path: 'data/:resourceName',
+    path: 'data/:damId/:resourceName',
     component: DataDetailComponent,
     resolve: {
       resource: DataResolverService,

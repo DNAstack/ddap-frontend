@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { EMPTY } from 'rxjs/internal/observable/empty';
 import { Observable } from 'rxjs/Observable';
@@ -11,12 +12,12 @@ import { FormValidators } from '../../../shared/validators';
 import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
-import TestPersona = dam.v1.TestPersona;
-import AccessList = dam.v1.AccessList;
 import Form from '../../shared/form';
 import { PersonaAutocompleteService } from '../persona-autocomplete.service';
 import { PersonaAccessFormComponent } from '../persona-resource-form/persona-access-form.component';
 import { PersonaService } from '../personas.service';
+import TestPersona = dam.v1.TestPersona;
+import AccessList = dam.v1.AccessList;
 
 @Component({
   selector: 'ddap-persona-form',
@@ -59,9 +60,10 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
   constructor(private formBuilder: FormBuilder,
               private personaService: PersonaService,
               private resourceService: ResourceService,
-              private personaAutocompleteService: PersonaAutocompleteService) {
+              private personaAutocompleteService: PersonaAutocompleteService,
+              private route: ActivatedRoute) {
 
-    this.resourceAccess$ = this.resourceService.getList().pipe(
+    this.resourceAccess$ = this.resourceService.getList(this.routeDamId()).pipe(
       map((resourceList) => this.generateAllAccessModel(resourceList))
     );
   }
@@ -133,7 +135,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
   }
 
   private buildGa4GhClaimGroupAutocomplete(autocompleteId: string, formGroup: FormGroup) {
-    this.claimDefinitions$[autocompleteId] = this.personaAutocompleteService.buildClaimDefinitionAutocomplete(formGroup);
+    this.claimDefinitions$[autocompleteId] = this.personaAutocompleteService.buildClaimDefinitionAutocomplete(this.routeDamId(), formGroup);
     this.trustedSources$[autocompleteId] = this.personaAutocompleteService.buildTrustedSourcesAutocomplete(formGroup);
     this.policyValues$[autocompleteId] = this.personaAutocompleteService.buildValuesAutocomplete(formGroup);
   }
@@ -148,7 +150,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
       this.form.disable();
     }
 
-    this.passportIssuers$ = this.personaAutocompleteService.buildIssuerAutocomplete(this.form);
+    this.passportIssuers$ = this.personaAutocompleteService.buildIssuerAutocomplete(this.routeDamId(), this.form);
 
     if (personaId) {
       this.validatorSubscription.unsubscribe();
@@ -157,7 +159,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
   }
 
   private executeDryRunRequest(personaId: string, change: ConfigModificationObject) {
-    return this.personaService.update(personaId, change).pipe(
+    return this.personaService.update(this.routeDamId(), personaId, change).pipe(
       tap(() => this.accessForm.makeAccessFieldsValid()),
       catchError((error) => {
         this.accessForm.validateAccessFields(personaId, error);
@@ -258,5 +260,12 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
         return this.executeDryRunRequest(personaId, change);
       })
     ).subscribe();
+  }
+
+  private routeDamId() {
+    return this.route
+      .snapshot
+      .paramMap
+      .get('damId');
   }
 }
