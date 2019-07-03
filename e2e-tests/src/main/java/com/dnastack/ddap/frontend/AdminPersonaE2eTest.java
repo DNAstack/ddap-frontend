@@ -202,34 +202,19 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                                               .goToAdmin(NavItem.PERSONAS);
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("John Persona"));
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("John Edited")));
+        assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (Elixir)"));
+        assertThat(adminListPage.getEntityTitles(), not(hasItem("Dr. Joe (Elixir) Edited")));
 
-        AdminManagePage adminManagePage = adminListPage.clickView("John Persona", "Edit Persona");
+        AdminManagePage adminManagePage = adminListPage.clickView("Dr. Joe (Elixir)", "Edit Persona");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
-        adminManagePage.fillField(DdapBy.se("inp-label"), "John Edited");
-        adminManagePage.clearField(DdapBy.se("inp-iss"));
-        adminManagePage.fillField(DdapBy.se("inp-iss"), "test-issuer");
-        adminManagePage.clearField(DdapBy.se("inp-sub"));
-        adminManagePage.fillField(DdapBy.se("inp-sub"), "test-subject");
 
-        adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
-        adminManagePage.toggleExpansionPanel("claim-0");
-        adminManagePage.fillField(DdapBy.se("inp-claimName"), "test-claimName");
-        adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
-        adminManagePage.fillField(DdapBy.se("inp-value"), "test-value");
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "2/14/2019 6:00 AM");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "2/14/2039 6:00 AM");
-        adminManagePage.closeAutocompletes();
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "so");
+        final WebElement gcsReadCheckbox = adminManagePage.findCheckbox(
+                "ga4gh-apis/gcs_read/viewer");
 
-        final WebElement ga4ghBeaconCheckbox = adminManagePage.findCheckbox(
-                "ga4gh-apis/beacon/discovery");
-
-        ga4ghBeaconCheckbox.click();
+        gcsReadCheckbox.click();
         // If we don't wait, submitting the form will happen before validation can occur.
-        new WebDriverWait(driver, 5).until(d -> ga4ghBeaconCheckbox.getAttribute("class").contains("ng-invalid"));
+        new WebDriverWait(driver, 5).until(d -> gcsReadCheckbox.getAttribute("class").contains("ng-invalid"));
 
         adminManagePage.clickUpdate();
         adminManagePage.assertError(containsString("Please fix invalid fields"));
