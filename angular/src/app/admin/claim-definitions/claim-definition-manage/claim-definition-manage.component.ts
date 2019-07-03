@@ -1,6 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel } from '../../shared/entity.model';
@@ -35,8 +35,13 @@ export class ClaimDefinitionManageComponent {
     const personaModel: EntityModel = this.claimDefinitionForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.definitionService.save(personaModel.name, change)
-      .subscribe(
-        () => this.router.navigate(['../..'], { relativeTo: this.route })
-      );
+      .subscribe(this.navigateUp, this.showError);
   }
+
+  private navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
+  private showError = ({ error }: HttpErrorResponse) => {
+    const message = (error instanceof Object) ? JSON.stringify(error) : error;
+    return this.formError.displayErrorMessage(this.formErrorElement, message);
+  }
+
 }
