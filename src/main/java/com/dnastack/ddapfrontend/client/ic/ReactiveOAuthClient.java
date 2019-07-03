@@ -77,6 +77,22 @@ public class ReactiveOAuthClient {
                 .flatMap(this::extractIdpTokens);
     }
 
+    public Mono<ClientResponse> revokeRefreshToken(String realm, String refreshToken) {
+        final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/revoke" +
+                "?token={refreshToken}" +
+                "&clientId={clientId}" +
+                "&clientSecret={clientSecret}");
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("refreshToken", refreshToken);
+        variables.put("clientId", idpClientId);
+        variables.put("clientSecret", idpClientSecret);
+
+        return webClient.post()
+                .uri(idpBaseUrl.resolve(template.expand(variables)))
+                .exchange();
+    }
+
     private Mono<TokenResponse> extractIdpTokens(ClientResponse idpTokenResponse) {
         if (idpTokenResponse.statusCode().is2xxSuccessful() && contentTypeIsApplicationJson(idpTokenResponse)) {
             return idpTokenResponse.bodyToMono(TokenResponse.class);

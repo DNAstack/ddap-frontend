@@ -52,6 +52,13 @@ export class LayoutComponent implements OnInit {
       .subscribe();
   }
 
+  logout() {
+    this.identityService.invalidateTokens()
+      .subscribe(() => {
+        window.location.href = `${this.loginPath}`;
+      });
+  }
+
   private periodicallyRefreshTokens(): Observable<any> {
     return this.identityService.refreshTokens()
       .pipe(

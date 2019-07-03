@@ -69,6 +69,10 @@ export class IdentityService {
     return this.http.get<any>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/identity/refresh`, {params});
   }
 
+  invalidateTokens(params?) {
+    return this.http.get<any>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/identity/logout`, {params});
+  }
+
   private getAccountLinksFromProviders(idps: object, realm: string): AccountLink[] {
     return Object.entries(idps)
       .map(([idpKey, idpValue]) => {

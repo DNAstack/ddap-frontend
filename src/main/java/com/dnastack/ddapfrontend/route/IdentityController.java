@@ -102,6 +102,17 @@ public class IdentityController {
         }).flatMap(account -> Mono.just(ResponseEntity.ok().body(account)));
     }
 
+    @GetMapping("/logout")
+    public Mono<? extends ResponseEntity<?>> invalidateTokens(ServerHttpRequest request, @PathVariable String realm) {
+        Optional<String> refreshToken = cookiePackager.extractToken(request, CookieKind.REFRESH);
+
+        return oAuthClient.revokeRefreshToken(realm, refreshToken.get())
+                .map(clientResponse -> ResponseEntity.noContent().build())
+                .onErrorContinue((throwable, o) -> {
+                    log.warn("Failed to invalidate refresh token", throwable);
+                });
+    }
+
     @GetMapping("/login")
     public Mono<? extends ResponseEntity<?>> apiLogin(ServerHttpRequest request,
                                                       @PathVariable String realm,

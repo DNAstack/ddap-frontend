@@ -18,6 +18,13 @@ mat-sidenav-container {
     background-color: $navbar-expanded-background;
     padding: 0.5rem 1rem;
   }
+  .credentials-username {
+    cursor: default;
+
+    span {
+      cursor: pointer;
+    }
+  }
 }
 
 /deep/ .ddap-logout {
