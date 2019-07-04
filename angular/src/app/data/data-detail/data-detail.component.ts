@@ -6,7 +6,6 @@ import { of } from 'rxjs/observable/of';
 import { EntityModel } from '../../admin/shared/entity.model';
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
-import { SearchStateService } from '../../shared/search-state.service';
 
 @Component({
   selector: 'ddap-resource-detail',
@@ -20,29 +19,25 @@ export class DataDetailComponent implements OnInit {
   searchOpened = false;
   views: any;
   resource: EntityModel;
+  limitSearch = true;
 
-  constructor(private route: ActivatedRoute,
-              public searchService: SearchStateService) {
+  constructor(private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.searchService.limitSearch = true;
-
-    this.route.data.subscribe(({resource, damId}) => {
+    this.route.data.subscribe(({resource}) => {
       this.resource = resource;
-      this.searchService.resource = resource.name;
-      this.searchService.damId = damId;
       this.resourceLabel$ = of(this.resource.dto.ui.label);
       this.views = this.getViews(this.resource);
     });
   }
 
-  limitSearchChange($event) {
-    this.searchService.limitSearch = $event.checked;
-  }
-
   searchOpenedChange($event) {
     this.searchOpened = $event;
+  }
+
+  toggleLimitSearch() {
+    this.limitSearch = !this.limitSearch;
   }
 
   private getViews(resource: EntityModel): EntityModel[] {

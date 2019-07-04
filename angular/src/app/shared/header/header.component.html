@@ -17,10 +17,10 @@
   </ng-template>
 
   <ng-template [ngIf]="searchOpen">
-    <button *ngIf="isSearchPage && searchBackLink"
+    <button *ngIf="isSearchPage"
             mat-icon-button
             data-se="search-back-link"
-            [routerLink]="searchBackLink">
+            (click)="back()">
       <mat-icon class="icon icon-close"></mat-icon>
     </button>
 
@@ -31,7 +31,8 @@
     </button>
 
     <ddap-beacon-search-bar
-      [placeholder]="['1 : 156105028 T > C']">
+      [placeholder]="['1 : 156105028 T > C']"
+      [limitSearch]="limitSearch">
     </ddap-beacon-search-bar>
   </ng-template>
 

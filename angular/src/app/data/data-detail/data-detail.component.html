@@ -2,13 +2,14 @@
              [backLink]="'../..'"
              [label]="resource?.dto?.ui?.label"
              [searchButton]="true"
+             [limitSearch]="limitSearch"
              (searchOpenChange)="searchOpenedChange($event)">
 </ddap-header>
 
 <ddap-resource-logo [imageUrl]="resource?.dto?.ui?.imageUrl">
   <ddap-limit-search *ngIf="searchOpened"
-                     [checked]="searchService.limitSearch"
-                     (change)="limitSearchChange($event)"
+                     [checked]="limitSearch"
+                     (change)="toggleLimitSearch()"
                      class="filter-top-border filter-inline"
                      [resourceName$]="resourceLabel$">
   </ddap-limit-search>
