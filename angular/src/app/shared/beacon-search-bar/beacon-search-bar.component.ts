@@ -22,10 +22,10 @@ export class BeaconSearchBarComponent implements OnInit {
   disabled: boolean;
 
   @Input()
-  replaceUrl = false;
+  limitSearch = false;
 
   @Input()
-  limitSearch = false;
+  replaceUrl = false;
 
   assemblyIds = assemblyIds;
   searchForm: FormGroup;

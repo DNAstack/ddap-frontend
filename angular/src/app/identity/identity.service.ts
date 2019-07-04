@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs/Observable';
-import { map, pluck } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
+import { flatMap, map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { ErrorHandlerService } from '../shared/error-handler/error-handler.service';
@@ -49,7 +50,14 @@ export class IdentityService {
 
   getAccountLinks(params?): Observable<AccountLink[]> {
     const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
-    return this.getIdentityProviders(params).zip(this.getPersonas(params))
+    // FIXME refactor to be less awful
+    const personasFromAllDams: Observable<any> = Array.from(environment.damApiUrls.keys())
+      .map(damId => this.getPersonas(damId, params))
+      .reduce((accum, cur) => accum.pipe(flatMap(p1 => cur.pipe(map(p2 => {
+        return {...p1, ...p2};
+      })))), of({}));
+    return this.getIdentityProviders(params)
+      .zip(personasFromAllDams)
       .pipe(
         map(([idps, personas]) => {
           return [
