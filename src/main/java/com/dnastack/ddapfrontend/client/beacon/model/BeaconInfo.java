@@ -11,6 +11,7 @@ public class BeaconInfo {
 
     private String name;
     private String resourceLabel;
+    private String damId;
     private String resourceId;
     private String viewId;
 

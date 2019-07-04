@@ -38,6 +38,7 @@ export class BeaconSearchBarComponent implements OnInit {
     const currentRoute = this.router.url;
     const resource = this.searchState.resource;
     const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
+    const damId = this.searchState.damId;
 
     const searchParams: BeaconSearchParams = {
       ...value,
@@ -46,6 +47,9 @@ export class BeaconSearchBarComponent implements OnInit {
 
     if (resource) {
       searchParams.resource = resource;
+    }
+    if (damId) {
+      searchParams.damId = damId;
     }
 
     this.searchState.backLink = currentRoute;

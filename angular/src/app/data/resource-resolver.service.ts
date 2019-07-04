@@ -7,14 +7,14 @@ import { DataService } from './data.service';
 @Injectable({
   providedIn: 'root',
 })
-export class DataResolverService implements Resolve<any> {
+export class ResourceResolverService implements Resolve<any> {
 
   constructor(private dataService: DataService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Observable<never> {
     const resourceName = route.paramMap.get('resourceName');
+    const damId = route.paramMap.get('damId');
     const realmId = route.root.firstChild.params.realmId;
-    // FIXME need to pull id from params
-    return this.dataService.getResource('1', resourceName, realmId);
+    return this.dataService.getResource(damId, resourceName, realmId);
   }
 }

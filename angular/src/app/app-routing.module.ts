@@ -9,9 +9,8 @@ import { LayoutComponent } from './layout/layout.component';
 import { defaultRealm } from './shared/realm/realm.constant';
 
 const routes: Routes = [
-  // FIXME need to pull id from somewhere
-  {path: '', redirectTo: `/${defaultRealm}/data/1`, pathMatch: 'full'},
-  {path: ':realmId', redirectTo: `/:realmId/data/1`, pathMatch: 'full'},
+  {path: '', redirectTo: `/${defaultRealm}/data`, pathMatch: 'full'},
+  {path: ':realmId', redirectTo: `/:realmId/data`, pathMatch: 'full'},
   {
     path: ':realmId',
     component: LayoutComponent,

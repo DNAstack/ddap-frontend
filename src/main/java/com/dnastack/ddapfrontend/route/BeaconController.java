@@ -65,32 +65,22 @@ class BeaconController {
         String refreshToken = foundRefreshToken.orElse(null);
 
         return Flux.fromStream(damClientFactory.allDamClients())
-                   .flatMap(damClient -> damClient.getResources(realm)
-                                                  .flux()
-                                                  .flatMap((damResources) -> {
-                                                      Map<String, DamResource> resources = damResources.getResources();
-                                                      return maybePerformBeaconQueries(damClient,
-                                                                                       realm,
-                                                                                       beaconRequest,
-                                                                                       damToken,
-                                                                                       refreshToken,
-                                                                                       resources.entrySet());
-                                                  }));
-    }
-
-    /*
-     * Temporary hack while we work on DISCO-2276
-     */
-    @GetMapping(value = "{resourceId}/search", params = "type=beacon")
-    public Flux<BeaconQueryResult> singleResourceBeaconSearch(@PathVariable String realm,
-                                                              @PathVariable String resourceId,
-                                                              BeaconRequestModel beaconRequest,
-                                                              ServerHttpRequest request) {
-        if (dams.size() != 1) {
-            throw new IllegalArgumentException("Must specify DAM ID when more than one DAM is configured.");
-        }
-
-        return singleResourceBeaconSearch(realm, dams.keySet().iterator().next(), resourceId, beaconRequest, request);
+                   .flatMap(clientEntry -> {
+                       final String damId = clientEntry.getKey();
+                       final ReactiveDamClient damClient = clientEntry.getValue();
+                       return damClient.getResources(realm)
+                                       .flux()
+                                       .flatMap((damResources) -> {
+                                           Map<String, DamResource> resources = damResources.getResources();
+                                           return maybePerformBeaconQueries(damClient,
+                                                                            damId,
+                                                                            realm,
+                                                                            beaconRequest,
+                                                                            damToken,
+                                                                            refreshToken,
+                                                                            resources.entrySet());
+                                       });
+                   });
     }
 
     @GetMapping(value = "{damId}/{resourceId}/search", params = "type=beacon")
@@ -108,11 +98,18 @@ class BeaconController {
                 .flux()
                 .flatMap((damResource) -> {
                     Map.Entry<String, DamResource> resource = Map.entry(resourceId, damResource);
-                    return maybePerformBeaconQueries(damClient, realm, beaconRequest, damToken, refreshToken.get(), Collections.singleton(resource));
+                    return maybePerformBeaconQueries(damClient,
+                                                     damId,
+                                                     realm,
+                                                     beaconRequest,
+                                                     damToken,
+                                                     refreshToken.get(),
+                                                     Collections.singleton(resource)
+                    );
                 });
     }
 
-    private static Stream<? extends BeaconView> filterBeaconView(Map.Entry<String, DamResource> resource) {
+    private static Stream<? extends BeaconView> filterBeaconView(String damId, Map.Entry<String, DamResource> resource) {
         return resource.getValue()
                 .getViews()
                 .entrySet()
@@ -126,24 +123,27 @@ class BeaconController {
                     return uris.stream()
                             .findFirst()
                             .stream()
-                            .map(uri -> new BeaconView(resource.getKey(),
+                            .map(uri -> new BeaconView(
+                                    damId,
+                                    resource.getKey(),
                                     resource.getValue(),
                                     view.getKey(),
                                     view.getValue(),
-                                    uri));
+                                    uri
+                            ));
                 });
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Flux<BeaconQueryResult> maybePerformBeaconQueries(ReactiveDamClient damClient,
-                                                              String realm,
+                                                              String damId, String realm,
                                                               BeaconRequestModel beaconRequest,
                                                               Optional<String> damToken,
                                                               String refreshToken,
                                                               Collection<Map.Entry<String, DamResource>> resourceEntries) {
         return resourceEntries
                 .stream()
-                .flatMap(BeaconController::filterBeaconView)
+                .flatMap((Map.Entry<String, DamResource> resources) -> filterBeaconView(damId, resources))
                 .map(beaconView -> damToken.map(token -> maybePerformSingleBeaconViewQuery(
                         damClient,
                         realm,
@@ -208,10 +208,13 @@ class BeaconController {
         final String viewLabel = beaconView.getView().getLabel();
         final String resourceLabel = beaconView.getResource().getLabel();
 
-        return new BeaconInfo(StringUtils.isEmpty(viewLabel) ? beaconView.getViewId() : viewLabel,
+        return new BeaconInfo(
+                StringUtils.isEmpty(viewLabel) ? beaconView.getViewId() : viewLabel,
                 StringUtils.isEmpty(resourceLabel) ? beaconView.getResourceId() : resourceLabel,
+                beaconView.getDamId(),
                 beaconView.getResourceId(),
-                beaconView.getViewId());
+                beaconView.getViewId()
+        );
     }
 
     private BeaconQueryResult createErrorBeaconResult(BeaconInfo beaconInfo, int errorStatus, String errorMessage) {
@@ -233,6 +236,7 @@ class BeaconController {
 
     @Value
     private static class BeaconView {
+        String damId;
         String resourceId;
         DamResource resource;
         String viewId;

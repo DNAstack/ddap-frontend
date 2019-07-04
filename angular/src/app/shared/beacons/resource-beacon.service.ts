@@ -18,8 +18,8 @@ export class ResourceBeaconService {
               private errorHandler: ErrorHandlerService) {
   }
 
-  query(queryValue: any, resource): Observable<BeaconResponse[]> {
-    const {query, assembly} = queryValue;
+  query(queryValue: { query: string; assembly: string; resource?: string; damId?: string }): Observable<BeaconResponse[]> {
+    const {query, assembly, resource, damId} = queryValue;
 
     if (!DnaChangeQueryParser.validate(query)) {
       return Observable.of([]);
@@ -29,16 +29,16 @@ export class ResourceBeaconService {
     params.type = 'beacon';
     params.assemblyId = assembly;
 
-    if (resource) {
-      return this.queryBeacon(resource, params);
+    if (resource && damId) {
+      return this.queryBeacon(damId, resource, params);
     }
 
     return this.queryAll(params);
   }
 
-  private queryBeacon(resourceId, params?): Observable<BeaconResponse[]> {
+  private queryBeacon(damId: string, resourceId: string, params?): Observable<BeaconResponse[]> {
     return this.http.get<BeaconResponse[]>(
-      `${environment.ddapApiUrl}/${realmIdPlaceholder}/resources/${resourceId}/search`,
+      `${environment.ddapApiUrl}/${realmIdPlaceholder}/resources/${damId}/${resourceId}/search`,
       {params}
     ).pipe(
       this.errorHandler.notifyOnError(`Can't query beacon for resource ${resourceId}.`)

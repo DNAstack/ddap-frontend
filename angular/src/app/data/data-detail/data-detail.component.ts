@@ -28,9 +28,10 @@ export class DataDetailComponent implements OnInit {
   ngOnInit() {
     this.searchService.limitSearch = true;
 
-    this.route.data.subscribe(({resource}) => {
+    this.route.data.subscribe(({resource, damId}) => {
       this.resource = resource;
       this.searchService.resource = resource.name;
+      this.searchService.damId = damId;
       this.resourceLabel$ = of(this.resource.dto.ui.label);
       this.views = this.getViews(this.resource);
     });
