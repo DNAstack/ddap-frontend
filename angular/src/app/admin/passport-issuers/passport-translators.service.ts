@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs/Observable';
-import { map, pluck } from 'rxjs/operators';
+import { flatMap, map, pluck } from 'rxjs/operators';
 
-import { environment } from '../../../environments/environment';
+import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
 
@@ -14,16 +14,22 @@ import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
 export class PassportTranslatorsService {
 
   constructor(protected http: HttpClient,
-              protected errorHandler: ErrorHandlerService) {
+              protected errorHandler: ErrorHandlerService,
+              private damInfoService: DamInfoService) {
   }
 
   get(damId: string): Observable<object> {
-    const damApiUrl = environment.damApiUrls.get(damId);
-    return this.http.get(`${damApiUrl}/${realmIdPlaceholder}/passportTranslators`)
+    return this.damInfoService.getDamUrls()
       .pipe(
-        pluck('passportTranslators'),
-        map((passportTranslatorsDto) => this.getTranslatorList(passportTranslatorsDto)),
-        this.errorHandler.notifyOnError(`Can't load passport translators.`)
+        flatMap(damApiUrls => {
+          const damApiUrl = damApiUrls.get(damId);
+          return this.http.get(`${damApiUrl}/${realmIdPlaceholder}/passportTranslators`)
+            .pipe(
+              pluck('passportTranslators'),
+              map((passportTranslatorsDto) => this.getTranslatorList(passportTranslatorsDto)),
+              this.errorHandler.notifyOnError(`Can't load passport translators.`)
+            );
+        })
       );
   }
 

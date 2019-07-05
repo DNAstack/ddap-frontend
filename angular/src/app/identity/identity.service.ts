@@ -4,9 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { zip } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
-import { map, pluck } from 'rxjs/operators';
+import { flatMap, map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
+import { DamInfoService } from '../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
@@ -21,7 +22,8 @@ export class IdentityService {
 
   constructor(private http: HttpClient,
               private errorHandler: ErrorHandlerService,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private damInfoService: DamInfoService) {
   }
 
   getIdentity(params = {}): Observable<Identity> {
@@ -40,33 +42,43 @@ export class IdentityService {
   }
 
   getPersonas(damId: string, params = {}): Observable<any> {
-    const damApiUrl = environment.damApiUrls.get(damId);
-    return this.http.get<any>(`${damApiUrl}/${realmIdPlaceholder}/testPersonas`, {params})
+    return this.damInfoService.getDamUrls()
       .pipe(
-        this.errorHandler.notifyOnError(`Can't load personas' information.`),
-        pluck('personas')
+        flatMap(damApiUrls => {
+          const damApiUrl = damApiUrls.get(damId);
+          return this.http.get<any>(`${damApiUrl}/${realmIdPlaceholder}/testPersonas`, {params})
+            .pipe(
+              this.errorHandler.notifyOnError(`Can't load personas' information.`),
+              pluck('personas')
+            );
+        })
       );
   }
 
   getAccountLinks(params?): Observable<AccountLink[]> {
     const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
-    const damIds: string[] = Array.from(environment.damApiUrls.keys());
-    const personasFromAllDams: Observable<any>[] = damIds
-      .map((damId: string) => this.getPersonas(damId, params));
-    // Important: zip doesn't take an array directly. Need to spread the array into separate arguments.
-    const mergedPersonas: Observable<any> = zip(...personasFromAllDams)
+    return this.damInfoService.getDamUrls()
       .pipe(
-        map((personas: any[]) => personas.reduce((accum, cur) => Object.assign({}, accum, cur), {}))
-      );
+        flatMap(damApiUrls => {
+          const damIds: string[] = Array.from(damApiUrls.keys());
+          const personasFromAllDams: Observable<any>[] = damIds
+            .map((damId: string) => this.getPersonas(damId, params));
+          // Important: zip doesn't take an array directly. Need to spread the array into separate arguments.
+          const mergedPersonas: Observable<any> = zip(...personasFromAllDams)
+            .pipe(
+              map((personas: any[]) => personas.reduce((accum, cur) => Object.assign({}, accum, cur), {}))
+            );
 
-    return this.getIdentityProviders(params)
-      .zip(mergedPersonas)
-      .pipe(
-        map(([idps, personas]) => {
-          return [
-            ...this.getAccountLinksFromProviders(idps, realmId),
-            ...this.getAccountLinksFromPersonas(personas, realmId),
-          ];
+          return this.getIdentityProviders(params)
+            .zip(mergedPersonas)
+            .pipe(
+              map(([idps, personas]) => {
+                return [
+                  ...this.getAccountLinksFromProviders(idps, realmId),
+                  ...this.getAccountLinksFromPersonas(personas, realmId),
+                ];
+              })
+            );
         })
       );
   }

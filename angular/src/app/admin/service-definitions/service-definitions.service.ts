@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
+import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
 import { ConfigEntityService } from '../shared/config-entity.service';
@@ -16,8 +17,9 @@ import { EntityModel } from '../shared/entity.model';
 export class ServiceDefinitionService extends ConfigEntityService {
 
   constructor(protected http: HttpClient,
-              protected errorHandler: ErrorHandlerService) {
-    super(http, errorHandler, 'serviceTemplates', 'serviceTemplates');
+              protected errorHandler: ErrorHandlerService,
+              protected damInfoService: DamInfoService) {
+    super(http, errorHandler, damInfoService, 'serviceTemplates', 'serviceTemplates');
   }
 
   get(damId: string, params: {} = {}): Observable<Map<string, EntityModel>> {

@@ -14,7 +14,7 @@ public class UriUtil {
      * @param request                 the inbound request from the user's browser (for calculating our return address)
      * @param realm                   the realm name to use in the returned URI
      * @param pathWithoutLeadingSlash the path component that comes after the realm. Must not begin with a slash.
-     * @return absolute URI of the DDAP token endpoint for the given realm. Never null.
+     * @return absolute URI of the given relative DDAP UI path for the given realm. Never null.
      */
     public static URI selfLinkToUi(ServerHttpRequest request, String realm, String pathWithoutLeadingSlash) {
         return URI.create(getExternalPath(request, format("/%s/%s", realm, pathWithoutLeadingSlash)));
@@ -26,9 +26,20 @@ public class UriUtil {
      * @param request                 the inbound request from the user's browser (for calculating our return address)
      * @param realm                   the realm name to use in the returned URI
      * @param pathWithoutLeadingSlash the path component that comes after the realm. Must not begin with a slash.
-     * @return absolute URI of the DDAP token endpoint for the given realm. Never null.
+     * @return absolute URI of the given relative DDAP API path for the given realm. Never null.
      */
     public static URI selfLinkToApi(ServerHttpRequest request, String realm, String pathWithoutLeadingSlash) {
         return URI.create(getExternalPath(request, format("/api/v1alpha/%s/%s", realm, pathWithoutLeadingSlash)));
+    }
+
+    /**
+     * Returns a fully-qualified URL pointing to the base URL for a DDAP proxy endpoint of a particular DAM.
+     *
+     * @param request                 the inbound request from the user's browser (for calculating our return address)
+     * @param damId                   the identifier of a particular DAM
+     * @return absolute base URI of the proxy endpoint of a DAM in this DDAP deployment. Never null.
+     */
+    public static URI selfLinkToDam(ServerHttpRequest request, String damId) {
+        return URI.create(getExternalPath(request, format("/dam/%s/v1alpha", damId)));
     }
 }

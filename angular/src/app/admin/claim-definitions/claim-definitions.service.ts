@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 
 import { environment } from '../../../environments/environment';
+import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
 import { ic } from '../../shared/proto/ic-service';
 import { ConfigEntityService } from '../shared/config-entity.service';
@@ -20,8 +21,9 @@ import IAccountClaim = ic.v1.IAccountClaim;
 export class ClaimDefinitionService extends ConfigEntityService {
 
   constructor(protected http: HttpClient,
-              protected errorHandler: ErrorHandlerService) {
-    super(http, errorHandler, 'claimDefinitions', 'claimDefinitions');
+              protected errorHandler: ErrorHandlerService,
+              protected damInfoService: DamInfoService) {
+    super(http, errorHandler, damInfoService, 'claimDefinitions', 'claimDefinitions');
   }
 
   get(damId: string, params: {} = {}): Observable<Map<string, EntityModel>> {

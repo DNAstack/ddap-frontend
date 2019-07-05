@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
+import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
 import { ConfigEntityService } from '../shared/config-entity.service';
 import { EntityModel } from '../shared/entity.model';
@@ -12,8 +13,9 @@ import { EntityModel } from '../shared/entity.model';
 export class ClientApplicationService extends ConfigEntityService {
 
   constructor(protected http: HttpClient,
-              protected errorHandler: ErrorHandlerService) {
-    super(http, errorHandler, 'clients', 'clients');
+              protected errorHandler: ErrorHandlerService,
+              protected damInfoService: DamInfoService) {
+    super(http, errorHandler, damInfoService, 'clients', 'clients');
   }
 
   get(damId: string, params: {} = {}): Observable<Map<string, EntityModel>> {

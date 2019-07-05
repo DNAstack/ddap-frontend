@@ -4,8 +4,8 @@ import { zip } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { flatMap, map } from 'rxjs/operators';
 
-import { environment } from '../../../environments/environment';
 import { EntityModel } from '../../admin/shared/entity.model';
+import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 import { DataService } from '../data.service';
 
@@ -23,25 +23,32 @@ export class DataListComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private route: ActivatedRoute,
-    public randomImageRetriever: ImagePlaceholderRetriever
+    public randomImageRetriever: ImagePlaceholderRetriever,
+    private damInfoService: DamInfoService
   ) {
   }
 
   ngOnInit() {
+    // FIXME I think this should be a piped Observable and not a subscription
     // Needed to reload the data every time the realm in the URL changes (i.e. using the realm selector)
     this.route.parent.params.subscribe(() => {
-      const damIds: string[] = Array.from(environment.damApiUrls.keys());
-      const unzippedQualifiedModels: Observable<{ damId: string, entity: EntityModel }[]>[] =
-        damIds.map(damId =>
-          this.dataService.get(damId)
-            .pipe(map((ems: EntityModel[]) => ems.map(DataListComponent.qualifier(damId)))));
+      this.qualifiedResources$ =
+        this.damInfoService.getDamUrls()
+          .pipe(
+            flatMap(damApiUrls => {
+              const damIds: string[] = Array.from(damApiUrls.keys());
+              const unzippedQualifiedModels: Observable<{ damId: string, entity: EntityModel }[]>[] =
+                damIds.map(damId =>
+                  this.dataService.get(damId)
+                    .pipe(map((ems: EntityModel[]) => ems.map(DataListComponent.qualifier(damId)))));
 
-      // Need to pass in all args separately, not as array
-      this.qualifiedResources$ = zip(...unzippedQualifiedModels)
-        .pipe(
-          map(DataListComponent.flatten)
-        );
-
+              // Need to pass in all args separately, not as array
+              return zip(...unzippedQualifiedModels)
+                .pipe(
+                  map(DataListComponent.flatten)
+                );
+            })
+          );
     });
   }
 

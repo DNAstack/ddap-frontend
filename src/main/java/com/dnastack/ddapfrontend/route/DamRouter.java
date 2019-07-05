@@ -11,13 +11,13 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
 
 import static java.lang.String.format;
 
-@RestController
+@Configuration
 public class DamRouter {
 
     @Autowired
