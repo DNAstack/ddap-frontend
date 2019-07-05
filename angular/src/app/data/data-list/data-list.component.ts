@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { zip } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { flatMap, map } from 'rxjs/operators';
 
+import { environment } from '../../../environments/environment';
 import { EntityModel } from '../../admin/shared/entity.model';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 import { DataService } from '../data.service';
@@ -28,20 +30,32 @@ export class DataListComponent implements OnInit {
   ngOnInit() {
     // Needed to reload the data every time the realm in the URL changes (i.e. using the realm selector)
     this.route.parent.params.subscribe(() => {
-      // FIXME need to pull id from params
-      const damId = '1';
-      const qualify: (em: EntityModel) => { damId: string, entity: EntityModel } = (em: EntityModel) => {
-        return {
-          damId: '1',
-          entity: em,
-        };
-      };
-      this.qualifiedResources$ =
-        this.dataService.get(damId)
-          .pipe(
-            map((ems: EntityModel[]) => ems.map(qualify))
-          );
+      const damIds: string[] = Array.from(environment.damApiUrls.keys());
+      const unzippedQualifiedModels: Observable<{ damId: string, entity: EntityModel }[]>[] =
+        damIds.map(damId =>
+          this.dataService.get(damId)
+            .pipe(map((ems: EntityModel[]) => ems.map(DataListComponent.qualifier(damId)))));
+
+      // Need to pass in all args separately, not as array
+      this.qualifiedResources$ = zip(...unzippedQualifiedModels)
+        .pipe(
+          map(DataListComponent.flatten)
+        );
+
     });
+  }
+
+  private static qualifier(damId: string): (em: EntityModel) => { damId: string, entity: EntityModel } {
+    return em => {
+      return {
+        damId: damId,
+        entity: em,
+      };
+    };
+  }
+
+  private static flatten<T>(arrayOfArrays: T[][]): T[] {
+    return arrayOfArrays.reduce((accum, cur) => accum.concat(...cur), []);
   }
 
 }
