@@ -134,13 +134,17 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
       return {};
     }
 
-    return variables.map((variable) => {
-      return {
-        [variable.name]: variable.value,
-      };
-    }).reduce((previousValue, currentValue) => {
-      return Object.assign(previousValue, currentValue);
-    }, {});
+    return variables
+    // Form will only validate if optional values are empty
+    // Don't send optional variables to the server
+      .filter((variable) => variable.value !== '')
+      .map((variable) => {
+        return {
+          [variable.name]: variable.value,
+        };
+      }).reduce((previousValue, currentValue) => {
+        return Object.assign(previousValue, currentValue);
+      }, {});
   }
 
   isValid() {
