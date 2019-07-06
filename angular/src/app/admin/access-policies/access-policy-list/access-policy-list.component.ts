@@ -14,7 +14,7 @@ export class AccessPolicyListComponent extends DamEntityListBase<AccessPolicySer
 
   rules$: Observable<any[]>;
 
-  constructor(ruleService: AccessPolicyService, route: ActivatedRoute) {
+  constructor(protected ruleService: AccessPolicyService, protected route: ActivatedRoute) {
     super(ruleService, route);
   }
 

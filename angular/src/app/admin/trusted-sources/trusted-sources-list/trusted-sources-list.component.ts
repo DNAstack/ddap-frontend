@@ -11,7 +11,7 @@ import { TrustedSourcesService } from '../trusted-sources.service';
 })
 export class TrustedSourcesListComponent extends DamEntityListBase<TrustedSourcesService> {
 
-  constructor(private trustedSourcesService: TrustedSourcesService, route: ActivatedRoute) {
+  constructor(protected trustedSourcesService: TrustedSourcesService, protected route: ActivatedRoute) {
     super(trustedSourcesService, route);
   }
 

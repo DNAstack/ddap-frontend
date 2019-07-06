@@ -11,7 +11,7 @@ import { ClaimDefinitionService } from '../claim-definitions.service';
 })
 export class ClaimDefinitionListComponent extends DamEntityListBase<ClaimDefinitionService> {
 
-  constructor(definitionService: ClaimDefinitionService, route: ActivatedRoute) {
+  constructor(protected definitionService: ClaimDefinitionService, protected route: ActivatedRoute) {
     super(definitionService, route);
   }
 

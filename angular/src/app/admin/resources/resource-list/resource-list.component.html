@@ -6,7 +6,7 @@
 
 <ddap-main>
   <mat-accordion class="ddap-resource-list">
-    <ng-container *ngFor="let resource of resources$ | async">
+    <ng-container *ngFor="let resource of entities$ | async">
       <mat-expansion-panel>
         <mat-expansion-panel-header collapsedHeight="5rem">
           <mat-panel-title>

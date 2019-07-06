@@ -11,7 +11,7 @@ import { ServiceDefinitionService } from '../service-definitions.service';
 })
 export class ServiceDefinitionListComponent extends DamEntityListBase<ServiceDefinitionService> {
 
-  constructor(serviceDefinitionService: ServiceDefinitionService, route: ActivatedRoute) {
+  constructor(protected serviceDefinitionService: ServiceDefinitionService, protected route: ActivatedRoute) {
     super(serviceDefinitionService, route);
   }
 

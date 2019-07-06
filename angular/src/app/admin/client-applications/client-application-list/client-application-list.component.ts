@@ -11,7 +11,7 @@ import { ClientApplicationService } from '../client-applications.service';
 })
 export class ClientApplicationListComponent extends DamEntityListBase<ClientApplicationService> {
 
-  constructor(service: ClientApplicationService, route: ActivatedRoute) {
+  constructor(protected service: ClientApplicationService, protected route: ActivatedRoute) {
     super(service, route);
   }
 

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
 
-import { EntityModel } from '../../shared/entity.model';
+import { DamEntityListBase } from '../../shared/dam-entity-list.base';
 import { ResourceService } from '../resources.service';
 
 @Component({
@@ -11,23 +9,10 @@ import { ResourceService } from '../resources.service';
   templateUrl: './resource-list.component.html',
   styleUrls: ['./resource-list.component.scss'],
 })
-export class ResourceListComponent implements OnInit {
+export class ResourceListComponent extends DamEntityListBase<ResourceService> implements OnInit {
 
-  resources$: Observable<any[]>;
-
-  constructor(private resourceService: ResourceService, private route: ActivatedRoute) {
-  }
-
-  ngOnInit() {
-    this.resources$ = this.resourceService.get(this.routeDamId())
-      .pipe(map(EntityModel.arrayFromMap));
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
+  constructor(protected resourceService: ResourceService, protected route: ActivatedRoute) {
+    super(resourceService, route);
   }
 
 }

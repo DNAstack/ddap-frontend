@@ -11,7 +11,7 @@ import { PassportIssuerService } from '../passport-issuers.service';
 })
 export class PassportIssuerListComponent extends DamEntityListBase<PassportIssuerService> {
 
-  constructor(passportService: PassportIssuerService, route: ActivatedRoute) {
+  constructor(protected passportService: PassportIssuerService, protected route: ActivatedRoute) {
     super(passportService, route);
   }
 
