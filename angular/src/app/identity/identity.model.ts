@@ -11,7 +11,10 @@ export interface Identity {
   };
   scopes: string[];
   accesses: [{
-    target: string;
+    target: {
+      service: string;
+      id?: string;
+    };
     isAdmin: boolean;
   }];
   sandbox: boolean;

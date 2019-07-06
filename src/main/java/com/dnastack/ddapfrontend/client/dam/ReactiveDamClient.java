@@ -5,6 +5,7 @@ import com.dnastack.ddapfrontend.client.WebClientFactory;
 import com.dnastack.ddapfrontend.client.dam.model.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
 
@@ -143,5 +144,13 @@ public class ReactiveDamClient {
               .header(AUTHORIZATION, "Bearer " + damToken)
                 .retrieve()
                 .bodyToMono(DamConfig.class);
+    }
+
+    public Mono<DamInfo> getDamInfo() {
+        return webClientFactory.getWebClient()
+                               .get()
+                               .uri(damBaseUrl.resolve("/dam"))
+                               .retrieve()
+                               .bodyToMono(DamInfo.class);
     }
 }

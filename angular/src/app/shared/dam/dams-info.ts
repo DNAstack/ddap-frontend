@@ -3,5 +3,7 @@ export interface DamsInfo {
 }
 
 export interface DamInfo {
+  id: string;
+  label: string;
   url: string;
 }

@@ -23,6 +23,12 @@ export class DamInfoService {
     return this.damInfoResponse$;
   }
 
+  getDamInfos(): Observable<DamInfo[]> {
+    return this.damInfoResponse$
+      .pipe(
+        map(damsInfo => DamInfoService.toDamInfos(damsInfo))
+      );
+  }
 
   getDamUrls(): Observable<Map<string, string>> {
     return this.getDamsInfo()
@@ -38,5 +44,12 @@ export class DamInfoService {
       damInfoEntries.map((entry: Entry<DamInfo>) => [entry[0], entry[1].url] as Entry<string>);
 
     return new Map(idUrlEntries);
+  }
+
+  private static toDamInfos(damsInfo: DamsInfo): DamInfo[] {
+    type Entry<T> = [string, T];
+    const damInfoEntries: Entry<DamInfo>[] = Object.entries(damsInfo);
+
+    return damInfoEntries.map((entry: Entry<DamInfo>) => entry[1]);
   }
 }

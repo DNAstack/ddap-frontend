@@ -26,11 +26,11 @@ public class AuthAccessTesterClient {
 
         final Flux<IdentityModel.Access> damAccessFlux =
                 damClientFactory.allDamClients()
-                                .map(Map.Entry::getValue)
-                                .map(damClient -> determineDamAccess(damClient,
-                                                                     realm,
-                                                                     damToken,
-                                                                     refreshToken))
+                                .map(idClientEntry -> determineDamAccess(idClientEntry.getKey(),
+                                                                         idClientEntry.getValue(),
+                                                                         realm,
+                                                                         damToken,
+                                                                         refreshToken))
                                 .reduce(Flux.empty(),
                                         (accum, mono) -> Flux.merge(accum,
                                                                     mono),
@@ -41,9 +41,9 @@ public class AuthAccessTesterClient {
                    .collectList();
     }
 
-    private Mono<IdentityModel.Access> determineDamAccess(ReactiveDamClient damClient, String realm, String damToken, String refreshToken) {
+    private Mono<IdentityModel.Access> determineDamAccess(String damId, ReactiveDamClient damClient, String realm, String damToken, String refreshToken) {
         IdentityModel.Access damAccess = new IdentityModel.Access();
-        damAccess.setTarget("DAM");
+        damAccess.setTarget(new IdentityModel.Target(IdentityModel.Service.DAM, damId));
         return damClient.getConfig(realm, damToken, refreshToken)
                 .doOnSuccessOrError((damConfig, throwable) -> {
                     if (throwable != null && !throwable.getMessage().contains("403")) {
@@ -57,7 +57,7 @@ public class AuthAccessTesterClient {
 
     private Mono<IdentityModel.Access> determineIcAccess(String realm, String icToken, String refreshToken) {
         IdentityModel.Access icAccess = new IdentityModel.Access();
-        icAccess.setTarget("IC");
+        icAccess.setTarget(new IdentityModel.Target(IdentityModel.Service.IC, null));
         return icClient.getConfig(realm, icToken, refreshToken)
                 .doOnSuccessOrError((icConfig, throwable) -> {
                     if (throwable != null && !throwable.getMessage().contains("403")) {

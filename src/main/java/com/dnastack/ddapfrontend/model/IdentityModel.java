@@ -1,7 +1,9 @@
 package com.dnastack.ddapfrontend.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -17,9 +19,20 @@ public class IdentityModel {
     @Data
     public static class Access {
 
-        private String target;
+        private Target target;
         private Boolean isAdmin;
 
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Target {
+        private Service service;
+        private String id;
+    }
+
+    public enum Service {
+        DAM, IC;
+    }
 }
