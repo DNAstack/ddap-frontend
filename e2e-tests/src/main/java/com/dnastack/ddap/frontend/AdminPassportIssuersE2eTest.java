@@ -2,10 +2,7 @@ package com.dnastack.ddap.frontend;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
-import com.dnastack.ddap.common.page.AdminDdapPage;
-import com.dnastack.ddap.common.page.AdminListPage;
-import com.dnastack.ddap.common.page.AdminManagePage;
-import com.dnastack.ddap.common.page.ICLoginPage;
+import com.dnastack.ddap.common.page.*;
 import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -105,5 +102,21 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
         adminListPage = adminManagePage.deleteEntity();
 
         assertThat(adminListPage.getEntityTitles(), not(hasItem("delete-me")));
+    }
+
+    @Test
+    public void forceDeletePassportIssuer() {
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                .goToAdmin(NavItem.PASSPORTS);
+
+        assertThat(adminListPage.getEntityTitles(), hasItem("nih"));
+
+        AdminManagePage adminManagePage = adminListPage.clickView("nih", "Edit");
+
+        adminManagePage.clickButton(DdapBy.se("btn-delete"));
+        ConfirmationRemovalDialog dialog = new ConfirmationRemovalDialog(driver);
+        adminListPage = dialog.confirmForceDelete();
+
+        assertThat(adminListPage.getEntityTitles(), not(hasItem("nih")));
     }
 }

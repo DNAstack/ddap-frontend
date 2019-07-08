@@ -70,13 +70,16 @@ export class ConfigEntityService {
       );
   }
 
-  remove(damId: string, entityId: string, ConfigModificationObject = null): Observable<any> {
+  remove(damId: string, entityId: string, change: ConfigModificationObject = null): Observable<any> {
     return this.damInfoService.getDamUrls()
       .pipe(
         flatMap(damApiUrls => {
           const damApiUrl = damApiUrls.get(damId);
-          return this.http.request('delete',`${damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${entityId}`,
-            {headers}
+          return this.http.request('delete', `${damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${entityId}`,
+            {
+              body: change,
+              headers,
+            }
           ).pipe(
             this.errorHandler.notifyOnError(`Can't remove ${entityId}.`)
           );
