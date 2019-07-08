@@ -22,7 +22,9 @@
         </mat-expansion-panel-header>
         <json-editor [options]="editorOptions" [data]="entity.dto"></json-editor>
         <mat-action-row>
-          <button mat-button [routerLink]="[entity.name]"
+          <button mat-button
+                  [routerLink]="[entity.name]"
+                  color="primary"
                   class="uppercase">
             Edit
           </button>
