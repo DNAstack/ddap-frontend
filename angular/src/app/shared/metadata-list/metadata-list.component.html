@@ -1,14 +1,16 @@
 <table class="ddap-resource-metadata">
-  <tr *ngFor="let object of metadata | keyvalue | metadataFilter: includeFields">
-    <td>{{ object.key }}</td>
-    <ng-container *ngIf="!object.value.startsWith('http'); else anchorLink">
-      <td>{{ object.value }}</td>
-    </ng-container>
-    <ng-template #anchorLink>
-      <td>
-        <a [href]="object.value">{{ object.value }}</a>
-      </td>
-    </ng-template>
-  </tr>
+  <ng-container *ngFor="let object of metadata | keyvalue | metadataFilter: includeFields">
+    <tr *ngIf="object.value">
+      <td>{{ object.key }}</td>
+      <ng-container *ngIf="!object.value.startsWith('http'); else anchorLink">
+        <td>{{ object.value }}</td>
+      </ng-container>
+      <ng-template #anchorLink>
+        <td>
+          <a [href]="object.value">{{ object.value }}</a>
+        </td>
+      </ng-template>
+    </tr>
+  </ng-container>
 </table>
 
