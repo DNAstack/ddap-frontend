@@ -1,6 +1,6 @@
 ddap-root {
   mat-sidenav {
-    width: 16rem;
+    width: $sidenav-width;
 
     header{
       min-height: $ddap-header-height;
