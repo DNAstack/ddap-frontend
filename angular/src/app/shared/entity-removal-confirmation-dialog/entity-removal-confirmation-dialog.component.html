@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Are you sure?</h2>
+<mat-dialog-content>
+  <p>Deleting this resource will affect following testing personas:</p>
+  <p>
+    <span *ngFor="let persona of data.testPersonas; let i = index">
+      {{ persona }}{{ i === (data.testPersonas.length - 1) ? '' : ', ' }}
+    </span>
+  </p>
+  <p>Do you want to proceed with removal?</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button
+          mat-dialog-close
+          class="uppercase"
+          data-se="cancel-btn">
+    Cancel
+  </button>
+  <button mat-button
+          [mat-dialog-close]="true"
+          color="warn"
+          class="uppercase"
+          data-se="accept-btn">
+    Force Delete
+  </button>
+</mat-dialog-actions>

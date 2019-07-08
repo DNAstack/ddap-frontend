@@ -10,6 +10,9 @@ import { DataModule } from './data/data.module';
 import { IdentityModule } from './identity/identity.module';
 import { LayoutComponent } from './layout/layout.component';
 import {
+  EntityRemovalConfirmationDialogComponent
+} from './shared/entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';
+import {
   RealmChangeConfirmationDialogComponent
 } from './shared/realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
 import { RealmInterceptor } from './shared/realm/realm-interceptor.service';
@@ -34,6 +37,7 @@ import { SharedModule } from './shared/shared.module';
   ],
   entryComponents: [
     RealmChangeConfirmationDialogComponent,
+    EntityRemovalConfirmationDialogComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: RealmInterceptor, multi: true },

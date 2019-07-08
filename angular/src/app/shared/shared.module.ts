@@ -36,13 +36,18 @@ import { BeaconSearchBarComponent } from './beacon-search-bar/beacon-search-bar.
 import { LimitSearchComponent } from './beacon-search-bar/limit-search/limit-search.component';
 import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
 import { ClaimGroupComponent } from './claim-group/claim-group.component';
+import {
+  EntityRemovalConfirmationDialogComponent
+} from './entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';
 import { FocusedDirective } from './focused.directive';
 import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 import { MetadataFilterPipe } from './metadata-list/metadata-filter.pipe';
 import { MetadataListComponent } from './metadata-list/metadata-list.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
-import { RealmChangeConfirmationDialogComponent } from './realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
+import {
+  RealmChangeConfirmationDialogComponent
+} from './realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
 import { RealmInputComponent } from './realm-input/realm-input.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
 import { ResourceViewItemComponent } from './resource-view-item/resource-view-item.component';
@@ -61,6 +66,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     FocusedDirective,
     RealmInputComponent,
     RealmChangeConfirmationDialogComponent,
+    EntityRemovalConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
     AsEntityModelPipe,
@@ -143,6 +149,7 @@ import { ResourceViewItemComponent } from './resource-view-item/resource-view-it
     FocusedDirective,
     RealmInputComponent,
     RealmChangeConfirmationDialogComponent,
+    EntityRemovalConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
     AsEntityModelPipe,

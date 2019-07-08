@@ -1,0 +1,19 @@
+@import "../../../styles/modules/colors";
+
+h2 {
+  margin-bottom: 0.8rem;
+}
+
+mat-dialog-content,
+button:first-child {
+  color: $color-grey;
+}
+
+span {
+  font-style: italic;
+  font-weight: 400;
+}
+
+::ng-deep mat-dialog-container {
+  max-width: 35rem;
+}
