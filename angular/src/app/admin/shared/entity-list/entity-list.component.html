@@ -12,7 +12,8 @@
     </mat-expansion-panel>
     <ng-container *ngFor="let entity of entityList | async">
       <mat-expansion-panel>
-        <mat-expansion-panel-header collapsedHeight="auto">
+        <mat-expansion-panel-header collapsedHeight="auto"
+                                    expandedHeight="auto">
           <mat-panel-title data-se="entity-title">
             {{ getTitle(entity) }}
           </mat-panel-title>
