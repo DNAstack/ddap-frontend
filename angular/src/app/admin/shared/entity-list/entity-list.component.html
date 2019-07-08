@@ -18,7 +18,9 @@
             {{ getTitle(entity) }}
           </mat-panel-title>
           <mat-panel-description>
-            {{ getDescription(entity.dto) }}
+            <div>
+              {{ getDescription(entity.dto) }}
+            </div>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <json-editor [options]="editorOptions" [data]="entity.dto"></json-editor>

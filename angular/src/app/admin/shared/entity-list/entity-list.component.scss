@@ -8,6 +8,12 @@
 
       mat-panel-description {
         padding: 0.5rem;
+        min-width: 0;
+
+        div {
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
       }
     }
   }
