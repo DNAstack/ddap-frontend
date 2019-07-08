@@ -2,5 +2,8 @@
 </ddap-header>
 
 <ddap-main>
-  <ddap-json-panel [entityService]="entityService" [entity]="entity"></ddap-json-panel>
+  <ddap-json-panel [entityService]="entityService"
+                   [routeDamId]="routeDamId()"
+                   [entity]="entity">
+  </ddap-json-panel>
 </ddap-main>

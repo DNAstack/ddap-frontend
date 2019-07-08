@@ -6,6 +6,7 @@ import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 
 import { ResourceService } from '../../resources/resources.service';
+import { ConfigEntityService } from '../config-entity.service';
 import { ConfigModificationObject } from '../configModificationObject';
 import { EntityModel } from '../entity.model';
 import { EntityService } from '../entity.service';
@@ -28,6 +29,8 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
 
   @Input()
   useTests = false;
+  @Input()
+  routeDamId: string;
 
   @Input()
   entity: EntityModel;
@@ -54,7 +57,7 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
   errorEditorOptions: JsonEditorOptions;
 
   @Input()
-  entityService: EntityService;
+  entityService: ConfigEntityService;
 
   isResource = false;
 
@@ -118,7 +121,7 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
 
     const change = new ConfigModificationObject(this.entityDto, testDto);
 
-    return this.entityService.update(this.entity.name, change).pipe(
+    return this.entityService.update(this.routeDamId, this.entity.name, change).pipe(
       catchError((e) => {
         this.state = ViewState.Editing;
         this.error = e.error;
@@ -165,12 +168,12 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
 
   remove() {
     this.state = ViewState.Submitting;
-    this.entityService.remove(this.entity.name)
+    this.entityService.remove(this.routeDamId, this.entity.name)
       .subscribe(() => {
         this.navigateBackTolistView();
-      }, e => {
+      }, ({ error }) => {
         this.state = ViewState.Viewing;
-        this.error = e.error;
+        this.error = JSON.stringify(error);
       });
   }
 
