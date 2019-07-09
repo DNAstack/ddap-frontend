@@ -1,10 +1,12 @@
 package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
-import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -12,15 +14,12 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 
-public class AdminOptionPage {
-    @Getter
-    private WebDriver driver;
+public class AdminOptionPage extends AdminDdapPage {
 
     public AdminOptionPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
     public AdminOptionPage submitOption(String optionName, String optionValue) {

@@ -1,7 +1,6 @@
 package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
-import lombok.Getter;
 import org.hamcrest.Matcher;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,12 +10,10 @@ import java.util.List;
 
 import static org.junit.Assert.assertThat;
 
-public class AdminManagePage {
-    @Getter
-    private WebDriver driver;
+public class AdminManagePage extends AdminDdapPage {
 
     public AdminManagePage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
     public void clearField(By fieldSelector) {

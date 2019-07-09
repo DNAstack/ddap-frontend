@@ -1,0 +1,15 @@
+<div *ngIf="!sandboxBannerStateService.isAcknowledged()"
+     class="mat-elevation-z2">
+  <mat-icon class="icon icon-warning"></mat-icon>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+  </p>
+  <button mat-button
+          color="primary"
+          class="uppercase"
+          data-se="accept-sandbox-warning"
+          (click)="accept()">
+    Accept
+  </button>
+</div>

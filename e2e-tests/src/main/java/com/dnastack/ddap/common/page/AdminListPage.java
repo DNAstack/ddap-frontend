@@ -1,7 +1,6 @@
 package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
-import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,18 +11,14 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
-public class AdminListPage {
-    @Getter
-    private WebDriver driver;
-
+public class AdminListPage extends AdminDdapPage {
     public AdminListPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
     public AdminManagePage clickManage() {
         driver.findElement(DdapBy.se("btn-manage"))
                 .click();
-
         return new AdminManagePage(driver);
     }
 
