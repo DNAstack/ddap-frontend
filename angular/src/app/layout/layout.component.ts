@@ -12,7 +12,7 @@ import { Profile } from '../identity/profile.model';
 import { DamInfoService } from '../shared/dam/dam-info.service';
 import { DamInfo, DamsInfo } from '../shared/dam/dams-info';
 
-const refreshRepeatTimeoutInMs = 3600000;
+const refreshRepeatTimeoutInMs = 600000;
 
 @Component({
   templateUrl: './layout.component.html',
