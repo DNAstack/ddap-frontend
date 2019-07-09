@@ -51,7 +51,6 @@ import {
 import { RealmInputComponent } from './realm-input/realm-input.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
 import { ResourceViewItemComponent } from './resource-view-item/resource-view-item.component';
-import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +70,6 @@ import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.componen
     MetadataListComponent,
     MetadataFilterPipe,
     AsEntityModelPipe,
-    SandboxBannerComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -155,7 +153,6 @@ import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.componen
     MetadataListComponent,
     MetadataFilterPipe,
     AsEntityModelPipe,
-    SandboxBannerComponent,
   ],
 })
 export class SharedModule {
