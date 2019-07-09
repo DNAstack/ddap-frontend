@@ -173,7 +173,7 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
         this.navigateBackTolistView();
       }, ({ error }) => {
         this.state = ViewState.Viewing;
-        this.error = JSON.stringify(error);
+        this.error = error;
       });
   }
 
