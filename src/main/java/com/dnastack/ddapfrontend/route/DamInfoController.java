@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -38,9 +39,9 @@ public class DamInfoController {
                                        .map(damInfoResponse -> {
                                            final String url = UriUtil.selfLinkToDam(request, damId)
                                                                      .toString();
-                                           final String label = damInfoResponse.getUi()
-                                                                               .getOrDefault("label",
-                                                                                             damInfoResponse.getName());
+                                           final String label = Optional.ofNullable(damInfoResponse.getUi())
+                                                                        .map(ui -> ui.get("label"))
+                                                                        .orElseGet(damInfoResponse::getName);
                                            return new DamInfo(damId, label, url);
                                        });
                    })
