@@ -8,7 +8,7 @@ public class DdapBy {
     }
 
     public static By seAndText(String selector, String text) {
-        return By.xpath(".//*[@data-se = '" + selector + "' and @placeholder = '" + text + "']");
+        return By.xpath(".//*[@data-se = '" + selector + "' and contains(text(), '" + text + "')]");
     }
 
     public static By text(String text) {

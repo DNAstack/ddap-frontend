@@ -66,7 +66,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     }
 
     private WebElement findPanelItemDescription(String description) {
-        return driver.findElement(By.xpath(format("//mat-panel-description[contains(text(), '%s')]", description)));
+        return driver.findElement(DdapBy.seAndText("entity-description", description));
     }
 
     @BeforeClass
