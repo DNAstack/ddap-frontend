@@ -6,12 +6,12 @@ import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.page.NavBar.icClientsLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
@@ -40,10 +40,8 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void addEmptyClient() {
-        ddapPage.getNavBar()
-                .goTo(NavItem.IC_PANEL);
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.IC_CLIENTS);
+                .goToAdmin(icClientsLink());
 
         assertThat(adminListPage.getEntityTitles(), not(hasItem("empty-client-label")));
 
@@ -61,10 +59,8 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void addClient() {
-        ddapPage.getNavBar()
-                .goTo(NavItem.IC_PANEL);
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.IC_CLIENTS);
+                .goToAdmin(icClientsLink());
 
         assertThat(adminListPage.getEntityTitles(), not(hasItem("add-client-label")));
 
@@ -86,10 +82,8 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void editClient() {
-        ddapPage.getNavBar()
-                .goTo(NavItem.IC_PANEL);
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.IC_CLIENTS);
+                .goToAdmin(icClientsLink());
 
         assertThat(adminListPage.getEntityTitles(), hasItem("edit-client-id"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("edited-client-id")));
@@ -107,10 +101,8 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void deleteClient() {
-        ddapPage.getNavBar()
-                .goTo(NavItem.IC_PANEL);
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.IC_CLIENTS);
+                .goToAdmin(icClientsLink());
 
         assertThat(adminListPage.getEntityTitles(), hasItem("delete-client-id"));
 

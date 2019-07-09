@@ -29,9 +29,9 @@ export class ServiceDefinitionService extends ConfigEntityService {
       );
   }
 
-  getTargetAdapterVariables(params: {} = {}): Observable<any> {
+  getTargetAdapterVariables(damId: string, params: {} = {}): Observable<any> {
     return this.http.get<ConfigModel>(
-      `${environment.ddapApiUrl}/${realmIdPlaceholder}/serviceTemplates/variables`, {params}
+      `${environment.ddapApiUrl}/${realmIdPlaceholder}/serviceTemplates/${damId}/variables`, {params}
       );
   }
 

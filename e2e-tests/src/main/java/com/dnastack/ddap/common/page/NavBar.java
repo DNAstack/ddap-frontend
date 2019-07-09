@@ -1,13 +1,16 @@
 package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
+import lombok.Value;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
@@ -15,30 +18,84 @@ import static java.lang.String.format;
 public class NavBar {
     private WebDriver driver;
 
-    public enum NavItem {
-        DATA("Explore Data", "nav-data"),
-        IC_PANEL(null, "nav-ic-panel"),
-        IC_IDENTITY_PROVIDERS("Identity Providers", "nav-ic-identity-providers"),
-        IC_CLIENTS("Clients", "nav-ic-clients"),
-        IC_OPTIONS("Options", "nav-ic-options"),
-        OPTIONS("Options", "nav-options"),
-        RESOURCES("Resource", "nav-resources"),
-        PERSONAS("Test Personas", "nav-test-personas"),
-        IDENTITY("My Identity", "nav-identity"),
-        CLIENTS("Client Applications", "nav-client-applications"),
-        TRUSTED_SOURCES("Trusted Sources", "nav-trusted-sources"),
-        DEFINITIONS("Claim Definitions", "nav-claim-definitions"),
-        SERVICE_DEFINITIONS("Service Definitions", "nav-service-definitions"),
-        RULES("Access Policies", "nav-access-policies"),
-        PASSPORTS("Passport Issuers", "nav-passport-issuers");
+    @Value
+    public static class NavLink {
+        private String title;
+        private By selector;
+        private NavLink parentSelector;
 
-        public final String title;
-        public final String selector;
-
-        NavItem(String title, String selector) {
-            this.title = title;
-            this.selector = selector;
+        public Optional<NavLink> getParentSelector() {
+            return Optional.ofNullable(parentSelector);
         }
+        public Optional<String> getTitle() {
+            return Optional.ofNullable(title);
+        }
+    }
+
+    public static NavLink dataLink() {
+        return new NavLink("Explore Data", DdapBy.se("nav-data"), null);
+    }
+
+    public static NavLink damIdentityLink() {
+        return new NavLink("My Identity", DdapBy.se("nav-identity"), null);
+    }
+
+    public static NavLink icPanelSelectorLink() {
+        return new NavLink("Identity Concentrator", DdapBy.se("nav-ic-panel"), null);
+    }
+
+    public static NavLink icIdentityProvidersLink() {
+        return new NavLink("Identity Providers", DdapBy.se("nav-ic-identity-providers"), icPanelSelectorLink());
+    }
+
+    public static NavLink icClientsLink() {
+        return new NavLink("Clients", DdapBy.se("nav-ic-clients"), icPanelSelectorLink());
+    }
+
+    public static NavLink icOptionsLink() {
+        return new NavLink("Options", DdapBy.se("nav-ic-options"), icPanelSelectorLink());
+    }
+
+    public static NavLink damPanelSelectorLink(String damId) {
+        return new NavLink(null,
+                           By.xpath(format("//*[@data-se = 'nav-dam-panel-%s']", damId)),
+                           icPanelSelectorLink());
+    }
+
+    public static NavLink damOptionsLink(String damId) {
+        return new NavLink("Options", DdapBy.se("nav-options"), damPanelSelectorLink(damId));
+    }
+
+    public static NavLink damResourceLink(String damId) {
+        return new NavLink("Resource", DdapBy.se("nav-resources"), damPanelSelectorLink(damId));
+    }
+
+    public static NavLink damTestPersonaLink(String damId) {
+        return new NavLink("Test Personas", DdapBy.se("nav-test-personas"), damPanelSelectorLink(damId));
+    }
+
+    public static NavLink damClientLink(String damId) {
+        return new NavLink("Client Applications", DdapBy.se("nav-client-applications"), damPanelSelectorLink(damId));
+    }
+
+    public static NavLink damTrustedSourcesLink(String damId) {
+        return new NavLink("Trusted Sources", DdapBy.se("nav-trusted-sources"), damPanelSelectorLink(damId));
+    }
+
+    public static NavLink damClaimDefinitionLink(String damId) {
+        return new NavLink("Claim Definitions", DdapBy.se("nav-claim-definitions"), damPanelSelectorLink(damId));
+    }
+
+    public static NavLink damServiceDefinitionLink(String damId) {
+        return new NavLink("Service Definitions", DdapBy.se("nav-service-definitions"), damPanelSelectorLink(damId));
+    }
+
+    public static NavLink damPoliciesLink(String damId) {
+        return new NavLink("Access Policies", DdapBy.se("nav-access-policies"), damPanelSelectorLink(damId));
+    }
+
+    public static NavLink damPassportsLink(String damId) {
+        return new NavLink("Passport Issuers", DdapBy.se("nav-passport-issuers"), damPanelSelectorLink(damId));
     }
 
     public NavBar(WebDriver driver) {
@@ -49,63 +106,56 @@ public class NavBar {
     }
 
     public void assertAdminNavBar() {
-        Arrays.stream(NavItem.values())
-                .filter(navItem -> navItem.title != null)
-                .forEach(this::findInNavBar);
+        Stream.of(icPanelSelectorLink().getSelector(), By.xpath(".//*[contains(@data-se, '" + "nav-dam-panel" + "')]"))
+              .forEach(this.driver::findElement);
     }
 
     public void assertNonAdminNavBar() {
-        Stream.of(NavItem.DATA, NavItem.IDENTITY)
-                .filter(navItem -> navItem.title != null)
-                .forEach(this::findInNavBar);
+        Stream.of(dataLink(), damIdentityLink())
+              .map(NavLink::getSelector)
+              .forEach(this.driver::findElement);
     }
 
-    public WebElement findInNavBar(NavItem item) {
-        return driver.findElement(By.xpath(format("//*[contains(text(), '%s')]", item.title)));
+    public boolean existsInNavBar(NavLink item) {
+        return driver.findElements(item.getSelector()).size() > 0;
     }
 
-    public boolean existsInNavBar(NavItem item) {
-        return driver.findElements(By.xpath(format("//*[contains(text(), '%s')]", item.title))).size() > 0;
+    public NavBar goTo(NavLink navItem) {
+        return goTo(navItem, NavBar::new);
     }
 
-    public NavBar goToAndCheckForTitle(NavItem navItem) {
-        driver.findElement(DdapBy.se(navItem.selector)).click();
-        driver.findElement(By.xpath("//h2[contains(text(), '" + navItem.title + "')]"));
+    public <T> T goTo(NavLink navItem, Function<WebDriver, T> pageFactory) {
+        final WebElement clickableNavLink = navItem.getParentSelector()
+                                                   .filter(parent -> !driver.findElement(navItem.getSelector())
+                                                                            .isDisplayed())
+                                                   .map(parent -> {
+                                                       final WebElement parentElement = driver.findElement(parent.getSelector());
+                                                       parentElement.click();
+                                                       WebElement linkElement = parentElement.findElement(navItem.getSelector());
+                                                       new WebDriverWait(driver,
+                                                                         5).until(ExpectedConditions.elementToBeClickable(
+                                                               linkElement));
 
-        return new NavBar(driver);
-    }
+                                                       return linkElement;
+                                                   })
+                                                   .orElseGet(() -> driver.findElement(navItem.getSelector()));
+        clickableNavLink.click();
 
-    public NavBar goTo(NavItem navItem) {
-        driver.findElement(DdapBy.se(navItem.selector)).click();
-        if (NavItem.IC_PANEL.equals(navItem)) {
-            new WebDriverWait(driver, 5).until(d -> d.findElement(DdapBy.se(NavItem.IC_IDENTITY_PROVIDERS.selector)).isDisplayed());
-        }
-
-        return new NavBar(driver);
+        return pageFactory.apply(driver);
     }
 
     public DataListPage goToData() {
-        driver.findElement(DdapBy.se(NavItem.DATA.selector)).click();
+        driver.findElement(dataLink().getSelector()).click();
 
         return new DataListPage(driver);
     }
 
-    public AdminListPage goToAdmin(NavItem navItem) {
-        driver.findElement(DdapBy.se(navItem.selector)).click();
-
-        return new AdminListPage(driver);
+    public AdminListPage goToAdmin(NavLink navItem) {
+        return goTo(navItem, AdminListPage::new);
     }
 
-    public AdminOptionPage goToAdminOptionPage(NavItem navItem) {
-        switch (navItem) {
-            case IC_OPTIONS:
-                goTo(NavItem.IC_PANEL);
-            case OPTIONS:
-                driver.findElement(DdapBy.se(navItem.selector)).click();
-                return new AdminOptionPage(driver);
-            default:
-                throw new IllegalArgumentException(String.format("Invalid nav item for option page: %s", navItem));
-        }
+    public AdminOptionPage goToAdminOptionPage(NavLink navItem) {
+        return goTo(navItem, AdminOptionPage::new);
     }
 
     private WebElement getRealmInput() {

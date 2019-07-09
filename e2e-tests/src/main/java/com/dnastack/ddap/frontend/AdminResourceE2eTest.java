@@ -6,7 +6,6 @@ import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -16,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.page.NavBar.damResourceLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -47,7 +47,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addResourceWithMinimalFieldsAndNoViews() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.RESOURCES);
+                .goToAdmin(damResourceLink(DAM_ID));
         String resourceId = "resource-" + System.currentTimeMillis();
 
         waitForAccessTablesToLoad();
@@ -67,7 +67,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addResourceWithAllFieldsAndNoViews() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.RESOURCES);
+                                              .goToAdmin(damResourceLink(DAM_ID));
         String resourceId = "resource-" + System.currentTimeMillis();
 
         waitForAccessTablesToLoad();
@@ -95,7 +95,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addResourceAndSingleView() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.RESOURCES);
+                                              .goToAdmin(damResourceLink(DAM_ID));
         String resourceId = "resource-" + System.currentTimeMillis();
         String viewId = "view-" + System.currentTimeMillis();
         String role = "discovery";
@@ -132,7 +132,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addResourceAndMultipleViews() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.RESOURCES);
+                                              .goToAdmin(damResourceLink(DAM_ID));
         String resourceId = "resource-" + System.currentTimeMillis();
         String view1Id = "view1-" + System.currentTimeMillis();
         String view1Role = "viewer";
@@ -186,7 +186,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void createInvalidResourceShowsServerSideError() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                                              .goToAdmin(NavItem.RESOURCES);
+                                              .goToAdmin(damResourceLink(DAM_ID));
         String resourceId = "resource-" + System.currentTimeMillis();
         String viewId = "view-" + System.currentTimeMillis();
         String role = "discovery";
@@ -221,7 +221,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void editInvalidResourceShowsServerSideError() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                                              .goToAdmin(NavItem.RESOURCES);
+                                              .goToAdmin(damResourceLink(DAM_ID));
         String resourceToEdit = "1000 Genomes";
         String newDefaultRole = "basic_discovery";
 
@@ -243,7 +243,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void editInvalidPersonaAccessShowsValidationMessage() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                                              .goToAdmin(NavItem.RESOURCES);
+                                              .goToAdmin(damResourceLink(DAM_ID));
         String resourceToEdit = "1000 Genomes";
 
         waitForAccessTablesToLoad();
@@ -263,7 +263,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void editResourceEditViewMakeNewDefaultRole() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.RESOURCES);
+                                              .goToAdmin(damResourceLink(DAM_ID));
         String resourceToEdit = "1000 Genomes";
         String newDefaultRole = "basic_discovery";
 
@@ -296,7 +296,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void editResourceRemoveView() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.RESOURCES);
+                                              .goToAdmin(damResourceLink(DAM_ID));
         String resourceToEdit = "1000 Genomes";
 
         waitForAccessTablesToLoad();
@@ -325,7 +325,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void editResourceNoChangesToView() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.RESOURCES);
+                                              .goToAdmin(damResourceLink(DAM_ID));
         String resourceToEdit = "1000 Genomes NOT_EDITED";
 
         waitForAccessTablesToLoad();
@@ -350,7 +350,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void deleteResource() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.RESOURCES);
+                                              .goToAdmin(damResourceLink(DAM_ID));
         String resourceToDelete = "Billing Test for GCS and BigQuery";
 
         waitForAccessTablesToLoad();

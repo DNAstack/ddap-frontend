@@ -6,12 +6,12 @@ import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.page.NavBar.icIdentityProvidersLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
@@ -40,10 +40,8 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void addEmptyIdentityProvider() {
-        ddapPage.getNavBar()
-                .goTo(NavItem.IC_PANEL);
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.IC_IDENTITY_PROVIDERS);
+                .goToAdmin(icIdentityProvidersLink());
 
         assertThat(adminListPage.getEntityTitles(), not(hasItem("empty-ip-label")));
 
@@ -65,10 +63,8 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void addIdentityProvider() {
-        ddapPage.getNavBar()
-                .goTo(NavItem.IC_PANEL);
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.IC_IDENTITY_PROVIDERS);
+                .goToAdmin(icIdentityProvidersLink());
 
         assertThat(adminListPage.getEntityTitles(), not(hasItem("add-ip-label")));
 
@@ -97,10 +93,8 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void editIdentityProvider() {
-        ddapPage.getNavBar()
-                .goTo(NavItem.IC_PANEL);
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.IC_IDENTITY_PROVIDERS);
+                .goToAdmin(icIdentityProvidersLink());
 
         assertThat(adminListPage.getEntityTitles(), hasItem("edit-ip-id"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("edited-ip-id")));
@@ -118,10 +112,8 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void deleteIdentityProvider() {
-        ddapPage.getNavBar()
-                .goTo(NavItem.IC_PANEL);
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.IC_IDENTITY_PROVIDERS);
+                .goToAdmin(icIdentityProvidersLink());
 
         assertThat(adminListPage.getEntityTitles(), hasItem("delete-ip-id"));
 

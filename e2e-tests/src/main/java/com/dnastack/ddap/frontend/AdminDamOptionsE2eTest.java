@@ -1,15 +1,18 @@
 package com.dnastack.ddap.frontend;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
-import com.dnastack.ddap.common.page.*;
-import com.dnastack.ddap.common.page.NavBar.NavItem;
+import com.dnastack.ddap.common.page.AdminDdapPage;
+import com.dnastack.ddap.common.page.AdminOptionPage;
+import com.dnastack.ddap.common.page.ICLoginPage;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.page.NavBar.damOptionsLink;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
 
 @SuppressWarnings("Duplicates")
 public class AdminDamOptionsE2eTest extends AbstractFrontendE2eTest {
@@ -34,7 +37,7 @@ public class AdminDamOptionsE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void submitBooleanOptionWronglyWithTypeError() {
         AdminOptionPage adminListPage = ddapPage.getNavBar()
-                                                .goToAdminOptionPage(NavItem.OPTIONS);
+                                                .goToAdminOptionPage(damOptionsLink(DAM_ID));
 
         assertThat(adminListPage.getOptionNames(), hasItem("Read Only Master Realm"));
         adminListPage.submitOption("Read Only Master Realm", "foobar");
@@ -44,7 +47,7 @@ public class AdminDamOptionsE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void submitBooleanOptionWithoutTypeError() {
         AdminOptionPage adminListPage = ddapPage.getNavBar()
-                                                .goToAdminOptionPage(NavItem.OPTIONS);
+                                                .goToAdminOptionPage(damOptionsLink(DAM_ID));
 
         assertThat(adminListPage.getOptionNames(), hasItem("Read Only Master Realm"));
         final String oldValue = adminListPage.getOptionValue("Read Only Master Realm");
@@ -55,7 +58,7 @@ public class AdminDamOptionsE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void submitNumberOptionWithoutTypeError() {
         AdminOptionPage adminListPage = ddapPage.getNavBar()
-                                                .goToAdminOptionPage(NavItem.OPTIONS);
+                                                .goToAdminOptionPage(damOptionsLink(DAM_ID));
 
         assertThat(adminListPage.getOptionNames(), hasItem("GCP Managed Keys Per Account"));
         final String oldValue = adminListPage.getOptionValue("GCP Managed Keys Per Account");
@@ -66,7 +69,7 @@ public class AdminDamOptionsE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void submitStringOptionWithoutTypeError() {
         AdminOptionPage adminListPage = ddapPage.getNavBar()
-                                                .goToAdminOptionPage(NavItem.OPTIONS);
+                                                .goToAdminOptionPage(damOptionsLink(DAM_ID));
 
         assertThat(adminListPage.getOptionNames(), hasItem("GCP Service Account Project"));
         final String oldValue = adminListPage.getOptionValue("GCP Service Account Project");

@@ -3,7 +3,6 @@ package com.dnastack.ddap.frontend;
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
 import com.dnastack.ddap.common.page.*;
-import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -14,6 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dnastack.ddap.common.page.NavBar.dataLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
@@ -42,7 +42,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void searchBeaconWithValidQuery() {
         ddapPage.getNavBar()
-            .goTo(NavItem.DATA);
+            .goTo(dataLink());
 
         String query = "1 : 156105028 T > C";
         SearchPage searchPage = new SearchPage(driver);
@@ -57,7 +57,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void searchBeaconWithInvalidQuery() {
         ddapPage.getNavBar()
-            .goTo(NavItem.DATA);
+            .goTo(dataLink());
 
         String query = "1 : 1 T > C";
         SearchPage searchPage = new SearchPage(driver);
@@ -72,7 +72,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void backLinkFromDataList() {
         ddapPage.getNavBar()
-                .goTo(NavItem.DATA);
+                .goTo(dataLink());
 
         String query = "1 : 156105028 T > C";
         SearchPage searchPage = new SearchPage(driver);
@@ -87,7 +87,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void backLinkFromDataDetails() {
         ddapPage.getNavBar()
-                .goTo(NavItem.DATA);
+                .goTo(dataLink());
 
         DataListPage dataListPage = new DataListPage(driver);
         final DataListItem data = dataListPage.findDataByName("1000 Genomes");
@@ -107,7 +107,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void limitSearchFromDataDetails() {
         ddapPage.getNavBar()
-                .goTo(NavItem.DATA);
+                .goTo(dataLink());
 
         DataListPage dataListPage = new DataListPage(driver);
         final DataListItem data = dataListPage.findDataByName("1000 Genomes");
@@ -128,7 +128,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void limitSearchOnSearchPage() {
         ddapPage.getNavBar()
-                .goTo(NavItem.DATA);
+                .goTo(dataLink());
 
         DataListPage dataListPage = new DataListPage(driver);
         final DataListItem data = dataListPage.findDataByName("1000 Genomes");
@@ -149,7 +149,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void changeQueryOnSearchPageAndGoBack() {
         ddapPage.getNavBar()
-                .goTo(NavItem.DATA);
+                .goTo(dataLink());
 
         String query = "1 : 156105028 T > C";
         SearchPage searchPage = new SearchPage(driver);
@@ -181,7 +181,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void testBRCA2SearchLink() {
         ddapPage.getNavBar()
-                .goTo(NavItem.DATA);
+                .goTo(dataLink());
 
         DataListPage dataListPage = new DataListPage(driver);
         final DataListItem data = dataListPage.findDataByName("All Of Us");

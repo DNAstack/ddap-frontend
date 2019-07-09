@@ -137,7 +137,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
   private buildGa4GhClaimGroupAutocomplete(autocompleteId: string, formGroup: FormGroup) {
     this.claimDefinitions$[autocompleteId] = this.personaAutocompleteService.buildClaimDefinitionAutocomplete(this.routeDamId(), formGroup);
     this.trustedSources$[autocompleteId] = this.personaAutocompleteService.buildTrustedSourcesAutocomplete(formGroup);
-    this.policyValues$[autocompleteId] = this.personaAutocompleteService.buildValuesAutocomplete(formGroup);
+    this.policyValues$[autocompleteId] = this.personaAutocompleteService.buildValuesAutocomplete(this.routeDamId(), formGroup);
   }
 
   private buildForm(personaId: string, personaDto: TestPersona) {

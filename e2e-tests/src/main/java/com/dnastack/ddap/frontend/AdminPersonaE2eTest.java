@@ -6,7 +6,6 @@ import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -15,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.page.NavBar.damTestPersonaLink;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -42,7 +42,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addPersona() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.PERSONAS);
+                .goToAdmin(damTestPersonaLink(DAM_ID));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -70,7 +70,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void editPersona() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.PERSONAS);
+                .goToAdmin(damTestPersonaLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("John Persona"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("John Edited")));
@@ -103,7 +103,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void deletePersona() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.PERSONAS);
+                .goToAdmin(damTestPersonaLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Undergrad Candice"));
 
@@ -117,7 +117,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void deleteAndAddPersona() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.PERSONAS);
+                .goToAdmin(damTestPersonaLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (eRA Commons)"));
         AdminManagePage adminManagePage = adminListPage.clickView("Dr. Joe (eRA Commons)", "Edit Persona");
@@ -164,7 +164,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void verifyFormErrorsWithInvalidIdentifier() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.PERSONAS);
+                .goToAdmin(damTestPersonaLink(DAM_ID));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -179,7 +179,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void verifyAutocompleteClaimValuesChangeOnClaimNameChange() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.PERSONAS);
+                .goToAdmin(damTestPersonaLink(DAM_ID));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
@@ -200,7 +200,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void editInvalidPersonaAccessShowsValidationMessage() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                                              .goToAdmin(NavItem.PERSONAS);
+                                              .goToAdmin(damTestPersonaLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (Elixir)"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("Dr. Joe (Elixir) Edited")));

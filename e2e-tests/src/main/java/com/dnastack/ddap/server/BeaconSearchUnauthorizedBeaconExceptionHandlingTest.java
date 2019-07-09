@@ -46,7 +46,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        BeaconQueryResult[] results = given()
+        BeaconQueryResult[] allResults = given()
                     .log().method()
                     .log().uri()
                 .when()
@@ -62,11 +62,14 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
                     .as(BeaconQueryResult[].class);
         // @formatter:on
 
-        Arrays.sort(results,
-                    comparing(result -> Optional.ofNullable(result)
-                                                .map(BeaconQueryResult::getBeaconInfo)
-                                                .map(BeaconInfo::getResourceId)
-                                                .orElse(null)));
+        final BeaconQueryResult[] results = Arrays.stream(allResults)
+                                                  .filter(bqr -> DAM_ID.equals(bqr.getBeaconInfo()
+                                                                                  .getDamId()))
+                                                  .sorted(comparing(result -> Optional.ofNullable(result)
+                                                                                      .map(BeaconQueryResult::getBeaconInfo)
+                                                                                      .map(BeaconInfo::getResourceId)
+                                                                                      .orElseThrow(() -> { throw new AssertionError("Should not be a null result."); })))
+                                                  .toArray(BeaconQueryResult[]::new);
 
         assertThat(results, arrayWithSize(2));
         assertThat(results[1].exists, nullValue());
@@ -84,7 +87,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        BeaconQueryResult[] results = given()
+        BeaconQueryResult[] allResults = given()
                 .log().method()
                 .log().uri()
                 .when()
@@ -100,11 +103,14 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
                 .as(BeaconQueryResult[].class);
         // @formatter:on
 
-        Arrays.sort(results,
-                    comparing(result -> Optional.ofNullable(result)
-                                                .map(BeaconQueryResult::getBeaconInfo)
-                                                .map(BeaconInfo::getResourceId)
-                                                .orElse(null)));
+        final BeaconQueryResult[] results = Arrays.stream(allResults)
+                                                  .filter(bqr -> DAM_ID.equals(bqr.getBeaconInfo()
+                                                                                  .getDamId()))
+                                                  .sorted(comparing(result -> Optional.ofNullable(result)
+                                                                                      .map(BeaconQueryResult::getBeaconInfo)
+                                                                                      .map(BeaconInfo::getResourceId)
+                                                                                      .orElseThrow(() -> { throw new AssertionError("Should not be a null result."); })))
+                                                  .toArray(BeaconQueryResult[]::new);
 
         assertThat(results, arrayWithSize(2));
         assertThat(results[1].exists, nullValue());
@@ -122,7 +128,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
     public void shouldGet401InBeaconResponsesWhenUnauthenticated() {
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        BeaconQueryResult[] results = given()
+        BeaconQueryResult[] allResults = given()
                 .log().method()
                 .log().uri()
                 .when()
@@ -136,11 +142,14 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
                 .as(BeaconQueryResult[].class);
         // @formatter:on
 
-        Arrays.sort(results,
-                    comparing(result -> Optional.ofNullable(result)
-                                                .map(BeaconQueryResult::getBeaconInfo)
-                                                .map(BeaconInfo::getResourceId)
-                                                .orElse(null)));
+        final BeaconQueryResult[] results = Arrays.stream(allResults)
+                                                  .filter(bqr -> DAM_ID.equals(bqr.getBeaconInfo()
+                                                                                  .getDamId()))
+                                                  .sorted(comparing(result -> Optional.ofNullable(result)
+                                                                                      .map(BeaconQueryResult::getBeaconInfo)
+                                                                                      .map(BeaconInfo::getResourceId)
+                                                                                      .orElseThrow(() -> { throw new AssertionError("Should not be a null result."); })))
+                                                  .toArray(BeaconQueryResult[]::new);
 
         assertThat(results, arrayWithSize(2));
         assertThat(results[1].exists, nullValue());
@@ -165,6 +174,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
     static class BeaconInfo {
         String resourceId;
         String name;
+        String damId;
     }
 
     @Data

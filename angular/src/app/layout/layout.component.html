@@ -96,7 +96,8 @@
 
         <!-- Start DAM navbar -->
         <mat-expansion-panel *ngFor="let damInfo of adminDamInfos"
-                             [expanded]="true">
+                             [expanded]="false"
+                             [attr.data-se]="'nav-dam-panel-' + damInfo.id">
           <mat-expansion-panel-header>
             <mat-panel-title>
               <span [textContent]="damInfo.label">Data Access Manager</span>

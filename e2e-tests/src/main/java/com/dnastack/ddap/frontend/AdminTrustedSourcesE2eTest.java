@@ -6,12 +6,12 @@ import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.page.NavBar.damTrustedSourcesLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
@@ -39,7 +39,7 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addEmptyTrustedSource() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.TRUSTED_SOURCES);
+                .goToAdmin(damTrustedSourcesLink(DAM_ID));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -55,7 +55,7 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addTrustedSource() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.TRUSTED_SOURCES);
+                .goToAdmin(damTrustedSourcesLink(DAM_ID));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -79,7 +79,7 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void editTrustedSource() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.TRUSTED_SOURCES);
+                .goToAdmin(damTrustedSourcesLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("test-source-name"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("test-source-nam3")));
@@ -98,7 +98,7 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void deleteTrustedSource() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.TRUSTED_SOURCES);
+                .goToAdmin(damTrustedSourcesLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("delete_me"));
 

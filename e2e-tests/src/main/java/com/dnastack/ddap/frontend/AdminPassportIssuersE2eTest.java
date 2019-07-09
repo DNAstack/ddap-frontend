@@ -3,12 +3,12 @@ package com.dnastack.ddap.frontend;
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
 import com.dnastack.ddap.common.page.*;
-import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.page.NavBar.damPassportsLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
@@ -36,7 +36,7 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addMinimalPassportIssuer() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.PASSPORTS);
+                .goToAdmin(damPassportsLink(DAM_ID));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -55,7 +55,7 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addPassportIssuer() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.PASSPORTS);
+                .goToAdmin(damPassportsLink(DAM_ID));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -74,7 +74,7 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void editPassportIssuer() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.PASSPORTS);
+                .goToAdmin(damPassportsLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("edit-me"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("full-passport-issu3r")));
@@ -93,7 +93,7 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void deletePassportIssuer() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.PASSPORTS);
+                .goToAdmin(damPassportsLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("delete-me"));
 
@@ -107,7 +107,7 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void forceDeletePassportIssuer() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.PASSPORTS);
+                .goToAdmin(damPassportsLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("nih"));
 

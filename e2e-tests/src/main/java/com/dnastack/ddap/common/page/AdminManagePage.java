@@ -25,8 +25,8 @@ public class AdminManagePage extends AdminDdapPage {
     }
 
     public void fillField(By fieldSelector, String fieldValue) {
-        WebElement formInput = driver.findElement(fieldSelector);
-        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(formInput));
+        WebElement formInput = new WebDriverWait(driver, 5)
+                .until(ExpectedConditions.elementToBeClickable(fieldSelector));
         formInput.sendKeys(fieldValue);
     }
 
@@ -35,14 +35,16 @@ public class AdminManagePage extends AdminDdapPage {
 
         new WebDriverWait(driver, 5)
                 .until(ExpectedConditions.elementToBeClickable(field));
+        // This dismisses any previous auto-complete suggestions in other fields.
         field.sendKeys(Keys.ENTER);
 
         List<WebElement> options = driver.findElements(By.tagName("mat-option"));
 
         if (fieldValue != null) {
-            WebElement option = driver.findElement(By.xpath("//mat-option/span[contains(text(), '"+fieldValue+"')]"));
-            new WebDriverWait(driver, 5)
-                    .until(ExpectedConditions.visibilityOf(option));
+            WebElement option =
+                    new WebDriverWait(driver, 5)
+                            .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+                                    "//mat-option/span[contains(text(), '" + fieldValue + "')]")));
 
             option.click();
         } else {

@@ -56,7 +56,7 @@ export class PersonaAutocompleteService {
     return filterSource(trustedSources$, formGroup.get('source').valueChanges);
   }
 
-  buildValuesAutocomplete(formGroup: FormGroup): Observable<string[]> {
+  buildValuesAutocomplete(damId: string, formGroup: FormGroup): Observable<string[]> {
     const claimName$ = formGroup.get('claimName').valueChanges.pipe(
       startWith('')
     );
@@ -69,16 +69,16 @@ export class PersonaAutocompleteService {
       debounceTime(300),
       switchMap(([claimName, value]) => {
         const currentClaimName = formGroup.get('claimName').value;
-        return this.getClaimDefinitionSuggestions(claimName || currentClaimName).pipe(
+        return this.getClaimDefinitionSuggestions(damId, claimName || currentClaimName).pipe(
           map(filterBy(includes(value)))
         );
       })
     );
   }
 
-  private getClaimDefinitionSuggestions(claimName): Observable<string[]> {
+  private getClaimDefinitionSuggestions(damId: string, claimName: string): Observable<string[]> {
     return this.http.get<string[]>(
-      `${environment.ddapApiUrl}/${realmIdPlaceholder}/autocomplete/claimValue?claimName=${claimName}`, {}
+      `${environment.ddapApiUrl}/${realmIdPlaceholder}/autocomplete/claimValue/${damId}?claimName=${claimName}`, {}
     );
   }
 }

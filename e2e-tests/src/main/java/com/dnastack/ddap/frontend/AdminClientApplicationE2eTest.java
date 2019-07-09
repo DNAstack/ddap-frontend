@@ -6,12 +6,12 @@ import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.page.NavBar.damClientLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
@@ -39,7 +39,7 @@ public class AdminClientApplicationE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addClientApplication() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.CLIENTS);
+                .goToAdmin(damClientLink(DAM_ID));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -55,7 +55,7 @@ public class AdminClientApplicationE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void editClientApplication() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.CLIENTS);
+                .goToAdmin(damClientLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("DNAstack Front-End"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("DNAstack Front-End Edited")));
@@ -74,7 +74,7 @@ public class AdminClientApplicationE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void deleteClientApplication() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.CLIENTS);
+                .goToAdmin(damClientLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Test Client"));
 

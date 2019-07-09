@@ -37,6 +37,7 @@ public abstract class AbstractBaseE2eTest {
     protected static final String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
     protected static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
     protected static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
+    protected static final String DAM_ID = requiredEnv("E2E_DAM_ID");
     protected static final String DDAP_TEST_REALM_NAME_PREFIX = requiredEnv("E2E_TEST_REALM");
     // Current size limit on realm names in DAM
     public static final int REALM_NAME_LIMIT = 40;

@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -43,7 +44,7 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
         String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
 
         // @formatter:off
-        BeaconQueryResult[] results = given()
+        BeaconQueryResult[] allResults = given()
                     .log().method()
                     .log().uri()
                 .when()
@@ -59,6 +60,10 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
         // @formatter:on
 
 
+        final BeaconQueryResult[] results = Arrays.stream(allResults)
+                                                  .filter(bqr -> DAM_ID.equals(bqr.getBeaconInfo()
+                                                                                  .getDamId()))
+                                                  .toArray(BeaconQueryResult[]::new);
         assertEquals(results.length, 2);
 
         final String errorMessage = "Name or service not known";
@@ -73,6 +78,12 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
     static class BeaconQueryResult {
         Boolean exists;
         BeaconQueryError queryError;
+        BeaconInfo beaconInfo;
+    }
+
+    @Data
+    static class BeaconInfo {
+        private String damId;
     }
 
     @Data

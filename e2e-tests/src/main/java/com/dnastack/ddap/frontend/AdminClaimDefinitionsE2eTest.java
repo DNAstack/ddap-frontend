@@ -6,12 +6,12 @@ import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.common.page.NavBar.NavItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.page.NavBar.damClaimDefinitionLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
@@ -39,7 +39,7 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addClaimDefinitionWithMinimalFields() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.DEFINITIONS);
+                .goToAdmin(damClaimDefinitionLink(DAM_ID));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -55,7 +55,7 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void addClaimDefinitionWithAllFields() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.DEFINITIONS);
+                .goToAdmin(damClaimDefinitionLink(DAM_ID));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -73,7 +73,7 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void editClaimDefinition() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.DEFINITIONS);
+                .goToAdmin(damClaimDefinitionLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Accepted Terms and Policies"));
         assertThat(adminListPage.getEntityTitles(), not(hasItem("Accepted Terms and Policies Edited")));
@@ -92,7 +92,7 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void deleteClaimDefinition() {
         AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(NavItem.DEFINITIONS);
+                .goToAdmin(damClaimDefinitionLink(DAM_ID));
 
         assertThat(adminListPage.getEntityTitles(), hasItem("Affiliation and Role"));
 
