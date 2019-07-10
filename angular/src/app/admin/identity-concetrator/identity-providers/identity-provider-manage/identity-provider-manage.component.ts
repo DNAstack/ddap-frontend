@@ -19,9 +19,9 @@ import { IdentityProviderService } from '../identity-providers.service';
 })
 export class IdentityProviderManageComponent implements OnInit {
 
-  @ViewChild('ddapForm', { static: false })
+  @ViewChild('ddapForm')
   identityProviderForm: IdentityProviderFormComponent;
-  @ViewChild('formErrorElement', { static: false })
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   identityProvider: IdentityProvider;

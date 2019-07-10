@@ -9,6 +9,7 @@ import { ResourceService } from '../../resources/resources.service';
 import { ConfigEntityService } from '../config-entity.service';
 import { ConfigModificationObject } from '../configModificationObject';
 import { EntityModel } from '../entity.model';
+import { EntityService } from '../entity.service';
 import { JsonEditorDefaults } from '../jsonEditorDefaults';
 import { TestFormComponent } from '../test-form/test-form.component';
 
@@ -39,16 +40,16 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
   ViewState = ViewState;
   state: ViewState = ViewState.Viewing;
 
-  @ViewChild('entityEditor', { static: false })
+  @ViewChild('entityEditor')
   entityEditor: JsonEditorComponent;
 
-  @ViewChild('testEditor', { static: false })
+  @ViewChild('testEditor')
   testEditor: JsonEditorComponent;
 
-  @ViewChild('errorEditor', { static: false })
+  @ViewChild('errorEditor')
   errorEditor: JsonEditorComponent;
 
-  @ViewChild(TestFormComponent, { static: false })
+  @ViewChild(TestFormComponent)
   testForm: TestFormComponent;
 
   entityEditorOptions: JsonEditorOptions;

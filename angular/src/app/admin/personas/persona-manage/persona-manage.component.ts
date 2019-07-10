@@ -18,9 +18,9 @@ import { PersonaService } from '../personas.service';
 })
 export class PersonaManageComponent implements OnInit {
 
-  @ViewChild(PersonaFormComponent, { static: false })
+  @ViewChild(PersonaFormComponent)
   personaForm: PersonaFormComponent;
-  @ViewChild('formErrorElement', { static: false })
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   persona: TestPersona;

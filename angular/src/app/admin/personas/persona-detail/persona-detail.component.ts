@@ -17,9 +17,9 @@ import { PersonaService } from '../personas.service';
 })
 export class PersonaDetailComponent extends DamEntityFormDetailBase<PersonaService> implements OnInit {
 
-  @ViewChild(PersonaFormComponent, { static: false })
+  @ViewChild(PersonaFormComponent)
   personaForm: PersonaFormComponent;
-  @ViewChild('formErrorElement', { static: false })
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   constructor(route: ActivatedRoute,

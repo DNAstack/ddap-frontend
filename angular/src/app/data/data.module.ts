@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { MatGridListModule } from '@angular/material/grid-list';
+import { MatGridListModule } from '@angular/material';
 
 import { SharedModule } from '../shared/shared.module';
 

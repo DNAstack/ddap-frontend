@@ -37,9 +37,9 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
   form: FormGroup;
 
   viewRefs: EmbeddedViewRef<ResourceViewFormComponent>[] = [];
-  @ViewChild('viewTemplate', { static: false })
+  @ViewChild('viewTemplate')
   viewTemplateRef: TemplateRef<any>;
-  @ViewChild('views', { read: ViewContainerRef, static: false })
+  @ViewChild('views', { read: ViewContainerRef })
   container: ViewContainerRef;
   @ViewChildren(ResourceViewFormComponent)
   viewChildComponents: QueryList<ResourceViewFormComponent>;

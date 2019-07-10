@@ -17,9 +17,9 @@ import { ClientService } from '../clients.service';
 })
 export class ClientDetailComponent extends IcEntityDetailBase<ClientService> implements OnInit {
 
-  @ViewChild(ClientFormComponent, { static: false })
+  @ViewChild(ClientFormComponent)
   clientForm: ClientFormComponent;
-  @ViewChild('formErrorElement', { static: false })
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   constructor(protected route: ActivatedRoute,

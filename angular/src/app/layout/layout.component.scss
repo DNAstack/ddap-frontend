@@ -26,7 +26,7 @@ mat-sidenav-container {
   }
 }
 
-::ng-deep .ddap-logout {
+/deep/ .ddap-logout {
   span.mat-line {
     color: $navbar-font-subtle-color;
   }

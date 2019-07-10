@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 
 import { nameConstraintPattern } from '../../admin/shared/entity.model';

@@ -24,7 +24,7 @@ export class PersonaResourceAccessComponent implements Form {
   @Input()
   isNewResource: boolean;
 
-  @ViewChild(TestFormComponent, { static: false })
+  @ViewChild(TestFormComponent)
   testForm: TestFormComponent;
   error: any = null;
   save$: Subject<any> = new Subject();
