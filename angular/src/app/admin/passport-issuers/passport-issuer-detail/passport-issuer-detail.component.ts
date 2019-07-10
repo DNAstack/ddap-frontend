@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import {
@@ -22,9 +22,9 @@ import { PassportIssuerService } from '../passport-issuers.service';
 })
 export class PassportIssuerDetailComponent extends DamEntityDetailBase<PassportIssuerService> {
 
-  @ViewChild(PassportIssuerFormComponent)
+  @ViewChild(PassportIssuerFormComponent, { static: false })
   passportIssuerForm: PassportIssuerFormComponent;
-  @ViewChild('formErrorElement')
+  @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
 
   constructor(route: ActivatedRoute,
@@ -60,7 +60,7 @@ export class PassportIssuerDetailComponent extends DamEntityDetailBase<PassportI
     }
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
-  };
+  }
 
   private openEntityRemovalConfirmationDialog(accessChange): void {
     const testPersonas = Object.keys(accessChange.testPersonas);

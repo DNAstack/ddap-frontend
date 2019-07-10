@@ -17,9 +17,9 @@ import { IdentityProviderService } from '../identity-providers.service';
 })
 export class IdentityProviderDetailComponent extends IcEntityDetailBase<IdentityProviderService> implements OnInit {
 
-  @ViewChild('ddapForm')
+  @ViewChild('ddapForm', { static: false })
   identityProviderForm: IdentityProviderFormComponent;
-  @ViewChild('formErrorElement')
+  @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
 
   constructor(route: ActivatedRoute,
