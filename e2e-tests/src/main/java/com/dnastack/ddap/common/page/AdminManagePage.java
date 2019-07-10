@@ -57,8 +57,8 @@ public class AdminManagePage extends AdminDdapPage {
     }
 
     public void fillTagField(By fieldSelector, String value) {
-        WebElement tagInput = driver.findElement(fieldSelector);
-        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(tagInput));
+        WebElement tagInput = new WebDriverWait(driver,
+                                                5).until(ExpectedConditions.elementToBeClickable(fieldSelector));
         tagInput.click();
         tagInput.findElement(By.tagName("input")).sendKeys(value, Keys.ENTER);
     }
@@ -73,11 +73,8 @@ public class AdminManagePage extends AdminDdapPage {
     }
 
     public WebElement findCheckedCheckbox(String checkboxId) {
-        WebElement checkbox = driver.findElement(By.xpath("//mat-checkbox[@id='" + checkboxId + "' and contains(@class, 'mat-checkbox-checked')]"));
-
-        this.scrollTo(checkbox);
-
-        return new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(checkbox));
+        return new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//mat-checkbox[@id='" + checkboxId + "' and contains(@class, 'mat-checkbox-checked')]")));
     }
 
     public WebElement findCheckbox(String checkboxId) {
