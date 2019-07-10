@@ -41,7 +41,9 @@ public class DamInfoController {
                                                                      .toString();
                                            final String label = Optional.ofNullable(damInfoResponse.getUi())
                                                                         .map(ui -> ui.get("label"))
-                                                                        .orElseGet(damInfoResponse::getName);
+                                                                        // If you use orElseGet here you will run into a compilation error on Java 11
+                                                                        // Issue is not present using Java 12
+                                                                        .orElse(damInfoResponse.getName());
                                            return new DamInfo(damId, label, url);
                                        });
                    })
