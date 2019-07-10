@@ -17,9 +17,9 @@ import { ClaimDefinitionService } from '../claim-definitions.service';
 })
 export class ClaimDefinitionDetailComponent extends DamEntityDetailBase<ClaimDefinitionService> {
 
-  @ViewChild(ClaimDefinitionFormComponent)
+  @ViewChild(ClaimDefinitionFormComponent, { static: false })
   claimDefinitionForm: ClaimDefinitionFormComponent;
-  @ViewChild('formErrorElement')
+  @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
 
   constructor(route: ActivatedRoute,

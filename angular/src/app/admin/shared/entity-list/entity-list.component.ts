@@ -26,7 +26,7 @@ export class EntityListComponent {
   @Input()
   editorOptions: JsonEditorOptions | any;
 
-  @ViewChild(JsonEditorComponent)
+  @ViewChild(JsonEditorComponent, { static: false })
   editor: JsonEditorComponent;
 
   constructor() {

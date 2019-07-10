@@ -17,9 +17,9 @@ import { ClientApplicationService } from '../client-applications.service';
 })
 export class ClientApplicationDetailComponent extends DamEntityDetailBase<ClientApplicationService> {
 
-  @ViewChild(ClientApplicationFormComponent)
+  @ViewChild(ClientApplicationFormComponent, { static: false })
   clientApplicationForm: ClientApplicationFormComponent;
-  @ViewChild('formErrorElement')
+  @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
 
   constructor(route: ActivatedRoute,

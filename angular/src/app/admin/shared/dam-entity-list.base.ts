@@ -1,6 +1,5 @@
-import { OnInit, ViewChild } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { JsonEditorComponent } from 'ang-jsoneditor';
 import { Observable } from 'rxjs/Observable';
 import { flatMap, map } from 'rxjs/operators';
 

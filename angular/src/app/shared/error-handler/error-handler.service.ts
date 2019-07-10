@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { OperatorFunction } from 'rxjs/interfaces';
+import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -13,7 +14,7 @@ export class ErrorHandlerService {
   }
 
   notifyOnError<T>(message?: string): OperatorFunction<T, T> {
-    return catchError<T, T>((error) => {
+    return catchError<T, Observable<T>>((error) => {
       this.openSnackBar(error, message);
       throw error;
     });
