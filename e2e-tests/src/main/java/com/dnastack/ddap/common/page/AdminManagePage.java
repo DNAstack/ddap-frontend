@@ -59,6 +59,8 @@ public class AdminManagePage extends AdminDdapPage {
     public void fillTagField(By fieldSelector, String value) {
         WebElement tagInput = new WebDriverWait(driver,
                                                 5).until(ExpectedConditions.elementToBeClickable(fieldSelector));
+        // Need to scroll to input or else it may not be clickable
+        scrollTo(tagInput);
         tagInput.click();
         tagInput.findElement(By.tagName("input")).sendKeys(value, Keys.ENTER);
     }

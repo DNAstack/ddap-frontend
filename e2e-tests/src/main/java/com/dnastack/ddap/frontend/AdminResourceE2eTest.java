@@ -255,7 +255,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         drJoeCheckbox.click();
         // If we don't wait, submitting the form will happen before validation can occur.
-        new WebDriverWait(driver, 5).until(d -> drJoeCheckbox.getAttribute("class").contains("ng-invalid"));
+        new WebDriverWait(driver, 10).until(d -> drJoeCheckbox.getAttribute("class").contains("ng-invalid"));
         adminManagePage.clickUpdate();
         adminManagePage.assertError(containsString("Please fix invalid fields"));
     }
@@ -311,11 +311,11 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/nci_researcher");
 
         adminManagePage.enterButton(DdapBy.se("btn-remove-view-gcs-file-access"));
-        // workaround to rebuild matrix, matrix is not rebuilt on view removal/addition
-        adminManagePage.clickCheckbox(By.id("discovery-access/discovery/administrator"));
 
+        // workaround to rebuild matrix, matrix is not rebuilt on view removal/addition
+        adminManagePage.clickCheckbox(By.id("discovery-access/discovery/dr_joe_elixir"));
+        // Wait until matrix refreshes before submitting
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
-        adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");
 
         adminListPage = adminManagePage.updateEntity();
 
