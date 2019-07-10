@@ -18,9 +18,9 @@ import { PassportIssuerService } from '../passport-issuers.service';
 })
 export class PassportIssuerManageComponent implements OnInit {
 
-  @ViewChild(PassportIssuerFormComponent)
+  @ViewChild(PassportIssuerFormComponent, { static: false })
   passportIssuerForm: PassportIssuerFormComponent;
-  @ViewChild('formErrorElement')
+  @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
 
   passportIssuer: TrustedPassportIssuer;

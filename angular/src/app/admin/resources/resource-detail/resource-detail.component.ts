@@ -20,11 +20,11 @@ import { ResourceService } from '../resources.service';
 })
 export class ResourceDetailComponent extends DamEntityFormDetailBase<ResourceService> implements OnInit {
 
-  @ViewChild(ResourceFormComponent)
+  @ViewChild(ResourceFormComponent, { static: false })
   resourceForm: ResourceFormComponent;
-  @ViewChild('formErrorElement')
+  @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
-  @ViewChild('accessForm')
+  @ViewChild('accessForm', { static: false })
   accessForm: PersonaResourceAccessComponent;
 
   constructor(route: ActivatedRoute,

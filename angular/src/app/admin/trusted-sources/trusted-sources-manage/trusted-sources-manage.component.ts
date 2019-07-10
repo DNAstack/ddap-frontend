@@ -16,12 +16,10 @@ import { TrustedSourcesService } from '../trusted-sources.service';
 })
 export class TrustedSourcesManageComponent {
 
-  @ViewChild(TrustedSourcesFormComponent)
+  @ViewChild(TrustedSourcesFormComponent, { static: false })
   trustedSourcesForm: TrustedSourcesFormComponent;
-  @ViewChild('formErrorElement')
+  @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
-
-  submitted = false;
 
   constructor(private trustedSourcesService: TrustedSourcesService,
               private router: Router,
@@ -45,7 +43,7 @@ export class TrustedSourcesManageComponent {
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
-  }
+  };
 
   private routeDamId() {
     return this.route
