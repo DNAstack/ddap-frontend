@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
-import { TrustedSourcesService } from '../../../trusted-sources/trusted-sources.service';
 import { ClientFormComponent } from '../client-form/client-form.component';
 import { ClientService } from '../clients.service';
 
@@ -17,9 +16,9 @@ import { ClientService } from '../clients.service';
 })
 export class ClientManageComponent {
 
-  @ViewChild(ClientFormComponent)
+  @ViewChild(ClientFormComponent, { static: false })
   clientForm: ClientFormComponent;
-  @ViewChild('formErrorElement')
+  @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
 
   constructor(private client: ClientService,

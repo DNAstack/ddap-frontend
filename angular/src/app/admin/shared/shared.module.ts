@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { MAT_CHECKBOX_CLICK_ACTION, MatButtonToggleModule } from '@angular/material';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MAT_CHECKBOX_CLICK_ACTION } from '@angular/material/checkbox';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 import { SharedModule } from '../../shared/shared.module';
