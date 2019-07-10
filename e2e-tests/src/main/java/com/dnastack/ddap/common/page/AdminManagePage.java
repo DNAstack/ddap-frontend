@@ -73,8 +73,11 @@ public class AdminManagePage extends AdminDdapPage {
     }
 
     public WebElement findCheckedCheckbox(String checkboxId) {
-        return new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.xpath(
+        WebElement checkbox = new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.xpath(
                 "//mat-checkbox[@id='" + checkboxId + "' and contains(@class, 'mat-checkbox-checked')]")));
+        this.scrollTo(checkbox);
+
+        return checkbox;
     }
 
     public WebElement findCheckbox(String checkboxId) {
@@ -151,10 +154,5 @@ public class AdminManagePage extends AdminDdapPage {
 
     private void scrollTo(WebElement element) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
