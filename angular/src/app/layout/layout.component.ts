@@ -11,6 +11,7 @@ import { IdentityStore } from '../identity/identity.store';
 import { Profile } from '../identity/profile.model';
 import { DamInfoService } from '../shared/dam/dam-info.service';
 import { DamInfo, DamsInfo } from '../shared/dam/dams-info';
+import {DamInfoStore} from "../shared/dam/dam-info.store";
 
 const refreshRepeatTimeoutInMs = 600000;
 
@@ -32,11 +33,13 @@ export class LayoutComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private identityService: IdentityService,
               private identityStore: IdentityStore,
+              private damInfoStore: DamInfoStore,
               private damInfoService: DamInfoService) {
 
   }
 
   ngOnInit() {
+    this.damInfoStore.getDamsInfo();
     this.identityStore.getIdentity()
       .zip(this.damInfoService.getDamsInfo())
       .subscribe(([{account, accesses, sandbox}, damsInfo]: [Identity, DamsInfo]) => {

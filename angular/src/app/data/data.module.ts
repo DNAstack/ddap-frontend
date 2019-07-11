@@ -5,6 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 
 import { DataDetailComponent } from './data-detail/data-detail.component';
 import { DataListComponent } from './data-list/data-list.component';
+import { DataRoutingModule } from './data-routing.module';
 import { DataSearchComponent } from './data-search/data-search.component';
 
 
@@ -16,6 +17,7 @@ import { DataSearchComponent } from './data-search/data-search.component';
   ],
   imports: [
     SharedModule,
+    DataRoutingModule,
 
     MatGridListModule,
   ],

@@ -6,6 +6,7 @@ import { IdentityProviderDetailComponent } from './identity-provider-detail/iden
 import { IdentityProviderFormComponent } from './identity-provider-form/identity-provider-form.component';
 import { IdentityProviderListComponent } from './identity-provider-list/identity-provider-list.component';
 import { IdentityProviderManageComponent } from './identity-provider-manage/identity-provider-manage.component';
+import {IdentityProvidersRoutingModule} from "./identity-providers-routing.module";
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { IdentityProviderManageComponent } from './identity-provider-manage/iden
   ],
   imports: [
     IdentityConcentratorSharedModule,
+    IdentityProvidersRoutingModule,
   ],
 })
 export class IdentityProvidersModule { }

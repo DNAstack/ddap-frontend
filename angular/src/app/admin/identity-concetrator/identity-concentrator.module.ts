@@ -1,17 +1,13 @@
 import { NgModule } from '@angular/core';
 
-import { ClientsModule } from './clients/clients.module';
-import { IdentityProvidersModule } from './identity-providers/identity-providers.module';
-import { OptionsModule } from './options/options.module';
+import {IdentityConcentratorRoutingModule} from "./identity-concentrator-routing.module";
 
 @NgModule({
   declarations: [
 
   ],
   imports: [
-    ClientsModule,
-    IdentityProvidersModule,
-    OptionsModule,
+    IdentityConcentratorRoutingModule,
   ],
 })
 export class IdentityConcentratorModule {

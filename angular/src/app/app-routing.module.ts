@@ -1,24 +1,32 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DAM_ADMIN_ROUTES } from './admin/admin.routes';
-import { IDENTITY_CONCENTRATOR_ROUTES } from './admin/identity-concetrator/identity-concentrator.routes';
-import { DATA_ROUTES } from './data/data.routes';
-import { IDENTITY_ROUTES } from './identity/identity.routes';
 import { LayoutComponent } from './layout/layout.component';
 import { defaultRealm } from './shared/realm/realm.constant';
 
 const routes: Routes = [
-  {path: '', redirectTo: `/${defaultRealm}/data`, pathMatch: 'full'},
-  {path: ':realmId', redirectTo: `/:realmId/data`, pathMatch: 'full'},
+  { path: '', pathMatch: 'full', redirectTo: `/${defaultRealm}/data` },
+  { path: ':realmId', pathMatch: 'full', redirectTo: `/:realmId/data` },
   {
     path: ':realmId',
     component: LayoutComponent,
     children: [
-      ...DATA_ROUTES,
-      ...IDENTITY_ROUTES,
-      ...IDENTITY_CONCENTRATOR_ROUTES,
-      ...DAM_ADMIN_ROUTES,
+      {
+        path: 'data',
+        loadChildren: () => import('./data/data.module').then(mod => mod.DataModule),
+      },
+      {
+        path: 'identity',
+        loadChildren: () => import('./identity/identity.module').then(mod => mod.IdentityModule),
+      },
+      {
+        path: 'identity-concentrator',
+        loadChildren: () => import('./admin/identity-concetrator/identity-concentrator.module').then(mod => mod.IdentityConcentratorModule),
+      },
+      {
+        path: 'dam',
+        loadChildren: () => import('./admin/admin.module').then(mod => mod.AdminModule),
+      },
     ],
   },
 ];

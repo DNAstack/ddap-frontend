@@ -6,6 +6,7 @@ import { PassportIssuerDetailComponent } from './passport-issuer-detail/passport
 import { PassportIssuerFormComponent } from './passport-issuer-form/passport-issuer-form.component';
 import { PassportIssuerListComponent } from './passport-issuer-list/passport-issuer-list.component';
 import { PassportIssuerManageComponent } from './passport-issuer-manage/passport-issuer-manage.component';
+import {PassportIssuersRoutingModule} from "./passport-issuers-routing.module";
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { PassportIssuerManageComponent } from './passport-issuer-manage/passport
   ],
   imports: [
     AdminSharedModule,
+    PassportIssuersRoutingModule,
   ],
 })
 export class PassportIssuersModule { }
