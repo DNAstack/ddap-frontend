@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 import { SharedModule } from '../shared/shared.module';
 
+import { IdentityRoutingModule } from './identity-routing.module';
 import { IdentityComponent } from './identity.component';
 
 @NgModule({
@@ -11,8 +11,7 @@ import { IdentityComponent } from './identity.component';
   ],
   imports: [
     SharedModule,
-
-    NgJsonEditorModule,
+    IdentityRoutingModule,
   ],
 })
 export class IdentityModule { }
