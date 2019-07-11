@@ -1,10 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable} from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
-import { environment } from '../../../environments/environment';
-
+import { DamInfoStore } from './dam-info.store';
 import { DamInfo, DamsInfo } from './dams-info';
 
 @Injectable({
@@ -12,26 +10,23 @@ import { DamInfo, DamsInfo } from './dams-info';
 })
 export class DamInfoService {
 
-  private readonly damInfoResponse$: Observable<DamsInfo>;
+  constructor(private damInfoStore: DamInfoStore) {
 
-  constructor(private http: HttpClient) {
-    // DAM URLs are the same in all realms so use master
-    this.damInfoResponse$ = this.http.get<DamsInfo>(`${environment.ddapApiUrl}/master/dam`).shareReplay();
   }
 
   getDamsInfo(): Observable<DamsInfo> {
-    return this.damInfoResponse$;
+    return this.damInfoStore.info;
   }
 
   getDamInfos(): Observable<DamInfo[]> {
-    return this.damInfoResponse$
+    return this.damInfoStore.info
       .pipe(
         map(damsInfo => DamInfoService.toDamInfos(damsInfo))
       );
   }
 
   getDamUrls(): Observable<Map<string, string>> {
-    return this.getDamsInfo()
+    return this.damInfoStore.info
       .pipe(
         map(damsInfo => DamInfoService.toMap(damsInfo))
       );
@@ -52,4 +47,5 @@ export class DamInfoService {
 
     return damInfoEntries.map((entry: Entry<DamInfo>) => entry[1]);
   }
+
 }

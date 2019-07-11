@@ -44,7 +44,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
         options.addArguments("incognito");
 
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
     }
 
     @AfterClass
