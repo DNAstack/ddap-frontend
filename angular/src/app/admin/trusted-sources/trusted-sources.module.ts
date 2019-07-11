@@ -6,7 +6,6 @@ import { TrustedSourcesDetailComponent } from './trusted-sources-detail/trusted-
 import { TrustedSourcesFormComponent } from './trusted-sources-form/trusted-sources-form.component';
 import { TrustedSourcesListComponent } from './trusted-sources-list/trusted-sources-list.component';
 import { TrustedSourcesManageComponent } from './trusted-sources-manage/trusted-sources-manage.component';
-import { TrustedSourcesRoutingModule } from './trusted-sources-routing.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +16,6 @@ import { TrustedSourcesRoutingModule } from './trusted-sources-routing.module';
   ],
   imports: [
     AdminSharedModule,
-    TrustedSourcesRoutingModule,
   ],
 })
 export class TrustedSourcesModule { }

@@ -126,6 +126,8 @@ public class NavBar {
 
     public <T> T goTo(NavLink navItem, Function<WebDriver, T> pageFactory) {
         final WebElement clickableNavLink = navItem.getParentSelector()
+                                                   .filter(parent -> !driver.findElement(navItem.getSelector())
+                                                                            .isDisplayed())
                                                    .map(parent -> {
                                                        final WebElement parentElement = driver.findElement(parent.getSelector());
                                                        parentElement.click();

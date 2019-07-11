@@ -27,6 +27,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TagInputModule } from 'ngx-chips';
 import { ClipboardModule } from 'ngx-clipboard';
 
+import { AppRoutingModule } from '../app-routing.module';
+
 import { AsEntityModelPipe } from './as-entity-model.pipe';
 import { BeaconSearchBarComponent } from './beacon-search-bar/beacon-search-bar.component';
 import { LimitSearchComponent } from './beacon-search-bar/limit-search/limit-search.component';
@@ -48,7 +50,6 @@ import { RealmInputComponent } from './realm-input/realm-input.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
 import { ResourceViewItemComponent } from './resource-view-item/resource-view-item.component';
 import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.component';
-import {RouterModule} from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -71,9 +72,12 @@ import {RouterModule} from "@angular/router";
     SandboxBannerComponent,
   ],
   imports: [
+    AppRoutingModule,
+
     CommonModule,
-    RouterModule,
     FormsModule,
+    BrowserModule,
+    BrowserAnimationsModule,
     ClipboardModule,
     ReactiveFormsModule,
     TagInputModule,
@@ -101,9 +105,12 @@ import {RouterModule} from "@angular/router";
     MatSlideToggleModule,
   ],
   exports: [
+    AppRoutingModule,
+
     CommonModule,
-    RouterModule,
     FormsModule,
+    BrowserModule,
+    BrowserAnimationsModule,
     ClipboardModule,
     ReactiveFormsModule,
     TagInputModule,

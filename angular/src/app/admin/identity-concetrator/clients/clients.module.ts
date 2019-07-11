@@ -6,7 +6,6 @@ import { ClientDetailComponent } from './client-detail/client-detail.component';
 import { ClientFormComponent } from './client-form/client-form.component';
 import { ClientListComponent } from './client-list/client-list.component';
 import { ClientManageComponent } from './client-manage/client-manage.component';
-import {ClientsRoutingModule} from "./clients-routing.module";
 
 @NgModule({
   declarations: [
@@ -17,7 +16,6 @@ import {ClientsRoutingModule} from "./clients-routing.module";
   ],
   imports: [
     IdentityConcentratorSharedModule,
-    ClientsRoutingModule,
   ],
 })
 export class ClientsModule { }

@@ -8,7 +8,6 @@ import { ResourceFormComponent } from './resource-form/resource-form.component';
 import { ResourceViewFormComponent } from './resource-form/resource-view-form/resource-view-form.component';
 import { ResourceListComponent } from './resource-list/resource-list.component';
 import { ResourceManageComponent } from './resource-manage/resource-manage.component';
-import { ResourcesRoutingModule } from './resources-routing.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +20,6 @@ import { ResourcesRoutingModule } from './resources-routing.module';
   ],
   imports: [
     AdminSharedModule,
-    ResourcesRoutingModule,
   ],
 })
 export class ResourcesModule { }

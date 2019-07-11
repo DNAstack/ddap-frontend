@@ -1,11 +1,13 @@
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 
+import { AdminModule } from './admin/admin.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DataModule } from './data/data.module';
+import { IdentityModule } from './identity/identity.module';
 import { LayoutComponent } from './layout/layout.component';
 import {
   EntityRemovalConfirmationDialogComponent
@@ -23,12 +25,15 @@ import { SharedModule } from './shared/shared.module';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     HttpClientModule,
     LoadingBarHttpClientModule,
 
-    SharedModule,
     AppRoutingModule,
+
+    SharedModule,
+    AdminModule,
+    DataModule,
+    IdentityModule,
   ],
   entryComponents: [
     RealmChangeConfirmationDialogComponent,

@@ -6,7 +6,6 @@ import { ClientApplicationDetailComponent } from './client-application-detail/cl
 import { ClientApplicationFormComponent } from './client-application-form/client-application-form.component';
 import { ClientApplicationListComponent } from './client-application-list/client-application-list.component';
 import { ClientApplicationManageComponent } from './client-application-manage/client-application-manage.component';
-import {ClientApplicationsRoutingModule} from "./client-applications-routing.module";
 
 @NgModule({
   declarations: [
@@ -17,7 +16,6 @@ import {ClientApplicationsRoutingModule} from "./client-applications-routing.mod
   ],
   imports: [
     AdminSharedModule,
-    ClientApplicationsRoutingModule,
   ],
 })
 export class ClientApplicationsModule { }
