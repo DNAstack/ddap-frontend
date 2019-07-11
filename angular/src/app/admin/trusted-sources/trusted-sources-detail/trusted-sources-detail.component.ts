@@ -17,9 +17,9 @@ import { TrustedSourcesService } from '../trusted-sources.service';
 })
 export class TrustedSourcesDetailComponent extends DamEntityFormDetailBase<TrustedSourcesService> {
 
-  @ViewChild(TrustedSourcesFormComponent, { static: false })
+  @ViewChild(TrustedSourcesFormComponent)
   trustedSourcesForm: TrustedSourcesFormComponent;
-  @ViewChild('formErrorElement', { static: false })
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   constructor(

@@ -11,6 +11,7 @@ export class PersonaAccessFormComponent {
 
   @Input()
   resources: any[];
+
   @Input()
   form: FormGroup;
 

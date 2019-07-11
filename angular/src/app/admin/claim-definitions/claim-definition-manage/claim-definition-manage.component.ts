@@ -16,9 +16,9 @@ import { ClaimDefinitionService } from '../claim-definitions.service';
 })
 export class ClaimDefinitionManageComponent {
 
-  @ViewChild(ClaimDefinitionFormComponent, { static: false })
+  @ViewChild(ClaimDefinitionFormComponent)
   claimDefinitionForm: ClaimDefinitionFormComponent;
-  @ViewChild('formErrorElement', { static: false })
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   constructor(private definitionService: ClaimDefinitionService,

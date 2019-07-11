@@ -17,11 +17,11 @@ import { ResourceService } from '../resources.service';
 })
 export class ResourceManageComponent {
 
-  @ViewChild(ResourceFormComponent, { static: false })
+  @ViewChild(ResourceFormComponent)
   resourceForm: ResourceFormComponent;
-  @ViewChild('formErrorElement', { static: false })
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
-  @ViewChild('accessForm', { static: false })
+  @ViewChild('accessForm')
   accessForm: PersonaResourceAccessComponent;
 
   constructor(public resourceService: ResourceService,

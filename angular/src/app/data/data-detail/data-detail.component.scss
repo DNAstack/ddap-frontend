@@ -44,7 +44,7 @@ ddap-resource-views {
   width: 100%;
 }
 
-::ng-deep .mat-list-base {
+/deep/ .mat-list-base {
   padding-top: 1rem;
 
   mat-list-item.ddap-data-view {

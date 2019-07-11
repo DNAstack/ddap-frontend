@@ -29,7 +29,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
   @Input()
   persona?: TestPersona = TestPersona.create();
 
-  @ViewChild(PersonaAccessFormComponent, { static: false })
+  @ViewChild(PersonaAccessFormComponent)
   accessForm: PersonaAccessFormComponent;
 
   form: FormGroup;

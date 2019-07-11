@@ -16,9 +16,9 @@ import { ClientApplicationService } from '../client-applications.service';
 })
 export class ClientApplicationManageComponent {
 
-  @ViewChild(ClientApplicationFormComponent, { static: false })
+  @ViewChild(ClientApplicationFormComponent)
   clientApplicationForm: ClientApplicationFormComponent;
-  @ViewChild('formErrorElement', { static: false })
+  @ViewChild('formErrorElement')
   formErrorElement: ElementRef;
 
   constructor(

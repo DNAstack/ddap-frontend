@@ -8,10 +8,9 @@ import { ImagePlaceholderRetriever } from '../image-placeholder.service';
   styleUrls: ['./resource-logo.component.scss'],
 })
 export class ResourceLogoComponent implements OnChanges, OnInit {
-
   @Input()
   imageUrl: string;
-  @ViewChild('logoPane', { static: false })
+  @ViewChild('logoPane')
   logoDiv: any;
 
   constructor(private renderer: Renderer2, private imgInjector: ImagePlaceholderRetriever) {}
