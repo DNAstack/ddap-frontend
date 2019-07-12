@@ -3,6 +3,9 @@
 </ddap-header>
 
 <ddap-main>
+  <ddap-entity-description>
+    Configuration of the Identity Concentrator, such as the time before expiry of various tokens.
+  </ddap-entity-description>
   <ddap-option-editable-list [options]="options"
                              [error]="error"
                              (submitted)="updateOptionValue($event)">

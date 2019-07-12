@@ -5,6 +5,10 @@
 </ddap-header>
 
 <ddap-main>
+  <ddap-entity-description>
+    Passport Issuers are GA4GH Identity Brokers that are trusted to accurately represent researcher identity
+    <a [routerLink]="['..', 'claim-definitions']">claims</a> from upstream identity providers.
+  </ddap-entity-description>
   <ddap-entity-list
     [headerTitle]="'passport issuer'"
     [descriptionProperty]="'issuer'"

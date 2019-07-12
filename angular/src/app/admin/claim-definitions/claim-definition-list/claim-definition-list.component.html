@@ -5,6 +5,10 @@
 </ddap-header>
 
 <ddap-main>
+  <ddap-entity-description>
+    Claim Definitions describe GA4GH Researcher Identity claims that are available for use in <a [routerLink]="['..', 'access-policies']">access policies</a>.
+    You must define a claim definition here before it can be referenced in a policy.
+  </ddap-entity-description>
   <ddap-entity-list
     [headerTitle]="'claim definitions'"
     [descriptionLabel]="'description'"

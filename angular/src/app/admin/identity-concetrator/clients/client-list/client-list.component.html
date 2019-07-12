@@ -5,6 +5,11 @@
 </ddap-header>
 
 <ddap-main>
+  <ddap-entity-description>
+    Clients are OIDC relying parties that can view Identity Tokens of users. Only make a service a client of
+    the Identity Concentrator if you trust them with information about user identities (such as their email
+    addresses and RI claims).
+  </ddap-entity-description>
   <ddap-entity-list
     [headerTitle]="'client'"
     [descriptionProperty]="'ui.description'"

@@ -5,6 +5,24 @@
 </ddap-header>
 
 <ddap-main>
+  <ddap-entity-description>
+    <p>
+      Test Personas are a way of asserting expected behaviour of <a [routerLink]="['..', 'access-policies']">access policies</a>
+      and <a [routerLink]="['..', 'resources']">resources</a> that must be maintained whenever new changes are made.
+      They are archetypes of users of the system, with identity <a [routerLink]="['..', 'claim-definitions']">claims</a>
+      that have particular values and are from particular <a [routerLink]="['..', 'trusted-sources']">sources</a>.
+    </p>
+    <p>
+      When you make a persona, you give it claims that make it like some category of real user in your system. You must
+      also specify what <a [routerLink]="['..', 'resources']">resources</a> you expect the user to have access to.
+      If any future request to modify configuration (whether that be a change to a resource, policy, or anything else)
+      causes these expectations to be violated, the change will be denied until the expectations are updated.
+    </p>
+    <p>
+      Test personas are meant to help protect existing policies and resources from changes that might accidentally
+      grant erroneous access to data.
+    </p>
+  </ddap-entity-description>
   <mat-accordion>
     <ng-container *ngFor="let persona of entities$ | async">
       <mat-expansion-panel>

@@ -6,6 +6,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { AccessTableComponent } from './access-table/access-table.component';
 import { EntityAddComponent } from './entity-add/entity-add.component';
+import { EntityDescriptionComponent } from './entity-description/entity-description.component';
 import { EntityListComponent } from './entity-list/entity-list.component';
 import { EntityManageFormComponent } from './entity-manage-form/entity-manage-form.component';
 import { JsonPanelComponent } from './json-panel/json-panel.component';
@@ -16,6 +17,7 @@ import { TestFormComponent } from './test-form/test-form.component';
   declarations: [
     JsonPanelComponent,
     EntityListComponent,
+    EntityDescriptionComponent,
     EntityAddComponent,
     EntityManageFormComponent,
     OptionEditableListComponent,
@@ -32,6 +34,7 @@ import { TestFormComponent } from './test-form/test-form.component';
     NgJsonEditorModule,
     JsonPanelComponent,
     EntityListComponent,
+    EntityDescriptionComponent,
     EntityAddComponent,
     EntityManageFormComponent,
     OptionEditableListComponent,

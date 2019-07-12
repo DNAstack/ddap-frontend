@@ -5,6 +5,11 @@
 </ddap-header>
 
 <ddap-main>
+  <ddap-entity-description>
+    Trusted Sources are sources of GA4GH <a [routerLink]="['..', 'claim-definitions']">claims</a> in researcher identity tokens.
+    Typical <a [routerLink]="['..', 'access-policies']">access policies</a> place restrictions on the value and source
+    of claims.
+  </ddap-entity-description>
   <ddap-entity-list
     [headerTitle]="'trusted source'"
     [descriptionProperty]="'sources'"
