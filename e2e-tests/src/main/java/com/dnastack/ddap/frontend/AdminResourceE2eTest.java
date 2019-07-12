@@ -6,6 +6,7 @@ import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.ICLoginPage;
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import static com.dnastack.ddap.common.page.NavBar.damResourceLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
 
 @SuppressWarnings("Duplicates")
 public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
@@ -51,7 +53,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String resourceId = "resource-" + System.currentTimeMillis();
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
+        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceId)));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
@@ -71,7 +73,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String resourceId = "resource-" + System.currentTimeMillis();
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
+        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceId)));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
@@ -101,7 +103,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String role = "discovery";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
+        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceId)));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
@@ -140,7 +142,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String view2Role = "discovery";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
+        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceId)));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
@@ -192,7 +194,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String role = "discovery";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceId)));
+        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceId)));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
@@ -215,7 +217,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         adminManagePage.clickSave();
         adminManagePage.assertError(containsString("NONEXISTENT_POLICY"));
-        adminManagePage.assertError(not(startsWith("{")));
+        adminManagePage.assertError(Matchers.not(startsWith("{")));
     }
 
     @Test
@@ -237,7 +239,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         adminManagePage.clickUpdate();
         adminManagePage.assertError(containsString("NONEXISTENT_POLICY"));
-        adminManagePage.assertError(not(startsWith("{")));
+        adminManagePage.assertError(Matchers.not(startsWith("{")));
     }
 
     @Test
@@ -316,6 +318,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.clickCheckbox(By.id("discovery-access/discovery/dr_joe_elixir"));
         // Wait until matrix refreshes before submitting
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
+        adminManagePage.waitForInflightRequests();
 
         adminListPage = adminManagePage.updateEntity();
 
@@ -360,6 +363,6 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.deleteEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem(resourceToDelete)));
+        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceToDelete)));
     }
 }

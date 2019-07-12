@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 
 import static org.junit.Assert.assertThat;
+import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
 
 public class AdminManagePage extends AdminDdapPage {
 
@@ -109,6 +110,11 @@ public class AdminManagePage extends AdminDdapPage {
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(button));
         this.scrollTo(button);
         button.click();
+    }
+
+    public void waitForInflightRequests() {
+        new WebDriverWait(driver,
+                          5).until(invisibilityOfElementLocated(By.xpath("//mat-progress-bar[contains(@class, 'main-progress-bar')]")));
     }
 
     public void closeAutocompletes() {
