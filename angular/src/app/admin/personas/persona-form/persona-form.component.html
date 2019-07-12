@@ -209,6 +209,16 @@
   </mat-progress-bar>
 
   <ng-container *ngIf="resourceAccessSubscription.closed">
+    <div class="access-description">
+      <p>
+        Headings are test persona names. Checkboxes represent the expected access on the labelled view (qualified by resource).
+        A box is checked if and only if the titled persona is expected to have access to the labelled view.
+      </p>
+      <p>
+        If a box is red, the changes you are making have altered the expected state. Please either modify your changes
+        to maintain the expected state, or click the checkbox to explicitly change the expected access.
+      </p>
+    </div>
     <ddap-persona-access-form [resources]="resourcesList"
                               [form]="resources">
 
