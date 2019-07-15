@@ -18,6 +18,7 @@ idp:
 ddap:
   public-uri: http://localhost:8085
   default-realm: dnastack
+  # Development key should not be deployed. There is an e2e test preventing this.
   signingKey: |
     VGhlcmUgb25jZSB3YXMgYSBsYW5ndWFnZSBjYWxsZWQgYmFzaApJdCdzIHNlbWFudGljcyB3ZXJlIG9mdGVuIHF1aXRlI
     HJhc2gKQnV0IGl0IHdvcmtlZCwgbW9yZSBvciBsZXNzCkV2ZW4gdGhvdWdoIGl0J3MgYSBtZXNzClNvIEkgZ3Vlc3MgaX
@@ -44,13 +45,6 @@ spring:
         # NB: If you add a new route here,
         # you may also need to modify com.dnastack.ddapfrontend.route.Router#angluarRoutes
         # Important: Routes for the DAM are in com.dnastack.ddapfrontend.route.DamRouter
-        - predicates:
-            - Path=/api/cafevariome/**
-          filters:
-            - Logging
-            - StripPrefix=2
-            - RemoveRequestHeader=Authorization
-          uri: https://beacon.cafevariome.org
         - predicates:
             - Path=/identity/**
           filters:
