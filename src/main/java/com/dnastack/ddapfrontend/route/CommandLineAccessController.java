@@ -42,7 +42,6 @@ public class CommandLineAccessController {
     private static final String DEFAULT_SCOPES = "openid ga4gh account_admin identities";
 
     private final ReactiveOAuthClient oAuthClient;
-    private final ReactiveIcClient icClient;
     private final OAuthStateHandler stateHandler;
     private Duration tokenTtl;
 
@@ -59,12 +58,10 @@ public class CommandLineAccessController {
     @Autowired
     public CommandLineAccessController(OAuthStateHandler stateHandler,
                                        ReactiveOAuthClient oAuthClient,
-                                       ReactiveIcClient icClient,
                                        @Value("${ddap.command-line-service.aud}") String tokenAudience,
                                        @Value("${ddap.command-line-service.ttl}") Duration tokenTtl,
                                        @Value("${ddap.command-line-service.signingKey}") String tokenSigningKeyBase64) {
         this.oAuthClient = oAuthClient;
-        this.icClient = icClient;
         this.stateHandler = stateHandler;
         this.tokenTtl = tokenTtl;
         this.jwtHandler = new JwtHandler(tokenAudience,
