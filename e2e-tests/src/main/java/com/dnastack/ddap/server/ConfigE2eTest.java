@@ -2,6 +2,7 @@ package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.SignatureException;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.NameValuePair;
@@ -13,7 +14,6 @@ import org.junit.Test;
 
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.security.SignatureException;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
