@@ -24,6 +24,7 @@
 		<protoc.version>3.7.0.2</protoc.version>
 		<protobuf.version>3.7.1</protobuf.version>
 		<jwt.version>0.10.5</jwt.version>
+		<ddap-cli.version>1.0-13-gd9fbf22</ddap-cli.version>
 	</properties>
 
 	<repositories>
@@ -125,6 +126,20 @@
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java-util</artifactId>
 			<version>${protobuf.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.dnastack.ddap</groupId>
+			<artifactId>ddap-cli</artifactId>
+			<version>${ddap-cli.version}</version>
+			<type>zip</type>
+			<!-- This is here with test scope because:
+					* We need this dependency to be resolved by the go-offline
+					* The go-offline plugin doesn't support dynamic dependencies that aren't jars
+					* We don't want this dependency to end up in our jar twice (we copy it in with the dependency plugin)
+					* Provided scope would be better, but the spring boot plugin copies provided scope jars into your boot jar
+			 -->
+            <scope>test</scope>
 		</dependency>
 
 		<!-- Automatically excluded from repackaged archive ("fat jar") by spring-boot-maven-plugin -->
@@ -235,7 +250,7 @@
 						<artifactItem>
 							<groupId>com.dnastack.ddap</groupId>
 							<artifactId>ddap-cli</artifactId>
-							<version>1.0-13-gd9fbf22</version>
+							<version>${ddap-cli.version}</version>
 							<type>zip</type>
 							<overWrite>false</overWrite>
 							<outputDirectory>${project.build.directory}/classes/static</outputDirectory>
