@@ -21,6 +21,8 @@ ADD target/pom.xml ./
 ADD target/.mvn ./.mvn
 ADD target/mvnw ./
 ADD target/angular/*.json ./angular/
+# Allows us to pass settings.xml configured on local machine or CI server to access private Nexus repo
+ADD target/.m2 /root/.m2
 RUN ./mvnw -B de.qaware.maven:go-offline-maven-plugin:resolve-dependencies
 RUN ./mvnw -B versions:set -DnewVersion=${APP_VERSION}
 
