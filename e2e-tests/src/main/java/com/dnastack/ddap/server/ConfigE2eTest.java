@@ -8,7 +8,6 @@ import io.restassured.response.Response;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.junit.Assume;
-import org.junit.AssumptionViolatedException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -91,7 +90,7 @@ public class ConfigE2eTest extends AbstractBaseE2eTest {
                                           .filter(pair -> pair.getName().equals("state"))
                                           .map(NameValuePair::getValue)
                                           .findFirst()
-                                          .orElseThrow(() -> new AssumptionViolatedException(
+                                          .orElseThrow(() -> new AssertionError(
                                                   "No state parameter in login redirect URL."));
 
         final String base64EncodedDevSigningKey = "VGhlcmUgb25jZSB3YXMgYSBsYW5ndWFnZSBjYWxsZWQgYmFzaApJdCdzIHNlbWFudGljcyB3ZXJlIG9mdGVuIHF1aXRlIHJhc2gKQnV0IGl0IHdvcmtlZCwgbW9yZSBvciBsZXNzCkV2ZW4gdGhvdWdoIGl0J3MgYSBtZXNzClNvIEkgZ3Vlc3MgaXQgc3RheXMgb3V0IG9mIHRoZSB0cmFzaAo=";
