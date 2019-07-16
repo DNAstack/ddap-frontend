@@ -3,7 +3,6 @@ package com.dnastack.ddapfrontend.route;
 import com.dnastack.ddapfrontend.cli.CliLoginStatus;
 import com.dnastack.ddapfrontend.cli.CliSessionNotFound;
 import com.dnastack.ddapfrontend.cli.TokenResponse;
-import com.dnastack.ddapfrontend.client.ic.ReactiveIcClient;
 import com.dnastack.ddapfrontend.client.ic.ReactiveOAuthClient;
 import com.dnastack.ddapfrontend.security.BadCredentialsException;
 import com.dnastack.ddapfrontend.security.JwtHandler;
@@ -14,6 +13,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -44,6 +44,7 @@ public class CommandLineAccessController {
     private final ReactiveOAuthClient oAuthClient;
     private final OAuthStateHandler stateHandler;
     private Duration tokenTtl;
+    private final Resource cliZip;
 
     private final JwtHandler jwtHandler;
     private final Pattern bearerTokenPattern = Pattern.compile("^Bearer ([^\\s]+).*$");
@@ -60,13 +61,20 @@ public class CommandLineAccessController {
                                        ReactiveOAuthClient oAuthClient,
                                        @Value("${ddap.command-line-service.aud}") String tokenAudience,
                                        @Value("${ddap.command-line-service.ttl}") Duration tokenTtl,
-                                       @Value("${ddap.command-line-service.signingKey}") String tokenSigningKeyBase64) {
+                                       @Value("${ddap.command-line-service.signingKey}") String tokenSigningKeyBase64,
+                                       @Value("classpath:/static/ddap-cli.zip") Resource cliZip) {
         this.oAuthClient = oAuthClient;
         this.stateHandler = stateHandler;
         this.tokenTtl = tokenTtl;
+        this.cliZip = cliZip;
         this.jwtHandler = new JwtHandler(tokenAudience,
                                          tokenTtl,
                                          Keys.hmacShaKeyFor(Base64.getMimeDecoder().decode(tokenSigningKeyBase64)));
+    }
+
+    @GetMapping(produces = "application/zip", path = "/download")
+    public Resource downloadCliZip() {
+        return cliZip;
     }
 
     @PostMapping("/login")

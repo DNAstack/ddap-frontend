@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Subscription } from 'rxjs/Subscription';
 
+import { environment } from '../../../environments/environment';
 import { ResourceService } from '../../admin/resources/resources.service';
 import { EntityModel } from '../../admin/shared/entity.model';
 import { dam } from '../proto/dam-service';
@@ -27,6 +28,8 @@ export class ResourceViewItemComponent {
 
   ttlForm = new FormControl(1, Validators.compose([Validators.required, Validators.min(1)]));
   selectedTimeUnit = 'h';
+  // Downloads the same zip file regardless of realm
+  downloadCliUrl = `${environment.ddapApiUrl}/master/cli/download`;
 
   constructor(private resourceService: ResourceService, private route: ActivatedRoute) {
 

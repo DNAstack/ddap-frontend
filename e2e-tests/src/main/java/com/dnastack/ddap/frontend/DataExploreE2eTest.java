@@ -2,26 +2,37 @@ package com.dnastack.ddap.frontend;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.page.*;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class DataExploreE2eTest extends AbstractFrontendE2eTest {
     private static final String REALM = generateRealmName(DataExploreE2eTest.class.getSimpleName());
 
-    @Override
-    protected String getRealm() {
-        return REALM;
-    }
-
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
         final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig("administrator", testConfig, "1", REALM);
+    }
+
+    private String basicUsername;
+    private String basicPassword;
+
+    @Before
+    public void setup() {
+        basicUsername = requiredEnv("E2E_BASIC_USERNAME");
+        basicPassword = requiredEnv("E2E_BASIC_PASSWORD");
+    }
+
+    @Override
+    protected String getRealm() {
+        return REALM;
     }
 
     @Override
@@ -82,6 +93,30 @@ public class DataExploreE2eTest extends AbstractFrontendE2eTest {
         ExpandedAccessibleViewItem beaconDiscoveryView = thousandGenomesDetailPage.expandViewItem("Beacon Discovery Access");
         ViewAccessMenu beaconDiscoveryAccessMenu = beaconDiscoveryView.requestAccess();
         assertFalse(beaconDiscoveryAccessMenu.accessRequestFailed());
+    }
+
+    @Test
+    public void shouldFindWorkingDownloadLink() {
+        DataListPage dataListPage = ddapPage.getNavBar().goToData();
+        DataDetailPage thousandGenomesDetailPage = dataListPage.findDataByName("1000 Genomes").clickViewButton();
+
+        ExpandedAccessibleViewItem fullFileReadView = thousandGenomesDetailPage.expandViewItem("Full File Read Access");
+        String downloadHref = fullFileReadView.getDownloadLink();
+
+        /*
+         * Clicking a link that opens in a new tab is difficult to do, so instead let's just
+         * check that the href works directly.
+         */
+        given()
+                .log().method()
+                .log().uri()
+                .auth().preemptive().basic(basicUsername, basicPassword)
+                .when()
+                .get(downloadHref)
+                .then()
+                .log().ifValidationFails()
+                .statusCode(200)
+                .contentType("application/zip");
     }
 
 }

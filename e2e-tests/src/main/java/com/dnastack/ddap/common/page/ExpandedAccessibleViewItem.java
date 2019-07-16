@@ -1,6 +1,9 @@
 package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
+import org.junit.AssumptionViolatedException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -22,4 +25,7 @@ public class ExpandedAccessibleViewItem {
         return new ViewAccessMenu(driver);
     }
 
+    public String getDownloadLink() {
+        return view.findElement(DdapBy.se("download-cli-button")).getAttribute("href");
+    }
 }
