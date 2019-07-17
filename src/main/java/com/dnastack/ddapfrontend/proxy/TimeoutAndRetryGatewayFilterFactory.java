@@ -17,9 +17,7 @@
 
 package com.dnastack.ddapfrontend.proxy;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -91,7 +89,7 @@ public class TimeoutAndRetryGatewayFilterFactory extends AbstractGatewayFilterFa
 					.doOnRepeat(context -> reset(context.applicationContext()));
 		}
 
-		//TODO: support timeout, backoff, jitter, etc... in Builder
+		//TODO: DISCO-2348 support timeout, backoff, jitter, etc... in Builder
 
 		Retry<ServerWebExchange> exceptionRetry = null;
 		if (!retryConfig.getExceptions().isEmpty()) {
@@ -119,12 +117,12 @@ public class TimeoutAndRetryGatewayFilterFactory extends AbstractGatewayFilterFa
 	public boolean exceedsMaxIterations(ServerWebExchange exchange, RetryConfig retryConfig) {
 		Integer iteration = exchange.getAttribute(RETRY_ITERATION_KEY);
 
-		//TODO: deal with null iteration
+		//TODO: DISCO-2349 deal with null iteration
 		return iteration != null && iteration >= retryConfig.getRetries();
 	}
 
 	public void reset(ServerWebExchange exchange) {
-		//TODO: what else to do to reset SWE?
+		//TODO: DISCO-2350 what else to do to reset SWE?
 		exchange.getAttributes().remove(ServerWebExchangeUtils.GATEWAY_ALREADY_ROUTED_ATTR);
 	}
 

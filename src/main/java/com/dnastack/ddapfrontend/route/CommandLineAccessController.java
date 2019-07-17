@@ -81,13 +81,13 @@ public class CommandLineAccessController {
     public Mono<? extends ResponseEntity<?>> commandLineLogin(ServerHttpRequest request,
                                                               @PathVariable String realm,
                                                               @RequestParam(defaultValue = DEFAULT_SCOPES) String scope) {
-        // TODO: Store in map to track login status
+        // TODO: DISCO-2352 Store in map to track login status
         final String cliSessionId = UUID.randomUUID().toString();
         loginStatusByCliSessionId.compute(cliSessionId, (id, monitor) -> {
             if (monitor == null) {
                 return new LoginStatus(Instant.now().plus(tokenTtl), null);
             } else {
-                // TODO retry retry regenerating a couple times.
+                // TODO DISCO-2353 retry regenerating a couple times.
                 throw new RuntimeException("Failed to generate unique CLI session id.");
             }
         });

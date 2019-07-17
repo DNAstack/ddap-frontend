@@ -35,7 +35,7 @@ public class DamRouter {
 
     @Bean
     public RouteLocator damRoutes(RouteLocatorBuilder builder) {
-        // TODO read from config
+        // TODO: DISCO-2347 read from config
         final TimeoutAndRetryGatewayFilterFactory.RetryConfig timeoutAndRetryConfig = new TimeoutAndRetryGatewayFilterFactory.RetryConfig();
         timeoutAndRetryConfig.setRetries(2);
         timeoutAndRetryConfig.setMinimumTimeout(1000);

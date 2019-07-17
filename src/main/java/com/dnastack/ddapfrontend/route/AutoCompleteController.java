@@ -67,7 +67,7 @@ public class AutoCompleteController {
 
         final ReactiveDamClient damClient = damClientFactory.getDamClient(damId);
 
-        // TODO catch 401/403 and return 401/403
+        // TODO: DISCO-2351 catch 401/403 and return 401/403
         return damClient.getConfig(realm, damToken, refreshToken)
                         .flatMap((damConfig) -> {
                     Map<String, DamPolicy> policies = damConfig.getPolicies();

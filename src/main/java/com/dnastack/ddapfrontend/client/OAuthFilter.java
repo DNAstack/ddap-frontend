@@ -44,7 +44,7 @@ public class OAuthFilter {
                                 .build();
                         return next.exchange(retryRequest).map(retryResponse -> {
                             return ClientResponse.from(retryResponse)
-                                    // TODO: find out how to propagate Set-Cookie to endpoint
+                                    // TODO: DISCO-2311 find out how to propagate Set-Cookie to endpoint
                                     .header(SET_COOKIE, cookiePackager.packageToken(token.getAccessToken(), UserTokenCookiePackager.CookieKind.IC).toString())
                                     .header(SET_COOKIE, cookiePackager.packageToken(token.getIdToken(), UserTokenCookiePackager.CookieKind.DAM).toString())
                                     .build();
