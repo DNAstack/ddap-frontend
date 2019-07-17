@@ -65,7 +65,7 @@
          class="accordion-wrapper">
       <mat-accordion [multi]="false">
         <mat-expansion-panel *ngIf="isIcAdmin"
-                             [expanded]="false"
+                             [expanded]="isActivePanel('identity-concentrator')"
                              data-se="nav-ic-panel">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -96,7 +96,7 @@
 
         <!-- Start DAM navbar -->
         <mat-expansion-panel *ngFor="let damInfo of adminDamInfos"
-                             [expanded]="false"
+                             [expanded]="isActivePanel('dam', damInfo.id)"
                              [attr.data-se]="'nav-dam-panel-' + damInfo.id">
           <mat-expansion-panel-header>
             <mat-panel-title>

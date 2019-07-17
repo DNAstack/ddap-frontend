@@ -1,10 +1,7 @@
 package com.dnastack.ddap.frontend;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
-import com.dnastack.ddap.common.page.AdminDdapPage;
-import com.dnastack.ddap.common.page.AnyDdapPage;
-import com.dnastack.ddap.common.page.ConfirmationRealmChangeDialog;
-import com.dnastack.ddap.common.page.ICLoginPage;
+import com.dnastack.ddap.common.page.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -13,10 +10,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 
-import static com.dnastack.ddap.common.page.NavBar.damResourceLink;
+import static com.dnastack.ddap.common.page.NavBar.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("Duplicates")
 public class NavbarE2eTest extends AbstractFrontendE2eTest {
@@ -109,6 +108,34 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
 
         assertThat(icLoginPage.getRealm(), is(REALM));
+    }
+
+    @Test
+    public void reloadPageToTestIcPanelExpansion() {
+        ddapPage.getNavBar()
+                .goToAdmin(icClientsLink());
+
+        assertTrue(driver.findElement(NavBar.icClientsLink().getSelector()).isDisplayed());
+        assertFalse(driver.findElement(NavBar.damOptionsLink("1").getSelector()).isDisplayed());
+
+        driver.navigate().refresh();
+
+        assertTrue(driver.findElement(NavBar.icClientsLink().getSelector()).isDisplayed());
+        assertFalse(driver.findElement(NavBar.damOptionsLink("1").getSelector()).isDisplayed());
+    }
+
+    @Test
+    public void reloadPageToTestDamPanelExpansion() {
+        ddapPage.getNavBar()
+                .goToAdmin(damTestPersonaLink("1"));
+
+        assertTrue(driver.findElement(NavBar.damTestPersonaLink("1").getSelector()).isDisplayed());
+        assertFalse(driver.findElement(NavBar.icClientsLink().getSelector()).isDisplayed());
+
+        driver.navigate().refresh();
+
+        assertTrue(driver.findElement(NavBar.damTestPersonaLink("1").getSelector()).isDisplayed());
+        assertFalse(driver.findElement(NavBar.icClientsLink().getSelector()).isDisplayed());
     }
 
 }

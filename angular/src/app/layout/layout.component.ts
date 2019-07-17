@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import 'rxjs-compat/add/operator/zip';
+import 'rxjs-compat/add/operator/zip'; // TODO: use static zip instead https://www.learnrxjs.io/operators/combination/zip.html
 import { Observable } from 'rxjs/Observable';
-import { map, repeatWhen } from 'rxjs/operators';
+import { repeatWhen } from 'rxjs/operators';
 
 import { Identity } from '../identity/identity.model';
 import { IdentityService } from '../identity/identity.service';
 import { IdentityStore } from '../identity/identity.store';
 import { Profile } from '../identity/profile.model';
 import { DamInfoService } from '../shared/dam/dam-info.service';
+import { DamInfoStore } from '../shared/dam/dam-info.store';
 import { DamInfo, DamsInfo } from '../shared/dam/dams-info';
-import {DamInfoStore} from "../shared/dam/dam-info.store";
 
 const refreshRepeatTimeoutInMs = 600000;
 
@@ -35,7 +35,6 @@ export class LayoutComponent implements OnInit {
               private identityStore: IdentityStore,
               private damInfoStore: DamInfoStore,
               private damInfoService: DamInfoService) {
-
   }
 
   ngOnInit() {
@@ -60,6 +59,17 @@ export class LayoutComponent implements OnInit {
     // Workaround to get fresh cookies
     this.periodicallyRefreshTokens()
       .subscribe();
+  }
+
+  isActivePanel(panelId: string, damId?: string): boolean {
+    const childRoute = this.activatedRoute.firstChild;
+    const damPanelId = 'dam';
+    if (panelId === damPanelId &&  childRoute.routeConfig.path === damPanelId) {
+      const damIdRouteSnapshot = childRoute.firstChild.snapshot;
+      return damIdRouteSnapshot.params.damId === damId;
+    }
+    const icPanelId = 'identity-concentrator';
+    return panelId === icPanelId && childRoute.routeConfig.path === icPanelId;
   }
 
   logout() {
