@@ -188,7 +188,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         DataDetailPage dataDetailPage = data.clickViewButton();
         dataDetailPage.assertResourcePage("All Of Us");
 
-        String query = "1 : 1 C > C";
+        String query = "C";
         SearchPage searchPage = new SearchPage(driver);
         searchPage.openSearchInput();
         searchPage.clickLimitSearch();

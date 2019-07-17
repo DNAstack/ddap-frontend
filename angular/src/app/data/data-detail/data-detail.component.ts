@@ -6,6 +6,7 @@ import { of } from 'rxjs/observable/of';
 import { EntityModel } from '../../admin/shared/entity.model';
 import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'ddap-resource-detail',
@@ -21,15 +22,21 @@ export class DataDetailComponent implements OnInit {
   resource: EntityModel;
   limitSearch = true;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,
+              private dataService: DataService) {
   }
 
   ngOnInit() {
-    this.route.data.subscribe(({resource}) => {
-      this.resource = resource;
-      this.resourceLabel$ = of(this.resource.dto.ui.label);
-      this.views = this.getViews(this.resource);
-    });
+    const resourceName = this.route.snapshot.params.resourceName;
+    const damId = this.route.snapshot.params.damId;
+    const realmId = this.route.root.firstChild.snapshot.params.realmId;
+
+    this.dataService.getResource(damId, resourceName, realmId)
+      .subscribe((resource) => {
+        this.resource = resource;
+        this.resourceLabel$ = of(this.resource.dto.ui.label);
+        this.views = this.getViews(this.resource);
+      });
   }
 
   searchOpenedChange($event) {

@@ -1,42 +1,42 @@
-<ddap-header class="no-border"
-             [backLink]="'../..'"
-             [label]="resource?.dto?.ui?.label"
-             [searchButton]="true"
-             [limitSearch]="limitSearch"
-             (searchOpenChange)="searchOpenedChange($event)">
-</ddap-header>
+<ng-container *ngIf="resource">
+  <ddap-header class="no-border"
+               [backLink]="'../..'"
+               [label]="resource.dto.ui.label"
+               [searchButton]="true"
+               [limitSearch]="limitSearch"
+               (searchOpenChange)="searchOpenedChange($event)">
+  </ddap-header>
 
-<ddap-resource-logo [imageUrl]="resource?.dto?.ui?.imageUrl">
-  <ddap-limit-search *ngIf="searchOpened"
-                     [checked]="limitSearch"
-                     (change)="toggleLimitSearch()"
-                     class="filter-top-border filter-inline"
-                     [resourceName$]="resourceLabel$">
-  </ddap-limit-search>
-</ddap-resource-logo>
+  <ddap-resource-logo [imageUrl]="resource.dto.ui.imageUrl">
+    <ddap-limit-search *ngIf="searchOpened"
+                       [checked]="limitSearch"
+                       (change)="toggleLimitSearch()"
+                       class="filter-top-border filter-inline"
+                       [resourceName$]="resourceLabel$">
+    </ddap-limit-search>
+  </ddap-resource-logo>
 
-<div>
-  <p class="ddap-resource-title">
-    {{ resource?.dto?.ui?.owner }}
-  </p>
+  <div>
+    <p class="ddap-resource-title">
+      {{ resource.dto.ui.owner }}
+    </p>
 
-  <mat-divider class="ddap-main-divider"></mat-divider>
+    <mat-divider class="ddap-main-divider"></mat-divider>
 
-  <div class="ddap-column-panel">
-    <div class="ddap-column">
-      <p>{{ resource?.dto?.ui?.description }}</p>
-      <ddap-metadata-list [metadata]="resource?.dto?.ui"></ddap-metadata-list>
-    </div>
-    <div class="ddap-column">
-      <mat-list class="ddap-resource-views">
-        <mat-list-item *ngFor="let view of views">
-          <ddap-resource-view-item [view]="view"
-
-                                   [resource]="resource">
-          </ddap-resource-view-item>
-        </mat-list-item>
-      </mat-list>
+    <div class="ddap-column-panel">
+      <div class="ddap-column">
+        <p>{{ resource.dto.ui.description }}</p>
+        <ddap-metadata-list [metadata]="resource.dto.ui"></ddap-metadata-list>
+      </div>
+      <div class="ddap-column">
+        <mat-list class="ddap-resource-views">
+          <mat-list-item *ngFor="let view of views">
+            <ddap-resource-view-item [view]="view"
+                                     [resource]="resource">
+            </ddap-resource-view-item>
+          </mat-list-item>
+        </mat-list>
+      </div>
     </div>
   </div>
-</div>
-
+</ng-container>
