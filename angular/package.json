@@ -15,8 +15,7 @@
     "lint:fix": "ng lint --fix",
     "e2e": "ng e2e",
     "proto": "./scripts/generate_proto.sh",
-    "proto:download": "./scripts/download_proto.sh",
-    "postinstall": "npm run proto"
+    "proto:download": "./scripts/download_proto.sh"
   },
   "private": true,
   "dependencies": {

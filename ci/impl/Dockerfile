@@ -20,10 +20,13 @@ WORKDIR /build
 ADD target/pom.xml ./
 ADD target/.mvn ./.mvn
 ADD target/mvnw ./
+# Downloads npm and node in separate layer from running "npm install"
+RUN ./mvnw -B initialize
 ADD target/angular/*.json ./angular/
 # Allows us to pass settings.xml configured on local machine or CI server to access private Nexus repo
 ADD target/.m2 /root/.m2
-RUN ./mvnw -B de.qaware.maven:go-offline-maven-plugin:resolve-dependencies
+# Resolves all maven dependencies and frontend dependencies (via "npm install")
+RUN ./mvnw -B -Presolve-dependencies initialize
 RUN ./mvnw -B versions:set -DnewVersion=${APP_VERSION}
 
 # Now add sources, which will bust the cache.
