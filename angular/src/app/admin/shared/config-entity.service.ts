@@ -4,15 +4,12 @@ import { flatMap, map, pluck } from 'rxjs/operators';
 
 import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
-import { HTTP_HEADERS } from '../../shared/HTTP_HEADERS';
 import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
 
 import { ConfigModel } from './config.model';
 import { ConfigModificationObject } from './configModificationObject';
 import { EntityModel } from './entity.model';
 import { EntityService } from './entity.service';
-
-const headers = HTTP_HEADERS;
 
 export class ConfigEntityService {
 
@@ -50,8 +47,7 @@ export class ConfigEntityService {
         flatMap(damApiUrls => {
           const damApiUrl = damApiUrls.get(damId);
           return this.http.post(`${damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${entityId}`,
-            change,
-            {headers}
+            change
           );
         })
       );
@@ -63,8 +59,7 @@ export class ConfigEntityService {
         flatMap(damApiUrls => {
           const damApiUrl = damApiUrls.get(damId);
           return this.http.put(`${damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${entityId}`,
-            change,
-            {headers}
+            change
           );
         })
       );
@@ -78,7 +73,6 @@ export class ConfigEntityService {
           return this.http.request('delete', `${damApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${entityId}`,
             {
               body: change,
-              headers,
             }
           ).pipe(
             this.errorHandler.notifyOnError(`Can't remove ${entityId}.`)
