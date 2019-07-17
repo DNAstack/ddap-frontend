@@ -5,6 +5,7 @@ div {
   position: fixed;
   display: flex;
   align-items: center;
+  width: 100%;
   color: $warn-font-color-alert;
   border: 0;
   border-radius: 0;
@@ -12,13 +13,18 @@ div {
   padding: .75rem 1.25rem;
   z-index: 1000;
   left: 0;
-  margin-left: $sidenav-width;
 
   mat-icon {
+    margin-left: $sidenav-width;
     margin-right: 1rem;
   }
 
+  p {
+    flex-grow: 1;
+  }
+
   button {
+    margin-right: 2rem;
     min-width: auto;
   };
 }
