@@ -77,14 +77,9 @@
     "typescript": "~3.4.5"
   },
   "lint-staged": {
-    "linters": {
-      "src/**/*.{js,ts,tsx}": [
-        "tslint --fix --format stylish",
-        "git add"
-      ]
-    },
-    "ignore": [
-      "src/app/shared/proto/*"
+    "src/**/*.{js,ts,tsx}": [
+      "tslint --fix --format stylish",
+      "git add"
     ]
   },
   "husky": {

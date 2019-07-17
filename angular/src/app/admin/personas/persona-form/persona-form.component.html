@@ -204,11 +204,11 @@
     <span>Resource Access</span>
   </h3>
 
-  <mat-progress-bar *ngIf="!resourceAccessSubscription.closed"
+  <mat-progress-bar *ngIf="!resourcesList"
                     mode="indeterminate">
   </mat-progress-bar>
-
-  <ng-container *ngIf="resourceAccessSubscription.closed">
+  
+  <ng-container *ngIf="resourcesList">
     <div class="access-description">
       <p>
         Headings are test persona names. Checkboxes represent the expected access on the labelled view (qualified by resource).
@@ -221,7 +221,6 @@
     </div>
     <ddap-persona-access-form [resources]="resourcesList"
                               [form]="resources">
-
     </ddap-persona-access-form>
   </ng-container>
 

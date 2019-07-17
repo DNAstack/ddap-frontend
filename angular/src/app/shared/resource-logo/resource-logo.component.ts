@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 
 import { ImagePlaceholderRetriever } from '../image-placeholder.service';
 
@@ -7,7 +7,7 @@ import { ImagePlaceholderRetriever } from '../image-placeholder.service';
   templateUrl: './resource-logo.component.html',
   styleUrls: ['./resource-logo.component.scss'],
 })
-export class ResourceLogoComponent implements OnChanges, OnInit {
+export class ResourceLogoComponent implements AfterViewInit {
 
   @Input()
   imageUrl: string;
@@ -16,7 +16,7 @@ export class ResourceLogoComponent implements OnChanges, OnInit {
 
   constructor(private renderer: Renderer2, private imgInjector: ImagePlaceholderRetriever) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngAfterViewInit() {
     if (this.imageUrl) {
       this.renderer.setStyle(this.logoDiv.nativeElement, 'background-image', `url('${this.imageUrl}')`);
     } else {
@@ -27,7 +27,4 @@ export class ResourceLogoComponent implements OnChanges, OnInit {
     this.renderer.setStyle(this.logoDiv.nativeElement, 'background-position-y', '50%');
   }
 
-  ngOnInit() {
-
-  }
 }

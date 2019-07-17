@@ -5,6 +5,12 @@
   "rulesDirectory": [
     "codelyzer"
   ],
+  "linterOptions": {
+    "exclude": [
+      "proto",
+      "src/app/shared/proto"
+    ]
+  },
   "rules": {
     "arrow-return-shorthand": true,
     "callable-types": true,

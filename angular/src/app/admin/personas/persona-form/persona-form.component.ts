@@ -53,7 +53,6 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
   claimDefinitions$: { [s: string]: Observable<any>; } = {};
   trustedSources$: { [s: string]: Observable<any>; } = {};
 
-  resourceAccessSubscription: Subscription = new Subscription();
   private validatorSubscription: Subscription = new Subscription();
   private resourceAccess$: Observable<any>;
 
@@ -77,7 +76,6 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
 
   ngOnDestroy(): void {
     this.validatorSubscription.unsubscribe();
-    this.resourceAccessSubscription.unsubscribe();
   }
 
   addGa4ghClaims() {
@@ -141,12 +139,10 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
   }
 
   private buildForm(personaId: string, personaDto: TestPersona) {
-
     this.form = this.buildMainForm(personaId, personaDto);
-    this.resourceAccessSubscription.unsubscribe();
-    this.resourceAccessSubscription = this.buildAccessForm(personaDto);
+    this.buildAccessForm(personaDto);
 
-    if (!this.resourceAccessSubscription.closed) {
+    if (!this.resourcesList) {
       this.form.disable();
     }
 
