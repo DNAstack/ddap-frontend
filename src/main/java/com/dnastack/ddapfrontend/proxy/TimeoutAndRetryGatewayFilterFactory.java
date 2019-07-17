@@ -17,6 +17,7 @@
 
 package com.dnastack.ddapfrontend.proxy;
 
+import com.dnastack.ddapfrontend.timeout.TimeoutUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
@@ -143,7 +144,7 @@ public class TimeoutAndRetryGatewayFilterFactory extends AbstractGatewayFilterFa
 													 final int iteration = exchange.getAttributeOrDefault(RETRY_ITERATION_KEY, -1) + 1;
 													 final long timeoutInMs = calculateTimeout(config, iteration);
 													 log.debug("Setting {}ms timeout on attempt {}", timeoutInMs, (iteration + 1));
-													 return timeout(filterChainResult, timeoutInMs);
+													 return TimeoutUtil.timeout(filterChainResult, Duration.ofMillis(timeoutInMs));
 												 } else {
                                                  	return filterChainResult;
 												 }
@@ -174,26 +175,6 @@ public class TimeoutAndRetryGatewayFilterFactory extends AbstractGatewayFilterFa
 		final long unboundTimeout = (long) (config.getMinimumTimeout() * Math.pow(config.getTimeoutExponentialScalingBase(),
 																				  iteration));
 		return Math.min(unboundTimeout, config.getMaximumTimeout());
-	}
-
-	// ADDED
-	private Mono<Void> timeout(Mono<Void> filterChainResult, long timeoutInMs) {
-	    /*
-	     Doing `filterChainResult.timeout(timeoutInMs)` breaks retrying,
-	     so we need to construct to enforce the timeout another way.
-	     */
-		final Mono<Boolean> delay = Mono.delay(Duration.ofMillis(timeoutInMs))
-										.map(ignore -> false);
-		final Mono<Boolean> actual = filterChainResult.map(ignore -> true);
-		final Mono<Boolean> gate = Mono.first(delay, actual);
-
-		return gate.flatMap(finished -> {
-			if (finished) {
-				return Mono.empty();
-			} else {
-				return Mono.error(new TimeoutException());
-			}
-		});
 	}
 
 	private static <T> List<T> toList(T... items) {

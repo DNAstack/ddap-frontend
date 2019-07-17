@@ -1,8 +1,13 @@
 package com.dnastack.ddapfrontend.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.gateway.support.TimeoutException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.time.Duration;
+
+import static com.dnastack.ddapfrontend.timeout.TimeoutUtil.timeout;
 
 @Component
 public class WebClientFactory {
@@ -16,8 +21,20 @@ public class WebClientFactory {
 
     private static WebClient.Builder getWebClientBuilder() {
         return WebClient.builder()
-                .filter(LoggingFilter.logRequest())
-                .filter(LoggingFilter.logResponse());
+                        .filter(LoggingFilter.logRequest())
+                        .filter(LoggingFilter.logResponse())
+                        .filter((request, next) -> {
+                            switch (request.method()) {
+                                case GET:
+                                case HEAD:
+                                case OPTIONS:
+                                    return timeout(next.exchange(request), Duration.ofSeconds(1))
+                                            .onErrorResume(TimeoutException.class, ex -> timeout(next.exchange(request), Duration.ofSeconds(10)))
+                                            .onErrorResume(TimeoutException.class, ex -> timeout(next.exchange(request), Duration.ofSeconds(20)));
+                                default:
+                                    return next.exchange(request);
+                            }
+                        });
     }
 
     public WebClient getWebClient() {
