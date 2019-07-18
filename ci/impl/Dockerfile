@@ -10,9 +10,6 @@ FROM openjdk:11-jdk-slim AS build
 ARG APP_NAME
 ARG APP_VERSION
 
-RUN apt-get update
-RUN apt-get -y install curl libatomic1
-
 WORKDIR /build
 
 # Before bringing in project sources, resolve maven dependencies.
@@ -32,6 +29,10 @@ RUN ./mvnw -B versions:set -DnewVersion=${APP_VERSION}
 # Now add sources, which will bust the cache.
 ADD target/src ./src
 ADD target/angular ./angular
+
+# Need libatomic1 for protoc. Do this as late as possible to
+# avoid busting cache before dependency resolution.
+RUN apt-get -qqy update && apt-get -qqy install curl libatomic1
 
 # If this step fails with an error like
 #     Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.1:test
