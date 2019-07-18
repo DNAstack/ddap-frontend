@@ -17,17 +17,13 @@
 
 package com.dnastack.ddapfrontend.proxy;
 
+import com.dnastack.ddapfrontend.route.LoggingWebFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.cloud.gateway.route.Route;
-import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
@@ -37,63 +33,15 @@ import java.net.URI;
 @Component
 public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory {
 
-	private static final Logger log = LoggerFactory.getLogger(LoggingGatewayFilterFactory.class);
-	private static final URI UNKNOWN_ROUTE_PLACEHOLDER = URI.create("http://unknown-route/");
+	private final LoggingWebFilter loggingFilter;
+
+	@Autowired
+	public LoggingGatewayFilterFactory(LoggingWebFilter loggingFilter) {
+		this.loggingFilter = loggingFilter;
+	}
 
 	@Override
 	public GatewayFilter apply(Object config) {
-		return (exchange, chain) -> {
-			final long startTime = System.currentTimeMillis();
-
-			// Make sure logging request is part of the mono, so that if the request is retried
-			// we will see it again in the logs
-			return Mono.fromRunnable(() -> logRoutedRequest(exchange))
-					   .then(chain.filter(exchange)
-								  .doOnSuccess(value -> logResponse(exchange, startTime))
-								  .doOnError(error -> logError(error, startTime))
-					              .doOnTerminate(() -> logTermination(startTime)));
-		};
-	}
-
-	private void logRoutedRequest(ServerWebExchange exchange) {
-		ServerHttpRequest request = exchange.getRequest();
-		URI calculatedRoute = calculateRequestRoute(exchange);
-		log.info(">>> {} {}", request.getMethodValue(), calculatedRoute);
-		exchange.getRequest()
-				.getHeaders()
-				.forEach((name, values) -> log.info("  {}: {}", name, values));
-	}
-
-	private URI calculateRequestRoute(ServerWebExchange exchange) {
-		ServerHttpRequest request = exchange.getRequest();
-		URI requestUri = request.getURI();
-
-		Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
-		URI routeUri = route == null ? UNKNOWN_ROUTE_PLACEHOLDER : route.getUri();
-
-		String queryString = requestUri.getQuery() == null ? "" : "?" + requestUri.getQuery();
-		String requestPathAndQuery = requestUri.getPath() + queryString;
-
-		return routeUri.resolve(requestPathAndQuery);
-	}
-
-	private void logTermination(long startTime) {
-		final long elapsedTime = System.currentTimeMillis() - startTime;
-		log.debug("<<< Chain filter mono terminated in {}ms", elapsedTime);
-	}
-
-	private void logError(Throwable error, long startTime) {
-		final long elapsedTime = System.currentTimeMillis() - startTime;
-		log.info("<<< Error occurred in {}ms: {}", elapsedTime, error.getMessage());
-		log.debug("<<< Error details", error);
-	}
-
-	private void logResponse(ServerWebExchange exchange, long startTime) {
-		ServerHttpResponse response = exchange.getResponse();
-		final long elapsedTime = System.currentTimeMillis() - startTime;
-		log.info("<<< HTTP {}: {} bytes in {}ms",
-				 response.getStatusCode(),
-				 response.getHeaders().getContentLength(),
-				 elapsedTime);
+		return (exchange, chain) -> loggingFilter.filter(exchange, chain::filter);
 	}
 }

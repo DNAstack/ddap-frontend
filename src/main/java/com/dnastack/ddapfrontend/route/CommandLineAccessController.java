@@ -10,6 +10,7 @@ import com.dnastack.ddapfrontend.security.OAuthStateHandler;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,8 +29,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.dnastack.ddapfrontend.http.UriUtil.selfLinkToApi;
@@ -47,7 +46,6 @@ public class CommandLineAccessController {
     private final Resource cliZip;
 
     private final JwtHandler jwtHandler;
-    private final Pattern bearerTokenPattern = Pattern.compile("^Bearer ([^\\s]+).*$");
 
     /*
      * IMPORTANT
@@ -107,22 +105,16 @@ public class CommandLineAccessController {
                                              .claim("webLoginUrl", webLoginUrl)
                                              .compact();
 
-
         return Mono.just(ResponseEntity.status(200)
                                        .location(statusUrl)
-                                       .header("Authorization", "Bearer " + bearerToken)
-                                       .build());
+                                       .body(new StartLoginResponse(bearerToken)));
     }
 
-    @GetMapping(path = "/login/{cliSessionId}/status", headers = "Authorization")
+    @GetMapping(path = "/login/{cliSessionId}/status")
     public Mono<CliLoginStatus> loginStatus(@PathVariable("realm") String realm,
                                             @PathVariable("cliSessionId") String cliSessionId,
-                                            @RequestHeader("Authorization") List<String> authHeaders) {
-        final Optional<String> oBearerToken = authHeaders.stream()
-                                                         .map(bearerTokenPattern::matcher)
-                                                         .filter(Matcher::matches)
-                                                         .map(matcher -> matcher.group(1))
-                                                         .findFirst();
+                                            @CookieValue("status_token") String token) {
+        final Optional<String> oBearerToken = Optional.ofNullable(token);
         if (oBearerToken.isPresent()) {
             final String jwt = oBearerToken.get();
             final Jws<Claims> jws = jwtHandler.createParser(JwtHandler.TokenKind.BEARER)
@@ -191,5 +183,11 @@ public class CommandLineAccessController {
     private static class LoginStatus {
         private Instant expiry;
         private TokenResponse tokenResponse;
+    }
+
+    @lombok.Value
+    @AllArgsConstructor
+    static class StartLoginResponse {
+        private String token;
     }
 }
