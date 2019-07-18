@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.SignatureException;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import lombok.Data;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.junit.Assume;
@@ -58,9 +59,9 @@ public class ConfigE2eTest extends AbstractBaseE2eTest {
                 .then()
                 .log().ifValidationFails()
                 .statusCode(200)
-                .header("Authorization", startsWith("Bearer "));
+                .body("token", not(isEmptyOrNullString()));
 
-        final String jwt = response.getHeader("Authorization").substring("Bearer ".length());
+        final String jwt = response.body().as(CliLoginResponse.class).getToken();
         final String base64EncodedDevSigningKey = "VGhlcmUgb25jZSB3YXMgYSBsYW5ndWFnZSBjYWxsZWQgYmFzaApJdCdzIHNlbWFudGljcyB3ZXJlIG9mdGVuIHF1aXRlIHJhc2gKQnV0IGl0IHdvcmtlZCwgbW9yZSBvciBsZXNzCkV2ZW4gdGhvdWdoIGl0J3MgYSBtZXNzClNvIEkgZ3Vlc3MgaXQgc3RheXMgb3V0IG9mIHRoZSB0cmFzaAo=";
         Jwts.parser()
             .setSigningKey(base64EncodedDevSigningKey)
@@ -227,5 +228,10 @@ public class ConfigE2eTest extends AbstractBaseE2eTest {
         .then()
                 .log().ifValidationFails()
                 .statusCode(404);
+    }
+
+    @Data
+    static class CliLoginResponse {
+        private String token;
     }
 }
