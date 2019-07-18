@@ -44,7 +44,6 @@ export class LayoutComponent implements OnInit {
       .subscribe(([{account, accesses, sandbox}, damsInfo]: [Identity, DamsInfo]) => {
         this.isSandbox = sandbox;
         this.profile = account.profile;
-
         this.isIcAdmin = accesses.find(access => access.target.service === 'IC').isAdmin;
         accesses.filter(access => access.target.service === 'DAM' && access.isAdmin)
           .map(access => access.target.id)

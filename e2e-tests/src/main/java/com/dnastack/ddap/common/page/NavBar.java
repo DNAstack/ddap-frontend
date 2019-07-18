@@ -111,7 +111,7 @@ public class NavBar {
     }
 
     public void assertNonAdminNavBar() {
-        Stream.of(dataLink(), damIdentityLink())
+        Stream.of(dataLink())
               .map(NavLink::getSelector)
               .forEach(this.driver::findElement);
     }

@@ -53,7 +53,8 @@
         <mat-icon class="icon icon-explore"></mat-icon>
         <h4 mat-line>Explore Data</h4>
       </mat-list-item>
-      <mat-list-item [routerLink]="['identity']"
+      <mat-list-item *ngIf="profile"
+                     [routerLink]="['identity']"
                      [routerLinkActive]="['active-nav-link']"
                      data-se="nav-identity">
         <mat-icon class="icon icon-identity"></mat-icon>
