@@ -15,7 +15,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("Duplicates")
 public class NavbarE2eTest extends AbstractFrontendE2eTest {
@@ -115,12 +114,12 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAdmin(icClientsLink());
 
-        assertTrue(driver.findElement(NavBar.icClientsLink().getSelector()).isDisplayed());
+        new WebDriverWait(driver, 10).until(d -> d.findElement(NavBar.icClientsLink().getSelector()).isDisplayed());
         assertFalse(driver.findElement(NavBar.damOptionsLink("1").getSelector()).isDisplayed());
 
         driver.navigate().refresh();
 
-        assertTrue(driver.findElement(NavBar.icClientsLink().getSelector()).isDisplayed());
+        new WebDriverWait(driver, 10).until(d -> d.findElement(NavBar.icClientsLink().getSelector()).isDisplayed());
         assertFalse(driver.findElement(NavBar.damOptionsLink("1").getSelector()).isDisplayed());
     }
 
@@ -129,12 +128,12 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ddapPage.getNavBar()
                 .goToAdmin(damTestPersonaLink("1"));
 
-        assertTrue(driver.findElement(NavBar.damTestPersonaLink("1").getSelector()).isDisplayed());
+        new WebDriverWait(driver, 10).until(d -> d.findElement(NavBar.damTestPersonaLink("1").getSelector()).isDisplayed());
         assertFalse(driver.findElement(NavBar.icClientsLink().getSelector()).isDisplayed());
 
         driver.navigate().refresh();
 
-        assertTrue(driver.findElement(NavBar.damTestPersonaLink("1").getSelector()).isDisplayed());
+        new WebDriverWait(driver, 10).until(d -> d.findElement(NavBar.damTestPersonaLink("1").getSelector()).isDisplayed());
         assertFalse(driver.findElement(NavBar.icClientsLink().getSelector()).isDisplayed());
     }
 
