@@ -2,19 +2,21 @@
 <form [formGroup]="form"
       novalidate
       (submit)="submitChange()">
-  <mat-form-field data-se="id-field">
+  <mat-form-field>
     <mat-label>{{ label }} Identifier</mat-label>
     <input id="id"
            name="id"
+           data-se="id-field"
            required
            matInput
            formControlName="id">
     <mat-hint>The name by which other config objects refer to this resource</mat-hint>
     <mat-error *ngIf="form.get('id').invalid">Identifier must be 3-46 characters and alphanumeric</mat-error>
   </mat-form-field>
-  <mat-form-field data-se="item-editor">
+  <mat-form-field>
       <textarea id="item"
                 name="item"
+                data-se="item-editor"
                 required
                 matInput
                 [placeholder]="label + ' JSON'"
@@ -23,6 +25,7 @@
       </textarea>
   </mat-form-field>
   <button type="submit"
+          data-se="btn-save"
           mat-flat-button
           color="primary"
           class="uppercase"
