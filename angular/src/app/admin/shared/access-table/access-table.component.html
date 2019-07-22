@@ -4,7 +4,8 @@
   </mat-progress-bar>
 </ng-container>
 <ng-template #accessTable>
-  <mat-table [dataSource]="accessDatatable">
+  <mat-table *ngIf="accessDatatable && accessDatatable.length > 0 && !emptyViews(); else emptyState"
+             [dataSource]="accessDatatable">
     <ng-container matColumnDef="persona">
       <mat-header-cell *matHeaderCellDef>
         <div>
@@ -44,4 +45,9 @@
     </mat-row>
   </mat-table>
 </ng-template>
-
+<ng-template #emptyState>
+  <div class="empty-state">
+    <mat-icon class="icon icon-views"></mat-icon>
+    <p>No views to display. Add some while editing resource.</p>
+  </div>
+</ng-template>

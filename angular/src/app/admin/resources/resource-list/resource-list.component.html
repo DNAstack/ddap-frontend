@@ -21,8 +21,12 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="flex">
-          <ddap-metadata-list [metadata]="resource.dto.ui" [includeFields]="['owner']">
-          </ddap-metadata-list>
+          <ng-container *ngIf="resource.dto.ui as ui">
+            <ddap-metadata-list *ngIf="displayableMetadata(ui | keyvalue | metadataFilter: ['owner'])"
+                                [metadata]="ui"
+                                [includeFields]="['owner']">
+            </ddap-metadata-list>
+          </ng-container>
           <ddap-access-table [resource]="resource">
           </ddap-access-table>
         </div>
