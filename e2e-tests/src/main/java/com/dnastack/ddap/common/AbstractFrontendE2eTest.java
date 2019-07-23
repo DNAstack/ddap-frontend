@@ -35,7 +35,6 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     public static void driverSetup() {
         screenshotDir = optionalEnv("E2E_SCREENSHOT_DIR", "target");
         WebDriverManager.chromedriver()
-                .avoidAutoVersion()
                 .setup();
         ChromeOptions options = new ChromeOptions();
         if (HEADLESS) {
