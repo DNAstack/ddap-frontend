@@ -57,10 +57,6 @@ export class AccessTableComponent implements OnChanges {
       });
   }
 
-  emptyViews() {
-    return Object.keys(this.viewNameDict).length === 0;
-  }
-
   getPersonaName(persona) {
     return _get(persona, 'dto.ui.label', persona.name);
   }
@@ -110,7 +106,7 @@ export class AccessTableComponent implements OnChanges {
 
   private buildViewNameDict(resource: object): object {
     const views = _get(resource, 'dto.views');
-    const viewsEntries = views ? Object.entries(views) : [];
+    const viewsEntries = Object.entries(views);
 
     return viewsEntries.reduce((sum, [viewName, viewDto]) => {
       sum[viewName] = _get(viewDto, 'ui.label');

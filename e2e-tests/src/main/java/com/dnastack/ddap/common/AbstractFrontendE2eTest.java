@@ -34,8 +34,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     @BeforeClass
     public static void driverSetup() {
         screenshotDir = optionalEnv("E2E_SCREENSHOT_DIR", "target");
-        WebDriverManager.chromedriver()
-                .setup();
+        WebDriverManager.chromedriver().setup(); // 73.0.3683.68
         ChromeOptions options = new ChromeOptions();
         if (HEADLESS) {
             options.addArguments("headless");
@@ -59,7 +58,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     @After
     public void afterEach() {
         if (driver != null) {
-            // FIXME: DISCO-2354 this is causing issue where basic auth prompt is displayed during tests, probably race condition
+            // FIXME: this is causing issue where basic auth prompt is displayed during tests, probably race condition
             // driver.manage().deleteAllCookies(); // Ensure that tests with login work independently of each other.
         }
     }

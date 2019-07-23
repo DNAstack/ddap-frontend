@@ -24,8 +24,6 @@
         <protoc.version>3.7.0.2</protoc.version>
         <protobuf.version>3.7.1</protobuf.version>
         <jwt.version>0.10.5</jwt.version>
-        <webdriver.version>3.3.0</webdriver.version>
-        <selenium.version>3.141.0</selenium.version>
     </properties>
 
     <dependencyManagement>
@@ -64,12 +62,12 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>${selenium.version}</version>
+            <version>3.141.0</version>
         </dependency>
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>${webdriver.version}</version>
+            <version>3.3.0</version>
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
@@ -90,11 +88,6 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>${jwt.version}</version>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

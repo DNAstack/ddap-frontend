@@ -15,8 +15,4 @@ export class ResourceListComponent extends DamEntityListBase<ResourceService> im
     super(resourceService, route);
   }
 
-  displayableMetadata(ui: any[]): boolean {
-    return !ui.every(({value}) => value === null || value === '');
-  }
-
 }

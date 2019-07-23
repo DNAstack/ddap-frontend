@@ -32,12 +32,6 @@ mat-table {
     }
   }
 
-  mat-cell:first-of-type,
-  mat-footer-cell:first-of-type,
-  mat-header-cell:first-of-type {
-    padding-left: 0;
-  }
-
   mat-row {
     border-bottom-style: dashed;
   }
@@ -57,18 +51,5 @@ mat-table {
 
   mat-icon.tick {
     color: $success-color;
-  }
-}
-
-.empty-state {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-  height: 100%;
-  color: $color-grey;
-
-  mat-icon {
-    margin-right: 0.5rem;
   }
 }

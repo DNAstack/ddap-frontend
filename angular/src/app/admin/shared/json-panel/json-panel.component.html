@@ -43,7 +43,6 @@
   <mat-action-row *ngIf="state !== ViewState.Viewing">
     <button mat-flat-button
             color="primary"
-            data-se="btn-save"
             (click)="save()">
       Submit
     </button>
@@ -58,7 +57,6 @@
             (click)="edit()">Edit
     </button>
     <button id="remove-btn"
-            data-se="btn-delete"
             mat-flat-button
             color="warn"
             (click)="remove()"
