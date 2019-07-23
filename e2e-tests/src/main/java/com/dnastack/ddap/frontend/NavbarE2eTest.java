@@ -111,8 +111,6 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void reloadPageToTestIcPanelExpansion() {
-        ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
-        icLoginPage.loginAsAdministrator(AdminDdapPage::new);
         ddapPage.getNavBar()
                 .goToAdmin(icClientsLink());
 
@@ -127,8 +125,6 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void reloadPageToTestDamPanelExpansion() {
-        ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
-        icLoginPage.loginAsAdministrator(AdminDdapPage::new);
         ddapPage.getNavBar()
                 .goToAdmin(damTestPersonaLink("1"));
 

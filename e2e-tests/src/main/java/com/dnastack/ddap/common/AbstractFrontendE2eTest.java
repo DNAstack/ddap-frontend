@@ -36,6 +36,16 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
         screenshotDir = optionalEnv("E2E_SCREENSHOT_DIR", "target");
         WebDriverManager.chromedriver()
                 .setup();
+        ChromeOptions options = new ChromeOptions();
+        if (HEADLESS) {
+            options.addArguments("headless");
+        }
+        options.addArguments("--disable-gpu");
+        options.addArguments("window-size=1200x600");
+        options.addArguments("incognito");
+
+        driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
     }
 
     @AfterClass
@@ -56,23 +66,8 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
 
     @Before
     public void beforeEach() {
-        driver = setupChromeDriver();
-        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-
         ICLoginPage icLoginPage = startLogin(getRealm());
         ddapPage = login(icLoginPage);
-    }
-
-    private ChromeDriver setupChromeDriver() {
-        ChromeOptions options = new ChromeOptions();
-        if (HEADLESS) {
-            options.addArguments("headless");
-        }
-        options.addArguments("--disable-gpu");
-        options.addArguments("window-size=1200x600");
-        options.addArguments("incognito");
-
-        return new ChromeDriver(options);
     }
 
     protected abstract AnyDdapPage login(ICLoginPage icLoginPage);
@@ -80,8 +75,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     protected abstract String getRealm();
 
     protected static ICLoginPage startLogin(String realm) {
-        String loginUrl = URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString();
-        driver.get(getUrlWithBasicCredentials(loginUrl));
+        driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));
         return new ICLoginPage(driver);
     }
 
