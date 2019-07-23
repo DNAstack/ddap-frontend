@@ -5,7 +5,6 @@ import com.dnastack.ddap.common.page.ICLoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.*;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -60,11 +59,6 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     @After
     public void afterEach() {
         if (driver != null) {
-            try {
-                driver.findElement(ICLoginPage.personaLoginButton("nci_researcher")).isDisplayed();
-            } catch (NoSuchElementException nsee) {
-                ddapPage.getNavBar().logOut();
-            }
             // FIXME: this is causing issue where basic auth prompt is displayed during tests, probably race condition
             // driver.manage().deleteAllCookies(); // Ensure that tests with login work independently of each other.
         }

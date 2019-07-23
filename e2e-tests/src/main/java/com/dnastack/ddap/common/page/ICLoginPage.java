@@ -3,7 +3,6 @@ package com.dnastack.ddap.common.page;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URI;
 import java.util.function.Function;
@@ -17,14 +16,14 @@ public class ICLoginPage {
 
     private WebDriver driver;
 
+    private By personaLoginButton(String persona) {
+        return By.xpath(format("//a[contains(@href, '%s')]", persona));
+    }
+
     public ICLoginPage(WebDriver driver) {
         this.driver = driver;
         log.info("Testing if {} is an IC login page", driver.getCurrentUrl());
-        new WebDriverWait(driver, 10).until(d -> d.findElement(personaLoginButton("nci_researcher")));
-    }
-
-    public static By personaLoginButton(String persona) {
-        return By.xpath(format("//a[contains(@href, '%s')]", persona));
+        driver.findElement(personaLoginButton("nci_researcher"));
     }
 
     public <T extends AnyDdapPage> T loginAsNciResearcher(Function<WebDriver, T> pageConstructor) {
