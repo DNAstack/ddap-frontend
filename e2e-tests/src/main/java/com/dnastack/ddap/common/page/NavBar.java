@@ -126,20 +126,22 @@ public class NavBar {
 
     public <T> T goTo(NavLink navItem, Function<WebDriver, T> pageFactory) {
         final WebElement clickableNavLink = navItem.getParentSelector()
-                                                   .map(parent -> {
-                                                       final WebElement parentElement = driver.findElement(parent.getSelector());
-                                                       parentElement.click();
-                                                       WebElement linkElement = parentElement.findElement(navItem.getSelector());
-                                                       new WebDriverWait(driver,
-                                                                         5).until(ExpectedConditions.elementToBeClickable(
-                                                               linkElement));
-
-                                                       return linkElement;
-                                                   })
+                                                   .map(parent -> getChildLink(navItem, parent))
                                                    .orElseGet(() -> driver.findElement(navItem.getSelector()));
         clickableNavLink.click();
 
         return pageFactory.apply(driver);
+    }
+
+    private WebElement getChildLink(NavLink navItem, NavLink parent) {
+        new WebDriverWait(driver, 5)
+                .until(ExpectedConditions.elementToBeClickable(parent.getSelector()));
+        final WebElement parentElement = driver.findElement(parent.getSelector());
+        parentElement.click();
+        new WebDriverWait(driver, 5)
+                .until(ExpectedConditions.elementToBeClickable(parentElement.findElement(navItem.getSelector())));
+
+        return parentElement.findElement(navItem.getSelector());
     }
 
     public DataListPage goToData() {

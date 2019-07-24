@@ -4,7 +4,11 @@ import com.dnastack.ddap.common.page.AnyDdapPage;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -22,19 +26,20 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     protected static final boolean HEADLESS = Boolean.parseBoolean(optionalEnv("HEADLESS", "true"));
     protected static final Pattern URL_PARSE_PATTERN = Pattern.compile("^(https?)://(.*)$");
 
-    protected static WebDriver driver;
-    protected static String screenshotDir;
+    protected WebDriver driver;
     protected AnyDdapPage ddapPage;
 
     @Rule
-    public ScreenShotRule screenShotRule() {
-        return new ScreenShotRule(driver, screenshotDir);
-    }
+    public TestName name = new TestName();
+    @Rule
+    public RetryRule retry = new RetryRule(3);
 
     @BeforeClass
     public static void driverSetup() {
-        screenshotDir = optionalEnv("E2E_SCREENSHOT_DIR", "target");
-        WebDriverManager.chromedriver().setup(); // 73.0.3683.68
+        WebDriverManager.chromedriver().setup();
+    }
+
+    private ChromeDriver getChromeDriver() {
         ChromeOptions options = new ChromeOptions();
         if (HEADLESS) {
             options.addArguments("headless");
@@ -43,28 +48,26 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
         options.addArguments("window-size=1200x600");
         options.addArguments("incognito");
 
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        return new ChromeDriver(options);
     }
 
-    @AfterClass
-    public static void quitDriver() {
+    @After
+    public void afterEach() {
+        String testName = this.getClass().getSimpleName() + "." + name.getMethodName() + ".png";
+        Screenshot.capture(testName, driver);
+
         if (driver != null) {
+            driver.manage().deleteAllCookies();
             driver.quit();
             driver = null;
         }
     }
 
-    @After
-    public void afterEach() {
-        if (driver != null) {
-            // FIXME: this is causing issue where basic auth prompt is displayed during tests, probably race condition
-            // driver.manage().deleteAllCookies(); // Ensure that tests with login work independently of each other.
-        }
-    }
-
     @Before
     public void beforeEach() {
+        driver = getChromeDriver();
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+
         ICLoginPage icLoginPage = startLogin(getRealm());
         ddapPage = login(icLoginPage);
     }
@@ -73,7 +76,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
 
     protected abstract String getRealm();
 
-    protected static ICLoginPage startLogin(String realm) {
+    protected ICLoginPage startLogin(String realm) {
         driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));
         return new ICLoginPage(driver);
     }
