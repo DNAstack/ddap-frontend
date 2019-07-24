@@ -15,9 +15,6 @@ public class Screenshot {
     protected static final String SCREENSHOT_DIR = optionalEnv("E2E_SCREENSHOT_DIR", "target");
 
     public static void capture(String filename, WebDriver driver) {
-//        String methodName = description.getMethodName();
-//        String fileName = description.getTestClass().getSimpleName() + "-" + methodName + ".png";
-
         try {
             File destiny = new File(SCREENSHOT_DIR, filename);
             FileUtils.copyFile(((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE), destiny);

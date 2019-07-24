@@ -3,6 +3,7 @@ package com.dnastack.ddap.frontend;
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.page.*;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -109,6 +110,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         assertThat(icLoginPage.getRealm(), is(REALM));
     }
 
+    @Ignore
     @Test
     public void reloadPageToTestIcPanelExpansion() {
         ddapPage.getNavBar()
@@ -123,6 +125,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         assertFalse(driver.findElement(NavBar.damOptionsLink("1").getSelector()).isDisplayed());
     }
 
+    @Ignore
     @Test
     public void reloadPageToTestDamPanelExpansion() {
         ddapPage.getNavBar()
