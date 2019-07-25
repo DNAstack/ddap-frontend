@@ -8,7 +8,6 @@ SRC_DAM_PROTO_FILE=./proto/dam_service.proto
 SRC_IC_PROTO_FILE=./proto/ic_service.proto
 OUT_DAM_FILE=dam-service
 OUT_IC_FILE=ic-service
-PROTOC_GEN_TS_PATH="./node_modules/.bin/protoc-gen-ts"
 TMP_DIR="./tmp"
 TMP_PROTO_FILE=${TMP_DIR}/temporary.proto
 OUT_DIR="./src/app/shared/proto"
