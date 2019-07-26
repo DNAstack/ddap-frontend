@@ -42,10 +42,7 @@ export class TestFormComponent implements OnChanges, Form {
               private formBuilder: FormBuilder,
               private route: ActivatedRoute) {
     this.personas$ = this.personaService
-      .getList(this.routeDamId(), pick('name'))
-      .pipe(
-        share()
-      );
+      .getList(this.routeDamId(), pick('name'));
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -1,28 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { ActivatedRoute } from '@angular/router';
 
 import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
-import { ConfigEntityService } from '../shared/config-entity.service';
-import { EntityModel } from '../shared/entity.model';
+import { DamConfigEntityType } from '../shared/dam/dam-config-entity-type.enum';
+import { DamConfigService } from '../shared/dam/dam-config.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PersonaService extends ConfigEntityService {
+export class PersonaService extends DamConfigService {
 
   constructor(protected http: HttpClient,
-              protected errorHandler: ErrorHandlerService,
-              protected damInfoService: DamInfoService) {
-    super(http, errorHandler, damInfoService, 'testPersonas', 'testPersonas');
-  }
-
-  get(damId: string, params: {} = {}): Observable<Map<string, EntityModel>> {
-    return super.get(damId, params)
-      .pipe(
-        this.errorHandler.notifyOnError(`Can't load personas.`)
-      );
+              protected damInfoService: DamInfoService,
+              protected route: ActivatedRoute,
+              protected errorHandler: ErrorHandlerService) {
+    super(DamConfigEntityType.personas, http, damInfoService);
   }
 
 }

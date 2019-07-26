@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { dam } from '../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
+import { DamConfigEntityComponentBase } from '../../shared/dam/dam-config-entity-component.base';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';
@@ -16,7 +17,7 @@ import { PersonaService } from '../personas.service';
   styleUrls: ['./persona-manage.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class PersonaManageComponent implements OnInit {
+export class PersonaManageComponent extends DamConfigEntityComponentBase implements OnInit {
 
   @ViewChild(PersonaFormComponent, { static: false })
   personaForm: PersonaFormComponent;
@@ -25,11 +26,11 @@ export class PersonaManageComponent implements OnInit {
 
   persona: TestPersona;
 
-  constructor(private personaService: PersonaService,
+  constructor(protected route: ActivatedRoute,
+              private personaService: PersonaService,
               private router: Router,
-              private route: ActivatedRoute,
               public formError: FormErrorScrollService) {
-
+    super(route);
   }
 
   ngOnInit(): void {
@@ -43,7 +44,7 @@ export class PersonaManageComponent implements OnInit {
 
     const personaModel: EntityModel = this.personaForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
-    this.personaService.save(this.routeDamId(), personaModel.name, change)
+    this.personaService.save(this.damId, personaModel.name, change)
       .subscribe(
         this.navigateUp,
         (err) => {
@@ -54,15 +55,10 @@ export class PersonaManageComponent implements OnInit {
   }
 
   private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
   }
 
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
-  }
 }
