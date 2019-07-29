@@ -1,13 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { DamEntityDetailBase } from '../../shared/dam-entity-detail.base';
+import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
+import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { ClientApplicationFormComponent } from '../client-application-form/client-application-form.component';
 import { ClientApplicationService } from '../client-applications.service';
+import { ClientApplicationsStore } from '../client-applications.store';
 
 @Component({
   selector: 'ddap-client-application-detail',
@@ -15,18 +17,20 @@ import { ClientApplicationService } from '../client-applications.service';
   styleUrls: ['./client-application-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class ClientApplicationDetailComponent extends DamEntityDetailBase<ClientApplicationService> {
+export class ClientApplicationDetailComponent extends DamConfigEntityDetailComponentBase<ClientApplicationsStore> implements OnInit {
 
   @ViewChild(ClientApplicationFormComponent, { static: false })
   clientApplicationForm: ClientApplicationFormComponent;
   @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
 
-  constructor(route: ActivatedRoute,
-              service: ClientApplicationService,
+  constructor(protected route: ActivatedRoute,
+              protected damConfigStore: DamConfigStore,
+              protected clientApplicationsStore: ClientApplicationsStore,
+              private clientApplicationService: ClientApplicationService,
               private router: Router,
               public formError: FormErrorScrollService) {
-    super(route, service, 'clientName');
+    super(route, damConfigStore, clientApplicationsStore);
   }
 
   update() {
@@ -36,16 +40,17 @@ export class ClientApplicationDetailComponent extends DamEntityDetailBase<Client
 
     const clientApplication: EntityModel = this.clientApplicationForm.getModel();
     const change = new ConfigModificationObject(clientApplication.dto, {});
-    this.entityService.update(this.routeDamId(), this.entity.name, change)
+    this.clientApplicationService.update(this.damId, this.entity.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
-    this.entityService.remove(this.routeDamId(), this.entity.name)
+    this.clientApplicationService.remove(this.damId, this.entity.name)
       .subscribe(this.navigateUp, this.showError);
   }
 
   private navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
+
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);

@@ -3,6 +3,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
+import { DamConfigEntityComponentBase } from '../../shared/dam/dam-config-entity-component.base';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { ClientApplicationFormComponent } from '../client-application-form/client-application-form.component';
@@ -14,19 +15,18 @@ import { ClientApplicationService } from '../client-applications.service';
   styleUrls: ['./client-application-manage.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class ClientApplicationManageComponent {
+export class ClientApplicationManageComponent extends DamConfigEntityComponentBase {
 
   @ViewChild(ClientApplicationFormComponent, { static: false })
   clientApplicationForm: ClientApplicationFormComponent;
   @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
 
-  constructor(
-    public service: ClientApplicationService,
-    private router: Router,
-    private route: ActivatedRoute,
-    public formError: FormErrorScrollService) {
-
+  constructor(protected route: ActivatedRoute,
+              private clientApplicationService: ClientApplicationService,
+              private router: Router,
+              public formError: FormErrorScrollService) {
+    super(route);
   }
 
   save() {
@@ -36,21 +36,15 @@ export class ClientApplicationManageComponent {
 
     const clientApplication: EntityModel = this.clientApplicationForm.getModel();
     const change = new ConfigModificationObject(clientApplication.dto, {});
-    this.service.save(this.routeDamId(), clientApplication.name, change)
+    this.clientApplicationService.save(this.damId, clientApplication.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
   private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 
 }

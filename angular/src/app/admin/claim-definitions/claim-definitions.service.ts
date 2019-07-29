@@ -26,7 +26,7 @@ export class ClaimDefinitionService extends DamConfigService {
               protected damInfoService: DamInfoService,
               protected route: ActivatedRoute,
               protected errorHandler: ErrorHandlerService) {
-    super(DamConfigEntityType.personas, http, damInfoService);
+    super(DamConfigEntityType.claimDefinitions, http, damInfoService);
   }
 
   public isExpiring({ expires }: IAccountClaim | AccountClaim): boolean {
