@@ -97,7 +97,7 @@
                 matSuffix
                 mat-icon-button
                 ngxClipboard
-                [cbContent]="url || access?.token"
+                [cbContent]="access?.token || url"
                 matTooltip="Copy to clipboard"
                 aria-label="Copy to clipboard">
           <mat-icon class="icon icon-copy"></mat-icon>
