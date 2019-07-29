@@ -1,18 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { DamEntityListBase } from '../../shared/dam-entity-list.base';
-import { PassportIssuerService } from '../passport-issuers.service';
+import { DamConfigEntityListComponentBase } from '../../shared/dam/dam-config-entity-list-component.base';
+import { DamConfigStore } from '../../shared/dam/dam-config.store';
+import { PassportIssuersStore } from '../passport-issuers.store';
 
 @Component({
   selector: 'ddap-passport-issuer-list',
   templateUrl: './passport-issuer-list.component.html',
   styleUrls: ['./passport-issuer-list.component.scss'],
 })
-export class PassportIssuerListComponent extends DamEntityListBase<PassportIssuerService> {
+export class PassportIssuerListComponent extends DamConfigEntityListComponentBase<PassportIssuersStore> implements OnInit {
 
-  constructor(protected passportService: PassportIssuerService, protected route: ActivatedRoute) {
-    super(passportService, route);
+  constructor(protected route: ActivatedRoute,
+              protected damConfigStore: DamConfigStore,
+              protected passportIssuersStore: PassportIssuersStore) {
+    super(route, damConfigStore, passportIssuersStore);
   }
 
 }

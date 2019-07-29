@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { ic } from '../../../../shared/proto/ic-service';
 import IdentityProvider = ic.v1.IdentityProvider;
 import { FormValidators } from '../../../../shared/validators';
-import { PassportTranslatorsService } from '../../../passport-issuers/passport-translators.service';
+import { PassportTranslatorsService } from '../../../passport-translators/passport-translators.service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 import Form from '../../../shared/form';
 

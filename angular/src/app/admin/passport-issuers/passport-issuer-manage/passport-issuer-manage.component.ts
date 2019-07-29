@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { dam } from '../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
+import { DamConfigEntityComponentBase } from '../../shared/dam/dam-config-entity-component.base';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { PassportIssuerFormComponent } from '../passport-issuer-form/passport-issuer-form.component';
@@ -16,7 +17,7 @@ import { PassportIssuerService } from '../passport-issuers.service';
   styleUrls: ['./passport-issuer-manage.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class PassportIssuerManageComponent implements OnInit {
+export class PassportIssuerManageComponent extends DamConfigEntityComponentBase implements OnInit {
 
   @ViewChild(PassportIssuerFormComponent, { static: false })
   passportIssuerForm: PassportIssuerFormComponent;
@@ -25,10 +26,11 @@ export class PassportIssuerManageComponent implements OnInit {
 
   passportIssuer: TrustedPassportIssuer;
 
-  constructor(private passportService: PassportIssuerService,
+  constructor(protected route: ActivatedRoute,
+              private passportIssuerService: PassportIssuerService,
               private router: Router,
-              private route: ActivatedRoute,
               public formError: FormErrorScrollService) {
+    super(route);
   }
 
   ngOnInit(): void {
@@ -42,21 +44,15 @@ export class PassportIssuerManageComponent implements OnInit {
 
     const personaModel: EntityModel = this.passportIssuerForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
-    this.passportService.save(this.routeDamId(), personaModel.name, change)
+    this.passportIssuerService.save(this.damId, personaModel.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
   private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 
 }

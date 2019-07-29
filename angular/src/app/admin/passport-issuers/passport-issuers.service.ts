@@ -1,28 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { ActivatedRoute } from '@angular/router';
 
 import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
-import { ConfigEntityService } from '../shared/config-entity.service';
-import { EntityModel } from '../shared/entity.model';
+import { DamConfigEntityType } from '../shared/dam/dam-config-entity-type.enum';
+import { DamConfigService } from '../shared/dam/dam-config.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PassportIssuerService extends ConfigEntityService {
+export class PassportIssuerService extends DamConfigService {
 
   constructor(protected http: HttpClient,
-              protected errorHandler: ErrorHandlerService,
-              protected damInfoService: DamInfoService) {
-    super(http, errorHandler, damInfoService, 'trustedPassportIssuers', 'trustedPassportIssuers');
+              protected damInfoService: DamInfoService,
+              protected route: ActivatedRoute,
+              protected errorHandler: ErrorHandlerService) {
+    super(DamConfigEntityType.passportIssuers, http, damInfoService);
   }
 
-  get(damId: string, params: {} = {}): Observable<Map<string, EntityModel>> {
-    return super.get(damId, params)
-      .pipe(
-        this.errorHandler.notifyOnError(`Can't load passport issuers.`)
-      );
-  }
 
 }

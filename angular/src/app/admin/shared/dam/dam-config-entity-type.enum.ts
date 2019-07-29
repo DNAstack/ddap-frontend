@@ -5,4 +5,5 @@ export enum DamConfigEntityType {
   serviceTemplates = 'serviceTemplates',
   claimDefinitions = 'claimDefinitions',
   clients = 'clients',
+  passportIssuers = 'trustedPassportIssuers',
 }
