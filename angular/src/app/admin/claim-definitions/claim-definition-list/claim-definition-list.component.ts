@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { PersonasStore } from '../../personas/personas.store';
-import { DamEntityListBase } from '../../shared/dam-entity-list.base';
 import { DamConfigEntityListComponentBase } from '../../shared/dam/dam-config-entity-list-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
-import { ClaimDefinitionService } from '../claim-definitions.service';
 import { ClaimDefinitionsStore } from '../claim-definitions.store';
 
 @Component({

@@ -11,6 +11,7 @@ import { ConfigModificationObject } from './configModificationObject';
 import { EntityModel } from './entity.model';
 import { EntityService } from './entity.service';
 
+// TODO: Deprecated, use DamConfigService instead
 export class ConfigEntityService {
 
   constructor(protected http: HttpClient,

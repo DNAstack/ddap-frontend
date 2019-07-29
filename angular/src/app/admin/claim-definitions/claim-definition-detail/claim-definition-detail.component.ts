@@ -2,10 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { PersonaService } from '../../personas/personas.service';
-import { PersonasStore } from '../../personas/personas.store';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { DamEntityDetailBase } from '../../shared/dam-entity-detail.base';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { EntityModel } from '../../shared/entity.model';

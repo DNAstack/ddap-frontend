@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
-import { PersonaService } from '../../personas/personas.service';
-import { PersonasStore } from '../../personas/personas.store';
-import { DamEntityDetailBase } from '../../shared/dam-entity-detail.base';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
-import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { AccessPolicyService } from '../access-policies.service';
 import { AccessPoliciesStore } from '../access-policies.store';
 

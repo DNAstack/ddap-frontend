@@ -2,16 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import { Observable } from 'rxjs/Observable';
 
 import { environment } from '../../../environments/environment';
 import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
 import { ic } from '../../shared/proto/ic-service';
-import { ConfigEntityService } from '../shared/config-entity.service';
 import { DamConfigEntityType } from '../shared/dam/dam-config-entity-type.enum';
 import { DamConfigService } from '../shared/dam/dam-config.service';
-import { EntityModel } from '../shared/entity.model';
 
 
 import AccountClaim = ic.v1.AccountClaim;
