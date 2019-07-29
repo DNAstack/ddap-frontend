@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { dam } from '../../../../shared/proto/dam-service';
 import { AccessPolicyService } from '../../../access-policies/access-policies.service';
+import { AccessPoliciesStore } from '../../../access-policies/access-policies.store';
 import { ServiceDefinitionService } from '../../../service-definitions/service-definitions.service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 
@@ -29,7 +30,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
 
   constructor(private formBuilder: FormBuilder,
               private serviceTemplateService: ServiceDefinitionService,
-              private accessPoliciesServices: AccessPolicyService,
+              private accessPoliciesStore: AccessPoliciesStore,
               private route: ActivatedRoute) {
   }
 
@@ -78,7 +79,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.policyValues$ = this.accessPoliciesServices.getList(this.routeDamId())
+    this.policyValues$ = this.accessPoliciesStore.getAsList(this.routeDamId())
       .pipe(
         map((policies: EntityModel[]) => {
           return policies.map((policy) => policy.name);

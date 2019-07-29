@@ -7,7 +7,7 @@ import { AccessPolicyManageComponent } from './access-policy-manage/access-polic
 
 export const routes: Routes = [
   { path: '', component: AccessPolicyListComponent },
-  { path: ':ruleName', component: AccessPolicDetailComponent },
+  { path: ':entityId', component: AccessPolicDetailComponent },
   { path: 'manage/add', pathMatch: 'full', component: AccessPolicyManageComponent },
 ];
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { DamConfigEntityComponentBase } from '../../shared/dam/dam-config-entity-component.base';
 import { AccessPolicyService } from '../access-policies.service';
 
 @Component({
@@ -8,22 +9,19 @@ import { AccessPolicyService } from '../access-policies.service';
   templateUrl: './access-policy-manage.component.html',
   styleUrls: ['./access-policy-manage.component.scss'],
 })
-export class AccessPolicyManageComponent {
+export class AccessPolicyManageComponent extends DamConfigEntityComponentBase {
 
   constructor(private accessPolicyService: AccessPolicyService,
               private router: Router,
-              private route: ActivatedRoute) {
+              protected route: ActivatedRoute) {
+    super(route);
   }
 
   save(entityId, change) {
-    this.accessPolicyService.save(this.routeDamId(), entityId, change)
-      .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
+    this.accessPolicyService.save(this.damId, entityId, change)
+      .subscribe(this.navigateUp);
   }
 
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
-  }
+  private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+
 }
