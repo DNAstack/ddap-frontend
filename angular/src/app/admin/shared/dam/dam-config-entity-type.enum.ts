@@ -3,4 +3,5 @@ export enum DamConfigEntityType {
   personas = 'testPersonas',
   policies = 'policies',
   serviceTemplates = 'serviceTemplates',
+  claimDefinitions = 'claimDefinitions',
 }

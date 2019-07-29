@@ -1,13 +1,18 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { PersonaService } from '../../personas/personas.service';
+import { PersonasStore } from '../../personas/personas.store';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { DamEntityDetailBase } from '../../shared/dam-entity-detail.base';
+import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
+import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { ClaimDefinitionFormComponent } from '../claim-definition-form/claim-definition-form.component';
 import { ClaimDefinitionService } from '../claim-definitions.service';
+import { ClaimDefinitionsStore } from '../claim-definitions.store';
 
 @Component({
   selector: 'ddap-claim-definition-detail',
@@ -15,18 +20,20 @@ import { ClaimDefinitionService } from '../claim-definitions.service';
   styleUrls: ['./claim-definition-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class ClaimDefinitionDetailComponent extends DamEntityDetailBase<ClaimDefinitionService> {
+export class ClaimDefinitionDetailComponent extends DamConfigEntityDetailComponentBase<ClaimDefinitionsStore> implements OnInit {
 
   @ViewChild(ClaimDefinitionFormComponent, { static: false })
   claimDefinitionForm: ClaimDefinitionFormComponent;
   @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
 
-  constructor(route: ActivatedRoute,
-              definitionService: ClaimDefinitionService,
+  constructor(protected route: ActivatedRoute,
+              protected damConfigStore: DamConfigStore,
+              protected claimDefinitionsStore: ClaimDefinitionsStore,
+              private claimDefinitionService: ClaimDefinitionService,
               private router: Router,
               public formError: FormErrorScrollService) {
-    super(route, definitionService, 'definitionName');
+    super(route, damConfigStore, claimDefinitionsStore);
   }
 
   update() {
@@ -36,16 +43,17 @@ export class ClaimDefinitionDetailComponent extends DamEntityDetailBase<ClaimDef
 
     const claimDefinition: EntityModel = this.claimDefinitionForm.getModel();
     const change = new ConfigModificationObject(claimDefinition.dto, {});
-    this.entityService.update(this.routeDamId(), this.entity.name, change)
+    this.claimDefinitionService.update(this.damId, this.entity.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
-    this.entityService.remove(this.routeDamId(), this.entity.name)
+    this.claimDefinitionService.remove(this.damId, this.entity.name)
       .subscribe(this.navigateUp, this.showError);
   }
 
   private navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
+
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);

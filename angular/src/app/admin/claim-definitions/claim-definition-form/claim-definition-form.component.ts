@@ -22,7 +22,6 @@ export class ClaimDefinitionFormComponent implements OnInit, Form {
   form: FormGroup;
 
   constructor(private formBuilder: FormBuilder) {
-
   }
 
   ngOnInit(): void {

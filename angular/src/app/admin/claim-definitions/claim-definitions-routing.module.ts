@@ -7,7 +7,7 @@ import { ClaimDefinitionManageComponent } from './claim-definition-manage/claim-
 
 export const routes: Routes = [
   { path: '', component: ClaimDefinitionListComponent },
-  { path: ':definitionName', component: ClaimDefinitionDetailComponent },
+  { path: ':entityId', component: ClaimDefinitionDetailComponent },
   { path: 'manage/add', pathMatch: 'full', component: ClaimDefinitionManageComponent },
 ];
 
