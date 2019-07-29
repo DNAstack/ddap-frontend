@@ -11,6 +11,7 @@ import { dam } from '../../../../shared/proto/dam-service';
 import { AccessPolicyService } from '../../../access-policies/access-policies.service';
 import { AccessPoliciesStore } from '../../../access-policies/access-policies.store';
 import { ServiceDefinitionService } from '../../../service-definitions/service-definitions.service';
+import { ServiceDefinitionsStore } from '../../../service-definitions/service-definitions.store';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 
 @Component({
@@ -29,7 +30,8 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   policyValues$: Observable<string[]>;
 
   constructor(private formBuilder: FormBuilder,
-              private serviceTemplateService: ServiceDefinitionService,
+              private serviceDefinitionService: ServiceDefinitionService,
+              private serviceDefinitionsStore: ServiceDefinitionsStore,
               private accessPoliciesStore: AccessPoliciesStore,
               private route: ActivatedRoute) {
   }
@@ -71,7 +73,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
       }),
     });
 
-    this.templatesSubscription = this.serviceTemplateService.getList(this.routeDamId()).subscribe((templates) => {
+    this.templatesSubscription = this.serviceDefinitionsStore.getAsList(this.routeDamId()).subscribe((templates) => {
       this.templates = templates;
       if (this.selectedTemplate) {
         this.rebuildPoliciesForRolesForm();
@@ -136,7 +138,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   }
 
   getVariablesBySelectedTemplate(): Observable<any> {
-    return this.serviceTemplateService.getTargetAdapterVariables(this.routeDamId(),
+    return this.serviceDefinitionService.getTargetAdapterVariables(this.routeDamId(),
       {serviceTemplate: this.viewForm.get('serviceTemplate').value});
   }
 

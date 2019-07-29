@@ -7,7 +7,7 @@ import { ServiceDefinitionManageComponent } from './service-definition-manage/se
 
 export const routes: Routes = [
   { path: '', component: ServiceDefinitionListComponent },
-  { path: ':serviceDefinitionName', component: ServiceDefinitionDetailComponent },
+  { path: ':entityId', component: ServiceDefinitionDetailComponent },
   { path: 'manage/add', pathMatch: 'full', component: ServiceDefinitionManageComponent },
 ];
 
