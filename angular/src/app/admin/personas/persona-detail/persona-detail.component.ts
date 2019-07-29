@@ -4,12 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
-import { DamConfigEntityType } from '../../shared/dam/dam-config-entity-type.enum';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';
 import { PersonaService } from '../personas.service';
+import { PersonasStore } from '../personas.store';
 
 @Component({
   selector: 'ddap-persona-detail',
@@ -17,7 +17,7 @@ import { PersonaService } from '../personas.service';
   styleUrls: ['./persona-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class PersonaDetailComponent extends DamConfigEntityDetailComponentBase implements OnInit {
+export class PersonaDetailComponent extends DamConfigEntityDetailComponentBase<PersonasStore> implements OnInit {
 
   @ViewChild(PersonaFormComponent, { static: false })
   personaForm: PersonaFormComponent;
@@ -26,10 +26,11 @@ export class PersonaDetailComponent extends DamConfigEntityDetailComponentBase i
 
   constructor(protected route: ActivatedRoute,
               protected damConfigStore: DamConfigStore,
+              protected personasStore: PersonasStore,
               private personaService: PersonaService,
               private router: Router,
               public formError: FormErrorScrollService) {
-    super(DamConfigEntityType.personas, route, damConfigStore);
+    super(route, damConfigStore, personasStore);
   }
 
   update() {

@@ -5,16 +5,16 @@ import { map, pluck } from 'rxjs/operators';
 import { EntityModel } from '../entity.model';
 
 import { DamConfigEntityComponentBase } from './dam-config-entity-component.base';
-import { DamConfigEntityType } from './dam-config-entity-type.enum';
+import { DamConfigEntityStore } from './dam-config-entity-store';
 import { DamConfigStore } from './dam-config.store';
 
-export class DamConfigEntityDetailComponentBase extends DamConfigEntityComponentBase implements OnInit {
+export class DamConfigEntityDetailComponentBase<T extends DamConfigEntityStore> extends DamConfigEntityComponentBase implements OnInit {
 
   entity: EntityModel;
 
-  constructor(protected entityType: DamConfigEntityType,
-              protected route: ActivatedRoute,
-              protected damConfigStore: DamConfigStore) {
+  constructor(protected route: ActivatedRoute,
+              protected damConfigStore: DamConfigStore,
+              protected entityDamConfigStore: T) {
     super(route);
   }
 
@@ -24,12 +24,16 @@ export class DamConfigEntityDetailComponentBase extends DamConfigEntityComponent
 
   ngOnInit() {
     this.damConfigStore.init(this.damId);
-    this.damConfigStore.state$
+    this.entityDamConfigStore.state$
       .pipe(
-        pluck(this.damId, this.entityType),
-        map(EntityModel.objectToMap)
+        pluck(this.damId),
+        map((entities) => {
+          if (entities) {
+            return entities.get(this.entityId);
+          }
+        })
       ).subscribe((entity) => {
-      this.entity = entity.get(this.entityId);
+      this.entity = entity;
     });
   }
 

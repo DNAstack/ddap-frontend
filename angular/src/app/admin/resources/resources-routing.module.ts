@@ -7,7 +7,7 @@ import { ResourceManageComponent } from './resource-manage/resource-manage.compo
 
 export const routes: Routes = [
   { path: '', component: ResourceListComponent },
-  { path: ':resourceName', component: ResourceDetailComponent },
+  { path: ':entityId', component: ResourceDetailComponent },
   { path: 'manage/add', component: ResourceManageComponent, pathMatch: 'full' },
 ];
 

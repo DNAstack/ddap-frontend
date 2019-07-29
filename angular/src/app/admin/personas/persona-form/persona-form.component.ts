@@ -10,14 +10,15 @@ import { Subscription } from 'rxjs/Subscription';
 import { dam } from '../../../shared/proto/dam-service';
 import { FormValidators } from '../../../shared/validators';
 import { ResourceService } from '../../resources/resources.service';
+import TestPersona = dam.v1.TestPersona;
+import AccessList = dam.v1.AccessList;
+import { ResourcesStore } from '../../resources/resources.store';
 import { ConfigModificationObject } from '../../shared/configModificationObject';
 import { EntityModel, nameConstraintPattern } from '../../shared/entity.model';
 import Form from '../../shared/form';
 import { PersonaAutocompleteService } from '../persona-autocomplete.service';
 import { PersonaAccessFormComponent } from '../persona-resource-form/persona-access-form.component';
 import { PersonaService } from '../personas.service';
-import TestPersona = dam.v1.TestPersona;
-import AccessList = dam.v1.AccessList;
 
 @Component({
   selector: 'ddap-persona-form',
@@ -58,11 +59,11 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
 
   constructor(private formBuilder: FormBuilder,
               private personaService: PersonaService,
-              private resourceService: ResourceService,
+              private resourcesStore: ResourcesStore,
               private personaAutocompleteService: PersonaAutocompleteService,
               private route: ActivatedRoute) {
 
-    this.resourceAccess$ = this.resourceService.getList(this.routeDamId()).pipe(
+    this.resourceAccess$ = this.resourcesStore.getAsList(this.routeDamId()).pipe(
       map((resourceList) => this.generateAllAccessModel(resourceList))
     );
   }

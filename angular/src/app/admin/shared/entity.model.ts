@@ -12,6 +12,8 @@ export class EntityModel {
   }
 
   static arrayFromMap(models: Map<string, EntityModel>): EntityModel[] {
-    return Array.from(models.values());
+    if (models) {
+      return Array.from(models.values());
+    }
   }
 }

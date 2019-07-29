@@ -31,7 +31,8 @@ export class PersonaResourceAccessComponent implements Form {
 
   private saveSubscription;
 
-  constructor(private resourceService: ResourceService, private route: ActivatedRoute) {
+  constructor(private resourceService: ResourceService,
+              private route: ActivatedRoute) {
     this.saveSubscription = this.save$.pipe(
       debounceTime(800),
       switchMap(({changes, isDryRun}) => this.saveResource(changes, isDryRun))

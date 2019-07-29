@@ -1,16 +1,18 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { flatMap } from 'rxjs/operators';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { DamEntityFormDetailBase } from '../../shared/dam-entity-form-detail.base';
+import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
+import { DamConfigEntityType } from '../../shared/dam/dam-config-entity-type.enum';
+import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { EntityModel } from '../../shared/entity.model';
 import { combine } from '../../shared/form';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { PersonaResourceAccessComponent } from '../resource-form/persona-resource-access/persona-resource-access.component';
 import { ResourceFormComponent } from '../resource-form/resource-form.component';
 import { ResourceService } from '../resources.service';
+import { ResourcesStore } from '../resources.store';
 
 @Component({
   selector: 'ddap-resource-detail',
@@ -18,7 +20,7 @@ import { ResourceService } from '../resources.service';
   styleUrls: ['./resource-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class ResourceDetailComponent extends DamEntityFormDetailBase<ResourceService> implements OnInit {
+export class ResourceDetailComponent extends DamConfigEntityDetailComponentBase<ResourcesStore> implements OnInit {
 
   @ViewChild(ResourceFormComponent, { static: false })
   resourceForm: ResourceFormComponent;
@@ -27,23 +29,18 @@ export class ResourceDetailComponent extends DamEntityFormDetailBase<ResourceSer
   @ViewChild('accessForm', { static: false })
   accessForm: PersonaResourceAccessComponent;
 
-  constructor(route: ActivatedRoute,
-              resourceService: ResourceService,
-              protected router: Router,
+  constructor(protected route: ActivatedRoute,
+              protected damConfigStore: DamConfigStore,
+              protected resourcesStore: ResourcesStore,
+              private resourceService: ResourceService,
+              private router: Router,
               public formError: FormErrorScrollService) {
-    super(route, router, resourceService, 'resourceName');
-  }
-
-  ngOnInit() {
-    this.route.params.pipe(
-      flatMap(params => this.entityService.getResource(this.routeDamId(), params['resourceName']))
-    ).subscribe((resource) => {
-      this.entity = resource;
-    });
+    super(route, damConfigStore, resourcesStore);
   }
 
   delete() {
-    this.doDelete(this.entity.name);
+    this.resourceService.remove(this.damId, this.entity.name)
+      .subscribe(this.navigateUp, this.showError);
   }
 
   update() {
@@ -53,13 +50,16 @@ export class ResourceDetailComponent extends DamEntityFormDetailBase<ResourceSer
       const resourceModel: EntityModel = this.resourceForm.getModel();
       const applyModel = this.accessForm.getApplyModel() || {};
       const change = new ConfigModificationObject(resourceModel.dto, applyModel);
-      this.entityService.update(this.routeDamId(), this.entity.name, change)
+      this.resourceService.update(this.damId, this.entity.name, change)
         .subscribe(this.navigateUp, this.showError);
     }
   }
+
+  protected navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
 
   protected showError = (error: HttpErrorResponse) => {
     const message = (error.error instanceof Object) ? JSON.stringify(error.error) : error.error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
   }
+
 }

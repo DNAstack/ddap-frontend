@@ -6,25 +6,24 @@ import { map, pluck } from 'rxjs/operators';
 import { EntityModel } from '../entity.model';
 
 import { DamConfigEntityComponentBase } from './dam-config-entity-component.base';
-import { DamConfigEntityType } from './dam-config-entity-type.enum';
+import { DamConfigEntityStore } from './dam-config-entity-store';
 import { DamConfigStore } from './dam-config.store';
 
-export class DamConfigEntityListComponentBase extends DamConfigEntityComponentBase implements OnInit {
+export class DamConfigEntityListComponentBase<T extends DamConfigEntityStore> extends DamConfigEntityComponentBase implements OnInit {
 
   entities$: Observable<EntityModel[]>;
 
-  constructor(protected entityType: DamConfigEntityType,
-              protected route: ActivatedRoute,
-              protected damConfigStore: DamConfigStore) {
+  constructor(protected route: ActivatedRoute,
+              protected damConfigStore: DamConfigStore,
+              protected entityDamConfigStore: T) {
     super(route);
   }
 
   ngOnInit() {
     this.damConfigStore.init(this.damId);
-    this.entities$ = this.damConfigStore.state$
+    this.entities$ = this.entityDamConfigStore.state$
       .pipe(
-        pluck(this.damId, this.entityType),
-        map(EntityModel.objectToMap),
+        pluck(this.damId),
         map(EntityModel.arrayFromMap)
       );
   }

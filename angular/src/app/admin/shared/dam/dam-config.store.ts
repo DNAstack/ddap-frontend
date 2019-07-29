@@ -1,7 +1,7 @@
 import DamConfig = dam.v1.DamConfig;
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { flatMap, map } from 'rxjs/operators';
 
 import { DamInfoService } from '../../../shared/dam/dam-info.service';

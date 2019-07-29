@@ -11,6 +11,7 @@ import { map, share, take, takeWhile, tap } from 'rxjs/operators';
 
 import { pick } from '../../../shared/autocomplete/autocomplete.util';
 import { PersonaService } from '../../personas/personas.service';
+import { PersonasStore } from '../../personas/personas.store';
 import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../configModificationObject';
 import { EntityModel } from '../entity.model';
@@ -37,12 +38,12 @@ export class TestFormComponent implements OnChanges, Form {
   private personas$: Observable<any>;
   private originalTest: any;
 
-  constructor(private personaService: PersonaService,
+  constructor(private personasStore: PersonasStore,
               private resourceService: ResourceService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute) {
-    this.personas$ = this.personaService
-      .getList(this.routeDamId(), pick('name'));
+    this.personas$ = this.personasStore
+      .getAsList(this.routeDamId(), pick('name'));
   }
 
   ngOnChanges(changes: SimpleChanges): void {

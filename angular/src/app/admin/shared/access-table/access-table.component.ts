@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
@@ -9,6 +9,7 @@ import { catchError, share, switchMap, take } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
 import { PersonaService } from '../../personas/personas.service';
+import { PersonasStore } from '../../personas/personas.store';
 import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../configModificationObject';
 import { EntityModel } from '../entity.model';
@@ -18,7 +19,7 @@ import { EntityModel } from '../entity.model';
   templateUrl: './access-table.component.html',
   styleUrls: ['./access-table.component.scss'],
 })
-export class AccessTableComponent implements OnChanges {
+export class AccessTableComponent implements OnInit, OnDestroy {
 
   @Input()
   resource: EntityModel;
@@ -31,30 +32,29 @@ export class AccessTableComponent implements OnChanges {
   personasSubscription: Subscription;
   private readonly personas$: Observable<any>;
 
-  constructor(private personaService: PersonaService,
+  constructor(private personasStore: PersonasStore,
               private resourceService: ResourceService,
               private route: ActivatedRoute) {
-    this.personas$ = this.personaService
-      .getList(this.routeDamId())
-      .pipe(
-        share()
-      );
+    this.personas$ = this.personasStore
+      .getAsList(this.routeDamId());
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const resource = changes.resource.currentValue;
-    const resourceViews = _get(resource, 'dto.views', {});
+  ngOnInit(): void {
+    const resourceViews = _get(this.resource, 'dto.views', {});
     const viewNames = Object.keys(resourceViews);
-    const accesses = this.buildAccessList(viewNames, resource);
+    const accesses = this.buildAccessList(viewNames, this.resource);
     const dryRun$ = this.dryRun(this.personas$);
 
-    this.viewNameDict = this.buildViewNameDict(resource);
+    this.viewNameDict = this.buildViewNameDict(this.resource);
 
-    this.personasSubscription = zip(this.personas$, dryRun$, of(accesses)).pipe(
-      take(1)
-    ).subscribe(([personas, dryRunDto, views]) => {
-      this.setAccessMatrixProperties(personas, views, dryRunDto);
+    this.personasSubscription = zip(this.personas$, dryRun$, of(accesses))
+      .subscribe(([personas, dryRunDto, views]) => {
+        this.setAccessMatrixProperties(personas, views, dryRunDto);
       });
+  }
+
+  ngOnDestroy(): void {
+    this.personasSubscription.unsubscribe();
   }
 
   emptyViews() {
@@ -142,4 +142,5 @@ export class AccessTableComponent implements OnChanges {
       .paramMap
       .get('damId');
   }
+
 }
