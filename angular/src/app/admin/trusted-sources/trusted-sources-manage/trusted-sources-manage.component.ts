@@ -3,6 +3,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../shared/configModificationObject';
+import { DamConfigEntityComponentBase } from '../../shared/dam/dam-config-entity-component.base';
 import { EntityModel } from '../../shared/entity.model';
 import { FormErrorScrollService } from '../../shared/form-error-scroll.service';
 import { TrustedSourcesFormComponent } from '../trusted-sources-form/trusted-sources-form.component';
@@ -14,17 +15,18 @@ import { TrustedSourcesService } from '../trusted-sources.service';
   styleUrls: ['./trusted-sources-manage.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class TrustedSourcesManageComponent {
+export class TrustedSourcesManageComponent extends DamConfigEntityComponentBase {
 
   @ViewChild(TrustedSourcesFormComponent, { static: false })
   trustedSourcesForm: TrustedSourcesFormComponent;
   @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
 
-  constructor(private trustedSourcesService: TrustedSourcesService,
+  constructor(protected route: ActivatedRoute,
+              private trustedSourcesService: TrustedSourcesService,
               private router: Router,
-              private route: ActivatedRoute,
               public formError: FormErrorScrollService) {
+    super(route);
   }
 
   save() {
@@ -35,20 +37,15 @@ export class TrustedSourcesManageComponent {
       return;
     }
 
-    this.trustedSourcesService.save(this.routeDamId(), trustedSourcesModel.name, change)
+    this.trustedSourcesService.save(this.damId, trustedSourcesModel.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
   private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);
-  };
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
+
 }

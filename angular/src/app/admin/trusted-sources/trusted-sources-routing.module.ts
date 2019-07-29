@@ -7,7 +7,7 @@ import { TrustedSourcesManageComponent } from './trusted-sources-manage/trusted-
 
 export const routes: Routes = [
   { path: '', component: TrustedSourcesListComponent },
-  { path: ':trustedSourceName', component: TrustedSourcesDetailComponent },
+  { path: ':entityId', component: TrustedSourcesDetailComponent },
   { path: 'manage/add', pathMatch: 'full', component: TrustedSourcesManageComponent },
 ];
 
