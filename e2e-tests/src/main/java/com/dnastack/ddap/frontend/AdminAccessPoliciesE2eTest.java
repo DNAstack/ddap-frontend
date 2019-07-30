@@ -12,9 +12,9 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.dnastack.ddap.common.page.NavBar.damPoliciesLink;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("Duplicates")
 public class AdminAccessPoliciesE2eTest extends AbstractFrontendE2eTest {

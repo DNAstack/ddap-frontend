@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 
 public class AdminListPage extends AdminDdapPage {
+
     public AdminListPage(WebDriver driver) {
         super(driver);
     }

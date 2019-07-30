@@ -37,7 +37,7 @@ public class AdminServiceTemplatesE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void addPolicy() {
+    public void addServiceTemplate() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damServiceDefinitionLink(DAM_ID));
 

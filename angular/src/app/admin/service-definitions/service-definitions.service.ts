@@ -18,7 +18,7 @@ export class ServiceDefinitionService extends DamConfigService {
   constructor(http: HttpClient,
               protected errorHandler: ErrorHandlerService,
               protected damInfoService: DamInfoService) {
-    super(DamConfigEntityType.resources, http, damInfoService);
+    super(DamConfigEntityType.serviceTemplates, http, damInfoService);
   }
 
   getTargetAdapterVariables(damId: string, params: {} = {}): Observable<any> {

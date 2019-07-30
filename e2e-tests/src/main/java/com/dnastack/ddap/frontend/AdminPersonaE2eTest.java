@@ -9,8 +9,6 @@ import com.dnastack.ddap.common.page.ICLoginPage;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 
@@ -209,14 +207,10 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
 
-        final WebElement gcsReadCheckbox = adminManagePage.findCheckbox(
-                "ga4gh-apis/gcs_read/viewer");
-
-        gcsReadCheckbox.click();
-        // If we don't wait, submitting the form will happen before validation can occur.
-        new WebDriverWait(driver, 5).until(d -> gcsReadCheckbox.getAttribute("class").contains("ng-invalid"));
+        adminManagePage.toggleCheckboxAndWaitForValidation("ga4gh-apis/gcs_read/viewer");
 
         adminManagePage.clickUpdate();
         adminManagePage.assertError(containsString("Please fix invalid fields"));
     }
+
 }
