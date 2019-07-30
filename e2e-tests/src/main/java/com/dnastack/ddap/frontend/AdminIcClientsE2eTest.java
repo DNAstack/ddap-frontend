@@ -12,9 +12,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.dnastack.ddap.common.page.NavBar.icClientsLink;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
 
 @SuppressWarnings("Duplicates")
 public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
@@ -43,7 +40,7 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(icClientsLink());
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("empty-client-label")));
+        adminListPage.assertListItemDoNotExist("empty-client-label");
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -54,7 +51,7 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("empty-client-label"));
+        adminListPage.assertListItemExists("empty-client-label");
     }
 
     @Test
@@ -62,7 +59,7 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(icClientsLink());
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("add-client-label")));
+        adminListPage.assertListItemDoNotExist("add-client-label");
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -77,7 +74,7 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("add-client-label"));
+        adminListPage.assertListItemExists("add-client-label");
     }
 
     @Test
@@ -85,8 +82,8 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(icClientsLink());
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("edit-client-id"));
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("edited-client-id")));
+        adminListPage.assertListItemExists("edit-client-id");
+        adminListPage.assertListItemDoNotExist("edited-client-id");
 
         AdminManagePage adminManagePage = adminListPage.clickView("edit-client-id", "Edit");
 
@@ -95,8 +92,8 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.updateEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("edit-client-id")));
-        assertThat(adminListPage.getEntityTitles(), hasItem("edited-client-id"));
+        adminListPage.assertListItemDoNotExist("edit-client-id");
+        adminListPage.assertListItemExists("edited-client-id");
     }
 
     @Test
@@ -104,12 +101,12 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(icClientsLink());
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("delete-client-id"));
+        adminListPage.assertListItemExists("delete-client-id");
 
         AdminManagePage adminManagePage = adminListPage.clickView("delete-client-id", "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("delete-client-id")));
+        adminListPage.assertListItemDoNotExist("delete-client-id");
     }
 }

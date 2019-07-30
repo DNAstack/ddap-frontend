@@ -62,7 +62,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("test-persona-name"));
+        adminListPage.assertListItemExists("test-persona-name");
     }
 
     @Test
@@ -70,13 +70,13 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damTestPersonaLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("John Persona"));
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("John Edited")));
+        adminListPage.assertListItemExists("John Persona");
+        adminListPage.assertListItemDoNotExist("Cooler John");
 
         AdminManagePage adminManagePage = adminListPage.clickView("John Persona", "Edit Persona");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
-        adminManagePage.fillField(DdapBy.se("inp-label"), "John Edited");
+        adminManagePage.fillField(DdapBy.se("inp-label"), "Cooler John");
         adminManagePage.clearField(DdapBy.se("inp-iss"));
         adminManagePage.fillField(DdapBy.se("inp-iss"), "test-issuer");
         adminManagePage.clearField(DdapBy.se("inp-sub"));
@@ -94,8 +94,8 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.updateEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("John Persona")));
-        assertThat(adminListPage.getEntityTitles(), hasItem("John Edited"));
+        adminListPage.assertListItemDoNotExist("John Persona");
+        adminListPage.assertListItemExists("Cooler John");
     }
 
     @Test
@@ -103,13 +103,13 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damTestPersonaLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("Undergrad Candice"));
+        adminListPage.assertListItemExists("Undergrad Candice");
 
         AdminManagePage adminManagePage = adminListPage.clickView("Undergrad Candice", "Edit Persona");
 
         adminListPage = adminManagePage.deleteEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("Undergrad Candice")));
+        adminListPage.assertListItemDoNotExist("Undergrad Candice");
     }
 
     @Test
@@ -117,10 +117,10 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damTestPersonaLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (eRA Commons)"));
+        adminListPage.assertListItemExists("Dr. Joe (eRA Commons)");
         AdminManagePage adminManagePage = adminListPage.clickView("Dr. Joe (eRA Commons)", "Edit Persona");
         adminListPage = adminManagePage.deleteEntity();
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("Dr. Joe (eRA Commons)")));
+        adminListPage.assertListItemDoNotExist("Dr. Joe (eRA Commons)");
 
         adminListPage.clickManage();
 
@@ -156,7 +156,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (eRA Commons)"));
+        adminListPage.assertListItemExists("Dr. Joe (eRA Commons)");
     }
 
     @Test
@@ -200,8 +200,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                                               .goToAdmin(damTestPersonaLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("Dr. Joe (Elixir)"));
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("Dr. Joe (Elixir) Edited")));
+        adminListPage.assertListItemExists("Dr. Joe (Elixir)");
 
         AdminManagePage adminManagePage = adminListPage.clickView("Dr. Joe (Elixir)", "Edit Persona");
 

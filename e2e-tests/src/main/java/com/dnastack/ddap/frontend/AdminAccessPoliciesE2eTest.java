@@ -12,9 +12,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.dnastack.ddap.common.page.NavBar.damPoliciesLink;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("Duplicates")
 public class AdminAccessPoliciesE2eTest extends AbstractFrontendE2eTest {
@@ -41,7 +38,7 @@ public class AdminAccessPoliciesE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damPoliciesLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("Bona Fide TEST")));
+        adminListPage.assertListItemDoNotExist("Bona Fide TEST");
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -51,7 +48,7 @@ public class AdminAccessPoliciesE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("Bona Fide TEST"));
+        adminListPage.assertListItemExists("Bona Fide TEST");
     }
 
 }

@@ -12,9 +12,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.dnastack.ddap.common.page.NavBar.damTrustedSourcesLink;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
 
 @SuppressWarnings("Duplicates")
 public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
@@ -49,7 +46,7 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("empty-source-name"));
+        adminListPage.assertListItemExists("empty-source-name");
     }
 
     @Test
@@ -73,7 +70,7 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("test-source-name"));
+        adminListPage.assertListItemExists("test-source-name");
     }
 
     @Test
@@ -81,18 +78,18 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damTrustedSourcesLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("test-source-name"));
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("test-source-nam3")));
+        adminListPage.assertListItemExists("test-source-name");
+        adminListPage.assertListItemDoNotExist("t3st-source-nam3");
 
         AdminManagePage adminManagePage = adminListPage.clickView("test-source", "Edit");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
-        adminManagePage.fillField(DdapBy.se("inp-label"), "test-source-nam3");
+        adminManagePage.fillField(DdapBy.se("inp-label"), "t3st-source-nam3");
 
         adminListPage = adminManagePage.updateEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("test-source-name")));
-        assertThat(adminListPage.getEntityTitles(), hasItem("test-source-nam3"));
+        adminListPage.assertListItemDoNotExist("test-source-name");
+        adminListPage.assertListItemExists("t3st-source-nam3");
     }
 
     @Test
@@ -100,12 +97,12 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damTrustedSourcesLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("delete_me"));
+        adminListPage.assertListItemExists("delete_me");
 
         AdminManagePage adminManagePage = adminListPage.clickView("delete_me", "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("delete_me")));
+        adminListPage.assertListItemDoNotExist("delete_me");
     }
 }

@@ -9,9 +9,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.dnastack.ddap.common.page.NavBar.damPassportsLink;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
 
 @SuppressWarnings("Duplicates")
 public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
@@ -49,7 +46,7 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("empty-passport-issuer"));
+        adminListPage.assertListItemExists("empty-passport-issuer");
     }
 
     @Test
@@ -68,7 +65,7 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("full-passport-issuer"));
+        adminListPage.assertListItemExists("full-passport-issuer");
     }
 
     @Test
@@ -76,8 +73,8 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damPassportsLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("edit-me"));
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("full-passport-issu3r")));
+        adminListPage.assertListItemExists("edit-me");
+        adminListPage.assertListItemDoNotExist("full-passport-issu3r");
 
         AdminManagePage adminManagePage = adminListPage.clickView("edit-me", "Edit");
 
@@ -86,8 +83,8 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.updateEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("edit-me")));
-        assertThat(adminListPage.getEntityTitles(), hasItem("full-passport-issu3r"));
+        adminListPage.assertListItemDoNotExist("edit-me");
+        adminListPage.assertListItemExists("full-passport-issu3r");
     }
 
     @Test
@@ -95,13 +92,13 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damPassportsLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("delete-me"));
+        adminListPage.assertListItemExists("delete-me");
 
         AdminManagePage adminManagePage = adminListPage.clickView("delete-me", "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("delete-me")));
+        adminListPage.assertListItemDoNotExist("delete-me");
     }
 
     @Test
@@ -109,7 +106,7 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damPassportsLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("nih"));
+        adminListPage.assertListItemExists("nih");
 
         AdminManagePage adminManagePage = adminListPage.clickView("nih", "Edit");
 
@@ -117,6 +114,6 @@ public class AdminPassportIssuersE2eTest extends AbstractFrontendE2eTest {
         ConfirmationRemovalDialog dialog = new ConfirmationRemovalDialog(driver);
         adminListPage = dialog.confirmForceDelete();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("nih")));
+        adminListPage.assertListItemDoNotExist("nih");
     }
 }

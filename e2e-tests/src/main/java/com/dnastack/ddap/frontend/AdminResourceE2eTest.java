@@ -19,7 +19,6 @@ import java.io.IOException;
 import static com.dnastack.ddap.common.page.NavBar.damResourceLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
 
 @SuppressWarnings("Duplicates")
 public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
@@ -53,7 +52,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String resourceId = "resource-" + System.currentTimeMillis();
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceId)));
+        adminListPage.assertListItemDoNotExist(resourceId);
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
@@ -63,7 +62,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-max-ttl"), "7d");
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceId));
+        adminListPage.assertListItemExists(resourceId);
     }
 
     @Test
@@ -73,7 +72,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String resourceId = "resource-" + System.currentTimeMillis();
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceId)));
+        adminListPage.assertListItemDoNotExist(resourceId);
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
@@ -91,7 +90,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-troubleshoot-url"), "http://test-troubleshoot-url.com");
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceId));
+        adminListPage.assertListItemExists(resourceId);
     }
 
     @Test
@@ -103,7 +102,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String role = "discovery";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceId)));
+        adminListPage.assertListItemDoNotExist(resourceId);
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
@@ -128,7 +127,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceId));
+        adminListPage.assertListItemExists(resourceId);
     }
 
     @Test
@@ -142,7 +141,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String view2Role = "discovery";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceId)));
+        adminListPage.assertListItemDoNotExist(resourceId);
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
@@ -182,7 +181,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceId));
+        adminListPage.assertListItemExists(resourceId);
     }
 
     @Test
@@ -194,7 +193,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String role = "discovery";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceId)));
+        adminListPage.assertListItemDoNotExist(resourceId);
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
         adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
@@ -228,7 +227,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String newDefaultRole = "basic_discovery";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+        adminListPage.assertListItemExists(resourceToEdit);
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
         adminManagePage.toggleExpansionPanel("view-discovery-access");
@@ -249,7 +248,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String resourceToEdit = "1000 Genomes";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+        adminListPage.assertListItemExists(resourceToEdit);
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
         final WebElement drJoeCheckbox = adminManagePage.findCheckedCheckbox(
@@ -270,7 +269,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String newDefaultRole = "basic_discovery";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+        adminListPage.assertListItemExists(resourceToEdit);
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
         adminManagePage.toggleExpansionPanel("view-discovery-access");
@@ -292,7 +291,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.updateEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+        adminListPage.assertListItemExists(resourceToEdit);
     }
 
     @Test
@@ -302,7 +301,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String resourceToEdit = "1000 Genomes";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+        adminListPage.assertListItemExists(resourceToEdit);
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
         adminManagePage.toggleExpansionPanel("view-gcs-file-access");
@@ -322,7 +321,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.updateEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+        adminListPage.assertListItemExists(resourceToEdit);
     }
 
     @Test
@@ -332,12 +331,12 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String resourceToEdit = "1000 Genomes NOT_EDITED";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit));
+        adminListPage.assertListItemExists(resourceToEdit);
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
-        adminManagePage.fillField(DdapBy.se("inp-label"), resourceToEdit + "_EDITED");
+        adminManagePage.fillField(DdapBy.se("inp-label"), "Cool edited resource");
 
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");
@@ -347,7 +346,8 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminListPage = adminManagePage.updateEntity();
         waitForAccessTablesToLoad();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToEdit + "_EDITED"));
+        adminListPage.assertListItemDoNotExist(resourceToEdit);
+        adminListPage.assertListItemExists("Cool edited resource");
     }
 
     @Test
@@ -357,12 +357,12 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         String resourceToDelete = "Billing Test for GCS and BigQuery";
 
         waitForAccessTablesToLoad();
-        assertThat(adminListPage.getEntityTitles(), hasItem(resourceToDelete));
+        adminListPage.assertListItemExists(resourceToDelete);
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToDelete, "Edit Resource");
 
         adminListPage = adminManagePage.deleteEntity();
 
-        assertThat(adminListPage.getEntityTitles(), Matchers.not(hasItem(resourceToDelete)));
+        adminListPage.assertListItemDoNotExist(resourceToDelete);
     }
 }

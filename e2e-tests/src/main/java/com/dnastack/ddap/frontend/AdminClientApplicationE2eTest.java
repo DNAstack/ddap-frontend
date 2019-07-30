@@ -12,9 +12,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.dnastack.ddap.common.page.NavBar.damClientLink;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
 
 @SuppressWarnings("Duplicates")
 public class AdminClientApplicationE2eTest extends AbstractFrontendE2eTest {
@@ -49,7 +46,7 @@ public class AdminClientApplicationE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("test-client-app-name"));
+        adminListPage.assertListItemExists("test-client-app-name");
     }
 
     @Test
@@ -57,18 +54,18 @@ public class AdminClientApplicationE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damClientLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("DNAstack Front-End"));
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("DNAstack Front-End Edited")));
+        adminListPage.assertListItemExists("DNAstack Front-End");
+        adminListPage.assertListItemDoNotExist("dnstck Front-End Edited");
 
         AdminManagePage adminManagePage = adminListPage.clickView("DNAstack Front-End", "Edit");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
-        adminManagePage.fillField(DdapBy.se("inp-label"), "DNAstack Front-End Edited");
+        adminManagePage.fillField(DdapBy.se("inp-label"), "dnstck Front-End Edited");
 
         adminListPage = adminManagePage.updateEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("DNAstack Front-End")));
-        assertThat(adminListPage.getEntityTitles(), hasItem("DNAstack Front-End Edited"));
+        adminListPage.assertListItemDoNotExist("DNAstack Front-End");
+        adminListPage.assertListItemExists("dnstck Front-End Edited");
     }
 
     @Test
@@ -76,12 +73,12 @@ public class AdminClientApplicationE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damClientLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("Test Client"));
+        adminListPage.assertListItemExists("Test Client");
 
         AdminManagePage adminManagePage = adminListPage.clickView("Test Client", "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("Test Client")));
+        adminListPage.assertListItemDoNotExist("Test Client");
     }
 }

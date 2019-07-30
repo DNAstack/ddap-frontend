@@ -12,9 +12,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.dnastack.ddap.common.page.NavBar.icIdentityProvidersLink;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
 
 @SuppressWarnings("Duplicates")
 public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
@@ -43,7 +40,7 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(icIdentityProvidersLink());
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("empty-ip-label")));
+        adminListPage.assertListItemDoNotExist("empty-ip-label");
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -58,7 +55,7 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("empty-ip-label"));
+        adminListPage.assertListItemExists("empty-ip-label");
     }
 
     @Test
@@ -66,7 +63,7 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(icIdentityProvidersLink());
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("add-ip-label")));
+        adminListPage.assertListItemDoNotExist("add-ip-label");
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -88,7 +85,7 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("add-ip-label"));
+        adminListPage.assertListItemExists("add-ip-label");
     }
 
     @Test
@@ -96,8 +93,8 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(icIdentityProvidersLink());
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("edit-ip-id"));
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("edited-ip-id")));
+        adminListPage.assertListItemExists("edit-ip-id");
+        adminListPage.assertListItemDoNotExist("edited-ip-id");
 
         AdminManagePage adminManagePage = adminListPage.clickView("edit-ip-id", "Edit");
 
@@ -106,8 +103,8 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.updateEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("edit-ip-id")));
-        assertThat(adminListPage.getEntityTitles(), hasItem("edited-ip-id"));
+        adminListPage.assertListItemDoNotExist("edit-ip-id");
+        adminListPage.assertListItemExists("edited-ip-id");
     }
 
     @Test
@@ -115,12 +112,12 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(icIdentityProvidersLink());
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("delete-ip-id"));
+        adminListPage.assertListItemExists("delete-ip-id");
 
         AdminManagePage adminManagePage = adminListPage.clickView("delete-ip-id", "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("delete-ip-id")));
+        adminListPage.assertListItemDoNotExist("delete-ip-id");
     }
 }

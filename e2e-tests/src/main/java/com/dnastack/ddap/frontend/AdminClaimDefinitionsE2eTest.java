@@ -12,9 +12,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.dnastack.ddap.common.page.NavBar.damClaimDefinitionLink;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("Duplicates")
 public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
@@ -49,7 +46,7 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem(claimDefId));
+        adminListPage.assertListItemExists(claimDefId);
     }
 
     @Test
@@ -67,7 +64,7 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem(claimDefId));
+        adminListPage.assertListItemExists(claimDefId);
     }
 
     @Test
@@ -75,18 +72,18 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damClaimDefinitionLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("Accepted Terms and Policies"));
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("Accepted Terms and Policies Edited")));
+        adminListPage.assertListItemExists("Accepted Terms and Policies");
+        adminListPage.assertListItemDoNotExist("Acc3pt3d T3rms and Policies Edited");
 
         AdminManagePage adminManagePage = adminListPage.clickView("Accepted Terms and Policies", "Edit");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
-        adminManagePage.fillField(DdapBy.se("inp-label"), "Accepted Terms and Policies Edited");
+        adminManagePage.fillField(DdapBy.se("inp-label"), "Acc3pt3d T3rms and Policies Edited");
 
         adminListPage = adminManagePage.updateEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("Accepted Terms and Policies")));
-        assertThat(adminListPage.getEntityTitles(), hasItem("Accepted Terms and Policies Edited"));
+        adminListPage.assertListItemDoNotExist("Accepted Terms and Policies");
+        adminListPage.assertListItemExists("Acc3pt3d T3rms and Policies Edited");
     }
 
     @Test
@@ -94,12 +91,12 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damClaimDefinitionLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("Affiliation and Role"));
+        adminListPage.assertListItemExists("Affiliation and Role");
 
         AdminManagePage adminManagePage = adminListPage.clickView("Affiliation and Role", "Edit");
 
         adminListPage = adminManagePage.deleteEntity();
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("Affiliation and Role")));
+        adminListPage.assertListItemDoNotExist("Affiliation and Role");
     }
 }

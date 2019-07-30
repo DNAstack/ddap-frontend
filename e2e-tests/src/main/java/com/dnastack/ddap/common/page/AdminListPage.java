@@ -4,10 +4,8 @@ import com.dnastack.ddap.common.DdapBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -36,12 +34,14 @@ public class AdminListPage extends AdminDdapPage {
         return new AdminManagePage(driver);
     }
 
-    public List<String> getEntityTitles() {
-        new WebDriverWait(driver, 5).until(d -> driver.findElement(DdapBy.se("entity-title")).isDisplayed());
+    public void assertListItemExists(String title) {
+        new WebDriverWait(driver, 2)
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DdapBy.seAndText("entity-title", title)));
+    }
 
-        return driver.findElements(DdapBy.se("entity-title")).stream()
-                .map(WebElement::getText)
-                .collect(Collectors.toList());
+    public void assertListItemDoNotExist(String title) {
+        new WebDriverWait(driver, 2)
+                .until(ExpectedConditions.invisibilityOfElementLocated(DdapBy.seAndText("entity-title", title)));
     }
 
     private By getLine(String resourceName) {

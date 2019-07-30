@@ -12,9 +12,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.dnastack.ddap.common.page.NavBar.damServiceDefinitionLink;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
 
 @SuppressWarnings("Duplicates")
 public class AdminServiceTemplatesE2eTest extends AbstractFrontendE2eTest {
@@ -41,7 +38,7 @@ public class AdminServiceTemplatesE2eTest extends AbstractFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damServiceDefinitionLink(DAM_ID));
 
-        assertThat(adminListPage.getEntityTitles(), not(hasItem("Beacon Discovery Search CUSTOM")));
+        adminListPage.assertListItemDoNotExist("Beacon Discovery Search CUSTOM");
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
@@ -51,7 +48,8 @@ public class AdminServiceTemplatesE2eTest extends AbstractFrontendE2eTest {
 
         adminListPage = adminManagePage.saveEntity();
 
-        assertThat(adminListPage.getEntityTitles(), hasItem("Beacon Discovery Search CUSTOM"));
+        adminListPage.assertListItemExists("Beacon Discovery Search CUSTOM");
+
     }
     
 }
