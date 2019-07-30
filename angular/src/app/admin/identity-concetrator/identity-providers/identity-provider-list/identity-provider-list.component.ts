@@ -1,25 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
-import { EntityModel } from '../../../shared/entity.model';
-import { IdentityProviderService } from '../identity-providers.service';
+import { IcConfigEntityListComponentBase } from '../../../shared/ic/ic-config-entity-list-component.base';
+import { IcConfigStore } from '../../../shared/ic/ic-config.store';
+import { IdentityProvidersStore } from '../identity-providers.store';
 
 @Component({
   selector: 'ddap-identity-provider-list',
   templateUrl: './identity-provider-list.component.html',
   styleUrls: ['./identity-provider-list.component.scss'],
 })
-export class IdentityProviderListComponent implements OnInit {
+export class IdentityProviderListComponent extends IcConfigEntityListComponentBase<IdentityProvidersStore> implements OnInit {
 
-  identityProviders$: Observable<any[]>;
-
-  constructor(private identityProviderService: IdentityProviderService) {
-  }
-
-  ngOnInit() {
-    this.identityProviders$ = this.identityProviderService.get()
-      .pipe(map(EntityModel.arrayFromMap));
+  constructor(protected route: ActivatedRoute,
+              protected icConfigStore: IcConfigStore,
+              protected identityProvidersStore: IdentityProvidersStore) {
+    super(icConfigStore, identityProvidersStore);
   }
 
 }

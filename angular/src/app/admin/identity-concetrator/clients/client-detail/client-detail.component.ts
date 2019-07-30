@@ -5,9 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
-import { IcEntityDetailBase } from '../../../shared/ic-entity-detail.base';
+import { IcConfigEntityDetailComponentBase } from '../../../shared/ic/ic-config-entity-detail-component.base';
+import { IcConfigStore } from '../../../shared/ic/ic-config.store';
 import { ClientFormComponent } from '../client-form/client-form.component';
 import { ClientService } from '../clients.service';
+import { ClientsStore } from '../clients.store';
 
 @Component({
   selector: 'ddap-client-detail',
@@ -15,7 +17,7 @@ import { ClientService } from '../clients.service';
   styleUrls: ['./client-detail.component.scss'],
   providers: [FormErrorScrollService],
 })
-export class ClientDetailComponent extends IcEntityDetailBase<ClientService> implements OnInit {
+export class ClientDetailComponent extends IcConfigEntityDetailComponentBase<ClientsStore> implements OnInit {
 
   @ViewChild(ClientFormComponent, { static: false })
   clientForm: ClientFormComponent;
@@ -23,10 +25,12 @@ export class ClientDetailComponent extends IcEntityDetailBase<ClientService> imp
   formErrorElement: ElementRef;
 
   constructor(protected route: ActivatedRoute,
-              protected client: ClientService,
+              protected icConfigStore: IcConfigStore,
+              protected clientsStore: ClientsStore,
+              private clientService: ClientService,
               private router: Router,
               public formError: FormErrorScrollService) {
-    super(route, client, 'clientName');
+    super(route, icConfigStore, clientsStore);
   }
 
   update() {
@@ -36,16 +40,17 @@ export class ClientDetailComponent extends IcEntityDetailBase<ClientService> imp
 
     const clientApplication: EntityModel = this.clientForm.getModel();
     const change = new ConfigModificationObject(clientApplication.dto, {});
-    this.entityService.update(this.entity.name, change)
+    this.clientService.update(this.entity.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 
   delete() {
-    this.entityService.remove(this.entity.name)
+    this.clientService.remove(this.entity.name)
       .subscribe(this.navigateUp, this.showError);
   }
 
   private navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
+
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);

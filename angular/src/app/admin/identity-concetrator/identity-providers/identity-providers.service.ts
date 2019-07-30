@@ -1,26 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { ActivatedRoute } from '@angular/router';
 
 import { ErrorHandlerService } from '../../../shared/error-handler/error-handler.service';
-import { EntityModel } from '../../shared/entity.model';
-import { IcConfigEntityService } from '../shared/ic-config-entity.service';
+import { IcConfigEntityType } from '../../shared/ic/ic-config-entity-type.enum';
+import { IcConfigService } from '../../shared/ic/ic-config.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class IdentityProviderService extends IcConfigEntityService {
+export class IdentityProviderService extends IcConfigService {
 
   constructor(protected http: HttpClient,
+              protected route: ActivatedRoute,
               protected errorHandler: ErrorHandlerService) {
-    super(http, errorHandler, 'identityProviders', 'identityProviders');
-  }
-
-  get(params: {} = {}): Observable<Map<string, EntityModel>> {
-    return super.get(params)
-      .pipe(
-        this.errorHandler.notifyOnError(`Can't load identity providers.`)
-      );
+    super(IcConfigEntityType.identityProviders, http, errorHandler);
   }
 
 }

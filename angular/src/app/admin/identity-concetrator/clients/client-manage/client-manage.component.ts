@@ -21,7 +21,7 @@ export class ClientManageComponent {
   @ViewChild('formErrorElement', { static: false })
   formErrorElement: ElementRef;
 
-  constructor(private client: ClientService,
+  constructor(private clientService: ClientService,
               private router: Router,
               private route: ActivatedRoute,
               public formError: FormErrorScrollService) {
@@ -35,7 +35,7 @@ export class ClientManageComponent {
     const clientModel: EntityModel = this.clientForm.getModel();
     const change = new ConfigModificationObject(clientModel.dto, {});
 
-    this.client.save(clientModel.name, change)
+    this.clientService.save(clientModel.name, change)
       .subscribe(this.navigateUp, this.showError);
   }
 

@@ -5,29 +5,29 @@ import { map, pluck } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { ErrorHandlerService } from '../../../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../../../shared/realm/realm.constant';
-import { ConfigModificationObject } from '../../shared/configModificationObject';
-import { EntityModel } from '../../shared/entity.model';
-import { EntityService } from '../../shared/entity.service';
+import { ConfigModificationObject } from '../configModificationObject';
+import { EntityModel } from '../entity.model';
 
-export abstract class IcConfigEntityService implements EntityService {
+import { IcConfigEntityType } from './ic-config-entity-type.enum';
 
-  protected constructor(protected http: HttpClient,
-                        protected errorHandler: ErrorHandlerService,
-                        protected typeNameInConfig: string,
-                        protected typeNameInUrl: string) {
+export abstract class IcConfigService {
+
+  protected constructor(protected entityType: IcConfigEntityType,
+                        protected http: HttpClient,
+                        protected errorHandler: ErrorHandlerService) {
   }
 
   get(params = {}): Observable<Map<string, EntityModel>> {
     return this.http.get<any>(`${environment.idpApiUrl}/${realmIdPlaceholder}/config`,
       {params}
     ).pipe(
-      pluck(this.typeNameInConfig),
+      pluck(this.entityType),
       map(EntityModel.objectToMap)
     );
   }
 
   save(id: string, change: ConfigModificationObject): Observable<any> {
-    return this.http.post(`${environment.idpApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
+    return this.http.post(`${environment.idpApiUrl}/${realmIdPlaceholder}/config/${this.entityType}/${id}`,
       change
     ).pipe(
       this.errorHandler.notifyOnError(`Can't save ${id}.`)
@@ -35,7 +35,7 @@ export abstract class IcConfigEntityService implements EntityService {
   }
 
   update(id: string, change: ConfigModificationObject): Observable<any> {
-    return this.http.put(`${environment.idpApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`,
+    return this.http.put(`${environment.idpApiUrl}/${realmIdPlaceholder}/config/${this.entityType}/${id}`,
       change
     ).pipe(
       this.errorHandler.notifyOnError(`Can't update ${id}.`)
@@ -43,7 +43,7 @@ export abstract class IcConfigEntityService implements EntityService {
   }
 
   remove(id: string): Observable<any> {
-    return this.http.delete(`${environment.idpApiUrl}/${realmIdPlaceholder}/config/${this.typeNameInUrl}/${id}`)
+    return this.http.delete(`${environment.idpApiUrl}/${realmIdPlaceholder}/config/${this.entityType}/${id}`)
       .pipe(
         this.errorHandler.notifyOnError(`Can't delete ${id}.`)
       );

@@ -48,6 +48,7 @@ export class IdentityProviderManageComponent implements OnInit {
   }
 
   private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+
   private showError = ({ error }: HttpErrorResponse) => {
     const message = (error instanceof Object) ? JSON.stringify(error) : error;
     return this.formError.displayErrorMessage(this.formErrorElement, message);

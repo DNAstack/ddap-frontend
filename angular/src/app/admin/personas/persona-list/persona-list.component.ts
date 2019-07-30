@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { DamConfigEntityListComponentBase } from '../../shared/dam/dam-config-entity-list-component.base';
-import { DamConfigEntityType } from '../../shared/dam/dam-config-entity-type.enum';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { PersonasStore } from '../personas.store';
 
