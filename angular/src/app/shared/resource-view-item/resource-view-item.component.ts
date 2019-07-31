@@ -48,6 +48,7 @@ export class ResourceViewItemComponent {
         this.access = access;
         this.url = this.getUrlIfApplicable(viewName, access.token);
         this.ttlForm.disable();
+        this.accessSubscription.unsubscribe();
       });
   }
 
