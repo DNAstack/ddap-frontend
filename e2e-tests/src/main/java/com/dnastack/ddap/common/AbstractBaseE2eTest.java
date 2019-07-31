@@ -39,6 +39,7 @@ public abstract class AbstractBaseE2eTest {
     protected static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
     protected static final String DAM_ID = requiredEnv("E2E_DAM_ID");
     protected static final String DDAP_TEST_REALM_NAME_PREFIX = requiredEnv("E2E_TEST_REALM");
+    protected static final String CLIENT_ID = requiredEnv("E2E_CLIENT_ID");
     // Current size limit on realm names in DAM
     public static final int REALM_NAME_LIMIT = 40;
 
@@ -125,7 +126,9 @@ public abstract class AbstractBaseE2eTest {
         } catch (IOException e) {
             throw new RuntimeException("Unable to load test resource template.", e);
         }
-        return resourceTemplate;
+        return resourceTemplate
+                .replace("$$E2E_BASE_URI$$", DDAP_BASE_URL)
+                .replace("$$E2E_CLIENT_ID$$", CLIENT_ID);
     }
 
     protected String fetchRealPersonaIcToken(String personaName, String realmName, String ... scopes) throws IOException {

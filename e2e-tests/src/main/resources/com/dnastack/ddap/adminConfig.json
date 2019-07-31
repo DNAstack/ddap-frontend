@@ -686,11 +686,11 @@
         "label": "DAM DDAP Production"
       }
     },
-    "ddap_staging": {
-      "clientId": "ab7ac98b-fc80-4556-9b4c-0191bce2cdcb",
+    "this_ddap": {
+      "clientId": "$$E2E_CLIENT_ID$$",
       "ui": {
-        "description": "DDAP Staging environment",
-        "label": "DAM DDAP Staging"
+        "description": "This DDAP under test",
+        "label": "DAM DDAP"
       }
     },
     "dnastack_fe": {

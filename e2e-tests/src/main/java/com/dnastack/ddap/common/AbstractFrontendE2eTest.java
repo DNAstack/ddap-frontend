@@ -32,7 +32,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     @Rule
     public TestName name = new TestName();
     @Rule
-    public RetryRule retry = new RetryRule(3);
+    public RetryRule retry = new RetryRule(Integer.parseInt(optionalEnv("E2E_TEST_RETRIES", "3")));
 
     @BeforeClass
     public static void driverSetup() {

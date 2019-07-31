@@ -70,77 +70,16 @@
         "https://ic-dot-hcls-data-connect-demo.appspot.com"
       ]
     },
-    "craig_test": {
-      "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c",
-      "redirectUris": [
-        "http://localhost:8080",
-        "https://ic-dot-hcls-data-connect-demo.appspot.com"
-      ]
-    },
-    "ddap_dev": {
-      "clientId": "b6bf058f-7904-4b98-8982-d5a7a3a38052",
+    "this_ddap": {
+      "clientId": "$$E2E_CLIENT_ID$$",
       "redirectUris": [
         "http://localhost:8085/api",
-        "https://ddap-frontend.staging.dnastack.com/api",
-        "https://ddap-frontend.prod.dnastack.com/api",
-        "https://ddap-frontend-candidate.staging.dnastack.com",
-        "https://ddap-frontend-candidate.prod.dnastack.com"
+        "$$E2E_BASE_URI$$/api"
       ],
       "ui": {
-        "description": "DDAP Developer environment",
-        "label": "IC DDAP Development"
+        "description": "DDAP being tested",
+        "label": "IC DDAP"
       }
-    },
-    "ddap_prod": {
-      "clientId": "d0e75142-ee26-4217-86dd-0b01c9f8f811",
-      "redirectUris": [
-        "http://localhost:8085/api",
-        "https://ddap-frontend.staging.dnastack.com/api",
-        "https://ddap-frontend.prod.dnastack.com/api",
-        "https://ddap-frontend-candidate.staging.dnastack.com",
-        "https://ddap-frontend-candidate.prod.dnastack.com"
-      ],
-      "ui": {
-        "description": "DDAP Production environment",
-        "label": "IC DDAP Production"
-      }
-    },
-    "ddap_staging": {
-      "clientId": "ab7ac98b-fc80-4556-9b4c-0191bce2cdcb",
-      "redirectUris": [
-        "http://localhost:8085/api",
-        "https://ddap-frontend.staging.dnastack.com/api",
-        "https://ddap-frontend.prod.dnastack.com/api",
-        "https://ddap-frontend-candidate.staging.dnastack.com",
-        "https://ddap-frontend-candidate.prod.dnastack.com"
-      ],
-      "ui": {
-        "description": "DDAP Staging environment",
-        "label": "IC DDAP Staging"
-      }
-    },
-    "dnastack_fe": {
-      "clientId": "b1aed96d-6367-4313-87a1-65eda4962a76",
-      "redirectUris": [
-        "http://localhost:8085/api",
-        "https://ddap-frontend.staging.dnastack.com/api",
-        "https://ddap-frontend.prod.dnastack.com/api",
-        "https://ddap-frontend-candidate.staging.dnastack.com",
-        "https://ddap-frontend-candidate.prod.dnastack.com"
-      ]
-    },
-    "test_client": {
-      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed64",
-      "redirectUris": [
-        "/",
-        "http://localhost:8080"
-      ]
-    },
-    "test_page": {
-      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed65",
-      "redirectUris": [
-        "/"
-      ]
     }
   },
   "accountTags": {

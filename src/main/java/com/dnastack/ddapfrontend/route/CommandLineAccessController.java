@@ -79,7 +79,6 @@ public class CommandLineAccessController {
     public Mono<? extends ResponseEntity<?>> commandLineLogin(ServerHttpRequest request,
                                                               @PathVariable String realm,
                                                               @RequestParam(defaultValue = DEFAULT_SCOPES) String scope) {
-        // TODO: DISCO-2352 Store in map to track login status
         final String cliSessionId = UUID.randomUUID().toString();
         loginStatusByCliSessionId.compute(cliSessionId, (id, monitor) -> {
             if (monitor == null) {

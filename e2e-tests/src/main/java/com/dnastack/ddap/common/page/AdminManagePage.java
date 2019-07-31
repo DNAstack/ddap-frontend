@@ -25,7 +25,7 @@ public class AdminManagePage extends AdminDdapPage {
     }
 
     public void fillField(By fieldSelector, String fieldValue) {
-        WebElement formInput = new WebDriverWait(driver, 5)
+        WebElement formInput = new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.elementToBeClickable(fieldSelector));
         formInput.sendKeys(fieldValue);
     }
