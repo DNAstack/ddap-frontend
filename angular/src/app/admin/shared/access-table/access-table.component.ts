@@ -1,14 +1,13 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import { of } from 'rxjs/internal/observable/of';
 import { zip } from 'rxjs/internal/observable/zip';
 import { Observable } from 'rxjs/Observable';
-import { catchError, share, switchMap, take } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
-import { PersonaService } from '../../personas/personas.service';
 import { PersonasStore } from '../../personas/personas.store';
 import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../configModificationObject';
