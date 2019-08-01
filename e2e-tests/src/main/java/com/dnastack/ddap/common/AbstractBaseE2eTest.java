@@ -127,8 +127,14 @@ public abstract class AbstractBaseE2eTest {
             throw new RuntimeException("Unable to load test resource template.", e);
         }
         return resourceTemplate
-                .replace("$$E2E_BASE_URI$$", DDAP_BASE_URL)
+                .replace("$$E2E_BASE_URI$$", stripTrailingSlash(DDAP_BASE_URL))
                 .replace("$$E2E_CLIENT_ID$$", CLIENT_ID);
+    }
+
+    private static String stripTrailingSlash(String url) {
+        return (url.endsWith("/"))
+                ? url.substring(0, url.length() - 1)
+                : url;
     }
 
     protected String fetchRealPersonaIcToken(String personaName, String realmName, String ... scopes) throws IOException {
