@@ -49,7 +49,7 @@ export class IdentityProviderFormComponent implements OnInit, Form {
     } = _get(this.model, 'dto', {});
 
     const scopeForm = this.formBuilder.array(scopes || []);
-    this.translators$ = this.passportTranslators.get(this.routeDamId());
+    this.translators$ = this.passportTranslators.allDams();
 
     this.form = this.formBuilder.group({
       id: [this.model.name || '', [Validators.required, Validators.pattern(nameConstraintPattern)]],
@@ -110,10 +110,4 @@ export class IdentityProviderFormComponent implements OnInit, Form {
     return this.form.valid;
   }
 
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
-  }
 }
