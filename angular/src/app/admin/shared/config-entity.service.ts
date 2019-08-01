@@ -6,7 +6,6 @@ import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
 
-import { ConfigModel } from './config.model';
 import { ConfigModificationObject } from './configModificationObject';
 import { EntityModel } from './entity.model';
 import { EntityService } from './entity.service';
@@ -26,7 +25,7 @@ export class ConfigEntityService {
       .pipe(
         flatMap(damApiUrls => {
           const damApiUrl = damApiUrls.get(damId);
-          return this.http.get<ConfigModel>(`${damApiUrl}/${realmIdPlaceholder}/config`, {params})
+          return this.http.get<any>(`${damApiUrl}/${realmIdPlaceholder}/config`, {params})
             .pipe(
               pluck(this.typeNameInConfig),
               map(EntityModel.objectToMap)

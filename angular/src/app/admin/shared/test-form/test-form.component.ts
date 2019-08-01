@@ -7,10 +7,9 @@ import _set from 'lodash.set';
 import { of } from 'rxjs/internal/observable/of';
 import { zip } from 'rxjs/internal/observable/zip';
 import { Observable } from 'rxjs/Observable';
-import { map, share, take, takeWhile, tap } from 'rxjs/operators';
+import { map, take, takeWhile, tap } from 'rxjs/operators';
 
 import { pick } from '../../../shared/autocomplete/autocomplete.util';
-import { PersonaService } from '../../personas/personas.service';
 import { PersonasStore } from '../../personas/personas.store';
 import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../configModificationObject';

@@ -5,7 +5,6 @@ import { flatMap, map } from 'rxjs/operators';
 import { DamInfoService } from '../../../shared/dam/dam-info.service';
 import { dam } from '../../../shared/proto/dam-service';
 import { realmIdPlaceholder } from '../../../shared/realm/realm.constant';
-import { ConfigModel } from '../config.model';
 import { ConfigModificationObject } from '../configModificationObject';
 
 import { DamConfigEntityType } from './dam-config-entity-type.enum';
@@ -24,7 +23,7 @@ export abstract class DamConfigService {
       .pipe(
         flatMap(damApiUrls => {
           const damApiUrl = damApiUrls.get(damId);
-          return this.http.get<ConfigModel>(`${damApiUrl}/${realmIdPlaceholder}/config`, { params })
+          return this.http.get<DamConfig>(`${damApiUrl}/${realmIdPlaceholder}/config`, { params })
             .pipe(
               map(DamConfig.create)
             );

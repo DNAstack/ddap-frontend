@@ -6,9 +6,10 @@ import { environment } from '../../../environments/environment';
 import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
-import { ConfigModel } from '../shared/config.model';
 import { DamConfigEntityType } from '../shared/dam/dam-config-entity-type.enum';
 import { DamConfigService } from '../shared/dam/dam-config.service';
+
+import { TargetAdapterVariables } from './target-adapter-variables.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,9 +22,10 @@ export class ServiceDefinitionService extends DamConfigService {
     super(DamConfigEntityType.serviceTemplates, http, damInfoService);
   }
 
-  getTargetAdapterVariables(damId: string, params: {} = {}): Observable<any> {
-    return this.http.get<ConfigModel>(
-      `${environment.ddapApiUrl}/${realmIdPlaceholder}/serviceTemplates/${damId}/variables`, {params}
+  getTargetAdapterVariables(damId: string, params: {} = {}): Observable<TargetAdapterVariables> {
+    return this.http.get<TargetAdapterVariables>(
+      `${environment.ddapApiUrl}/${realmIdPlaceholder}/serviceTemplates/${damId}/variables`,
+      {params}
       );
   }
 

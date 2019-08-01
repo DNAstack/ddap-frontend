@@ -9,7 +9,6 @@ import { DamInfoService } from '../../../shared/dam/dam-info.service';
 import { dam } from '../../../shared/proto/dam-service';
 import { realmIdPlaceholder } from '../../../shared/realm/realm.constant';
 import { Store } from '../../../shared/store/store';
-import { ConfigModel } from '../config.model';
 
 import { DamConfigs } from './dam-configs.model';
 
@@ -39,7 +38,7 @@ export class DamConfigStore extends Store<DamConfigs> {
       .pipe(
         flatMap(damApiUrls => {
           const damApiUrl = damApiUrls.get(damId);
-          return this.http.get<ConfigModel>(`${damApiUrl}/${realmIdPlaceholder}/config`, { params })
+          return this.http.get<DamConfig>(`${damApiUrl}/${realmIdPlaceholder}/config`, { params })
             .pipe(
               map(DamConfig.create)
             );
