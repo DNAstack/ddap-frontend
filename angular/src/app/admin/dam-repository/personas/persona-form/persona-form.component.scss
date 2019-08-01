@@ -1,0 +1,20 @@
+@import "../../../../../styles/modules/colors";
+
+mat-card-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.ddap-access-col {
+  margin-bottom: 1rem;
+}
+
+mat-checkbox.ng-invalid {
+  color: #f44336;
+}
+
+.access-description {
+  font-size: 16px;
+  color: $color-dark-grey;
+}

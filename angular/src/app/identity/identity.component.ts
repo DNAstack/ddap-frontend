@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Subscription } from 'rxjs/Subscription';
 
-import { ClaimDefinitionService } from '../admin/claim-definitions/claim-definitions.service';
+import { ClaimDefinitionService } from '../admin/dam-repository/claim-definitions/claim-definitions.service';
 
 import { AccountLink } from './account-link.model';
 import { Account } from './account.model';

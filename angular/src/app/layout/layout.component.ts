@@ -5,7 +5,6 @@ import 'rxjs-compat/add/operator/zip'; // TODO: use static zip instead https://w
 import { Observable } from 'rxjs/Observable';
 import { repeatWhen } from 'rxjs/operators';
 
-import { DamConfigStore } from '../admin/shared/dam/dam-config.store';
 import { Identity } from '../identity/identity.model';
 import { IdentityService } from '../identity/identity.service';
 import { IdentityStore } from '../identity/identity.store';

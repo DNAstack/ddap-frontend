@@ -6,7 +6,7 @@ import _get from 'lodash.get';
 import { Subscription } from 'rxjs/Subscription';
 
 import { environment } from '../../../environments/environment';
-import { ResourceService } from '../../admin/resources/resources.service';
+import { ResourceService } from '../../admin/dam-repository/resources/resources.service';
 import { EntityModel } from '../../admin/shared/entity.model';
 import { dam } from '../proto/dam-service';
 

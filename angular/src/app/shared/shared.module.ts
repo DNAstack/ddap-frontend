@@ -22,8 +22,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 import { TagInputModule } from 'ngx-chips';
 import { ClipboardModule } from 'ngx-clipboard';
 
@@ -32,9 +31,6 @@ import { BeaconSearchBarComponent } from './beacon-search-bar/beacon-search-bar.
 import { LimitSearchComponent } from './beacon-search-bar/limit-search/limit-search.component';
 import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
 import { ClaimGroupComponent } from './claim-group/claim-group.component';
-import {
-  EntityRemovalConfirmationDialogComponent
-} from './entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';
 import { FocusedDirective } from './focused.directive';
 import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
@@ -48,7 +44,6 @@ import { RealmInputComponent } from './realm-input/realm-input.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
 import { ResourceViewItemComponent } from './resource-view-item/resource-view-item.component';
 import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.component';
-import {RouterModule} from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -64,7 +59,6 @@ import {RouterModule} from "@angular/router";
     FocusedDirective,
     RealmInputComponent,
     RealmChangeConfirmationDialogComponent,
-    EntityRemovalConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
     AsEntityModelPipe,
@@ -142,7 +136,6 @@ import {RouterModule} from "@angular/router";
     FocusedDirective,
     RealmInputComponent,
     RealmChangeConfirmationDialogComponent,
-    EntityRemovalConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
     AsEntityModelPipe,

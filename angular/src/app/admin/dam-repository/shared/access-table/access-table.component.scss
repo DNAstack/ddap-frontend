@@ -1,0 +1,74 @@
+@import "../../../../../styles/modules/colors";
+
+
+mat-table {
+  mat-header-cell:first-child,
+  mat-cell:first-child {
+    align-items: start;
+    text-align: left;
+
+    & > div {
+      display: flex;
+      align-items: center;
+
+      span {
+        font-size: 1rem;
+        margin-left: 0.5rem;
+      }
+    }
+  }
+
+  mat-header-cell,
+  mat-cell {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  mat-header-cell:not(:first-child) {
+    span:last-child {
+      font-weight: 300;
+    }
+  }
+
+  mat-cell:first-of-type,
+  mat-footer-cell:first-of-type,
+  mat-header-cell:first-of-type {
+    padding-left: 0;
+  }
+
+  mat-row {
+    border-bottom-style: dashed;
+  }
+
+  mat-row:last-child {
+    border-bottom: none;
+  }
+
+  mat-icon {
+    vertical-align: middle;
+    color: $color-grey;
+  }
+
+  mat-icon.lock {
+    color: $color-grey-light;
+  }
+
+  mat-icon.tick {
+    color: $success-color;
+  }
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  height: 100%;
+  color: $color-grey;
+
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+}

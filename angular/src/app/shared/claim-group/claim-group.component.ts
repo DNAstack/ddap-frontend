@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import * as moment from 'moment';
 
-import { ClaimDefinitionService } from '../../admin/claim-definitions/claim-definitions.service';
+import { ClaimDefinitionService } from '../../admin/dam-repository/claim-definitions/claim-definitions.service';
 import { dam } from '../proto/dam-service';
 import { ic } from '../proto/ic-service';
 import GA4GHClaim = dam.v1.TestPersona.GA4GHClaim;

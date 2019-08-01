@@ -1,0 +1,5 @@
+@import "../../../../../styles/modules/colors";
+
+mat-checkbox.ng-invalid {
+  color: $failure-color;
+}

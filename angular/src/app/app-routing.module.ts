@@ -13,19 +13,18 @@ const routes: Routes = [
     children: [
       {
         path: 'data',
-        loadChildren: () => import('./data/data.module').then(mod => mod.DataModule),
+        loadChildren: () => import('./data/data.module')
+          .then(mod => mod.DataModule),
       },
       {
         path: 'identity',
-        loadChildren: () => import('./identity/identity.module').then(mod => mod.IdentityModule),
+        loadChildren: () => import('./identity/identity.module')
+          .then(mod => mod.IdentityModule),
       },
       {
-        path: 'identity-concentrator',
-        loadChildren: () => import('./admin/identity-concetrator/identity-concentrator.module').then(mod => mod.IdentityConcentratorModule),
-      },
-      {
-        path: 'dam',
-        loadChildren: () => import('./admin/admin.module').then(mod => mod.AdminModule),
+        path: 'admin',
+        loadChildren: () => import('./admin/admin.module')
+          .then(mod => mod.AdminModule),
       },
     ],
   },

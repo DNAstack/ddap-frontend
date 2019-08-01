@@ -74,19 +74,19 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
-            <mat-list-item [routerLink]="['identity-concentrator', 'identity-providers']"
+            <mat-list-item [routerLink]="['admin', 'identity-concentrator', 'identity-providers']"
                            [routerLinkActive]="['active-nav-link']"
                            data-se="nav-ic-identity-providers">
               <mat-icon class="icon icon-identities"></mat-icon>
               <h4 mat-line>Identity Providers</h4>
             </mat-list-item>
-            <mat-list-item [routerLink]="['identity-concentrator', 'clients']"
+            <mat-list-item [routerLink]="['admin', 'identity-concentrator', 'clients']"
                            [routerLinkActive]="['active-nav-link']"
                            data-se="nav-ic-clients">
               <mat-icon class="icon icon-apps"></mat-icon>
               <h4 mat-line>Clients</h4>
             </mat-list-item>
-            <mat-list-item [routerLink]="['identity-concentrator', 'options']"
+            <mat-list-item [routerLink]="['admin', 'identity-concentrator', 'options']"
                            [routerLinkActive]="['active-nav-link']"
                            data-se="nav-ic-options">
               <mat-icon class="icon icon-settings"></mat-icon>
@@ -107,63 +107,63 @@
 
           <mat-nav-list class="sub-nav">
             <mat-list-item
-              [routerLink]="['dam', damInfo.id, 'resources']"
+              [routerLink]="['admin', 'dam', damInfo.id, 'resources']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-resources">
               <mat-icon class="icon icon-resource"></mat-icon>
               <h4 mat-line>Resources</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damInfo.id, 'access-policies']"
+              [routerLink]="['admin', 'dam', damInfo.id, 'access-policies']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-access-policies">
               <mat-icon class="icon icon-policies"></mat-icon>
               <h4 mat-line>Access Policies</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damInfo.id, 'service-definitions']"
+              [routerLink]="['admin', 'dam', damInfo.id, 'service-definitions']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-service-definitions">
               <mat-icon class="icon icon-clients"></mat-icon>
               <h4 mat-line>Service Definitions</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damInfo.id, 'trusted-sources']"
+              [routerLink]="['admin', 'dam', damInfo.id, 'trusted-sources']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-trusted-sources">
               <mat-icon class="icon icon-trusted"></mat-icon>
               <h4 mat-line>Trusted Sources</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damInfo.id, 'passport-issuers']"
+              [routerLink]="['admin', 'dam', damInfo.id, 'passport-issuers']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-passport-issuers">
               <mat-icon class="icon icon-passport"></mat-icon>
               <h4 mat-line>Passport Issuers</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damInfo.id, 'claim-definitions']"
+              [routerLink]="['admin', 'dam', damInfo.id, 'claim-definitions']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-claim-definitions">
               <mat-icon class="icon icon-claims"></mat-icon>
               <h4 mat-line>Claim Definitions</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damInfo.id, 'test-personas']"
+              [routerLink]="['admin', 'dam', damInfo.id, 'test-personas']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-test-personas">
               <mat-icon class="icon icon-tests"></mat-icon>
               <h4 mat-line>Test Personas</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damInfo.id, 'client-applications']"
+              [routerLink]="['admin', 'dam', damInfo.id, 'client-applications']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-client-applications">
               <mat-icon class="icon icon-apps"></mat-icon>
               <h4 mat-line>Client Applications</h4>
             </mat-list-item>
             <mat-list-item
-              [routerLink]="['dam', damInfo.id, 'options']"
+              [routerLink]="['admin', 'dam', damInfo.id, 'options']"
               [routerLinkActive]="['active-nav-link']"
               data-se="nav-options">
               <mat-icon class="icon icon-settings"></mat-icon>

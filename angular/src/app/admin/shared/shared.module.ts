@@ -5,25 +5,23 @@ import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 import { SharedModule } from '../../shared/shared.module';
 
-import { AccessTableComponent } from './access-table/access-table.component';
 import { EntityAddComponent } from './entity-add/entity-add.component';
 import { EntityDescriptionComponent } from './entity-description/entity-description.component';
 import { EntityListComponent } from './entity-list/entity-list.component';
 import { EntityManageFormComponent } from './entity-manage-form/entity-manage-form.component';
-import { JsonPanelComponent } from './json-panel/json-panel.component';
+import {
+  EntityRemovalConfirmationDialogComponent
+} from './entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';
 import { OptionEditableListComponent } from './option-editable-list/option-editable-list.component';
-import { TestFormComponent } from './test-form/test-form.component';
 
 @NgModule({
   declarations: [
-    JsonPanelComponent,
     EntityListComponent,
     EntityDescriptionComponent,
     EntityAddComponent,
     EntityManageFormComponent,
+    EntityRemovalConfirmationDialogComponent,
     OptionEditableListComponent,
-    AccessTableComponent,
-    TestFormComponent,
   ],
   imports: [
     SharedModule,
@@ -33,17 +31,18 @@ import { TestFormComponent } from './test-form/test-form.component';
   exports: [
     SharedModule,
     NgJsonEditorModule,
-    JsonPanelComponent,
     EntityListComponent,
     EntityDescriptionComponent,
     EntityAddComponent,
     EntityManageFormComponent,
+    EntityRemovalConfirmationDialogComponent,
     OptionEditableListComponent,
-    AccessTableComponent,
-    TestFormComponent,
+  ],
+  entryComponents: [
+    EntityRemovalConfirmationDialogComponent,
   ],
   providers: [
-    {provide: MAT_CHECKBOX_CLICK_ACTION, useValue: 'check-indeterminate'},
+    { provide: MAT_CHECKBOX_CLICK_ACTION, useValue: 'check-indeterminate' },
   ],
 })
 export class AdminSharedModule { }
