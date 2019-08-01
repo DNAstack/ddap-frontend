@@ -10,3 +10,7 @@ export function objectToArray(dto) {
 
   return bar;
 }
+
+export function flattenArray(arr) {
+  return arr.reduce((accumulator, currentVal) => accumulator.concat(currentVal), []);
+}
