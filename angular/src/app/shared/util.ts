@@ -12,5 +12,5 @@ export function objectToArray(dto) {
 }
 
 export function flattenArray(arr) {
-  return arr.reduce((a, c) => a.concat(c), []);
+  return arr.reduce((accumulator, currentVal) => accumulator.concat(currentVal), []);
 }
