@@ -1,6 +1,7 @@
-import { OnInit } from '@angular/core';
+import { OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, pluck } from 'rxjs/operators';
+import { Subscription } from 'rxjs/Subscription';
 
 import { EntityModel } from '../entity.model';
 
@@ -8,9 +9,12 @@ import { DamConfigEntityComponentBase } from './dam-config-entity-component.base
 import { DamConfigEntityStore } from './dam-config-entity-store';
 import { DamConfigStore } from './dam-config.store';
 
-export class DamConfigEntityDetailComponentBase<T extends DamConfigEntityStore> extends DamConfigEntityComponentBase implements OnInit {
+export class DamConfigEntityDetailComponentBase<T extends DamConfigEntityStore>
+  extends DamConfigEntityComponentBase implements OnInit, OnDestroy {
 
   entity: EntityModel;
+
+  private subscription: Subscription;
 
   constructor(protected route: ActivatedRoute,
               protected damConfigStore: DamConfigStore,
@@ -24,7 +28,7 @@ export class DamConfigEntityDetailComponentBase<T extends DamConfigEntityStore> 
 
   ngOnInit() {
     this.damConfigStore.init(this.damId);
-    this.entityDamConfigStore.state$
+    this.subscription = this.entityDamConfigStore.state$
       .pipe(
         pluck(this.damId),
         map((entities) => {
@@ -35,6 +39,10 @@ export class DamConfigEntityDetailComponentBase<T extends DamConfigEntityStore> 
       ).subscribe((entity) => {
       this.entity = entity;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }
