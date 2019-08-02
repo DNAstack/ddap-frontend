@@ -27,7 +27,7 @@ export class DamConfigEntityDetailComponentBase<T extends DamConfigEntityStore>
   }
 
   ngOnInit() {
-    this.damConfigStore.init(this.damId);
+    this.damConfigStore.set(this.damId);
     this.subscription = this.entityDamConfigStore.state$
       .pipe(
         pluck(this.damId),
