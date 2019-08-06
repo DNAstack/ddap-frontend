@@ -22,7 +22,7 @@ export class DamConfigStore extends Store<DamConfigs> {
     super({});
   }
 
-  public init(damId: string): void {
+  public set(damId: string): void {
     this.get(damId)
       .subscribe((config) => {
         if (damId in this.state && _isEqual(this.state[damId], config)) {
