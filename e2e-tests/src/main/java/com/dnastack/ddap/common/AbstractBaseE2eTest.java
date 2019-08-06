@@ -42,6 +42,8 @@ public abstract class AbstractBaseE2eTest {
     protected static final String CLIENT_ID = requiredEnv("E2E_CLIENT_ID");
     // Current size limit on realm names in DAM
     public static final int REALM_NAME_LIMIT = 40;
+    private static final String SERVICE_ACCOUNT_PROJECT = requiredEnv("E2E_SERVICE_ACCOUNT_PROJECT");
+    private static final String PASSPORT_ISSUER = requiredEnv("E2E_PASSPORT_ISSUER");
 
     protected static String generateRealmName(String testClassName) {
         final String uniqueStamp = String.valueOf(System.currentTimeMillis() % 10000);
@@ -128,7 +130,9 @@ public abstract class AbstractBaseE2eTest {
         }
         return resourceTemplate
                 .replace("$$E2E_BASE_URI$$", stripTrailingSlash(DDAP_BASE_URL))
-                .replace("$$E2E_CLIENT_ID$$", CLIENT_ID);
+                .replace("$$E2E_CLIENT_ID$$", CLIENT_ID)
+                .replace("$$E2E_SERVICE_ACCOUNT_PROJECT$$", SERVICE_ACCOUNT_PROJECT)
+                .replace("$$E2E_PASSPORT_ISSUER$$", PASSPORT_ISSUER);
     }
 
     private static String stripTrailingSlash(String url) {

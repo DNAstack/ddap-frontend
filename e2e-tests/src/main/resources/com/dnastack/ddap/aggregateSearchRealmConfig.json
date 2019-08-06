@@ -29,6 +29,9 @@
     "ic_hlcs_prod": {
       "issuer": "https://ic-prod-dot-hcls-data-connect-demo.appspot.com/oidc"
     },
+    "this_ic" : {
+      "issuer": "$$E2E_PASSPORT_ISSUER$$"
+    },
     "nih": {
       "issuer": "https://login.nih.org/oidc",
       "translateUsing": "dbgap_translator"
@@ -1081,7 +1084,7 @@
     "readOnlyMasterRealm":true,
     "gcpManagedKeysMaxRequestedTtl":"7d",
     "gcpManagedKeysPerAccount":8,
-    "gcpServiceAccountProject":"craigv-codelab",
+    "gcpServiceAccountProject":"$$E2E_SERVICE_ACCOUNT_PROJECT$$",
     "descriptors":{
       "gcpManagedKeysMaxRequestedTtl":{
         "label":"GCP Managed Keys Maximum Requested TTL",

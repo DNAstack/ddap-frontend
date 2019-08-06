@@ -394,7 +394,7 @@
     "readOnlyMasterRealm": true,
     "gcpManagedKeysMaxRequestedTtl": "7d",
     "gcpManagedKeysPerAccount": 8,
-    "gcpServiceAccountProject": "craigv-codelab",
+    "gcpServiceAccountProject": "$$E2E_SERVICE_ACCOUNT_PROJECT$$",
     "descriptors": {
       "gcpManagedKeysMaxRequestedTtl": {
         "label": "GCP Managed Keys Maximum Requested TTL",

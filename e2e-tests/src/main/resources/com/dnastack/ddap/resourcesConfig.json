@@ -1278,7 +1278,7 @@
     "readOnlyMasterRealm": true,
     "gcpManagedKeysMaxRequestedTtl": "7d",
     "gcpManagedKeysPerAccount": 8,
-    "gcpServiceAccountProject": "hcls-data-connect-demo",
+    "gcpServiceAccountProject": "$$E2E_SERVICE_ACCOUNT_PROJECT$$",
     "descriptors": {
       "gcpManagedKeysMaxRequestedTtl": {
         "label": "GCP Managed Keys Maximum Requested TTL",
