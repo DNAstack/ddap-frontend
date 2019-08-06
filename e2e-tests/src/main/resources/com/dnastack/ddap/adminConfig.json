@@ -26,6 +26,9 @@
     "ic_staging": {
       "issuer": "https://ic-staging-dot-hcls-data-connect-demo.appspot.com/oidc"
     },
+    "this_ic": {
+      "issuer": "$$E2E_PASSPORT_ISSUER$$"
+    },
     "nih": {
       "issuer": "https://login.nih.gov/oidc",
       "translateUsing": "dbgap_translator"
