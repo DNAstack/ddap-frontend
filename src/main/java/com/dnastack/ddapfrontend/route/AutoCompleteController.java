@@ -61,13 +61,13 @@ public class AutoCompleteController {
 
         // find beacons under resourceId in DAM config
         Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
-        Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
+        Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
+
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
         String refreshToken = foundRefreshToken.orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
 
         final ReactiveDamClient damClient = damClientFactory.getDamClient(damId);
 
-        // TODO: DISCO-2351 catch 401/403 and return 401/403
         return damClient.getConfig(realm, damToken, refreshToken)
                         .flatMap((damConfig) -> {
                     Map<String, DamPolicy> policies = damConfig.getPolicies();
