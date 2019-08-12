@@ -7,6 +7,7 @@ import { flatMap, map } from 'rxjs/operators';
 import { EntityModel } from '../../admin/shared/entity.model';
 import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
+import { flatten } from '../../shared/util';
 import { DataService } from '../data.service';
 
 
@@ -45,7 +46,7 @@ export class DataListComponent implements OnInit {
               // Need to pass in all args separately, not as array
               return zip(...unzippedQualifiedModels)
                 .pipe(
-                  map(DataListComponent.flatten)
+                  map(flatten)
                 );
             })
           );
@@ -59,10 +60,6 @@ export class DataListComponent implements OnInit {
         entity: em,
       };
     };
-  }
-
-  private static flatten<T>(arrayOfArrays: T[][]): T[] {
-    return arrayOfArrays.reduce((accum, cur) => accum.concat(...cur), []);
   }
 
 }

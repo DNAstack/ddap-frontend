@@ -8,7 +8,8 @@ import { flatMap, map, pluck } from 'rxjs/operators';
 import { DamInfoService } from '../../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../../../shared/realm/realm.constant';
-import { flattenArray } from '../../../shared/util';
+import { flatten } from '../../../shared/util';
+import { DamConfigEntityType } from '../shared/dam/dam-config-entity-type.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,7 @@ export class PassportTranslatorsService {
             return this.getPassportTranslators(damApiUrl);
           });
           return zip(...passportTranslators).pipe(
-            map(translators => flattenArray(translators))
+            map(flatten)
           );
         })
       );
@@ -49,8 +50,8 @@ export class PassportTranslatorsService {
   private getPassportTranslators(damApiUrl) {
     return this.http.get(`${damApiUrl}/${realmIdPlaceholder}/passportTranslators`)
       .pipe(
-        pluck('passportTranslators'),
-        map((passportTranslatorsDto) => this.getTranslatorList(passportTranslatorsDto)),
+        pluck(DamConfigEntityType.passportTranslators),
+        map(this.getTranslatorList),
         this.errorHandler.notifyOnError(`Can't load passport translators.`)
       );
   }
