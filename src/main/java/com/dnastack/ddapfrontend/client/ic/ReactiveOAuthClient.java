@@ -57,7 +57,8 @@ public class ReactiveOAuthClient {
                 .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .header(AUTHORIZATION, "Bearer " + code)
                 .exchange()
-                .flatMap(this::extractIdpTokens);
+                .flatMap(this::extractIdpTokens)
+                .onErrorMap(ex ->  new InvalidTokenException(ex.getMessage()));
     }
 
     public Mono<TokenResponse> refreshAccessToken(String realm, String refreshToken) {
@@ -76,7 +77,7 @@ public class ReactiveOAuthClient {
                 .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .exchange()
                 .flatMap(this::extractIdpTokens)
-                .onErrorMap(e ->  new InvalidTokenException("Invalid dam token"));
+                .onErrorMap(ex ->  new InvalidTokenException(ex.getMessage()));
     }
 
     public Mono<ClientResponse> revokeRefreshToken(String realm, String refreshToken) {
