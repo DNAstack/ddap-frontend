@@ -3,6 +3,7 @@ package com.dnastack.ddapfrontend;
 import com.dnastack.ddapfrontend.cli.CliSessionNotFound;
 import com.dnastack.ddapfrontend.client.ic.AccountLinkingFailedException;
 import com.dnastack.ddapfrontend.security.BadCredentialsException;
+import com.dnastack.ddapfrontend.security.InvalidTokenException;
 import com.dnastack.ddapfrontend.security.InvalidOAuthStateException;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,11 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<DdapErrorResponse> handle(BadCredentialsException ex) {
         return ResponseEntity.status(403).body(new DdapErrorResponse(ex.getMessage(), 403));
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<DdapErrorResponse> handle(InvalidTokenException ex) {
+        return ResponseEntity.status(401).body(new DdapErrorResponse(ex.getMessage(), 401));
     }
 
 }

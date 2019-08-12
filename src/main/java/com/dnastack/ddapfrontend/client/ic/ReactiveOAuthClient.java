@@ -2,6 +2,7 @@ package com.dnastack.ddapfrontend.client.ic;
 
 import com.dnastack.ddapfrontend.client.LoggingFilter;
 import com.dnastack.ddapfrontend.client.ic.model.TokenResponse;
+import com.dnastack.ddapfrontend.security.InvalidTokenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -56,7 +57,8 @@ public class ReactiveOAuthClient {
                 .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .header(AUTHORIZATION, "Bearer " + code)
                 .exchange()
-                .flatMap(this::extractIdpTokens);
+                .flatMap(this::extractIdpTokens)
+                .onErrorMap(ex ->  new InvalidTokenException(ex.getMessage()));
     }
 
     public Mono<TokenResponse> refreshAccessToken(String realm, String refreshToken) {
@@ -74,7 +76,8 @@ public class ReactiveOAuthClient {
         return webClient.post()
                 .uri(idpBaseUrl.resolve(template.expand(variables)))
                 .exchange()
-                .flatMap(this::extractIdpTokens);
+                .flatMap(this::extractIdpTokens)
+                .onErrorMap(ex ->  new InvalidTokenException(ex.getMessage()));
     }
 
     public Mono<ClientResponse> revokeRefreshToken(String realm, String refreshToken) {
