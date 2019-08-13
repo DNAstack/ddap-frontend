@@ -3,6 +3,7 @@ package com.dnastack.ddapfrontend.route;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +14,8 @@ import java.util.Map;
 
 import static java.lang.String.format;
 
-@RestController("/api/v1alpha/{realm}/dataset")
+@RestController
+@RequestMapping("/api/v1alpha/{realm}/dataset")
 public class DatasetController {
     @GetMapping(params = "dataset_url")
     public Dataset fetchDataset(@RequestParam("dataset_url") String datasetUrl) {
@@ -21,7 +23,9 @@ public class DatasetController {
 
         final Schema schema = new Schema();
         final Map<String, PropertyDescription> properties = new LinkedHashMap<>();
+        properties.put("id", new PropertyDescription("id of a resource", "string"));
         properties.put("url", new PropertyDescription("a url of a resource", "string"));
+        properties.put("label", new PropertyDescription("name of a resource", "string"));
         schema.setProperties(properties);
 
         final List<Map<String, Object>> objects = new ArrayList<>();
@@ -31,7 +35,9 @@ public class DatasetController {
 
         for (int i = 0; i < 100; i++) {
             Map<String, Object> object = new LinkedHashMap<>();
-            object.put("url", format("drs://thousand-genomes-objects/%d", i));
+            object.put("url", format("drs://thousand-genomes-objects/%d", i+1));
+            object.put("id", Integer.toString(i+1));
+            object.put("Label", format("Thousand Genomes %d", i+1));
             objects.add(object);
         }
 
