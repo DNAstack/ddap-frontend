@@ -27,6 +27,7 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
     @Test
     public void shouldFindSuggestionsForMatchingClaim() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("administrator", REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -36,6 +37,7 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
                     .when()
                     .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
+                    .cookie("refresh_token", refreshToken)
                     .get("/api/v1alpha/" + REALM + "/autocomplete/claimValue/" + DAM_ID + "?claimName=com.dnastack.test.claim")
                     .then()
                     .log().ifValidationFails()
@@ -52,6 +54,7 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
     @Test
     public void shouldFindSuggestionsForVariableValues() throws IOException {
         String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("administrator", REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -61,6 +64,7 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
                     .when()
                     .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
+                    .cookie("refresh_token", refreshToken)
                     .get("/api/v1alpha/" + REALM + "/autocomplete/claimValue/"+ DAM_ID + "?claimName=ga4gh.ControlledAccessGrants")
                     .then()
                     .log().ifValidationFails()
