@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { DatasetService } from '../dataset.service';
 
-import sampleData from './data.json';
 import { DatasetList } from './DatasetList';
 
 @Component({
@@ -12,13 +12,16 @@ import { DatasetList } from './DatasetList';
   templateUrl: './dataset-search.component.html',
   styleUrls: ['./dataset-search.component.scss'],
 })
-export class DatasetSearchComponent implements OnInit {
+export class DatasetSearchComponent implements OnInit, OnDestroy {
 
   datasetFetchForm: FormGroup;
   datasetList: DatasetList[];
 
+  private searchSubscription: Subscription;
+
   constructor(private datasetService: DatasetService,
-              private router: Router) {
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
     this.datasetFetchForm = new FormGroup({
       url: new FormControl('', [Validators.required]),
     });
@@ -26,15 +29,33 @@ export class DatasetSearchComponent implements OnInit {
 
 
   onSubmit({ value }) {
-    this.datasetList = sampleData;
-    // this.datasetService.fetchDataset(value.url).subscribe(data => {
-    //   // TODO: table
-    //   this.datasetList = data;
-    // });
-    // this.router.navigate([value], {replaceUrl: true });
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+        dataset_url: value.url,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  initializeSearch(url) {
+    this.datasetService.fetchDataset(url).subscribe(data => {
+      this.datasetList = data;
+    });
   }
 
   ngOnInit() {
+    this.searchSubscription = this.activatedRoute.queryParams
+      .subscribe(({dataset_url}) => {
+        if (dataset_url) {
+          this.initializeSearch(dataset_url);
+          this.datasetFetchForm.patchValue({url: dataset_url});
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.searchSubscription.unsubscribe();
   }
 
 }
