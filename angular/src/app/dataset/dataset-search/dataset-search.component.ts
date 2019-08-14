@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { DatasetService } from '../dataset.service';
 
+import sampleData from './data.json';
 import { DatasetList } from './DatasetList';
 
 @Component({
@@ -15,7 +17,8 @@ export class DatasetSearchComponent implements OnInit {
   datasetFetchForm: FormGroup;
   datasetList: DatasetList[];
 
-  constructor(private datasetService: DatasetService) {
+  constructor(private datasetService: DatasetService,
+              private router: Router) {
     this.datasetFetchForm = new FormGroup({
       url: new FormControl('', [Validators.required]),
     });
@@ -23,10 +26,12 @@ export class DatasetSearchComponent implements OnInit {
 
 
   onSubmit({ value }) {
-    this.datasetService.fetchDataset(value.url).subscribe(data => {
-      // TODO: table
-      this.datasetList = data;
-    });
+    this.datasetList = sampleData;
+    // this.datasetService.fetchDataset(value.url).subscribe(data => {
+    //   // TODO: table
+    //   this.datasetList = data;
+    // });
+    // this.router.navigate([value], {replaceUrl: true });
   }
 
   ngOnInit() {
