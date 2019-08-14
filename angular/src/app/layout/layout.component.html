@@ -53,6 +53,12 @@
         <mat-icon class="icon icon-explore"></mat-icon>
         <h4 mat-line>Explore Data</h4>
       </mat-list-item>
+      <mat-list-item [routerLink]="['dataset']"
+                    [routerLinkActive]="['active-nav-link']"
+                    data-se="nav-dataset">
+        <mat-icon class="icon icon-add"></mat-icon>
+        <h4 mat-line>Import Data</h4>
+      </mat-list-item>
       <mat-list-item *ngIf="profile"
                      [routerLink]="['identity']"
                      [routerLinkActive]="['active-nav-link']"
