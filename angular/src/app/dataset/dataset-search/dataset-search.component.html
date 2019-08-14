@@ -10,6 +10,12 @@
              matInput
             formControlName="url"/>
     </mat-form-field>
-    <button mat-raised-button>Fetch</button>
+    <button mat-raised-button type="submit">Fetch</button>
   </form>
+</div>
+
+<div *ngIf="datasetList && datasetList.hasOwnProperty('objects')">
+  <ddap-dataset-list
+    [dataset]=datasetList
+  ></ddap-dataset-list>
 </div>

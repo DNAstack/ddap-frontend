@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { DatasetService } from '../dataset.service';
 
+import { DatasetList } from './DatasetList';
+
 @Component({
   selector: 'ddap-dataset-search',
   templateUrl: './dataset-search.component.html',
@@ -11,6 +13,7 @@ import { DatasetService } from '../dataset.service';
 export class DatasetSearchComponent implements OnInit {
 
   datasetFetchForm: FormGroup;
+  datasetList: DatasetList[];
 
   constructor(private datasetService: DatasetService) {
     this.datasetFetchForm = new FormGroup({
@@ -20,8 +23,9 @@ export class DatasetSearchComponent implements OnInit {
 
 
   onSubmit({ value }) {
-    this.datasetService.fetchDataset(value.url).subscribe(s => {
+    this.datasetService.fetchDataset(value.url).subscribe(data => {
       // TODO: table
+      this.datasetList = data;
     });
   }
 

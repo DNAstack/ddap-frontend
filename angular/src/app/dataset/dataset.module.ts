@@ -5,12 +5,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { SharedModule } from '../shared/shared.module';
 
+import { DatasetListComponent } from './dataset-list/dataset-list.component';
 import { DatasetRoutingModule } from './dataset-routing.module';
 import { DatasetSearchComponent } from './dataset-search/dataset-search.component';
 
 
 @NgModule({
-  declarations: [DatasetSearchComponent],
+  declarations: [DatasetSearchComponent, DatasetListComponent],
   imports: [
     CommonModule,
     DatasetRoutingModule,
