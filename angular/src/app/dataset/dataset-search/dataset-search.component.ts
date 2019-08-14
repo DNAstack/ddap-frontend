@@ -41,7 +41,10 @@ export class DatasetSearchComponent implements OnInit, OnDestroy {
   initializeSearch(url) {
     this.datasetService.fetchDataset(url).subscribe(data => {
       this.datasetList = data;
-    });
+    },
+      () => {
+        this.datasetList = [];
+      });
   }
 
   ngOnInit() {
