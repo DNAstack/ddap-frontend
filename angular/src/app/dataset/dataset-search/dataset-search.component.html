@@ -18,8 +18,8 @@
   </form>
 </div>
 
-<div *ngIf="datasetList && datasetList.hasOwnProperty('objects')">
+<div *ngIf="datasetList$">
   <ddap-dataset-list
-    [dataset]=datasetList
+    [dataset$]=datasetList$
   ></ddap-dataset-list>
 </div>
