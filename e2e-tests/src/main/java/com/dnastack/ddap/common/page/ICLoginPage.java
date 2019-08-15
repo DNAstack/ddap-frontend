@@ -3,6 +3,8 @@ package com.dnastack.ddap.common.page;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URI;
 import java.util.function.Function;
@@ -23,6 +25,8 @@ public class ICLoginPage {
     public ICLoginPage(WebDriver driver) {
         this.driver = driver;
         log.info("Testing if {} is an IC login page", driver.getCurrentUrl());
+
+        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(personaLoginButton("nci_researcher")));
         driver.findElement(personaLoginButton("nci_researcher"));
     }
 
