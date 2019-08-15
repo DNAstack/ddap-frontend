@@ -19,5 +19,5 @@ public class DatasetResult {
 
     Map<String, String> pagination;
 
-    Schema schema;
+    Map<String, Object> schema;
 }
