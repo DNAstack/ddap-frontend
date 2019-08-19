@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
+import { unique } from '../../shared/util';
 import { DatasetService } from '../dataset.service';
 
 @Component({
@@ -29,46 +30,34 @@ export class DatasetViewsComponent implements OnInit {
     this.getAccessTokens(columnName, { ttl });
   }
 
-  getAccessTokens(columnName: string, ttl: object) {
-    this.datasetList$.subscribe(data => {
-      const columnData = this.extractColumnData(data, columnName);
+  ngOnInit() {
+  }
+
+  private getAccessTokens(columnName: string, ttl: object) {
+    this.datasetList$.subscribe(tableData => {
+      const columnData = this.extractColumnData(tableData, columnName);
       // TODO: handle view error
       this.datasetService.getViews(columnData)
         .subscribe(views => {
-          // TODO: refactor
-          const uniqueViews = this.getUniqueValues(Object.values(views));
+          const uniqueViews = unique(Object.values(views));
           uniqueViews.map(view => {
             // TODO: Handle error
-            this.datasetService.getAccessTokens(view, ttl).subscribe(access => this.accessTokens.push(access));
+            this.datasetService.getAccessTokens(view, ttl).subscribe(access => this.accessTokens.push(access),
+              (error) => console.error(error));
           });
-        });
+        },
+          (error) => console.error(error));
     });
   }
 
-  extractColumnData(data: Array<object>, columnName) {
-    // TODO: refactor
-    return data.reduce((acc: Array<string>, c) => {
+  private extractColumnData(tableData: Array<object>, columnName) {
+    return tableData.reduce((acc: Array<string>, c) => {
       const columnValue: string = c[columnName];
       if (columnValue) {
         acc.push(columnValue);
       }
       return acc;
     }, []);
-  }
-
-  getUniqueValues(views) {
-    // TODO: refactor
-    return views.reduce((acc, view) =>  {
-      view.map(v => {
-        if (!acc.includes(v)) {
-          acc.push(v);
-        }
-      });
-      return acc;
-    }, []);
-  }
-
-  ngOnInit() {
   }
 
 }

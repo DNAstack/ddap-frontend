@@ -26,18 +26,16 @@ export class DatasetService {
   }
 
   getViews(urls): Observable<any> {
-    // TODO: Handle no views error
     return this.http.post(`${environment.ddapApiUrl}/${realmIdPlaceholder}/dataset/views`, urls)
       .pipe(
-        this.errorHandler.notifyOnError(`temporary`)
+        this.errorHandler.notifyOnError(`URLs can't be empty`)
       );
   }
 
   getAccessTokens(view, ttl) {
     // TODO: Handle no access errors
-    // TODO: Update the url to use env variable instead of hardcoding
     return this.http.get(
-      `http://localhost:8085${view}/token`,
+      `${view}/token`,
       {
         params: this.httpParamsService.getHttpParamsFrom(ttl),
       });
