@@ -45,8 +45,9 @@ public class DatasetController {
 
 
     @GetMapping(params = "dataset_url")
-    public Mono<DatasetResult> fetchDataset(@RequestParam("dataset_url") String datasetUrl) {
-        return datasetClient.fetchSingleDataset(datasetUrl, null).onErrorResume(e -> {
+    public Mono<DatasetResult> fetchDataset(@RequestParam("dataset_url") String datasetUrl,
+        @RequestParam(value = "access_token", required = false) String accessToken) {
+        return datasetClient.fetchSingleDataset(datasetUrl, accessToken).onErrorResume(e -> {
             if (!DatasetErrorException.class.isAssignableFrom(e.getClass())) {
                 throw new DatasetErrorException(500, e.getMessage());
             } else {
