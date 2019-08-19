@@ -11,20 +11,19 @@ import { DatasetService } from '../dataset.service';
 })
 export class DatasetViewsComponent implements OnInit {
   datasetColumnsForm: FormGroup;
+  accessTokens: Array<object> = [];
   @Input() columns;
   @Input() datasetList$: Observable<object[]>;
-  selectedTimeUnit = 'h';
 
   constructor(private datasetService: DatasetService) {
     this.datasetColumnsForm = new FormGroup({
       columnName: new FormControl('', [Validators.required]),
-      timeDuration: new FormControl(),
-      timeUnit: new FormControl(),
+      timeDuration: new FormControl('1'),
+      timeUnit: new FormControl('h'),
     });
   }
 
   onSubmit({ value }) {
-    // TODO make API call
     const {columnName, timeDuration, timeUnit} = value;
     const ttl = `${timeDuration}${timeUnit}`;
     this.getAccessTokens(columnName, { ttl });
@@ -33,18 +32,19 @@ export class DatasetViewsComponent implements OnInit {
   getAccessTokens(columnName: string, ttl: object) {
     this.datasetList$.subscribe(data => {
       const columnData = this.extractColumnData(data, columnName);
-      const viewUrls  = this.datasetService.getViews(columnData)
+      this.datasetService.getViews(columnData)
         .subscribe(views => {
           const uniqueViews = this.getUniqueValues(views);
           uniqueViews.map(view => {
             // TODO: Handle view
-            this.datasetService.getAccessTokens(view, ttl).subscribe();
+            this.datasetService.getAccessTokens(view, ttl).subscribe(access => this.accessTokens.push(access));
           });
         });
     });
   }
 
   extractColumnData(data: Array<object>, columnName) {
+    // TODO: refactor
     return data.reduce((acc: Array<string>, c) => {
       const columnValue: string = c[columnName];
       if (columnValue) {
@@ -55,6 +55,7 @@ export class DatasetViewsComponent implements OnInit {
   }
 
   getUniqueValues(views) {
+    // TODO: refactor
     return views.reduce((acc, view) =>  {
       const viewUrls = Object.values(view)[0];
       viewUrls.map(v => {

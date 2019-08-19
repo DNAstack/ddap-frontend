@@ -25,8 +25,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Time unit</mat-label>
-        <mat-select [(value)]="selectedTimeUnit"
-          formControlName="timeUnit">
+        <mat-select formControlName="timeUnit">
           <mat-option value="s">second</mat-option>
           <mat-option value="m">minute</mat-option>
           <mat-option value="h">hour</mat-option>
@@ -36,4 +35,11 @@
     </div>
     <button mat-raised-button type="submit">Get Access</button>
   </form>
+</div>
+
+<div *ngIf="accessTokens && accessTokens.length">
+  <ddap-dataset-view-access
+    *ngFor="let accessObj of accessTokens"
+    [access] = accessObj
+  ></ddap-dataset-view-access>
 </div>
