@@ -2,6 +2,7 @@ package com.dnastack.ddap.server;
 
 import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
+import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -9,6 +10,8 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import dam.v1.DamService;
 import java.io.IOException;
+import java.util.Arrays;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -101,6 +104,57 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
             .body("message",notNullValue())
             .body("statusCode",equalTo(404))
             .statusCode(404);
+    }
+
+    @Test
+    public void shouldReturnViewForBucket() throws IOException{
+        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+
+        // @formatter:off
+        given()
+            .log().method()
+            .log().cookies()
+            .log().uri()
+            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+            .cookie("dam_token", validPersonaToken)
+                .cookie("refresh_token", refreshToken)
+            .contentType("application/json")
+            .body(Arrays.asList("gs://ga4gh-apis-controlled-access","https://www.googleapis.com/storage/v1/b/ga4gh-apis-controlled-access"))
+        .when()
+            .post(format("/api/v1alpha/%s/dataset/views",REALM))
+            .then()
+            .log().ifValidationFails()
+            .contentType("application/json")
+            .body("gs://ga4gh-apis-controlled-access[0]",anyOf(equalTo("/dam/1/v1alpha/resources/ga4gh-apis/view"
+                        + "/gcs_read"),equalTo("/dam/1/v1alpha/resources/thousand-genomes/view/gcs-file-access")))
+            .statusCode(200);
+
+    }
+
+    @Test
+    public void shouldReturnEmptyViewsForNonExistantResource() throws IOException{
+        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+
+        // @formatter:off
+        given()
+            .log().method()
+            .log().cookies()
+            .log().uri()
+            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+            .cookie("dam_token", validPersonaToken)
+                .cookie("refresh_token", refreshToken)
+            .contentType("application/json")
+            .body(Arrays.asList("gs://empty-view"))
+        .when()
+            .post(format("/api/v1alpha/%s/dataset/views",REALM))
+            .then()
+            .log().ifValidationFails()
+            .body("isEmpty()",Matchers.is(true))
+            .contentType("application/json")
+            .statusCode(200);
+
     }
 
 }
