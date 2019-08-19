@@ -13,6 +13,7 @@ import { DatasetService } from '../dataset.service';
 export class DatasetViewsComponent implements OnInit {
   datasetColumnsForm: FormGroup;
   accessTokens: Array<object> = [];
+  errorMessages: Array<any> = [];
   @Input() columns;
   @Input() datasetList$: Observable<object[]>;
 
@@ -42,14 +43,20 @@ export class DatasetViewsComponent implements OnInit {
           const uniqueViews = unique(Object.values(views));
           uniqueViews.map(view => {
             // TODO: Handle error
-            this.datasetService.getAccessTokens(view, ttl).subscribe(access => this.accessTokens.push(access),
-              (error) => console.error(error));
+            this.datasetService.getAccessTokens(view, ttl).subscribe(access => {
+              this.errorMessages = [];
+              this.accessTokens.push(access);
+              },
+              (error) => this.handleAccessTokenError(error, view));
           });
         },
           (error) => console.error(error));
     });
   }
 
+  private handleAccessTokenError(error, view) {
+    this.errorMessages.push(`Cannot fetch token for the view: ${view}`);
+  }
   private extractColumnData(tableData: Array<object>, columnName) {
     return tableData.reduce((acc: Array<string>, c) => {
       const columnValue: string = c[columnName];
