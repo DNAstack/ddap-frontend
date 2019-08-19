@@ -77,7 +77,7 @@ public class DatasetController {
             String token = damToken.get();
 
             return damClient.getFlattenedViews(realm, token, refreshToken).flatMap(flatViews ->
-                Mono.just(getRelevantViewsForUrlsInDam(damId, flatViews, uniqueUrls))
+                Mono.just(getRelevantViewsForUrlsInDam(damId, realm, flatViews, uniqueUrls))
             );
 
         }).collectList().flatMap(viewsForAllDams -> {
@@ -96,7 +96,8 @@ public class DatasetController {
         });
     }
 
-    private Map<String, Set<String>> getRelevantViewsForUrlsInDam(String damId, Map<String, FlatView> flatViews,
+    private Map<String, Set<String>> getRelevantViewsForUrlsInDam(String damId, String realm, Map<String,
+        FlatView> flatViews,
         List<String> urls) {
 
         Map<String, Set<String>> views = new HashMap<>();
@@ -111,13 +112,14 @@ public class DatasetController {
                 }
 
                 if (url.startsWith(interfaceUri)) {
-                    UriTemplate template = new UriTemplate("/dam/{damId}/v1alpha/resources/{resourceName}/view"
-                        + "/{viewName}");
+                    UriTemplate template = new UriTemplate("/dam/{damId}/v1alpha/{realmId}/resources/"
+                        + "{resourceName}/view/{viewName}");
 
                     final Map<String, Object> variables = new HashMap<>();
                     variables.put("damId", damId);
                     variables.put("resourceName", flatView.getResourceName());
                     variables.put("viewName", flatView.getViewName());
+                    variables.put("realmId", realm);
                     viewsForUrl.add(template.expand(variables).toString());
                 }
             }
