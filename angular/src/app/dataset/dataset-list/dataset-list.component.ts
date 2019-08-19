@@ -45,8 +45,6 @@ export class DatasetListComponent implements OnInit {
       this.datasetColumns = Object.keys(data.schema.properties);
       this.columnsToDisplay = this.columnsToDisplay.concat(this.datasetColumns);
     });
-    // this.datasetColumns = Object.keys(this.dataset.schema.properties);
-    // this.columnsToDisplay = this.columnsToDisplay.concat(this.datasetColumns);
   }
 
 }
