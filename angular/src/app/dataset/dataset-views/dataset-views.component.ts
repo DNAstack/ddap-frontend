@@ -32,11 +32,13 @@ export class DatasetViewsComponent implements OnInit {
   getAccessTokens(columnName: string, ttl: object) {
     this.datasetList$.subscribe(data => {
       const columnData = this.extractColumnData(data, columnName);
+      // TODO: handle view error
       this.datasetService.getViews(columnData)
         .subscribe(views => {
-          const uniqueViews = this.getUniqueValues(views);
+          // TODO: refactor
+          const uniqueViews = this.getUniqueValues(Object.values(views));
           uniqueViews.map(view => {
-            // TODO: Handle view
+            // TODO: Handle error
             this.datasetService.getAccessTokens(view, ttl).subscribe(access => this.accessTokens.push(access));
           });
         });
@@ -57,8 +59,7 @@ export class DatasetViewsComponent implements OnInit {
   getUniqueValues(views) {
     // TODO: refactor
     return views.reduce((acc, view) =>  {
-      const viewUrls = Object.values(view)[0];
-      viewUrls.map(v => {
+      view.map(v => {
         if (!acc.includes(v)) {
           acc.push(v);
         }

@@ -14,6 +14,7 @@ export class DatasetListComponent implements OnInit {
 
   list$: Observable<object[]>;
   totalRows: number;
+  selectedRowsData$: Observable<Array<object>>;
   columnsToDisplay: string[] = ['select'];
   datasetColumns: string[];
   selection = new SelectionModel<object>(true, []);
@@ -25,10 +26,17 @@ export class DatasetListComponent implements OnInit {
     return this.totalRows === selectedRows;
   }
 
+  rowSelection(row) {
+    this.selection.toggle(row);
+    this.selectedRowsData$ = of(this.selection.selected);
+  }
+
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
-      this.list$.subscribe(rows => rows.map(row => this.selection.select(row)));
+      this.list$.subscribe(rows => rows.map(row => this.selection.select(row)),
+        () => console.error(),
+        () => this.selectedRowsData$ = of(this.selection.selected));
   }
 
   checkboxLabel(row?): string {
