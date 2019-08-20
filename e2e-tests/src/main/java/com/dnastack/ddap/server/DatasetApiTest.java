@@ -128,7 +128,32 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
             .contentType("application/json")
             .body("gs://ga4gh-apis-controlled-access[0]",
                 anyOf(equalTo("/dam/1/v1alpha/" + REALM + "/resources/ga4gh-apis/view/gcs_read"),
-                    equalTo("/dam/1/v1alpha/" + REALM + "resources/thousand-genomes/view/gcs-file-access")))
+                    equalTo("/dam/1/v1alpha/" + REALM + "/resources/thousand-genomes/view/gcs-file-access")))
+            .statusCode(200);
+
+    }
+
+    @Test
+    public void shouldNotReturnViewForPartialSubset() throws IOException{
+        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
+        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+
+        // @formatter:off
+        given()
+            .log().method()
+            .log().cookies()
+            .log().uri()
+            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
+            .cookie("dam_token", validPersonaToken)
+                .cookie("refresh_token", refreshToken)
+            .contentType("application/json")
+            .body(Arrays.asList("gs://ga4gh-apis-controlled-access-with-more-stuff"))
+        .when()
+            .post(format("/api/v1alpha/%s/dataset/views",REALM))
+            .then()
+            .log().ifValidationFails()
+            .contentType("application/json")
+            .body("isEmpty()",Matchers.is(true))
             .statusCode(200);
 
     }
