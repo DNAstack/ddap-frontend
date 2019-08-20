@@ -127,8 +127,8 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
             .log().ifValidationFails()
             .contentType("application/json")
             .body("gs://ga4gh-apis-controlled-access[0]",
-                anyOf(equalTo("/dam/1/v1alpha/" + REALM + "/resources/ga4gh-apis/view/gcs_read"),
-                    equalTo("/dam/1/v1alpha/" + REALM + "/resources/thousand-genomes/view/gcs-file-access")))
+                anyOf(equalTo("/dam/1/v1alpha/" + REALM + "/resources/ga4gh-apis/views/gcs_read"),
+                    equalTo("/dam/1/v1alpha/" + REALM + "/resources/thousand-genomes/views/gcs-file-access")))
             .statusCode(200);
 
     }

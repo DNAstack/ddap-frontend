@@ -113,7 +113,7 @@ public class DatasetController {
 
                 if (url.startsWith(interfaceUri)) {
                     UriTemplate template = new UriTemplate("/dam/{damId}/v1alpha/{realmId}/resources/"
-                        + "{resourceName}/view/{viewName}");
+                        + "{resourceName}/views/{viewName}");
 
                     final Map<String, Object> variables = new HashMap<>();
                     variables.put("damId", damId);
