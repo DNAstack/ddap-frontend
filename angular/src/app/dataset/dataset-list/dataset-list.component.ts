@@ -1,5 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material';
 import { Observable, of } from 'rxjs';
 
 @Component({
@@ -11,6 +12,7 @@ export class DatasetListComponent implements OnInit {
 
   @Input()
   dataset$;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   list$: Observable<object[]>;
   totalRows: number;
