@@ -8,7 +8,7 @@ import { flatMap, map, pluck } from 'rxjs/operators';
 import { DamInfoService } from '../../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../../../shared/realm/realm.constant';
-import { flattenArray } from '../../../shared/util';
+import { flatten } from '../../../shared/util';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +39,7 @@ export class PassportTranslatorsService {
             return this.getPassportTranslators(damApiUrl);
           });
           return zip(...passportTranslators).pipe(
-            map(translators => flattenArray(translators))
+            map(flatten)
           );
         })
       );

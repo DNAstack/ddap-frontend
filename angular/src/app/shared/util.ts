@@ -1,3 +1,5 @@
+import _uniq from 'lodash.uniq';
+
 export function objectToArray(dto) {
   const bar = Object
     .keys(dto)
@@ -11,6 +13,10 @@ export function objectToArray(dto) {
   return bar;
 }
 
-export function flattenArray(arr) {
-  return arr.reduce((accumulator, currentVal) => accumulator.concat(currentVal), []);
+export function flatten<T>(arrayOfArrays: T[][]): T[] {
+  return arrayOfArrays.reduce((accumulator, currentVal) => accumulator.concat(...currentVal), []);
+}
+
+export function unique<T>(arrayOfArrays: T[][]): T[] {
+  return _uniq(flatten(arrayOfArrays));
 }

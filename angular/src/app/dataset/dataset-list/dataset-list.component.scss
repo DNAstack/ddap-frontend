@@ -1,3 +1,28 @@
 table {
   width: 100%;
 }
+
+.ddap-column-panel {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  > .ddap-column {
+    padding: 0 1rem 0 0;
+
+    &:first-child {
+      width: 70%;
+    }
+
+    &:last-child {
+      flex: 1;
+      padding: 0;
+    }
+  }
+}
+
+.mat-header-cell,
+.mat-cell {
+  word-wrap: break-word;
+  word-break: break-all;
+}

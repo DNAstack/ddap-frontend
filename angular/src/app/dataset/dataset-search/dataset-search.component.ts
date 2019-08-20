@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 
 import { DatasetService } from '../dataset.service';
 
@@ -15,7 +15,7 @@ import { DatasetList } from './DatasetList';
 export class DatasetSearchComponent implements OnInit, OnDestroy {
 
   datasetFetchForm: FormGroup;
-  datasetList: DatasetList[];
+  datasetList$: Observable<DatasetList>;
 
   private searchSubscription: Subscription;
 
@@ -40,10 +40,10 @@ export class DatasetSearchComponent implements OnInit, OnDestroy {
 
   initializeSearch(url) {
     this.datasetService.fetchDataset(url).subscribe(data => {
-      this.datasetList = data;
+      this.datasetList$ = of(data);
     },
       () => {
-        this.datasetList = [];
+        this.datasetList$ = new Observable<DatasetList>();
       });
   }
 

@@ -1,5 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Input, OnInit } from '@angular/core';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'ddap-dataset-list',
@@ -9,25 +10,33 @@ import { Component, Input, OnInit } from '@angular/core';
 export class DatasetListComponent implements OnInit {
 
   @Input()
-  dataset;
+  dataset$;
 
-  list;
+  list$: Observable<object[]>;
+  totalRows: number;
+  selectedRowsData$: Observable<Array<object>>;
   columnsToDisplay: string[] = ['select'];
   datasetColumns: string[];
-  selection = new SelectionModel(true, []);
+  selection = new SelectionModel<object>(true, []);
 
   constructor() { }
 
   isAllSelected() {
     const selectedRows = this.selection.selected.length;
-    const totalRows = this.list.length;
-    return totalRows === selectedRows;
+    return this.totalRows === selectedRows;
+  }
+
+  rowSelection(row) {
+    this.selection.toggle(row);
+    this.selectedRowsData$ = of(this.selection.selected);
   }
 
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
-      this.list.forEach(row => this.selection.select(row));
+      this.list$.subscribe(rows => rows.map(row => this.selection.select(row)),
+        () => console.error(),
+        () => this.selectedRowsData$ = of(this.selection.selected));
   }
 
   checkboxLabel(row?): string {
@@ -38,9 +47,12 @@ export class DatasetListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.list = this.dataset.objects;
-    this.datasetColumns = Object.keys(this.dataset.schema.properties);
-    this.columnsToDisplay = this.columnsToDisplay.concat(this.datasetColumns);
+    this.dataset$.subscribe(data => {
+      this.list$ = of(data.objects);
+      this.totalRows = data.objects.length;
+      this.datasetColumns = Object.keys(data.schema.properties);
+      this.columnsToDisplay = this.columnsToDisplay.concat(this.datasetColumns);
+    });
   }
 
 }

@@ -1,0 +1,9 @@
+@import "../../../styles/modules/colors";
+
+mat-form-field:first-child {
+  margin-right: 0.5rem;
+}
+.error-message {
+  font-size: 0.5rem;
+  color: $failure-color;
+}
