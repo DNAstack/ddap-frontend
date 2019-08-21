@@ -18,7 +18,7 @@
   </form>
 </div>
 
-<div *ngIf="datasetList$">
+<div *ngIf="datasetList$ | async">
   <ddap-dataset-list
     [dataset$]=datasetList$
   ></ddap-dataset-list>

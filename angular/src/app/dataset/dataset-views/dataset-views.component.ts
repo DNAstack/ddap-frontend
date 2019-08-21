@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
 import { unique } from '../../shared/util';
 import { DatasetService } from '../dataset.service';
@@ -10,7 +10,7 @@ import { DatasetService } from '../dataset.service';
   templateUrl: './dataset-views.component.html',
   styleUrls: ['./dataset-views.component.scss'],
 })
-export class DatasetViewsComponent implements OnInit {
+export class DatasetViewsComponent {
   datasetColumnsForm: FormGroup;
   accessTokens: Array<object> = [];
   errorMessages: Array<any> = [];
@@ -29,9 +29,6 @@ export class DatasetViewsComponent implements OnInit {
     const {columnName, timeDuration, timeUnit} = value;
     const ttl = `${timeDuration}${timeUnit}`;
     this.getAccessTokens(columnName, { ttl });
-  }
-
-  ngOnInit() {
   }
 
   private getAccessTokens(columnName: string, ttl: object) {
