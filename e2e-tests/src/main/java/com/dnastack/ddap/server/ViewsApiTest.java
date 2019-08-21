@@ -164,6 +164,7 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
             .body("view",equalTo(view))
             .body("keySet()",not(hasItem("locationAndToken")))
             .body("exception",notNullValue())
+            .body("exception.statusCode",equalTo(404))
             .contentType("application/json")
             .statusCode(200);
         // @formatter:on

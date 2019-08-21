@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -102,7 +103,7 @@ public class ViewsController {
 
         ViewAuthorizationResponse(String view, Throwable exception) {
             this.view = view;
-            this.exception = new ViewAuthorizationException(exception);
+            this.exception = ViewAuthorizationException.from(exception);
             this.locationAndToken = null;
         }
     }
@@ -122,6 +123,15 @@ public class ViewsController {
             this.message = throwable.getMessage();
             this.exceptionClass = throwable.getClass().getName();
             this.statusCode = status;
+        }
+
+        static ViewAuthorizationException from(Throwable throwable) {
+            if (throwable instanceof WebClientResponseException) {
+                return new ViewAuthorizationException(((WebClientResponseException) throwable).getRawStatusCode(),
+                    throwable);
+            } else {
+                return new ViewAuthorizationException(throwable);
+            }
         }
 
     }
