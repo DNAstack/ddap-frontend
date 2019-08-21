@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 
 import { environment } from '../../environments/environment';
 import { ErrorHandlerService } from '../shared/error-handler/error-handler.service';
-import { HttpParamsService } from '../shared/http-params.service';
 import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 import { Dataset } from './dataset-import/Dataset';
@@ -16,8 +15,7 @@ import { ViewTokens } from './dataset-views/ViewTokens';
 export class DatasetService {
 
   constructor(private http: HttpClient,
-              private errorHandler: ErrorHandlerService,
-              private httpParamsService: HttpParamsService) { }
+              private errorHandler: ErrorHandlerService) { }
 
   fetchDataset(url: string): Observable<Dataset> {
     return this.http.get<Dataset>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/dataset?dataset_url=${url}`)
@@ -31,15 +29,6 @@ export class DatasetService {
       .pipe(
         this.errorHandler.notifyOnError(`URLs can't be empty`)
       );
-  }
-
-  getAccessTokens(view, ttl) {
-    // TODO: Handle no access errors
-    return this.http.get(
-      `${view}/token`,
-      {
-        params: this.httpParamsService.getHttpParamsFrom(ttl),
-      });
   }
 
   getViewsAuthorization(views): Observable<Array<ViewTokens>> {
