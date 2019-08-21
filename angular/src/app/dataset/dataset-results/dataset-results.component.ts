@@ -5,11 +5,11 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 @Component({
-  selector: 'ddap-dataset-list',
-  templateUrl: './dataset-list.component.html',
-  styleUrls: ['./dataset-list.component.scss'],
+  selector: 'ddap-dataset-results',
+  templateUrl: './dataset-results.component.html',
+  styleUrls: ['./dataset-results.component.scss'],
 })
-export class DatasetListComponent implements OnInit {
+export class DatasetResultsComponent implements OnInit {
 
   @Input()
   dataset$;

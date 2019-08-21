@@ -7,7 +7,7 @@ import { ErrorHandlerService } from '../shared/error-handler/error-handler.servi
 import { HttpParamsService } from '../shared/http-params.service';
 import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
-import { DatasetList } from './dataset-search/DatasetList';
+import { DatasetList } from './dataset-import/DatasetList';
 
 @Injectable({
   providedIn: 'root',

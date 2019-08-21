@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DatasetSearchComponent } from './dataset-search/dataset-search.component';
+import { DatasetImportComponent } from './dataset-import/dataset-import.component';
 
 
 const routes: Routes = [
-  {path: '', component: DatasetSearchComponent},
+  {path: '', component: DatasetImportComponent},
 ];
 
 @NgModule({

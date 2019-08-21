@@ -10,11 +10,11 @@ import { DatasetService } from '../dataset.service';
 import { DatasetList } from './DatasetList';
 
 @Component({
-  selector: 'ddap-dataset-search',
-  templateUrl: './dataset-search.component.html',
-  styleUrls: ['./dataset-search.component.scss'],
+  selector: 'ddap-dataset-import',
+  templateUrl: './dataset-import.component.html',
+  styleUrls: ['./dataset-import.component.scss'],
 })
-export class DatasetSearchComponent implements OnInit, OnDestroy {
+export class DatasetImportComponent implements OnInit, OnDestroy {
 
   datasetFetchForm: FormGroup;
   datasetList$: Observable<DatasetList>;
