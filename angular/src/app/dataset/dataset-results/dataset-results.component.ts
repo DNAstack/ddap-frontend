@@ -1,20 +1,20 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+
+import { Dataset } from '../dataset-import/Dataset';
 
 @Component({
-  selector: 'ddap-dataset-list',
-  templateUrl: './dataset-list.component.html',
-  styleUrls: ['./dataset-list.component.scss'],
+  selector: 'ddap-dataset-results',
+  templateUrl: './dataset-results.component.html',
+  styleUrls: ['./dataset-results.component.scss'],
 })
-export class DatasetListComponent implements OnInit {
+export class DatasetResultsComponent implements OnInit {
 
   @Input()
-  dataset$;
+  dataset: Dataset;
 
-  list$: Observable<object[]>;
-  totalRows: number;
-  selectedRowsData$: Observable<Array<object>>;
+  list: Array<object>;
+  selectedRowsData: Array<object>;
   columnsToDisplay: string[] = ['select'];
   datasetColumns: string[];
   selection = new SelectionModel<object>(true, []);
@@ -23,20 +23,18 @@ export class DatasetListComponent implements OnInit {
 
   isAllSelected() {
     const selectedRows = this.selection.selected.length;
-    return this.totalRows === selectedRows;
+    return this.list.length === selectedRows;
   }
 
   rowSelection(row) {
     this.selection.toggle(row);
-    this.selectedRowsData$ = of(this.selection.selected);
+    this.selectedRowsData = this.selection.selected;
   }
 
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
-      this.list$.subscribe(rows => rows.map(row => this.selection.select(row)),
-        () => console.error(),
-        () => this.selectedRowsData$ = of(this.selection.selected));
+      this.list.map(row => this.selection.select(row));
   }
 
   checkboxLabel(row?): string {
@@ -47,12 +45,11 @@ export class DatasetListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataset$.subscribe(data => {
-      this.list$ = of(data.objects);
-      this.totalRows = data.objects.length;
-      this.datasetColumns = Object.keys(data.schema.properties);
+    if (this.dataset) {
+      this.list = this.dataset.objects;
+      this.datasetColumns = Object.keys(this.dataset.schema.properties);
       this.columnsToDisplay = this.columnsToDisplay.concat(this.datasetColumns);
-    });
+    }
   }
 
 }

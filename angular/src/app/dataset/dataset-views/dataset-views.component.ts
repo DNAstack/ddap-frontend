@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
 
 import { unique } from '../../shared/util';
 import { DatasetService } from '../dataset.service';
@@ -10,55 +10,48 @@ import { DatasetService } from '../dataset.service';
   templateUrl: './dataset-views.component.html',
   styleUrls: ['./dataset-views.component.scss'],
 })
-export class DatasetViewsComponent implements OnInit {
+export class DatasetViewsComponent {
   datasetColumnsForm: FormGroup;
   accessTokens: Array<object> = [];
   errorMessages: Array<any> = [];
-  @Input() columns;
-  @Input() datasetList$: Observable<object[]>;
+
+  @Input() columns: Array<string>;
+  @Input() selectedRowsData: Array<object> = [];
 
   constructor(private datasetService: DatasetService) {
     this.datasetColumnsForm = new FormGroup({
       columnName: new FormControl('', [Validators.required]),
-      timeDuration: new FormControl('1'),
-      timeUnit: new FormControl('h'),
     });
   }
 
-  onSubmit({ value }) {
-    const {columnName, timeDuration, timeUnit} = value;
-    const ttl = `${timeDuration}${timeUnit}`;
-    this.getAccessTokens(columnName, { ttl });
-  }
-
-  ngOnInit() {
-  }
-
-  private getAccessTokens(columnName: string, ttl: object) {
-    this.datasetList$.subscribe(tableData => {
-      const columnData = this.extractColumnData(tableData, columnName);
-      // TODO: handle view error
-      this.datasetService.getViews(columnData)
-        .subscribe(views => {
+  getViewsTokens({ value }) {
+    const { columnName } = value;
+    const columnData = this.extractColumnData(columnName);
+    // TODO: handle view error
+    this.datasetService.getViews(columnData)
+      .pipe(
+        flatMap(views => {
           const uniqueViews = unique(Object.values(views));
-          uniqueViews.map(view => {
-            // TODO: Handle error
-            this.datasetService.getAccessTokens(view, ttl).subscribe(access => {
-              this.errorMessages = [];
-              this.accessTokens.push(access);
-              },
-              (error) => this.handleAccessTokenError(error, view));
-          });
-        },
-          (error) => console.error(error));
+          return this.datasetService.getViewsAuthorization(uniqueViews);
+        })
+      ).subscribe((viewTokens) => {
+        viewTokens.map((viewToken) => {
+          const { locationAndToken, exception, view} = viewToken;
+          if (locationAndToken) {
+            this.accessTokens.push(locationAndToken);
+          } else if (exception) {
+            this.handleAccessTokenError(exception, view);
+          }
+        });
     });
   }
 
-  private handleAccessTokenError(error, view) {
-    this.errorMessages.push(`Cannot fetch token for the view: ${view}`);
+  private handleAccessTokenError(exception, view) {
+    this.errorMessages.push(`${view} : ${exception.message}`);
   }
-  private extractColumnData(tableData: Array<object>, columnName) {
-    return tableData.reduce((acc: Array<string>, c) => {
+
+  private extractColumnData(columnName) {
+    return this.selectedRowsData.reduce((acc: Array<string>, c) => {
       const columnValue: string = c[columnName];
       if (columnValue) {
         acc.push(columnValue);

@@ -1,21 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 
 import { DatasetService } from '../dataset.service';
 
-import { DatasetList } from './DatasetList';
+import { Dataset } from './Dataset';
 
 @Component({
-  selector: 'ddap-dataset-search',
-  templateUrl: './dataset-search.component.html',
-  styleUrls: ['./dataset-search.component.scss'],
+  selector: 'ddap-dataset-import',
+  templateUrl: './dataset-import.component.html',
+  styleUrls: ['./dataset-import.component.scss'],
 })
-export class DatasetSearchComponent implements OnInit, OnDestroy {
+export class DatasetImportComponent implements OnInit, OnDestroy {
 
   datasetFetchForm: FormGroup;
-  datasetList$: Observable<DatasetList>;
+  dataset: Dataset = {} as Dataset;
 
   private searchSubscription: Subscription;
 
@@ -38,12 +38,12 @@ export class DatasetSearchComponent implements OnInit, OnDestroy {
     });
   }
 
-  initializeSearch(url) {
+  initializeSearch(url: string) {
     this.datasetService.fetchDataset(url).subscribe(data => {
-      this.datasetList$ = of(data);
+      this.dataset = data;
     },
       () => {
-        this.datasetList$ = new Observable<DatasetList>();
+        this.dataset = {} as Dataset;
       });
   }
 
