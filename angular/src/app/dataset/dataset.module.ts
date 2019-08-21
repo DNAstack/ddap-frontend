@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatInputModule, MatPaginatorModule, MatSelectModule } from '@angular/material';
+import { MatInputModule, MatSelectModule } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { SharedModule } from '../shared/shared.module';
@@ -21,7 +21,6 @@ import { DatasetViewsComponent } from './dataset-views/dataset-views.component';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatPaginatorModule,
   ],
 })
 export class DatasetModule { }

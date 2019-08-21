@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+import { Access } from './Access';
+
 @Component({
   selector: 'ddap-dataset-view-access',
   templateUrl: './dataset-view-access.component.html',
@@ -8,7 +10,7 @@ import { Component, Input } from '@angular/core';
 export class DatasetViewAccessComponent {
 
   @Input()
-  access: object;
+  access: Access;
 
   constructor() { }
 
