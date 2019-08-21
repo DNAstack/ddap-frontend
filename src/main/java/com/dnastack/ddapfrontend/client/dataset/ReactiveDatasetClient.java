@@ -2,6 +2,7 @@ package com.dnastack.ddapfrontend.client.dataset;
 
 import com.dnastack.ddapfrontend.client.LoggingFilter;
 import com.dnastack.ddapfrontend.client.dataset.model.DatasetResult;
+import com.dnastack.ddapfrontend.util.Tuple;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -150,23 +151,6 @@ public class ReactiveDatasetClient {
 
     }
 
-    private static class Tuple<X, Y> {
 
-        final X x;
-        final Y y;
-
-        Tuple(X x, Y y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        public X getX() {
-            return x;
-        }
-
-        public Y getY() {
-            return y;
-        }
-    }
 
 }
