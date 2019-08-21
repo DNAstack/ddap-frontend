@@ -1,8 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
 
 import { Dataset } from '../dataset-import/Dataset';
 
@@ -18,7 +16,7 @@ export class DatasetResultsComponent implements OnInit {
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   list: Array<object>;
-  selectedRowsData$: Observable<Array<object>>;
+  selectedRowsData: Array<object>;
   columnsToDisplay: string[] = ['select'];
   datasetColumns: string[];
   selection = new SelectionModel<object>(true, []);
@@ -32,7 +30,7 @@ export class DatasetResultsComponent implements OnInit {
 
   rowSelection(row) {
     this.selection.toggle(row);
-    this.selectedRowsData$ = of(this.selection.selected);
+    this.selectedRowsData = this.selection.selected;
   }
 
   masterToggle() {

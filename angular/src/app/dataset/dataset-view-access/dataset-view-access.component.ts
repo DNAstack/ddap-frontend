@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
 export class DatasetViewAccessComponent {
 
   @Input()
-  access;
+  access: object;
 
   constructor() { }
 

@@ -1,6 +1,5 @@
 <div>
-  <form novalidate
-  (ngSubmit)="onSubmit(datasetColumnsForm)"
+  <div
   [formGroup]="datasetColumnsForm">
     <mat-form-field>
       <mat-label>Choose column to fetch views</mat-label>
@@ -8,39 +7,13 @@
         <mat-option *ngFor="let column of columns" [value]=column>{{ column }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <div class="flex">
-      <mat-form-field>
-        <input matInput
-               type="number"
-               min="1"
-               placeholder="Duration of an access token"
-               formControlName="timeDuration">
-        <mat-hint align="start"><strong>Maximum duration is 90 days</strong> </mat-hint>
-<!--        <mat-error *ngIf="ttlForm.hasError('required')">-->
-<!--          Duration is required-->
-<!--        </mat-error>-->
-<!--        <mat-error *ngIf="ttlForm.hasError('min')">-->
-<!--          Duration must be a positive integer-->
-<!--        </mat-error>-->
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Time unit</mat-label>
-        <mat-select formControlName="timeUnit">
-          <mat-option value="s">second</mat-option>
-          <mat-option value="m">minute</mat-option>
-          <mat-option value="h">hour</mat-option>
-          <mat-option value="d">day</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <button mat-raised-button type="submit">Get Access</button>
-  </form>
+    <button mat-raised-button (click)="getViewsTokens(datasetColumnsForm)">Get Access</button>
+  </div>
 </div>
 
 <div *ngIf="errorMessages && errorMessages.length">
   <p class="error-message" *ngFor="let message of errorMessages">{{ message }}</p>
 </div>
-
 <div *ngIf="accessTokens && accessTokens.length">
   <ddap-dataset-view-access
     *ngFor="let accessObj of accessTokens"

@@ -32,7 +32,7 @@
   <div class="ddap-column" *ngIf="selection.selected.length">
     <ddap-dataset-views
       [columns]=columnsToDisplay
-      [datasetList$]=selectedRowsData$
+      [selectedRowsData]=selectedRowsData
     ></ddap-dataset-views>
   </div>
 </div>

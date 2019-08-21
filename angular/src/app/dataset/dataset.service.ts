@@ -8,6 +8,7 @@ import { HttpParamsService } from '../shared/http-params.service';
 import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 import { Dataset } from './dataset-import/Dataset';
+import { ViewTokens } from './dataset-views/ViewTokens';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class DatasetService {
   }
 
   getViews(urls): Observable<any> {
-    return this.http.post(`${environment.ddapApiUrl}/${realmIdPlaceholder}/dataset/views`, urls)
+    return this.http.post(`${environment.ddapApiUrl}/${realmIdPlaceholder}/views/lookup`, urls)
       .pipe(
         this.errorHandler.notifyOnError(`URLs can't be empty`)
       );
@@ -39,5 +40,9 @@ export class DatasetService {
       {
         params: this.httpParamsService.getHttpParamsFrom(ttl),
       });
+  }
+
+  getViewsAuthorization(views): Observable<Array<ViewTokens>> {
+    return this.http.post<Array<ViewTokens>>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/views/tokens`, views);
   }
 }
