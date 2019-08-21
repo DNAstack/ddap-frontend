@@ -18,8 +18,8 @@
   </form>
 </div>
 
-<div *ngIf="datasetList$ | async">
+<div *ngIf="dataset.hasOwnProperty('objects') && dataset.objects.length">
   <ddap-dataset-results
-    [dataset$]=datasetList$
+    [dataset]=dataset
   ></ddap-dataset-results>
 </div>

@@ -4,6 +4,8 @@ import { MatPaginator } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
+import { Dataset } from '../dataset-import/Dataset';
+
 @Component({
   selector: 'ddap-dataset-results',
   templateUrl: './dataset-results.component.html',
@@ -12,11 +14,10 @@ import { of } from 'rxjs/observable/of';
 export class DatasetResultsComponent implements OnInit {
 
   @Input()
-  dataset$;
+  dataset: Dataset;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
-  list$: Observable<object[]>;
-  totalRows: number;
+  list: Array<object>;
   selectedRowsData$: Observable<Array<object>>;
   columnsToDisplay: string[] = ['select'];
   datasetColumns: string[];
@@ -26,7 +27,7 @@ export class DatasetResultsComponent implements OnInit {
 
   isAllSelected() {
     const selectedRows = this.selection.selected.length;
-    return this.totalRows === selectedRows;
+    return this.list.length === selectedRows;
   }
 
   rowSelection(row) {
@@ -37,9 +38,7 @@ export class DatasetResultsComponent implements OnInit {
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
-      this.list$.subscribe(rows => rows.map(row => this.selection.select(row)),
-        () => console.error(),
-        () => this.selectedRowsData$ = of(this.selection.selected));
+      this.list.map(row => this.selection.select(row));
   }
 
   checkboxLabel(row?): string {
@@ -50,12 +49,11 @@ export class DatasetResultsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataset$.subscribe(data => {
-      this.list$ = of(data.objects);
-      this.totalRows = data.objects.length;
-      this.datasetColumns = Object.keys(data.schema.properties);
+    if (this.dataset) {
+      this.list = this.dataset.objects;
+      this.datasetColumns = Object.keys(this.dataset.schema.properties);
       this.columnsToDisplay = this.columnsToDisplay.concat(this.datasetColumns);
-    });
+    }
   }
 
 }

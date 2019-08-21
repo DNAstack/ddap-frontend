@@ -1,6 +1,6 @@
 <div class="ddap-column-panel">
   <div class="ddap-column">
-    <mat-table [dataSource]="list$" class="mat-elevation-z8">
+    <mat-table [dataSource]="list" class="mat-elevation-z8">
       <ng-container matColumnDef="select">
         <mat-header-cell *matHeaderCellDef>
           <mat-checkbox (change)="$event ? masterToggle() : null"
