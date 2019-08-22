@@ -27,7 +27,8 @@ export class DatasetViewsComponent {
   getViewsTokens({ value }) {
     const { columnName } = value;
     const columnData = this.extractColumnData(columnName);
-    // TODO: handle view error
+    this.accessTokens = [];
+    this.errorMessages = [];
     this.datasetService.getViews(columnData)
       .pipe(
         flatMap(views => {

@@ -8,3 +8,13 @@
   font-size: 12px;
   padding: 6px;
 }
+.dataset-import-wrapper {
+  display: flex;
+  -webkit-box-align: start;
+  align-items: flex-start;
+  -webkit-box-pack: justify;
+
+  mat-form-field {
+    width: 80%;
+  }
+}

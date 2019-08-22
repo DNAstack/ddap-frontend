@@ -9,18 +9,20 @@
   (ngSubmit)="onSubmit(datasetFetchForm)"
   [formGroup]="datasetFetchForm">
     <mat-label>URL of the dataset</mat-label>
-    <mat-form-field>
-      <input formControlName="url"
-             placeholder="url"
-             matInput
-             data-se="dataset-url"/>
-    </mat-form-field>
-    <button mat-raised-button
-            color="primary"
-            type="submit"
-            data-se="btn-import-dataset">
-      Fetch
-    </button>
+    <div class="dataset-import-wrapper">
+      <mat-form-field>
+        <input formControlName="url"
+               placeholder="url"
+               matInput
+               data-se="dataset-url"/>
+      </mat-form-field>
+      <button mat-raised-button
+              color="primary"
+              type="submit"
+              data-se="btn-import-dataset">
+        Fetch
+      </button>
+    </div>
   </form>
 </div>
 
