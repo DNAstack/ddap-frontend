@@ -1,12 +1,12 @@
 import IdentityProvider = ic.v1.IdentityProvider;
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ic } from '../../../../shared/proto/ic-service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
+import { FormValidationService } from '../../../shared/form/form-validation.service';
+import { IcConfigEntityFormComponentBase } from '../../shared/ic/ic-config-entity-form-component.base';
 import { IdentityProviderFormComponent } from '../identity-provider-form/identity-provider-form.component';
 import { IdentityProviderService } from '../identity-providers.service';
 
@@ -14,22 +14,21 @@ import { IdentityProviderService } from '../identity-providers.service';
   selector: 'ddap-identity-provider-manage',
   templateUrl: './identity-provider-manage.component.html',
   styleUrls: ['./identity-provider-manage.component.scss'],
-  providers: [FormErrorScrollService],
+  providers: [FormValidationService],
 
 })
-export class IdentityProviderManageComponent implements OnInit {
+export class IdentityProviderManageComponent extends IcConfigEntityFormComponentBase implements OnInit {
 
-  @ViewChild('ddapForm', { static: false })
+  @ViewChild('identityProviderForm', { static: false })
   identityProviderForm: IdentityProviderFormComponent;
-  @ViewChild('formErrorElement', { static: false })
-  formErrorElement: ElementRef;
 
   identityProvider: IdentityProvider;
 
-  constructor(private identityProviderService: IdentityProviderService,
-              private router: Router,
-              private route: ActivatedRoute,
-              public formError: FormErrorScrollService) {
+  constructor(protected route: ActivatedRoute,
+              protected router: Router,
+              protected validationService: FormValidationService,
+              private identityProviderService: IdentityProviderService) {
+    super(route, router, validationService);
   }
 
   ngOnInit(): void {
@@ -37,20 +36,14 @@ export class IdentityProviderManageComponent implements OnInit {
   }
 
   save() {
-    if (!this.formError.validate(this.identityProviderForm, this.formErrorElement)) {
+    if (!this.validate(this.identityProviderForm)) {
       return;
     }
 
     const personaModel: EntityModel = this.identityProviderForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.identityProviderService.save(personaModel.name, change)
-      .subscribe(this.navigateUp, this.showError);
+      .subscribe(() => this.navigateUp('../..'), this.showError);
   }
 
-  private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
-
-  private showError = ({ error }: HttpErrorResponse) => {
-    const message = (error instanceof Object) ? JSON.stringify(error) : error;
-    return this.formError.displayErrorMessage(this.formErrorElement, message);
-  }
 }

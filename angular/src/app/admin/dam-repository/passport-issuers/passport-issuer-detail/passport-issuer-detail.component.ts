@@ -8,7 +8,7 @@ import {
   EntityRemovalConfirmationDialogComponent
 } from '../../../shared/entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
+import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { PassportIssuerFormComponent } from '../passport-issuer-form/passport-issuer-form.component';
@@ -19,50 +19,45 @@ import { PassportIssuersStore } from '../passport-issuers.store';
   selector: 'ddap-passport-issuer-detail',
   templateUrl: './passport-issuer-detail.component.html',
   styleUrls: ['./passport-issuer-detail.component.scss'],
-  providers: [FormErrorScrollService],
+  providers: [FormValidationService],
 })
 export class PassportIssuerDetailComponent extends DamConfigEntityDetailComponentBase<PassportIssuersStore> implements OnInit {
 
   @ViewChild(PassportIssuerFormComponent, { static: false })
   passportIssuerForm: PassportIssuerFormComponent;
-  @ViewChild('formErrorElement', { static: false })
-  formErrorElement: ElementRef;
 
   constructor(protected route: ActivatedRoute,
+              protected router: Router,
+              protected validationService: FormValidationService,
               protected damConfigStore: DamConfigStore,
               protected passportIssuersStore: PassportIssuersStore,
               private passportIssuerService: PassportIssuerService,
-              private router: Router,
-              public formError: FormErrorScrollService,
               public dialog: MatDialog) {
-    super(route, damConfigStore, passportIssuersStore);
+    super(route, router, validationService, damConfigStore, passportIssuersStore);
   }
 
   update() {
-    if (!this.formError.validate(this.passportIssuerForm, this.formErrorElement)) {
+    if (!this.validate(this.passportIssuerForm)) {
       return;
     }
 
     const passportIssuer: EntityModel = this.passportIssuerForm.getModel();
     const change = new ConfigModificationObject(passportIssuer.dto, {});
     this.passportIssuerService.update(this.damId, this.entity.name, change)
-      .subscribe(this.navigateUp, this.showError);
+      .subscribe(() => this.navigateUp('..'), this.showError);
   }
 
   delete() {
     this.passportIssuerService.remove(this.damId, this.entity.name)
-      .subscribe(this.navigateUp, this.showError);
+      .subscribe(() => this.navigateUp('..'), this.showError);
   }
 
-  private navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
-
-  private showError = ({ error }: HttpErrorResponse) => {
+  protected showError = ({ error }: HttpErrorResponse) => {
     if (error && ('testPersonas' in error)) {
       this.openEntityRemovalConfirmationDialog(error);
       return;
     }
-    const message = (error instanceof Object) ? JSON.stringify(error) : error;
-    return this.formError.displayErrorMessage(this.formErrorElement, message);
+    super.showError(error);
   }
 
   private openEntityRemovalConfirmationDialog(accessChange): void {
@@ -76,7 +71,7 @@ export class PassportIssuerDetailComponent extends DamConfigEntityDetailComponen
       }
       const change = new ConfigModificationObject(this.passportIssuerForm.getModel().dto, accessChange);
       this.passportIssuerService.remove(this.damId, this.entity.name, change)
-        .subscribe(this.navigateUp);
+        .subscribe(() => this.navigateUp('..'));
     });
   }
 

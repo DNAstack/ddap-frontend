@@ -1,11 +1,11 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
-import { DamConfigEntityComponentBase } from '../../shared/dam/dam-config-entity-component.base';
+import { combine } from '../../../shared/form/form';
+import { FormValidationService } from '../../../shared/form/form-validation.service';
+import { DamConfigEntityFormComponentBase } from '../../shared/dam/dam-config-entity-form-component.base';
 import { PersonaResourceAccessComponent } from '../resource-form/persona-resource-access/persona-resource-access.component';
 import { ResourceFormComponent } from '../resource-form/resource-form.component';
 import { ResourceService } from '../resources.service';
@@ -14,40 +14,34 @@ import { ResourceService } from '../resources.service';
   selector: 'ddap-resource-manage',
   templateUrl: './resource-manage.component.html',
   styleUrls: ['./resource-manage.component.scss'],
-  providers: [FormErrorScrollService],
+  providers: [FormValidationService],
 })
-export class ResourceManageComponent extends DamConfigEntityComponentBase {
+export class ResourceManageComponent extends DamConfigEntityFormComponentBase {
 
   @ViewChild(ResourceFormComponent, { static: false })
   resourceForm: ResourceFormComponent;
-  @ViewChild('formErrorElement', { static: false })
-  formErrorElement: ElementRef;
   @ViewChild('accessForm', { static: false })
   accessForm: PersonaResourceAccessComponent;
 
-  constructor(public resourceService: ResourceService,
-              public formError: FormErrorScrollService,
-              protected route: ActivatedRoute,
-              private router: Router) {
-    super(route);
+  constructor(protected route: ActivatedRoute,
+              protected router: Router,
+              protected validationService: FormValidationService,
+              public resourceService: ResourceService) {
+    super(route, router, validationService);
   }
 
   save() {
-    if (this.formError.validate(this.resourceForm, this.formErrorElement)) {
-      const resourceModel: EntityModel = this.resourceForm.getModel();
-      const applyModel = this.accessForm.getApplyModel() || {};
-      const change = new ConfigModificationObject(resourceModel.dto, applyModel);
-
-      return this.resourceService.save(this.damId, resourceModel.name, change)
-        .subscribe(this.navigateUp, this.showError);
+    const aggregateForm = combine(this.resourceForm, this.accessForm.testForm);
+    if (!this.validate(aggregateForm)) {
+      return;
     }
-  }
 
-  private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
+    const resourceModel: EntityModel = this.resourceForm.getModel();
+    const applyModel = this.accessForm.getApplyModel() || {};
+    const change = new ConfigModificationObject(resourceModel.dto, applyModel);
 
-  private showError = ({ error }: HttpErrorResponse) => {
-    const message = (error instanceof Object) ? JSON.stringify(error) : error;
-    return this.formError.displayErrorMessage(this.formErrorElement, message);
+    return this.resourceService.save(this.damId, resourceModel.name, change)
+      .subscribe(() => this.navigateUp('../..'), this.showError);
   }
 
 }

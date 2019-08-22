@@ -4,12 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs/Observable';
 
-import { ic } from '../../../../shared/proto/ic-service';
 import IdentityProvider = ic.v1.IdentityProvider;
-import { FormValidators } from '../../../../shared/validators';
+import { FormValidators } from '../../../../shared/form/validators';
+import { ic } from '../../../../shared/proto/ic-service';
 import { PassportTranslatorsService } from '../../../dam-repository/passport-translators/passport-translators.service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
-import Form from '../../../shared/form';
+import Form from '../../../shared/form/form';
 
 @Component({
   selector: 'ddap-identity-provider-form',

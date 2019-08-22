@@ -12,6 +12,7 @@ import { EntityManageFormComponent } from './entity-manage-form/entity-manage-fo
 import {
   EntityRemovalConfirmationDialogComponent
 } from './entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';
+import { FormFooterErrorComponent } from './form/form-footer-error/form-footer-error.component';
 import { OptionEditableListComponent } from './option-editable-list/option-editable-list.component';
 
 @NgModule({
@@ -22,6 +23,7 @@ import { OptionEditableListComponent } from './option-editable-list/option-edita
     EntityManageFormComponent,
     EntityRemovalConfirmationDialogComponent,
     OptionEditableListComponent,
+    FormFooterErrorComponent,
   ],
   imports: [
     SharedModule,
@@ -37,6 +39,7 @@ import { OptionEditableListComponent } from './option-editable-list/option-edita
     EntityManageFormComponent,
     EntityRemovalConfirmationDialogComponent,
     OptionEditableListComponent,
+    FormFooterErrorComponent,
   ],
   entryComponents: [
     EntityRemovalConfirmationDialogComponent,

@@ -8,7 +8,7 @@ import { Subject } from 'rxjs/Subject';
 
 import { ConfigModificationObject } from '../../../../shared/configModificationObject';
 import { EntityModel } from '../../../../shared/entity.model';
-import Form from '../../../../shared/form';
+import Form from '../../../../shared/form/form';
 import { TestFormComponent } from '../../../shared/test-form/test-form.component';
 import { ResourceService } from '../../resources.service';
 

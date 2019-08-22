@@ -1,10 +1,10 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
+import { FormValidationService } from '../../../shared/form/form-validation.service';
+import { IcConfigEntityFormComponentBase } from '../../shared/ic/ic-config-entity-form-component.base';
 import { ClientFormComponent } from '../client-form/client-form.component';
 import { ClientService } from '../clients.service';
 
@@ -12,37 +12,29 @@ import { ClientService } from '../clients.service';
   selector: 'ddap-client-manage',
   templateUrl: './client-manage.component.html',
   styleUrls: ['./client-manage.component.scss'],
-  providers: [FormErrorScrollService],
+  providers: [FormValidationService],
 })
-export class ClientManageComponent {
+export class ClientManageComponent extends IcConfigEntityFormComponentBase {
 
   @ViewChild(ClientFormComponent, { static: false })
   clientForm: ClientFormComponent;
-  @ViewChild('formErrorElement', { static: false })
-  formErrorElement: ElementRef;
 
-  constructor(private clientService: ClientService,
-              private router: Router,
-              private route: ActivatedRoute,
-              public formError: FormErrorScrollService) {
+  constructor(protected route: ActivatedRoute,
+              protected router: Router,
+              protected validationService: FormValidationService,
+              private clientService: ClientService) {
+    super(route, router, validationService);
   }
 
   save() {
-    if (!this.formError.validate(this.clientForm, this.formErrorElement)) {
+    if (!this.validate(this.clientForm)) {
       return;
     }
 
-    const clientModel: EntityModel = this.clientForm.getModel();
-    const change = new ConfigModificationObject(clientModel.dto, {});
-
-    this.clientService.save(clientModel.name, change)
-      .subscribe(this.navigateUp, this.showError);
-  }
-
-  private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
-  private showError = ({ error }: HttpErrorResponse) => {
-    const message = (error instanceof Object) ? JSON.stringify(error) : error;
-    return this.formError.displayErrorMessage(this.formErrorElement, message);
+    const client: EntityModel = this.clientForm.getModel();
+    const change = new ConfigModificationObject(client.dto, {});
+    this.clientService.save(client.name, change)
+      .subscribe(() => this.navigateUp('../..'), this.showError);
   }
 
 }

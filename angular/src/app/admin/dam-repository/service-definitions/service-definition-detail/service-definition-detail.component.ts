@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
+import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { ServiceDefinitionService } from '../service-definitions.service';
@@ -14,9 +15,11 @@ import { ServiceDefinitionsStore } from '../service-definitions.store';
 export class ServiceDefinitionDetailComponent extends DamConfigEntityDetailComponentBase<ServiceDefinitionsStore> implements OnInit {
 
   constructor(protected route: ActivatedRoute,
+              protected router: Router,
+              protected validationService: FormValidationService,
               protected damConfigStore: DamConfigStore,
               protected serviceDefinitionsStore: ServiceDefinitionsStore,
               public serviceDefinitionService: ServiceDefinitionService) {
-    super(route, damConfigStore, serviceDefinitionsStore);
+    super(route, router, validationService, damConfigStore, serviceDefinitionsStore);
   }
 }

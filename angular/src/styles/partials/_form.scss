@@ -133,6 +133,10 @@ form.ddap-form {
     margin-right: 2rem;
     margin-left: $sidenav-width + 4rem;
   }
+
+  ddap-form-footer-error {
+    flex-grow: 1;
+  }
 }
 
 @media (max-width: 1600px) {

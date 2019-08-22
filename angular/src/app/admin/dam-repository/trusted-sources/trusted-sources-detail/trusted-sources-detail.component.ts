@@ -1,10 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
+import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { TrustedSourcesFormComponent } from '../trusted-sources-form/trusted-sources-form.component';
@@ -15,44 +14,36 @@ import { TrustedSourcesStore } from '../trusted-sources.store';
   selector: 'ddap-trusted-source-detail',
   templateUrl: './trusted-sources-detail.component.html',
   styleUrls: ['./trusted-sources-detail.component.scss'],
-  providers: [FormErrorScrollService],
+  providers: [FormValidationService],
 })
 export class TrustedSourcesDetailComponent extends DamConfigEntityDetailComponentBase<TrustedSourcesStore> implements OnInit {
 
   @ViewChild(TrustedSourcesFormComponent, { static: false })
   trustedSourcesForm: TrustedSourcesFormComponent;
-  @ViewChild('formErrorElement', { static: false })
-  formErrorElement: ElementRef;
 
   constructor(protected route: ActivatedRoute,
+              protected router: Router,
+              protected validationService: FormValidationService,
               protected damConfigStore: DamConfigStore,
               protected trustedSourcesStore: TrustedSourcesStore,
-              private trustedSourcesService: TrustedSourcesService,
-              private router: Router,
-              public formError: FormErrorScrollService) {
-    super(route, damConfigStore, trustedSourcesStore);
+              private trustedSourcesService: TrustedSourcesService) {
+    super(route, router, validationService, damConfigStore, trustedSourcesStore);
   }
 
   update() {
-    if (!this.formError.validate(this.trustedSourcesForm, this.formErrorElement)) {
+    if (!this.validate(this.trustedSourcesForm)) {
       return;
     }
 
-    const trustedSourcesModel: EntityModel = this.trustedSourcesForm.getModel();
-    const change = new ConfigModificationObject(trustedSourcesModel.dto, {});
+    const trustedSources: EntityModel = this.trustedSourcesForm.getModel();
+    const change = new ConfigModificationObject(trustedSources.dto, {});
     this.trustedSourcesService.update(this.damId, this.entity.name, change)
-      .subscribe(this.navigateUp, this.showError);
+      .subscribe(() => this.navigateUp('..'), this.showError);
   }
 
   delete() {
     this.trustedSourcesService.remove(this.damId, this.entity.name)
-      .subscribe(this.navigateUp, this.showError);
+      .subscribe(() => this.navigateUp('..'), this.showError);
   }
 
-  protected navigateUp = () => this.router.navigate(['..'], { relativeTo: this.route });
-
-  protected showError = ({ error }: HttpErrorResponse) => {
-    const message = (error instanceof Object) ? JSON.stringify(error) : error;
-    return this.formError.displayErrorMessage(this.formErrorElement, message);
-  }
 }

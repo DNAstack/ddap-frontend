@@ -1,25 +1,28 @@
 import { OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, pluck } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
 import { EntityModel } from '../../../shared/entity.model';
+import { FormValidationService } from '../../../shared/form/form-validation.service';
 
-import { DamConfigEntityComponentBase } from './dam-config-entity-component.base';
+import { DamConfigEntityFormComponentBase } from './dam-config-entity-form-component.base';
 import { DamConfigEntityStore } from './dam-config-entity-store';
 import { DamConfigStore } from './dam-config.store';
 
 export class DamConfigEntityDetailComponentBase<T extends DamConfigEntityStore>
-  extends DamConfigEntityComponentBase implements OnInit, OnDestroy {
+  extends DamConfigEntityFormComponentBase implements OnInit, OnDestroy {
 
   entity: EntityModel;
 
   private subscription: Subscription;
 
   constructor(protected route: ActivatedRoute,
+              protected router: Router,
+              protected validationService: FormValidationService,
               protected damConfigStore: DamConfigStore,
               protected entityDamConfigStore: T) {
-    super(route);
+    super(route, router, validationService);
   }
 
   get entityId() {

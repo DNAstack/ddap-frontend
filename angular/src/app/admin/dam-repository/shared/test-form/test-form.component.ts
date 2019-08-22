@@ -10,11 +10,11 @@ import { Observable } from 'rxjs/Observable';
 import { map, take, takeWhile, tap } from 'rxjs/operators';
 
 import { pick } from '../../../../shared/autocomplete/autocomplete.util';
-import { PersonasStore } from '../../personas/personas.store';
-import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import Form from '../../../shared/form';
+import Form from '../../../shared/form/form';
+import { PersonasStore } from '../../personas/personas.store';
+import { ResourceService } from '../../resources/resources.service';
 
 @Component({
   selector: 'ddap-test-form',

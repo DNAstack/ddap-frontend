@@ -16,10 +16,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 import Resource = dam.v1.Resource;
 
+import { FormValidators } from '../../../../shared/form/validators';
 import { dam } from '../../../../shared/proto/dam-service';
-import { FormValidators } from '../../../../shared/validators';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
-import Form from '../../../shared/form';
+import Form from '../../../shared/form/form';
 
 import { ResourceViewFormComponent } from './resource-view-form/resource-view-form.component';
 

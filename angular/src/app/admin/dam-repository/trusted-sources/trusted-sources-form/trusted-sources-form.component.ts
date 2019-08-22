@@ -5,7 +5,7 @@ import _get from 'lodash.get';
 import { dam } from '../../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 import TrustedSource = dam.v1.TrustedSource;
-import Form from '../../../shared/form';
+import Form from '../../../shared/form/form';
 
 @Component({
   selector: 'ddap-trusted-sources-form',

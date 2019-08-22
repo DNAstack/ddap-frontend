@@ -1,12 +1,10 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
-import { PersonaService } from '../../personas/personas.service';
-import { DamConfigEntityComponentBase } from '../../shared/dam/dam-config-entity-component.base';
+import { FormValidationService } from '../../../shared/form/form-validation.service';
+import { DamConfigEntityFormComponentBase } from '../../shared/dam/dam-config-entity-form-component.base';
 import { ClaimDefinitionFormComponent } from '../claim-definition-form/claim-definition-form.component';
 import { ClaimDefinitionService } from '../claim-definitions.service';
 
@@ -14,38 +12,29 @@ import { ClaimDefinitionService } from '../claim-definitions.service';
   selector: 'ddap-claim-definition-manage',
   templateUrl: './claim-definition-manage.component.html',
   styleUrls: ['./claim-definition-manage.component.scss'],
-  providers: [FormErrorScrollService],
+  providers: [FormValidationService],
 })
-export class ClaimDefinitionManageComponent extends DamConfigEntityComponentBase {
+export class ClaimDefinitionManageComponent extends DamConfigEntityFormComponentBase {
 
   @ViewChild(ClaimDefinitionFormComponent, { static: false })
   claimDefinitionForm: ClaimDefinitionFormComponent;
-  @ViewChild('formErrorElement', { static: false })
-  formErrorElement: ElementRef;
 
   constructor(protected route: ActivatedRoute,
-              private claimDefinitionService: ClaimDefinitionService,
-              private router: Router,
-              public formError: FormErrorScrollService) {
-    super(route);
+              protected router: Router,
+              protected validationService: FormValidationService,
+              private claimDefinitionService: ClaimDefinitionService) {
+    super(route, router, validationService);
   }
 
   save() {
-    if (!this.formError.validate(this.claimDefinitionForm, this.formErrorElement)) {
+    if (!this.validate(this.claimDefinitionForm)) {
       return;
     }
 
-    const personaModel: EntityModel = this.claimDefinitionForm.getModel();
-    const change = new ConfigModificationObject(personaModel.dto, {});
-    this.claimDefinitionService.save(this.damId, personaModel.name, change)
-      .subscribe(this.navigateUp, this.showError);
-  }
-
-  private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
-
-  private showError = ({ error }: HttpErrorResponse) => {
-    const message = (error instanceof Object) ? JSON.stringify(error) : error;
-    return this.formError.displayErrorMessage(this.formErrorElement, message);
+    const claimDefinition: EntityModel = this.claimDefinitionForm.getModel();
+    const change = new ConfigModificationObject(claimDefinition.dto, {});
+    this.claimDefinitionService.save(this.damId, claimDefinition.name, change)
+      .subscribe(() => this.navigateUp('../..'), this.showError);
   }
 
 }

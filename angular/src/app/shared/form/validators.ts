@@ -1,6 +1,6 @@
 import { AbstractControl } from '@angular/forms';
 
-import { TimeDurationParser } from './time-duration.parser';
+import { TimeDurationParser } from '../time-duration.parser';
 
 export class FormValidators {
 

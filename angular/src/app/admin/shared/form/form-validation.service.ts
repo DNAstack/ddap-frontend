@@ -1,17 +1,29 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
-// Inspired by https://loiane.com/2017/08/angular-reactive-forms-trigger-validation-on-submit/
-@Injectable({
-  providedIn: 'root',
-})
+import Form from './form';
+
+@Injectable()
 export class FormValidationService {
 
-  forceValidateMultiple(formGroups: FormGroup[]): void {
+  public showError = false;
+  public message: string;
+
+  validate(formComponent: Form): boolean {
+    if (!formComponent.isValid()) {
+      this.forceValidateMultiple(formComponent.getAllForms());
+
+      return false;
+    }
+
+    return true;
+  }
+
+  private forceValidateMultiple(formGroups: FormGroup[]): void {
     formGroups.forEach((form) => this.forceValidate(form));
   }
 
-  forceValidate(form: FormGroup) {
+  private forceValidate(form: FormGroup) {
     if (!form.controls) {
       return;
     }

@@ -1,13 +1,12 @@
 import TestPersona = dam.v1.TestPersona;
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { dam } from '../../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormErrorScrollService } from '../../../shared/form-error-scroll.service';
-import { DamConfigEntityComponentBase } from '../../shared/dam/dam-config-entity-component.base';
+import { FormValidationService } from '../../../shared/form/form-validation.service';
+import { DamConfigEntityFormComponentBase } from '../../shared/dam/dam-config-entity-form-component.base';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';
 import { PersonaService } from '../personas.service';
 
@@ -15,22 +14,20 @@ import { PersonaService } from '../personas.service';
   selector: 'ddap-persona-manage',
   templateUrl: './persona-manage.component.html',
   styleUrls: ['./persona-manage.component.scss'],
-  providers: [FormErrorScrollService],
+  providers: [FormValidationService],
 })
-export class PersonaManageComponent extends DamConfigEntityComponentBase implements OnInit {
+export class PersonaManageComponent extends DamConfigEntityFormComponentBase implements OnInit {
 
   @ViewChild(PersonaFormComponent, { static: false })
   personaForm: PersonaFormComponent;
-  @ViewChild('formErrorElement', { static: false })
-  formErrorElement: ElementRef;
 
   persona: TestPersona;
 
   constructor(protected route: ActivatedRoute,
-              private personaService: PersonaService,
-              private router: Router,
-              public formError: FormErrorScrollService) {
-    super(route);
+              protected router: Router,
+              protected validationService: FormValidationService,
+              private personaService: PersonaService) {
+    super(route, router, validationService);
   }
 
   ngOnInit(): void {
@@ -38,7 +35,7 @@ export class PersonaManageComponent extends DamConfigEntityComponentBase impleme
   }
 
   save() {
-    if (!this.formError.validate(this.personaForm, this.formErrorElement)) {
+    if (!this.validate(this.personaForm)) {
       return;
     }
 
@@ -52,13 +49,6 @@ export class PersonaManageComponent extends DamConfigEntityComponentBase impleme
           this.showError(err);
         }
       );
-  }
-
-  private navigateUp = () => this.router.navigate(['../..'], { relativeTo: this.route });
-
-  private showError = ({ error }: HttpErrorResponse) => {
-    const message = (error instanceof Object) ? JSON.stringify(error) : error;
-    return this.formError.displayErrorMessage(this.formErrorElement, message);
   }
 
 }
