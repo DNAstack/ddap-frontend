@@ -12,10 +12,8 @@ export class FormValidationService {
   validate(formComponent: Form): boolean {
     if (!formComponent.isValid()) {
       this.forceValidateMultiple(formComponent.getAllForms());
-
       return false;
     }
-
     return true;
   }
 

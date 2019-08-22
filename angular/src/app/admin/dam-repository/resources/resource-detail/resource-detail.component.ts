@@ -36,7 +36,7 @@ export class ResourceDetailComponent extends DamConfigEntityDetailComponentBase<
 
   update() {
     const aggregateForm = combine(this.resourceForm, this.accessForm.testForm);
-    if (!this.validate(aggregateForm)) {
+    if (!this.validate(this.accessForm.testForm.form ? aggregateForm : this.resourceForm)) {
       return;
     }
 

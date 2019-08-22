@@ -43,7 +43,7 @@ export class PersonaManageComponent extends DamConfigEntityFormComponentBase imp
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.personaService.save(this.damId, personaModel.name, change)
       .subscribe(
-        this.navigateUp,
+        () => this.navigateUp('../..'),
         (err) => {
           this.personaForm.accessForm.validateAccessFields(personaModel.name, err);
           this.showError(err);
