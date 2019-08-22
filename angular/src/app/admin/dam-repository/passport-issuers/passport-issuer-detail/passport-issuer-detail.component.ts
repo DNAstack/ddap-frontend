@@ -44,20 +44,20 @@ export class PassportIssuerDetailComponent extends DamConfigEntityDetailComponen
     const passportIssuer: EntityModel = this.passportIssuerForm.getModel();
     const change = new ConfigModificationObject(passportIssuer.dto, {});
     this.passportIssuerService.update(this.damId, this.entity.name, change)
-      .subscribe(() => this.navigateUp('..'), this.showError);
+      .subscribe(() => this.navigateUp('..'), this.showErrorMessage);
   }
 
   delete() {
     this.passportIssuerService.remove(this.damId, this.entity.name)
-      .subscribe(() => this.navigateUp('..'), this.showError);
+      .subscribe(() => this.navigateUp('..'), this.showErrorMessage);
   }
 
-  protected showError = ({ error }: HttpErrorResponse) => {
+  showErrorMessage = ({ error }: HttpErrorResponse) => {
     if (error && ('testPersonas' in error)) {
       this.openEntityRemovalConfirmationDialog(error);
       return;
     }
-    super.showError(error);
+    this.showError(error);
   }
 
   private openEntityRemovalConfirmationDialog(accessChange): void {

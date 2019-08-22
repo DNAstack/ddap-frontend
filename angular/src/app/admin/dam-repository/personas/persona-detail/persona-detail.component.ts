@@ -39,20 +39,20 @@ export class PersonaDetailComponent extends DamConfigEntityDetailComponentBase<P
     const personaModel: EntityModel = this.personaForm.getModel();
     const change = new ConfigModificationObject(personaModel.dto, {});
     this.personaService.update(this.damId, this.entity.name, change)
-      .subscribe(() => this.navigateUp('..'), this.showError);
+      .subscribe(() => this.navigateUp('..'), this.showErrorMessage);
   }
 
   delete() {
     this.personaService.remove(this.damId, this.entity.name)
-      .subscribe(() => this.navigateUp('..'), this.showError);
+      .subscribe(() => this.navigateUp('..'), this.showErrorMessage);
   }
 
-  protected showError = (error: HttpErrorResponse) => {
+  showErrorMessage = (error: HttpErrorResponse) => {
     if (error.status === 424) {
       const personaModel: EntityModel = this.personaForm.getModel();
       this.personaForm.accessForm.validateAccessFields(personaModel.name, error);
     } else {
-      super.showError(error);
+      this.showError(error);
     }
   }
 
