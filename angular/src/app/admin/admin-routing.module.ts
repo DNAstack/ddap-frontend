@@ -3,19 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
-    children: [
-      {
-        path: 'dam',
-        loadChildren: () => import('./dam-repository/dam-repository.module')
-          .then(mod => mod.DamRepositoryModule),
-      },
-      {
-        path: 'identity-concentrator',
-        loadChildren: () => import('./identity-concentrator/identity-concentrator.module')
-          .then(mod => mod.IdentityConcentratorModule),
-      },
-    ],
+    path: 'dam',
+    loadChildren: () => import('./dam-repository/dam-repository.module')
+      .then(mod => mod.DamRepositoryModule),
+  },
+  {
+    path: 'identity-concentrator',
+    loadChildren: () => import('./identity-concentrator/identity-concentrator.module')
+      .then(mod => mod.IdentityConcentratorModule),
   },
 ];
 

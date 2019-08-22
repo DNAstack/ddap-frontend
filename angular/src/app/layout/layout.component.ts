@@ -61,7 +61,8 @@ export class LayoutComponent implements OnInit {
   }
 
   isActivePanel(panelId: string, damId?: string): boolean {
-    const childRoute = this.activatedRoute.firstChild;
+    const adminRoute = this.activatedRoute.firstChild;
+    const childRoute = adminRoute.firstChild;
     const damPanelId = 'dam';
     if (panelId === damPanelId &&  childRoute.routeConfig.path === damPanelId) {
       const damIdRouteSnapshot = childRoute.firstChild.snapshot;
