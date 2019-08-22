@@ -37,9 +37,10 @@ public class DamInfoController {
                        final ReactiveDamClient damClient = e.getValue();
                        return damClient.getDamInfo()
                                        .map(damInfoResponse -> {
+
                                            final String url = UriUtil.selfLinkToDam(request, damId)
                                                                      .toString();
-                                           final String label = Optional.ofNullable(damInfoResponse.getUi())
+                                           final String label = Optional.ofNullable(damInfoResponse.getUiMap())
                                                                         .map(ui -> ui.get("label"))
                                                                         // If you use orElseGet here you will run into a compilation error on Java 11
                                                                         // Issue is not present using Java 12

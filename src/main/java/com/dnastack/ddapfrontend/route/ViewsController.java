@@ -3,14 +3,15 @@ package com.dnastack.ddapfrontend.route;
 import com.dnastack.ddapfrontend.client.dam.DamAuthorizationException;
 import com.dnastack.ddapfrontend.client.dam.DamClientFactory;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
-import com.dnastack.ddapfrontend.client.dam.model.LocationAndToken;
-import com.dnastack.ddapfrontend.model.FlatView;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
+import dam.v1.DamService.GetFlatViewsResponse;
+import dam.v1.DamService.GetTokenResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -92,10 +93,10 @@ public class ViewsController {
     private static class ViewAuthorizationResponse {
 
         private final String view;
-        private final LocationAndToken locationAndToken;
+        private final GetTokenResponse locationAndToken;
         private final ViewAuthorizationException exception;
 
-        ViewAuthorizationResponse(String view, LocationAndToken locationAndToken) {
+        ViewAuthorizationResponse(String view, GetTokenResponse locationAndToken) {
             this.view = view;
             this.locationAndToken = locationAndToken;
             this.exception = null;
@@ -177,14 +178,14 @@ public class ViewsController {
     }
 
     private Map<String, Set<String>> getRelevantViewsForUrlsInDam(String damId, String realm, Map<String,
-        FlatView> flatViews,
+        GetFlatViewsResponse.FlatView> flatViews,
         List<String> urls) {
 
         Map<String, Set<String>> views = new HashMap<>();
         urls.stream().forEach(url -> {
             Set<String> viewsForUrl = new HashSet<>();
-            for (Map.Entry<String, FlatView> entry : flatViews.entrySet()) {
-                FlatView flatView = entry.getValue();
+            for (Entry<String, GetFlatViewsResponse.FlatView> entry : flatViews.entrySet()) {
+                GetFlatViewsResponse.FlatView flatView = entry.getValue();
                 String interfaceUri = flatView.getInterfaceUri();
 
                 if (!interfaceUri.endsWith("/") && url.length() > interfaceUri.length()) {
