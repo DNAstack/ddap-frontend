@@ -3,6 +3,7 @@ package com.dnastack.ddapfrontend.client.dataset;
 import com.dnastack.ddapfrontend.client.LoggingFilter;
 import com.dnastack.ddapfrontend.client.dataset.model.DatasetResult;
 import com.dnastack.ddapfrontend.util.Tuple;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,11 +12,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.BodyExtractors;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -24,10 +31,21 @@ public class ReactiveDatasetClient {
 
 
     private static final WebClient webClient = WebClient.builder()
+        .filter(ReactiveDatasetClient.modifyContentType())
         .filter(LoggingFilter.logRequest())
         .filter(LoggingFilter.logResponse())
         .build();
 
+    private static ExchangeFilterFunction modifyContentType() {
+        return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
+            ClientResponse.Builder clientResponseCopy = ClientResponse.from(clientResponse);
+            Flux<DataBuffer> body = clientResponse.body(BodyExtractors.toDataBuffers());
+            clientResponseCopy.body(body);
+            clientResponseCopy.headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON));
+            ClientResponse response = clientResponseCopy.build();
+            return Mono.just(response);
+        });
+    }
 
     public Mono<DatasetResult> fetchSingleDataset(String datasetUrl, String viewAccessToken) {
         return webClient.get()
@@ -48,7 +66,10 @@ public class ReactiveDatasetClient {
                             } else {
                                 return materializeInLineSchema(datasetUrl, result);
                             }
-                        });
+                        })
+                            .onErrorMap(ex -> {
+                                return new DatasetErrorException(clientResponse.statusCode().value(), ex.getMessage());
+                            });
                 } else {
                     return clientResponse.bodyToMono(String.class)
                         .flatMap(body -> Mono
@@ -141,7 +162,6 @@ public class ReactiveDatasetClient {
             if (clientResponse.statusCode().is2xxSuccessful()) {
                 return clientResponse.bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
                 }).flatMap(resolvedSchema -> resolveSchemaObject(uriToFetch, resolvedSchema));
-
             } else {
                 return clientResponse.bodyToMono(String.class)
                     .flatMap(body -> Mono
