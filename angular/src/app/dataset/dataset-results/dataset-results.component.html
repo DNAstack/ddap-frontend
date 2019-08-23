@@ -28,6 +28,20 @@
       <mat-row *matRowDef="let row; columns: columnsToDisplay;"></mat-row>
 
     </mat-table>
+    <div class="pagination">
+      <button
+        *ngIf="pagination.previousPageUrl"
+        (click)="redirectToPage(pagination.previousPageUrl)"
+      >
+        Previous Page
+      </button>
+      <button
+        *ngIf="pagination.nextPageUrl"
+        (click)="redirectToPage(pagination.nextPageUrl)"
+      >
+        Next Page
+      </button>
+    </div>
   </div>
   <div class="ddap-column" *ngIf="selection.selected.length">
     <ddap-dataset-views

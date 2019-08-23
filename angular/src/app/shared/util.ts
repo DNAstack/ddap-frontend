@@ -1,3 +1,4 @@
+import _camelCase from 'lodash.camelcase';
 import _uniq from 'lodash.uniq';
 
 export function objectToArray(dto) {
@@ -19,4 +20,8 @@ export function flatten<T>(arrayOfArrays: T[][]): T[] {
 
 export function unique<T>(arrayOfArrays: T[][]): T[] {
   return _uniq(flatten(arrayOfArrays));
+}
+
+export function camelCase(text: string) {
+  return _camelCase(text);
 }

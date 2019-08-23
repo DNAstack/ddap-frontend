@@ -29,5 +29,6 @@
 <div *ngIf="dataset.hasOwnProperty('objects') && dataset.objects.length">
   <ddap-dataset-results
     [dataset]=dataset
+    (fetchDatasetResults)="fetchPageResults($event)"
   ></ddap-dataset-results>
 </div>
