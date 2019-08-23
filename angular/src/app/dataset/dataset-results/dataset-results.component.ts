@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
 import { camelCase } from '../../shared/util';
 import { Dataset } from '../dataset-import/Dataset';
@@ -11,7 +11,7 @@ import { Pagination } from './Pagination';
   templateUrl: './dataset-results.component.html',
   styleUrls: ['./dataset-results.component.scss'],
 })
-export class DatasetResultsComponent implements OnInit {
+export class DatasetResultsComponent implements OnChanges {
 
   @Input()
   dataset: Dataset;
@@ -28,7 +28,7 @@ export class DatasetResultsComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnChanges(): void {
     if (this.dataset) {
       this.list = this.dataset.objects;
       this.datasetColumns = Object.keys(this.dataset.schema.schema.properties);
