@@ -1,7 +1,8 @@
 package com.dnastack.ddap.server;
 
-import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.dnastack.ddap.common.*;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -10,11 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparing;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -28,8 +30,27 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
     @Before
     public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", realmConfigString, "1", REALM);
+        final String baseRealmConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
+
+        final ObjectMapper objectMapper = new ObjectMapper();
+
+        /*
+         * Instead of having a mostly copy-pasted duplicate config file for this test,
+         * let's just modify the config programmatically with the changes we need.
+         */
+        final DamConfig damConfig = objectMapper.readValue(baseRealmConfig, DamConfig.class);
+        final RoleDef badAccessRole = new RoleDef(singletonList("fakeScope"), singletonList("metadata"), new UiMetadata("Role That Will Give a 403", "Role That Will Give a 403"));
+        final String badAccessRoleName = "discovery";
+        damConfig.getServiceTemplates().get("beacon").getRoles().put(badAccessRoleName, badAccessRole);
+        final Resource thousandGenomesResource = damConfig.getResources().get("thousand-genomes");
+        final View beaconView = thousandGenomesResource.getViews().get("discovery-access");
+        final RoleBind badRoleBind = new RoleBind(asList("bona_fide", "ethics"));
+        beaconView.getRoles().put(badAccessRoleName, badRoleBind);
+        beaconView.setDefaultRole(badAccessRoleName);
+
+        final String realmConfig = objectMapper.writeValueAsString(damConfig);
+
+        setupRealmConfig("administrator", realmConfig, "1", REALM);
         RestAssured.config = RestAssuredConfig.config()
                                               .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                                                       (cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()

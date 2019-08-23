@@ -1,13 +1,14 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.dnastack.ddap.common.DamConfig;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
 import lombok.Data;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -22,15 +23,41 @@ import static org.junit.Assert.assertThat;
 /**
  * 1. Test for when no server found or no response from a beacon error
  */
-@Ignore
 public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(BeaconSearchExceptionNoServerResponseHandlingTest.class.getSimpleName());
 
     @Before
     public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", realmConfigString, "1", REALM);
+        final String baseRealmConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
+
+        final ObjectMapper objectMapper = new ObjectMapper();
+
+        /*
+         * Instead of having a mostly copy-pasted duplicate config file for this test,
+         * let's just modify the config programmatically with the changes we need.
+         */
+        final DamConfig damConfig = objectMapper.readValue(baseRealmConfig, DamConfig.class);
+        damConfig.getResources()
+                 .get("thousand-genomes")
+                 .getViews()
+                 .get("discovery-access")
+                 .getItems()
+                 .get(0)
+                 .getVars()
+                 .put("url", "https://non-existent.totally-fake.dnastack.com");
+        damConfig.getResources()
+                 .get("ga4gh-apis")
+                 .getViews()
+                 .get("beacon")
+                 .getItems()
+                 .get(0)
+                 .getVars()
+                 .put("url", "https://other-non-existent.totally-fake.dnastack.com");
+
+        final String realmConfig = objectMapper.writeValueAsString(damConfig);
+
+        setupRealmConfig("administrator", realmConfig, "1", REALM);
         RestAssured.config = RestAssuredConfig.config()
                                               .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                                                       (cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()
