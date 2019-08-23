@@ -37,7 +37,7 @@ public class DataExploreE2eTest extends AbstractFrontendE2eTest {
 
     @Override
     protected AnyDdapPage login(ICLoginPage icLoginPage) {
-        return icLoginPage.loginAsNciResearcher(AnyDdapPage::new);
+        return icLoginPage.loginAsPersona("dr_joe_elixir", AnyDdapPage::new);
     }
 
     @Test
