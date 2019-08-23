@@ -62,14 +62,11 @@ export class TrustedSourcesFormComponent implements OnChanges, OnDestroy, Form {
   }
 
   getModel(): EntityModel {
-    const {id, sources, claims, label, description} = this.form.value;
+    const {id, sources, claims, ui} = this.form.value;
     const trustedSources = TrustedSource.create({
       claims,
       sources,
-      ui: {
-        label,
-        description,
-      },
+      ui,
     });
 
     return new EntityModel(id, trustedSources);
@@ -88,11 +85,11 @@ export class TrustedSourcesFormComponent implements OnChanges, OnDestroy, Form {
     const claimsForm = this.formBuilder.array(claims || []);
 
     return this.formBuilder.group({
-        id: [{value: sourceId, disabled: !!sourceId}, [
-          Validators.pattern(nameConstraintPattern),
-        ]],
-        label: [_get(ui, 'label')],
-        description: [_get(ui, 'description')],
+        id: [{value: sourceId, disabled: !!sourceId}, [Validators.pattern(nameConstraintPattern)]],
+        ui: this.formBuilder.group({
+          label: [_get(ui, 'label'), [Validators.required]],
+          description: [_get(ui, 'description', ''), [Validators.required, Validators.maxLength(255)]],
+        }),
         sources: sourcesForm,
         claims: claimsForm,
       }

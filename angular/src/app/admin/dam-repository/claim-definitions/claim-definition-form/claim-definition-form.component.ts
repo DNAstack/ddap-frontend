@@ -31,7 +31,7 @@ export class ClaimDefinitionFormComponent implements OnInit, Form {
       id: [this.claimDefinition.name || '', [Validators.pattern(nameConstraintPattern)]],
       ui: this.formBuilder.group({
         label: [ui.label || '', [Validators.required]],
-        description: [ui.description || '', [Validators.maxLength(255)]],
+        description: [ui.description || '', [Validators.required, Validators.maxLength(255)]],
         infoUrl: [ui.infoUrl || '', [FormValidators.url]],
       }),
     });

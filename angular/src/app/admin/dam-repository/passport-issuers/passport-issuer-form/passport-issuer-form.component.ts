@@ -43,7 +43,7 @@ export class PassportIssuerFormComponent implements OnInit, Form {
       id: [this.passportIssuer.name || '', [Validators.required, Validators.pattern(nameConstraintPattern)]],
       ui: this.formBuilder.group({
         label: [_get(ui, 'label', ''), []],
-        description: [_get(ui, 'description', ''), [Validators.maxLength(255)]],
+        description: [_get(ui, 'description', ''), [Validators.required, Validators.maxLength(255)]],
       }),
       issuer: [issuer, Validators.required],
       translateUsing: [translateUsing],

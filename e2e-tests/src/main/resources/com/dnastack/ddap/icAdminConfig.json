@@ -3,12 +3,64 @@
   "revision": "1",
   "commitTime": 1544824316,
   "identityProviders": {
+    "elixir": {
+      "issuer": "https://login.elixir-czech.org/oidc/",
+      "authorizeUrl": "https://login.elixir-czech.org/oidc/authorize",
+      "responseType": "token id_token",
+      "tokenUrl": "https://login.elixir-czech.org/oidc/token",
+      "scopes": [
+        "openid",
+        "profile",
+        "ga4gh"
+      ],
+      "translateUsing": "elixir_translator",
+      "clientId": "5bf6422e-ab73-42a9-b558-b89cab0421db",
+      "ui": {
+        "description": "Elixir identity provider",
+        "iconUrl": "/identity/static/elixir_identity.png",
+        "label": "Elixir"
+      }
+    },
+    "era_commons": {
+      "issuer": "https://dbgap.nlm.nih.gov/aa",
+      "authorizeUrl": "https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?login=NFL\\u0026redirect_to=${REDIRECT_URI}\\u0026page=redirect",
+      "tokenUrl": "ACCESS_TOKEN=https://dbgap.ncbi.nlm.nih.gov/aa/jwt/user.cgi?",
+      "translateUsing": "dbgap_translator",
+      "ui": {
+        "description": "eRA Commons identity provider",
+        "iconUrl": "/identity/static/era_commons_identity.jpg",
+        "label": "eRA Commons"
+      }
+    },
+    "google": {
+      "issuer": "https://accounts.google.com",
+      "authorizeUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+      "tokenUrl": "https://oauth2.googleapis.com/token",
+      "clientId": "2978103516-cmpti2bi0c5rteimvoks1abubdvjrdik.apps.googleusercontent.com",
+      "ui": {
+        "description": "Google identity provider",
+        "iconUrl": "/identity/static/google_identity.png",
+        "label": "Google"
+      }
+    },
+    "nih_login": {
+      "issuer": "https://federationdev.nih.gov",
+      "authorizeUrl": "https://federationdev.nih.gov:443/auth/oauth/v2/authorize",
+      "tokenUrl": "https://federationdev.nih.gov:443/auth/oauth/v2/token",
+      "clientId": "701a0bea-8f7d-4cc6-86ed-bb6cb427685a",
+      "ui": {
+        "description": "NIH Login identity provider",
+        "iconUrl": "/identity/static/nih_identity.jpeg",
+        "label": "NIH Login"
+      }
+    },
     "edit-ip-id": {
       "issuer": "https://www.googleapis.com/oauth2/v4/token",
       "authorizeUrl": "https://accounts.google.com/o/oauth2/v2/auth",
       "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
       "clientId": "2978103516-cmpti2bi0c5rteimvoks1abubdvjrdik.apps.googleusercontent.com",
       "ui": {
+        "label": "edit-ip-id",
         "iconUrl": "/identity/static/google_identity.png",
         "description": "description"
       }
@@ -19,40 +71,119 @@
       "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
       "clientId": "2978103516-cmpti2bi0c5rteimvoks1abubdvjrdik.apps.googleusercontent.com",
       "ui": {
+        "label": "delete-ip-id",
         "iconUrl": "/identity/static/google_identity.png",
-        "description": "description"
-      }
-    },
-    "elixir": {
-      "issuer": "https://login.elixir-czech.org/oidc",
-      "authorizeUrl": "https://login.elixir-czech.org/oidc/authorize",
-      "responseType": "token id_token",
-      "tokenUrl": "https://login.elixir-czech.org/oidc/token",
-      "scopes": [
-        "openid",
-        "profile",
-        "bona_fide_status"
-      ],
-      "clientId": "76823614-51a3-4e2a-b17f-142b63c19e88",
-      "ui": {
-        "iconUrl": "/identity/static/elixir_identity.png",
-        "label": "Elixir",
-        "description": "description"
-      }
-    },
-    "google": {
-      "issuer": "https://www.googleapis.com/oauth2/v4/token",
-      "authorizeUrl": "https://accounts.google.com/o/oauth2/v2/auth",
-      "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
-      "clientId": "2978103516-cmpti2bi0c5rteimvoks1abubdvjrdik.apps.googleusercontent.com",
-      "ui": {
-        "iconUrl": "/identity/static/google_identity.png",
-        "label": "Google",
         "description": "description"
       }
     }
   },
   "clients": {
+    "chao_test": {
+      "clientId": "46551464-5015-4588-928c-11a4e8440682",
+      "redirectUris": [
+        "http://localhost:8085/api",
+        "https://dev-gl4yfhvd3a-uc.a.run.app/api"
+      ],
+      "ui": {
+        "description": "DDAP Developer environment",
+        "label": "Chao's IC DDAP Development"
+      }
+    },
+    "craig_test": {
+      "clientId": "1f8ff367-3950-48c2-9358-781f9adff70c",
+      "redirectUris": [
+        "http://localhost:8080",
+        "https://ic-dot-hcls-data-connect-demo.appspot.com"
+      ],
+      "ui": {
+        "description": "DDAP Developer environment",
+        "label": "Craig's IC DDAP Development"
+      }
+    },
+    "dnastack_fe": {
+      "clientId": "b1aed96d-6367-4313-87a1-65eda4962a76",
+      "redirectUris": [
+        "http://localhost:8085/api",
+        "https://ddap-frontend.staging.dnastack.com/api",
+        "https://ddap-frontend.prod.dnastack.com/api",
+        "https://ddap-frontend-candidate.staging.dnastack.com",
+        "https://ddap-frontend-candidate.prod.dnastack.com"
+      ],
+      "ui": {
+        "description": "DDAP Developer environment",
+        "label": "DNASTACK IC DDAP Development"
+      }
+    },
+    "ga4gh_dam": {
+      "clientId": "05c14eaf-c762-4dbf-b7aa-c7bab5dd41b2",
+      "ui": {
+        "description": "Data Access Management Service",
+        "label": "DAM"
+      }
+    },
+    "ga4gh_ddap_dev": {
+      "clientId": "b6bf058f-7904-4b98-8982-d5a7a3a38052",
+      "redirectUris": [
+        "http://localhost:8085/api",
+        "https://ddap-frontend.staging.dnastack.com/api",
+        "https://ddap-frontend.prod.dnastack.com/api",
+        "https://ddap-frontend-candidate.staging.dnastack.com",
+        "https://ddap-frontend-candidate.prod.dnastack.com"
+      ],
+      "ui": {
+        "description": "DDAP Developer environment",
+        "label": "IC DDAP Development"
+      }
+    },
+    "ga4gh_ddap_prod": {
+      "clientId": "d0e75142-ee26-4217-86dd-0b01c9f8f811",
+      "redirectUris": [
+        "http://localhost:8085/api",
+        "https://ddap-frontend.staging.dnastack.com/api",
+        "https://ddap-frontend.prod.dnastack.com/api",
+        "https://ddap-frontend-candidate.staging.dnastack.com",
+        "https://ddap-frontend-candidate.prod.dnastack.com"
+      ],
+      "ui": {
+        "description": "DDAP Production environment",
+        "label": "IC DDAP Production"
+      }
+    },
+    "ga4gh_ddap_staging": {
+      "clientId": "ab7ac98b-fc80-4556-9b4c-0191bce2cdcb",
+      "redirectUris": [
+        "http://localhost:8085/api",
+        "https://ddap-frontend.staging.dnastack.com/api",
+        "https://ddap-frontend.prod.dnastack.com/api",
+        "https://ddap-frontend-candidate.staging.dnastack.com",
+        "https://ddap-frontend-candidate.prod.dnastack.com"
+      ],
+      "ui": {
+        "description": "DDAP Staging environment",
+        "label": "IC DDAP Staging"
+      }
+    },
+    "test_client": {
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed64",
+      "redirectUris": [
+        "/",
+        "http://localhost:8080"
+      ],
+      "ui": {
+        "description": "Test page",
+        "label": "Local Test Page"
+      }
+    },
+    "test_page": {
+      "clientId": "903cfaeb-57d9-4ef6-5659-04377794ed65",
+      "redirectUris": [
+        "/"
+      ],
+      "ui": {
+        "description": "Test page",
+        "label": "Test Page"
+      }
+    },
     "edit-client-id": {
       "clientId": "1f8ff367-3950-3333-9358-781f9adff70c",
       "redirectUris": [
@@ -60,7 +191,8 @@
         "https://ic-dot-hcls-data-connect-demo.appspot.com"
       ],
       "ui": {
-        "description": "description"
+        "description": "description",
+        "label": "edit-client-id"
       }
     },
     "delete-client-id": {
@@ -68,7 +200,11 @@
       "redirectUris": [
         "http://localhost:8080",
         "https://ic-dot-hcls-data-connect-demo.appspot.com"
-      ]
+      ],
+      "ui": {
+        "description": "description",
+        "label": "delete-client-id"
+      }
     },
     "this_ddap": {
       "clientId": "$$E2E_CLIENT_ID$$",
@@ -113,7 +249,7 @@
     "authCodeTokenTtl": "5m",
     "accessTokenTtl": "1d",
     "refreshTokenTtl": "180d",
-    "claimTtlCap": "180d",
+    "claimTtlCap": "9125d",
     "descriptors": {
       "accessTokenTtl": {
         "label": "Access Token TTL",
@@ -147,7 +283,7 @@
         "regexp": "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$",
         "type": "string:duration",
         "min": "10s",
-        "max": "180d",
+        "max": "9125d",
         "defaultValue": "90d"
       },
       "defaultPassportTokenTtl": {
@@ -191,5 +327,9 @@
         "isList": true
       }
     }
+  },
+  "ui": {
+    "description": "Test Identity Concentrator",
+    "label": "Test Identity Concentrator"
   }
 }

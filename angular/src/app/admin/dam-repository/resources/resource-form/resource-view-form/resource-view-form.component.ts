@@ -8,11 +8,11 @@ import View = dam.v1.View;
 import { Subscription } from 'rxjs/Subscription';
 
 import { dam } from '../../../../../shared/proto/dam-service';
+import { EntityModel, nameConstraintPattern } from '../../../../shared/entity.model';
 import { AccessPolicyService } from '../../../access-policies/access-policies.service';
 import { AccessPoliciesStore } from '../../../access-policies/access-policies.store';
 import { ServiceDefinitionService } from '../../../service-definitions/service-definitions.service';
 import { ServiceDefinitionsStore } from '../../../service-definitions/service-definitions.store';
-import { EntityModel, nameConstraintPattern } from '../../../../shared/entity.model';
 
 @Component({
   selector: 'ddap-resource-view-form',
@@ -70,6 +70,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
       contentTypes: [dto.contentTypes, []],
       ui: this.formBuilder.group({
         label: [dto.ui.label, [Validators.required]],
+        description: [dto.ui.description, [Validators.required, Validators.maxLength(255)]],
       }),
     });
 

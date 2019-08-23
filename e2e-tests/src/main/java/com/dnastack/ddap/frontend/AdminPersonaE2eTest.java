@@ -14,8 +14,7 @@ import java.io.IOException;
 
 import static com.dnastack.ddap.common.page.NavBar.damTestPersonaLink;
 import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
 
 @SuppressWarnings("Duplicates")
 public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
@@ -152,6 +151,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
 
         adminManagePage.clickCheckbox(By.id("dataset_example/bq_read/viewer"));
         adminManagePage.clickCheckbox(By.id("dataset_example/gcs_read/viewer"));
+        adminManagePage.clickCheckbox(By.id("ga4gh-apis/gcs_read/viewer"));
         adminManagePage.clickCheckbox(By.id("thousand-genomes/gcs-file-access/viewer"));
 
         adminListPage = adminManagePage.saveEntity();
@@ -191,7 +191,7 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.clearField(DdapBy.se("inp-value"));
 
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "ResearcherStatus");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-value"), "https://www.nature.com/articles/s41431-018-0219-y");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-value"), "https://www.nature.com/articles/s99999-999-9999-z");
         adminManagePage.closeAutocompletes();
     }
 
@@ -205,8 +205,6 @@ public class AdminPersonaE2eTest extends AbstractFrontendE2eTest {
         AdminManagePage adminManagePage = adminListPage.clickView("Dr. Joe (Elixir)", "Edit Persona");
 
         adminManagePage.clearField(DdapBy.se("inp-label"));
-
-        adminManagePage.toggleCheckboxAndWaitForValidation("ga4gh-apis/gcs_read/viewer");
 
         adminManagePage.clickUpdate();
         adminManagePage.assertError(containsString("Please fix invalid fields"));

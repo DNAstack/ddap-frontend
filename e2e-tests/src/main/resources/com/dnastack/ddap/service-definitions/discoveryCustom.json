@@ -32,6 +32,7 @@
     }
   },
   "ui": {
-    "label": "Beacon Discovery Search CUSTOM"
+    "label": "Beacon Discovery Search CUSTOM",
+    "description": "Copy of Beacon Discovery"
   }
 }

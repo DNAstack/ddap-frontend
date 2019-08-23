@@ -10,7 +10,8 @@
              required>
       <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
     </mat-form-field>
-    <mat-form-field class="col">
+    <mat-form-field class="col"
+                    formGroupName="ui">
       <input matInput
              placeholder="Display Name"
              formControlName="label"
@@ -19,7 +20,8 @@
     </mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field class="col">
+    <mat-form-field class="col"
+                    formGroupName="ui">
       <textarea matInput
                 placeholder="Description"
                 formControlName="description"

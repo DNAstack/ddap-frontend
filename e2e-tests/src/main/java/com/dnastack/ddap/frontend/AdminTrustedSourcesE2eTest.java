@@ -24,7 +24,7 @@ public class AdminTrustedSourcesE2eTest extends AbstractFrontendE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String testConfig = loadTemplate("/com/dnastack/ddap/trustedSourcesConfig.json");
+        final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig("administrator", testConfig, "1", REALM);
     }
 

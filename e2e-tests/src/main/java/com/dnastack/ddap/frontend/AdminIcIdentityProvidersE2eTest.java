@@ -24,7 +24,7 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String icConfig = loadTemplate("/com/dnastack/ddap/icConfig.json");
+        final String icConfig = loadTemplate("/com/dnastack/ddap/icAdminConfig.json");
         final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig("administrator", damConfig, "1", REALM);
         setupIcConfig("administrator", icConfig, REALM);

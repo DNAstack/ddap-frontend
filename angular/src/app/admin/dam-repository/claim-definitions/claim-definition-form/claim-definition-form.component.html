@@ -26,7 +26,8 @@
       <textarea matInput
                 placeholder="Description"
                 formControlName="description"
-                data-se="inp-description">
+                data-se="inp-description"
+                required>
       </textarea>
         <mat-error *ngIf="form.get('ui.description').invalid">Description must be up to 255 characters</mat-error>
       </mat-form-field>

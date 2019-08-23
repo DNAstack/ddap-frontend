@@ -43,6 +43,7 @@ public class AdminClaimDefinitionsE2eTest extends AbstractFrontendE2eTest {
         String claimDefId = "test-claim-def-minimal";
         adminManagePage.fillField(DdapBy.se("inp-id"), claimDefId);
         adminManagePage.fillField(DdapBy.se("inp-label"), claimDefId);
+        adminManagePage.fillField(DdapBy.se("inp-description"), "This is description");
 
         adminListPage = adminManagePage.saveEntity();
 

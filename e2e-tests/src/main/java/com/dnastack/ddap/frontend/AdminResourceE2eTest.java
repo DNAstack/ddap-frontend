@@ -17,8 +17,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.IOException;
 
 import static com.dnastack.ddap.common.page.NavBar.damResourceLink;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.startsWith;
 
 @SuppressWarnings("Duplicates")
 public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
@@ -31,7 +31,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String testConfig = loadTemplate("/com/dnastack/ddap/resourcesConfig.json");
+        final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig("administrator", testConfig, "1", REALM);
     }
 
@@ -115,6 +115,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.toggleExpansionPanel("view-new");
         adminManagePage.fillField(DdapBy.se("inp-view-id"), viewId);
         adminManagePage.fillField(DdapBy.se("inp-view-label"), viewId);
+        adminManagePage.fillField(DdapBy.se("inp-view-description"), "View Description");
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Phase 3");
         adminManagePage.fillField(DdapBy.se("inp-view-aud"), "http://audience-test.com");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-view-service-template"), "Beacon Discovery Search");
@@ -154,6 +155,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.toggleExpansionPanel("view-new");
         adminManagePage.fillField(DdapBy.se("inp-view-id"), view1Id);
         adminManagePage.fillField(DdapBy.se("inp-view-label"), view1Id);
+        adminManagePage.fillField(DdapBy.se("inp-view-description"), "View 1 Description");
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Phase 3");
         adminManagePage.fillField(DdapBy.se("inp-view-aud"), "http://audience-test.com");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-view-service-template"), "Google Cloud Storage");
@@ -166,6 +168,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.toggleExpansionPanel("view-new");
         adminManagePage.fillField(DdapBy.se("inp-view-id"), view2Id);
         adminManagePage.fillField(DdapBy.se("inp-view-label"), view2Id);
+        adminManagePage.fillField(DdapBy.se("inp-view-description"), "View 2 Description");
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Version 2");
         adminManagePage.fillField(DdapBy.se("inp-view-aud"), "http://audience-test.com");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-view-service-template"), "Beacon Discovery Search");
@@ -206,6 +209,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.toggleExpansionPanel("view-new");
         adminManagePage.fillField(DdapBy.se("inp-view-id"), viewId);
         adminManagePage.fillField(DdapBy.se("inp-view-label"), viewId);
+        adminManagePage.fillField(DdapBy.se("inp-view-description"), "View Description");
         adminManagePage.fillField(DdapBy.se("inp-view-version"), "Phase 3");
         adminManagePage.fillField(DdapBy.se("inp-view-aud"), "http://audience-test.com");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-view-service-template"), "Beacon Discovery Search");
@@ -251,8 +255,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminListPage.assertListItemExists(resourceToEdit);
 
         AdminManagePage adminManagePage = adminListPage.clickView(resourceToEdit, "Edit Resource");
-        final WebElement drJoeCheckbox = adminManagePage.findCheckedCheckbox(
-                "discovery-access/discovery/dr_joe_elixir");
+        WebElement drJoeCheckbox = adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
 
         drJoeCheckbox.click();
         // If we don't wait, submitting the form will happen before validation can occur.
@@ -328,7 +331,7 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
     public void editResourceNoChangesToView() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                                               .goToAdmin(damResourceLink(DAM_ID));
-        String resourceToEdit = "1000 Genomes NOT_EDITED";
+        String resourceToEdit = "GA4GH APIs";
 
         waitForAccessTablesToLoad();
         adminListPage.assertListItemExists(resourceToEdit);
@@ -338,10 +341,10 @@ public class AdminResourceE2eTest extends AbstractFrontendE2eTest {
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), "Cool edited resource");
 
-        adminManagePage.findCheckedCheckbox("discovery-access/discovery/dr_joe_elixir");
-        adminManagePage.findCheckedCheckbox("discovery-access/discovery/nci_researcher");
-        adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/dr_joe_era_commons");
-        adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/nci_researcher");
+        adminManagePage.findCheckedCheckbox("beacon/discovery/dr_joe_elixir");
+        adminManagePage.findCheckedCheckbox("beacon/discovery/nci_researcher");
+        adminManagePage.findCheckedCheckbox("gcs_read/viewer/dr_joe_era_commons");
+        adminManagePage.findCheckedCheckbox("gcs_read/viewer/nci_researcher");
 
         adminListPage = adminManagePage.updateEntity();
         waitForAccessTablesToLoad();

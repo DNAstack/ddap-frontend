@@ -26,15 +26,26 @@
                required>
         <mat-error *ngIf="viewForm.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
       </mat-form-field>
-      <ng-container formGroupName="ui">
-        <mat-form-field class="col">
-          <input matInput
-                 placeholder="Display Name"
-                 formControlName="label"
-                 data-se="inp-view-label"
-                 required>
-        </mat-form-field>
-      </ng-container>
+      <mat-form-field class="col"
+                      formGroupName="ui">
+        <input matInput
+               placeholder="Display Name"
+               formControlName="label"
+               data-se="inp-view-label"
+               required>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col"
+                      formGroupName="ui">
+        <textarea matInput
+                  placeholder="Description"
+                  formControlName="description"
+                  data-se="inp-view-description"
+                  required>
+        </textarea>
+        <mat-error *ngIf="viewForm.get('ui.description').invalid">Description must be up to 255 characters</mat-error>
+      </mat-form-field>
     </div>
     <div class="row">
       <mat-form-field class="col">

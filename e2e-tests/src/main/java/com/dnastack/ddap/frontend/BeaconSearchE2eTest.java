@@ -30,7 +30,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String testConfig = loadTemplate("/com/dnastack/ddap/aggregateSearchRealmConfig.json");
+        final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig("administrator", testConfig, "1", REALM);
     }
 
@@ -184,9 +184,9 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
                 .goTo(dataLink());
 
         DataListPage dataListPage = new DataListPage(driver);
-        final DataListItem data = dataListPage.findDataByName("All Of Us");
+        final DataListItem data = dataListPage.findDataByName("GA4GH APIs");
         DataDetailPage dataDetailPage = data.clickViewButton();
-        dataDetailPage.assertResourcePage("All Of Us");
+        dataDetailPage.assertResourcePage("GA4GH APIs");
 
         String query = "C";
         SearchPage searchPage = new SearchPage(driver);
