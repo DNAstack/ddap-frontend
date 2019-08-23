@@ -1,6 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 
 import { camelCase } from '../../shared/util';
 import { Dataset } from '../dataset-import/Dataset';
@@ -27,8 +26,7 @@ export class DatasetResultsComponent implements OnInit {
   datasetColumns: string[];
   selection = new SelectionModel<object>(true, []);
 
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute) { }
+  constructor() { }
 
   ngOnInit() {
     if (this.dataset) {
