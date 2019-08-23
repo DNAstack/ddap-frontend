@@ -28,7 +28,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
     @Before
     public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/beaconSearchUnauthorizedBeaconExceptionHandlingTest.json");
+        String realmConfigString = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig("administrator", realmConfigString, "1", REALM);
         RestAssured.config = RestAssuredConfig.config()
                                               .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(

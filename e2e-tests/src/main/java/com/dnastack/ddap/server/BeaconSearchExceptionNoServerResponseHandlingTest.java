@@ -7,6 +7,7 @@ import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
 import lombok.Data;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -21,13 +22,14 @@ import static org.junit.Assert.assertThat;
 /**
  * 1. Test for when no server found or no response from a beacon error
  */
+@Ignore
 public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(BeaconSearchExceptionNoServerResponseHandlingTest.class.getSimpleName());
 
     @Before
     public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/beaconSearchExceptionNoServerResponseHandlingTest.json");
+        String realmConfigString = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig("administrator", realmConfigString, "1", REALM);
         RestAssured.config = RestAssuredConfig.config()
                                               .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(

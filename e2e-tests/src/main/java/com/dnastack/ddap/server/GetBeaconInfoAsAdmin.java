@@ -31,7 +31,7 @@ public class GetBeaconInfoAsAdmin extends AbstractBaseE2eTest {
 
     @Before
     public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/aggregateSearchRealmFakeBeaconInfoConfig.json");
+        String realmConfigString = loadTemplate("/com/dnastack/ddap/adminConfig.json");
 
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(realmConfigString, damConfigBuilder);
@@ -79,9 +79,8 @@ public class GetBeaconInfoAsAdmin extends AbstractBaseE2eTest {
                                                .collect(Collectors.toList());
 
         Assert.assertThat(results,
-                          containsInAnyOrder(equalTo(new BeaconInfo("beacon", "fake-ga4gh", DAM_ID)),
-                                             equalTo(new BeaconInfo("beacon", "ga4gh-apis", DAM_ID)),
-                                             equalTo(new BeaconInfo("Beacon Discovery Access", "1000 Genomes", DAM_ID))));
+                          containsInAnyOrder(equalTo(new BeaconInfo("Beacon Discovery", "GA4GH APIs", DAM_ID)),
+                                             equalTo(new BeaconInfo("Beacon Discovery Access", "1000 Genomes (non-prod)", DAM_ID))));
     }
 
     @Data

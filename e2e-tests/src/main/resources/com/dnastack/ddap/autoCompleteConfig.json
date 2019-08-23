@@ -14,38 +14,77 @@
       ],
       "claims": [
         "^ga4gh.*$"
-      ]
+      ],
+      "ui": {
+        "description": "nih institutes claim source",
+        "label": "nih institutes"
+      }
     }
   },
   "trustedPassportIssuers": {
     "dbGaP": {
       "issuer": "https://dbgap.nlm.nih.gov/aa",
-      "translateUsing": "dbgap_translator"
+      "translateUsing": "dbgap_translator",
+      "ui": {
+        "description": "dbGaP passport issuer",
+        "label": "dbGaP passport issuer"
+      }
     },
     "elixir": {
       "issuer": "https://login.elixir-czech.org/oidc/",
-      "translateUsing": "elixir_translator"
+      "translateUsing": "elixir_translator",
+      "ui": {
+        "description": "elixir passport issuer",
+        "label": "elixir passport issuer"
+      },
+      "clientId": "5bf6422e-ab73-42a9-b558-b89cab0421db"
     },
     "ic_dev": {
-      "issuer": "https://ic-dev-dot-craigv-codelab.appspot.com/oidc"
-    },
-    "ic_old": {
-      "issuer": "https://ic-dot-craigv-codelab.appspot.com/oidc"
+      "issuer": "https://ic-dev-dot-hcls-data-connect-demo.appspot.com/oidc",
+      "ui": {
+        "description": "IC Dev passport issuer",
+        "label": "IC Dev"
+      },
+      "clientId": "05c14eaf-c762-4dbf-b7aa-c7bab5dd41b2"
     },
     "ic_prod": {
-      "issuer": "https://ic-prod-dot-craigv-codelab.appspot.com/oidc"
+      "issuer": "https://ic-prod-dot-hcls-data-connect-demo.appspot.com/oidc",
+      "ui": {
+        "description": "IC Prod passport issuer",
+        "label": "IC Prod"
+      },
+      "clientId": "05c14eaf-c762-4dbf-b7aa-c7bab5dd41b2"
     },
     "ic_staging": {
-      "issuer": "https://ic-staging-dot-craigv-codelab.appspot.com/oidc"
+      "issuer": "https://ic-staging-dot-hcls-data-connect-demo.appspot.com/oidc",
+      "ui": {
+        "description": "IC Staging passport issuer",
+        "label": "IC Staging"
+      },
+      "clientId": "05c14eaf-c762-4dbf-b7aa-c7bab5dd41b2"
     },
-    "ic_hlcs_staging": {
-      "issuer": "https://ic-staging-dot-hcls-data-connect-demo.appspot.com/oidc"
+    "localhost": {
+      "issuer": "http://localhost:8080/oidc",
+      "ui": {
+        "description": "Local IC Dev passport issuer",
+        "label": "Local IC Dev"
+      },
+      "clientId": "05c14eaf-c762-4dbf-b7aa-c7bab5dd41b2"
     },
-    "ic_hlcs_prod": {
-      "issuer": "https://ic-prod-dot-hcls-data-connect-demo.appspot.com/oidc"
+    "nih": {
+      "issuer": "https://login.nih.gov/oidc",
+      "translateUsing": "dbgap_translator",
+      "ui": {
+        "description": "nih passport issuer",
+        "label": "nih passport issuer"
+      }
     },
-    "playgroundIC": {
-      "issuer": "https://ic-staging-dot-craigv-codelab.appspot.com/oidc"
+    "this_ic": {
+      "issuer": "$$E2E_PASSPORT_ISSUER$$",
+      "ui": {
+        "description": "IC DDAP",
+        "label": "IC DDAP"
+      }
     }
   },
   "policies": {
@@ -53,6 +92,10 @@
       "allow": {
         "claim": "com.dnastack.test.claim",
         "values": ["foobar", "foobar2"]
+      },
+      "ui": {
+        "description": "description",
+        "label": "simplePolicy"
       }
     },
     "allTruePolicy": {
@@ -61,6 +104,10 @@
           "claim": "com.dnastack.test.claim",
           "values": ["foobar3"]
         }]
+      },
+      "ui": {
+        "description": "description",
+        "label": "allTruePolicy"
       }
     },
     "anyTruePolicy": {
@@ -69,6 +116,10 @@
           "claim": "com.dnastack.test.claim",
           "values": ["foobar4"]
         }]
+      },
+      "ui": {
+        "description": "description",
+        "label": "anyTruePolicy"
       }
     },
     "anyAllTruePolicy": {
@@ -79,6 +130,10 @@
             "values": ["foobar5", "^.$"]
           }]
         }]
+      },
+      "ui": {
+        "description": "description",
+        "label": "anyAllTruePolicy"
       }
     },
     "variablePolicy": {
@@ -129,7 +184,6 @@
       }
     }
   },
-
   "resources": {
     "dataset_example": {
       "views": {
@@ -166,7 +220,8 @@
           ],
           "defaultRole": "viewer",
           "ui": {
-            "label": "BigQuery Read"
+            "label": "BigQuery Read",
+            "description": "BigQuery Read"
           }
         },
         "gcs_read": {
@@ -202,7 +257,8 @@
           ],
           "defaultRole": "viewer",
           "ui": {
-            "label": "File Read"
+            "label": "File Read",
+            "description": "File Read"
           }
         }
       },
@@ -222,7 +278,6 @@
       }
     }
   },
-
   "serviceTemplates": {
     "beacon": {
       "targetAdapter": "token:jwt:gatekeeper",
@@ -249,7 +304,8 @@
         }
       },
       "ui": {
-        "label": "Beacon Discovery Search"
+        "label": "Beacon Discovery Search",
+        "description": "Beacon Discovery Search"
       }
     },
     "bigquery": {
@@ -279,7 +335,8 @@
         }
       },
       "ui": {
-        "label": "Google BigQuery"
+        "label": "Google BigQuery",
+        "description": "Google BigQuery"
       }
     },
     "gcs": {
@@ -318,7 +375,8 @@
         }
       },
       "ui": {
-        "label": "Google Cloud Storage"
+        "label": "Google Cloud Storage",
+        "description": "Google Cloud Storage"
       }
     },
     "views": {
@@ -334,19 +392,22 @@
         }
       },
       "ui": {
-        "label": "Multiple Resource Views"
+        "label": "Multiple Resource Views",
+        "description": "Multiple Resource Views"
       }
     }
   },
   "claimDefinitions": {
     "com.dnastack.test.claim": {
       "ui": {
-        "label": "labelValueFoo"
+        "label": "labelValueFoo",
+        "description": "labelValueFoo"
       }
     },
     "ga4gh.ControlledAccessGrants": {
       "ui": {
-        "label": "ControlledAccessGrants"
+        "label": "ControlledAccessGrants",
+        "description": "ControlledAccessGrants"
       }
     }
   },
@@ -433,6 +494,7 @@
     }
   },
   "ui": {
-    "label": "Mount Sinai Hospital Autism Repository"
+    "label": "Mount Sinai Hospital Autism Repository",
+    "description": "Test Repo"
   }
 }

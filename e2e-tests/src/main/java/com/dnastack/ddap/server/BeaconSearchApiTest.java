@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,7 +47,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
 
     @Before
     public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/aggregateSearchRealmConfig.json");
+        String realmConfigString = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig("administrator", realmConfigString, "1", REALM);
         RestAssured.config = RestAssuredConfig.config()
                                               .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
@@ -95,7 +94,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
                                             equalTo(new BeaconInfo("Beacon Discovery Access",
                                                                     "discovery-access",
                                                                     "thousand-genomes",
-                                                                    "1000 Genomes",
+                                                                    "1000 Genomes (non-prod)",
                                                                     DAM_ID))));
     }
 
@@ -129,7 +128,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
             .body("[0].beaconInfo.name", equalTo("Beacon Discovery Access"))
             .body("[0].beaconInfo.viewId", equalTo("discovery-access"))
             .body("[0].beaconInfo.resourceId", equalTo("thousand-genomes"))
-            .body("[0].beaconInfo.resourceLabel", equalTo("1000 Genomes"))
+            .body("[0].beaconInfo.resourceLabel", equalTo("1000 Genomes (non-prod)"))
             .body("[0].exists", anyOf(nullValue(), instanceOf(boolean.class)))
             .statusCode(200);
         // @formatter:on
@@ -165,7 +164,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
             .body("[0].beaconInfo.name", equalTo("Beacon Discovery Access"))
             .body("[0].beaconInfo.viewId", equalTo("discovery-access"))
             .body("[0].beaconInfo.resourceId", equalTo("thousand-genomes"))
-            .body("[0].beaconInfo.resourceLabel", equalTo("1000 Genomes"))
+            .body("[0].beaconInfo.resourceLabel", equalTo("1000 Genomes (non-prod)"))
             .body("[0].exists", anyOf(nullValue(), instanceOf(boolean.class)))
             .statusCode(200);
         // @formatter:on
