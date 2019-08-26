@@ -10,11 +10,17 @@
   [formGroup]="datasetFetchForm">
     <mat-label>URL of the dataset</mat-label>
     <mat-form-field>
-      <input placeholder="url"
+      <input formControlName="url"
+             placeholder="url"
              matInput
-            formControlName="url"/>
+             data-se="dataset-url"/>
     </mat-form-field>
-    <button mat-raised-button type="submit">Fetch</button>
+    <button mat-raised-button
+            color="primary"
+            type="submit"
+            data-se="btn-import-dataset">
+      Fetch
+    </button>
   </form>
 </div>
 
