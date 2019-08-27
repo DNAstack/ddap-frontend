@@ -3,7 +3,8 @@
     <mat-table [dataSource]="list" class="mat-elevation-z8">
       <ng-container matColumnDef="select">
         <mat-header-cell *matHeaderCellDef>
-          <mat-checkbox (change)="$event ? masterToggle() : null"
+          <mat-checkbox color="primary"
+                        (change)="$event ? masterToggle() : null"
                         [checked]="selection.hasValue() && isAllSelected()"
                         [indeterminate]="selection.hasValue() && !isAllSelected()"
                         [aria-label]="checkboxLabel()"
@@ -11,7 +12,8 @@
           </mat-checkbox>
         </mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <mat-checkbox (click)="$event.stopPropagation()"
+          <mat-checkbox color="primary"
+                        (click)="$event.stopPropagation()"
                         (change)="$event ? rowSelection(row) : null"
                         [checked]="selection.isSelected(row)"
                         [aria-label]="checkboxLabel(row)">
@@ -29,13 +31,13 @@
 
     </mat-table>
     <div class="pagination">
-      <button
+      <button mat-raised-button color="primary"
         *ngIf="pagination.previousPageUrl"
         (click)="redirectToPage(pagination.previousPageUrl)"
       >
         Previous Page
       </button>
-      <button
+      <button mat-raised-button color="primary"
         *ngIf="pagination.nextPageUrl"
         (click)="redirectToPage(pagination.nextPageUrl)"
       >

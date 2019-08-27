@@ -21,6 +21,13 @@ table {
   }
 }
 
+.pagination {
+  padding-top: 1rem;
+  button {
+    margin-right: 1rem;
+  }
+}
+
 .mat-header-cell,
 .mat-cell {
   word-wrap: break-word;

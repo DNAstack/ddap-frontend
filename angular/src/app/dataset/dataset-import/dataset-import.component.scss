@@ -1,7 +1,9 @@
+@import "../../../styles/modules/colors";
+
 .wip {
   position: absolute;
   top: 6px;
-  background: #0d0d92;
+  background: $warn-color;
   color: white;
   left: -20px;
   text-transform: uppercase;
