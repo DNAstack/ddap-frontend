@@ -151,12 +151,11 @@ public class ViewsController {
         Optional<String> foundRefreshToken = cookiePackager
             .extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
         String refreshToken = foundRefreshToken.orElse(null);
-
         return Flux.fromStream(damClientFactory.allDamClients()).flatMap(clientEntry -> {
             String damId = clientEntry.getKey();
             ReactiveDamClient damClient = clientEntry.getValue();
             String token = damToken.get();
-
+            // TODO: Handle error when token is empty
             return damClient.getFlattenedViews(realm, token, refreshToken).flatMap(flatViews ->
                 Mono.just(getRelevantViewsForUrlsInDam(damId, realm, flatViews, uniqueUrls))
             );

@@ -1,55 +1,90 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
+import { camelCase } from '../../shared/util';
 import { Dataset } from '../dataset-import/Dataset';
+
+import { Pagination } from './Pagination';
 
 @Component({
   selector: 'ddap-dataset-results',
   templateUrl: './dataset-results.component.html',
   styleUrls: ['./dataset-results.component.scss'],
 })
-export class DatasetResultsComponent implements OnInit {
+export class DatasetResultsComponent implements OnChanges {
 
   @Input()
   dataset: Dataset;
 
+  @Output()
+  fetchDatasetResults = new EventEmitter();
+
   list: Array<object>;
   selectedRowsData: Array<object>;
-  columnsToDisplay: string[] = ['select'];
+  pagination: Pagination = {} as Pagination;
+  columnsToDisplay: string[];
+  additionalColumns: string[] = ['select'];
   datasetColumns: string[];
   selection = new SelectionModel<object>(true, []);
 
   constructor() { }
 
-  isAllSelected() {
+  ngOnChanges(): void {
+    if (this.dataset) {
+      this.list = this.dataset.objects;
+      this.datasetColumns = this.getDatasetColumns();
+      this.columnsToDisplay = this.additionalColumns.concat(this.datasetColumns);
+      this.pagination = this.formatPagination(this.dataset.pagination);
+    }
+  }
+
+  private isAllSelected() {
     const selectedRows = this.selection.selected.length;
     return this.list.length === selectedRows;
   }
 
-  rowSelection(row) {
+  private rowSelection(row) {
     this.selection.toggle(row);
     this.selectedRowsData = this.selection.selected;
   }
 
-  masterToggle() {
+  private masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
       this.list.map(row => this.selection.select(row));
   }
 
-  checkboxLabel(row?): string {
+  private checkboxLabel(row?): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
-  ngOnInit() {
-    if (this.dataset) {
-      this.list = this.dataset.objects;
-      this.datasetColumns = Object.keys(this.dataset.schema.properties);
-      this.columnsToDisplay = this.columnsToDisplay.concat(this.datasetColumns);
+  private getDatasetColumns() {
+    let schemaProperties = {};
+    const schemaObj = this.dataset.schema;
+    if (schemaObj.hasOwnProperty('schema')) {
+      schemaProperties = schemaObj.schema.properties;
+    } else {
+      schemaProperties = schemaObj.properties;
     }
+    return Object.keys(schemaProperties);
+  }
+
+  private formatPagination(pagination: object): Pagination {
+    const updatedPagination = {} as Pagination;
+    if (pagination) {
+      Object.keys(pagination)
+        .map(key => {
+          updatedPagination[camelCase(key)] = pagination[key];
+        });
+    }
+    return updatedPagination;
+  }
+
+  private redirectToPage(pageUrl: string) {
+    this.fetchDatasetResults.next(pageUrl);
   }
 
 }

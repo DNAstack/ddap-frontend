@@ -16,6 +16,7 @@ export class DatasetImportComponent implements OnInit, OnDestroy {
 
   datasetFetchForm: FormGroup;
   dataset: Dataset = {} as Dataset;
+  datasetUrl: string;
 
   private searchSubscription: Subscription;
 
@@ -29,16 +30,26 @@ export class DatasetImportComponent implements OnInit, OnDestroy {
 
 
   onSubmit({ value }) {
+    this.fetchDatasetResults(value.url);
+  }
+
+  fetchPageResults(relativeUrl) {
+    const urlObject = new URL(relativeUrl, this.datasetUrl);
+    this.fetchDatasetResults(urlObject.href);
+  }
+
+  fetchDatasetResults(url: string) {
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: {
-        dataset_url: value.url,
+        dataset_url: url,
       },
       queryParamsHandling: 'merge',
     });
   }
 
   initializeSearch(url: string) {
+    this.datasetUrl = url;
     this.datasetService.fetchDataset(url).subscribe(data => {
       this.dataset = data;
     },

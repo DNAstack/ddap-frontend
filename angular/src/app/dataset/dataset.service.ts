@@ -27,7 +27,7 @@ export class DatasetService {
   getViews(urls): Observable<any> {
     return this.http.post(`${environment.ddapApiUrl}/${realmIdPlaceholder}/views/lookup`, urls)
       .pipe(
-        this.errorHandler.notifyOnError(`URLs can't be empty`)
+        this.errorHandler.notifyOnError()
       );
   }
 
