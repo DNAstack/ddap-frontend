@@ -22,7 +22,8 @@ export class DatasetResultsComponent implements OnChanges {
   list: Array<object>;
   selectedRowsData: Array<object>;
   pagination: Pagination = {} as Pagination;
-  columnsToDisplay: string[] = ['select'];
+  columnsToDisplay: string[];
+  additionalColumns: string[] = ['select'];
   datasetColumns: string[];
   selection = new SelectionModel<object>(true, []);
 
@@ -32,7 +33,7 @@ export class DatasetResultsComponent implements OnChanges {
     if (this.dataset) {
       this.list = this.dataset.objects;
       this.datasetColumns = this.getDatasetColumns();
-      this.columnsToDisplay = this.columnsToDisplay.concat(this.datasetColumns);
+      this.columnsToDisplay = this.additionalColumns.concat(this.datasetColumns);
       this.pagination = this.formatPagination(this.dataset.pagination);
     }
   }
