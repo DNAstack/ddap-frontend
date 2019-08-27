@@ -24,7 +24,7 @@
     "era_commons": {
       "issuer": "https://dbgap.nlm.nih.gov/aa",
       "authorizeUrl": "https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?login=NFL\\u0026redirect_to=${REDIRECT_URI}\\u0026page=redirect",
-      "tokenUrl": "ACCESS_TOKEN=https://dbgap.ncbi.nlm.nih.gov/aa/jwt/user.cgi?",
+      "tokenUrl": "https://dbgap.ncbi.nlm.nih.gov/aa/jwt/user.cgi?",
       "translateUsing": "dbgap_translator",
       "ui": {
         "description": "eRA Commons identity provider",
@@ -133,34 +133,6 @@
       "ui": {
         "description": "DDAP Developer environment",
         "label": "IC DDAP Development"
-      }
-    },
-    "ga4gh_ddap_prod": {
-      "clientId": "d0e75142-ee26-4217-86dd-0b01c9f8f811",
-      "redirectUris": [
-        "http://localhost:8085/api",
-        "https://ddap-frontend.staging.dnastack.com/api",
-        "https://ddap-frontend.prod.dnastack.com/api",
-        "https://ddap-frontend-candidate.staging.dnastack.com",
-        "https://ddap-frontend-candidate.prod.dnastack.com"
-      ],
-      "ui": {
-        "description": "DDAP Production environment",
-        "label": "IC DDAP Production"
-      }
-    },
-    "ga4gh_ddap_staging": {
-      "clientId": "ab7ac98b-fc80-4556-9b4c-0191bce2cdcb",
-      "redirectUris": [
-        "http://localhost:8085/api",
-        "https://ddap-frontend.staging.dnastack.com/api",
-        "https://ddap-frontend.prod.dnastack.com/api",
-        "https://ddap-frontend-candidate.staging.dnastack.com",
-        "https://ddap-frontend-candidate.prod.dnastack.com"
-      ],
-      "ui": {
-        "description": "DDAP Staging environment",
-        "label": "IC DDAP Staging"
       }
     },
     "test_client": {
