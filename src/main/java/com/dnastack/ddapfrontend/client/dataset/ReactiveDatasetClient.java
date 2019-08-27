@@ -3,7 +3,6 @@ package com.dnastack.ddapfrontend.client.dataset;
 import com.dnastack.ddapfrontend.client.LoggingFilter;
 import com.dnastack.ddapfrontend.client.dataset.model.DatasetResult;
 import com.dnastack.ddapfrontend.util.Tuple;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -67,9 +65,7 @@ public class ReactiveDatasetClient {
                                 return materializeInLineSchema(datasetUrl, result);
                             }
                         })
-                            .onErrorMap(ex -> {
-                                return new DatasetErrorException(clientResponse.statusCode().value(), ex.getMessage());
-                            });
+                        .onErrorMap(ex -> new DatasetErrorException(clientResponse.statusCode().value(), ex.getMessage()));
                 } else {
                     return clientResponse.bodyToMono(String.class)
                         .flatMap(body -> Mono
