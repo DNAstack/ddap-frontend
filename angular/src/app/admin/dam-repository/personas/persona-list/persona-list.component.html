@@ -7,14 +7,19 @@
 <ddap-main>
   <ddap-entity-description>
     <p>
-      Test Personas are a way of asserting expected behaviour of <a [routerLink]="['..', 'access-policies']">access policies</a>
-      and <a [routerLink]="['..', 'resources']">resources</a> that must be maintained whenever new changes are made.
-      They are archetypes of users of the system, with identity <a [routerLink]="['..', 'claim-definitions']">claims</a>
-      that have particular values and are from particular <a [routerLink]="['..', 'trusted-sources']">sources</a>.
+      Test Personas are a way of asserting expected behaviour of
+      <ddap-entity-description-link [path]="'../access-policies'">access policies</ddap-entity-description-link>
+      and <ddap-entity-description-link [path]="'../resources'">resources</ddap-entity-description-link>
+      that must be maintained whenever new changes are made. They are archetypes of users of the system, with identity
+      <ddap-entity-description-link [path]="'../claim-definitions'">claims</ddap-entity-description-link>
+      that have particular values and are from particular
+      <ddap-entity-description-link [path]="'../trusted-sources'">sources</ddap-entity-description-link>.
     </p>
     <p>
       When you make a persona, you give it claims that make it like some category of real user in your system. You must
-      also specify what <a [routerLink]="['..', 'resources']">resources</a> you expect the user to have access to.
+      also specify what
+      <ddap-entity-description-link [path]="'../resources'">resources</ddap-entity-description-link>
+      you expect the user to have access to.
       If any future request to modify configuration (whether that be a change to a resource, policy, or anything else)
       causes these expectations to be violated, the change will be denied until the expectations are updated.
     </p>

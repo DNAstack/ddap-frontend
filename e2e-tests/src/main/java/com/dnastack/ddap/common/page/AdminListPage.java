@@ -34,6 +34,11 @@ public class AdminListPage extends AdminDdapPage {
         return new AdminManagePage(driver);
     }
 
+    public AdminListPage clickDescriptionLink() {
+        driver.findElement(By.tagName("ddap-entity-description-link")).click();
+        return new AdminListPage(driver);
+    }
+
     public void assertListItemExists(String title) {
         new WebDriverWait(driver, 2)
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DdapBy.seAndText("entity-title", title)));

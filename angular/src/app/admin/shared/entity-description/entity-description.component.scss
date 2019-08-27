@@ -3,10 +3,4 @@
 .description {
   padding: 0 0.5em 2em;
   font-size: 15px;
-
-  ::ng-deep a {
-    text-decoration: none;
-    color: $primary-color;
-    font-weight: 500;
-  }
 }

@@ -1,12 +1,14 @@
 package com.dnastack.ddap.frontend;
 
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
+import com.dnastack.ddap.common.DdapBy;
 import com.dnastack.ddap.common.page.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
@@ -108,6 +110,18 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
 
         assertThat(icLoginPage.getRealm(), is(REALM));
+    }
+
+    @Test
+    public void testDescriptionLinkNavigation() {
+        ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
+        icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+
+        AdminListPage adminListPage = ddapPage.getNavBar()
+                .goToAdmin(damResourceLink(DAM_ID));
+        adminListPage.clickDescriptionLink();
+        new WebDriverWait(driver, 3)
+                .until(ExpectedConditions.textToBe(DdapBy.se("page-title"), "Access Policies"));
     }
 
     @Ignore

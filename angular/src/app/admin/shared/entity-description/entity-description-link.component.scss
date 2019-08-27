@@ -1,0 +1,8 @@
+@import "../../../../styles/modules/colors";
+
+a {
+  text-decoration: none;
+  color: $primary-color;
+  font-weight: 500;
+  cursor: pointer;
+}

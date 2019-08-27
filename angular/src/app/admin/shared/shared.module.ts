@@ -14,11 +14,13 @@ import {
 } from './entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';
 import { FormFooterErrorComponent } from './form/form-footer-error/form-footer-error.component';
 import { OptionEditableListComponent } from './option-editable-list/option-editable-list.component';
+import {EntityDescriptionLinkComponent} from "./entity-description/entity-description-link.component";
 
 @NgModule({
   declarations: [
     EntityListComponent,
     EntityDescriptionComponent,
+    EntityDescriptionLinkComponent,
     EntityAddComponent,
     EntityManageFormComponent,
     EntityRemovalConfirmationDialogComponent,
@@ -35,6 +37,7 @@ import { OptionEditableListComponent } from './option-editable-list/option-edita
     NgJsonEditorModule,
     EntityListComponent,
     EntityDescriptionComponent,
+    EntityDescriptionLinkComponent,
     EntityAddComponent,
     EntityManageFormComponent,
     EntityRemovalConfirmationDialogComponent,

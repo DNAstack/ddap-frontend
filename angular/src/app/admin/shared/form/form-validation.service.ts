@@ -3,11 +3,10 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 import Form from './form';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class FormValidationService {
-
-  public showError = false;
-  public message: string;
 
   validate(formComponent: Form): boolean {
     if (!formComponent.isValid()) {
