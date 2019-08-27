@@ -669,8 +669,8 @@
           "items": [
             {
               "vars": {
-                "bucket": "ga4gh-apis-controlled-access",
-                "project": "ga4gh-apis"
+                "bucket": "$$E2E_TEST_BUCKET$$",
+                "project": "$$E2E_TEST_PROJECT$$"
               }
             }
           ],
