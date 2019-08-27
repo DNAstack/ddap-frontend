@@ -31,7 +31,7 @@ export class DatasetResultsComponent implements OnChanges {
   ngOnChanges(): void {
     if (this.dataset) {
       this.list = this.dataset.objects;
-      this.datasetColumns = Object.keys(this.dataset.schema.schema.properties);
+      this.datasetColumns = this.getDatasetColumns();
       this.columnsToDisplay = this.columnsToDisplay.concat(this.datasetColumns);
       this.pagination = this.formatPagination(this.dataset.pagination);
     }
@@ -58,6 +58,17 @@ export class DatasetResultsComponent implements OnChanges {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  }
+
+  private getDatasetColumns() {
+    let schemaProperties = {};
+    const schemaObj = this.dataset.schema;
+    if (schemaObj.hasOwnProperty('schema')) {
+      schemaProperties = schemaObj.schema.properties;
+    } else {
+      schemaProperties = schemaObj.properties;
+    }
+    return Object.keys(schemaProperties);
   }
 
   private formatPagination(pagination: object): Pagination {
