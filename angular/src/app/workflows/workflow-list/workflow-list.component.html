@@ -1,0 +1,26 @@
+<ddap-header icon="rules" label="Workflows">
+
+</ddap-header>
+
+<ddap-main>
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let workflow of workflowService.get() | async">
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{ workflow.name }}</mat-panel-title>
+        <mat-panel-description>{{ workflow.status }}</mat-panel-description>
+      </mat-expansion-panel-header>
+      <a [href]="workflow.url"
+         disabled
+         data-se="access-btn"
+         target='_blank'
+         rel='noopener noreferrer'>
+        <button mat-button
+                disabled
+                color="primary"
+                class="uppercase">
+          View
+        </button>
+      </a>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ddap-main>

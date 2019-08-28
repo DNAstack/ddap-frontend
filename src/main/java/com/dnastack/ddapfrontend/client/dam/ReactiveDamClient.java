@@ -1,28 +1,21 @@
 package com.dnastack.ddapfrontend.client.dam;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
 import com.dnastack.ddapfrontend.client.OAuthFilter;
 import com.dnastack.ddapfrontend.client.WebClientFactory;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
-import dam.v1.DamService.DamConfig;
-import dam.v1.DamService.GetFlatViewsResponse;
+import dam.v1.DamService.*;
 import dam.v1.DamService.GetFlatViewsResponse.Builder;
 import dam.v1.DamService.GetFlatViewsResponse.FlatView;
-import dam.v1.DamService.GetInfoResponse;
-import dam.v1.DamService.GetResourceResponse;
-import dam.v1.DamService.GetResourcesResponse;
-import dam.v1.DamService.GetTokenResponse;
-import dam.v1.DamService.GetViewsResponse;
-import dam.v1.DamService.Resource;
-import dam.v1.DamService.TargetAdaptersResponse;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
+
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Slf4j
 public class ReactiveDamClient {
@@ -42,6 +35,49 @@ public class ReactiveDamClient {
         this.damClientId = damClientId;
         this.damClientSecret = damClientSecret;
         this.webClientFactory = webClientFactory;
+    }
+
+    public Mono<DamConfig> getConfig(String realm, String damToken, String refreshToken) {
+        final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/config" +
+                "?client_id={clientId}" +
+                "&client_secret={clientSecret}");
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("realm", realm);
+        variables.put("clientId", damClientId);
+        variables.put("clientSecret", damClientSecret);
+
+        return webClientFactory.getWebClient(realm, refreshToken, OAuthFilter.Audience.IC)
+                .get()
+                .uri(damBaseUrl.resolve(template.expand(variables)))
+                .header(AUTHORIZATION, "Bearer " + damToken)
+                .retrieve()
+                .bodyToMono(String.class)
+                .flatMap(jsonString -> {
+                    try {
+                        DamConfig.Builder builder = DamConfig.newBuilder();
+                        JsonFormat.parser().merge(jsonString, builder);
+                        return Mono.just(builder.build());
+                    } catch (InvalidProtocolBufferException e) {
+                        return Mono.error(e);
+                    }
+                });
+    }
+
+    public Mono<GetInfoResponse> getDamInfo() {
+        return webClientFactory.getWebClient()
+                .get()
+                .uri(damBaseUrl.resolve("/dam"))
+                .retrieve()
+                .bodyToMono(String.class)
+                .flatMap(jsonString -> {
+                    try {
+                        GetInfoResponse.Builder builder = GetInfoResponse.newBuilder();
+                        JsonFormat.parser().merge(jsonString, builder);
+                        return Mono.just(builder.build());
+                    } catch (InvalidProtocolBufferException e) {
+                        return Mono.error(e);
+                    }
+                });
     }
 
     public Mono<Resource> getResource(String realm, String resourceId) {
@@ -171,49 +207,6 @@ public class ReactiveDamClient {
             .flatMap(jsonString -> {
                 try {
                     TargetAdaptersResponse.Builder builder = TargetAdaptersResponse.newBuilder();
-                    JsonFormat.parser().merge(jsonString, builder);
-                    return Mono.just(builder.build());
-                } catch (InvalidProtocolBufferException e) {
-                    return Mono.error(e);
-                }
-            });
-    }
-
-    public Mono<DamConfig> getConfig(String realm, String damToken, String refreshToken) {
-        final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/config" +
-            "?client_id={clientId}" +
-            "&client_secret={clientSecret}");
-        final Map<String, Object> variables = new HashMap<>();
-        variables.put("realm", realm);
-        variables.put("clientId", damClientId);
-        variables.put("clientSecret", damClientSecret);
-
-        return webClientFactory.getWebClient(realm, refreshToken, OAuthFilter.Audience.IC)
-            .get()
-            .uri(damBaseUrl.resolve(template.expand(variables)))
-            .header(AUTHORIZATION, "Bearer " + damToken)
-            .retrieve()
-            .bodyToMono(String.class)
-            .flatMap(jsonString -> {
-                try {
-                    DamConfig.Builder builder = DamConfig.newBuilder();
-                    JsonFormat.parser().merge(jsonString, builder);
-                    return Mono.just(builder.build());
-                } catch (InvalidProtocolBufferException e) {
-                    return Mono.error(e);
-                }
-            });
-    }
-
-    public Mono<GetInfoResponse> getDamInfo() {
-        return webClientFactory.getWebClient()
-            .get()
-            .uri(damBaseUrl.resolve("/dam"))
-            .retrieve()
-            .bodyToMono(String.class)
-            .flatMap(jsonString -> {
-                try {
-                    GetInfoResponse.Builder builder = GetInfoResponse.newBuilder();
                     JsonFormat.parser().merge(jsonString, builder);
                     return Mono.just(builder.build());
                 } catch (InvalidProtocolBufferException e) {

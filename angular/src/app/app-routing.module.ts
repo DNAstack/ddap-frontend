@@ -31,6 +31,11 @@ const routes: Routes = [
         loadChildren: () => import('./dataset/dataset.module')
           .then(mod => mod.DatasetModule),
       },
+      {
+        path: 'workflows',
+        loadChildren: () => import('./workflows/workflows.module')
+          .then(mod => mod.WorkflowsModule),
+      },
     ],
   },
 ];
