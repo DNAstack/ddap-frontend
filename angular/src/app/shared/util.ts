@@ -25,3 +25,7 @@ export function unique<T>(arrayOfArrays: T[][]): T[] {
 export function camelCase(text: string) {
   return _camelCase(text);
 }
+
+export function isEmptyObject(obj: object): boolean {
+  return (obj && (Object.keys(obj).length === 0));
+}

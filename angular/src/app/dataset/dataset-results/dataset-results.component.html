@@ -30,16 +30,20 @@
       <mat-row *matRowDef="let row; columns: columnsToDisplay;"></mat-row>
 
     </mat-table>
-    <div class="pagination">
-      <button mat-raised-button color="primary"
-        *ngIf="pagination.previousPageUrl"
-        (click)="redirectToPage(pagination.previousPageUrl)"
+    <div class="pagination" *ngIf="hasPagination()">
+      <button mat-button
+              color="primary"
+              class="uppercase"
+              [disabled]="!pagination.previousPageUrl"
+              (click)="redirectToPage(pagination.previousPageUrl)"
       >
         Previous Page
       </button>
-      <button mat-raised-button color="primary"
-        *ngIf="pagination.nextPageUrl"
-        (click)="redirectToPage(pagination.nextPageUrl)"
+      <button mat-button
+              class="uppercase"
+              color="primary"
+              [disabled]="!pagination.nextPageUrl"
+              (click)="redirectToPage(pagination.nextPageUrl)"
       >
         Next Page
       </button>
