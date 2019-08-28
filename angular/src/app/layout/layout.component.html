@@ -59,6 +59,12 @@
         <mat-icon class="icon icon-add"></mat-icon>
         <h4 mat-line>Import Data</h4>
       </mat-list-item>
+      <mat-list-item [routerLink]="['workflows']"
+                     [routerLinkActive]="['active-nav-link']"
+                     data-se="nav-workflows">
+        <mat-icon class="icon icon-rules"></mat-icon>
+        <h4 mat-line>Workflows</h4>
+      </mat-list-item>
       <mat-list-item *ngIf="profile"
                      [routerLink]="['identity']"
                      [routerLinkActive]="['active-nav-link']"

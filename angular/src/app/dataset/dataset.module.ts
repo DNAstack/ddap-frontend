@@ -13,7 +13,12 @@ import { DatasetViewsComponent } from './dataset-views/dataset-views.component';
 
 
 @NgModule({
-  declarations: [DatasetImportComponent, DatasetResultsComponent, DatasetViewsComponent, DatasetViewAccessComponent],
+  declarations: [
+    DatasetImportComponent,
+    DatasetResultsComponent,
+    DatasetViewsComponent,
+    DatasetViewAccessComponent,
+  ],
   imports: [
     CommonModule,
     DatasetRoutingModule,
