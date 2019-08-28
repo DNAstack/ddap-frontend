@@ -1,5 +1,5 @@
 @import "../../../styles/modules/colors";
-@import "../../../styles/modules/typography";
+@import "../../../styles/modules/layout";
 @import "../../../../node_modules/@angular/material/theming";
 
 header {
@@ -7,7 +7,7 @@ header {
   align-items: center;
   margin: 0 -2rem;
   padding: 0 2rem;
-  min-height: $ddap-header-height;
+  min-height: $sidenav-header-height;
   border-bottom: 1px solid $color-faded-grey;
 
   h2, ddap-beacon-search-bar {
