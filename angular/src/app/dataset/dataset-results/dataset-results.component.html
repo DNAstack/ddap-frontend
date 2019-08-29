@@ -1,5 +1,9 @@
-<div class="ddap-column-panel">
-  <div class="ddap-column">
+<div>
+  <ddap-dataset-views
+    [columns]=columnsToDisplay
+    [selectedRowsData]=selectedRowsData
+  ></ddap-dataset-views>
+  <div>
     <mat-table [dataSource]="list" class="mat-elevation-z8">
       <ng-container matColumnDef="select">
         <mat-header-cell *matHeaderCellDef>
@@ -48,12 +52,6 @@
         Next Page
       </button>
     </div>
-  </div>
-  <div class="ddap-column" *ngIf="selection.selected.length">
-    <ddap-dataset-views
-      [columns]=columnsToDisplay
-      [selectedRowsData]=selectedRowsData
-    ></ddap-dataset-views>
   </div>
 </div>
 
