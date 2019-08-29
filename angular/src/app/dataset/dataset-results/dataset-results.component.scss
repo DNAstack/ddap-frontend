@@ -12,7 +12,8 @@ mat-cell {
     flex: 0 0 5%;
   }
 
-  &:hover button{
+  &:hover button,
+  &:focus button{
     visibility: visible;
   }
   button {
