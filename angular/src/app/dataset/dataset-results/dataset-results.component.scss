@@ -1,7 +1,24 @@
-table {
-  width: 100%;
-}
+mat-header-cell,
+mat-cell {
+  margin-right: 0.5rem;
+  span {
+    overflow: hidden;
+    width:auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
+  &:nth-child(1) {
+    flex: 0 0 5%;
+  }
+
+  &:hover button{
+    visibility: visible;
+  }
+  button {
+    visibility: hidden;
+  }
+}
 .pagination {
   padding-top: 1rem;
   button {

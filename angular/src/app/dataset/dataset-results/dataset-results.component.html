@@ -27,7 +27,19 @@
 
       <ng-container *ngFor="let column of datasetColumns" matColumnDef="{{column}}">
         <mat-header-cell *matHeaderCellDef> {{ column }} </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element[column] }} </mat-cell>
+        <mat-cell *matCellDef="let element">
+          <span>{{ element[column] }}</span>
+          <button *ngIf="isUrl(element[column])"
+                  mat-flat-button
+                  matSuffix
+                  mat-icon-button
+                  ngxClipboard
+                  [cbContent]="element[column]"
+                  matTooltip="Copy to clipboard"
+                  aria-label="Copy to clipboard">
+            <mat-icon class="icon icon-copy"></mat-icon>
+          </button>
+        </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>

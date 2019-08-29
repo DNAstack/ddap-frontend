@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { camelCase, isEmptyObject } from '../../shared/util';
+import { camelCase, isEmptyObject, isUrl } from '../../shared/util';
 import { Dataset } from '../dataset-import/Dataset';
 
 import { Pagination } from './Pagination';
@@ -40,6 +40,10 @@ export class DatasetResultsComponent implements OnChanges {
 
   hasPagination(): boolean {
     return !isEmptyObject(this.pagination);
+  }
+
+  isUrl(columnValue): boolean {
+    return isUrl(columnValue);
   }
 
   private isAllSelected() {

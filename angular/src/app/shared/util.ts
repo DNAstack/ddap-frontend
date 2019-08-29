@@ -29,3 +29,12 @@ export function camelCase(text: string) {
 export function isEmptyObject(obj: object): boolean {
   return (obj && (Object.keys(obj).length === 0));
 }
+
+/**
+ *
+ * @param {text}
+ * checks for only `://` in the string and returns true if present
+ */
+export function isUrl(text: string): boolean {
+  return /(:\/{2})/.test(text);
+}
