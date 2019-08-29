@@ -12,7 +12,7 @@
   <div class="ddap-column">
     <button mat-raised-button
             (click)="getViewsTokens(datasetColumnsForm)"
-            [disabled]="!datasetColumnsForm.get('columnName').value"
+            [disabled]="!enableAccessButton()"
             data-se="btn-get-access">
       Get Access
     </button>
