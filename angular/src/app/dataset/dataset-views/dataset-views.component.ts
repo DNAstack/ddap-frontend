@@ -47,6 +47,11 @@ export class DatasetViewsComponent {
     });
   }
 
+  enableAccessButton(): boolean {
+    return (this.datasetColumnsForm.get('columnName').value &&
+      (this.selectedRowsData && !!this.selectedRowsData.length));
+  }
+
   private handleAccessTokenError(exception, view) {
     this.errorMessages.push(`${view} : ${exception.message}`);
   }

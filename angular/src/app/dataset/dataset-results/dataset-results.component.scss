@@ -1,26 +1,25 @@
-table {
-  width: 100%;
-}
+mat-header-cell,
+mat-cell {
+  margin-right: 0.5rem;
+  span {
+    overflow: hidden;
+    width:auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-.ddap-column-panel {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  &:nth-child(1) {
+    flex: 0 0 5%;
+  }
 
-  > .ddap-column {
-    padding: 0 1rem 0 0;
-
-    &:first-child {
-      width: 70%;
-    }
-
-    &:last-child {
-      flex: 1;
-      padding: 0;
-    }
+  &:hover button,
+  &:focus button{
+    visibility: visible;
+  }
+  button {
+    visibility: hidden;
   }
 }
-
 .pagination {
   padding-top: 1rem;
   button {
@@ -32,4 +31,8 @@ table {
 .mat-cell {
   word-wrap: break-word;
   word-break: break-all;
+}
+
+.mat-button[disabled] {
+  cursor: not-allowed;
 }

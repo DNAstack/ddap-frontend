@@ -3,6 +3,14 @@
 mat-form-field:first-child {
   margin-right: 0.5rem;
 }
+.ddap-column-panel {
+  display: flex;
+  align-items: baseline;
+
+  .ddap-column {
+    padding: 0 1rem 0 0;
+  }
+}
 .error-message {
   font-size: 0.5rem;
   color: $failure-color;

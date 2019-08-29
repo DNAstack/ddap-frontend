@@ -2,13 +2,13 @@
 
 .wip {
   position: absolute;
-  top: 6px;
+  top: 0.4rem;
   background: $warn-color;
   color: white;
-  left: -20px;
+  left: -1.4rem;
   text-transform: uppercase;
-  font-size: 12px;
-  padding: 6px 30px;
+  font-size: 0.7rem;
+  padding: 0.4rem 2rem;
   transform: rotate(-45deg);
 }
 .dataset-import-wrapper {
@@ -16,6 +16,7 @@
   -webkit-box-align: start;
   align-items: flex-start;
   -webkit-box-pack: justify;
+  padding-top: 1rem;
 
   mat-form-field {
     width: 80%;

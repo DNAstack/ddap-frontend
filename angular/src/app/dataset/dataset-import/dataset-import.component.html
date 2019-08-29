@@ -1,4 +1,6 @@
-<ddap-header label="Import Dataset"></ddap-header>
+<ddap-header label="Import Dataset"
+             icon="add"
+></ddap-header>
 
 <div class="wip">
   <span>WIP</span>
@@ -8,15 +10,15 @@
   <form novalidate
   (ngSubmit)="onSubmit(datasetFetchForm)"
   [formGroup]="datasetFetchForm">
-    <mat-label>URL of the dataset</mat-label>
     <div class="dataset-import-wrapper">
       <mat-form-field>
         <input formControlName="url"
-               placeholder="url"
+               placeholder="URL of the dataset"
                matInput
                data-se="dataset-url"/>
       </mat-form-field>
-      <button mat-raised-button
+      <button mat-button
+              class="uppercase"
               color="primary"
               type="submit"
               data-se="btn-import-dataset">
