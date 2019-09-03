@@ -30,7 +30,9 @@ export class DatasetImportComponent implements OnInit, OnDestroy {
 
 
   onSubmit({ value }) {
-    this.fetchDatasetResults(value.url);
+    if (this.datasetFetchForm.valid) {
+      this.fetchDatasetResults(value.url);
+    }
   }
 
   fetchPageResults(relativeUrl) {
