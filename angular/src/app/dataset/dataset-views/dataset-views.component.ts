@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { of } from 'rxjs/observable/of';
 import { flatMap } from 'rxjs/operators';
@@ -11,11 +11,15 @@ import { DatasetService } from '../dataset.service';
   templateUrl: './dataset-views.component.html',
   styleUrls: ['./dataset-views.component.scss'],
 })
-export class DatasetViewsComponent {
+export class DatasetViewsComponent implements OnChanges {
   datasetColumnsForm: FormGroup;
   accessTokens: Array<object> = [];
-  errorMessages: Array<any> = [];
+  accessTokenErrorMessages: Array<any> = [];
   noViews = false;
+  genericError = '';
+
+  URLS_EMPTY_MESSAGE = 'Urls cannot be empty or null';
+  NO_VIEWS_MESSAGE = 'No views present for the selected data';
 
   @Input() columns: Array<string>;
   @Input() selectedRowsData: Array<object> = [];
@@ -26,17 +30,27 @@ export class DatasetViewsComponent {
     });
   }
 
+  ngOnChanges(): void {
+    this.accessTokens = [];
+    this.accessTokenErrorMessages = [];
+    this.noViews = false;
+  }
+
   getViewsTokens({ value }) {
     const { columnName } = value;
-    const columnData = this.extractColumnData(columnName);
+    const columnData: Array<string> = this.extractColumnData(columnName);
     this.accessTokens = [];
-    this.errorMessages = [];
+    this.accessTokenErrorMessages = [];
     this.noViews = false;
+    if (columnData.length === 0) {
+      this.handleErrorMessage(this.URLS_EMPTY_MESSAGE);
+      return;
+    }
     this.datasetService.getViews(columnData)
       .pipe(
         flatMap(views => {
           if (isEmptyObject(views)) {
-            this.noViews = true;
+            this.handleErrorMessage(this.NO_VIEWS_MESSAGE);
             return of([]);
           }
           const uniqueViews = unique(Object.values(views));
@@ -60,17 +74,22 @@ export class DatasetViewsComponent {
   }
 
   private handleAccessTokenError(exception, view) {
-    this.errorMessages.push(`${view} : ${exception.message}`);
+    this.accessTokenErrorMessages.push(`${view} : ${exception.message}`);
   }
 
-  private extractColumnData(columnName) {
-    return this.selectedRowsData.reduce((acc: Array<string>, c) => {
+  private extractColumnData(columnName): Array<any> {
+    return this.selectedRowsData.reduce((acc: Array<string>, c): any => {
       const columnValue: string = c[columnName];
       if (columnValue) {
         acc.push(columnValue);
       }
       return acc;
     }, []);
+  }
+
+  private handleErrorMessage(message) {
+    this.genericError = message;
+    this.noViews = true;
   }
 
 }

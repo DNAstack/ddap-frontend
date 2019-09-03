@@ -36,6 +36,7 @@ export class DatasetResultsComponent implements OnChanges {
       this.columnsToDisplay = this.additionalColumns.concat(this.datasetColumns);
       this.pagination = this.formatPagination(this.dataset.pagination);
       this.selection.clear();
+      this.selectedRowsData = [];
     }
   }
 
