@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { of } from 'rxjs/observable/of';
 import { flatMap } from 'rxjs/operators';
 
-import { unique } from '../../shared/util';
+import { isEmptyObject, unique } from '../../shared/util';
 import { DatasetService } from '../dataset.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class DatasetViewsComponent {
   datasetColumnsForm: FormGroup;
   accessTokens: Array<object> = [];
   errorMessages: Array<any> = [];
+  noViews = false;
 
   @Input() columns: Array<string>;
   @Input() selectedRowsData: Array<object> = [];
@@ -29,9 +31,14 @@ export class DatasetViewsComponent {
     const columnData = this.extractColumnData(columnName);
     this.accessTokens = [];
     this.errorMessages = [];
+    this.noViews = false;
     this.datasetService.getViews(columnData)
       .pipe(
         flatMap(views => {
+          if (isEmptyObject(views)) {
+            this.noViews = true;
+            return of([]);
+          }
           const uniqueViews = unique(Object.values(views));
           return this.datasetService.getViewsAuthorization(uniqueViews);
         })
