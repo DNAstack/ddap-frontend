@@ -35,6 +35,7 @@ export class DatasetResultsComponent implements OnChanges {
       this.datasetColumns = this.getDatasetColumns();
       this.columnsToDisplay = this.additionalColumns.concat(this.datasetColumns);
       this.pagination = this.formatPagination(this.dataset.pagination);
+      this.selection.clear();
     }
   }
 
@@ -60,6 +61,7 @@ export class DatasetResultsComponent implements OnChanges {
     this.isAllSelected() ?
       this.selection.clear() :
       this.list.map(row => this.selection.select(row));
+    this.selectedRowsData = this.selection.selected;
   }
 
   private checkboxLabel(row?): string {
