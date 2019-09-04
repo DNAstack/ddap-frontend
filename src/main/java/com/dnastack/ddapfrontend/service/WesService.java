@@ -2,11 +2,8 @@ package com.dnastack.ddapfrontend.service;
 
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
 import com.dnastack.ddapfrontend.client.wes.ReactiveWesClient;
+import com.dnastack.ddapfrontend.model.workflow.WesResourceViews;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunsResponseModel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,25 +33,25 @@ public class WesService {
         this.wesClient = wesClient;
     }
 
-    public Flux<WorkflowExecutionRunsResponseModel> getWorkflowJobs(ReactiveDamClient damClient,
-                                                                    String realm,
-                                                                    String damToken,
-                                                                    String refreshToken) {
-        Flux<WesResource> wesResources = getResourcesWithWesViews(damClient, realm, damToken, refreshToken);
-        return wesResources.flatMap(wesResource -> Flux.fromIterable(
-                wesResource.getViews()
+    public Flux<WorkflowExecutionRunsResponseModel> getAllWorkflowRuns(ReactiveDamClient damClient,
+                                                                       String realm,
+                                                                       String damToken,
+                                                                       String refreshToken) {
+        Flux<WesResourceViews> wesResources = getResourcesWithWesViews(damClient, realm, damToken, refreshToken);
+        return wesResources.flatMap(wesResourceViews -> Flux.fromIterable(
+                wesResourceViews.getViews()
                         .stream()
-                        .map((view) -> getJobsFromWesServer(damClient, realm, damToken, refreshToken, view, wesResource.getResource()))
+                        .map((view) -> getAllWorkflowRunsFromWesServer(damClient, realm, damToken, refreshToken, view, wesResourceViews.getResource()))
                         .collect(toList())
         ).flatMap(Flux::merge));
     }
 
-    private Mono<WorkflowExecutionRunsResponseModel> getJobsFromWesServer(ReactiveDamClient damClient,
-                                                                          String realm,
-                                                                          String damToken,
-                                                                          String refreshToken,
-                                                                          Map.Entry<String, View> view,
-                                                                          Map.Entry<String, Resource> wesResource) {
+    private Mono<WorkflowExecutionRunsResponseModel> getAllWorkflowRunsFromWesServer(ReactiveDamClient damClient,
+                                                                                     String realm,
+                                                                                     String damToken,
+                                                                                     String refreshToken,
+                                                                                     Map.Entry<String, View> view,
+                                                                                     Map.Entry<String, Resource> wesResource) {
         return damClient.getAccessTokenForView(realm, wesResource.getKey(), view.getKey(), damToken, refreshToken)
                 .flatMap((tokenResponse) -> wesClient.getJobs(getWesServerUri(view.getValue()), tokenResponse.getToken()))
                 .doOnSuccess((runsResponse) -> {
@@ -80,10 +77,10 @@ public class WesService {
         return ui;
     }
 
-    private Flux<WesResource> getResourcesWithWesViews(ReactiveDamClient damClient,
-                                                       String realm,
-                                                       String damToken,
-                                                       String refreshToken) {
+    public Flux<WesResourceViews> getResourcesWithWesViews(ReactiveDamClient damClient,
+                                                           String realm,
+                                                           String damToken,
+                                                           String refreshToken) {
         return damClient.getConfig(realm, damToken, refreshToken)
                 .map(DamConfig::getResourcesMap)
                 .map(Map::entrySet)
@@ -92,7 +89,7 @@ public class WesService {
                 .flatMapMany(Flux::fromIterable);
     }
 
-    private List<WesResource> getResourcesWithWesViews(Stream<Map.Entry<String, Resource>> resources) {
+    private List<WesResourceViews> getResourcesWithWesViews(Stream<Map.Entry<String, Resource>> resources) {
         return resources
                 .filter(this::hasWesViews)
                 .map(this::buildWesResource)
@@ -107,11 +104,11 @@ public class WesService {
                 .anyMatch(view -> view.getValue().getServiceTemplate().equals(WES_SERVICE_DEFINITION));
     }
 
-    private WesResource buildWesResource(Map.Entry<String, Resource> resource) {
-        WesResource wesResource = new WesResource();
-        wesResource.setResource(resource);
-        wesResource.setViews(getWesViewsFrom(resource.getValue()));
-        return wesResource;
+    private WesResourceViews buildWesResource(Map.Entry<String, Resource> resource) {
+        WesResourceViews wesResourceViews = new WesResourceViews();
+        wesResourceViews.setResource(resource);
+        wesResourceViews.setViews(getWesViewsFrom(resource.getValue()));
+        return wesResourceViews;
     }
 
     private List<Map.Entry<String, View>> getWesViewsFrom(Resource resource) {
@@ -127,15 +124,6 @@ public class WesService {
                 .map(item -> item.getVarsMap().get("url"))
                 .findFirst()
                 .get());
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    private class WesResource {
-        private Map.Entry<String, Resource> resource;
-        private List<Map.Entry<String, View>> views;
     }
 
 }

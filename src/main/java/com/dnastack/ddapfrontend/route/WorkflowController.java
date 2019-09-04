@@ -2,6 +2,7 @@ package com.dnastack.ddapfrontend.route;
 
 import com.dnastack.ddapfrontend.client.dam.DamClientFactory;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
+import com.dnastack.ddapfrontend.model.workflow.WesResourceViews;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunsResponseModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import com.dnastack.ddapfrontend.service.WesService;
@@ -21,7 +22,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 
 @RestController
-@RequestMapping("/api/v1alpha/{realm}/workflows")
+@RequestMapping("/api/v1alpha/{realm}/wes")
 public class WorkflowController {
 
     private UserTokenCookiePackager cookiePackager;
@@ -37,15 +38,28 @@ public class WorkflowController {
         this.damClients = damClientFactory::allDamClients;
     }
 
-    @GetMapping
-    public Flux<WorkflowExecutionRunsResponseModel> getWorkflows(ServerHttpRequest request, @PathVariable String realm) {
+    @GetMapping(value = "/runs")
+    public Flux<WorkflowExecutionRunsResponseModel> getWorkflowRuns(ServerHttpRequest request, @PathVariable String realm) {
         Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
         String refreshToken = foundRefreshToken.orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
 
         return Flux.merge(damClients.get()
-                .map(damClient -> wesService.getWorkflowJobs(damClient.getValue(), realm, damToken, refreshToken))
+                .map(damClient -> wesService.getAllWorkflowRuns(damClient.getValue(), realm, damToken, refreshToken))
+                .collect(toList())
+        );
+    }
+
+    @GetMapping(value = "/views")
+    public Flux<WesResourceViews> getWesResources(ServerHttpRequest request, @PathVariable String realm) {
+        Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
+        Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
+        String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
+        String refreshToken = foundRefreshToken.orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
+
+        return Flux.merge(damClients.get()
+                .map(damClient -> wesService.getResourcesWithWesViews(damClient.getValue(), realm, damToken, refreshToken))
                 .collect(toList())
         );
     }
