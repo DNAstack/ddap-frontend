@@ -32,6 +32,7 @@ import { LimitSearchComponent } from './beacon-search-bar/limit-search/limit-sea
 import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
 import { ClaimGroupComponent } from './claim-group/claim-group.component';
 import { FocusedDirective } from './focused.directive';
+import { HeaderBtnComponent } from './header/header-btn/header-btn.component';
 import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 import { MetadataFilterPipe } from './metadata-list/metadata-filter.pipe';
@@ -48,6 +49,7 @@ import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.componen
 @NgModule({
   declarations: [
     HeaderComponent,
+    HeaderBtnComponent,
     MainComponent,
     NavBackComponent,
     ResourceLogoComponent,
@@ -125,6 +127,7 @@ import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.componen
     MatSlideToggleModule,
 
     HeaderComponent,
+    HeaderBtnComponent,
     MainComponent,
     NavBackComponent,
     ClaimGroupComponent,
