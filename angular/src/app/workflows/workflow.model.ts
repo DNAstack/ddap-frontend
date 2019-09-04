@@ -1,23 +1,17 @@
 export interface Workflow {
-  name: string;
-  status: string;
-  url: string;
+  runs: WorkflowRun[];
+  error: {
+    message: string;
+  };
+  ui: {
+    resource: string;
+    resourceId: string;
+    view: string;
+    viewId: string;
+  };
 }
 
-export const workflows: Workflow[] = [
-  {
-    name: 'Workflow 1',
-    status: 'Running',
-    url: 'http://url-to-gc-bucket',
-  },
-  {
-    name: 'Workflow 2',
-    status: 'Failed',
-    url: 'http://url-to-gc-bucket',
-  },
-  {
-    name: 'Workflow 3',
-    status: 'Completed',
-    url: 'http://url-to-gc-bucket',
-  },
-];
+export interface WorkflowRun {
+  run_id: string;
+  state: string;
+}

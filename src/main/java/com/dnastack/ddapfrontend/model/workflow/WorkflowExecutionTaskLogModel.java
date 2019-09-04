@@ -1,4 +1,4 @@
-package com.dnastack.ddapfrontend.model;
+package com.dnastack.ddapfrontend.model.workflow;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class WorkflowExecutionStatusModel {
+public class WorkflowExecutionTaskLogModel {
 
-    private String id;
+    private String name;
 
 }

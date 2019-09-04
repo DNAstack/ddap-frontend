@@ -1,0 +1,13 @@
+@import "../../../styles/modules/colors";
+
+h3 {
+  .mat-icon {
+    margin-right: 0.5rem;
+  }
+
+  span:last-child {
+    font-size: 0.8rem;
+    color: $color-grey;
+    margin-left: 0.5rem;
+  }
+}
