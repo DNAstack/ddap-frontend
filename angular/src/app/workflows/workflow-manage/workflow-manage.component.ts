@@ -1,8 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { map } from 'rxjs/operators';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 
-import { SimplifiedWesResourceViews, WesResourceViews } from '../workflow.model';
+import { WorkflowFormComponent } from '../workflow-form/workflow-form.component';
 import { WorkflowService } from '../workflows.service';
 
 @Component({
@@ -11,24 +9,21 @@ import { WorkflowService } from '../workflows.service';
   styleUrls: ['./workflow-manage.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class WorkflowManageComponent implements OnInit {
+export class WorkflowManageComponent {
 
-  form: FormGroup;
-  wesResourceViews: SimplifiedWesResourceViews[];
+  @ViewChild(WorkflowFormComponent, { static: false })
+  workflowForm: WorkflowFormComponent;
 
-  constructor(private formBuilder: FormBuilder,
-              private workflowService: WorkflowService) {
+  constructor(private workflowService: WorkflowService) {
   }
 
-  ngOnInit(): void {
-    this.form = this.formBuilder.group({
-      wesView: ['', [Validators.required]],
-    });
-
-    this.workflowService.getAllWesViews()
-      .subscribe((sanitizedWesResourceViews: SimplifiedWesResourceViews[]) => {
-        this.wesResourceViews = sanitizedWesResourceViews;
-      });
+  executeWorkflow(): void {
+    const damId = this.workflowForm.getDamId();
+    const wesView = this.workflowForm.form.get('wesView').value;
+    const wdl = this.workflowForm.form.get('wdl').value;
+    const inputs = this.workflowForm.form.get('inputs').value;
+    this.workflowService.runWorkflow(damId, wesView, wdl, inputs)
+      .subscribe();
   }
 
 }

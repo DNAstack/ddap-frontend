@@ -6,15 +6,14 @@ import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { SharedModule } from '../../shared/shared.module';
 
 import { EntityAddComponent } from './entity-add/entity-add.component';
+import { EntityDescriptionLinkComponent } from './entity-description/entity-description-link.component';
 import { EntityDescriptionComponent } from './entity-description/entity-description.component';
 import { EntityListComponent } from './entity-list/entity-list.component';
 import { EntityManageFormComponent } from './entity-manage-form/entity-manage-form.component';
 import {
   EntityRemovalConfirmationDialogComponent
 } from './entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';
-import { FormFooterErrorComponent } from './form/form-footer-error/form-footer-error.component';
 import { OptionEditableListComponent } from './option-editable-list/option-editable-list.component';
-import {EntityDescriptionLinkComponent} from "./entity-description/entity-description-link.component";
 
 @NgModule({
   declarations: [
@@ -25,7 +24,6 @@ import {EntityDescriptionLinkComponent} from "./entity-description/entity-descri
     EntityManageFormComponent,
     EntityRemovalConfirmationDialogComponent,
     OptionEditableListComponent,
-    FormFooterErrorComponent,
   ],
   imports: [
     SharedModule,
@@ -42,7 +40,6 @@ import {EntityDescriptionLinkComponent} from "./entity-description/entity-descri
     EntityManageFormComponent,
     EntityRemovalConfirmationDialogComponent,
     OptionEditableListComponent,
-    FormFooterErrorComponent,
   ],
   entryComponents: [
     EntityRemovalConfirmationDialogComponent,

@@ -32,6 +32,7 @@ import { LimitSearchComponent } from './beacon-search-bar/limit-search/limit-sea
 import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
 import { ClaimGroupComponent } from './claim-group/claim-group.component';
 import { FocusedDirective } from './focused.directive';
+import { FormFooterErrorComponent } from './form/form-footer-error/form-footer-error.component';
 import { HeaderBtnComponent } from './header/header-btn/header-btn.component';
 import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
@@ -65,6 +66,7 @@ import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.componen
     MetadataFilterPipe,
     AsEntityModelPipe,
     SandboxBannerComponent,
+    FormFooterErrorComponent,
   ],
   imports: [
     CommonModule,
@@ -143,6 +145,7 @@ import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.componen
     MetadataFilterPipe,
     AsEntityModelPipe,
     SandboxBannerComponent,
+    FormFooterErrorComponent,
   ],
 })
 export class SharedModule {
