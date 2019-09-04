@@ -1,6 +1,7 @@
 package com.dnastack.ddapfrontend.client.wes;
 
 import com.dnastack.ddapfrontend.client.WebClientFactory;
+import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunsResponseModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriTemplate;
@@ -22,7 +23,7 @@ public class ReactiveWesClient {
         this.webClientFactory = webClientFactory;
     }
 
-    public Mono<Object> getJobs(URI wesServerUrl, String wesToken) {
+    public Mono<WorkflowExecutionRunsResponseModel> getJobs(URI wesServerUrl, String wesToken) {
         final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs");
         final Map<String, Object> variables = new HashMap<>();
 
@@ -31,7 +32,7 @@ public class ReactiveWesClient {
                 .uri(wesServerUrl.resolve(template.expand(variables)))
                 .header(AUTHORIZATION, "Bearer " + wesToken)
                 .retrieve()
-                .bodyToMono(Object.class);
+                .bodyToMono(WorkflowExecutionRunsResponseModel.class);
     }
 
 }

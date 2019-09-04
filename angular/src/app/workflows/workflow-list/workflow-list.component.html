@@ -3,24 +3,32 @@
 </ddap-header>
 
 <ddap-main>
-  <mat-accordion>
-    <mat-expansion-panel *ngFor="let workflow of workflowService.get() | async">
+  <mat-accordion *ngFor="let workflow of workflows">
+    <h3 class="flex vertical-center">
+      <span class="flex vertical-center">
+        <mat-icon class="icon icon-resource"></mat-icon> {{ workflow.ui.resource }}
+      </span>
+      <span class="flex vertical-center">
+        (<mat-icon class="icon icon-views"></mat-icon> {{ workflow.ui.view }})
+      </span>
+    </h3>
+    <mat-expansion-panel [disabled]="true">
       <mat-expansion-panel-header>
-        <mat-panel-title>{{ workflow.name }}</mat-panel-title>
-        <mat-panel-description>{{ workflow.status }}</mat-panel-description>
+        <mat-panel-title>Run Identifier</mat-panel-title>
+        <mat-panel-description>State</mat-panel-description>
       </mat-expansion-panel-header>
-      <a [href]="workflow.url"
-         disabled
-         data-se="access-btn"
-         target='_blank'
-         rel='noopener noreferrer'>
-        <button mat-button
-                disabled
-                color="primary"
-                class="uppercase">
-          View
-        </button>
-      </a>
+    </mat-expansion-panel>
+    <mat-expansion-panel *ngFor="let run of workflow.runs">
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{ run.run_id }}</mat-panel-title>
+        <mat-panel-description>{{ run.state }}</mat-panel-description>
+      </mat-expansion-panel-header>
+      <button mat-button
+              disabled
+              color="primary"
+              class="uppercase">
+        View
+      </button>
     </mat-expansion-panel>
   </mat-accordion>
 </ddap-main>

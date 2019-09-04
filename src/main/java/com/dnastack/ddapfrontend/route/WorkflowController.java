@@ -2,6 +2,7 @@ package com.dnastack.ddapfrontend.route;
 
 import com.dnastack.ddapfrontend.client.dam.DamClientFactory;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
+import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunsResponseModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import com.dnastack.ddapfrontend.service.WesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class WorkflowController {
     }
 
     @GetMapping
-    public Flux<Object> getWorkflows(ServerHttpRequest request, @PathVariable String realm) {
+    public Flux<WorkflowExecutionRunsResponseModel> getWorkflows(ServerHttpRequest request, @PathVariable String realm) {
         Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
