@@ -15,6 +15,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class WesResourceViews {
 
+    private String damId;
     private Map.Entry<String, DamService.Resource> resource;
     private List<Map.Entry<String, DamService.View>> views;
 

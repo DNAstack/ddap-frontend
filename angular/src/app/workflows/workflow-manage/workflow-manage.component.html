@@ -3,24 +3,17 @@
 </ddap-header>
 
 <ddap-main>
-  <form class="ddap-form"
-        novalidate
-        [formGroup]="form">
-    <div class="row">
-      <mat-form-field class="col">
-        <mat-label>WES Servers</mat-label>
-        <mat-select formControlName="wesView"
-                    data-se="inp-workflow-wes-view"
-                    panelClass="workflow-wes-view-select"
-                    required>
-          <ng-container *ngFor="let wesResourceView of wesResourceViews">
-            <mat-option *ngFor="let wesView of wesResourceView.views"
-                        [value]="wesView.name">
-              <div>{{ wesView.url }}</div>
-            </mat-option>
-          </ng-container>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </form>
+  <ddap-workflow-form #workflowForm></ddap-workflow-form>
+  <div class="ddap-form-toolbar">
+    <ddap-form-footer-error>
+    </ddap-form-footer-error>
+    <button mat-flat-button
+            (click)="executeWorkflow()"
+            data-se="btn-execute"
+            type="submit"
+            color="primary"
+            class="uppercase">
+      Execute Workflow
+    </button>
+  </div>
 </ddap-main>

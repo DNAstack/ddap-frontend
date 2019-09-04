@@ -1,0 +1,40 @@
+<form class="ddap-form"
+      novalidate
+      [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col">
+      <mat-label>WES Servers</mat-label>
+      <mat-select formControlName="wesView"
+                  data-se="inp-workflow-wes-view"
+                  panelClass="workflow-wes-view-select"
+                  required>
+        <ng-container *ngFor="let wesResourceView of wesResourceViews">
+          <mat-option *ngFor="let wesView of wesResourceView.views"
+                      [value]="wesView.name">
+            <div>{{ wesView.url }}</div>
+          </mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col">
+        <textarea matInput
+                  placeholder="Workflow Description (WDL JSON)"
+                  formControlName="wdl"
+                  data-se="inp-workflow-wdl"
+                  required>
+        </textarea>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col">
+        <textarea matInput
+                  placeholder="Workflow Inputs (JSON)"
+                  formControlName="inputs"
+                  data-se="inp-workflow-inputs"
+                  required>
+        </textarea>
+    </mat-form-field>
+  </div>
+</form>

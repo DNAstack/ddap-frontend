@@ -19,6 +19,7 @@ export interface WorkflowRun {
 }
 
 export interface WesResourceViews {
+  damId: string;
   resource: {[key: string]: any};
   views: {[key: string]: any}[];
 }
@@ -26,15 +27,17 @@ export interface WesResourceViews {
 export class SimplifiedWesResourceViews {
   resourceId: string;
   resource: string;
+  damId: string;
   views: {
     name: string;
     label: string;
     url: string;
   }[];
 
-  constructor(resourceId: string, resource: string, views: { name: string; label: string; url: string }[]) {
+  constructor(resourceId: string, resource: string, damId: string, views: { name: string; label: string; url: string }[]) {
     this.resourceId = resourceId;
     this.resource = resource;
+    this.damId = damId;
     this.views = views;
   }
 
@@ -54,6 +57,7 @@ export class SimplifiedWesResourceViews {
     return new SimplifiedWesResourceViews(
       resourceId,
       wesResourceViews.resource[resourceId].ui.label,
+      wesResourceViews.damId,
       views
     );
   }
