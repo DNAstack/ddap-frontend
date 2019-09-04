@@ -41,7 +41,7 @@ public class NavBar {
     }
 
     public static NavLink importDataLink() {
-        return new NavLink("Import Data", DdapBy.se("nava-dataset"), null);
+        return new NavLink("Import Data", DdapBy.se("nav-dataset"), null);
     }
 
     public static NavLink damIdentityLink() {

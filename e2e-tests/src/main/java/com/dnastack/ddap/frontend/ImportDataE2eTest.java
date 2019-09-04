@@ -6,13 +6,19 @@ import com.dnastack.ddap.common.page.DatasetPage;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.dnastack.ddap.common.page.NavBar.importDataLink;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class ImportDataE2eTest extends AbstractFrontendE2eTest {
     private static final String REALM= generateRealmName(ImportDataE2eTest.class.getSimpleName());
+    private static String datasetUrl = optionalEnv("E2E_DATASET_URL", "https://storage.googleapis.com"
+            + "/ddap-test-objects/dataset/subjects-with-objects");
 
     @Override
     protected String getRealm() {
@@ -33,18 +39,32 @@ public class ImportDataE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void testFetchDatasetResult() {
         ddapPage.getNavBar().goTo(importDataLink());
-        String datasetUrl = "https://storage.googleapis.com/ddap-test-objects/dataset/subjects-with-objects";
         DatasetPage datasetPage = new DatasetPage(driver);
         datasetPage.fetchDatasetResult(datasetUrl);
+        List<WebElement> datasetResults = datasetPage.dataSetResult();
+        assertFalse(datasetResults.isEmpty());
     }
 
     @Test
     public void testGetAccessOfValidUrlColumns() {
-
+        ddapPage.getNavBar().goTo(importDataLink());
+        DatasetPage datasetPage = new DatasetPage(driver);
+        datasetPage.fetchDatasetResult(datasetUrl);
+        List<WebElement> accessTokenCards = datasetPage.getAccessTokens("bam_file");
+        assertFalse(accessTokenCards.isEmpty());
     }
 
     @Test
     public void testGetAccessOfInvalidUrlColumns() {
+        ddapPage.getNavBar().goTo(importDataLink());
+        DatasetPage datasetPage = new DatasetPage(driver);
+        datasetPage.fetchDatasetResult(datasetUrl);
+        List<WebElement> accessTokenCards = datasetPage.getAccessTokens(null);
+        assertTrue(accessTokenCards.isEmpty());
+    }
+
+    @Test
+    public void testGetAccessOfNoViews() {
 
     }
 

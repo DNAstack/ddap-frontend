@@ -5,7 +5,10 @@
       <mat-label>Choose column to fetch views</mat-label>
       <mat-select formControlName="columnName"
                   data-se="select-column">
-        <mat-option *ngFor="let column of columns" [value]=column>{{ column }}</mat-option>
+        <mat-option *ngFor="let column of columns"
+                    [value]=column>
+          {{ column }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
@@ -20,7 +23,7 @@
 </div>
 
 <div *ngIf="accessTokenErrorMessages && accessTokenErrorMessages.length">
-  <p class="error-message" *ngFor="let message of accessTokenErrorMessages">{{ message }}</p>
+  <p class="error-message" data-se="access-token-info" *ngFor="let message of accessTokenErrorMessages">{{ message }}</p>
 </div>
 <div *ngIf="noViews" class="views-error">
   <mat-icon class="icon icon-warning"></mat-icon>
