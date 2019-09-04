@@ -14,11 +14,11 @@ export class WorkflowListComponent implements OnInit, OnDestroy {
   workflows: Workflow[];
   workflowSubscription: Subscription;
 
-  constructor(public workflowService: WorkflowService) {
+  constructor(private workflowService: WorkflowService) {
   }
 
   ngOnInit(): void {
-    this.workflowSubscription = this.workflowService.get()
+    this.workflowSubscription = this.workflowService.getAllWorkflowRuns()
       .subscribe((workflows: Workflow[]) => {
         this.workflows = workflows;
       });
