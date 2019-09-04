@@ -19,10 +19,14 @@
   </div>
 </div>
 
-<div *ngIf="errorMessages && errorMessages.length">
-  <p class="error-message" *ngFor="let message of errorMessages">{{ message }}</p>
+<div *ngIf="accessTokenErrorMessages && accessTokenErrorMessages.length">
+  <p class="error-message" *ngFor="let message of accessTokenErrorMessages">{{ message }}</p>
 </div>
-<div *ngIf="accessTokens && accessTokens.length">
+<div *ngIf="noViews" class="views-error">
+  <mat-icon class="icon icon-warning"></mat-icon>
+  <span>{{ genericError }}</span>
+</div>
+<div *ngIf="accessTokens && accessTokens.length" class="ddap-column-panel">
   <ddap-dataset-view-access
     *ngFor="let accessObj of accessTokens"
     [access] = accessObj

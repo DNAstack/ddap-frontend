@@ -35,6 +35,8 @@ export class DatasetResultsComponent implements OnChanges {
       this.datasetColumns = this.getDatasetColumns();
       this.columnsToDisplay = this.additionalColumns.concat(this.datasetColumns);
       this.pagination = this.formatPagination(this.dataset.pagination);
+      this.selection.clear();
+      this.selectedRowsData = [];
     }
   }
 
@@ -60,6 +62,7 @@ export class DatasetResultsComponent implements OnChanges {
     this.isAllSelected() ?
       this.selection.clear() :
       this.list.map(row => this.selection.select(row));
+    this.selectedRowsData = this.selection.selected;
   }
 
   private checkboxLabel(row?): string {
@@ -83,6 +86,10 @@ export class DatasetResultsComponent implements OnChanges {
   private formatPagination(pagination: object): Pagination {
     const updatedPagination = {} as Pagination;
     if (pagination) {
+      // fallback for prev_page_url
+      if (pagination.hasOwnProperty('prev_page_url')) {
+        pagination['previous_page_url'] = pagination['prev_page_url'];
+      }
       Object.keys(pagination)
         .map(key => {
           updatedPagination[camelCase(key)] = pagination[key];

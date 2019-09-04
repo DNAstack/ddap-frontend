@@ -7,7 +7,7 @@
 </div>
 
 <div>
-  <form novalidate
+  <form
   (ngSubmit)="onSubmit(datasetFetchForm)"
   [formGroup]="datasetFetchForm">
     <div class="dataset-import-wrapper">
@@ -16,11 +16,13 @@
                placeholder="URL of the dataset"
                matInput
                data-se="dataset-url"/>
+        <mat-error *ngIf="datasetFetchForm.invalid">Please enter a valid dataset URL</mat-error>
       </mat-form-field>
       <button mat-button
               class="uppercase"
               color="primary"
               type="submit"
+              [disabled]="datasetFetchForm.invalid"
               data-se="btn-import-dataset">
         Fetch
       </button>

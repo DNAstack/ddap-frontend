@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { catchError } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { ErrorHandlerService } from '../shared/error-handler/error-handler.service';
@@ -32,6 +33,9 @@ export class DatasetService {
   }
 
   getViewsAuthorization(views): Observable<Array<ViewTokens>> {
-    return this.http.post<Array<ViewTokens>>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/views/tokens`, views);
+    return this.http.post<Array<ViewTokens>>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/views/tokens`, views)
+      .pipe(
+        this.errorHandler.notifyOnError()
+      );
   }
 }
