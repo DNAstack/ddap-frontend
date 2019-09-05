@@ -27,5 +27,4 @@ export class WorkflowListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.workflowSubscription.unsubscribe();
   }
-
 }
