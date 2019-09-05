@@ -3,6 +3,7 @@ package com.dnastack.ddapfrontend.service;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
 import com.dnastack.ddapfrontend.client.wes.ReactiveWesClient;
 import com.dnastack.ddapfrontend.model.workflow.WesResourceViews;
+import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunModel;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunRequestModel;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunsResponseModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -136,11 +137,11 @@ public class WesService {
                 .get());
     }
 
-    public Mono<Object> executeWorkflow(Map.Entry<String, ReactiveDamClient> damClient,
-                                  String realm,
-                                  String damToken,
-                                  String refreshToken,
-                                  WorkflowExecutionRunRequestModel runRequest) {
+    public Mono<WorkflowExecutionRunModel> executeWorkflow(Map.Entry<String, ReactiveDamClient> damClient,
+                                                           String realm,
+                                                           String damToken,
+                                                           String refreshToken,
+                                                           WorkflowExecutionRunRequestModel runRequest) {
         Flux<WesResourceViews> wesResources = getResourcesWithWesViews(damClient, realm, damToken, refreshToken);
         return wesResources
                 .filter(wesResourceViews -> wesResourceViews.getViews().stream()
@@ -162,7 +163,7 @@ public class WesService {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("workflow_url", "workflow.wdl")
                 .header(CONTENT_DISPOSITION, "form-data; name=\"workflow_url\"");
-        builder.part("workflow_attachment", runRequest.getWdlJson(), MediaType.TEXT_PLAIN)
+        builder.part("workflow_attachment", runRequest.getWdl(), MediaType.TEXT_PLAIN)
                 .header(CONTENT_DISPOSITION, "form-data; name=\"workflow_attachment\"; filename=\"workflow.wdl\"");
         builder.part("workflow_params", runRequest.getInputsJson(), MediaType.APPLICATION_JSON_UTF8)
                 .header(CONTENT_DISPOSITION, "form-data; name=\"workflow_params\"; filename=\"inputs.json\"");

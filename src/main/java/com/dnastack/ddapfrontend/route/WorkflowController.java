@@ -3,6 +3,7 @@ package com.dnastack.ddapfrontend.route;
 import com.dnastack.ddapfrontend.client.dam.DamClientFactory;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
 import com.dnastack.ddapfrontend.model.workflow.WesResourceViews;
+import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunModel;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunRequestModel;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunsResponseModel;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
@@ -66,9 +67,9 @@ public class WorkflowController {
     }
 
     @PostMapping(value = "/runs")
-    public Mono<Object> addWorkflowToRun(ServerHttpRequest request,
-                                         @PathVariable String realm,
-                                         @RequestBody WorkflowExecutionRunRequestModel runRequest) {
+    public Mono<WorkflowExecutionRunModel> addWorkflowToRun(ServerHttpRequest request,
+                                                            @PathVariable String realm,
+                                                            @RequestBody WorkflowExecutionRunRequestModel runRequest) {
         Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));

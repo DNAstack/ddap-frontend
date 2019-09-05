@@ -14,7 +14,7 @@ public class WorkflowExecutionRunRequestModel {
     private String damId;
     private String view;
 
-    private String wdlJson;
+    private String wdl;
     private String inputsJson;
 
 }
