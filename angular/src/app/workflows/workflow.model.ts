@@ -46,10 +46,12 @@ export class SimplifiedWesResourceViews {
       .map((viewMap) => {
         return Object.entries(viewMap)
           .map(([key, value]) => {
+            const wesInterface = Object.keys(value.interfaces)[0];
+            const wesUri = value.interfaces[wesInterface].uri[0];
             return {
               name: key,
               label: value.ui.label,
-              url: value.items[0].vars.url,
+              url: wesUri,
             };
           });
       }));
