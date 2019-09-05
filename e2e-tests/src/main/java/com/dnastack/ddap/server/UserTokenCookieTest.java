@@ -4,6 +4,8 @@ import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
+import dam.v1.DamService;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -19,6 +21,15 @@ import static org.hamcrest.Matchers.not;
 public class UserTokenCookieTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(UserTokenCookieTest.class.getSimpleName());
+
+    @Before
+    public void setupRealm() throws IOException {
+        String configJson = loadTemplate("/com/dnastack/ddap/adminConfig.json");
+        DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
+        validateProtoBuf(configJson, damConfigBuilder);
+        setupRealmConfig("administrator", configJson, "1", REALM);
+    }
+
 
     @Test
     public void damResponsesShouldClearExpiredUserTokenCookies() throws Exception {
