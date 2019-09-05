@@ -36,6 +36,10 @@ public class NavBar {
         return new NavLink("Explore Data", DdapBy.se("nav-data"), null);
     }
 
+    public static NavLink workflowLink() {
+        return new NavLink("Workflows", DdapBy.se("nav-workflows"), null);
+    }
+
     public static NavLink damIdentityLink() {
         return new NavLink("My Identity", DdapBy.se("nav-identity"), null);
     }
@@ -148,6 +152,12 @@ public class NavBar {
         driver.findElement(dataLink().getSelector()).click();
 
         return new DataListPage(driver);
+    }
+
+    public WorkflowListPage goToWorkflows() {
+        driver.findElement(workflowLink().getSelector()).click();
+
+        return new WorkflowListPage(driver);
     }
 
     public AdminListPage goToAdmin(NavLink navItem) {

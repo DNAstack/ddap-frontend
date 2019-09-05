@@ -23,8 +23,8 @@
     </mat-expansion-panel>
     <mat-expansion-panel *ngFor="let run of workflow.runs">
       <mat-expansion-panel-header>
-        <mat-panel-title>{{ run.run_id }}</mat-panel-title>
-        <mat-panel-description>{{ run.state }}</mat-panel-description>
+        <mat-panel-title data-se="run-id">{{ run.run_id }}</mat-panel-title>
+        <mat-panel-description data-se="run-state">{{ run.state }}</mat-panel-description>
       </mat-expansion-panel-header>
       <button mat-button
               disabled

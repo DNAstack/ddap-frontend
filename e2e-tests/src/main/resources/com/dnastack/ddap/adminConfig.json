@@ -776,6 +776,48 @@
         "troubleshootUrl": "http://troubleshoot.1000-genomes.org",
         "year": "2017"
       }
+    },
+    "wes-resource": {
+      "views": {
+        "wes-view": {
+          "serviceTemplate": "wes",
+          "version": "1",
+          "contentTypes": [],
+          "roles": {
+            "execute": {
+              "policies": [
+                "bona_fide"
+              ]
+            }
+          },
+          "items": [
+            {
+              "vars": {
+                "url": "https://ddap-wes-service.staging.dnastack.com"
+              }
+            }
+          ],
+          "aud": "ddap-wes",
+          "defaultRole": "execute",
+          "ui": {
+            "description": "wes-view",
+            "label": "WES View"
+          }
+        }
+      },
+      "ui": {
+        "access": "",
+        "applyUrl": "",
+        "description": "wes-resource",
+        "imageUrl": "",
+        "infoUrl": "",
+        "label": "WES Resource",
+        "owner": "",
+        "size": "",
+        "tags": "",
+        "troubleshootUrl": "",
+        "year": ""
+      }
     }
   },
   "clients": {
@@ -1019,6 +1061,34 @@
         "description": "Offers Resource Viewer access across multiple views",
         "label": "Multiple Resource Views"
       }
+    },
+    "wes": {
+      "targetAdapter": "token:jwt:gatekeeper",
+      "itemFormat": "url",
+      "interfaces": {
+        "http:wes": "${url}"
+      },
+      "roles": {
+        "execute": {
+          "targetScopes": [
+            "registered"
+          ],
+          "damRoleCategories": [
+            "metadata",
+            "list",
+            "read",
+            "write"
+          ],
+          "ui": {
+            "description": "Run a Workflow against a configured WES API",
+            "label": "WES Execute"
+          }
+        }
+      },
+      "ui": {
+        "description": "Offers executing of workflow",
+        "label": "Workflow Execution Schema"
+      }
     }
   },
   "claimDefinitions": {
@@ -1132,6 +1202,11 @@
         "thousand-genomes": {
           "access": [
             "discovery-access/discovery"
+          ]
+        },
+        "wes-resource": {
+          "access": [
+            "wes-view/execute"
           ]
         }
       },
@@ -1280,6 +1355,11 @@
           "access": [
             "discovery-access/discovery",
             "gcs-file-access/viewer"
+          ]
+        },
+        "wes-resource": {
+          "access": [
+            "wes-view/execute"
           ]
         }
       },
