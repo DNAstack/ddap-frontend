@@ -19,6 +19,7 @@ public class ImportDataE2eTest extends AbstractFrontendE2eTest {
     private static final String REALM= generateRealmName(ImportDataE2eTest.class.getSimpleName());
     private static String datasetUrl = optionalEnv("E2E_DATASET_URL", "https://storage.googleapis.com"
             + "/ddap-test-objects/dataset/subjects-with-objects");
+    // TODO: DISCO-2408
 
     @Override
     protected String getRealm() {
@@ -62,11 +63,5 @@ public class ImportDataE2eTest extends AbstractFrontendE2eTest {
         List<WebElement> accessTokenCards = datasetPage.getAccessTokens(null);
         assertTrue(accessTokenCards.isEmpty());
     }
-
-    @Test
-    public void testGetAccessOfNoViews() {
-
-    }
-
 
 }
