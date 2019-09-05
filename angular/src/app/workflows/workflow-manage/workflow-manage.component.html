@@ -5,7 +5,8 @@
 <ddap-main>
   <ddap-workflow-form #workflowForm></ddap-workflow-form>
   <div class="ddap-form-toolbar">
-    <ddap-form-footer-error>
+    <ddap-form-footer-error [showError]="!isFormValid && isFormValidated"
+                            [message]="formErrorMessage">
     </ddap-form-footer-error>
     <button mat-flat-button
             (click)="executeWorkflow()"

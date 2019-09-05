@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -15,6 +16,7 @@ import { WorkflowsRoutingModule } from './workflows-routing.module';
   ],
   imports: [
     SharedModule,
+    NgJsonEditorModule,
     WorkflowsRoutingModule,
   ],
 })

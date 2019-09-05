@@ -36,7 +36,7 @@ export class WorkflowService {
       {
         damId,
         view,
-        wdlJson: wdl,
+        wdl,
         inputsJson: inputs,
       }
     );

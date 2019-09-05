@@ -20,21 +20,21 @@
   <div class="row">
     <mat-form-field class="col">
         <textarea matInput
-                  placeholder="Workflow Description (WDL JSON)"
+                  placeholder="Workflow Description (WDL)"
                   formControlName="wdl"
                   data-se="inp-workflow-wdl"
+                  rows="15"
                   required>
         </textarea>
     </mat-form-field>
   </div>
+  <h3>
+    <mat-icon class="icon icon-tests"></mat-icon>
+    <span>Workflow Inputs</span>
+  </h3>
   <div class="row">
-    <mat-form-field class="col">
-        <textarea matInput
-                  placeholder="Workflow Inputs (JSON)"
-                  formControlName="inputs"
-                  data-se="inp-workflow-inputs"
-                  required>
-        </textarea>
-    </mat-form-field>
+    <json-editor class="col"
+                 formControlName="inputs"
+                 [options]="editorOptions"></json-editor>
   </div>
 </form>

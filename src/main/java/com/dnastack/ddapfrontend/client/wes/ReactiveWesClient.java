@@ -1,11 +1,11 @@
 package com.dnastack.ddapfrontend.client.wes;
 
 import com.dnastack.ddapfrontend.client.WebClientFactory;
+import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunModel;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunsResponseModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -40,10 +40,10 @@ public class ReactiveWesClient {
                 .bodyToMono(WorkflowExecutionRunsResponseModel.class);
     }
 
-    public Mono<Object> addRun(URI wesServerUrl, String wesToken, MultiValueMap<String, HttpEntity<?>> multipart) {
+    public Mono<WorkflowExecutionRunModel> addRun(URI wesServerUrl, String wesToken, MultiValueMap<String, HttpEntity<?>> multipart) {
         final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs");
         final Map<String, Object> variables = new HashMap<>();
-        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+
         return webClientFactory.getWebClient()
                 .post()
                 .uri(wesServerUrl.resolve(template.expand(variables)))
@@ -51,7 +51,7 @@ public class ReactiveWesClient {
                 .header(AUTHORIZATION, "Bearer " + wesToken)
                 .body(BodyInserters.fromMultipartData(multipart))
                 .retrieve()
-                .bodyToMono(Object.class);
+                .bodyToMono(WorkflowExecutionRunModel.class);
     }
 
 }
