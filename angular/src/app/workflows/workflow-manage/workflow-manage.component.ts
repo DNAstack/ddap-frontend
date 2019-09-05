@@ -38,7 +38,7 @@ export class WorkflowManageComponent {
     const wdl = this.workflowForm.form.get('wdl').value;
     const inputs = JSON.stringify(this.workflowForm.form.get('inputs').value);
     this.workflowService.runWorkflow(damId, wesView, wdl, inputs)
-      .subscribe(() => this.navigateUp('..'), this.showError);
+      .subscribe(() => this.navigateUp('../..'), this.showError);
   }
 
   protected navigateUp = (path: string) => this.router.navigate([path], { relativeTo: this.route });

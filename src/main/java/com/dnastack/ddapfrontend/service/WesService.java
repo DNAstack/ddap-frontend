@@ -6,7 +6,7 @@ import com.dnastack.ddapfrontend.model.workflow.WesResourceViews;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunModel;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunRequestModel;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunsResponseModel;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import dam.v1.DamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -18,13 +18,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static dam.v1.DamService.*;
+import static dam.v1.DamService.Resource;
+import static dam.v1.DamService.View;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
@@ -32,14 +29,12 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 @Component
 public class WesService {
 
-    private static final String WES_SERVICE_DEFINITION = "wes";
-
-    private ObjectMapper objectMapper;
+    private WesResourceService wesResourceService;
     private ReactiveWesClient wesClient;
 
     @Autowired
-    public WesService(ObjectMapper objectMapper, ReactiveWesClient wesClient) {
-        this.objectMapper = objectMapper;
+    public WesService(WesResourceService wesResourceService, ReactiveWesClient wesClient) {
+        this.wesResourceService = wesResourceService;
         this.wesClient = wesClient;
     }
 
@@ -47,13 +42,20 @@ public class WesService {
                                                                        String realm,
                                                                        String damToken,
                                                                        String refreshToken) {
-        Flux<WesResourceViews> wesResources = getResourcesWithWesViews(damClient, realm, damToken, refreshToken);
-        return wesResources.flatMap(wesResourceViews -> Flux.fromIterable(
-                wesResourceViews.getViews()
-                        .stream()
-                        .map((view) -> getAllWorkflowRunsFromWesServer(damClient.getValue(), realm, damToken, refreshToken, view, wesResourceViews.getResource()))
-                        .collect(toList())
-        ).flatMap(Flux::merge));
+        return wesResourceService.getResources(damClient, realm)
+                .flatMap(wesResourceViews -> Flux.fromIterable(
+                        wesResourceViews.getViews()
+                                .stream()
+                                .map((view) -> getAllWorkflowRunsFromWesServer(
+                                        damClient.getValue(),
+                                        realm,
+                                        damToken,
+                                        refreshToken,
+                                        view,
+                                        wesResourceViews.getResource()
+                                ))
+                                .collect(toList())
+                ).flatMap(Flux::merge));
     }
 
     private Mono<WorkflowExecutionRunsResponseModel> getAllWorkflowRunsFromWesServer(ReactiveDamClient damClient,
@@ -63,7 +65,10 @@ public class WesService {
                                                                                      Map.Entry<String, View> view,
                                                                                      Map.Entry<String, Resource> wesResource) {
         return damClient.getAccessTokenForView(realm, wesResource.getKey(), view.getKey(), damToken, refreshToken)
-                .flatMap((tokenResponse) -> wesClient.getRuns(getWesServerUri(view.getValue()), tokenResponse.getToken()))
+                .flatMap((tokenResponse) -> {
+                    URI wesServerUri = wesResourceService.getWesServerUri(view.getValue());
+                    return wesClient.getRuns(wesServerUri, tokenResponse.getToken());
+                })
                 .doOnSuccess((runsResponse) -> {
                     runsResponse.setUi(getWorkflowUi(view, wesResource));
                 })
@@ -87,75 +92,32 @@ public class WesService {
         return ui;
     }
 
-    public Flux<WesResourceViews> getResourcesWithWesViews(Map.Entry<String, ReactiveDamClient> damClient,
-                                                           String realm,
-                                                           String damToken,
-                                                           String refreshToken) {
-        return damClient.getValue().getConfig(realm, damToken, refreshToken)
-                .map(DamConfig::getResourcesMap)
-                .map(Map::entrySet)
-                .map(Collection::stream)
-                .map(resources -> getResourcesWithWesViews(damClient.getKey(), resources))
-                .flatMapMany(Flux::fromIterable);
-    }
-
-    private List<WesResourceViews> getResourcesWithWesViews(String damId, Stream<Map.Entry<String, Resource>> resources) {
-        return resources
-                .filter(this::hasWesViews)
-                .map(resource -> buildWesResource(damId, resource))
-                .collect(Collectors.toList());
-    }
-
-    private boolean hasWesViews(Map.Entry<String, Resource> resource) {
-        return resource.getValue()
-                .getViewsMap()
-                .entrySet()
-                .stream()
-                .anyMatch(view -> view.getValue().getServiceTemplate().equals(WES_SERVICE_DEFINITION));
-    }
-
-    private WesResourceViews buildWesResource(String damId, Map.Entry<String, Resource> resource) {
-        WesResourceViews wesResourceViews = new WesResourceViews();
-        wesResourceViews.setDamId(damId);
-        wesResourceViews.setResource(resource);
-        wesResourceViews.setViews(getWesViewsFrom(resource.getValue()));
-        return wesResourceViews;
-    }
-
-    private List<Map.Entry<String, View>> getWesViewsFrom(Resource resource) {
-        return resource.getViewsMap()
-                .entrySet()
-                .stream()
-                .filter(view -> view.getValue().getServiceTemplate().equals(WES_SERVICE_DEFINITION))
-                .collect(toList());
-    }
-
-    private URI getWesServerUri(View view) {
-        return URI.create(view.getItemsList().stream()
-                .map(item -> item.getVarsMap().get("url"))
-                .findFirst()
-                .get());
-    }
-
     public Mono<WorkflowExecutionRunModel> executeWorkflow(Map.Entry<String, ReactiveDamClient> damClient,
                                                            String realm,
                                                            String damToken,
                                                            String refreshToken,
                                                            WorkflowExecutionRunRequestModel runRequest) {
-        Flux<WesResourceViews> wesResources = getResourcesWithWesViews(damClient, realm, damToken, refreshToken);
+        Flux<WesResourceViews> wesResources = wesResourceService.getResources(damClient, realm);
         return wesResources
                 .filter(wesResourceViews -> wesResourceViews.getViews().stream()
-                        .anyMatch(stringViewEntry -> stringViewEntry.getKey().equals(runRequest.getView()))
-                )
+                        .anyMatch(stringViewEntry -> stringViewEntry.getKey().equals(runRequest.getView())))
                 .single()
-                .flatMap(wesResourceViews -> {
-                    Map.Entry<String, View> view = wesResourceViews.getViews().stream()
-                            .filter(stringViewEntry -> stringViewEntry.getKey().equals(runRequest.getView()))
-                            .findFirst()
-                            .get();
-                    return damClient.getValue().getAccessTokenForView(realm, wesResourceViews.getResource().getKey(), view.getKey(), damToken, refreshToken)
-                            .flatMap((tokenResponse) -> wesClient.addRun(getWesServerUri(view.getValue()), tokenResponse.getToken(), getMultipartBody(runRequest)));
+                .flatMap(wesResourceViews -> executeWorkflow(damClient, realm, damToken, refreshToken, runRequest, wesResourceViews));
+    }
+
+    private Mono<WorkflowExecutionRunModel> executeWorkflow(Map.Entry<String, ReactiveDamClient> damClient,
+                                                            String realm,
+                                                            String damToken,
+                                                            String refreshToken,
+                                                            WorkflowExecutionRunRequestModel runRequest,
+                                                            WesResourceViews wesResourceViews) {
+        Map.Entry<String, DamService.View> view = wesResourceService.getViewById(wesResourceViews, runRequest.getView());
+        return damClient.getValue().getAccessTokenForView(realm, wesResourceViews.getResource().getKey(), view.getKey(), damToken, refreshToken)
+                .flatMap((tokenResponse) -> {
+                    URI wesServerUri = wesResourceService.getWesServerUri(view.getValue());
+                    return wesClient.addRun(wesServerUri, tokenResponse.getToken(), getMultipartBody(runRequest));
                 });
+
     }
 
     // TODO: Add support for `tokens.json`
