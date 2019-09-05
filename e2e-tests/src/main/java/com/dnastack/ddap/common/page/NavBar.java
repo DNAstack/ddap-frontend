@@ -40,6 +40,10 @@ public class NavBar {
         return new NavLink("Workflows", DdapBy.se("nav-workflows"), null);
     }
 
+    public static NavLink importDataLink() {
+        return new NavLink("Import Data", DdapBy.se("nav-dataset"), null);
+    }
+
     public static NavLink damIdentityLink() {
         return new NavLink("My Identity", DdapBy.se("nav-identity"), null);
     }
