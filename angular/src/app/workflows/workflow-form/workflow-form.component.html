@@ -16,7 +16,10 @@
         <ng-container *ngFor="let wesResourceView of wesResourceViews">
           <mat-option *ngFor="let wesView of wesResourceView.views"
                       [value]="wesView.name">
-            <div>{{ wesView.url }}</div>
+            <div class="select-option">
+              <span>{{wesResourceView.resource}}/{{wesView.label}}: </span>
+              {{ wesView.url }}
+            </div>
           </mat-option>
         </ng-container>
       </mat-select>

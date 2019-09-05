@@ -1,2 +1,7 @@
 @import "../../../styles/modules/colors";
-
+.select-option {
+  span {
+    color: $color-grey;
+    font-size: 0.8rem;
+  }
+}
