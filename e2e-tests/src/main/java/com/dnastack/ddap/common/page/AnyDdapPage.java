@@ -2,11 +2,15 @@ package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
 import org.openqa.selenium.remote.Augmenter;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
 
 @Slf4j
 public class AnyDdapPage {
@@ -38,5 +42,10 @@ public class AnyDdapPage {
         } catch (NoSuchElementException nsee) {
             // intentionally left empty
         }
+    }
+
+    public void waitForInflightRequests() {
+        new WebDriverWait(driver, 5)
+                .until(invisibilityOfElementLocated(By.xpath("//mat-progress-bar[contains(@class, 'main-progress-bar')]")));
     }
 }

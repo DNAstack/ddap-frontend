@@ -17,24 +17,30 @@
       </mat-select>
     </mat-form-field>
   </div>
+  <h3>
+    <mat-icon class="icon icon-settings"></mat-icon>
+    <span>Workflow Description (WDL)</span>
+  </h3>
   <div class="row">
     <mat-form-field class="col">
         <textarea matInput
-                  placeholder="Workflow Description (WDL)"
                   formControlName="wdl"
                   data-se="inp-workflow-wdl"
-                  rows="15"
                   required>
         </textarea>
     </mat-form-field>
   </div>
   <h3>
     <mat-icon class="icon icon-tests"></mat-icon>
-    <span>Workflow Inputs</span>
+    <span>Workflow Inputs (JSON)</span>
   </h3>
   <div class="row">
-    <json-editor class="col"
-                 formControlName="inputs"
-                 [options]="editorOptions"></json-editor>
+    <mat-form-field class="col">
+        <textarea matInput
+                  formControlName="inputs"
+                  data-se="inp-workflow-inputs"
+                  required>
+        </textarea>
+    </mat-form-field>
   </div>
 </form>
