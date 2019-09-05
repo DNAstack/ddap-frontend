@@ -38,7 +38,7 @@ public class ImportDataE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void testFetchDatasetResult() {
+    public void fetchDatasetResult() {
         ddapPage.getNavBar().goTo(importDataLink());
         DatasetPage datasetPage = new DatasetPage(driver);
         datasetPage.fetchDatasetResult(datasetUrl);
@@ -47,7 +47,7 @@ public class ImportDataE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void testGetAccessOfValidUrlColumns() {
+    public void accessTokensForValidUrlColumns() {
         ddapPage.getNavBar().goTo(importDataLink());
         DatasetPage datasetPage = new DatasetPage(driver);
         datasetPage.fetchDatasetResult(datasetUrl);
@@ -56,7 +56,7 @@ public class ImportDataE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void testGetAccessOfInvalidUrlColumns() {
+    public void accessTokensForInvalidOrNoViews() {
         ddapPage.getNavBar().goTo(importDataLink());
         DatasetPage datasetPage = new DatasetPage(driver);
         datasetPage.fetchDatasetResult(datasetUrl);
