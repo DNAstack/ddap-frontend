@@ -14,6 +14,9 @@ import java.util.List;
 public class WorkflowExecutionRunsResponseModel {
 
     private List<WorkflowExecutionRunModel> runs;
+    private String damId;
+    private String resourceId;
+    private String viewId;
     private WorkflowUi ui;
     private WorkflowRequestError error;
 
@@ -22,9 +25,8 @@ public class WorkflowExecutionRunsResponseModel {
     @NoArgsConstructor
     public static class WorkflowUi {
         private String resource;
-        private String resourceId;
         private String view;
-        private String viewId;
+
     }
 
     @Data

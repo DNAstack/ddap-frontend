@@ -2,14 +2,15 @@ import { flatten } from '../shared/util';
 
 export interface Workflow {
   runs: WorkflowRun[];
+  damId: string;
+  resourceId: string;
+  viewId: string;
   error: {
     message: string;
   };
   ui: {
     resource: string;
-    resourceId: string;
     view: string;
-    viewId: string;
   };
 }
 

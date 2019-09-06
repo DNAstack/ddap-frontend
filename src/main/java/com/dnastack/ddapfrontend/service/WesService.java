@@ -47,7 +47,7 @@ public class WesService {
                         wesResourceViews.getViews()
                                 .stream()
                                 .map((view) -> getAllWorkflowRunsFromWesServer(
-                                        damClient.getValue(),
+                                        damClient,
                                         realm,
                                         damToken,
                                         refreshToken,
@@ -58,38 +58,50 @@ public class WesService {
                 ).flatMap(Flux::merge));
     }
 
-    private Mono<WorkflowExecutionRunsResponseModel> getAllWorkflowRunsFromWesServer(ReactiveDamClient damClient,
+    private Mono<WorkflowExecutionRunsResponseModel> getAllWorkflowRunsFromWesServer(Map.Entry<String, ReactiveDamClient> damClient,
                                                                                      String realm,
                                                                                      String damToken,
                                                                                      String refreshToken,
                                                                                      Map.Entry<String, View> view,
-                                                                                     Map.Entry<String, Resource> wesResource) {
-        return damClient.getAccessTokenForView(realm, wesResource.getKey(), view.getKey(), damToken, refreshToken)
+                                                                                     Map.Entry<String, Resource> resource) {
+        return damClient.getValue()
+                .getAccessTokenForView(realm, resource.getKey(), view.getKey(), damToken, refreshToken)
                 .flatMap((tokenResponse) -> {
                     URI wesServerUri = wesResourceService.getWesServerUri(view.getValue());
                     return wesClient.getRuns(wesServerUri, tokenResponse.getToken());
                 })
-                .doOnSuccess((runsResponse) -> {
-                    runsResponse.setUi(getWorkflowUi(view, wesResource));
-                })
+                .doOnSuccess((runsResponse) -> setWorkflowRunMetadata(damClient.getKey(), view, resource, runsResponse))
                 .onErrorResume(throwable -> {
                     log.error("Failed to load workflow runs with error", throwable);
-                    WorkflowExecutionRunsResponseModel response = new WorkflowExecutionRunsResponseModel();
-                    WorkflowExecutionRunsResponseModel.WorkflowRequestError error = new WorkflowExecutionRunsResponseModel.WorkflowRequestError();
-                    error.setMessage(throwable.getMessage());
-                    response.setError(error);
-                    response.setUi(getWorkflowUi(view, wesResource));
-                    return Mono.just(response);
+                    return Mono.just(buildWorkflowRunMetadata(throwable, view, resource));
                 });
     }
 
-    private WorkflowExecutionRunsResponseModel.WorkflowUi getWorkflowUi(Map.Entry<String, View> view, Map.Entry<String, Resource> wesResource) {
+    private void setWorkflowRunMetadata(String damId,
+                                        Map.Entry<String, View> view,
+                                        Map.Entry<String, Resource> resource,
+                                        WorkflowExecutionRunsResponseModel runsResponse) {
         WorkflowExecutionRunsResponseModel.WorkflowUi ui = new WorkflowExecutionRunsResponseModel.WorkflowUi();
-        ui.setResource(wesResource.getValue().getUiOrDefault("label", wesResource.getKey()));
-        ui.setResourceId(wesResource.getKey());
+        ui.setResource(resource.getValue().getUiOrDefault("label", resource.getKey()));
         ui.setView(view.getValue().getUiOrDefault("label", view.getKey()));
-        ui.setViewId(view.getKey());
-        return ui;
+        runsResponse.setDamId(damId);
+        runsResponse.setResourceId(resource.getKey());
+        runsResponse.setViewId(view.getKey());
+        runsResponse.setUi(ui);
+    }
+
+    private WorkflowExecutionRunsResponseModel buildWorkflowRunMetadata(Throwable throwable,
+                                                                        Map.Entry<String, View> view,
+                                                                        Map.Entry<String, Resource> resource) {
+        WorkflowExecutionRunsResponseModel.WorkflowUi ui = new WorkflowExecutionRunsResponseModel.WorkflowUi();
+        ui.setResource(resource.getValue().getUiOrDefault("label", resource.getKey()));
+        ui.setView(view.getValue().getUiOrDefault("label", view.getKey()));
+        WorkflowExecutionRunsResponseModel runsResponse = new WorkflowExecutionRunsResponseModel();
+        WorkflowExecutionRunsResponseModel.WorkflowRequestError error = new WorkflowExecutionRunsResponseModel.WorkflowRequestError();
+        error.setMessage(throwable.getMessage());
+        runsResponse.setError(error);
+        runsResponse.setUi(ui);
+        return runsResponse;
     }
 
     public Mono<WorkflowExecutionRunModel> executeWorkflow(Map.Entry<String, ReactiveDamClient> damClient,
