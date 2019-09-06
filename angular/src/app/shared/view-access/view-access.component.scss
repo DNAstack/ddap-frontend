@@ -1,0 +1,98 @@
+@import "../../../styles/modules/colors";
+
+h4 {
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.ddap-resource-view-item {
+  mat-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  ::ng-deep mat-card {
+    background: transparent;
+    padding: 0;
+
+    & > .mat-card-actions,
+    & > .mat-card-actions:last-child {
+      margin: auto;
+      padding: 0;
+    }
+
+    .mat-card-header .mat-card-title,
+    .mat-card-header .mat-card-subtitle {
+      margin: 0;
+    }
+
+    .mat-card-header-text {
+      margin: 0;
+    }
+  }
+
+  button {
+    margin-top: 1rem;
+  }
+
+  button.success {
+    background: $success-color;
+  }
+
+  mat-form-field:first-child {
+    margin-right: 0.5rem;
+  }
+}
+
+::ng-deep .access-menu {
+  width: 30rem;
+
+  &.mat-menu-panel {
+    min-width: 0;
+    min-height: 0;
+    max-width: 30rem;
+  }
+
+  .mat-menu-content:not(:empty) {
+    padding: 0;
+  }
+
+  & .row {
+    width: 100%;
+  }
+
+  p {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .error-container {
+    mat-icon {
+      margin-left: 1rem;
+    }
+
+    .error-message {
+      background: $color-faded-grey;
+    }
+  }
+
+  mat-form-field {
+    padding-left: 1rem;
+    padding-top: 1rem;
+    margin-right: 1rem;
+  }
+
+  button {
+    padding-right: 1rem;
+  }
+
+  a > button {
+    text-align: left;
+    padding: 0 0 0 1rem;
+  }
+}
+
+.right {
+  float: right;
+}

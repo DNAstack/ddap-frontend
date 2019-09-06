@@ -1,89 +1,112 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { of } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
+import { FormValidators } from '../../shared/form/validators';
+import { isEmptyObject, unique } from '../../shared/util';
+import { DatasetService } from '../dataset.service';
 
 import { Dataset } from './dataset.model';
-import {DatasetService} from "../dataset.service";
-import Form from "../../admin/shared/form/form";
-import {FormValidators} from "../../shared/form/validators";
+import { ViewToken } from './view.token.model';
 
 @Component({
   selector: 'ddap-dataset-form',
   templateUrl: './dataset-form.component.html',
   styleUrls: ['./dataset-form.component.scss'],
 })
-export class DatasetFormComponent implements Form, OnInit, OnDestroy {
+export class DatasetFormComponent implements OnInit {
 
   form: FormGroup;
-  dataset: Dataset = {} as Dataset;
-  datasetUrl: string;
-
-  private searchSubscription: Subscription;
+  dataset: Dataset;
+  currentDatasetUrl: string;
+  selectedData: object[];
+  accessTokens: ViewToken[];
+  accessErrors: string[];
+  error: string;
 
   constructor(private formBuilder: FormBuilder,
-              private datasetService: DatasetService,
-              private router: Router,
-              private activatedRoute: ActivatedRoute) {
+              private datasetService: DatasetService) {
+  }
+
+  get datasetUrl() {
+    return this.form.get('url').value;
+  }
+
+  get selectedColumn() {
+    return this.form.get('selectedColumn').value;
   }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      url: ['', [FormValidators.url]],
+      url: ['', [Validators.required, FormValidators.url]],
+      selectedColumn: ['', [Validators.required]],
     });
+  }
 
-    this.searchSubscription = this.activatedRoute.queryParams
-      .subscribe(({dataset_url}) => {
-        if (dataset_url) {
-          this.initializeSearch(dataset_url);
-          this.form.patchValue({url: dataset_url});
-        }
+  fetchDataset(url: string) {
+    this.datasetService.fetchDataset(url)
+      .subscribe((dataset) => {
+        this.dataset = dataset;
+      }, () => {
+        this.dataset = null;
       });
   }
 
-  ngOnDestroy(): void {
-    this.searchSubscription.unsubscribe();
+  pageChange(relativeUrl) {
+    const { href: newDatasetUrl } = new URL(relativeUrl, this.datasetUrl);
+    this.currentDatasetUrl = newDatasetUrl;
+    this.fetchDataset(this.currentDatasetUrl);
   }
 
-  getAllForms(): FormGroup[] {
-    return [];
+  dataSelectionChange(selection) {
+    this.selectedData = selection;
   }
 
-  isValid(): boolean {
-    return false;
-  }
-
-  onSubmit({ value }) {
-    if (this.form.valid) {
-      this.fetchDatasetResults(value.url);
+  getDatasetColumns() {
+    let schemaProperties = {};
+    const schemaObj = this.dataset.schema;
+    if (schemaObj.hasOwnProperty('schema')) {
+      schemaProperties = schemaObj.schema.properties;
+    } else {
+      schemaProperties = schemaObj.properties;
     }
+    return Object.keys(schemaProperties);
   }
 
-  fetchPageResults(relativeUrl) {
-    const urlObject = new URL(relativeUrl, this.datasetUrl);
-    this.fetchDatasetResults(urlObject.href);
-  }
+  requestAccessTokens() {
+    this.accessTokens = [];
+    this.accessErrors = [];
+    const columnData: string[] = this.extractColumnData(this.selectedColumn);
 
-  fetchDatasetResults(url: string) {
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: {
-        dataset_url: url,
-      },
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  initializeSearch(url: string) {
-    this.datasetUrl = url;
-    this.datasetService.fetchDataset(url).subscribe(data => {
-      this.dataset = data;
-    },
-      () => {
-        this.dataset = {} as Dataset;
+    this.datasetService.getViews(columnData)
+      .pipe(
+        flatMap(views => {
+          if (isEmptyObject(views)) {
+            this.error = 'No views associated with selected data and selected column';
+            return of([]);
+          }
+          const uniqueViews = unique(Object.values(views));
+          return this.datasetService.getViewsAuthorization(uniqueViews);
+        })
+      )
+      .subscribe((viewTokens: ViewToken[]) => {
+        viewTokens.map((viewToken) => {
+          const { locationAndToken, exception, view } = viewToken;
+          if (locationAndToken) {
+            this.accessTokens.push(viewToken);
+          }
+          if (exception) {
+            this.accessErrors.push(`${view} : ${exception.message}`);
+          }
+        });
       });
   }
 
-
+  private extractColumnData(columnName): string[] {
+    return this.selectedData
+      .map((rowData) => rowData[columnName])
+      .filter((columnData) => columnData);
+  }
 
 }

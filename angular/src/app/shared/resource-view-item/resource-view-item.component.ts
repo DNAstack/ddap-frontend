@@ -43,7 +43,8 @@ export class ResourceViewItemComponent {
 
     const viewName = this.view.name;
     const ttl = `${this.ttlForm.value}${this.selectedTimeUnit}`;
-    this.accessSubscription = this.resourceService.getAccessRequestToken(this.routeDamId(), this.resource.name, viewName, { ttl })
+    this.accessSubscription = this.resourceService
+      .getAccessRequestToken(this.routeDamId(), this.resource.name, viewName, { ttl })
       .subscribe((access) => {
         this.access = access;
         this.url = this.getUrlIfApplicable(viewName, access.token);

@@ -65,45 +65,9 @@
           yPosition="above"
           [overlapTrigger]="false">
   <div *ngIf="access; else error">
-    <div class="flex flex--column vertical-center">
-      <div class="flex vertical-center row">
-        <mat-form-field class="stretch">
-          <input matInput
-                 readonly
-                 type="text"
-                 [placeholder]="'Account'"
-                 [value]="access?.account">
-        </mat-form-field>
-        <button mat-flat-button
-                matSuffix
-                mat-icon-button
-                ngxClipboard
-                [cbContent]="access?.account"
-                matTooltip="Copy to clipboard"
-                aria-label="Copy to clipboard">
-          <mat-icon class="icon icon-copy"></mat-icon>
-        </button>
-      </div>
-      <div class="flex vertical-center row"
-           *ngIf="access?.token">
-        <mat-form-field class="stretch">
-          <input matInput
-                 readonly
-                 type="text"
-                 [placeholder]="'Access token'"
-                 [value]="access?.token">
-        </mat-form-field>
-        <button mat-flat-button
-                matSuffix
-                mat-icon-button
-                ngxClipboard
-                [cbContent]="access?.token || url"
-                matTooltip="Copy to clipboard"
-                aria-label="Copy to clipboard">
-          <mat-icon class="icon icon-copy"></mat-icon>
-        </button>
-      </div>
-    </div>
+    <ddap-view-access [access]="access"
+                      [url]="url">
+    </ddap-view-access>
     <div>
       <a *ngIf="url"
          href="{{ url }}"

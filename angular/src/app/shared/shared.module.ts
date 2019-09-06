@@ -46,6 +46,7 @@ import { RealmInputComponent } from './realm-input/realm-input.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
 import { ResourceViewItemComponent } from './resource-view-item/resource-view-item.component';
 import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.component';
+import { ViewAccessComponent } from './view-access/view-access.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.componen
     NavBackComponent,
     ResourceLogoComponent,
     ResourceViewItemComponent,
+    ViewAccessComponent,
     ClaimGroupComponent,
     BeaconSearchBarComponent,
     BeaconResultComponent,
@@ -137,6 +139,7 @@ import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.componen
     BeaconResultComponent,
     ResourceLogoComponent,
     ResourceViewItemComponent,
+    ViewAccessComponent,
     LimitSearchComponent,
     FocusedDirective,
     RealmInputComponent,

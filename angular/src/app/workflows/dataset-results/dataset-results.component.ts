@@ -17,7 +17,9 @@ export class DatasetResultsComponent implements OnChanges {
   dataset: Dataset;
 
   @Output()
-  fetchDatasetResults = new EventEmitter();
+  selectionChanged = new EventEmitter();
+  @Output()
+  pageChanged = new EventEmitter();
 
   list: Array<object>;
   selectedRowsData: Array<object>;
@@ -56,13 +58,15 @@ export class DatasetResultsComponent implements OnChanges {
   private rowSelection(row) {
     this.selection.toggle(row);
     this.selectedRowsData = this.selection.selected;
+    this.selectionChanged.emit(this.selectedRowsData);
   }
 
   private masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.list.map(row => this.selection.select(row));
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.list.map(row => this.selection.select(row));
     this.selectedRowsData = this.selection.selected;
+    this.selectionChanged.emit(this.selectedRowsData);
   }
 
   private checkboxLabel(row?): string {
@@ -99,7 +103,7 @@ export class DatasetResultsComponent implements OnChanges {
   }
 
   private redirectToPage(pageUrl: string) {
-    this.fetchDatasetResults.next(pageUrl);
+    this.pageChanged.next(pageUrl);
   }
 
 }

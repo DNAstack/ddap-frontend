@@ -4,7 +4,7 @@ mat-form-field {
 
 form.ddap-form {
   margin: auto auto 3rem auto;
-  width: 50%;
+  width: 75%;
 
   .row, .col {
     width: 100%;
@@ -92,14 +92,19 @@ form.ddap-form {
     margin-top: 2rem;
     display: flex;
 
-    .mat-icon {
+    .mat-icon,
+    .step {
       margin-right: 1rem;
     }
 
-    > span {
+    > span:last-child {
       font-size: 1.4rem;
       font-weight: 500;
       flex-grow: 1;
+    }
+
+    &.form-section-title > span:last-child {
+      font-size: 1.8rem;
     }
   }
 

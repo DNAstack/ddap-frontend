@@ -27,3 +27,18 @@ body {
 .stretch {
   flex-grow: 1;
 }
+
+.warning-section {
+  display: flex;
+  align-items: center;
+  color: $warn-font-color-alert;
+  border: 0;
+  border-radius: 0;
+  background-color: $warn-background-color-alert;
+  padding: .75rem 1.25rem;
+  margin-bottom: 2rem;
+
+  span {
+    margin-left: 0.5rem;
+  }
+}

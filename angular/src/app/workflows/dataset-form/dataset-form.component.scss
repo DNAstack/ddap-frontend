@@ -1,24 +1,12 @@
 @import "../../../styles/modules/colors";
 
-.wip {
-  position: absolute;
-  top: 0.4rem;
-  background: $warn-color;
-  color: white;
-  left: -1.4rem;
-  text-transform: uppercase;
-  font-size: 0.7rem;
-  padding: 0.4rem 2rem;
-  transform: rotate(-45deg);
+.mat-button.mat-primary,
+.mat-icon-button.mat-primary,
+.mat-stroked-button.mat-primary {
+  min-width: auto;
 }
-.dataset-import-wrapper {
-  display: flex;
-  -webkit-box-align: start;
-  align-items: flex-start;
-  -webkit-box-pack: justify;
-  padding-top: 1rem;
 
-  mat-form-field {
-    width: 80%;
-  }
+.error-message {
+  font-size: 0.8rem;
+  color: $failure-color;
 }

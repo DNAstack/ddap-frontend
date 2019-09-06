@@ -1,12 +1,7 @@
-import {PaginationModel} from "../dataset-results/pagination.model";
+import { PaginationModel } from '../dataset-results/pagination.model';
 
 export interface Dataset {
-  schema: Schema;
-  objects: Array<object>;
+  schema: {[key: string]: any};
+  objects: object[];
   pagination?: PaginationModel;
 }
-
-interface Schema {
-  [key: string]: any;
-}
-

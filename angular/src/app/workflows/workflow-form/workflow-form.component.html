@@ -1,6 +1,11 @@
 <form class="ddap-form"
       novalidate
       [formGroup]="form">
+  <h3 class="form-section-title">
+    <mat-icon class="icon icon-resources"></mat-icon>
+    <span>Workflow Configuration</span>
+  </h3>
+
   <div class="row">
     <mat-form-field class="col">
       <mat-label>WES Servers</mat-label>
@@ -18,8 +23,8 @@
     </mat-form-field>
   </div>
   <h3>
-    <mat-icon class="icon icon-settings"></mat-icon>
-    <span>Workflow Description (WDL)</span>
+    <span class="step">1.</span>
+    <span>Import workflow description (WDL)</span>
   </h3>
   <div class="row">
     <mat-form-field class="col">
@@ -31,8 +36,8 @@
     </mat-form-field>
   </div>
   <h3>
-    <mat-icon class="icon icon-tests"></mat-icon>
-    <span>Workflow Inputs (JSON)</span>
+    <span class="step">2.</span>
+    <span>Set workflow inputs (JSON)</span>
   </h3>
   <div class="row">
     <mat-form-field class="col">

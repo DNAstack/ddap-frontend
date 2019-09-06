@@ -3,15 +3,7 @@
 </ddap-header>
 
 <ddap-main>
-  <h3>
-    <mat-icon class="icon icon-resource"></mat-icon>
-    <span>Datasets Import</span>
-  </h3>
   <ddap-dataset-form #datasetForm></ddap-dataset-form>
-  <h3>
-    <mat-icon class="icon icon-resources"></mat-icon>
-    <span>Workflow Configuration</span>
-  </h3>
   <ddap-workflow-form #workflowForm></ddap-workflow-form>
   <div class="ddap-form-toolbar">
     <ddap-form-footer-error [showError]="!isFormValid && isFormValidated"

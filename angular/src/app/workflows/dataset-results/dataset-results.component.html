@@ -1,9 +1,11 @@
-<div>
-  <ddap-dataset-views [columns]=columnsToDisplay
-                      [selectedRowsData]=selectedRowsData>
-  </ddap-dataset-views>
-  <div>
-    <mat-table [dataSource]="list" class="mat-elevation-z8">
+<div class="row">
+  <mat-expansion-panel class="col">
+    <mat-expansion-panel-header collapsedHeight="5rem">
+      <mat-panel-title>
+        Selected {{ selectedRowsData.length }} rows
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-table [dataSource]="list">
       <ng-container matColumnDef="select">
         <mat-header-cell *matHeaderCellDef>
           <mat-checkbox color="primary"
@@ -24,9 +26,9 @@
           </mat-checkbox>
         </mat-cell>
       </ng-container>
-
-      <ng-container *ngFor="let column of datasetColumns" matColumnDef="{{column}}">
-        <mat-header-cell *matHeaderCellDef> {{ column }} </mat-header-cell>
+      <ng-container *ngFor="let column of datasetColumns"
+                    matColumnDef="{{column}}">
+        <mat-header-cell *matHeaderCellDef>{{ column }}</mat-header-cell>
         <mat-cell *matCellDef="let element">
           <span>{{ element[column] }}</span>
           <button *ngIf="isUrl(element[column])"
@@ -41,30 +43,25 @@
           </button>
         </mat-cell>
       </ng-container>
-
       <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
       <mat-row *matRowDef="let row; columns: columnsToDisplay;"></mat-row>
-
     </mat-table>
-    <div class="pagination" *ngIf="hasPagination()">
+    <div class="pagination"
+         *ngIf="hasPagination()">
       <button mat-button
               color="primary"
               class="uppercase"
               [disabled]="!pagination.previousPageUrl"
-              (click)="redirectToPage(pagination.previousPageUrl)"
-      >
+              (click)="redirectToPage(pagination.previousPageUrl)">
         Previous Page
       </button>
       <button mat-button
               class="uppercase"
               color="primary"
               [disabled]="!pagination.nextPageUrl"
-              (click)="redirectToPage(pagination.nextPageUrl)"
-      >
+              (click)="redirectToPage(pagination.nextPageUrl)">
         Next Page
       </button>
     </div>
-  </div>
+  </mat-expansion-panel>
 </div>
-
-

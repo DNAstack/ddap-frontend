@@ -1,6 +1,11 @@
 <form class="ddap-form"
       novalidate
       [formGroup]="form">
+  <h3 class="form-section-title">
+    <mat-icon class="icon icon-resource"></mat-icon>
+    <span>Datasets Import</span>
+  </h3>
+
   <div class="row">
     <mat-form-field class="col">
       <input formControlName="url"
@@ -9,21 +14,81 @@
              data-se="dataset-url"/>
       <mat-error *ngIf="form.get('url').invalid">Please enter a valid dataset URL</mat-error>
     </mat-form-field>
+    <button mat-button
+            class="uppercase"
+            color="primary"
+            [disabled]="form.get('url').invalid"
+            (click)="fetchDataset(datasetUrl)"
+            data-se="btn-import-dataset">
+      Load Dataset
+    </button>
   </div>
-  <button mat-button
-          class="uppercase"
-          color="primary"
-          type="submit"
-          [disabled]="form.invalid"
-          (click)="onSubmit(form)"
-          data-se="btn-import-dataset">
-    Fetch
-  </button>
-</form>
 
-<div *ngIf="dataset.hasOwnProperty('objects') && dataset.objects.length">
-  <ddap-dataset-results
-    [dataset]=dataset
-    (fetchDatasetResults)="fetchPageResults($event)"
-  ></ddap-dataset-results>
-</div>
+  <ng-container *ngIf="dataset && dataset.objects.length">
+    <h3>
+      <span class="step">1.</span>
+      <span>Select data for workflow execution</span>
+    </h3>
+    <ddap-dataset-results [dataset]=dataset
+                          (selectionChanged)="dataSelectionChange($event)"
+                          (pageChanged)="pageChange($event)">
+    </ddap-dataset-results>
+
+    <h3>
+      <span class="step">2.</span>
+      <span>Request access for selected data</span>
+    </h3>
+    <div class="row">
+      <mat-form-field class="col">
+        <mat-label>Choose column to fetch views</mat-label>
+        <mat-select formControlName="selectedColumn"
+                    data-se="select-column">
+          <mat-option *ngFor="let column of getDatasetColumns()"
+                      [value]=column>
+            {{ column }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="col">
+        <button mat-raised-button
+                class="uppercase"
+                color="primary"
+                (click)="requestAccessTokens()"
+                [disabled]="!selectedColumn || !selectedData || selectedData.length < 1"
+                data-se="btn-get-access">
+          Access
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="accessErrors && accessErrors.length">
+      <p class="error-message"
+         data-se="access-token-info"
+         *ngFor="let error of accessErrors">
+        {{ error }}
+      </p>
+    </div>
+    <p *ngIf="error" class="warning-section">
+      <mat-icon class="icon icon-warning"></mat-icon>
+      <span>{{ error }}</span>
+    </p>
+    <ng-container *ngIf="accessTokens && accessTokens.length">
+      <h3>
+        <mat-icon class="icon icon-passport"></mat-icon>
+        <span>Access tokens</span>
+      </h3>
+      <div class="row"
+           *ngFor="let access of accessTokens">
+        <mat-expansion-panel class="col">
+          <mat-expansion-panel-header collapsedHeight="3rem">
+            <mat-panel-title>
+              {{ access.locationAndToken.name }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ddap-view-access [access]=access.locationAndToken>
+          </ddap-view-access>
+        </mat-expansion-panel>
+      </div>
+    </ng-container>
+  </ng-container>
+</form>
