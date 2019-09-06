@@ -32,10 +32,8 @@ export class WorkflowService {
   }
 
   public runWorkflow(damId: string, view: String, wdl: String, inputs: String): Observable<any> {
-    return this.http.post(`${environment.ddapApiUrl}/${realmIdPlaceholder}/wes/runs`,
+    return this.http.post(`${environment.ddapApiUrl}/${realmIdPlaceholder}/wes/${damId}/views/${view}/runs`,
       {
-        damId,
-        view,
         wdl,
         inputsJson: inputs,
       }

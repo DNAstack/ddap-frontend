@@ -11,9 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WorkflowExecutionRunRequestModel {
 
-    private String damId;
-    private String view;
-
     private String wdl;
     private String inputsJson;
 

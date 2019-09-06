@@ -96,22 +96,24 @@ public class WesService {
                                                            String realm,
                                                            String damToken,
                                                            String refreshToken,
+                                                           String viewId,
                                                            WorkflowExecutionRunRequestModel runRequest) {
         Flux<WesResourceViews> wesResources = wesResourceService.getResources(damClient, realm);
         return wesResources
                 .filter(wesResourceViews -> wesResourceViews.getViews().stream()
-                        .anyMatch(stringViewEntry -> stringViewEntry.getKey().equals(runRequest.getView())))
+                        .anyMatch(stringViewEntry -> stringViewEntry.getKey().equals(viewId)))
                 .single()
-                .flatMap(wesResourceViews -> executeWorkflow(damClient, realm, damToken, refreshToken, runRequest, wesResourceViews));
+                .flatMap(wesResourceViews -> executeWorkflow(damClient, realm, damToken, refreshToken, viewId, runRequest, wesResourceViews));
     }
 
     private Mono<WorkflowExecutionRunModel> executeWorkflow(Map.Entry<String, ReactiveDamClient> damClient,
                                                             String realm,
                                                             String damToken,
                                                             String refreshToken,
+                                                            String viewId,
                                                             WorkflowExecutionRunRequestModel runRequest,
                                                             WesResourceViews wesResourceViews) {
-        Map.Entry<String, DamService.View> view = wesResourceService.getViewById(wesResourceViews, runRequest.getView());
+        Map.Entry<String, DamService.View> view = wesResourceService.getViewById(wesResourceViews, viewId);
         return damClient.getValue().getAccessTokenForView(realm, wesResourceViews.getResource().getKey(), view.getKey(), damToken, refreshToken)
                 .flatMap((tokenResponse) -> {
                     URI wesServerUri = wesResourceService.getWesServerUri(view.getValue());

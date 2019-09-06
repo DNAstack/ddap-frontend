@@ -66,9 +66,11 @@ public class WorkflowController {
         );
     }
 
-    @PostMapping(value = "/runs")
+    @PostMapping(value = "/{damId}/views/{viewId}/runs")
     public Mono<WorkflowExecutionRunModel> addWorkflowToRun(ServerHttpRequest request,
                                                             @PathVariable String realm,
+                                                            @PathVariable String damId,
+                                                            @PathVariable String viewId,
                                                             @RequestBody WorkflowExecutionRunRequestModel runRequest) {
         Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
@@ -76,10 +78,10 @@ public class WorkflowController {
         String refreshToken = foundRefreshToken.orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
 
         Map.Entry<String, ReactiveDamClient> damClient = damClients.get()
-                .filter(damClientEntry -> damClientEntry.getKey().equals(runRequest.getDamId()))
+                .filter(damClientEntry -> damClientEntry.getKey().equals(damId))
                 .findFirst()
                 .get();
-        return wesService.executeWorkflow(damClient, realm, damToken, refreshToken, runRequest);
+        return wesService.executeWorkflow(damClient, realm, damToken, refreshToken, viewId, runRequest);
     }
 
 }
