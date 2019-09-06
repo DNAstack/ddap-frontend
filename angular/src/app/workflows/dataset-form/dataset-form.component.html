@@ -1,0 +1,29 @@
+<form class="ddap-form"
+      novalidate
+      [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col">
+      <input formControlName="url"
+             placeholder="URL of the dataset"
+             matInput
+             data-se="dataset-url"/>
+      <mat-error *ngIf="form.get('url').invalid">Please enter a valid dataset URL</mat-error>
+    </mat-form-field>
+  </div>
+  <button mat-button
+          class="uppercase"
+          color="primary"
+          type="submit"
+          [disabled]="form.invalid"
+          (click)="onSubmit(form)"
+          data-se="btn-import-dataset">
+    Fetch
+  </button>
+</form>
+
+<div *ngIf="dataset.hasOwnProperty('objects') && dataset.objects.length">
+  <ddap-dataset-results
+    [dataset]=dataset
+    (fetchDatasetResults)="fetchPageResults($event)"
+  ></ddap-dataset-results>
+</div>

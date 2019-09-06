@@ -1,7 +1,7 @@
-# Data Discovery Access Portal Frontend
+# Data Discovery AccessModel Portal Frontend
 
 This repo contains a Spring Boot application that serves the Web UI for
-Data Discovery Access Portal (DDAP) and acts as the user-facing edge
+Data Discovery AccessModel Portal (DDAP) and acts as the user-facing edge
 service for the rest of the DDAP components.
 
 ## User Interface
@@ -36,7 +36,7 @@ or `npm run build:watch` (same functionality, but includes a linter).
 
 ## API Gateway
 
-All requests to `/dam/**` are passed to the Data Access Manager (DAM) component,
+All requests to `/dam/**` are passed to the Data AccessModel Manager (DAM) component,
 with backend credentials (clientId and clientSecret) added in by the gateway.
 
 Similarly, all requests to `/identity/**` are passed to the Identity Concentrator with

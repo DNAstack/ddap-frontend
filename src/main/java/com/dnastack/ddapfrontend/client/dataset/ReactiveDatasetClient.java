@@ -60,7 +60,7 @@ public class ReactiveDatasetClient {
                     return clientResponse.bodyToMono(DatasetResult.class)
                         .flatMap(result -> {
                             if (result.getSchema() == null) {
-                                return Mono.error(new DatasetErrorException(null, "Dataset schema is not defined"));
+                                return Mono.error(new DatasetErrorException(null, "DatasetModel schema is not defined"));
                             } else {
                                 return materializeInLineSchema(datasetUrl, result);
                             }

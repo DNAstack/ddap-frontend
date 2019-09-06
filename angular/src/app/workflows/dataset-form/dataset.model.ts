@@ -1,9 +1,9 @@
-import { Pagination } from '../dataset-results/Pagination';
+import {PaginationModel} from "../dataset-results/pagination.model";
 
 export interface Dataset {
   schema: Schema;
   objects: Array<object>;
-  pagination?: Pagination;
+  pagination?: PaginationModel;
 }
 
 interface Schema {

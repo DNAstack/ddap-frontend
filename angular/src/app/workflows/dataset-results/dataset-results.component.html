@@ -1,8 +1,7 @@
 <div>
-  <ddap-dataset-views
-    [columns]=columnsToDisplay
-    [selectedRowsData]=selectedRowsData
-  ></ddap-dataset-views>
+  <ddap-dataset-views [columns]=columnsToDisplay
+                      [selectedRowsData]=selectedRowsData>
+  </ddap-dataset-views>
   <div>
     <mat-table [dataSource]="list" class="mat-elevation-z8">
       <ng-container matColumnDef="select">

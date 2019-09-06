@@ -1,4 +1,4 @@
-export interface Pagination {
+export interface PaginationModel {
   nextPageUrl?: string;
   previousPageUrl?: string;
 }

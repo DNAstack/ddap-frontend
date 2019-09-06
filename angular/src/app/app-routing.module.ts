@@ -27,11 +27,6 @@ const routes: Routes = [
           .then(mod => mod.AdminModule),
       },
       {
-        path: 'dataset',
-        loadChildren: () => import('./dataset/dataset.module')
-          .then(mod => mod.DatasetModule),
-      },
-      {
         path: 'workflows',
         loadChildren: () => import('./workflows/workflows.module')
           .then(mod => mod.WorkflowsModule),

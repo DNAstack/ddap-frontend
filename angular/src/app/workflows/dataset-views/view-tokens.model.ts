@@ -1,4 +1,4 @@
-export interface ViewTokens {
+export interface ViewTokensModel {
   view: string;
   locationAndToken?: object;
   exception?: Exception;

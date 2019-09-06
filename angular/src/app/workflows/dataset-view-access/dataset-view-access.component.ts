@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { Access } from './Access';
+import { AccessModel } from './access.model';
 
 @Component({
   selector: 'ddap-dataset-view-access',
@@ -10,7 +10,7 @@ import { Access } from './Access';
 export class DatasetViewAccessComponent {
 
   @Input()
-  access: Access;
+  access: AccessModel;
 
   constructor() { }
 

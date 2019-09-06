@@ -1,4 +1,4 @@
 // TODO: update
-export interface Access {
+export interface AccessModel {
   [key: string]: any;
 }

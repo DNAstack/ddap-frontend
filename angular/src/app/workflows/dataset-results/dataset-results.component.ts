@@ -2,9 +2,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
 import { camelCase, isEmptyObject, isUrl } from '../../shared/util';
-import { Dataset } from '../dataset-import/Dataset';
+import { Dataset } from '../dataset-form/dataset.model';
 
-import { Pagination } from './Pagination';
+import { PaginationModel } from './pagination.model';
 
 @Component({
   selector: 'ddap-dataset-results',
@@ -21,7 +21,7 @@ export class DatasetResultsComponent implements OnChanges {
 
   list: Array<object>;
   selectedRowsData: Array<object>;
-  pagination: Pagination = {} as Pagination;
+  pagination: PaginationModel = {} as PaginationModel;
   columnsToDisplay: string[];
   additionalColumns: string[] = ['select'];
   datasetColumns: string[];
@@ -83,8 +83,8 @@ export class DatasetResultsComponent implements OnChanges {
     return Object.keys(schemaProperties);
   }
 
-  private formatPagination(pagination: object): Pagination {
-    const updatedPagination = {} as Pagination;
+  private formatPagination(pagination: object): PaginationModel {
+    const updatedPagination = {} as PaginationModel;
     if (pagination) {
       // fallback for prev_page_url
       if (pagination.hasOwnProperty('prev_page_url')) {
