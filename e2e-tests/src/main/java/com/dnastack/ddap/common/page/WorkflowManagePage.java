@@ -117,7 +117,9 @@ public class WorkflowManagePage extends AnyDdapPage {
 
     public List<WebElement> getAccessTokens(String columnName) {
         fillFieldFromDropdown(DdapBy.se("select-column"), columnName);
-        driver.findElement(DdapBy.se("btn-get-access")).click();
+        WebElement access = driver.findElement(DdapBy.se("btn-get-access"));
+        scrollTo(access);
+        access.click();
         new WebDriverWait(driver, 15)
                 .until(ExpectedConditions.numberOfElementsToBeMoreThan(DdapBy.se("access-token"), 0));
 
