@@ -63,12 +63,14 @@
 
     <div *ngIf="accessErrors && accessErrors.length">
       <p class="error-message"
-         data-se="access-token-info"
+         data-se="access-token-errors"
          *ngFor="let error of accessErrors">
         {{ error }}
       </p>
     </div>
-    <p *ngIf="error" class="warning-section">
+    <p *ngIf="error"
+       class="warning-section"
+       data-se="access-token-warning">
       <mat-icon class="icon icon-warning"></mat-icon>
       <span>{{ error }}</span>
     </p>
@@ -79,7 +81,8 @@
       </h3>
       <div class="row"
            *ngFor="let access of accessTokens">
-        <mat-expansion-panel class="col">
+        <mat-expansion-panel class="col"
+                             data-se="access-token">
           <mat-expansion-panel-header collapsedHeight="3rem">
             <mat-panel-title>
               {{ access.locationAndToken.name }}

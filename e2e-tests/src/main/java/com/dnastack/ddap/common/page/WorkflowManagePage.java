@@ -97,4 +97,41 @@ public class WorkflowManagePage extends AnyDdapPage {
     private void scrollTo(WebElement element) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
+
+    public List<WebElement> fetchDatasetResult(String datasetUrl) {
+        WebElement datasetInput = driver.findElement(DdapBy.se("dataset-url"));
+        WebElement fetchButton = driver.findElement(DdapBy.se("btn-import-dataset"));
+        datasetInput.clear();
+        datasetInput.sendKeys(datasetUrl);
+        fetchButton.click();
+        return datasetResultRows();
+    }
+
+    private List<WebElement> datasetResultRows() {
+        new WebDriverWait(getDriver(), 10)
+                .until(ExpectedConditions.presenceOfElementLocated(By.tagName("ddap-dataset-results")));
+        WebElement datasetResults = driver.findElement(By.tagName("ddap-dataset-results"));
+        datasetResults.click();
+        return datasetResults.findElements(By.xpath("//mat-row"));
+    }
+
+    public List<WebElement> getAccessTokens(String columnName, boolean isValidView) {
+        fillFieldFromDropdown(DdapBy.se("select-column"), columnName);
+        driver.findElement(DdapBy.se("btn-get-access")).click();
+        if (isValidView) {
+            new WebDriverWait(driver, 15)
+                    .until(ExpectedConditions.numberOfElementsToBeMoreThan(DdapBy.se("access-token"), 0));
+        } else {
+            new WebDriverWait(driver, 15)
+                    .until(ExpectedConditions.visibilityOfElementLocated(DdapBy.se("access-token-warning")));
+        }
+
+        return driver.findElements(DdapBy.se("access-token"));
+    }
+
+    public void selectCheckboxes() {
+        List<WebElement> checkboxes = driver.findElements(By.tagName("mat-checkbox"));
+        checkboxes.get(1).click();
+        checkboxes.get(2).click();
+    }
 }
