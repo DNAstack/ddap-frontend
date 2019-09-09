@@ -4,6 +4,10 @@ import com.dnastack.ddap.common.DdapBy;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -26,6 +30,15 @@ public class WorkflowListPage extends AnyDdapPage {
     public void assertJobInRunningState() {
         reloadPageUntilNewJobVisible(3, 0);
         assertThat(driver.findElement(DdapBy.se("run-state")).getText(), equalTo("RUNNING"));
+    }
+
+    public WorkflowDetailPage viewRunDetails() {
+        new WebDriverWait(driver, 10)
+                .until(ExpectedConditions.numberOfElementsToBeMoreThan(DdapBy.se("run"), 0));
+        List<WebElement> runs = driver.findElements(DdapBy.se("run"));
+        runs.get(0).click();
+        driver.findElement(DdapBy.se("view-btn")).click();
+        return new WorkflowDetailPage(driver);
     }
 
     private void reloadPageUntilNewJobVisible(int maxReloads, int currentReload) {

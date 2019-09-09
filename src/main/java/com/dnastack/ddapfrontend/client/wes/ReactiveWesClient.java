@@ -5,9 +5,11 @@ import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunModel;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunsResponseModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
@@ -31,7 +33,6 @@ public class ReactiveWesClient {
     public Mono<WorkflowExecutionRunsResponseModel> getRuns(URI wesServerUrl, String wesToken) {
         final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs");
         final Map<String, Object> variables = new HashMap<>();
-
         return webClientFactory.getWebClient()
                 .get()
                 .uri(wesServerUrl.resolve(template.expand(variables)))
@@ -54,4 +55,17 @@ public class ReactiveWesClient {
                 .bodyToMono(WorkflowExecutionRunModel.class);
     }
 
+    public Mono<WorkflowExecutionRunModel> getRun(URI wesServerUrl, String wesToken, String runId) {
+        final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs/{runId}");
+        final Map<String, String> variables = new HashMap<>();
+        variables.put("runId", runId);
+
+        return webClientFactory.getWebClient()
+                .get()
+                .uri(wesServerUrl.resolve(template.expand(variables)))
+                .header(AUTHORIZATION, "Bearer " + wesToken)
+                .retrieve()
+                .bodyToMono(WorkflowExecutionRunModel.class);
+    }
+    
 }

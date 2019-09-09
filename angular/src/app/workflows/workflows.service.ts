@@ -40,4 +40,11 @@ export class WorkflowService {
     );
   }
 
+  public workflowRunDetail(damId: string, viewId: string, runId: string): Observable<any> {
+    return this.http.get(`${environment.ddapApiUrl}/${realmIdPlaceholder}/wes/${damId}/views/${viewId}/runs/${runId}`)
+      .pipe(
+        this.errorHandler.notifyOnError()
+      );
+  }
+
 }

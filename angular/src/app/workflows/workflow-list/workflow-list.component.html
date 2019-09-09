@@ -22,16 +22,19 @@
       </mat-expansion-panel-header>
     </mat-expansion-panel>
     <mat-expansion-panel *ngFor="let run of workflow.runs">
-      <mat-expansion-panel-header>
+      <mat-expansion-panel-header data-se="run">
         <mat-panel-title data-se="run-id">{{ run.run_id }}</mat-panel-title>
         <mat-panel-description data-se="run-state">{{ run.state }}</mat-panel-description>
       </mat-expansion-panel-header>
-      <button mat-button
-              disabled
-              color="primary"
-              class="uppercase">
-        View
-      </button>
+      <a [routerLink]="[workflow.damId, 'views', workflow.viewId, 'runs', run.run_id]">
+        <button mat-button
+                color="primary"
+                class="uppercase"
+                data-se="view-btn"
+        >
+          View
+        </button>
+      </a>
     </mat-expansion-panel>
   </mat-accordion>
 </ddap-main>
