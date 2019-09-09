@@ -5,6 +5,7 @@ import com.dnastack.ddap.common.DdapBy;
 import com.dnastack.ddap.common.page.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -62,48 +63,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         driver.findElement(By.xpath(usernameXpath)).getText();
     }
 
-    @Test
-    public void realmSelectorShouldShowCurrentRealm() {
-        assertThat(ddapPage.getNavBar().getRealm(), is(REALM));
-    }
 
-    @Test
-    public void testRealmChangeAndAcceptConfirmationDialog() {
-        String otherRealm = "test_other_realm_" + System.currentTimeMillis();
-        assertThat("this test is pointless unless we start on a different realm than we're going to!",
-                ddapPage.getNavBar().getRealm(), is(not(otherRealm)));
-
-        ConfirmationRealmChangeDialog confirmationRealmChangeDialog = ddapPage.getNavBar().setRealm(otherRealm);
-        // Login happens automatically because we are using personas and we hint to the IC how to log us in to the new realm.
-        AnyDdapPage anyPage = confirmationRealmChangeDialog.confirmChangeRealmDialog();
-
-        // Wrap this with large timeout because redirect to IC and back happens here
-        new WebDriverWait(driver, 10)
-                .ignoring(AssertionError.class)
-                .ignoring(StaleElementReferenceException.class)
-                .until(d -> {
-                    assertThat(ddapPage.getNavBar().getRealm(), is(otherRealm));
-                    return true;
-                });
-    }
-
-    @Test
-    public void testRealmChangeAndCancelConfirmationDialog() {
-        String otherRealm = "test_other_realm_" + System.currentTimeMillis();
-        assertThat("this test is pointless unless we start on a different realm than we're going to!",
-                ddapPage.getNavBar().getRealm(), is(not(otherRealm)));
-
-        ConfirmationRealmChangeDialog confirmationRealmChangeDialog = ddapPage.getNavBar().setRealm(otherRealm);
-        AnyDdapPage ddapPage = confirmationRealmChangeDialog.cancelChangeRealmDialog();
-
-        // Wrap this with large timeout because redirect to IC and back happens here
-        new WebDriverWait(driver, 10)
-                .ignoring(AssertionError.class)
-                .until(d -> {
-                    assertThat(ddapPage.getNavBar().getRealm(), is(not(otherRealm)));
-                    return true;
-                });
-    }
 
     @Test
     public void logoutButtonShouldGoToIcLoginForCurrentRealm() {

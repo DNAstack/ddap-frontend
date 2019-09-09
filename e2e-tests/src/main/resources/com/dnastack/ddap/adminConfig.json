@@ -638,7 +638,7 @@
           "items": [
             {
               "vars": {
-                "url": "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
+                "url": "https://gatekeeper-cafe-variome.$$E2E_TEST_NAMESPACE$$.dnastack.com/beacon/query"
               }
             }
           ],
@@ -719,7 +719,7 @@
           "items": [
             {
               "vars": {
-                "url": "https://gatekeeper-cafe-variome.staging.dnastack.com/beacon/query"
+                "url": "https://gatekeeper-cafe-variome.$$E2E_TEST_NAMESPACE$$.dnastack.com/beacon/query"
               }
             }
           ],
@@ -793,7 +793,7 @@
           "items": [
             {
               "vars": {
-                "url": "https://ddap-wes-service.staging.dnastack.com"
+                "url": "https://ddap-wes-service.$$E2E_TEST_NAMESPACE$$.dnastack.com"
               }
             }
           ],

@@ -42,6 +42,8 @@ public abstract class AbstractBaseE2eTest {
     protected static final String CLIENT_ID = requiredEnv("E2E_CLIENT_ID");
     protected static final String TEST_PROJECT = requiredEnv("E2E_TEST_PROJECT");
     protected static final String TEST_BUCKET = requiredEnv("E2E_TEST_BUCKET");
+    protected static final String NAMESPACE =  requiredEnv("E2E_TEST_NAMESPACE");
+
     // Current size limit on realm names in DAM
     public static final int REALM_NAME_LIMIT = 40;
     private static final String SERVICE_ACCOUNT_PROJECT = requiredEnv("E2E_SERVICE_ACCOUNT_PROJECT");
@@ -136,7 +138,8 @@ public abstract class AbstractBaseE2eTest {
                 .replace("$$E2E_SERVICE_ACCOUNT_PROJECT$$", SERVICE_ACCOUNT_PROJECT)
                 .replace("$$E2E_PASSPORT_ISSUER$$", PASSPORT_ISSUER)
                 .replace("$$E2E_TEST_BUCKET$$", TEST_BUCKET)
-                .replace("$$E2E_TEST_PROJECT$$",TEST_PROJECT);
+                .replace("$$E2E_TEST_PROJECT$$",TEST_PROJECT)
+                .replaceAll("\\$\\$E2E_TEST_NAMESPACE\\$\\$",NAMESPACE);
     }
 
     private static String stripTrailingSlash(String url) {
