@@ -17,12 +17,13 @@
                         data-se="select-all">
           </mat-checkbox>
         </mat-header-cell>
-        <mat-cell *matCellDef="let row">
+        <mat-cell *matCellDef="let row; let i = index">
           <mat-checkbox color="primary"
                         (click)="$event.stopPropagation()"
                         (change)="$event ? rowSelection(row) : null"
                         [checked]="selection.isSelected(row)"
-                        [aria-label]="checkboxLabel(row)">
+                        [aria-label]="checkboxLabel(row)"
+                        [attr.data-se]="'checkbox-' + i">
           </mat-checkbox>
         </mat-cell>
       </ng-container>

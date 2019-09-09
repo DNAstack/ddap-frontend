@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import _sampleSize from 'lodash.samplesize';
 import { of } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
@@ -63,15 +64,16 @@ export class DatasetFormComponent implements OnInit {
     this.selectedData = selection;
   }
 
-  getDatasetColumns() {
-    let schemaProperties = {};
-    const schemaObj = this.dataset.schema;
-    if (schemaObj.hasOwnProperty('schema')) {
-      schemaProperties = schemaObj.schema.properties;
-    } else {
-      schemaProperties = schemaObj.properties;
-    }
-    return Object.keys(schemaProperties);
+  getFileOnlyColumns() {
+    const columns: string[] = this.getDatasetColumns();
+    const samples: object[] = _sampleSize(this.dataset.objects, 15);
+
+    return columns.filter((column) => {
+      return samples.some((sample) => {
+        const value = sample[column];
+        return value && value.startsWith('gs://');
+      });
+    });
   }
 
   requestAccessTokens() {
@@ -101,6 +103,17 @@ export class DatasetFormComponent implements OnInit {
           }
         });
       });
+  }
+
+  private getDatasetColumns() {
+    let schemaProperties = {};
+    const schemaObj = this.dataset.schema;
+    if (schemaObj.hasOwnProperty('schema')) {
+      schemaProperties = schemaObj.schema.properties;
+    } else {
+      schemaProperties = schemaObj.properties;
+    }
+    return Object.keys(schemaProperties);
   }
 
   private extractColumnData(columnName): string[] {

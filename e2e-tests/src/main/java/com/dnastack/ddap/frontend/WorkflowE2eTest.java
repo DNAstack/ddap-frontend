@@ -71,19 +71,9 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         WorkflowManagePage managePage = workflowListPage.clickManage();
 
         managePage.fetchDatasetResult(datasetUrl);
-        managePage.selectCheckboxes();
-        managePage.getAccessTokens("bam_file", true);
-    }
-
-    @Test
-    public void accessTokensForInvalidColumnNoViews() {
-        WorkflowListPage workflowListPage = ddapPage.getNavBar()
-                .goToWorkflows();
-        WorkflowManagePage managePage = workflowListPage.clickManage();
-
-        managePage.fetchDatasetResult(datasetUrl);
-        managePage.selectCheckboxes();
-        managePage.getAccessTokens("blood_type", false);
+        managePage.clickCheckbox(DdapBy.se("checkbox-2"));
+        managePage.clickCheckbox(DdapBy.se("checkbox-3"));
+        managePage.getAccessTokens("bam_file");
     }
 
 }

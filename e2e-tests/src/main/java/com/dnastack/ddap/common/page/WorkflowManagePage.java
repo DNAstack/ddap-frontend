@@ -115,23 +115,21 @@ public class WorkflowManagePage extends AnyDdapPage {
         return datasetResults.findElements(By.xpath("//mat-row"));
     }
 
-    public List<WebElement> getAccessTokens(String columnName, boolean isValidView) {
+    public List<WebElement> getAccessTokens(String columnName) {
         fillFieldFromDropdown(DdapBy.se("select-column"), columnName);
         driver.findElement(DdapBy.se("btn-get-access")).click();
-        if (isValidView) {
-            new WebDriverWait(driver, 15)
-                    .until(ExpectedConditions.numberOfElementsToBeMoreThan(DdapBy.se("access-token"), 0));
-        } else {
-            new WebDriverWait(driver, 15)
-                    .until(ExpectedConditions.visibilityOfElementLocated(DdapBy.se("access-token-warning")));
-        }
+        new WebDriverWait(driver, 15)
+                .until(ExpectedConditions.numberOfElementsToBeMoreThan(DdapBy.se("access-token"), 0));
 
         return driver.findElements(DdapBy.se("access-token"));
     }
 
-    public void selectCheckboxes() {
-        List<WebElement> checkboxes = driver.findElements(By.tagName("mat-checkbox"));
-        checkboxes.get(1).click();
-        checkboxes.get(2).click();
+    public void clickCheckbox(By checkboxSelector) {
+        WebElement checkbox = driver.findElement(checkboxSelector);
+
+        this.scrollTo(checkbox);
+
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(checkbox));
+        checkbox.click();
     }
 }
