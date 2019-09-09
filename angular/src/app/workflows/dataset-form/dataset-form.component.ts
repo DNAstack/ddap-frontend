@@ -127,6 +127,11 @@ export class DatasetFormComponent implements OnInit {
     return tokensModel;
   }
 
+  chipSelect(datasetUrl: string) {
+    this.form.patchValue({url: datasetUrl});
+    this.fetchDataset(datasetUrl);
+  }
+
   private getDatasetColumns() {
     let schemaProperties = {};
     const schemaObj = this.dataset.schema;
