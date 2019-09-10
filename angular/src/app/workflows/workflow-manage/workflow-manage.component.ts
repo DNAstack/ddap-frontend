@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import Form from '../../admin/shared/form/form';
 import { FormValidationService } from '../../admin/shared/form/form-validation.service';
+import { DatasetFormComponent } from '../dataset-form/dataset-form.component';
 import { WorkflowFormComponent } from '../workflow-form/workflow-form.component';
 import { WorkflowService } from '../workflows.service';
 
@@ -15,6 +16,8 @@ import { WorkflowService } from '../workflows.service';
 })
 export class WorkflowManageComponent {
 
+  @ViewChild(DatasetFormComponent, { static: false })
+  datasetForm: DatasetFormComponent;
   @ViewChild(WorkflowFormComponent, { static: false })
   workflowForm: WorkflowFormComponent;
 
@@ -37,11 +40,13 @@ export class WorkflowManageComponent {
     const wesView = this.workflowForm.form.get('wesView').value;
     const wdl = this.workflowForm.form.get('wdl').value;
     const inputs = this.workflowForm.form.get('inputs').value;
-    this.workflowService.runWorkflow(damId, wesView, wdl, inputs)
-      .subscribe(() => this.navigateUp('../..'), this.showError);
+    const tokens = JSON.stringify(this.datasetForm.getTokensModel());
+    this.workflowService.runWorkflow(damId, wesView, wdl, inputs, tokens)
+      .subscribe(({ run_id: runId }) => this.navigateUp('../..', runId), this.showError);
   }
 
-  protected navigateUp = (path: string) => this.router.navigate([path], { relativeTo: this.route });
+  protected navigateUp = (path: string, runId: string) =>
+    this.router.navigate([path], { relativeTo: this.route, state: { runId } })
 
   protected showError = ({ error }: HttpErrorResponse) => {
     this.formErrorMessage = (error instanceof Object) ? JSON.stringify(error) : error;

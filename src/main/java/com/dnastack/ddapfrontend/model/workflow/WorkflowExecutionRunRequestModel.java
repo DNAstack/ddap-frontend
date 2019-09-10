@@ -13,5 +13,6 @@ public class WorkflowExecutionRunRequestModel {
 
     private String wdl;
     private String inputsJson;
+    private String tokensJson;
 
 }

@@ -22,6 +22,7 @@ export class DatasetFormComponent implements OnInit {
   dataset: Dataset;
   currentDatasetUrl: string;
   selectedData: object[];
+  columnDataMappedToViews: any[];
   accessTokens: ViewToken[];
   accessErrors: string[];
   error: string;
@@ -88,8 +89,8 @@ export class DatasetFormComponent implements OnInit {
             this.error = 'No views associated with selected data and selected column';
             return of([]);
           }
-          const uniqueViews = unique(Object.values(views));
-          return this.datasetService.getViewsAuthorization(uniqueViews);
+          this.columnDataMappedToViews = views;
+          return this.datasetService.getViewsAuthorization(unique(Object.values(views)));
         })
       )
       .subscribe((viewTokens: ViewToken[]) => {
@@ -103,6 +104,22 @@ export class DatasetFormComponent implements OnInit {
           }
         });
       });
+  }
+
+  getTokensModel(): object {
+    const tokensModel = {};
+    if (!this.accessTokens) {
+      return tokensModel;
+    }
+
+    this.accessTokens.forEach((token) => {
+      const entries = Object.entries(this.columnDataMappedToViews);
+      entries.filter(([_, value]) => value.some((view) => view === token.view))
+        .forEach(([key, _]) => {
+          tokensModel[key] = token.locationAndToken.token;
+        });
+    });
+    return tokensModel;
   }
 
   private getDatasetColumns() {

@@ -6,7 +6,6 @@ import com.dnastack.ddap.common.page.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,8 +44,32 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         WorkflowManagePage managePage = workflowListPage.clickManage();
 
         managePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-workflow-wes-view"));
-        managePage.fillField(DdapBy.se("inp-workflow-wdl"), loadTemplate("/com/dnastack/ddap/workflow/workflow.wdl"));
-        managePage.fillField(DdapBy.se("inp-workflow-inputs"), loadTemplate("/com/dnastack/ddap/workflow/inputs.json"));
+        managePage.fillField(DdapBy.se("inp-workflow-wdl"), loadTemplate("/com/dnastack/ddap/workflow/simple-workflow.wdl"));
+        managePage.fillField(DdapBy.se("inp-workflow-inputs"), loadTemplate("/com/dnastack/ddap/workflow/simple-inputs.json"));
+
+        workflowListPage = managePage.saveEntity();
+        workflowListPage.assertJobInRunningState();
+
+        WorkflowDetailPage runDetailsPage = workflowListPage.viewRunDetails();
+        runDetailsPage.assertDetailsArePresent();
+    }
+
+    @Test
+    public void testWorkflowExecutionWithTokens() {
+        WorkflowListPage workflowListPage = ddapPage.getNavBar()
+                .goToWorkflows();
+        WorkflowManagePage managePage = workflowListPage.clickManage();
+
+        managePage.fetchDatasetResult(datasetUrl);
+        managePage.clickCheckbox(DdapBy.se("checkbox-2"));
+        managePage.clickCheckbox(DdapBy.se("checkbox-3"));
+        managePage.getAccessTokens("bam_file");
+
+        managePage.waitForInflightRequests();
+
+        managePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-workflow-wes-view"));
+        managePage.fillField(DdapBy.se("inp-workflow-wdl"), loadTemplate("/com/dnastack/ddap/workflow/with-tokens-workflow.wdl"));
+        managePage.fillField(DdapBy.se("inp-workflow-inputs"), loadTemplate("/com/dnastack/ddap/workflow/with-tokens-inputs.json"));
 
         workflowListPage = managePage.saveEntity();
         workflowListPage.assertJobInRunningState();
@@ -72,21 +95,6 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         managePage.clickCheckbox(DdapBy.se("checkbox-2"));
         managePage.clickCheckbox(DdapBy.se("checkbox-3"));
         managePage.getAccessTokens("bam_file");
-    }
-
-    @Test
-    public void workflowRunDetails() {
-        WorkflowListPage workflowListPage = ddapPage.getNavBar().goToWorkflows();
-        WorkflowManagePage managePage = workflowListPage.clickManage();
-
-        managePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-workflow-wes-view"));
-        managePage.fillField(DdapBy.se("inp-workflow-wdl"), loadTemplate("/com/dnastack/ddap/workflow/workflow.wdl"));
-        managePage.fillField(DdapBy.se("inp-workflow-inputs"), loadTemplate("/com/dnastack/ddap/workflow/inputs.json"));
-
-        workflowListPage = managePage.saveEntity();
-
-        WorkflowDetailPage runDetailsPage = workflowListPage.viewRunDetails();
-        runDetailsPage.assertDetailsArePresent();
     }
 
 }

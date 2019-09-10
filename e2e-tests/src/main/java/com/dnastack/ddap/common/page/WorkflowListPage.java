@@ -28,7 +28,7 @@ public class WorkflowListPage extends AnyDdapPage {
     }
 
     public void assertJobInRunningState() {
-        reloadPageUntilNewJobVisible(3, 0);
+        reloadPageUntilNewJobVisible(5, 0);
         assertThat(driver.findElement(DdapBy.se("run-state")).getText(), equalTo("RUNNING"));
     }
 
@@ -44,7 +44,13 @@ public class WorkflowListPage extends AnyDdapPage {
     private void reloadPageUntilNewJobVisible(int maxReloads, int currentReload) {
         try {
             waitForInflightRequests();
-            driver.findElement(DdapBy.se("run-state"));
+            List<WebElement> runStates = driver.findElements(DdapBy.se("run-state"));
+            boolean atLeastOneIsRunning = runStates.stream()
+                    .anyMatch(state -> state.getText().equals("RUNNING"));
+            if (!atLeastOneIsRunning && (currentReload < maxReloads)) {
+                driver.navigate().refresh();
+                reloadPageUntilNewJobVisible(maxReloads, ++currentReload);
+            }
         } catch (NoSuchElementException nse) {
             if (currentReload < maxReloads) {
                 driver.navigate().refresh();

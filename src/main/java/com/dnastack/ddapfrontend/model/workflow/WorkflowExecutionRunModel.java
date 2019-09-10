@@ -20,8 +20,8 @@ public class WorkflowExecutionRunModel {
     private Object request;
     private Object outputs;
     @JsonProperty(value = "run_log")
-    private WorkflowExecutionRunLogModel runLog;
+    private Object runLog;
     @JsonProperty(value = "task_logs")
-    private List<WorkflowExecutionTaskLogModel> taskLogs;
+    private List<Object> taskLogs;
 
 }

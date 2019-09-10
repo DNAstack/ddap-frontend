@@ -114,8 +114,15 @@ public class WesService {
                 .flatMap(wesResourceViews -> executeWorkflow(damClient, realm, damToken, refreshToken, viewId, runRequest, wesResourceViews));
     }
 
-
-
+    private Mono<WesResourceViews> wesView(Map.Entry<String, ReactiveDamClient> damClient,
+                                           String realm,
+                                           String viewId) {
+        Flux<WesResourceViews> wesResources = wesResourceService.getResources(damClient, realm);
+        return wesResources
+                .filter(wesResourceViews -> wesResourceViews.getViews().stream()
+                        .anyMatch(stringViewEntry -> stringViewEntry.getKey().equals(viewId)))
+                .single();
+    }
 
     public Mono<WorkflowExecutionRunModel> getWorkflowRunDetails(Map.Entry<String, ReactiveDamClient> damClient,
                                                                           String realm,
@@ -140,7 +147,6 @@ public class WesService {
                     URI wesServerUri = wesResourceService.getWesServerUri(view.getValue());
                     return wesClient.getRun(wesServerUri, tokenResponse.getToken(), runId);
                 });
-
     }
 
     private Mono<WorkflowExecutionRunModel> executeWorkflow(Map.Entry<String, ReactiveDamClient> damClient,
@@ -156,28 +162,18 @@ public class WesService {
                     URI wesServerUri = wesResourceService.getWesServerUri(view.getValue());
                     return wesClient.addRun(wesServerUri, tokenResponse.getToken(), getMultipartBody(runRequest));
                 });
-
     }
 
-    private Mono<WesResourceViews> wesView(Map.Entry<String, ReactiveDamClient> damClient,
-                                           String realm,
-                                           String viewId) {
-        Flux<WesResourceViews> wesResources = wesResourceService.getResources(damClient, realm);
-        return wesResources
-                .filter(wesResourceViews -> wesResourceViews.getViews().stream()
-                        .anyMatch(stringViewEntry -> stringViewEntry.getKey().equals(viewId)))
-                .single();
-    }
-
-    // TODO: Add support for `tokens.json`
     private MultiValueMap<String, HttpEntity<?>> getMultipartBody(WorkflowExecutionRunRequestModel runRequest) {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("workflow_url", "workflow.wdl")
                 .header(CONTENT_DISPOSITION, "form-data; name=\"workflow_url\"");
-        builder.part("workflow_attachment", runRequest.getWdl(), MediaType.TEXT_PLAIN)
-                .header(CONTENT_DISPOSITION, "form-data; name=\"workflow_attachment\"; filename=\"workflow.wdl\"");
         builder.part("workflow_params", runRequest.getInputsJson(), MediaType.APPLICATION_JSON_UTF8)
                 .header(CONTENT_DISPOSITION, "form-data; name=\"workflow_params\"; filename=\"inputs.json\"");
+        builder.part("workflow_attachment", runRequest.getWdl(), MediaType.TEXT_PLAIN)
+                .header(CONTENT_DISPOSITION, "form-data; name=\"workflow_attachment\"; filename=\"workflow.wdl\"");
+        builder.part("workflow_attachment", runRequest.getTokensJson(), MediaType.APPLICATION_JSON_UTF8)
+                .header(CONTENT_DISPOSITION, "form-data; name=\"workflow_attachment\"; filename=\"tokens.json\"");
         return builder.build();
     }
 

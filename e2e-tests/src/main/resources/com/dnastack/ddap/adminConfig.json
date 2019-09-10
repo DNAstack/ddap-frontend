@@ -1005,7 +1005,10 @@
             "roles/storage.objectCreator"
           ],
           "targetScopes": [
-            "https://www.googleapis.com/auth/cloud-platform"
+            "https://www.googleapis.com/auth/cloud-platform",
+            "email",
+            "openid",
+            "profile"
           ],
           "damRoleCategories": [
             "metadata",
@@ -1023,7 +1026,10 @@
             "roles/storage.objectViewer"
           ],
           "targetScopes": [
-            "https://www.googleapis.com/auth/cloud-platform"
+            "https://www.googleapis.com/auth/cloud-platform",
+            "email",
+            "openid",
+            "profile"
           ],
           "damRoleCategories": [
             "metadata",

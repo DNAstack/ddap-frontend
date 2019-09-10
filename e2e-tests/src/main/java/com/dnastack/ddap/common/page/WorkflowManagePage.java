@@ -73,7 +73,7 @@ public class WorkflowManagePage extends AnyDdapPage {
 
     public WorkflowListPage saveEntity() {
         clickSave();
-
+        waitForInflightRequests();
         return new WorkflowListPage(driver);
     }
 

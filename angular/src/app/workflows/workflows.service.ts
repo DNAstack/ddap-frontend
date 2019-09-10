@@ -31,11 +31,12 @@ export class WorkflowService {
       );
   }
 
-  public runWorkflow(damId: string, view: String, wdl: String, inputs: String): Observable<any> {
+  public runWorkflow(damId: string, view: String, wdl: String, inputs: String, tokens: string): Observable<any> {
     return this.http.post(`${environment.ddapApiUrl}/${realmIdPlaceholder}/wes/${damId}/views/${view}/runs`,
       {
         wdl,
         inputsJson: inputs,
+        tokensJson: tokens,
       }
     );
   }
