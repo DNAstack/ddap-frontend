@@ -10,3 +10,10 @@
   font-size: 0.8rem;
   color: $failure-color;
 }
+
+.view-access {
+  ::ng-deep .mat-expansion-panel-header-title,
+  ::ng-deep .mat-expansion-panel-header-description {
+    flex-basis: 0;
+  }
+}

@@ -106,6 +106,11 @@ export class DatasetFormComponent implements OnInit {
       });
   }
 
+  getColumnDataByView(viewId: string) {
+    const entries = Object.entries(this.columnDataMappedToViews);
+    return entries.find(([_, value]) => value.find((view) => view === viewId))[0];
+  }
+
   getTokensModel(): object {
     const tokensModel = {};
     if (!this.accessTokens) {

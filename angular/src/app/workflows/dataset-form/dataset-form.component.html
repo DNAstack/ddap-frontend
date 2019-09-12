@@ -83,12 +83,15 @@
           </h3>
           <div class="row"
                *ngFor="let access of accessTokens">
-            <mat-expansion-panel class="col"
+            <mat-expansion-panel class="col view-access"
                                  data-se="access-token">
-              <mat-expansion-panel-header collapsedHeight="3rem">
+              <mat-expansion-panel-header collapsedHeight="4rem">
                 <mat-panel-title>
                   {{ access.locationAndToken.name }}
                 </mat-panel-title>
+                <mat-panel-description>
+                  {{ getColumnDataByView(access.view) }}
+                </mat-panel-description>
               </mat-expansion-panel-header>
               <ddap-view-access [access]=access.locationAndToken>
               </ddap-view-access>
