@@ -43,7 +43,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void testSimpleWorkflowExecution() {
+    public void testSimpleWorkflowExecution() throws InterruptedException {
         WorkflowListPage workflowListPage = ddapPage.getNavBar()
                 .goToWorkflows();
         WorkflowManagePage managePage = workflowListPage.clickManage();
@@ -60,7 +60,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void testWorkflowExecutionWithTokens() throws JsonProcessingException {
+    public void testWorkflowExecutionWithTokens() throws JsonProcessingException, InterruptedException {
         WorkflowListPage workflowListPage = ddapPage.getNavBar()
                 .goToWorkflows();
         WorkflowManagePage managePage = workflowListPage.clickManage();

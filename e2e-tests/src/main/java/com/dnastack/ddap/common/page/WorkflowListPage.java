@@ -1,6 +1,8 @@
 package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
+import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,17 +10,37 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+@Slf4j
 public class WorkflowListPage extends AnyDdapPage {
+
+    private String workflowRunId;
 
     public WorkflowListPage(WebDriver driver) {
         super(driver);
         waitForInflightRequests();
         WebElement pageTitle = driver.findElement(DdapBy.se("page-title"));
         assertThat(pageTitle.getText(), equalTo("Workflows"));
+        extractWorkflowIdFromSnackbarIfExists();
+    }
+
+    private void extractWorkflowIdFromSnackbarIfExists() {
+        try {
+            String text = driver.findElement(By.tagName("simple-snack-bar")).getText();
+            Pattern uuidPattern = Pattern.compile("\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b");
+            Matcher uuidMatcher = uuidPattern.matcher(text);
+            if (uuidMatcher.find()) {
+                workflowRunId = uuidMatcher.group();
+            }
+        } catch (NoSuchElementException | IllegalStateException e) {
+            // Intentionally left empty
+        }
     }
 
     public WorkflowManagePage clickManage() {
@@ -27,7 +49,7 @@ public class WorkflowListPage extends AnyDdapPage {
         return new WorkflowManagePage(driver);
     }
 
-    public void assertJobInRunningState() {
+    public void assertJobInRunningState() throws InterruptedException {
         reloadPageUntilNewJobVisible(15, 0);
         assertThat(driver.findElement(DdapBy.se("run-state")).getText(), equalTo("RUNNING"));
     }
@@ -41,23 +63,36 @@ public class WorkflowListPage extends AnyDdapPage {
         return new WorkflowDetailPage(driver);
     }
 
-    private void reloadPageUntilNewJobVisible(int maxReloads, int currentReload) {
+    private void reloadPageUntilNewJobVisible(int maxReloads, int currentReload) throws InterruptedException {
         try {
             waitForInflightRequests();
-            List<WebElement> runStates = driver.findElements(DdapBy.se("run-state"));
-            boolean atLeastOneIsRunning = runStates.stream()
-                    .anyMatch(state -> state.getText().equals("RUNNING"));
-            if (!atLeastOneIsRunning && (currentReload < maxReloads)) {
-                driver.navigate().refresh();
-                reloadPageUntilNewJobVisible(maxReloads, ++currentReload);
+            List<WebElement> runs = driver.findElements(DdapBy.se("run"));
+            Optional<WebElement> foundRun = runs.stream()
+                    .filter((run) -> {
+                        String runId = run.findElement(DdapBy.se("run-id")).getText();
+                        return runId.equals(workflowRunId);
+                    })
+                    .findFirst();
+            if (foundRun.isPresent()) {
+                String state = foundRun.get().findElement(DdapBy.se("run-state")).getText();
+                if (!state.equals("RUNNING")) {
+                    waitAndReloadPage(maxReloads, currentReload);
+                }
+            } else {
+                waitAndReloadPage(maxReloads, currentReload);
             }
         } catch (NoSuchElementException nse) {
             if (currentReload < maxReloads) {
-                driver.navigate().refresh();
-                reloadPageUntilNewJobVisible(maxReloads, ++currentReload);
+                waitAndReloadPage(maxReloads, currentReload);
             } else {
                 throw nse;
             }
         }
+    }
+
+    private void waitAndReloadPage(int maxReloads, int currentReload) throws InterruptedException {
+        Thread.sleep(5_000);
+        driver.navigate().refresh();
+        reloadPageUntilNewJobVisible(maxReloads, ++currentReload);
     }
 }
