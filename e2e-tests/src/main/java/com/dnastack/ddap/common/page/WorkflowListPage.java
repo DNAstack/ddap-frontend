@@ -28,7 +28,7 @@ public class WorkflowListPage extends AnyDdapPage {
     }
 
     public void assertJobInRunningState() {
-        reloadPageUntilNewJobVisible(5, 0);
+        reloadPageUntilNewJobVisible(15, 0);
         assertThat(driver.findElement(DdapBy.se("run-state")).getText(), equalTo("RUNNING"));
     }
 
