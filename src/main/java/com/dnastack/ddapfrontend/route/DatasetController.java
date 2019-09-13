@@ -47,6 +47,18 @@ public class DatasetController {
         return getDatasetResult(datasetUrl, accessToken, request, realm);
     }
 
+    private Mono<DatasetResult> getDatasetResult(String datasetUrl, String token, ServerHttpRequest request, String realm) {
+        return datasetClient.fetchSingleDataset(datasetUrl, token).onErrorResume(e -> {
+            if (!DatasetErrorException.class.isAssignableFrom(e.getClass())) {
+                throw new DatasetErrorException(500, e.getMessage());
+            } else if(((DatasetErrorException) e).getStatus() == 403) {
+                return getAccess(datasetUrl, request, realm);
+            }else {
+                throw (DatasetErrorException) e;
+            }
+        });
+    }
+
     private Mono<DatasetResult> getAccess(String datasetUrl, ServerHttpRequest request, String realm) {
         Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
@@ -75,19 +87,6 @@ public class DatasetController {
             }
         }
         );
-    }
-
-    private Mono<DatasetResult> getDatasetResult(String datasetUrl, String token, ServerHttpRequest request, String realm) {
-        return datasetClient.fetchSingleDataset(datasetUrl, token).onErrorResume(e -> {
-            if (!DatasetErrorException.class.isAssignableFrom(e.getClass())) {
-                throw new DatasetErrorException(500, e.getMessage());
-            } else if(((DatasetErrorException) e).getStatus() == 403) {
-                System.out.println("called");
-                return getAccess(datasetUrl, request, realm);
-            }else {
-                throw (DatasetErrorException) e;
-            }
-        });
     }
 
     private Mono<Set<String>> getViews(String damToken,
