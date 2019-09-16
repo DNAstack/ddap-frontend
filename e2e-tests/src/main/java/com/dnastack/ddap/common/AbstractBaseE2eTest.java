@@ -50,10 +50,11 @@ public abstract class AbstractBaseE2eTest {
     private static final String PASSPORT_ISSUER = requiredEnv("E2E_PASSPORT_ISSUER");
 
     protected static String generateRealmName(String testClassName) {
-        final String uniqueStamp = String.valueOf(System.currentTimeMillis() % 10000);
+        /*
+         * Temporarily removed randomness to avoid service account quotas. See DISCO-2416
+         */
         final String nameWithoutStamp = DDAP_TEST_REALM_NAME_PREFIX + "_" + testClassName;
-        // Always include stamp. Overwrite tail of full name if necessary
-        return nameWithoutStamp.substring(0, min(REALM_NAME_LIMIT - uniqueStamp.length(), nameWithoutStamp.length())) + uniqueStamp;
+        return nameWithoutStamp.substring(0, REALM_NAME_LIMIT);
     }
 
     @Before
