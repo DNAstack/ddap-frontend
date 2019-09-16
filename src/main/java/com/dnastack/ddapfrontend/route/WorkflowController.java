@@ -2,6 +2,7 @@ package com.dnastack.ddapfrontend.route;
 
 import com.dnastack.ddapfrontend.client.dam.DamClientFactory;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
+import com.dnastack.ddapfrontend.client.wes.ReactiveWdlValidatorClient;
 import com.dnastack.ddapfrontend.model.workflow.WesResourceViews;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunModel;
 import com.dnastack.ddapfrontend.model.workflow.WorkflowExecutionRunRequestModel;
@@ -32,17 +33,25 @@ public class WorkflowController {
     private WesResourceService wesResourceService;
     private WesService wesService;
 
+    private ReactiveWdlValidatorClient wdlValidatorClient;
     private Supplier<Stream<Map.Entry<String, ReactiveDamClient>>> damClients;
 
     @Autowired
     public WorkflowController(UserTokenCookiePackager cookiePackager,
+                              ReactiveWdlValidatorClient wdlValidatorClient,
                               DamClientFactory damClientFactory,
                               WesResourceService wesResourceService,
                               WesService wesService) {
         this.cookiePackager = cookiePackager;
+        this.wdlValidatorClient = wdlValidatorClient;
         this.wesResourceService = wesResourceService;
         this.wesService = wesService;
         this.damClients = damClientFactory::allDamClients;
+    }
+
+    @PostMapping(value = "/describe")
+    public Mono<Object> getJsonSchemaFromWdl(@PathVariable String realm, @RequestBody String wdl) {
+        return wdlValidatorClient.getJsonSchema(wdl);
     }
 
     @GetMapping(value = "/views")

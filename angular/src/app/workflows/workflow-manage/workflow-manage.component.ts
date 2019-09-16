@@ -39,7 +39,7 @@ export class WorkflowManageComponent {
     const damId = this.workflowForm.getDamId();
     const wesView = this.workflowForm.form.get('wesView').value;
     const wdl = this.workflowForm.form.get('wdl').value;
-    const inputs = this.workflowForm.form.get('inputs').value;
+    const inputs = JSON.stringify(this.workflowForm.form.get('inputs').value);
     const tokens = JSON.stringify(this.datasetForm.getTokensModel());
     this.workflowService.runWorkflow(damId, wesView, wdl, inputs, tokens)
       .subscribe(({ run_id: runId }) => this.navigateUp('../..', runId), this.showError);

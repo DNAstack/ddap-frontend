@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
+import { MaterialDesignFrameworkModule } from 'angular7-json-schema-form';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -23,6 +25,8 @@ import { WorkflowsRoutingModule } from './workflows-routing.module';
   imports: [
     SharedModule,
     NgJsonEditorModule,
+    FlexLayoutModule,
+    MaterialDesignFrameworkModule,
     WorkflowsRoutingModule,
   ],
 })

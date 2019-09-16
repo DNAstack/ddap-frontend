@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { JsonEditorOptions } from 'ang-jsoneditor';
+import { NoneComponent } from 'angular7-json-schema-form';
 
-import { JsonEditorDefaults } from '../../admin/dam-repository/shared/jsonEditorDefaults';
 import Form from '../../admin/shared/form/form';
 import { SimplifiedWesResourceViews } from '../workflow.model';
 import { WorkflowService } from '../workflows.service';
@@ -17,12 +16,13 @@ export class WorkflowFormComponent implements Form, OnInit {
 
   form: FormGroup;
   wesResourceViews: SimplifiedWesResourceViews[];
-  editorOptions: JsonEditorOptions;
+  inputSchema;
+  widgets = {
+    submit: NoneComponent,
+  };
 
   constructor(private formBuilder: FormBuilder,
               private workflowService: WorkflowService) {
-    this.editorOptions = new JsonEditorDefaults();
-    this.editorOptions.mode = 'code';
   }
 
   ngOnInit(): void {
@@ -50,6 +50,17 @@ export class WorkflowFormComponent implements Form, OnInit {
     return this.wesResourceViews.find((wesResourceViews: SimplifiedWesResourceViews) => {
       return wesResourceViews.views.some((view) => view.name === this.form.get('wesView').value);
     }).damId;
+  }
+
+  generateForm() {
+    this.workflowService.getJsonSchemaFromWdl(this.form.get('wdl').value)
+      .subscribe(({ input_schema: inputSchema }) => {
+        this.inputSchema = inputSchema;
+      });
+  }
+
+  inputFormChange(inputs) {
+    this.form.get('inputs').setValue(inputs);
   }
 
 }

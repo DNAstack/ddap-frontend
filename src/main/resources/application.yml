@@ -37,6 +37,9 @@ ddap:
     aud: ${ddap.public-uri}
     ttl: PT10M
     signingKey: ${ddap.signingKey}
+  wdl-validator:
+    url: https://wdl-validator.staging.dnastack.com
+    token: 1c0c52bedbc8c88bd998fa919243f32bcf5b201818288f112a477d118cc24d36
 
 spring:
   cloud:

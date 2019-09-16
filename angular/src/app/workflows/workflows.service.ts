@@ -48,4 +48,12 @@ export class WorkflowService {
       );
   }
 
+  public getJsonSchemaFromWdl(wdl: string): Observable<any> {
+    return this.http.post(`${environment.ddapApiUrl}/${realmIdPlaceholder}/wes/describe`,
+      wdl
+    ).pipe(
+      this.errorHandler.notifyOnError()
+    );
+  }
+
 }

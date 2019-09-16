@@ -17,7 +17,7 @@
           <mat-option *ngFor="let wesView of wesResourceView.views"
                       [value]="wesView.name">
             <div class="select-option">
-              <span>{{wesResourceView.resource}}/{{wesView.label}}: </span>
+              <span>{{ wesResourceView.resource }}/{{ wesView.label }}: </span>
               {{ wesView.url }}
             </div>
           </mat-option>
@@ -41,16 +41,25 @@
   </div>
   <h3>
     <span class="step">2.</span>
+    <span>Generate Input Form From Provided WDL (step 1.)</span>
+  </h3>
+  <button mat-flat-button
+          (click)="generateForm()"
+          data-se="btn-generate-form"
+          color="primary"
+          [disabled]="!form.get('wdl').value || form.get('wdl').value.trim().length < 1"
+          class="uppercase">
+    Generate Input Form
+  </button>
+  <h3>
+    <span class="step">3.</span>
     <span>Set workflow inputs (JSON)</span>
   </h3>
-  <div class="row">
-    <mat-form-field class="col">
-        <textarea matInput
-                  formControlName="inputs"
-                  data-se="inp-workflow-inputs"
-                  rows="20"
-                  required>
-        </textarea>
-    </mat-form-field>
-  </div>
+  <json-schema-form
+    loadExternalAssets="true"
+    [widgets]="widgets"
+    [schema]="inputSchema"
+    framework="material-design"
+    (onChanges)="inputFormChange($event)">
+  </json-schema-form>
 </form>
