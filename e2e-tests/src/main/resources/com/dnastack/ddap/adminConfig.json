@@ -95,7 +95,8 @@
       "ui": {
         "description": "IC DDAP",
         "label": "IC DDAP"
-      }
+      },
+      "clientId": "05c14eaf-c762-4dbf-b7aa-c7bab5dd41b2"
     }
   },
   "trustedSources": {
