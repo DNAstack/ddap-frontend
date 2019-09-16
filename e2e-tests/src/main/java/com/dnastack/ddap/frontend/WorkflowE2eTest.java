@@ -3,17 +3,13 @@ package com.dnastack.ddap.frontend;
 import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
 import com.dnastack.ddap.common.page.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertFalse;
 
@@ -50,7 +46,9 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
         managePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-workflow-wes-view"));
         managePage.fillField(DdapBy.se("inp-workflow-wdl"), loadTemplate("/com/dnastack/ddap/workflow/simple-workflow.wdl"));
-        managePage.fillField(DdapBy.se("inp-workflow-inputs"), loadTemplate("/com/dnastack/ddap/workflow/simple-inputs.json"));
+        managePage.clickButton(DdapBy.se("btn-generate-form"));
+        managePage.waitForInflightRequests();
+        managePage.fillField(By.name("test.name"), "e2e-test");
 
         workflowListPage = managePage.saveEntity();
         workflowListPage.assertJobInRunningState();
@@ -60,7 +58,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void testWorkflowExecutionWithTokens() throws JsonProcessingException, InterruptedException {
+    public void testWorkflowExecutionWithTokens() throws InterruptedException {
         WorkflowListPage workflowListPage = ddapPage.getNavBar()
                 .goToWorkflows();
         WorkflowManagePage managePage = workflowListPage.clickManage();
@@ -74,8 +72,9 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         managePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-workflow-wes-view"));
         managePage.fillField(DdapBy.se("inp-workflow-wdl"), loadTemplate("/com/dnastack/ddap/workflow/with-tokens-workflow.wdl"));
         String gsUrl = tokenElement.findElement(By.tagName("mat-panel-description")).getText();
-        Map<String, String> inputs = Collections.singletonMap("md5Sum.inputFile", gsUrl);
-        managePage.fillField(DdapBy.se("inp-workflow-inputs"), new ObjectMapper().writeValueAsString(inputs));
+        managePage.clickButton(DdapBy.se("btn-generate-form"));
+        managePage.waitForInflightRequests();
+        managePage.fillField(By.name("md5Sum.inputFile"), gsUrl);
 
         workflowListPage = managePage.saveEntity();
         workflowListPage.assertJobInRunningState();
