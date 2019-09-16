@@ -54,7 +54,7 @@ public abstract class AbstractBaseE2eTest {
          * Temporarily removed randomness to avoid service account quotas. See DISCO-2416
          */
         final String nameWithoutStamp = DDAP_TEST_REALM_NAME_PREFIX + "_" + testClassName;
-        return nameWithoutStamp.substring(0, REALM_NAME_LIMIT);
+        return nameWithoutStamp.substring(0, min(REALM_NAME_LIMIT, nameWithoutStamp.length()));
     }
 
     @Before
