@@ -64,6 +64,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         WorkflowManagePage managePage = workflowListPage.clickManage();
 
         managePage.fetchDatasetResult(datasetUrl);
+        managePage.waitForInflightRequests();
         managePage.clickCheckbox(DdapBy.se("checkbox-2"));
         WebElement tokenElement = managePage.getAccessTokens("bam_file").get(0);
 

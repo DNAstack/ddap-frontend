@@ -51,7 +51,7 @@ public class WorkflowListPage extends AnyDdapPage {
 
     public void assertJobInRunningState() throws InterruptedException {
         reloadPageUntilNewJobVisible(15, 0);
-        assertThat(driver.findElement(DdapBy.se("run-state")).getText(), equalTo("RUNNING"));
+        assertThat(driver.findElement(DdapBy.se("run-id")).getText(), equalTo(workflowRunId));
     }
 
     public WorkflowDetailPage viewRunDetails() {
@@ -73,12 +73,7 @@ public class WorkflowListPage extends AnyDdapPage {
                         return runId.equals(workflowRunId);
                     })
                     .findFirst();
-            if (foundRun.isPresent()) {
-                String state = foundRun.get().findElement(DdapBy.se("run-state")).getText();
-                if (!state.equals("RUNNING")) {
-                    waitAndReloadPage(maxReloads, currentReload);
-                }
-            } else {
+            if (!foundRun.isPresent()) {
                 waitAndReloadPage(maxReloads, currentReload);
             }
         } catch (NoSuchElementException nse) {
