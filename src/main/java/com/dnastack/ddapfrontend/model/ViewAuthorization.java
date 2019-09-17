@@ -15,7 +15,7 @@ public class ViewAuthorization {
             return locationAndToken;
         }
 
-        private final ViewAuthorizationException exception;
+        private final ViewAuthorizationError exception;
 
         public ViewAuthorizationResponse(String view, GetTokenResponse locationAndToken) {
             this.view = view;
@@ -25,34 +25,34 @@ public class ViewAuthorization {
 
         public ViewAuthorizationResponse(String view, Throwable exception) {
             this.view = view;
-            this.exception = ViewAuthorizationException.from(exception);
+            this.exception = ViewAuthorizationError.from(exception);
             this.locationAndToken = null;
         }
     }
 
     @Data
-    public static class ViewAuthorizationException {
+    public static class ViewAuthorizationError {
 
         private final String message;
         private final String exceptionClass;
         private final int statusCode;
 
-        ViewAuthorizationException(Throwable throwable) {
+        ViewAuthorizationError(Throwable throwable) {
             this(500, throwable);
         }
 
-        ViewAuthorizationException(int status, Throwable throwable) {
+        ViewAuthorizationError(int status, Throwable throwable) {
             this.message = throwable.getMessage();
             this.exceptionClass = throwable.getClass().getName();
             this.statusCode = status;
         }
 
-        static ViewAuthorizationException from(Throwable throwable) {
+        static ViewAuthorizationError from(Throwable throwable) {
             if (throwable instanceof WebClientResponseException) {
-                return new ViewAuthorizationException(((WebClientResponseException) throwable).getRawStatusCode(),
+                return new ViewAuthorizationError(((WebClientResponseException) throwable).getRawStatusCode(),
                         throwable);
             } else {
-                return new ViewAuthorizationException(throwable);
+                return new ViewAuthorizationError(throwable);
             }
         }
 

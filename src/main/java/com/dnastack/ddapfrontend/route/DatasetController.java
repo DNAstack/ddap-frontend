@@ -5,7 +5,6 @@ import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
 import com.dnastack.ddapfrontend.client.dataset.DatasetErrorException;
 import com.dnastack.ddapfrontend.client.dataset.ReactiveDatasetClient;
 import com.dnastack.ddapfrontend.client.dataset.model.DatasetResult;
-import com.dnastack.ddapfrontend.model.ViewAuthorization;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 
 import java.util.*;
@@ -29,13 +28,15 @@ public class DatasetController {
     private final ReactiveDatasetClient datasetClient;
     private final DamClientFactory damClientFactory;
     private final UserTokenCookiePackager cookiePackager;
+    private final ViewsService viewsService;
 
     @Autowired
     public DatasetController(DamClientFactory damClientFactory, UserTokenCookiePackager cookiePackager,
-        ReactiveDatasetClient datasetClient) {
+                             ReactiveDatasetClient datasetClient, ViewsService viewsService) {
         this.datasetClient = datasetClient;
         this.cookiePackager = cookiePackager;
         this.damClientFactory = damClientFactory;
+        this.viewsService = viewsService;
     }
 
 
@@ -67,7 +68,7 @@ public class DatasetController {
         return getViews(damToken, realm, refreshToken, datasetUrl).flatMap(viewsForUrl -> {
             if(!viewsForUrl.isEmpty()) {
                 List<String> uniqueViews = new ArrayList<>(new HashSet<>(viewsForUrl));
-                return ViewsService.authorizeViews(uniqueViews, damToken, refreshToken, realm)
+                return viewsService.authorizeViews(uniqueViews, damToken, refreshToken, realm)
                     .collectList()
                     .flatMap(tokens -> {
                         // assuming that there is only one token for a bucket
@@ -97,7 +98,7 @@ public class DatasetController {
             String damId = clientEntry.getKey();
             ReactiveDamClient damClient = clientEntry.getValue();
             return damClient.getFlattenedViews(realm, damToken, refreshToken).flatMap(flatViews ->
-                    ViewsService.getRelevantViewsForUrlsInDam(damId, realm, flatViews, List.of(datasetUrl))
+                    viewsService.getRelevantViewsForUrlsInDam(damId, realm, flatViews, List.of(datasetUrl))
             );
         }).collectList().flatMap(viewsForAllDams -> {
             final Set<String> finalViews = new HashSet<>();

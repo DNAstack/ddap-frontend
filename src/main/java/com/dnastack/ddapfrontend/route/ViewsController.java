@@ -13,12 +13,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import lombok.Data;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -37,11 +32,15 @@ public class ViewsController {
 
     private final DamClientFactory damClientFactory;
     private final UserTokenCookiePackager cookiePackager;
+    private final ViewsService viewsService;
 
     @Autowired
-    public ViewsController(DamClientFactory damClientFactory, UserTokenCookiePackager cookiePackager) {
+    public ViewsController(DamClientFactory damClientFactory,
+                           UserTokenCookiePackager cookiePackager,
+                           ViewsService viewsService) {
         this.cookiePackager = cookiePackager;
         this.damClientFactory = damClientFactory;
+        this.viewsService = viewsService;
     }
 
 
@@ -62,7 +61,7 @@ public class ViewsController {
             .orElseThrow(() -> new DamAuthorizationException(401, "User has not authenticated with the DAM to perform"
                 + " this action"));
 
-        return ViewsService.authorizeViews(uniqueViews, foundDamToken, refreshToken, realm);
+        return viewsService.authorizeViews(uniqueViews, foundDamToken, refreshToken, realm);
     }
 
     @PostMapping(path = "/lookup")
@@ -85,7 +84,7 @@ public class ViewsController {
             String token = damToken.get();
             // TODO: Handle error when token is empty
             return damClient.getFlattenedViews(realm, token, refreshToken).flatMap(flatViews ->
-                    ViewsService.getRelevantViewsForUrlsInDam(damId, realm, flatViews, uniqueUrls));
+                    viewsService.getRelevantViewsForUrlsInDam(damId, realm, flatViews, uniqueUrls));
 
         }).collectList().flatMap(viewsForAllDams -> {
             final Map<String, Set<String>> finalViewListing = new HashMap<>();
