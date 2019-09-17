@@ -53,7 +53,11 @@ public class LoggingWebFilter implements WebFilter, Ordered {
         Route gatewayRoute = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         URI routeUri = gatewayRoute == null ? requestUri : gatewayRoute.getUri();
 
-        return UriComponentsBuilder.fromUri(routeUri).replaceQuery(requestUri.getQuery()).build().toUri();
+        return UriComponentsBuilder.fromUri(routeUri)
+                                   .replacePath(requestUri.getPath())
+                                   .replaceQuery(requestUri.getQuery())
+                                   .build()
+                                   .toUri();
     }
 
     private void logTermination(long startTime) {
