@@ -23,7 +23,26 @@
       Load Dataset
     </button>
   </div>
-
+  <div>
+    <mat-chip-list>
+      <mat-label>Example datasets:</mat-label>
+      <mat-chip color="accent"
+                (click)="chipSelect('https://storage.googleapis.com/dnastack-dataset-sample/' +
+                 'dataset/subjects')">
+        Pagination
+      </mat-chip>
+      <mat-chip color="accent"
+                (click)="chipSelect('https://storage.googleapis.com/ddap-test-dataset/dataset/' +
+                 'subjects-with-objects')">
+        With URLs
+      </mat-chip>
+      <mat-chip color="accent"
+                (click)="chipSelect('https://storage.googleapis.com/ddap-test-dataset/dataset' +
+                 '/subjects-retricted-access')">
+        Secured
+      </mat-chip>
+    </mat-chip-list>
+  </div>
   <ng-container *ngIf="dataset && dataset.objects.length">
     <ng-container *ngIf="getFileOnlyColumns() as columns">
       <h3>
