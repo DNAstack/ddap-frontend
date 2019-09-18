@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 import { ErrorHandlerService } from '../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
-import { SimplifiedWesResourceViews, WesResourceViews, Workflow } from './workflow.model';
+import { SimplifiedWesResourceViews, WesResourceViews, WorkflowRunsResponse } from './workflow.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +18,8 @@ export class WorkflowService {
               private errorHandler: ErrorHandlerService) {
   }
 
-  public getAllWorkflowRuns(): Observable<Workflow[]> {
-    return this.http.get<Workflow[]>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/wes/runs`);
+  public getWorkflowRuns(damId: string, view: String): Observable<WorkflowRunsResponse> {
+    return this.http.get<WorkflowRunsResponse>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/wes/${damId}/views/${view}/runs`);
   }
 
   public getAllWesViews(): Observable<SimplifiedWesResourceViews[]> {

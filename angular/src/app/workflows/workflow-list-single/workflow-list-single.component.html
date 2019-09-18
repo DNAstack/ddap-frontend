@@ -1,0 +1,62 @@
+<ddap-header icon="rules" label="Workflows">
+  <ddap-header-btn
+    [navigateTo]="['manage', 'add']"
+    [label]="'execute workflow'">
+  </ddap-header-btn>
+</ddap-header>
+
+<ddap-main>
+  <ng-container *ngIf="newlyCreatedWorkflows">
+    <h3 class="flex vertical-center">
+      New Workflows
+    </h3>
+    <mat-accordion>
+      <mat-expansion-panel [disabled]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Run Identifier</mat-panel-title>
+          <mat-panel-description>State</mat-panel-description>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+      <mat-expansion-panel *ngFor="let run of newlyCreatedWorkflows"
+                           [disabled]="true">
+        <mat-expansion-panel-header data-se="new-run">
+          <mat-panel-title data-se="new-run-id">{{ run.run_id }}</mat-panel-title>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-container>
+  <ng-container *ngIf="workflowRunsResponse">
+    <mat-accordion>
+      <h3 class="flex vertical-center">
+      <span class="flex vertical-center">
+        <mat-icon class="icon icon-resource"></mat-icon> {{ workflowRunsResponse.ui.resource }}
+      </span>
+        <span class="flex vertical-center">
+        (<mat-icon class="icon icon-views"></mat-icon> {{ workflowRunsResponse.ui.view }})
+      </span>
+      </h3>
+      <mat-expansion-panel [disabled]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Run Identifier</mat-panel-title>
+          <mat-panel-description>State</mat-panel-description>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+      <mat-expansion-panel *ngFor="let run of workflowRunsResponse.runs">
+        <mat-expansion-panel-header data-se="run">
+          <mat-panel-title data-se="run-id">{{ run.run_id }}</mat-panel-title>
+          <mat-panel-description data-se="run-state">{{ run.state }}</mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <a [routerLink]="[workflowRunsResponse.damId, 'views', workflowRunsResponse.viewId, 'runs', run.run_id]">
+            <button mat-button
+                    color="primary"
+                    class="uppercase"
+                    data-se="view-btn">
+              View
+            </button>
+          </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-container>
+</ddap-main>
