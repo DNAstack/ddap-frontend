@@ -1,5 +1,6 @@
 package com.dnastack.ddapfrontend.model.workflow;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,8 +18,11 @@ public class WorkflowExecutionRunsResponseModel {
     private String damId;
     private String resourceId;
     private String viewId;
+    private String wesUrl;
     private WorkflowUi ui;
     private WorkflowRequestError error;
+    @JsonProperty(value = "next_page_token")
+    private String nextPageToken;
 
     @Data
     @AllArgsConstructor

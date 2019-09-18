@@ -4,7 +4,8 @@
 </ddap-header>
 
 <div class="ddap-data-pane">
-<mat-card class="ddap-card" *ngFor="let qualified of (qualifiedResources$ | async)">
+<mat-card class="ddap-card"
+          *ngFor="let qualified of (qualifiedResources$ | async)">
   <mat-card-header>
     <mat-card-title>{{ qualified.entity.dto.ui.label || 'Unknown' }}</mat-card-title>
     <mat-card-subtitle>{{ qualified.entity.dto.ui.description || 'Unknown' }}</mat-card-subtitle>
@@ -20,8 +21,9 @@
   <mat-card-actions>
     <button mat-button
             color="primary"
+            class="uppercase"
             [routerLink]="[qualified.damId, qualified.entity.name]"
-            data-se="view-set-btn">VIEW SET</button>
+            data-se="view-set-btn">View Set</button>
     <span flex></span>
     <mat-icon class="icon icon-add"></mat-icon>
   </mat-card-actions>

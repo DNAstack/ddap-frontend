@@ -28,9 +28,10 @@ public class ReactiveWesClient {
         this.webClientFactory = webClientFactory;
     }
 
-    public Mono<WorkflowExecutionRunsResponseModel> getRuns(URI wesServerUrl, String wesToken) {
-        final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs");
+    public Mono<WorkflowExecutionRunsResponseModel> getRuns(URI wesServerUrl, String wesToken, String nextPage) {
+        final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs?page_token=" + nextPage);
         final Map<String, Object> variables = new HashMap<>();
+
         return webClientFactory.getWebClient()
                 .get()
                 .uri(wesServerUrl.resolve(template.expand(variables)))
@@ -40,7 +41,7 @@ public class ReactiveWesClient {
     }
 
     public Mono<WorkflowExecutionRunModel> addRun(URI wesServerUrl, String wesToken, MultiValueMap<String, HttpEntity<?>> multipart) {
-        final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs");
+        final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs?page_size=10");
         final Map<String, Object> variables = new HashMap<>();
 
         return webClientFactory.getWebClient()

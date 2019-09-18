@@ -38,6 +38,7 @@ import { MainComponent } from './main/main.component';
 import { MetadataFilterPipe } from './metadata-list/metadata-filter.pipe';
 import { MetadataListComponent } from './metadata-list/metadata-list.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
+import { PaginatorComponent } from './paginator/paginator.component';
 import {
   RealmChangeConfirmationDialogComponent
 } from './realm/realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
@@ -67,6 +68,7 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     MetadataFilterPipe,
     SandboxBannerComponent,
     FormFooterErrorComponent,
+    PaginatorComponent,
   ],
   imports: [
     CommonModule,
@@ -146,6 +148,7 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     MetadataFilterPipe,
     SandboxBannerComponent,
     FormFooterErrorComponent,
+    PaginatorComponent,
   ],
 })
 export class SharedModule {
