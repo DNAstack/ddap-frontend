@@ -10,13 +10,16 @@ import { DatasetResultsComponent } from './dataset-results/dataset-results.compo
 import { WorkflowDetailComponent } from './workflow-detail/workflow-detail.component';
 import { AutocompleteInputComponent } from './workflow-form/widget/autocomplete-input.component';
 import { WorkflowFormComponent } from './workflow-form/workflow-form.component';
-import { WorkflowListComponent } from './workflow-list/workflow-list.component';
+import { WorkflowListMultiComponent } from './workflow-list-multi/workflow-list-multi.component';
+import { WorkflowListSingleComponent } from './workflow-list-single/workflow-list-single.component';
 import { WorkflowManageComponent } from './workflow-manage/workflow-manage.component';
 import { WorkflowsRoutingModule } from './workflows-routing.module';
 
 @NgModule({
   declarations: [
-    WorkflowListComponent,
+    WorkflowListMultiComponent,
+    WorkflowListSingleComponent,
+    WorkflowDetailComponent,
     WorkflowManageComponent,
     WorkflowFormComponent,
     DatasetFormComponent,

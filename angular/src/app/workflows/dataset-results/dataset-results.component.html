@@ -47,22 +47,10 @@
       <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
       <mat-row *matRowDef="let row; columns: columnsToDisplay;"></mat-row>
     </mat-table>
-    <div class="pagination"
-         *ngIf="hasPagination()">
-      <button mat-button
-              color="primary"
-              class="uppercase"
-              [disabled]="!pagination.previousPageUrl"
-              (click)="redirectToPage(pagination.previousPageUrl)">
-        Previous Page
-      </button>
-      <button mat-button
-              class="uppercase"
-              color="primary"
-              [disabled]="!pagination.nextPageUrl"
-              (click)="redirectToPage(pagination.nextPageUrl)">
-        Next Page
-      </button>
-    </div>
+    <ddap-paginator *ngIf="hasPagination()"
+                    [nextPage]="pagination.nextPageUrl"
+                    [previousPage]="pagination.previousPageUrl"
+                    (pageChangeRequested)="redirectToPage($event)">
+    </ddap-paginator>
   </mat-expansion-panel>
 </div>

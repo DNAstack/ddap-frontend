@@ -1,0 +1,16 @@
+<div class="paginator">
+  <button mat-button
+          color="primary"
+          class="uppercase"
+          [disabled]="!previousPage"
+          (click)="changePage(previousPage)">
+    Previous Page
+  </button>
+  <button mat-button
+          class="uppercase"
+          color="primary"
+          [disabled]="!nextPage"
+          (click)="changePage(nextPage)">
+    Next Page
+  </button>
+</div>

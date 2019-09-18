@@ -1,6 +1,6 @@
 import { flatten } from '../shared/util';
 
-export interface Workflow {
+export interface WorkflowRunsResponse {
   runs: WorkflowRun[];
   damId: string;
   resourceId: string;
@@ -12,6 +12,7 @@ export interface Workflow {
     resource: string;
     view: string;
   };
+  next_page_token: string;
 }
 
 export interface WorkflowRun {

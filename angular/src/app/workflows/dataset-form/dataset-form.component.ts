@@ -35,7 +35,9 @@ export class DatasetFormComponent implements OnInit {
   }
 
   get datasetUrl() {
-    return this.form.get('url').value;
+    return this.currentDatasetUrl
+      ? this.currentDatasetUrl
+      : this.form.get('url').value;
   }
 
   get selectedColumn() {

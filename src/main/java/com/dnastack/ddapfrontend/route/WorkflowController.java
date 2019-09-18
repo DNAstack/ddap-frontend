@@ -62,17 +62,22 @@ public class WorkflowController {
         );
     }
 
-    @GetMapping(value = "/runs")
-    public Flux<WorkflowExecutionRunsResponseModel> getWorkflowRuns(ServerHttpRequest request, @PathVariable String realm) {
+    @GetMapping(value = "/{damId}/views/{viewId}/runs")
+    public Mono<WorkflowExecutionRunsResponseModel> getWorkflowRuns(ServerHttpRequest request,
+                                                                    @PathVariable String realm,
+                                                                    @PathVariable String damId,
+                                                                    @PathVariable String viewId,
+                                                                    @RequestParam(required = false) String nextPage) {
         Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
         String refreshToken = foundRefreshToken.orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
 
-        return Flux.merge(damClients.get()
-                .map(damClient -> wesService.getAllWorkflowRuns(damClient, realm, damToken, refreshToken))
-                .collect(toList())
-        );
+        Map.Entry<String, ReactiveDamClient> damClient = damClients.get()
+                .filter(damClientEntry -> damClientEntry.getKey().equals(damId))
+                .findFirst()
+                .get();
+        return wesService.getAllWorkflowRunsFromWesServer(damClient, realm, damToken, refreshToken, viewId, nextPage);
     }
 
     @PostMapping(value = "/{damId}/views/{viewId}/runs")

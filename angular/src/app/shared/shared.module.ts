@@ -26,7 +26,6 @@ import { RouterModule } from '@angular/router';
 import { TagInputModule } from 'ngx-chips';
 import { ClipboardModule } from 'ngx-clipboard';
 
-import { AsEntityModelPipe } from './as-entity-model.pipe';
 import { BeaconSearchBarComponent } from './beacon-search-bar/beacon-search-bar.component';
 import { LimitSearchComponent } from './beacon-search-bar/limit-search/limit-search.component';
 import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
@@ -39,6 +38,7 @@ import { MainComponent } from './main/main.component';
 import { MetadataFilterPipe } from './metadata-list/metadata-filter.pipe';
 import { MetadataListComponent } from './metadata-list/metadata-list.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
+import { PaginatorComponent } from './paginator/paginator.component';
 import {
   RealmChangeConfirmationDialogComponent
 } from './realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
@@ -66,9 +66,9 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     RealmChangeConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
-    AsEntityModelPipe,
     SandboxBannerComponent,
     FormFooterErrorComponent,
+    PaginatorComponent,
   ],
   imports: [
     CommonModule,
@@ -146,9 +146,9 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     RealmChangeConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
-    AsEntityModelPipe,
     SandboxBannerComponent,
     FormFooterErrorComponent,
+    PaginatorComponent,
   ],
 })
 export class SharedModule {

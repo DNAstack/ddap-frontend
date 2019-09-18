@@ -22,7 +22,6 @@ import java.util.Map;
 
 import static dam.v1.DamService.Resource;
 import static dam.v1.DamService.View;
-import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 @Slf4j
@@ -38,24 +37,17 @@ public class WesService {
         this.wesClient = wesClient;
     }
 
-    public Flux<WorkflowExecutionRunsResponseModel> getAllWorkflowRuns(Map.Entry<String, ReactiveDamClient> damClient,
-                                                                       String realm,
-                                                                       String damToken,
-                                                                       String refreshToken) {
-        return wesResourceService.getResources(damClient, realm)
-                .flatMap(wesResourceViews -> Flux.fromIterable(
-                        wesResourceViews.getViews()
-                                .stream()
-                                .map((view) -> getAllWorkflowRunsFromWesServer(
-                                        damClient,
-                                        realm,
-                                        damToken,
-                                        refreshToken,
-                                        view,
-                                        wesResourceViews.getResource()
-                                ))
-                                .collect(toList())
-                ).flatMap(Flux::merge));
+    public Mono<WorkflowExecutionRunsResponseModel> getAllWorkflowRunsFromWesServer(Map.Entry<String, ReactiveDamClient> damClient,
+                                                                                    String realm,
+                                                                                    String damToken,
+                                                                                    String refreshToken,
+                                                                                    String viewId,
+                                                                                    String nextPage) {
+        return wesView(damClient, realm, viewId)
+                .flatMap(wesResourceViews -> {
+                    Map.Entry<String, DamService.View> view = wesResourceService.getViewById(wesResourceViews, viewId);
+                    return getAllWorkflowRunsFromWesServer(damClient, realm, damToken, refreshToken, view, wesResourceViews.getResource(), nextPage);
+                });
     }
 
     private Mono<WorkflowExecutionRunsResponseModel> getAllWorkflowRunsFromWesServer(Map.Entry<String, ReactiveDamClient> damClient,
@@ -63,12 +55,13 @@ public class WesService {
                                                                                      String damToken,
                                                                                      String refreshToken,
                                                                                      Map.Entry<String, View> view,
-                                                                                     Map.Entry<String, Resource> resource) {
+                                                                                     Map.Entry<String, Resource> resource,
+                                                                                     String nextPage) {
         return damClient.getValue()
                 .getAccessTokenForView(realm, resource.getKey(), view.getKey(), damToken, refreshToken)
                 .flatMap((tokenResponse) -> {
                     URI wesServerUri = wesResourceService.getWesServerUri(view.getValue());
-                    return wesClient.getRuns(wesServerUri, tokenResponse.getToken());
+                    return wesClient.getRuns(wesServerUri, tokenResponse.getToken(), nextPage);
                 })
                 .doOnSuccess((runsResponse) -> setWorkflowRunMetadata(damClient.getKey(), view, resource, runsResponse))
                 .onErrorResume(throwable -> {
