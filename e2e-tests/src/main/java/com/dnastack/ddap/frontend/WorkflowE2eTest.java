@@ -18,7 +18,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
     private static String datasetUrl = optionalEnv(
             "E2E_DATASET_URL",
-            "https://storage.googleapis.com/ddap-test-objects/dataset/subjects-with-objects"
+            "https://storage.googleapis.com/ddap-e2etest-objects/dataset/subjects-with-objects"
     );
 
     @BeforeClass
