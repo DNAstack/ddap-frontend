@@ -1,7 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import _cloneDeep from 'lodash.clonedeep';
 import _get from 'lodash.get';
+import { merge, Observable, zip } from 'rxjs';
 
 import Form from '../../admin/shared/form/form';
 import { FormValidationService } from '../../admin/shared/form/form-validation.service';
@@ -38,7 +40,7 @@ export class WorkflowManageComponent {
     this.datasetColumns = columns;
   }
 
-  executeWorkflow(): void {
+  executeWorkflows(): void {
     if (!this.validate(this.workflowForm)) {
       return;
     }
@@ -46,20 +48,27 @@ export class WorkflowManageComponent {
     const damId = this.workflowForm.getDamId();
     const wesView = this.workflowForm.form.get('wesView').value;
     const wdl = this.workflowForm.form.get('wdl').value;
-    const inputs = this.workflowForm.form.get('inputs').value;
-    this.substituteColumnNamesWithValues(inputs, this.datasetForm.selectedData[0]);
+    // TODO: make tokens relevant to single run -> instead of all tokens, just tokens which are needed for particular run
     const tokens = JSON.stringify(this.datasetForm.getTokensModel());
-    this.workflowService.runWorkflow(damId, wesView, wdl, JSON.stringify(inputs), tokens)
-      .subscribe(({ run_id: runId }) => this.navigateUp('../..', runId), this.showError);
+
+    zip(...this.datasetForm.selectedData
+      .map((row) => this.executeWorkflowForSingleRow(row, damId, wesView, wdl, tokens))
+    ).subscribe((runs: object[]) => this.navigateUp('../..', runs), this.showError);
   }
 
-  protected navigateUp = (path: string, runId: string) =>
-    this.router.navigate([path], { relativeTo: this.route, state: { runId } })
+  protected navigateUp = (path: string, runs: object[]) =>
+    this.router.navigate([path], { relativeTo: this.route, state: { runs } })
 
   protected showError = ({ error }: HttpErrorResponse) => {
     this.formErrorMessage = (error instanceof Object) ? JSON.stringify(error) : error;
     this.isFormValid = false;
     this.isFormValidated = true;
+  }
+
+  private executeWorkflowForSingleRow(row, damId, wesView, wdl, tokens): Observable<any> {
+    const inputs = _cloneDeep(this.workflowForm.form.get('inputs').value);
+    this.substituteColumnNamesWithValues(inputs, row);
+    return this.workflowService.runWorkflow(damId, wesView, wdl, JSON.stringify(inputs), tokens);
   }
 
   private substituteColumnNamesWithValues(object: object, row: object) {

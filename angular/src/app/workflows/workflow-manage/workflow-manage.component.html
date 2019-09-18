@@ -10,12 +10,17 @@
                             [message]="formErrorMessage">
     </ddap-form-footer-error>
     <button mat-flat-button
-            (click)="executeWorkflow()"
+            (click)="executeWorkflows()"
             data-se="btn-execute"
             type="submit"
             color="primary"
             class="uppercase">
-      Execute Workflow
+      <ng-container *ngIf="this.datasetForm.selectedData as selectedData; else singleWorkflow">
+        Execute {{ selectedData.length > 1 ? selectedData.length + ' Workflows' : ' Workflow' }}
+      </ng-container>
+      <ng-template #singleWorkflow>
+        Execute Workflow
+      </ng-template>
     </button>
   </div>
 </ddap-main>

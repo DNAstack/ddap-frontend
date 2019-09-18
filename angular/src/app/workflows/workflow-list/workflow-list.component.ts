@@ -24,7 +24,8 @@ export class WorkflowListComponent implements OnInit, OnDestroy {
               private workflowService: WorkflowService) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation && navigation.extras.state) {
-      this.newlyCreatedWorkflowId = navigation.extras.state.runId;
+      // TODO: decide how to display with multi-run
+      // this.newlyCreatedWorkflowId = navigation.extras.state.runs;
     }
   }
 
