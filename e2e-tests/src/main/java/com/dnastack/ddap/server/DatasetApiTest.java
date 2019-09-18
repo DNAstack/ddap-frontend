@@ -19,9 +19,9 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(DatasetApiTest.class.getSimpleName());
     private static final String DATASET_URL_WITH_INLINE_SCHEMA = "https://storage.googleapis"
-        + ".com/ddap-test-objects/dataset/subjects";
+        + ".com/ddap-e2etest-objects/dataset/subjects";
     private static final String DATASET_URL_WITH_RESOLVED_SCHEMA = "https://storage.googleapis"
-        + ".com/ddap-test-objects/dataset/subjects-referenced-schema";
+        + ".com/ddap-e2etest-objects/dataset/subjects-referenced-schema";
 
 
     @Before
