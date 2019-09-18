@@ -109,7 +109,12 @@ public abstract class AbstractBaseE2eTest {
         validateProtoBuf(config, damConfigBuilder);
 
         final String modificationPayload = format("{ \"item\": %s }", config);
-        final CookieStore cookieStore = performPersonaLogin(personaName, realmName);
+        /*
+         Use the master realm because some tests break the ability to reset realms in future runs.
+         In particular, tests that reset the IC config can change the 'ga4gh_dam` client ID which needs
+         to be a particular value (configured in master) for passport tokens to have a validatable audience
+         */
+        final CookieStore cookieStore = performPersonaLogin(personaName, "master");
 
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
         HttpPut request = new HttpPut(format("%s/dam/%s/v1alpha/%s/config", DDAP_BASE_URL, damId, realmName));
