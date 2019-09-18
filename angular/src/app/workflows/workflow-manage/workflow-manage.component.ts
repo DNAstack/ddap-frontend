@@ -54,16 +54,20 @@ export class WorkflowManageComponent {
     if (this.datasetForm.selectedData && this.datasetForm.selectedData.length > 0) {
       zip(...this.datasetForm.selectedData
         .map((row) => this.executeWorkflowForSingleRow(row, damId, wesView, wdl, tokens))
-      ).subscribe((runs: object[]) => this.navigateUp('../..', runs), this.showError);
+      ).subscribe((runs: object[]) => this.navigateUp('../..', runs, damId, wesView), this.showError);
     } else {
       const inputs = this.workflowForm.form.get('inputs').value;
       this.workflowService.runWorkflow(damId, wesView, wdl, JSON.stringify(inputs), tokens)
-        .subscribe((run) => this.navigateUp('../..', [run]), this.showError);
+        .subscribe((run) => this.navigateUp('../..', [run], damId, wesView), this.showError);
     }
   }
 
-  protected navigateUp = (path: string, runs: object[]) =>
-    this.router.navigate([path], { relativeTo: this.route, state: { runs } })
+  protected navigateUp = (path: string, runs: object[], damId, viewId) => {
+    const routeParams = this.route.snapshot.params;
+    const navigatePath = (routeParams && routeParams.viewId) ? [path] :
+                        [path, damId, 'views', viewId, 'runs'];
+    this.router.navigate(navigatePath, { relativeTo: this.route, state: { runs } });
+  }
 
   protected showError = ({ error }: HttpErrorResponse) => {
     this.formErrorMessage = (error instanceof Object) ? JSON.stringify(error) : error;
