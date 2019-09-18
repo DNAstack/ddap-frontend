@@ -64,6 +64,7 @@ export class DatasetFormComponent implements OnInit {
   pageChange(relativeUrl) {
     const { href: newDatasetUrl } = new URL(relativeUrl, this.datasetUrl);
     this.currentDatasetUrl = newDatasetUrl;
+    this.form.patchValue({url: newDatasetUrl});
     this.fetchDataset(this.currentDatasetUrl);
   }
 
