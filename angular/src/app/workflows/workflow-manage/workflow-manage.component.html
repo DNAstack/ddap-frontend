@@ -3,8 +3,8 @@
 </ddap-header>
 
 <ddap-main>
-  <ddap-dataset-form #datasetForm></ddap-dataset-form>
-  <ddap-workflow-form #workflowForm></ddap-workflow-form>
+  <ddap-dataset-form #datasetForm (datasetColumnsChanged)="datasetColumnsChange($event)"></ddap-dataset-form>
+  <ddap-workflow-form #workflowForm [datasetColumns]="datasetColumns"></ddap-workflow-form>
   <div class="ddap-form-toolbar">
     <ddap-form-footer-error [showError]="!isFormValid && isFormValidated"
                             [message]="formErrorMessage">

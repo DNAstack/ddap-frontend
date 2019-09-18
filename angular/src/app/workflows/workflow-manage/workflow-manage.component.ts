@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import _get from 'lodash.get';
 
 import Form from '../../admin/shared/form/form';
 import { FormValidationService } from '../../admin/shared/form/form-validation.service';
@@ -25,10 +26,16 @@ export class WorkflowManageComponent {
   isFormValid: boolean;
   isFormValidated: boolean;
 
+  datasetColumns: string[];
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private validationService: FormValidationService,
               private workflowService: WorkflowService) {
+  }
+
+  datasetColumnsChange(columns) {
+    this.datasetColumns = columns;
   }
 
   executeWorkflow(): void {
@@ -39,9 +46,10 @@ export class WorkflowManageComponent {
     const damId = this.workflowForm.getDamId();
     const wesView = this.workflowForm.form.get('wesView').value;
     const wdl = this.workflowForm.form.get('wdl').value;
-    const inputs = JSON.stringify(this.workflowForm.form.get('inputs').value);
+    const inputs = this.workflowForm.form.get('inputs').value;
+    this.substituteColumnNamesWithValues(inputs, this.datasetForm.selectedData[0]);
     const tokens = JSON.stringify(this.datasetForm.getTokensModel());
-    this.workflowService.runWorkflow(damId, wesView, wdl, inputs, tokens)
+    this.workflowService.runWorkflow(damId, wesView, wdl, JSON.stringify(inputs), tokens)
       .subscribe(({ run_id: runId }) => this.navigateUp('../..', runId), this.showError);
   }
 
@@ -52,6 +60,19 @@ export class WorkflowManageComponent {
     this.formErrorMessage = (error instanceof Object) ? JSON.stringify(error) : error;
     this.isFormValid = false;
     this.isFormValidated = true;
+  }
+
+  private substituteColumnNamesWithValues(object: object, row: object) {
+    Object.entries(object).forEach(([key, value]) => {
+      switch (typeof object[key]) {
+        case 'object':
+          this.substituteColumnNamesWithValues(object[key], row); break;
+        case 'string':
+          if (value.startsWith('${') && value.endsWith('}')) {
+            object[key] = _get(row, value.substring(2, value.length - 1), '');
+          }
+      }
+    });
   }
 
   private validate(form: Form): boolean {

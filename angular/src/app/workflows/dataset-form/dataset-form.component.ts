@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _sampleSize from 'lodash.samplesize';
 import { of } from 'rxjs';
@@ -17,6 +17,9 @@ import { ViewToken } from './view.token.model';
   styleUrls: ['./dataset-form.component.scss'],
 })
 export class DatasetFormComponent implements OnInit {
+
+  @Output()
+  datasetColumnsChanged: EventEmitter<string[]> = new EventEmitter<string[]>();
 
   form: FormGroup;
   dataset: Dataset;
@@ -50,6 +53,7 @@ export class DatasetFormComponent implements OnInit {
     this.datasetService.fetchDataset(url)
       .subscribe((dataset) => {
         this.dataset = dataset;
+        this.datasetColumnsChanged.emit(this.getDatasetColumns());
       }, () => {
         this.dataset = null;
       });
