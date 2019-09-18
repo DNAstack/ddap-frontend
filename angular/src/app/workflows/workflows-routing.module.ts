@@ -11,6 +11,7 @@ export const routes: Routes = [
   { path: ':damId/views/:viewId/runs', component: WorkflowListSingleComponent},
   { path: ':damId/views/:viewId/runs/:runId', component: WorkflowDetailComponent},
   { path: 'manage/add', pathMatch: 'full', component: WorkflowManageComponent },
+  { path: ':damId/views/:viewId/runs/manage/add', component: WorkflowManageComponent},
 ];
 
 @NgModule({

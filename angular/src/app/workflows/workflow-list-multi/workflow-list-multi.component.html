@@ -13,7 +13,9 @@
         <mat-card-subtitle>{{ view.label }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        {{ view.url }}
+        <div class="card-content">
+          {{ view.url }}
+        </div>
       </mat-card-content>
       <mat-card-actions>
         <a [routerLink]="[resourceViews.damId, 'views', view.name, 'runs']">
