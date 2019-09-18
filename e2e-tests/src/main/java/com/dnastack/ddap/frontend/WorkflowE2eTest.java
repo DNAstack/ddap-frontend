@@ -6,12 +6,11 @@ import com.dnastack.ddap.common.page.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
-import java.util.List;
 
-import static org.junit.Assert.assertFalse;
+import static com.dnastack.ddap.common.WorkflowRunState.*;
+import static java.util.Arrays.asList;
 
 public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
@@ -39,7 +38,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void testSimpleWorkflowExecution() throws InterruptedException {
+    public void testSingleSimpleWorkflowExecution() {
         WorkflowListPage workflowListPage = ddapPage.getNavBar()
                 .goToWorkflows();
         WorkflowManagePage managePage = workflowListPage.clickManage();
@@ -50,44 +49,57 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         managePage.waitForInflightRequests();
         managePage.fillField(By.name("test.name"), "e2e-test");
 
-        workflowListPage = managePage.saveEntity();
-        workflowListPage.assertJobInRunningState();
+        workflowListPage = managePage.saveEntity(1);
+        workflowListPage.assertNewRunsInState(asList(RUNNING, COMPLETE));
 
         WorkflowDetailPage runDetailsPage = workflowListPage.viewRunDetails();
         runDetailsPage.assertDetailsArePresent();
     }
 
     @Test
-    public void testWorkflowExecutionWithTokens() throws InterruptedException {
+    public void testSingleWorkflowExecutionWithTokens() {
         WorkflowListPage workflowListPage = ddapPage.getNavBar()
                 .goToWorkflows();
         WorkflowManagePage managePage = workflowListPage.clickManage();
 
         managePage.fetchDatasetResult(datasetUrl);
-        managePage.clickCheckbox(DdapBy.se("checkbox-2"));
-        WebElement tokenElement = managePage.getAccessTokens("bam_file").get(0);
-
+        managePage.waitForInflightRequests();
+        managePage.clickCheckbox(DdapBy.se("checkbox-0"));
+        managePage.getAccessTokens("bam_file");
         managePage.waitForInflightRequests();
 
         managePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-workflow-wes-view"));
         managePage.fillField(DdapBy.se("inp-workflow-wdl"), loadTemplate("/com/dnastack/ddap/workflow/with-tokens-workflow.wdl"));
-        String gsUrl = tokenElement.findElement(By.tagName("mat-panel-description")).getText();
         managePage.clickButton(DdapBy.se("btn-generate-form"));
         managePage.waitForInflightRequests();
-        managePage.fillField(By.name("md5Sum.inputFile"), gsUrl);
+        managePage.fillFieldFromDropdown(By.name("md5Sum.inputFile"), "bam_file");
 
-        workflowListPage = managePage.saveEntity();
-        workflowListPage.assertJobInRunningState();
+        workflowListPage = managePage.saveEntity(1);
+        workflowListPage.assertNewRunsInState(asList(QUEUED, RUNNING, COMPLETE));
     }
 
     @Test
-    public void testFetchingDataset() {
+    public void testMultipleWorkflowExecutionWithTokens() {
         WorkflowListPage workflowListPage = ddapPage.getNavBar()
                 .goToWorkflows();
         WorkflowManagePage managePage = workflowListPage.clickManage();
 
-        List<WebElement> datasetRows = managePage.fetchDatasetResult(datasetUrl);
-        assertFalse(datasetRows.isEmpty());
+        managePage.fetchDatasetResult(datasetUrl);
+        managePage.waitForInflightRequests();
+        managePage.clickCheckbox(DdapBy.se("checkbox-0"));
+        managePage.clickCheckbox(DdapBy.se("checkbox-2"));
+        managePage.clickCheckbox(DdapBy.se("checkbox-3"));
+        managePage.getAccessTokens("bam_file");
+        managePage.waitForInflightRequests();
+
+        managePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-workflow-wes-view"));
+        managePage.fillField(DdapBy.se("inp-workflow-wdl"), loadTemplate("/com/dnastack/ddap/workflow/with-tokens-workflow.wdl"));
+        managePage.clickButton(DdapBy.se("btn-generate-form"));
+        managePage.waitForInflightRequests();
+        managePage.fillFieldFromDropdown(By.name("md5Sum.inputFile"), "bam_file");
+
+        workflowListPage = managePage.saveEntity(3);
+        workflowListPage.assertNewRunsInState(asList(QUEUED, RUNNING, COMPLETE));
     }
 
     @Test
@@ -97,8 +109,9 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         WorkflowManagePage managePage = workflowListPage.clickManage();
 
         managePage.fetchDatasetResult(datasetUrl);
+        managePage.waitForInflightRequests();
+        managePage.clickCheckbox(DdapBy.se("checkbox-0"));
         managePage.clickCheckbox(DdapBy.se("checkbox-2"));
-        managePage.clickCheckbox(DdapBy.se("checkbox-3"));
         managePage.getAccessTokens("bam_file");
     }
 

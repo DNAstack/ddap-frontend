@@ -6,6 +6,25 @@
 </ddap-header>
 
 <ddap-main>
+  <ng-container *ngIf="newlyCreatedWorkflows">
+    <h3 class="flex vertical-center">
+      New Workflows
+    </h3>
+    <mat-accordion>
+      <mat-expansion-panel [disabled]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Run Identifier</mat-panel-title>
+          <mat-panel-description>State</mat-panel-description>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+      <mat-expansion-panel *ngFor="let run of newlyCreatedWorkflows"
+                           [disabled]="true">
+        <mat-expansion-panel-header data-se="new-run">
+          <mat-panel-title data-se="new-run-id">{{ run.run_id }}</mat-panel-title>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-container>
   <mat-accordion *ngFor="let workflow of workflows">
     <h3 class="flex vertical-center">
       <span class="flex vertical-center">
@@ -30,8 +49,7 @@
         <button mat-button
                 color="primary"
                 class="uppercase"
-                data-se="view-btn"
-        >
+                data-se="view-btn">
           View
         </button>
       </a>

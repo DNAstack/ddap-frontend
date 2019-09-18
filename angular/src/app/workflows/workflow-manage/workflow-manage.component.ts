@@ -51,9 +51,15 @@ export class WorkflowManageComponent {
     // TODO: make tokens relevant to single run -> instead of all tokens, just tokens which are needed for particular run
     const tokens = JSON.stringify(this.datasetForm.getTokensModel());
 
-    zip(...this.datasetForm.selectedData
-      .map((row) => this.executeWorkflowForSingleRow(row, damId, wesView, wdl, tokens))
-    ).subscribe((runs: object[]) => this.navigateUp('../..', runs), this.showError);
+    if (this.datasetForm.selectedData && this.datasetForm.selectedData.length > 0) {
+      zip(...this.datasetForm.selectedData
+        .map((row) => this.executeWorkflowForSingleRow(row, damId, wesView, wdl, tokens))
+      ).subscribe((runs: object[]) => this.navigateUp('../..', runs), this.showError);
+    } else {
+      const inputs = this.workflowForm.form.get('inputs').value;
+      this.workflowService.runWorkflow(damId, wesView, wdl, JSON.stringify(inputs), tokens)
+        .subscribe((run) => this.navigateUp('../..', [run]), this.showError);
+    }
   }
 
   protected navigateUp = (path: string, runs: object[]) =>

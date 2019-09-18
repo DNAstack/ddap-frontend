@@ -157,7 +157,7 @@ public class NavBar {
     public WorkflowListPage goToWorkflows() {
         driver.findElement(workflowLink().getSelector()).click();
 
-        return new WorkflowListPage(driver);
+        return new WorkflowListPage(driver, null);
     }
 
     public AdminListPage goToAdmin(NavLink navItem) {

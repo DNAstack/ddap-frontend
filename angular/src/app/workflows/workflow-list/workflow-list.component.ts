@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -16,24 +15,19 @@ export class WorkflowListComponent implements OnInit, OnDestroy {
   workflows: Workflow[];
   workflowSubscription: Subscription;
 
-  newlyCreatedWorkflowId?: string;
+  newlyCreatedWorkflows?: any[];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private snackBar: MatSnackBar,
               private workflowService: WorkflowService) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation && navigation.extras.state) {
-      // TODO: decide how to display with multi-run
-      // this.newlyCreatedWorkflowId = navigation.extras.state.runs;
+      this.newlyCreatedWorkflows = navigation.extras.state.runs;
     }
   }
 
   ngOnInit(): void {
     this.getWorkflows();
-    if (this.newlyCreatedWorkflowId) {
-      this.notifyAboutNewWorkflow();
-    }
   }
 
   ngOnDestroy(): void {
@@ -48,16 +42,6 @@ export class WorkflowListComponent implements OnInit, OnDestroy {
       .subscribe((workflows: Workflow[]) => {
         this.workflows = workflows;
       });
-  }
-
-  private notifyAboutNewWorkflow() {
-    const message = `Your workflow ID is ${this.newlyCreatedWorkflowId}. If you can't see it refresh the data.`;
-    const snackBarRef = this.snackBar.open(message, 'Refresh', {
-      duration: 8000,
-    });
-    snackBarRef.onAction().subscribe(() => {
-      this.getWorkflows();
-    });
   }
 
 }

@@ -71,10 +71,10 @@ public class WorkflowManagePage extends AnyDdapPage {
         button.click();
     }
 
-    public WorkflowListPage saveEntity() {
+    public WorkflowListPage saveEntity(Integer expectedNumberOfNewWorkflowRuns) {
         clickSave();
         waitForInflightRequests();
-        return new WorkflowListPage(driver);
+        return new WorkflowListPage(driver, expectedNumberOfNewWorkflowRuns);
     }
 
     public void clickSave() {

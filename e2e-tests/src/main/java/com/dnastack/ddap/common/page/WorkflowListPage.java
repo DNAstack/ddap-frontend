@@ -1,45 +1,40 @@
 package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.WorkflowRunState;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 @Slf4j
 public class WorkflowListPage extends AnyDdapPage {
 
-    private String workflowRunId;
+    private List<String> workflowRunIds = new ArrayList<>();
 
-    public WorkflowListPage(WebDriver driver) {
+    public WorkflowListPage(WebDriver driver, Integer expectedNumberOfNewWorkflowRuns) {
         super(driver);
         waitForInflightRequests();
         WebElement pageTitle = driver.findElement(DdapBy.se("page-title"));
         assertThat(pageTitle.getText(), equalTo("Workflows"));
-        extractWorkflowIdFromSnackbarIfExists();
+        extractNewWorkflowIdsIfExists(expectedNumberOfNewWorkflowRuns);
     }
 
-    private void extractWorkflowIdFromSnackbarIfExists() {
-        try {
-            String text = driver.findElement(By.tagName("simple-snack-bar")).getText();
-            Pattern uuidPattern = Pattern.compile("\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b");
-            Matcher uuidMatcher = uuidPattern.matcher(text);
-            if (uuidMatcher.find()) {
-                workflowRunId = uuidMatcher.group();
-            }
-        } catch (NoSuchElementException | IllegalStateException e) {
-            // Intentionally left empty
+    private void extractNewWorkflowIdsIfExists(Integer expectedNumberOfNewWorkflowRuns) {
+        workflowRunIds = driver.findElements(DdapBy.se("new-run-id"))
+                .stream()
+                .map(WebElement::getText)
+                .collect(toList());
+        if (expectedNumberOfNewWorkflowRuns != null) {
+            assertThat(workflowRunIds, hasSize(equalTo(expectedNumberOfNewWorkflowRuns)));
         }
     }
 
@@ -47,11 +42,6 @@ public class WorkflowListPage extends AnyDdapPage {
         driver.findElement(DdapBy.se("btn-manage"))
                 .click();
         return new WorkflowManagePage(driver);
-    }
-
-    public void assertJobInRunningState() throws InterruptedException {
-        reloadPageUntilNewJobVisible(15, 0);
-        assertThat(driver.findElement(DdapBy.se("run-state")).getText(), equalTo("RUNNING"));
     }
 
     public WorkflowDetailPage viewRunDetails() {
@@ -63,36 +53,32 @@ public class WorkflowListPage extends AnyDdapPage {
         return new WorkflowDetailPage(driver);
     }
 
-    private void reloadPageUntilNewJobVisible(int maxReloads, int currentReload) throws InterruptedException {
-        try {
-            waitForInflightRequests();
-            List<WebElement> runs = driver.findElements(DdapBy.se("run"));
-            Optional<WebElement> foundRun = runs.stream()
-                    .filter((run) -> {
-                        String runId = run.findElement(DdapBy.se("run-id")).getText();
-                        return runId.equals(workflowRunId);
-                    })
-                    .findFirst();
-            if (foundRun.isPresent()) {
-                String state = foundRun.get().findElement(DdapBy.se("run-state")).getText();
-                if (!state.equals("RUNNING")) {
-                    waitAndReloadPage(maxReloads, currentReload);
-                }
-            } else {
-                waitAndReloadPage(maxReloads, currentReload);
-            }
-        } catch (NoSuchElementException nse) {
-            if (currentReload < maxReloads) {
-                waitAndReloadPage(maxReloads, currentReload);
-            } else {
-                throw nse;
-            }
+    public void assertNewRunsInState(List<WorkflowRunState> acceptedStates) {
+        reloadPageUntilNewRunsNotInState(acceptedStates, 15, 0);
+    }
+
+    private void reloadPageUntilNewRunsNotInState(List<WorkflowRunState> acceptedStates, int maxReloads, int currentReload) {
+        waitForInflightRequests();
+        List<WebElement> allRuns = driver.findElements(DdapBy.se("run"));
+        List<WebElement> newRuns = allRuns.stream()
+                .filter((run) -> {
+                    String runId = run.findElement(DdapBy.se("run-id")).getText();
+                    return workflowRunIds.contains(runId);
+                })
+                .collect(toList());
+        boolean allInExpectedState = newRuns.stream()
+                .allMatch((newRun) -> {
+                    String state = newRun.findElement(DdapBy.se("run-state")).getText();
+                    return acceptedStates.stream()
+                            .map(Enum::name)
+                            .anyMatch(s -> s.equals(state));
+                });
+
+        if (newRuns.isEmpty() || !allInExpectedState) {
+            assertThat("Failed to assert states of new workflow runs within valid reload duration", currentReload, lessThanOrEqualTo(maxReloads));
+            driver.navigate().refresh();
+            reloadPageUntilNewRunsNotInState(acceptedStates, maxReloads, ++currentReload);
         }
     }
 
-    private void waitAndReloadPage(int maxReloads, int currentReload) throws InterruptedException {
-        Thread.sleep(5_000);
-        driver.navigate().refresh();
-        reloadPageUntilNewJobVisible(maxReloads, ++currentReload);
-    }
 }
