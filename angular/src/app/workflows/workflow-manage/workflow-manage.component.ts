@@ -62,10 +62,11 @@ export class WorkflowManageComponent {
     }
   }
 
-  protected navigateUp = (path: string, runs: object[], damId, viewId) => {
-    const routeParams = this.route.snapshot.params;
-    const navigatePath = (routeParams && routeParams.viewId) ? [path] :
-                        [path, damId, 'views', viewId, 'runs'];
+  protected navigateUp = (path: string, runs: object[], damId, wesView) => {
+    const { viewId } = this.route.snapshot.params;
+    const navigatePath = viewId
+                          ? [path]
+                          : [path, damId, 'views', wesView, 'runs'];
     this.router.navigate(navigatePath, { relativeTo: this.route, state: { runs } });
   }
 

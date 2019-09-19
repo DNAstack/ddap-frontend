@@ -1,6 +1,6 @@
 @import "../../../styles/modules/colors";
 
-.card-content {
+::ng-deep mat-card-content {
   padding: 0 1rem;
 }
 

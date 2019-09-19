@@ -49,13 +49,12 @@ export class WorkflowFormComponent implements Form, OnInit, OnChanges {
       wdl: ['', [Validators.required]],
       inputs: ['', [Validators.required]],
     });
-    const routeParams = this.route.snapshot.params;
-
     this.workflowService.getAllWesViews()
       .subscribe((sanitizedWesResourceViews: SimplifiedWesResourceViews[]) => {
         this.wesResourceViews = sanitizedWesResourceViews;
-        if (routeParams && routeParams.viewId) {
-          this.selectedView = routeParams.viewId;
+        const {viewId} = this.route.snapshot.params;
+        if (viewId) {
+          this.selectedView = viewId;
         }
         this.form.get('wesView').patchValue(this.selectedView);
       });

@@ -12,7 +12,6 @@
       <mat-select formControlName="wesView"
                   data-se="inp-workflow-wes-view"
                   panelClass="workflow-wes-view-select"
-                  [(value)]="selectedView"
                   required>
         <ng-container *ngFor="let wesResourceView of wesResourceViews">
           <mat-option *ngFor="let wesView of wesResourceView.views"
