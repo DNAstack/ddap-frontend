@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { PaginationTypes } from '../../shared/paginator/paginationType.const';
 import { WorkflowRunsResponse } from '../workflow.model';
 import { WorkflowService } from '../workflows.service';
 
@@ -16,6 +17,7 @@ export class WorkflowListSingleComponent implements OnInit {
 
   newlyCreatedWorkflows?: any[];
   pageToken = '';
+  paginationType = PaginationTypes.UNIDIRECTION;
 
   constructor(private route: ActivatedRoute,
               private router: Router,

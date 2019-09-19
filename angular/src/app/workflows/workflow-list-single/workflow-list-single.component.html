@@ -60,7 +60,7 @@
     </mat-accordion>
     <ddap-paginator *ngIf="pageToken.length"
                     [nextPage]="workflowRunsResponse.next_page_token"
-                    [paginationType]="'uni'"
+                    [paginationType]="paginationType"
                     (pageChangeRequested)="redirectToPage($event)">
     </ddap-paginator>
   </ng-container>
