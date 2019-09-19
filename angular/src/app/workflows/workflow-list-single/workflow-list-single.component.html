@@ -58,5 +58,10 @@
         </mat-action-row>
       </mat-expansion-panel>
     </mat-accordion>
+    <ddap-paginator *ngIf="pageToken.length"
+                    [nextPage]="workflowRunsResponse.next_page_token"
+                    [paginationType]="'uni'"
+                    (pageChangeRequested)="redirectToPage($event)">
+    </ddap-paginator>
   </ng-container>
 </ddap-main>

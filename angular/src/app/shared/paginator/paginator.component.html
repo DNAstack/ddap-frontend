@@ -1,5 +1,5 @@
 <div class="paginator">
-  <button mat-button
+  <button *ngIf="(paginationType !== 'uni')" mat-button
           color="primary"
           class="uppercase"
           [disabled]="!previousPage"

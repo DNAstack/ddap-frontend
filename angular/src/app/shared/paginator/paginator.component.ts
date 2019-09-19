@@ -11,6 +11,8 @@ export class PaginatorComponent {
   nextPage?: string;
   @Input()
   previousPage?: string;
+  @Input()
+  paginationType = 'default';
 
   @Output()
   pageChangeRequested: EventEmitter<string> = new EventEmitter<string>();
