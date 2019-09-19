@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Workflow } from '../workflow.model';
@@ -17,8 +17,7 @@ export class WorkflowListComponent implements OnInit, OnDestroy {
 
   newlyCreatedWorkflows?: any[];
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
+  constructor(private router: Router,
               private workflowService: WorkflowService) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation && navigation.extras.state) {

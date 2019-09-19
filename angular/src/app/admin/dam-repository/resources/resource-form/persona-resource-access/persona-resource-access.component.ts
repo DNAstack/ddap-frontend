@@ -29,11 +29,9 @@ export class PersonaResourceAccessComponent implements Form {
   error: any = null;
   save$: Subject<any> = new Subject();
 
-  private saveSubscription;
-
   constructor(private resourceService: ResourceService,
               private route: ActivatedRoute) {
-    this.saveSubscription = this.save$.pipe(
+    this.save$.pipe(
       debounceTime(800),
       switchMap(({changes, isDryRun}) => this.saveResource(changes, isDryRun))
     ).subscribe();

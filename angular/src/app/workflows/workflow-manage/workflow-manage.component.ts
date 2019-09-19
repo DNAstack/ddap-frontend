@@ -3,7 +3,7 @@ import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import _cloneDeep from 'lodash.clonedeep';
 import _get from 'lodash.get';
-import { merge, Observable, zip } from 'rxjs';
+import { Observable, zip } from 'rxjs';
 
 import Form from '../../admin/shared/form/form';
 import { FormValidationService } from '../../admin/shared/form/form-validation.service';

@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ComponentFactoryResolver,
   EmbeddedViewRef,
   Input,
   OnInit,
@@ -45,7 +44,6 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
   viewChildComponents: QueryList<ResourceViewFormComponent>;
 
   constructor(private formBuilder: FormBuilder,
-              private componentFactoryResolver: ComponentFactoryResolver,
               private cd: ChangeDetectorRef) {
   }
 

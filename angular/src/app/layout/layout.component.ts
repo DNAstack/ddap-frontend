@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import 'rxjs-compat/add/operator/zip'; // TODO: use static zip instead https://www.learnrxjs.io/operators/combination/zip.html
 import { Observable } from 'rxjs/Observable';
@@ -29,7 +29,6 @@ export class LayoutComponent implements OnInit {
   adminDamInfos: DamInfo[] = [];
 
   constructor(public loader: LoadingBarService,
-              private router: Router,
               private activatedRoute: ActivatedRoute,
               private identityService: IdentityService,
               private identityStore: IdentityStore,

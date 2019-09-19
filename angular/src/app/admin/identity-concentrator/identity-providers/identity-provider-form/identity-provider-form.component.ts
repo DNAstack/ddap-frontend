@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs/Observable';
 
@@ -19,20 +18,18 @@ import Form from '../../../shared/form/form';
 })
 export class IdentityProviderFormComponent implements OnInit, Form {
 
-  get scopes() {
-    return this.form.get('scopes') as FormArray;
-  }
-
   @Input()
   model?: EntityModel = new EntityModel('', IdentityProvider.create());
 
   form: FormGroup;
-
   translators$: Observable<any>;
 
+  get scopes() {
+    return this.form.get('scopes') as FormArray;
+  }
+
   constructor(private formBuilder: FormBuilder,
-              private passportTranslators: PassportTranslatorsService,
-              private route: ActivatedRoute) {
+              private passportTranslators: PassportTranslatorsService) {
 
   }
 

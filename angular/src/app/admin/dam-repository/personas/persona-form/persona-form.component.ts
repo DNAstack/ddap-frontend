@@ -12,7 +12,6 @@ import { dam } from '../../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 import Form from '../../../shared/form/form';
-import { ResourceService } from '../../resources/resources.service';
 import TestPersona = dam.v1.TestPersona;
 import AccessList = dam.v1.AccessList;
 import { ResourcesStore } from '../../resources/resources.store';

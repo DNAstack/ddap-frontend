@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { dam } from '../../../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../../../shared/entity.model';
-import { AccessPolicyService } from '../../../access-policies/access-policies.service';
 import { AccessPoliciesStore } from '../../../access-policies/access-policies.store';
 import { ServiceDefinitionService } from '../../../service-definitions/service-definitions.service';
 import { ServiceDefinitionsStore } from '../../../service-definitions/service-definitions.store';

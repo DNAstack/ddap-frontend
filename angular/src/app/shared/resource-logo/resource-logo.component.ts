@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, Renderer2, ViewChild } from '@angular/core';
 
 import { ImagePlaceholderRetriever } from '../image-placeholder.service';
 

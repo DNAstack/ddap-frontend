@@ -8,10 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import { catchError, switchMap } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 
-import { PersonasStore } from '../../personas/personas.store';
-import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
+import { PersonasStore } from '../../personas/personas.store';
+import { ResourceService } from '../../resources/resources.service';
 
 @Component({
   selector: 'ddap-access-table',

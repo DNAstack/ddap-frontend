@@ -5,10 +5,10 @@ import { of } from 'rxjs/internal/observable/of';
 import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 
-import { ResourceService } from '../../resources/resources.service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
-import { DamConfigService } from '../dam/dam-config.service';
 import { EntityModel } from '../../../shared/entity.model';
+import { ResourceService } from '../../resources/resources.service';
+import { DamConfigService } from '../dam/dam-config.service';
 import { JsonEditorDefaults } from '../jsonEditorDefaults';
 import { TestFormComponent } from '../test-form/test-form.component';
 
