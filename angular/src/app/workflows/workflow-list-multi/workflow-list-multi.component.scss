@@ -8,3 +8,7 @@
   margin: 1rem 0;
 }
 
+::ng-deep mat-card-actions {
+  margin-left: 0;
+}
+
