@@ -2,11 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EntityModel } from '../../admin/shared/entity.model';
+import { EntityModel } from '../../../admin/shared/entity.model';
 import { assemblyIds } from '../assembly.model';
 import { BeaconSearchParams } from '../beacon-search-params.model';
 
-import { ValidateVariant } from './variant.validator';
+import { VariantValidators } from './variant.validator';
 
 @Component({
   selector: 'ddap-beacon-search-bar',
@@ -17,13 +17,10 @@ export class BeaconSearchBarComponent implements OnInit {
 
   @Input()
   placeholder: string;
-
   @Input()
   disabled: boolean;
-
   @Input()
   limitSearch = false;
-
   @Input()
   replaceUrl = false;
 
@@ -35,7 +32,7 @@ export class BeaconSearchBarComponent implements OnInit {
 
     this.searchForm = new FormGroup({
       assembly: new FormControl(this.assemblyIds[0], [Validators.required]),
-      query: new FormControl('', [Validators.required, ValidateVariant]),
+      query: new FormControl('', [Validators.required, VariantValidators.variant]),
     });
   }
 

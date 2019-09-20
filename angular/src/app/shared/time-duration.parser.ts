@@ -2,7 +2,7 @@
 export class TimeDurationParser {
 
   // example of valid string: "10d"
-  static regex = new RegExp(/^(-*\d+)(s|m|h|d|w)$/);
+  static readonly regex = new RegExp(/^(-*\d+)(s|m|h|d|w)$/);
 
   static validate(duration: string): boolean {
     return this.regex.test(duration);

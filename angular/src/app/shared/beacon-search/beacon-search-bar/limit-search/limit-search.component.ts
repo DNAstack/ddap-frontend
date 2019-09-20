@@ -7,14 +7,14 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./limit-search.component.scss'],
 })
 export class LimitSearchComponent {
+
   @Input()
   checked;
-
   @Input()
   resourceName$: Observable<string>;
 
   @Output()
-  change: EventEmitter<any> = new EventEmitter<any>();
+  readonly change: EventEmitter<any> = new EventEmitter<any>();
 
   limitSearch($event) {
     return this.change.emit($event);

@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class ImagePlaceholderRetriever {
 
-  imageNamePrefix = 'placeholder_pattern';
+  readonly imageNamePrefix = 'placeholder_pattern';
 
   getPathToFixedRandomImage(string: string): string {
     const i = string ? string.length % 4 : 0;

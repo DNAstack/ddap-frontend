@@ -26,9 +26,9 @@ import { RouterModule } from '@angular/router';
 import { TagInputModule } from 'ngx-chips';
 import { ClipboardModule } from 'ngx-clipboard';
 
-import { BeaconSearchBarComponent } from './beacon-search-bar/beacon-search-bar.component';
-import { LimitSearchComponent } from './beacon-search-bar/limit-search/limit-search.component';
-import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
+import { BeaconResultComponent } from './beacon-search/beacon-result/beacon-result.component';
+import { BeaconSearchBarComponent } from './beacon-search/beacon-search-bar/beacon-search-bar.component';
+import { LimitSearchComponent } from './beacon-search/beacon-search-bar/limit-search/limit-search.component';
 import { ClaimGroupComponent } from './claim-group/claim-group.component';
 import { FocusedDirective } from './focused.directive';
 import { FormFooterErrorComponent } from './form/form-footer-error/form-footer-error.component';

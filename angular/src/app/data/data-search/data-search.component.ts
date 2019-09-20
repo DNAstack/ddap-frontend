@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { BeaconSearchParams } from '../../shared/beacon-search-params.model';
-import { BeaconResponse } from '../../shared/beacons/beacon-response.model';
-import { BeaconServiceQuery, ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
+import { BeaconResponse } from '../../shared/beacon-search/beacon-response.model';
+import { BeaconSearchParams } from '../../shared/beacon-search/beacon-search-params.model';
+import { BeaconServiceQuery, ResourceBeaconService } from '../../shared/beacon-search/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 import { DataService } from '../data.service';
 

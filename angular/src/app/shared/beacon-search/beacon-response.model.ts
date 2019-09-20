@@ -1,6 +1,5 @@
 
 export interface BeaconResponse {
-
   beaconInfo: {
     name: string,
     damId: string,
@@ -22,5 +21,4 @@ export interface BeaconResponse {
     errorMessage: string
   };
   exists: boolean;
-
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs-compat';
 
 import { environment } from '../../../environments/environment';
-import { DnaChangeQueryParser } from '../dna-change-query.parser';
+import { DnaChangeQueryParser } from './dna-change-query.parser';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../realm/realm.constant';
 

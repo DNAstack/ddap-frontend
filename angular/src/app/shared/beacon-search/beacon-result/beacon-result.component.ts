@@ -15,18 +15,19 @@ export class BeaconResultComponent implements OnInit {
 
   realm: string;
 
-  constructor(private activatedRoute: ActivatedRoute) {
-
+  constructor(private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.root.firstChild.params.subscribe((params) => {
-      this.realm = params.realmId;
-    });
+    this.route.root.firstChild.params
+      .subscribe((params) => {
+        this.realm = params.realmId;
+      });
   }
 
   getLinkToResource() {
-    return `/${this.realm}/data/${this.beacon.beaconInfo.damId}/${this.beacon.beaconInfo.resourceId}`;
+    const { damId, resourceId } = this.beacon.beaconInfo;
+    return `/${this.realm}/data/${damId}/${resourceId}`;
   }
 
 }

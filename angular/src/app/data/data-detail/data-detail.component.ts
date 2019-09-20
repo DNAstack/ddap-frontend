@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 import { EntityModel } from '../../admin/shared/entity.model';
-import { ResourceBeaconService } from '../../shared/beacons/resource-beacon.service';
+import { ResourceBeaconService } from '../../shared/beacon-search/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 import { DataService } from '../data.service';
 
