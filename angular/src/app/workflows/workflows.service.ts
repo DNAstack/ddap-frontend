@@ -18,8 +18,9 @@ export class WorkflowService {
               private errorHandler: ErrorHandlerService) {
   }
 
-  public getWorkflowRuns(damId: string, view: String): Observable<WorkflowRunsResponse> {
-    return this.http.get<WorkflowRunsResponse>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/wes/${damId}/views/${view}/runs`);
+  public getWorkflowRuns(damId: string, view: String, nextPage: string = ''): Observable<WorkflowRunsResponse> {
+    return this.http.get<WorkflowRunsResponse>
+    (`${environment.ddapApiUrl}/${realmIdPlaceholder}/wes/${damId}/views/${view}/runs?nextPage=${nextPage}`);
   }
 
   public getAllWesViews(): Observable<SimplifiedWesResourceViews[]> {

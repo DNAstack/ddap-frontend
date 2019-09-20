@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { NoneComponent } from 'angular7-json-schema-form';
 import _set from 'lodash.set';
 
@@ -35,9 +36,11 @@ export class WorkflowFormComponent implements Form, OnInit, OnChanges {
       },
     },
   };
+  selectedView: string;
 
   constructor(private formBuilder: FormBuilder,
-              private workflowService: WorkflowService) {
+              private workflowService: WorkflowService,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -46,10 +49,14 @@ export class WorkflowFormComponent implements Form, OnInit, OnChanges {
       wdl: ['', [Validators.required]],
       inputs: ['', [Validators.required]],
     });
-
     this.workflowService.getAllWesViews()
       .subscribe((sanitizedWesResourceViews: SimplifiedWesResourceViews[]) => {
         this.wesResourceViews = sanitizedWesResourceViews;
+        const {viewId} = this.route.snapshot.params;
+        if (viewId) {
+          this.selectedView = viewId;
+          this.form.get('wesView').patchValue(this.selectedView);
+        }
       });
   }
 

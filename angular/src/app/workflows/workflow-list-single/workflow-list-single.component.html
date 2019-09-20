@@ -47,7 +47,7 @@
           <mat-panel-description data-se="run-state">{{ run.state }}</mat-panel-description>
         </mat-expansion-panel-header>
         <mat-action-row>
-          <a [routerLink]="[workflowRunsResponse.damId, 'views', workflowRunsResponse.viewId, 'runs', run.run_id]">
+          <a [routerLink]="[run.run_id]">
             <button mat-button
                     color="primary"
                     class="uppercase"
@@ -58,5 +58,10 @@
         </mat-action-row>
       </mat-expansion-panel>
     </mat-accordion>
+    <ddap-paginator *ngIf="pageToken.length"
+                    [nextPage]="workflowRunsResponse.next_page_token"
+                    [paginationType]="paginationType"
+                    (pageChangeRequested)="redirectToPage($event)">
+    </ddap-paginator>
   </ng-container>
 </ddap-main>
