@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { PaginationTypes } from './paginationType.const';
+import { PaginationTypes } from './pagination-type.enum';
 
 @Component({
   selector: 'ddap-paginator',
@@ -14,7 +14,7 @@ export class PaginatorComponent {
   @Input()
   previousPage?: string;
   @Input()
-  paginationType: string = PaginationTypes.DEFAULT;
+  paginationType: string = PaginationTypes.bidirectional;
 
   @Output()
   pageChangeRequested: EventEmitter<string> = new EventEmitter<string>();
@@ -24,6 +24,6 @@ export class PaginatorComponent {
   }
 
   showPrevious() {
-    return this.paginationType !== PaginationTypes.UNIDIRECTION;
+    return this.paginationType !== PaginationTypes.unidirectional;
   }
 }

@@ -36,7 +36,7 @@ export class WorkflowFormComponent implements Form, OnInit, OnChanges {
       },
     },
   };
-  selectedView = '';
+  selectedView: string;
 
   constructor(private formBuilder: FormBuilder,
               private workflowService: WorkflowService,
@@ -55,8 +55,8 @@ export class WorkflowFormComponent implements Form, OnInit, OnChanges {
         const {viewId} = this.route.snapshot.params;
         if (viewId) {
           this.selectedView = viewId;
+          this.form.get('wesView').patchValue(this.selectedView);
         }
-        this.form.get('wesView').patchValue(this.selectedView);
       });
   }
 
