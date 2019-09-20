@@ -14,8 +14,11 @@ export class RealmInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const realmId = _get(this.activatedRoute, 'root.firstChild.snapshot.params.realmId');
+    if (!req.url.includes(realmIdPlaceholder)) {
+      return next.handle(req);
+    }
 
+    const realmId = _get(this.activatedRoute, 'root.firstChild.snapshot.params.realmId');
     const secureReq = req.clone({
       url: req.url.replace(realmIdPlaceholder, realmId),
     });

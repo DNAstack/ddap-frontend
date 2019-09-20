@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { nameConstraintPattern } from '../../admin/shared/entity.model';
+import { nameConstraintPattern } from '../../../admin/shared/entity.model';
 import { RealmChangeConfirmationDialogComponent } from '../realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
 
 @Component({
@@ -26,9 +26,7 @@ export class RealmInputComponent implements OnInit {
     this.activatedRoute.root.firstChild.params.subscribe((params) => {
       this.realm = params.realmId;
       this.form = this.formBuilder.group({
-        realm: [this.realm, [
-          Validators.pattern(nameConstraintPattern),
-        ]],
+        realm: [this.realm, [Validators.pattern(nameConstraintPattern)]],
       });
     });
   }

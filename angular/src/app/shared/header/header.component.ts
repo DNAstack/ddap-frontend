@@ -10,27 +10,21 @@ export class HeaderComponent {
 
   @Input()
   label: string;
-
   @Input()
   icon: string = null;
-
   @Input()
   isSearchPage = false;
-
   @Input()
   backLink: any = null;
-
   @Input()
   searchButton = false;
-
   @Input()
   searchOpen = false;
-
   @Input()
   limitSearch = false;
 
   @Output()
-  searchOpenChange = new EventEmitter<boolean>();
+  readonly searchOpenChange = new EventEmitter<boolean>();
 
   constructor(private location: Location) {
   }

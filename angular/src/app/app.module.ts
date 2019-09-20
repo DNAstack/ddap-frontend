@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { LayoutComponent } from './layout/layout.component';
 import {
   RealmChangeConfirmationDialogComponent
-} from './shared/realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
+} from './shared/realm/realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
 import { RealmInterceptor } from './shared/realm/realm-interceptor.service';
 import { SharedModule } from './shared/shared.module';
 

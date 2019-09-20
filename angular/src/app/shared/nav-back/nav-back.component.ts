@@ -6,6 +6,8 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./nav-back.component.scss'],
 })
 export class NavBackComponent {
+
   @Input()
   navigateTo: string;
+
 }

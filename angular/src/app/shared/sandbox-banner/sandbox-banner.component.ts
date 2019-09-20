@@ -9,7 +9,6 @@ import { SandboxBannerStateService } from './sandbox-banner-state.service';
 })
 export class SandboxBannerComponent {
 
-
   constructor(public sandboxBannerStateService: SandboxBannerStateService) {
   }
 

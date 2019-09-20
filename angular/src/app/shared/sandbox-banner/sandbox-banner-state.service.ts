@@ -9,7 +9,6 @@ const STORAGE_KEY = 'sandbox-warning-acknowledgement';
 export class SandboxBannerStateService {
 
   constructor(@Inject(LOCAL_STORAGE) private storage: StorageService) {
-
   }
 
   storeAcknowledgement(): void {

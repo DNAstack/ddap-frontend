@@ -40,8 +40,8 @@ import { MetadataListComponent } from './metadata-list/metadata-list.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
 import {
   RealmChangeConfirmationDialogComponent
-} from './realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
-import { RealmInputComponent } from './realm-input/realm-input.component';
+} from './realm/realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
+import { RealmInputComponent } from './realm/realm-input/realm-input.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
 import { ResourceViewItemComponent } from './resource-view-item/resource-view-item.component';
 import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.component';
