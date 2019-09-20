@@ -39,9 +39,10 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void testSingleSimpleWorkflowExecution() {
-        WorkflowListPage workflowListPage = ddapPage.getNavBar()
+        WorkflowServersPage workflowServersPage = ddapPage.getNavBar()
                 .goToWorkflows();
-        WorkflowManagePage managePage = workflowListPage.clickManage();
+        workflowServersPage.clickViewRuns();
+        WorkflowManagePage managePage = workflowServersPage.clickManage();
 
         managePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-workflow-wes-view"));
         managePage.fillField(DdapBy.se("inp-workflow-wdl"), loadTemplate("/com/dnastack/ddap/workflow/simple-workflow.wdl"));
@@ -49,7 +50,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         managePage.waitForInflightRequests();
         managePage.fillField(By.name("test.name"), "e2e-test");
 
-        workflowListPage = managePage.saveEntity(1);
+        WorkflowListPage workflowListPage = managePage.saveEntity(1);
         workflowListPage.assertNewRunsInState(asList(RUNNING, COMPLETE));
 
         WorkflowDetailPage runDetailsPage = workflowListPage.viewRunDetails();
@@ -58,9 +59,9 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void testSingleWorkflowExecutionWithTokens() {
-        WorkflowListPage workflowListPage = ddapPage.getNavBar()
+        WorkflowServersPage workflowServersPage = ddapPage.getNavBar()
                 .goToWorkflows();
-        WorkflowManagePage managePage = workflowListPage.clickManage();
+        WorkflowManagePage managePage = workflowServersPage.clickManage();
 
         managePage.fetchDatasetResult(datasetUrl);
         managePage.waitForInflightRequests();
@@ -74,14 +75,15 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         managePage.waitForInflightRequests();
         managePage.fillFieldFromDropdown(By.name("md5Sum.inputFile"), "bam_file");
 
-        workflowListPage = managePage.saveEntity(1);
+        WorkflowListPage workflowListPage = managePage.saveEntity(1);
         workflowListPage.assertNewRunsInState(asList(QUEUED, RUNNING, COMPLETE));
     }
 
     @Test
     public void testMultipleWorkflowExecutionWithTokens() {
-        WorkflowListPage workflowListPage = ddapPage.getNavBar()
+        WorkflowServersPage workflowServersPage = ddapPage.getNavBar()
                 .goToWorkflows();
+        WorkflowListPage workflowListPage = workflowServersPage.clickViewRuns();
         WorkflowManagePage managePage = workflowListPage.clickManage();
 
         managePage.fetchDatasetResult(datasetUrl);
@@ -104,8 +106,9 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void accessTokensForValidUrlColumns() {
-        WorkflowListPage workflowListPage = ddapPage.getNavBar()
+        WorkflowServersPage workflowServersPage = ddapPage.getNavBar()
                 .goToWorkflows();
+        WorkflowListPage workflowListPage = workflowServersPage.clickViewRuns();
         WorkflowManagePage managePage = workflowListPage.clickManage();
 
         managePage.fetchDatasetResult(datasetUrl);

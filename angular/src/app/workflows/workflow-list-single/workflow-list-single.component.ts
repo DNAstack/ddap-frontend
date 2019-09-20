@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { PaginationTypes } from '../../shared/paginator/pagination-type.enum';
 import { WorkflowRunsResponse } from '../workflow.model';
 import { WorkflowService } from '../workflows.service';
 
@@ -15,6 +16,8 @@ export class WorkflowListSingleComponent implements OnInit {
   workflowRunsResponse: WorkflowRunsResponse;
 
   newlyCreatedWorkflows?: any[];
+  pageToken: string;
+  paginationType = PaginationTypes.unidirectional;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -31,15 +34,15 @@ export class WorkflowListSingleComponent implements OnInit {
   }
 
   private redirectToPage(pageToken: string) {
-    // console.log(pageToken);
-    // TODO
+    this.getWorkflows(pageToken);
   }
 
-  private getWorkflows() {
+  private getWorkflows(pageToken?: string) {
     const { damId, viewId } = this.route.snapshot.params;
-    this.workflowService.getWorkflowRuns(damId, viewId)
+    this.workflowService.getWorkflowRuns(damId, viewId, pageToken)
       .subscribe((workflowRunsResponse: WorkflowRunsResponse) => {
         this.workflowRunsResponse = workflowRunsResponse;
+        this.pageToken = workflowRunsResponse.next_page_token || '';
       });
   }
 
