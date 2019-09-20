@@ -26,7 +26,6 @@ import { RouterModule } from '@angular/router';
 import { TagInputModule } from 'ngx-chips';
 import { ClipboardModule } from 'ngx-clipboard';
 
-import { AsEntityModelPipe } from './as-entity-model.pipe';
 import { BeaconSearchBarComponent } from './beacon-search-bar/beacon-search-bar.component';
 import { LimitSearchComponent } from './beacon-search-bar/limit-search/limit-search.component';
 import { BeaconResultComponent } from './beacons/beacon-result/beacon-result.component';
@@ -66,7 +65,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     RealmChangeConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
-    AsEntityModelPipe,
     SandboxBannerComponent,
     FormFooterErrorComponent,
   ],
@@ -146,7 +144,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     RealmChangeConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
-    AsEntityModelPipe,
     SandboxBannerComponent,
     FormFooterErrorComponent,
   ],
