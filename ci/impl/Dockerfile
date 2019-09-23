@@ -29,6 +29,7 @@ RUN ./mvnw -B versions:set -DnewVersion=${APP_VERSION}
 # Now add sources, which will bust the cache.
 ADD target/src ./src
 ADD target/angular ./angular
+ADD target/shared ./shared
 
 # Need libatomic1 for protoc. Do this as late as possible to
 # avoid busting cache before dependency resolution.
