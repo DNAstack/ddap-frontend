@@ -41,8 +41,8 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
     public void testSingleSimpleWorkflowExecution() {
         WorkflowWesServersPage workflowWesServersPage = ddapPage.getNavBar()
                 .goToWorkflows();
-        workflowWesServersPage.clickViewRuns();
-        WorkflowManagePage managePage = workflowWesServersPage.clickManage();
+        WorkflowListPage workflowListPage = workflowWesServersPage.clickViewRuns();
+        WorkflowManagePage managePage = workflowListPage.clickManage();
 
         managePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-workflow-wes-view"));
         managePage.fillField(DdapBy.se("inp-workflow-wdl"), loadTemplate("/com/dnastack/ddap/workflow/simple-workflow.wdl"));
@@ -50,7 +50,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         managePage.waitForInflightRequests();
         managePage.fillField(By.name("test.name"), "e2e-test");
 
-        WorkflowListPage workflowListPage = managePage.saveEntity(1);
+        workflowListPage = managePage.saveEntity(1);
         workflowListPage.assertNewRunsInState(asList(RUNNING, COMPLETE));
 
         WorkflowDetailPage runDetailsPage = workflowListPage.viewRunDetails();
@@ -61,7 +61,8 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
     public void testSingleWorkflowExecutionWithTokens() {
         WorkflowWesServersPage workflowWesServersPage = ddapPage.getNavBar()
                 .goToWorkflows();
-        WorkflowManagePage managePage = workflowWesServersPage.clickManage();
+        WorkflowListPage workflowListPage = workflowWesServersPage.clickViewRuns();
+        WorkflowManagePage managePage = workflowListPage.clickManage();
 
         managePage.fetchDatasetResult(datasetUrl);
         managePage.waitForInflightRequests();
@@ -75,7 +76,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         managePage.waitForInflightRequests();
         managePage.fillFieldFromDropdown(By.name("md5Sum.inputFile"), "bam_file");
 
-        WorkflowListPage workflowListPage = managePage.saveEntity(1);
+        workflowListPage = managePage.saveEntity(1);
         workflowListPage.assertNewRunsInState(asList(QUEUED, RUNNING, COMPLETE));
     }
 

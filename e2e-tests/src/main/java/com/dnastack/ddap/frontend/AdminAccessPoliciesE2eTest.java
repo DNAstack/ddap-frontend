@@ -15,6 +15,7 @@ import static com.dnastack.ddap.common.page.NavBar.damPoliciesLink;
 
 @SuppressWarnings("Duplicates")
 public class AdminAccessPoliciesE2eTest extends AbstractFrontendE2eTest {
+
     private static final String REALM = generateRealmName(AdminAccessPoliciesE2eTest.class.getSimpleName());
 
     @Override
