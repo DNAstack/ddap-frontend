@@ -220,7 +220,7 @@
                             <addProtoSources>all</addProtoSources>
                             <includeMavenTypes>direct</includeMavenTypes>
                             <inputDirectories>
-                                <include>${basedir}/src/main/resources/protos</include>
+                                <include>${basedir}/shared/protos</include>
                             </inputDirectories>
                         </configuration>
                     </execution>

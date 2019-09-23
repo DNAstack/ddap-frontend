@@ -3,9 +3,9 @@
 set -e
 set -x
 
-COMMON_PROTO_FILE=./proto/common/models/common.proto
-SRC_DAM_PROTO_FILE=./proto/dam_service.proto
-SRC_IC_PROTO_FILE=./proto/ic_service.proto
+COMMON_PROTO_FILE=../shared/protos/proto/models/common.proto
+SRC_DAM_PROTO_FILE=../shared/protos/dam_service.proto
+SRC_IC_PROTO_FILE=../shared/protos/ic_service.proto
 OUT_DAM_FILE=dam-service
 OUT_IC_FILE=ic-service
 TMP_DIR="./tmp"

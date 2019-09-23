@@ -10,8 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
-    "proto": "./scripts/generate_proto.sh",
-    "proto:download": "./scripts/download_proto.sh"
+    "proto": "./scripts/generate_proto.sh"
   },
   "private": true,
   "dependencies": {

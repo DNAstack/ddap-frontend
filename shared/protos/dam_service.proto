@@ -1,10 +1,10 @@
-// Copyright 2018 Google LLC
+// Copyright 2019 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,9 @@ syntax = "proto3";
 // end points to receive requests and returns responses using these messages.
 package dam.v1;
 
-option go_package = "github.com/googlegenomics/ga4gh-identity/dam/api/v1";
+import "proto/models/common.proto";
+
+option go_package = "github.com/GoogleCloudPlatform/healthcare-federated-access-services/proto/dam/v1";
 
 message DamConfig {
   string version = 1;
@@ -41,6 +43,8 @@ message TrustedPassportIssuer {
   string translate_using = 2;
   map<string, string> ui = 3;
   string client_id = 4;
+  string auth_url = 5;
+  string token_url = 6;
 }
 
 message TrustedSource {
@@ -82,6 +86,7 @@ message View {
   message Item {
     map<string, string> vars = 1;
   }
+
   string service_template = 1;
   string version = 2;
   string topic = 3;
@@ -111,6 +116,7 @@ message Client {
   int64 revision = 2;
   double commit_time = 3;
   map<string, string> ui = 4;
+  repeated string redirect_uris = 5;
 }
 
 message ServiceTemplate {
@@ -130,7 +136,6 @@ message ServiceRole {
 
 message AccessRole {
   repeated string policies = 1;
-  map<string, string> ui = 2;
   repeated PolicyBasis computed_policy_basis = 3 [json_name = "policyBasis"];
 }
 
@@ -291,6 +296,8 @@ message GetInfoResponse {
   string name = 1;
   repeated string versions = 2;
   int64 start_time = 3;
+  repeated string modules = 4;
+  map<string, string> ui = 5;
 }
 
 message RealmRequest {
@@ -454,12 +461,24 @@ message BackgroundProcessResponse {
   BackgroundProcess process = 1;
 }
 
+message TokensRequest {}
+
+message TokensResponse {
+  repeated models.TokenMetadata tokens = 1;
+}
+
+message TokenRequest {}
+
+message TokenResponse {
+  models.TokenMetadata token = 1;
+}
+
 ////////////////////////////////////////////////
 
 message ConfigModification {
   message PersonaModification {
     map<string, AccessList> resources = 1;
-    // TODO(cdvoisin): remove add_resources and remove_resources when DDAP no
+    // TODO: remove add_resources and remove_resources when DDAP no
     // longer needs them.
     map<string, AccessList> add_resources = 2;
     map<string, AccessList> remove_resources = 3;

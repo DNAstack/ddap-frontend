@@ -1,10 +1,10 @@
-// Copyright 2018 Google LLC
+// Copyright 2019 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,9 +18,9 @@ syntax = "proto3";
 // end points to receive requests and returns responses using these messages.
 package ic.v1;
 
-import "common/models/common.proto";
+import "proto/models/common.proto";
 
-option go_package = "github.com/googlegenomics/ga4gh-identity/ic/api/v1";
+option go_package = "github.com/GoogleCloudPlatform/healthcare-federated-access-services/proto/ic/v1";
 
 ///////////////////////////////////////////////////
 // oidc
@@ -29,9 +29,12 @@ message OidcConfig {
   string issuer = 1 [json_name = "issuer"];
   string jwks_uri = 2 [json_name = "jwks_uri"];
   string auth_url = 3 [json_name = "auth_url"];
-  repeated string response_types_supported = 4 [json_name = "response_types_supported"];
+  repeated string response_types_supported = 4
+  [json_name = "response_types_supported"];
   string token_endpoint = 5 [json_name = "token_endpoint"];
+  string revocation_endpoint = 8 [json_name = "revocation_endpoint"];
   string userinfo_endpoint = 6 [json_name = "userinfo_endpoint"];
+  repeated string scopes_supported = 7 [json_name = "scopes_supported"];
 }
 
 ///////////////////////////////////////////////////
@@ -42,8 +45,9 @@ message IcConfig {
   double commit_time = 3;
   map<string, IdentityProvider> identity_providers = 4;
   map<string, Client> clients = 5;
-  map<string, common.models.AccountTag> account_tags = 6;
+  map<string, models.AccountTag> account_tags = 6;
   ConfigOptions options = 7;
+  map<string, string> ui = 8;
 }
 
 message IdentityProvider {
@@ -150,7 +154,8 @@ message ConnectedAccount {
   map<string, AccountClaimList> claims = 7;
   repeated string tags = 8;
   IdentityProvider computed_identity_provider = 9
-      [json_name = "identityProvider"];
+  [json_name = "identityProvider"];
+  string computed_login_hint = 10 [json_name = "loginHint"];
 }
 
 message AccountClaimList {
@@ -192,6 +197,7 @@ message GetInfoResponse {
   repeated string versions = 2;
   int64 start_time = 3;
   repeated string modules = 4;
+  map<string, string> ui = 5;
 }
 
 message RealmRequest {
@@ -279,10 +285,43 @@ message AccountSubjectResponse {
   ConnectedAccount item = 1;
 }
 
+message SubjectClaimsRequest {
+  ConfigModification modification = 1;
+}
+
+message SubjectClaimsResponse {
+  map<string, AccountClaimList> claims = 1;
+}
+
 message ClientSecretRequest {}
 
 message ClientSecretResponse {
   string secret = 1;
+}
+
+message TokenMetadata {
+  string token_type = 1;
+  int64 issued_at = 2;
+  string scope = 3;
+  string identity_provider = 4;
+  string subject = 5;
+  string nonce = 6;
+}
+
+message TokenMetadataRequest {}
+
+message TokenMetadataResponse {
+  TokenMetadata token_metadata = 1;
+}
+
+message TokensMetadataRequest {}
+
+message TokensMetadataResponse {
+  map<string, TokenMetadata> tokens_metadata = 1;
+}
+
+message RevocationRequest {
+  string token = 1;
 }
 
 ///////////////////////////////////////////////////
