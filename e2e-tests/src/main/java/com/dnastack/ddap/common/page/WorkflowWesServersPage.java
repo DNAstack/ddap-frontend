@@ -9,12 +9,13 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class WorkflowServersPage extends AnyDdapPage {
-    public WorkflowServersPage(WebDriver driver) {
+public class WorkflowWesServersPage extends AnyDdapPage {
+
+    public WorkflowWesServersPage(WebDriver driver) {
         super(driver);
         waitForInflightRequests();
         WebElement pageTitle = driver.findElement(DdapBy.se("page-title"));
-        assertThat(pageTitle.getText(), equalTo("Workflows"));
+        assertThat(pageTitle.getText(), equalTo("WES Servers"));
     }
 
     public WorkflowListPage clickViewRuns() {
@@ -29,4 +30,5 @@ public class WorkflowServersPage extends AnyDdapPage {
                 .click();
         return new WorkflowManagePage(driver);
     }
+
 }

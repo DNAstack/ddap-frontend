@@ -39,8 +39,8 @@ export class WorkflowFormComponent implements Form, OnInit, OnChanges {
   selectedView: string;
 
   constructor(private formBuilder: FormBuilder,
-              private workflowService: WorkflowService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private workflowService: WorkflowService) {
   }
 
   ngOnInit(): void {

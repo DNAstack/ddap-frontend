@@ -29,7 +29,7 @@ public class ReactiveWesClient {
     }
 
     public Mono<WorkflowExecutionRunsResponseModel> getRuns(URI wesServerUrl, String wesToken, String nextPage) {
-        final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs?page_token=" + nextPage);
+        final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs?page_size=20&page_token=" + nextPage);
         final Map<String, Object> variables = new HashMap<>();
 
         return webClientFactory.getWebClient()
@@ -41,7 +41,7 @@ public class ReactiveWesClient {
     }
 
     public Mono<WorkflowExecutionRunModel> addRun(URI wesServerUrl, String wesToken, MultiValueMap<String, HttpEntity<?>> multipart) {
-        final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs?page_size=10");
+        final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs");
         final Map<String, Object> variables = new HashMap<>();
 
         return webClientFactory.getWebClient()

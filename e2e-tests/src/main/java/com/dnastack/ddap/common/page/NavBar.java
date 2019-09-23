@@ -154,10 +154,10 @@ public class NavBar {
         return new DataListPage(driver);
     }
 
-    public WorkflowServersPage goToWorkflows() {
+    public WorkflowWesServersPage goToWorkflows() {
         driver.findElement(workflowLink().getSelector()).click();
 
-        return new WorkflowServersPage(driver);
+        return new WorkflowWesServersPage(driver);
     }
 
     public AdminListPage goToAdmin(NavLink navItem) {

@@ -1,4 +1,5 @@
-<ddap-header icon="rules" label="Workflows">
+<ddap-header icon="rules"
+             label="WES Servers">
   <ddap-header-btn
     [navigateTo]="['manage', 'add']"
     [label]="'execute workflow'">
@@ -9,13 +10,13 @@
   <ng-container *ngFor="let resourceViews of wesResourceViews">
     <mat-card *ngFor="let view of resourceViews.views">
       <mat-card-header>
-        <mat-card-title>{{ resourceViews.resource }}</mat-card-title>
-        <mat-card-subtitle>{{ view.label }}</mat-card-subtitle>
+        <mat-card-title>{{ view.label }}</mat-card-title>
+        <mat-card-subtitle>{{ resourceViews.resource }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         {{ view.url }}
       </mat-card-content>
-      <mat-card-actions>
+      <mat-card-actions align="end">
         <a [routerLink]="[resourceViews.damId, 'views', view.name, 'runs']">
           <button mat-button
                   color="primary"
