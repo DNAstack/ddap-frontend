@@ -19,7 +19,7 @@ mkdir -p ${docker_context_dir}
 # Allows us to pass settings.xml configured on local machine or CI server to access private Nexus repo
 mkdir -p ${docker_context_dir}/.m2
 cp -rp src .mvn mvnw pom.xml ${docker_context_dir}
-#cp ~/.m2/*.xml ${docker_context_dir}/.m2
+cp ~/.m2/*.xml ${docker_context_dir}/.m2
 
 # Copy protos
 cp -rp shared ${docker_context_dir}
