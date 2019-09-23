@@ -24,7 +24,7 @@ public class WorkflowListPage extends AnyDdapPage {
         super(driver);
         waitForInflightRequests();
         WebElement pageTitle = driver.findElement(DdapBy.se("page-title"));
-        assertThat(pageTitle.getText(), equalTo("Workflows"));
+        assertThat(pageTitle.getText(), equalTo("Workflow Runs"));
         extractNewWorkflowIdsIfExists(expectedNumberOfNewWorkflowRuns);
     }
 

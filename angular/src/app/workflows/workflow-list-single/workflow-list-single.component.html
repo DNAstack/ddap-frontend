@@ -1,4 +1,5 @@
-<ddap-header icon="rules" label="Workflows">
+<ddap-header [backLink]="['../../../..']"
+             label="Workflow Runs">
   <ddap-header-btn
     [navigateTo]="['manage', 'add']"
     [label]="'execute workflow'">
@@ -27,14 +28,6 @@
   </ng-container>
   <ng-container *ngIf="workflowRunsResponse">
     <mat-accordion>
-      <h3 class="flex vertical-center">
-      <span class="flex vertical-center">
-        <mat-icon class="icon icon-resource"></mat-icon> {{ workflowRunsResponse.ui.resource }}
-      </span>
-        <span class="flex vertical-center">
-        (<mat-icon class="icon icon-views"></mat-icon> {{ workflowRunsResponse.ui.view }})
-      </span>
-      </h3>
       <mat-expansion-panel [disabled]="true">
         <mat-expansion-panel-header>
           <mat-panel-title>Run Identifier</mat-panel-title>
@@ -58,10 +51,10 @@
         </mat-action-row>
       </mat-expansion-panel>
     </mat-accordion>
-    <ddap-paginator *ngIf="pageToken.length"
+    <ddap-paginator *ngIf="workflowRunsResponse.next_page_token"
                     [nextPage]="workflowRunsResponse.next_page_token"
                     [paginationType]="paginationType"
-                    (pageChangeRequested)="redirectToPage($event)">
+                    (pageChangeRequested)="getWorkflows($event)">
     </ddap-paginator>
   </ng-container>
 </ddap-main>

@@ -39,10 +39,10 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void testSingleSimpleWorkflowExecution() {
-        WorkflowServersPage workflowServersPage = ddapPage.getNavBar()
+        WorkflowWesServersPage workflowWesServersPage = ddapPage.getNavBar()
                 .goToWorkflows();
-        workflowServersPage.clickViewRuns();
-        WorkflowManagePage managePage = workflowServersPage.clickManage();
+        workflowWesServersPage.clickViewRuns();
+        WorkflowManagePage managePage = workflowWesServersPage.clickManage();
 
         managePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-workflow-wes-view"));
         managePage.fillField(DdapBy.se("inp-workflow-wdl"), loadTemplate("/com/dnastack/ddap/workflow/simple-workflow.wdl"));
@@ -59,9 +59,9 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void testSingleWorkflowExecutionWithTokens() {
-        WorkflowServersPage workflowServersPage = ddapPage.getNavBar()
+        WorkflowWesServersPage workflowWesServersPage = ddapPage.getNavBar()
                 .goToWorkflows();
-        WorkflowManagePage managePage = workflowServersPage.clickManage();
+        WorkflowManagePage managePage = workflowWesServersPage.clickManage();
 
         managePage.fetchDatasetResult(datasetUrl);
         managePage.waitForInflightRequests();
@@ -81,9 +81,9 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void testMultipleWorkflowExecutionWithTokens() {
-        WorkflowServersPage workflowServersPage = ddapPage.getNavBar()
+        WorkflowWesServersPage workflowWesServersPage = ddapPage.getNavBar()
                 .goToWorkflows();
-        WorkflowListPage workflowListPage = workflowServersPage.clickViewRuns();
+        WorkflowListPage workflowListPage = workflowWesServersPage.clickViewRuns();
         WorkflowManagePage managePage = workflowListPage.clickManage();
 
         managePage.fetchDatasetResult(datasetUrl);
@@ -106,9 +106,9 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void accessTokensForValidUrlColumns() {
-        WorkflowServersPage workflowServersPage = ddapPage.getNavBar()
+        WorkflowWesServersPage workflowWesServersPage = ddapPage.getNavBar()
                 .goToWorkflows();
-        WorkflowListPage workflowListPage = workflowServersPage.clickViewRuns();
+        WorkflowListPage workflowListPage = workflowWesServersPage.clickViewRuns();
         WorkflowManagePage managePage = workflowListPage.clickManage();
 
         managePage.fetchDatasetResult(datasetUrl);

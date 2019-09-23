@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 
 import { SimplifiedWesResourceViews } from '../workflow.model';
 import { WorkflowService } from '../workflows.service';
@@ -13,9 +12,7 @@ export class WorkflowListMultiComponent implements OnInit {
 
   wesResourceViews: SimplifiedWesResourceViews[];
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private workflowService: WorkflowService) {
+  constructor(private workflowService: WorkflowService) {
   }
 
   ngOnInit(): void {

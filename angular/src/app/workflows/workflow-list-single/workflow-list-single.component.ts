@@ -1,5 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PaginationTypes } from '../../shared/paginator/pagination-type.enum';
@@ -16,12 +15,10 @@ export class WorkflowListSingleComponent implements OnInit {
   workflowRunsResponse: WorkflowRunsResponse;
 
   newlyCreatedWorkflows?: any[];
-  pageToken: string;
   paginationType = PaginationTypes.unidirectional;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private snackBar: MatSnackBar,
               private workflowService: WorkflowService) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation && navigation.extras.state) {
@@ -33,16 +30,11 @@ export class WorkflowListSingleComponent implements OnInit {
     this.getWorkflows();
   }
 
-  private redirectToPage(pageToken: string) {
-    this.getWorkflows(pageToken);
-  }
-
   private getWorkflows(pageToken?: string) {
     const { damId, viewId } = this.route.snapshot.params;
     this.workflowService.getWorkflowRuns(damId, viewId, pageToken)
       .subscribe((workflowRunsResponse: WorkflowRunsResponse) => {
         this.workflowRunsResponse = workflowRunsResponse;
-        this.pageToken = workflowRunsResponse.next_page_token || '';
       });
   }
 
