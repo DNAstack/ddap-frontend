@@ -1,6 +1,7 @@
 package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.util.WebPageScroller;
 import org.hamcrest.Matcher;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -59,17 +60,14 @@ public class AdminManagePage extends AdminDdapPage {
     public void fillTagField(By fieldSelector, String value) {
         WebElement tagInput = new WebDriverWait(driver,
                                                 5).until(ExpectedConditions.elementToBeClickable(fieldSelector));
-        // Need to scroll to input or else it may not be clickable
-        scrollTo(tagInput);
+        WebPageScroller.scrollTo(driver, tagInput);
         tagInput.click();
         tagInput.findElement(By.tagName("input")).sendKeys(value, Keys.ENTER);
     }
 
     public void clickCheckbox(By checkboxSelector) {
         WebElement checkbox = driver.findElement(checkboxSelector);
-
-        this.scrollTo(checkbox);
-
+        WebPageScroller.scrollTo(driver, checkbox);
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(checkbox));
         checkbox.click();
     }
@@ -77,15 +75,13 @@ public class AdminManagePage extends AdminDdapPage {
     public WebElement findCheckedCheckbox(String checkboxId) {
         WebElement checkbox = new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.xpath(
                 "//mat-checkbox[@id='" + checkboxId + "' and contains(@class, 'mat-checkbox-checked')]")));
-        this.scrollTo(checkbox);
-
+        WebPageScroller.scrollTo(driver, checkbox);
         return checkbox;
     }
 
     public WebElement findCheckbox(String checkboxId) {
         WebElement checkbox = driver.findElement(By.xpath("//mat-checkbox[@id='" + checkboxId + "']"));
-
-        this.scrollTo(checkbox);
+        WebPageScroller.scrollTo(driver, checkbox);
 
         return new WebDriverWait(driver, 5)
                 .until(ExpectedConditions.elementToBeClickable(checkbox));
@@ -103,21 +99,21 @@ public class AdminManagePage extends AdminDdapPage {
     public void toggleExpansionPanel(String panelId) {
         WebElement panel = driver.findElement(DdapBy.se(panelId));
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(panel));
-        this.scrollTo(panel);
+        WebPageScroller.scrollTo(driver, panel);
         panel.click();
     }
 
     public void enterButton(By selector) {
         WebElement button = driver.findElement(selector);
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(button));
-        this.scrollTo(button);
+        WebPageScroller.scrollTo(driver, button);
         button.sendKeys(Keys.ENTER);
     }
 
     public void clickButton(By selector) {
         WebElement button = driver.findElement(selector);
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(button));
-        this.scrollTo(button);
+        WebPageScroller.scrollTo(driver, button);
         button.click();
     }
 
@@ -164,7 +160,4 @@ public class AdminManagePage extends AdminDdapPage {
         }
     }
 
-    private void scrollTo(WebElement element) {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-    }
 }

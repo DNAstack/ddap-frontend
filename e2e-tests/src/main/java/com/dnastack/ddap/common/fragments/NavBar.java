@@ -1,6 +1,7 @@
-package com.dnastack.ddap.common.page;
+package com.dnastack.ddap.common.fragments;
 
 import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.page.*;
 import lombok.Value;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -16,6 +17,7 @@ import java.util.stream.Stream;
 import static java.lang.String.format;
 
 public class NavBar {
+
     private WebDriver driver;
 
     @Value

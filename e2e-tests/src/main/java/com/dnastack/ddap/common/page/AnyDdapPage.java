@@ -1,10 +1,9 @@
 package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.fragments.NavBar;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
 import org.openqa.selenium.remote.Augmenter;
@@ -30,6 +29,11 @@ public class AnyDdapPage {
         return new NavBar(getDriver());
     }
 
+    public void waitForInflightRequests() {
+        new WebDriverWait(driver, 5)
+                .until(invisibilityOfElementLocated(By.xpath("//mat-progress-bar[contains(@class, 'main-progress-bar')]")));
+    }
+
     private void acknowledgeSandboxIfAvailable() {
         try {
             WebStorage webStorage = (WebStorage) new Augmenter().augment(driver);
@@ -44,8 +48,4 @@ public class AnyDdapPage {
         }
     }
 
-    public void waitForInflightRequests() {
-        new WebDriverWait(driver, 5)
-                .until(invisibilityOfElementLocated(By.xpath("//mat-progress-bar[contains(@class, 'main-progress-bar')]")));
-    }
 }

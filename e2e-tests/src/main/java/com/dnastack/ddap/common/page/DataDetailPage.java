@@ -1,5 +1,6 @@
 package com.dnastack.ddap.common.page;
 
+import com.dnastack.ddap.common.fragments.ExpandedAccessibleViewItem;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

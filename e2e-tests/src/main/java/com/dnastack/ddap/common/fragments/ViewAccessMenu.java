@@ -1,4 +1,4 @@
-package com.dnastack.ddap.common.page;
+package com.dnastack.ddap.common.fragments;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;

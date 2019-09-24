@@ -1,6 +1,8 @@
-package com.dnastack.ddap.common.page;
+package com.dnastack.ddap.common.fragments;
 
 import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.page.AdminDdapPage;
+import com.dnastack.ddap.common.page.AnyDdapPage;
 import org.openqa.selenium.WebDriver;
 
 public class ConfirmationRealmChangeDialog {

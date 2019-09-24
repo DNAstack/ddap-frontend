@@ -1,7 +1,7 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.fragments.DataListItem;
 import com.dnastack.ddap.common.page.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dnastack.ddap.common.page.NavBar.dataLink;
+import static com.dnastack.ddap.common.fragments.NavBar.dataLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
@@ -21,22 +21,16 @@ import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("Duplicates")
 public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
-    private static final String REALM = generateRealmName(BeaconSearchE2eTest.class.getSimpleName());
 
-    @Override
-    protected String getRealm() {
-        return REALM;
-    }
+    private static final String REALM = generateRealmName(BeaconSearchE2eTest.class.getSimpleName());
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", testConfig, "1", REALM);
-    }
+        final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
+        setupRealmConfig("administrator", damConfig, "1", REALM);
 
-    @Override
-    protected AnyDdapPage login(ICLoginPage icLoginPage) {
-        return icLoginPage.loginAsNciResearcher(AnyDdapPage::new);
+        ICLoginPage icLoginPage = startLogin(REALM);
+        ddapPage = icLoginPage.loginAsNciResearcher(AdminDdapPage::new);
     }
 
     @Test

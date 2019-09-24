@@ -1,6 +1,5 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
 import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminListPage;
@@ -11,16 +10,12 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static com.dnastack.ddap.common.page.NavBar.icClientsLink;
+import static com.dnastack.ddap.common.fragments.NavBar.icClientsLink;
 
 @SuppressWarnings("Duplicates")
 public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
-    private static final String REALM = generateRealmName(AdminIcClientsE2eTest.class.getSimpleName());
 
-    @Override
-    protected String getRealm() {
-        return REALM;
-    }
+    private static final String REALM = generateRealmName(AdminIcClientsE2eTest.class.getSimpleName());
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
@@ -28,11 +23,9 @@ public class AdminIcClientsE2eTest extends AbstractFrontendE2eTest {
         final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig("administrator", damConfig, "1", REALM);
         setupIcConfig("administrator", icConfig, REALM);
-    }
 
-    @Override
-    protected AdminDdapPage login(ICLoginPage icLoginPage) {
-        return icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+        ICLoginPage icLoginPage = startLogin(REALM);
+        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
     }
 
     @Test

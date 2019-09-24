@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class IdentityPage extends AnyDdapPage {
+
     public IdentityPage(WebDriver driver) {
         super(driver);
         driver.findElement(By.xpath("//h2[contains(text(), 'My Identity')]"));
@@ -27,4 +28,5 @@ public class IdentityPage extends AnyDdapPage {
             .map(WebElement::getText)
             .collect(Collectors.toList());
     }
+
 }

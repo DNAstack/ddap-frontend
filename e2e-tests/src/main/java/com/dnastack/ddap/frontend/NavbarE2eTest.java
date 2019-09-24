@@ -1,43 +1,34 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.fragments.NavBar;
 import com.dnastack.ddap.common.page.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 
-import static com.dnastack.ddap.common.page.NavBar.*;
+import static com.dnastack.ddap.common.fragments.NavBar.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertFalse;
 
 @SuppressWarnings("Duplicates")
 public class NavbarE2eTest extends AbstractFrontendE2eTest {
-    private static final String REALM = generateRealmName(NavbarE2eTest.class.getSimpleName());
 
-    @Override
-    protected String getRealm() {
-        return REALM;
-    }
+    private static final String REALM = generateRealmName(NavbarE2eTest.class.getSimpleName());
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", testConfig, "1", REALM);
-    }
+        final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
+        setupRealmConfig("administrator", damConfig, "1", REALM);
 
-    @Override
-    protected AnyDdapPage login(ICLoginPage icLoginPage) {
-        return icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+        ICLoginPage icLoginPage = startLogin(REALM);
+        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
     }
 
     @Test

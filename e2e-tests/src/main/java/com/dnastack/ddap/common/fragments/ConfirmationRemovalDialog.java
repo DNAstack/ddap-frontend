@@ -1,6 +1,7 @@
-package com.dnastack.ddap.common.page;
+package com.dnastack.ddap.common.fragments;
 
 import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.page.AdminListPage;
 import org.openqa.selenium.WebDriver;
 
 public class ConfirmationRemovalDialog {

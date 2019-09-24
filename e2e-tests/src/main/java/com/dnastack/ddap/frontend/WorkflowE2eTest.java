@@ -1,6 +1,5 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.AbstractFrontendE2eTest;
 import com.dnastack.ddap.common.DdapBy;
 import com.dnastack.ddap.common.page.*;
 import org.junit.BeforeClass;
@@ -23,18 +22,11 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
+        String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig("administrator", testConfig, "1", REALM);
-    }
 
-    @Override
-    protected String getRealm() {
-        return REALM;
-    }
-
-    @Override
-    protected AnyDdapPage login(ICLoginPage icLoginPage) {
-        return icLoginPage.loginAsNciResearcher(AnyDdapPage::new);
+        ICLoginPage icLoginPage = startLogin(REALM);
+        ddapPage = icLoginPage.loginAsNciResearcher(AdminDdapPage::new);
     }
 
     @Test

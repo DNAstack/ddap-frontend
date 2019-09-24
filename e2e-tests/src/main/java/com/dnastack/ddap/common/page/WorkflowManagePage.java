@@ -1,14 +1,15 @@
 package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.DdapBy;
-import org.hamcrest.Matcher;
-import org.openqa.selenium.*;
+import com.dnastack.ddap.common.util.WebPageScroller;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
-
-import static org.junit.Assert.assertThat;
 
 public class WorkflowManagePage extends AnyDdapPage {
 
@@ -57,17 +58,10 @@ public class WorkflowManagePage extends AnyDdapPage {
         fillFieldFromDropdown(fieldSelector, null);
     }
 
-    public void enterButton(By selector) {
-        WebElement button = driver.findElement(selector);
-        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(button));
-        this.scrollTo(button);
-        button.sendKeys(Keys.ENTER);
-    }
-
     public void clickButton(By selector) {
         WebElement button = driver.findElement(selector);
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(button));
-        this.scrollTo(button);
+        WebPageScroller.scrollTo(driver, button);
         button.click();
     }
 
@@ -79,23 +73,6 @@ public class WorkflowManagePage extends AnyDdapPage {
 
     public void clickSave() {
         this.clickButton(DdapBy.se("btn-execute"));
-    }
-
-    public boolean hasErrors() {
-        return !driver.findElements(By.tagName("mat-error")).isEmpty();
-    }
-
-    public void assertError(Matcher<String> messageMatcher) {
-        try {
-            final WebElement errorField = new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(By.tagName("mat-error")));
-            assertThat(errorField.getText(), messageMatcher);
-        } catch (NoSuchElementException nsee) {
-            throw new AssertionError("No error tag found.", nsee);
-        }
-    }
-
-    private void scrollTo(WebElement element) {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
     public List<WebElement> fetchDatasetResult(String datasetUrl) {
@@ -118,7 +95,7 @@ public class WorkflowManagePage extends AnyDdapPage {
     public List<WebElement> getAccessTokens(String columnName) {
         fillFieldFromDropdown(DdapBy.se("select-column"), columnName);
         WebElement access = driver.findElement(DdapBy.se("btn-get-access"));
-        scrollTo(access);
+        WebPageScroller.scrollTo(driver, access);
         access.click();
         new WebDriverWait(driver, 15)
                 .until(ExpectedConditions.numberOfElementsToBeMoreThan(DdapBy.se("access-token"), 0));
@@ -128,9 +105,7 @@ public class WorkflowManagePage extends AnyDdapPage {
 
     public void clickCheckbox(By checkboxSelector) {
         WebElement checkbox = driver.findElement(checkboxSelector);
-
-        this.scrollTo(checkbox);
-
+        WebPageScroller.scrollTo(driver, checkbox);
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(checkbox));
         checkbox.click();
     }

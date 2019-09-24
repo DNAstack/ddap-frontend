@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class WorkflowDetailPage extends AnyDdapPage{
+
     public WorkflowDetailPage(WebDriver driver) {
         super(driver);
         waitForInflightRequests();
@@ -20,4 +21,5 @@ public class WorkflowDetailPage extends AnyDdapPage{
         WebElement jsonEditor = driver.findElement(DdapBy.se("run-json-editor"));
         assertTrue(jsonEditor.isDisplayed());
     }
+
 }

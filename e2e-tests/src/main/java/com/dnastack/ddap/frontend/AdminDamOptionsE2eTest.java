@@ -1,38 +1,15 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.AbstractFrontendE2eTest;
-import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminOptionPage;
-import com.dnastack.ddap.common.page.ICLoginPage;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.IOException;
-
-import static com.dnastack.ddap.common.page.NavBar.damOptionsLink;
+import static com.dnastack.ddap.common.fragments.NavBar.damOptionsLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 
 @SuppressWarnings("Duplicates")
-public class AdminDamOptionsE2eTest extends AbstractFrontendE2eTest {
-    private static final String REALM = generateRealmName(AdminDamOptionsE2eTest.class.getSimpleName());
-
-    @Override
-    protected String getRealm() {
-        return REALM;
-    }
-
-    @BeforeClass
-    public static void oneTimeSetup() throws IOException {
-        final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", testConfig, "1", REALM);
-    }
-
-    @Override
-    protected AdminDdapPage login(ICLoginPage icLoginPage) {
-        return icLoginPage.loginAsAdministrator(AdminDdapPage::new);
-    }
+public class AdminDamOptionsE2eTest extends AbstractAdminFrontendE2eTest {
 
     @Test
     public void submitBooleanOptionWronglyWithTypeError() {

@@ -1,5 +1,7 @@
-package com.dnastack.ddap.common.page;
+package com.dnastack.ddap.common.fragments;
 
+import com.dnastack.ddap.common.page.DataDetailPage;
+import com.dnastack.ddap.common.util.WebPageScroller;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static java.lang.String.format;
 
 public class DataListItem {
+
     private WebDriver driver;
     private String resourceName;
 
@@ -22,6 +25,7 @@ public class DataListItem {
         final WebElement viewButton = listItem.findElement(By.xpath(".//*[@data-se = 'view-set-btn']"));
         // need to wait for button to become visible.
         new WebDriverWait(driver, 5).until(d -> viewButton.isDisplayed());
+        WebPageScroller.scrollTo(driver, viewButton);
         viewButton.click();
 
         return new WebDriverWait(driver, 5).until(DataDetailPage::new);
@@ -34,4 +38,5 @@ public class DataListItem {
         new WebDriverWait(driver, 50).until(d -> we.isDisplayed());
         return we;
     }
+
 }
