@@ -1,4 +1,4 @@
-package com.dnastack.ddap.common;
+package com.dnastack.ddap.common.util;
 
 import org.openqa.selenium.By;
 

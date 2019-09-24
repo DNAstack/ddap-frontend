@@ -1,5 +1,6 @@
 package com.dnastack.ddap.common.page;
 
+import com.dnastack.ddap.common.TestingPersona;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +12,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.dnastack.ddap.common.TestingPersona.*;
 import static java.lang.String.format;
 
 @Slf4j
@@ -18,27 +20,26 @@ public class ICLoginPage {
 
     private WebDriver driver;
 
-    private By personaLoginButton(String persona) {
-        return By.xpath(format("//a[contains(@href, '%s')]", persona));
-    }
-
     public ICLoginPage(WebDriver driver) {
         this.driver = driver;
         log.info("Testing if {} is an IC login page", driver.getCurrentUrl());
+        new WebDriverWait(driver, 5)
+                .until(ExpectedConditions.visibilityOfElementLocated(personaLoginButton(NCI_RESEARCHER)));
+    }
 
-        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(personaLoginButton("nci_researcher")));
-        driver.findElement(personaLoginButton("nci_researcher"));
+    private By personaLoginButton(TestingPersona persona) {
+        return By.xpath(format("//a[contains(@href, '%s')]", persona.getValue()));
     }
 
     public <T extends AnyDdapPage> T loginAsNciResearcher(Function<WebDriver, T> pageConstructor) {
-        return loginAsPersona("nci_researcher", pageConstructor);
+        return loginAsPersona(NCI_RESEARCHER, pageConstructor);
     }
 
     public <T extends AdminDdapPage> T loginAsAdministrator(Function<WebDriver, T> pageConstructor) {
-        return loginAsPersona("administrator", pageConstructor);
+        return loginAsPersona(ADMINISTRATOR, pageConstructor);
     }
 
-    public <T extends AnyDdapPage> T loginAsPersona(String persona, Function<WebDriver, T> pageConstructor) {
+    public <T extends AnyDdapPage> T loginAsPersona(TestingPersona persona, Function<WebDriver, T> pageConstructor) {
         driver.findElement(personaLoginButton(persona)).click();
         return pageConstructor.apply(driver);
     }

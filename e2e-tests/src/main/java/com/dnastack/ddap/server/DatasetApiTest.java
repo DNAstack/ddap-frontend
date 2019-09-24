@@ -1,19 +1,18 @@
 package com.dnastack.ddap.server;
 
+import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.dnastack.ddap.common.TestingPersona;
+import dam.v1.DamService;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+
 import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
-import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-
-import com.dnastack.ddap.common.AbstractBaseE2eTest;
-import dam.v1.DamService;
-import java.io.IOException;
-import java.util.Arrays;
-import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Test;
 
 public class DatasetApiTest extends AbstractBaseE2eTest {
 
@@ -23,19 +22,18 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
     private static final String DATASET_URL_WITH_RESOLVED_SCHEMA = "https://storage.googleapis"
         + ".com/ddap-e2etest-objects/dataset/subjects-referenced-schema";
 
-
     @Before
     public void setupRealm() throws IOException {
         String configJson = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(configJson, damConfigBuilder);
-        setupRealmConfig("administrator", configJson, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, configJson, "1", REALM);
     }
 
     @Test
     public void shouldGetSingleDatasetFromFetch() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         // @formatter:off
         given()
@@ -58,8 +56,8 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldGetSingleDatasetFromFetchAndResolveRemoteSchema() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         // @formatter:off
         given()
@@ -84,8 +82,8 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldGetErrorMessageFromNonexistantDataset() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         // @formatter:off
         given()

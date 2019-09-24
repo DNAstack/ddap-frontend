@@ -2,6 +2,7 @@ package com.dnastack.ddap.frontend;
 
 import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.ICLoginPage;
+import com.dnastack.ddap.common.TestingPersona;
 import org.junit.BeforeClass;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ public abstract class AbstractAdminFrontendE2eTest extends AbstractFrontendE2eTe
     public static void oneTimeSetup() throws IOException {
         String realm = getRealm();
         String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", testConfig, "1", realm);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, testConfig, "1", realm);
 
         ICLoginPage icLoginPage = startLogin(realm);
         ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);

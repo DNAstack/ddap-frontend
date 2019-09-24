@@ -1,6 +1,7 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.dnastack.ddap.common.TestingPersona;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import dam.v1.DamService;
 import io.restassured.RestAssured;
@@ -36,7 +37,7 @@ public class GetBeaconInfoAsAdmin extends AbstractBaseE2eTest {
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(realmConfigString, damConfigBuilder);
 
-        setupRealmConfig("administrator", realmConfigString, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, realmConfigString, "1", REALM);
         RestAssured.config = RestAssuredConfig.config()
                                               .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                                                       (cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()
@@ -54,8 +55,8 @@ public class GetBeaconInfoAsAdmin extends AbstractBaseE2eTest {
      */
     @Test
     public void exerciseMissingBeaconInfo() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("administrator", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.ADMINISTRATOR, REALM);
 
         // @formatter:off
         final Response response = given()

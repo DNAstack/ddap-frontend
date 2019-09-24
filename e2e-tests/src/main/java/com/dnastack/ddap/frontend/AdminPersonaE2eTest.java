@@ -1,6 +1,6 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.util.DdapBy;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import org.junit.Test;

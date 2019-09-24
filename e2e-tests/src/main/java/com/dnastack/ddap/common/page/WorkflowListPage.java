@@ -1,6 +1,6 @@
 package com.dnastack.ddap.common.page;
 
-import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.util.DdapBy;
 import com.dnastack.ddap.common.WorkflowRunState;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;

@@ -1,8 +1,8 @@
 package com.dnastack.ddap.frontend;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
-import com.dnastack.ddap.common.RetryRule;
-import com.dnastack.ddap.common.Screenshot;
+import com.dnastack.ddap.common.util.RetryRule;
+import com.dnastack.ddap.common.util.ScreenshotUtil;
 import com.dnastack.ddap.common.page.AnyDdapPage;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -68,7 +68,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     @After
     public void afterEach() {
         String testName = this.getClass().getSimpleName() + "." + name.getMethodName() + ".png";
-        Screenshot.capture(testName, driver);
+        ScreenshotUtil.capture(testName, driver);
     }
 
     protected static ICLoginPage startLogin(String realm) {

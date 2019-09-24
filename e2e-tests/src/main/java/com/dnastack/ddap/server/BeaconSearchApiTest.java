@@ -1,6 +1,7 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.dnastack.ddap.common.TestingPersona;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
@@ -48,7 +49,7 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
     @Before
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", realmConfigString, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, realmConfigString, "1", REALM);
         RestAssured.config = RestAssuredConfig.config()
                                               .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                                                       (cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()
@@ -60,8 +61,8 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldGetTwoResultsForAggregateSearch() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -100,8 +101,8 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldGetOneResultForSingleResourceSearch() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         // @formatter:off
         given()
@@ -136,8 +137,8 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void missingResourceUiLabel() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         // @formatter:off
         given()

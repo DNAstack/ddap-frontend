@@ -1,6 +1,7 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.dnastack.ddap.common.TestingPersona;
 import dam.v1.DamService;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,13 +22,13 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
         String configJson = loadTemplate("/com/dnastack/ddap/autoCompleteConfig.json");
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(configJson, damConfigBuilder);
-        setupRealmConfig("administrator", configJson, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, configJson, "1", REALM);
     }
 
     @Test
     public void shouldFindSuggestionsForMatchingClaim() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("administrator", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.ADMINISTRATOR, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -53,8 +54,8 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldFindSuggestionsForVariableValues() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("administrator", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.ADMINISTRATOR, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off

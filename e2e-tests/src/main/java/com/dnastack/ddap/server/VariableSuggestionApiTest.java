@@ -1,6 +1,7 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.dnastack.ddap.common.TestingPersona;
 import dam.v1.DamService;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +22,12 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
         String configJson = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(configJson, damConfigBuilder);
-        setupRealmConfig("administrator", configJson, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, configJson, "1", REALM);
     }
 
     @Test
     public void shouldFindBigQueryVariables() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -53,7 +54,7 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldFindGCSVariables() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -80,7 +81,7 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldGetBadRequest() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off

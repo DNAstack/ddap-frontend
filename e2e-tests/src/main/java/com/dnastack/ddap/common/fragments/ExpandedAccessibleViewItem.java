@@ -1,6 +1,6 @@
 package com.dnastack.ddap.common.fragments;
 
-import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.util.DdapBy;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;

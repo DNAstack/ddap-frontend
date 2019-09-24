@@ -2,6 +2,7 @@ package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import com.dnastack.ddap.common.DamConfig;
+import com.dnastack.ddap.common.TestingPersona;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
@@ -57,7 +58,7 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
 
         final String realmConfig = objectMapper.writeValueAsString(damConfig);
 
-        setupRealmConfig("administrator", realmConfig, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, realmConfig, "1", REALM);
         RestAssured.config = RestAssuredConfig.config()
                                               .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                                                       (cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()
@@ -69,8 +70,8 @@ public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractB
 
     @Test
     public void shouldGetNoBeaconServerFoundError() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         // @formatter:off
         BeaconQueryResult[] allResults = given()

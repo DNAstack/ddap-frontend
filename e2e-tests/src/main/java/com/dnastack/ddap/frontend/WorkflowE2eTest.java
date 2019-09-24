@@ -1,7 +1,8 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.util.DdapBy;
 import com.dnastack.ddap.common.page.*;
+import com.dnastack.ddap.common.TestingPersona;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import static com.dnastack.ddap.common.WorkflowRunState.*;
 import static java.util.Arrays.asList;
 
+@SuppressWarnings("Duplicates")
 public class WorkflowE2eTest extends AbstractFrontendE2eTest {
 
     private static final String REALM = generateRealmName(WorkflowE2eTest.class.getSimpleName());
@@ -23,7 +25,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
         String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", testConfig, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, testConfig, "1", REALM);
 
         ICLoginPage icLoginPage = startLogin(REALM);
         ddapPage = icLoginPage.loginAsNciResearcher(AdminDdapPage::new);

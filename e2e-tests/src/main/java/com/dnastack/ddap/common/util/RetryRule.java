@@ -1,4 +1,4 @@
-package com.dnastack.ddap.common;
+package com.dnastack.ddap.common.util;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;

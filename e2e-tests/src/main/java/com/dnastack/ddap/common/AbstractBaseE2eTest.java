@@ -87,12 +87,12 @@ public abstract class AbstractBaseE2eTest {
         }
     }
 
-    protected static void setupIcConfig(String personaName, String config, String realmName) throws IOException {
+    protected static void setupIcConfig(TestingPersona persona, String config, String realmName) throws IOException {
         final String modificationPayload = format("{ \"item\": %s }", config);
-        final CookieStore cookieStore = performPersonaLogin(personaName, realmName);
+        final CookieStore cookieStore = performPersonaLogin(persona.getValue(), realmName);
 
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpPut request = new HttpPut(format("%s/identity/v1alpha/%s/config?persona=%s", DDAP_BASE_URL, realmName, personaName));
+        HttpPut request = new HttpPut(format("%s/identity/v1alpha/%s/config?persona=%s", DDAP_BASE_URL, realmName, persona.getValue()));
         request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
         request.setEntity(new StringEntity(modificationPayload));
 
@@ -104,7 +104,7 @@ public abstract class AbstractBaseE2eTest {
                 allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
 
-    protected static void setupRealmConfig(String personaName, String config, String damId, String realmName) throws IOException {
+    protected static void setupRealmConfig(TestingPersona persona, String config, String damId, String realmName) throws IOException {
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(config, damConfigBuilder);
 
@@ -114,7 +114,7 @@ public abstract class AbstractBaseE2eTest {
          In particular, tests that reset the IC config can change the 'ga4gh_dam` client ID which needs
          to be a particular value (configured in master) for passport tokens to have a validatable audience
          */
-        final CookieStore cookieStore = performPersonaLogin(personaName, "master");
+        final CookieStore cookieStore = performPersonaLogin(persona.getValue(), "master");
 
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
         HttpPut request = new HttpPut(format("%s/dam/%s/v1alpha/%s/config", DDAP_BASE_URL, damId, realmName));
@@ -158,14 +158,25 @@ public abstract class AbstractBaseE2eTest {
         return fetchRealPersonaToken(personaName, "ic_token", realmName, scopes);
     }
 
+    protected String fetchRealPersonaIcToken(TestingPersona persona, String realmName, String ... scopes) throws IOException {
+        return fetchRealPersonaIcToken(persona.getValue(), realmName, scopes);
+    }
+
     protected String fetchRealPersonaDamToken(String personaName, String realmName) throws IOException {
         return fetchRealPersonaToken(personaName, "dam_token", realmName);
+    }
+
+    protected String fetchRealPersonaDamToken(TestingPersona persona, String realmName) throws IOException {
+        return fetchRealPersonaDamToken(persona.getValue(), realmName);
     }
 
     protected String fetchRealPersonaRefreshToken(String personaName, String realmName) throws IOException {
         return fetchRealPersonaToken(personaName, "refresh_token", realmName);
     }
 
+    protected String fetchRealPersonaRefreshToken(TestingPersona persona, String realmName) throws IOException {
+        return fetchRealPersonaRefreshToken(persona.getValue(), realmName);
+    }
 
     private String fetchRealPersonaToken(String personaName, String tokenCookieName, String realmName, String ... scopes) throws IOException {
         final CookieStore cookieStore = performPersonaLogin(personaName, realmName, scopes);
@@ -188,6 +199,10 @@ public abstract class AbstractBaseE2eTest {
         assertThat(tokenCookie.getAttribute("httponly"), nullValue());
 
         return tokenCookie.getValue();
+    }
+
+    private String fetchRealPersonaToken(TestingPersona persona, String tokenCookieName, String realmName, String ... scopes) throws IOException {
+        return fetchRealPersonaToken(persona.getValue(), tokenCookieName, realmName, scopes);
     }
 
     private static CookieStore performPersonaLogin(String personaName, String realmName, String ... scopes) throws IOException {

@@ -1,6 +1,6 @@
 package com.dnastack.ddap.common.page;
 
-import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.util.DdapBy;
 import com.dnastack.ddap.common.fragments.DataListItem;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

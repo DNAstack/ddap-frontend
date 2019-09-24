@@ -1,6 +1,7 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.dnastack.ddap.common.TestingPersona;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
@@ -27,7 +28,7 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
         String configJson = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(configJson, damConfigBuilder);
-        setupRealmConfig("administrator", configJson, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, configJson, "1", REALM);
     }
 
 
@@ -115,7 +116,7 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldBeAbleToAccessICWithAppropriateCookie() throws IOException {
-        String validPersonaToken = fetchRealPersonaIcToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaIcToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         // @formatter:off
         given()

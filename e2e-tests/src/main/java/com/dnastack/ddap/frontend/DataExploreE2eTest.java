@@ -3,6 +3,7 @@ package com.dnastack.ddap.frontend;
 import com.dnastack.ddap.common.fragments.ExpandedAccessibleViewItem;
 import com.dnastack.ddap.common.fragments.ViewAccessMenu;
 import com.dnastack.ddap.common.page.*;
+import com.dnastack.ddap.common.TestingPersona;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+@SuppressWarnings("Duplicates")
 public class DataExploreE2eTest extends AbstractFrontendE2eTest {
 
     private static final String REALM = generateRealmName(DataExploreE2eTest.class.getSimpleName());
@@ -20,10 +22,10 @@ public class DataExploreE2eTest extends AbstractFrontendE2eTest {
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
         final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", damConfig, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
 
         ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsPersona("dr_joe_elixir", AdminDdapPage::new);
+        ddapPage = icLoginPage.loginAsPersona(TestingPersona.DR_JOE_ELIXIR, AdminDdapPage::new);
     }
 
     private String basicUsername;

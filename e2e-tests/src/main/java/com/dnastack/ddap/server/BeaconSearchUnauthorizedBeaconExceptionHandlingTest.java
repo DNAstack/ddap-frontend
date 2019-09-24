@@ -1,6 +1,7 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.*;
+import com.dnastack.ddap.common.TestingPersona;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
@@ -50,7 +51,7 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
         final String realmConfig = objectMapper.writeValueAsString(damConfig);
 
-        setupRealmConfig("administrator", realmConfig, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, realmConfig, "1", REALM);
         RestAssured.config = RestAssuredConfig.config()
                                               .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                                                       (cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()
@@ -62,8 +63,8 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
     @Test
     public void shouldGet403ErrorWhenUsingUnderscopedToken() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -103,8 +104,8 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
     @Test
     public void shouldGet403WhenUserCannotGetViewToken() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("administrator", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("administrator", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.ADMINISTRATOR, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off

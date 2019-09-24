@@ -4,6 +4,7 @@ import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AnyDdapPage;
 import com.dnastack.ddap.common.fragments.ConfirmationRealmChangeDialog;
 import com.dnastack.ddap.common.page.ICLoginPage;
+import com.dnastack.ddap.common.TestingPersona;
 import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
+@SuppressWarnings("Duplicates")
 public class RealmE2eTest extends AbstractFrontendE2eTest {
 
     private static final String REALM = generateRealmName(RealmE2eTest.class.getSimpleName());
@@ -25,7 +27,7 @@ public class RealmE2eTest extends AbstractFrontendE2eTest {
         boolean isSandbox = Boolean.parseBoolean(optionalEnv("E2E_SANDBOX", "false"));
         Assume.assumeTrue(isSandbox);
         final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", testConfig, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, testConfig, "1", REALM);
 
         ICLoginPage icLoginPage = startLogin(REALM);
         ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);

@@ -1,6 +1,7 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.dnastack.ddap.common.TestingPersona;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
@@ -24,7 +25,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
     @Before
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/accountLinkingTestRealmConfig.json");
-        setupRealmConfig("administrator", realmConfigString, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, realmConfigString, "1", REALM);
         RestAssured.config = RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                 (cls, charset) -> {
                     ObjectMapper om = new ObjectMapper().findAndRegisterModules();
@@ -180,9 +181,9 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
 
     @Test
     public void testAccessesAsAdmin() throws Exception {
-        String icToken = fetchRealPersonaIcToken("administrator", REALM, "");
-        String danToken = fetchRealPersonaDamToken("administrator", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("administrator", REALM);
+        String icToken = fetchRealPersonaIcToken(TestingPersona.ADMINISTRATOR, REALM, "");
+        String danToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.ADMINISTRATOR, REALM);
 
         // @formatter:off
         given()

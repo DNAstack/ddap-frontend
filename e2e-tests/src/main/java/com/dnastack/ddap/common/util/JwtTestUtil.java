@@ -1,4 +1,4 @@
-package com.dnastack.ddap.common;
+package com.dnastack.ddap.common.util;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

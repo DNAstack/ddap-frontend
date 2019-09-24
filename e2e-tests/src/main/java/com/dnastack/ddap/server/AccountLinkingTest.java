@@ -1,7 +1,8 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
-import com.dnastack.ddap.common.JwtTestUtil;
+import com.dnastack.ddap.common.util.JwtTestUtil;
+import com.dnastack.ddap.common.TestingPersona;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
@@ -30,7 +31,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
     @Before
     public void setupRealm() throws IOException {
         String realmConfigString = loadTemplate("/com/dnastack/ddap/accountLinkingTestRealmConfig.json");
-        setupRealmConfig("administrator", realmConfigString, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, realmConfigString, "1", REALM);
         RestAssured.config = RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                 (cls, charset) -> {
                     ObjectMapper om = new ObjectMapper().findAndRegisterModules();
@@ -89,8 +90,8 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     @Test
     public void linkIcLoginExternalAccountShouldPassLinkScopeForAccountInIcToken() throws Exception {
-        String icTokenJwt = fetchRealPersonaIcToken("nci_researcher", REALM);
-        String refreshTokenJwt = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String icTokenJwt = fetchRealPersonaIcToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshTokenJwt = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
         String baseAccountId = JwtTestUtil.getSubject(icTokenJwt);
         String requestedScope = "link:" + baseAccountId;
 
@@ -117,7 +118,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
     @Test
     public void linkAndUnlinkAccount() throws Exception {
         String icTokenJwtBeforeLinking = fetchRealPersonaIcToken("mr_hyde", REALM, "openid", "identities", "link");
-        String refreshTokenJwt = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String refreshTokenJwt = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
         String baseAccountId = JwtTestUtil.getSubject(icTokenJwtBeforeLinking);
 
         // Link account

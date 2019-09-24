@@ -1,4 +1,4 @@
-package com.dnastack.ddap.common;
+package com.dnastack.ddap.common.util;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import static com.dnastack.ddap.common.AbstractBaseE2eTest.optionalEnv;
 
-public class Screenshot {
+public class ScreenshotUtil {
 
     protected static final String SCREENSHOT_DIR = optionalEnv("E2E_SCREENSHOT_DIR", "target");
 

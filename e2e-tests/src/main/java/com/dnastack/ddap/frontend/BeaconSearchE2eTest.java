@@ -1,8 +1,9 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.util.DdapBy;
 import com.dnastack.ddap.common.fragments.DataListItem;
 import com.dnastack.ddap.common.page.*;
+import com.dnastack.ddap.common.TestingPersona;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -27,7 +28,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
         final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", damConfig, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
 
         ICLoginPage icLoginPage = startLogin(REALM);
         ddapPage = icLoginPage.loginAsNciResearcher(AdminDdapPage::new);

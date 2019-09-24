@@ -1,20 +1,18 @@
 package com.dnastack.ddap.server;
 
-import static io.restassured.RestAssured.given;
-import static java.lang.String.format;
-import static org.hamcrest.CoreMatchers.anyOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.dnastack.ddap.common.TestingPersona;
 import dam.v1.DamService;
-import java.io.IOException;
-import java.util.Arrays;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.util.Arrays;
+
+import static io.restassured.RestAssured.given;
+import static java.lang.String.format;
+import static org.hamcrest.CoreMatchers.*;
 
 public class ViewsApiTest extends AbstractBaseE2eTest {
 
@@ -26,13 +24,13 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
         String configJson = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
         validateProtoBuf(configJson, damConfigBuilder);
-        setupRealmConfig("administrator", configJson, "1", REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, configJson, "1", REALM);
     }
 
     @Test
     public void shouldReturnViewForBucket() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         // @formatter:off
         given()
@@ -59,8 +57,8 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldNotReturnViewForPartialSubset() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         // @formatter:off
         given()
@@ -85,8 +83,8 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldReturnEmptyViewsForNonExistantResource() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
 
         // @formatter:off
         given()
@@ -111,8 +109,8 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldReturnListOfAuthorizedViews() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
         String view = "/dam/1/v1alpha/" + REALM + "/resources/ga4gh-apis/views/gcs_read";
 
         // @formatter:off
@@ -142,8 +140,8 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldReturnListOfAuthorizedViewsWithError() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken("nci_researcher", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("nci_researcher", REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
         String view = "/dam/1/v1alpha/" + REALM + "/resources/ga4gh-apis/views/invalid";
 
         // @formatter:off

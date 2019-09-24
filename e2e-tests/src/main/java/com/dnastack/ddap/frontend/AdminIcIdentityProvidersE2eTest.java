@@ -1,10 +1,11 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.DdapBy;
+import com.dnastack.ddap.common.util.DdapBy;
 import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
 import com.dnastack.ddap.common.page.ICLoginPage;
+import com.dnastack.ddap.common.TestingPersona;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -21,8 +22,8 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
     public static void oneTimeSetup() throws IOException {
         final String icConfig = loadTemplate("/com/dnastack/ddap/icAdminConfig.json");
         final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig("administrator", damConfig, "1", REALM);
-        setupIcConfig("administrator", icConfig, REALM);
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
+        setupIcConfig(TestingPersona.ADMINISTRATOR, icConfig, REALM);
 
         ICLoginPage icLoginPage = startLogin(REALM);
         ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
