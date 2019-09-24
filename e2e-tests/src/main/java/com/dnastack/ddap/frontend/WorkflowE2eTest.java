@@ -97,18 +97,4 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         workflowListPage.assertNewRunsInState(asList(QUEUED, RUNNING, COMPLETE));
     }
 
-    @Test
-    public void accessTokensForValidUrlColumns() {
-        WorkflowWesServersPage workflowWesServersPage = ddapPage.getNavBar()
-                .goToWorkflows();
-        WorkflowListPage workflowListPage = workflowWesServersPage.clickViewRuns();
-        WorkflowManagePage managePage = workflowListPage.clickManage();
-
-        managePage.fetchDatasetResult(datasetUrl);
-        managePage.waitForInflightRequests();
-        managePage.clickCheckbox(DdapBy.se("checkbox-0"));
-        managePage.clickCheckbox(DdapBy.se("checkbox-2"));
-        managePage.getAccessTokens("bam_file");
-    }
-
 }

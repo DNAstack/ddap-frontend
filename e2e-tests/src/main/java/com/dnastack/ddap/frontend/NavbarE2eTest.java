@@ -50,11 +50,8 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     @Test
     public void checkForProfileName() {
         final String usernameXpath = "//*[@data-se='nav-account']//h4[contains(text(), 'Administrator')]";
-
         driver.findElement(By.xpath(usernameXpath)).getText();
     }
-
-
 
     @Test
     public void logoutButtonShouldGoToIcLoginForCurrentRealm() {

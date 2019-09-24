@@ -11,22 +11,6 @@ import static com.dnastack.ddap.common.fragments.NavBar.damTrustedSourcesLink;
 public class AdminTrustedSourcesE2eTest extends AbstractAdminFrontendE2eTest {
 
     @Test
-    public void addEmptyTrustedSource() {
-        AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(damTrustedSourcesLink(DAM_ID));
-
-        AdminManagePage adminManagePage = adminListPage.clickManage();
-
-        adminManagePage.fillField(DdapBy.se("inp-id"), "empty-source");
-        adminManagePage.fillField(DdapBy.se("inp-label"), "empty-source-name");
-        adminManagePage.fillField(DdapBy.se("inp-description"), "empty-source-desc");
-
-        adminListPage = adminManagePage.saveEntity();
-
-        adminListPage.assertListItemExists("empty-source-name");
-    }
-
-    @Test
     public void addTrustedSource() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damTrustedSourcesLink(DAM_ID));

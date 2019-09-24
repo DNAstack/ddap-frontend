@@ -12,25 +12,6 @@ import static com.dnastack.ddap.common.fragments.NavBar.damPassportsLink;
 public class AdminPassportIssuersE2eTest extends AbstractAdminFrontendE2eTest {
 
     @Test
-    public void addMinimalPassportIssuer() {
-        AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(damPassportsLink(DAM_ID));
-
-        AdminManagePage adminManagePage = adminListPage.clickManage();
-
-        adminManagePage.fillField(DdapBy.se("inp-id"), "empty-passport-id");
-        adminManagePage.fillField(DdapBy.se("inp-label"), "empty-passport-issuer");
-        adminManagePage.fillField(DdapBy.se("inp-description"), "empty-passport-issuer-desc");
-
-        adminManagePage.fillField(DdapBy.se("inp-issuer"), "https://login.elixir-czech.org/oidc");
-        adminManagePage.closeAutocompletes();
-
-        adminListPage = adminManagePage.saveEntity();
-
-        adminListPage.assertListItemExists("empty-passport-issuer");
-    }
-
-    @Test
     public void addPassportIssuer() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damPassportsLink(DAM_ID));

@@ -11,24 +11,7 @@ import static com.dnastack.ddap.common.fragments.NavBar.damClaimDefinitionLink;
 public class AdminClaimDefinitionsE2eTest extends AbstractAdminFrontendE2eTest {
 
     @Test
-    public void addClaimDefinitionWithMinimalFields() {
-        AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(damClaimDefinitionLink(DAM_ID));
-
-        AdminManagePage adminManagePage = adminListPage.clickManage();
-
-        String claimDefId = "test-claim-def-minimal";
-        adminManagePage.fillField(DdapBy.se("inp-id"), claimDefId);
-        adminManagePage.fillField(DdapBy.se("inp-label"), claimDefId);
-        adminManagePage.fillField(DdapBy.se("inp-description"), "This is description");
-
-        adminListPage = adminManagePage.saveEntity();
-
-        adminListPage.assertListItemExists(claimDefId);
-    }
-
-    @Test
-    public void addClaimDefinitionWithAllFields() {
+    public void addClaimDefinition() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damClaimDefinitionLink(DAM_ID));
 

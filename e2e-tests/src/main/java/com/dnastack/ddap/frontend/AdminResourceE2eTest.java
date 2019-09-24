@@ -23,27 +23,7 @@ public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
     }
 
     @Test
-    public void addResourceWithMinimalFieldsAndNoViews() {
-        AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(damResourceLink(DAM_ID));
-        String resourceId = "resource-" + System.currentTimeMillis();
-
-        waitForAccessTablesToLoad();
-        adminListPage.assertListItemDoNotExist(resourceId);
-
-        AdminManagePage adminManagePage = adminListPage.clickManage();
-        adminManagePage.fillField(DdapBy.se("inp-id"), resourceId);
-        adminManagePage.fillField(DdapBy.se("inp-label"), resourceId);
-        adminManagePage.fillField(DdapBy.se("inp-description"), "This is description");
-        adminManagePage.fillField(DdapBy.se("inp-owner"), "E2E test");
-        adminManagePage.fillField(DdapBy.se("inp-max-ttl"), "7d");
-        adminListPage = adminManagePage.saveEntity();
-
-        adminListPage.assertListItemExists(resourceId);
-    }
-
-    @Test
-    public void addResourceWithAllFieldsAndNoViews() {
+    public void addResourceWithNoViews() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                                               .goToAdmin(damResourceLink(DAM_ID));
         String resourceId = "resource-" + System.currentTimeMillis();
