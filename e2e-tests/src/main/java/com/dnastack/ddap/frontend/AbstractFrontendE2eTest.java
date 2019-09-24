@@ -72,7 +72,6 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     }
 
     protected static ICLoginPage startLogin(String realm) {
-        driver.manage().deleteAllCookies();
         driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));
         return new ICLoginPage(driver);
     }

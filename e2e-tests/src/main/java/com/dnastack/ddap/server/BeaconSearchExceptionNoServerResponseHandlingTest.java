@@ -1,14 +1,14 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
-import com.dnastack.ddap.common.DamConfig;
 import com.dnastack.ddap.common.TestingPersona;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,48 +24,45 @@ import static org.junit.Assert.assertThat;
 /**
  * 1. Test for when no server found or no response from a beacon error
  */
+@Slf4j
 public class BeaconSearchExceptionNoServerResponseHandlingTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(BeaconSearchExceptionNoServerResponseHandlingTest.class.getSimpleName());
 
     @Before
     public void setupRealm() throws IOException {
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, getModifiedRealmJson(), "1", REALM);
+        RestAssured.config = RestAssuredConfig.config()
+                .objectMapperConfig(new ObjectMapperConfig()
+                        .jackson2ObjectMapperFactory((cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()
+                                .findAndRegisterModules()
+                                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)));
+    }
+
+    private String getModifiedRealmJson() {
         final String baseRealmConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-
-        final ObjectMapper objectMapper = new ObjectMapper();
-
         /*
          * Instead of having a mostly copy-pasted duplicate config file for this test,
          * let's just modify the config programmatically with the changes we need.
          */
-        final DamConfig damConfig = objectMapper.readValue(baseRealmConfig, DamConfig.class);
-        damConfig.getResources()
-                 .get("thousand-genomes")
-                 .getViews()
-                 .get("discovery-access")
-                 .getItems()
-                 .get(0)
-                 .getVars()
-                 .put("url", "https://non-existent.totally-fake.dnastack.com");
-        damConfig.getResources()
-                 .get("ga4gh-apis")
-                 .getViews()
-                 .get("beacon")
-                 .getItems()
-                 .get(0)
-                 .getVars()
-                 .put("url", "https://other-non-existent.totally-fake.dnastack.com");
-
-        final String realmConfig = objectMapper.writeValueAsString(damConfig);
-
-        setupRealmConfig(TestingPersona.ADMINISTRATOR, realmConfig, "1", REALM);
-        RestAssured.config = RestAssuredConfig.config()
-                                              .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
-                                                      (cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()
-                                                              .findAndRegisterModules()
-                                                              .configure(
-                                                                      DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                                                                      false)));
+        JSONObject realmConfigJson = new JSONObject(baseRealmConfig);
+        realmConfigJson.getJSONObject("resources")
+                .getJSONObject("thousand-genomes")
+                .getJSONObject("views")
+                .getJSONObject("discovery-access")
+                .getJSONArray("items")
+                .getJSONObject(0)
+                .getJSONObject("vars")
+                .put("url", "https://non-existent.totally-fake.dnastack.com");
+        realmConfigJson.getJSONObject("resources")
+                .getJSONObject("ga4gh-apis")
+                .getJSONObject("views")
+                .getJSONObject("beacon")
+                .getJSONArray("items")
+                .getJSONObject(0)
+                .getJSONObject("vars")
+                .put("url", "https://other-non-existent.totally-fake.dnastack.com");
+        return realmConfigJson.toString();
     }
 
     @Test
