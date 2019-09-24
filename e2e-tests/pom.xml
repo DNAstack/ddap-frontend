@@ -131,7 +131,7 @@
                             <addProtoSources>all</addProtoSources>
                             <includeMavenTypes>direct</includeMavenTypes>
                             <inputDirectories>
-                                <include>${basedir}/src/main/resources/protos</include>
+                                <include>../shared/protos</include>
                             </inputDirectories>
                         </configuration>
                     </execution>

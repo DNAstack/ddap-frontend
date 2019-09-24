@@ -21,6 +21,7 @@ docker_context_dir=ci/e2e-tests/target
 mkdir -p ${docker_context_dir}
 
 cp -rp \
+  shared \
   e2e-tests/pom.xml \
   e2e-tests/src \
   ci/e2e-tests/e2e-exec-pom.xml \

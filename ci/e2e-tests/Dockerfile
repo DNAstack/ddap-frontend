@@ -13,7 +13,9 @@ ARG APP_VERSION
 RUN apt-get update
 RUN apt-get -y install curl libatomic1
 
-WORKDIR /build
+WORKDIR /build/e2e-app/
+
+ADD target/shared ../shared
 
 # Before bringing in project sources, resolve maven dependencies.
 # This allows Docker to reuse the cached image with all dependencies resolved.
@@ -51,7 +53,7 @@ USER root
 #    && mkdir /target \
 #    && chown seluser:seluser /target
 
-COPY --from=0 /build/target/ddap-frontend-e2e-tests*.jar /e2e-tests.jar
+COPY --from=0 /build/e2e-app/target/ddap-frontend-e2e-tests*.jar /e2e-tests.jar
 RUN mkdir /target
 RUN chown seluser:seluser /target /*.jar
 USER seluser:seluser
