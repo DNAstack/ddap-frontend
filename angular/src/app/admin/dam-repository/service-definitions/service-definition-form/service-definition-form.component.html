@@ -1,0 +1,210 @@
+<form class="ddap-form"
+      novalidate
+      [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             required
+             placeholder="Name"
+             data-se="id-field"
+             formControlName="id"
+      />
+      <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
+    </mat-form-field>
+    <mat-form-field class="col"
+    formGroupName="ui">
+      <input matInput
+             placeholder="Display Name"
+             formControlName="label"
+             data-se="inp-label"
+      />
+    </mat-form-field>
+  </div>
+  <mat-form-field formGroupName="ui">
+    <textarea matInput
+           required
+           placeholder="Description"
+           formControlName="description"
+           data-se="description">
+      <mat-error *ngIf="form.get('ui.description').invalid">Description must be up to 255 characters</mat-error>
+    </textarea>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Target Adapter</mat-label>
+    <mat-select formControlName="targetAdapter"
+                (selectionChange)="targetAdapterChange()"
+                data-se="target-adapter"
+                required>
+      <mat-option *ngFor="let targetAdapter of targetAdapters | keyvalue"
+                  [value]="targetAdapter.key">
+        {{targetAdapter.key}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Item Format</mat-label>
+    <mat-select formControlName="itemFormat"
+                data-se="itemFormat"
+                required>
+      <mat-option *ngFor="let itemFormat of itemFormats"
+                  [value]="itemFormat">
+        {{itemFormat}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <h3>
+    <span>Interfaces</span>
+    <div>
+      <button mat-button
+              color="primary"
+              class="uppercase"
+              data-se="btn-add-interface"
+              type="button"
+              (click)="addInterface()">
+        Add Interface
+      </button>
+    </div>
+  </h3>
+  <p>Interfaces for service definition</p>
+  <mat-accordion multi displayMode="flat">
+    <mat-expansion-panel *ngFor="let interfaceObj of interfaces.controls; let i=index"
+                         formArrayName="interfaces"
+    >
+      <mat-expansion-panel-header collapsedHeight="5rem"
+                                  expandedHeight="5rem">
+        <ng-container *ngIf="interfaceObj">
+          <mat-panel-title>
+            <mat-icon class="icon icon-views"></mat-icon>
+            <span>{{interfaceObj.value.type || 'Interface Type'}}</span>
+          </mat-panel-title>
+        </ng-container>
+      </mat-expansion-panel-header>
+      <div class="row" [formGroupName]="i">
+        <mat-form-field class="col">
+          <input matInput
+                 formControlName="type"
+                 placeholder="Interface Type"
+          />
+        </mat-form-field>
+        <mat-form-field class="col">
+          <input matInput
+                 formControlName="value"
+                 placeholder="Interface Value"
+          />
+        </mat-form-field>
+      </div>
+      <div class="footer">
+        <button mat-button
+                type="button"
+                class="uppercase"
+                color="warn"
+                [attr.data-se]="'btn-remove-interface-' + interfaceObj.value.type"
+                (click)="removeInterface(i)"
+        >Remove Interface</button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <h3>
+    <span>Roles</span>
+    <div>
+      <button mat-button
+              type="button"
+              color="primary"
+              class="uppercase"
+              data-se="btn-add-role"
+              (click)="addRole()"
+      >Add Role</button>
+    </div>
+  </h3>
+  <p>Add role for access</p>
+  <mat-accordion multi displayMode="flat">
+    <mat-expansion-panel *ngFor="let role of roles.controls; let i=index"
+                         formArrayName="roles"
+                         [attr.data-se]="'role-'+i">
+      <mat-expansion-panel-header collapsedHeight="5rem"
+                                  expandedHeight="5rem"
+      >
+        <ng-container *ngIf="role">
+          <mat-panel-title>
+            <mat-icon class="icon icon-identity"></mat-icon>
+            <span>{{role.value.name || 'Role' }}</span>
+          </mat-panel-title>
+          <div class="invalid-warning" *ngIf="role.invalid">
+            <mat-icon class="icon icon-warning"
+                      matTooltip="Role is invalid">
+            </mat-icon>
+          </div>
+        </ng-container>
+      </mat-expansion-panel-header>
+
+
+      <div [formGroupName]="i">
+        <div class="row">
+          <mat-form-field class="col">
+            <input placeholder="Name"
+                   matInput
+                   formControlName="name"
+            />
+          </mat-form-field>
+          <mat-form-field class="col"
+                          formGroupName="ui">
+            <input matInput
+                   required
+                   placeholder="Display Name"
+                   formControlName="label" />
+          </mat-form-field>
+        </div>
+        <mat-form-field formGroupName="ui">
+          <textarea matInput
+                    required
+                    placeholder="Description"
+                    formControlName="description"
+          ></textarea>
+        </mat-form-field>
+        <div class="row">
+          <div class="col">
+            <tag-input formControlName="targetRoles"
+                       secondaryPlaceholder="Add Target Role"
+                       placeholder="+ Target Role"
+                       editable="true"
+                       [attr.required]="(requirements && requirements.targetRole) ? true : null"
+                       modelAsStrings="true"
+            ></tag-input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <tag-input formControlName="targetScopes"
+                       secondaryPlaceholder="Add Target Scope"
+                       placeholder="+ Target Scope"
+                       editable="true"
+                       modelAsStrings="true"
+            ></tag-input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <tag-input formControlName="damRoleCategories"
+                       secondaryPlaceholder="Add Dam Role Categories"
+                       placeholder="+ Dam Role Category"
+                       editable="true"
+                       modelAsStrings="true"
+            ></tag-input>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <button mat-button
+                type="button"
+                class="uppercase"
+                color="warn"
+                [attr.data-se]="'btn-remove-role-' + role.value.name"
+                (click)="removeRole(i)"
+        >Remove Role</button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>

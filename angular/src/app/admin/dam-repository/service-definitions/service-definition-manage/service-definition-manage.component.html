@@ -2,7 +2,19 @@
 </ddap-header>
 
 <ddap-main>
-  <ddap-entity-manage-form [label]="'Service Template'"
-                           (submitted)="save($event.id, $event.change)">
-  </ddap-entity-manage-form>
+  <ddap-service-definition-form [damId]="damId"></ddap-service-definition-form>
 </ddap-main>
+
+<div class="ddap-form-toolbar">
+  <ddap-form-footer-error [showError]=""
+                          [message]="">
+  </ddap-form-footer-error>
+  <button mat-flat-button
+          (click)="save()"
+          data-se="btn-save"
+          type="submit"
+          color="primary"
+          class="uppercase">
+    Add Service Definition
+  </button>
+</div>
