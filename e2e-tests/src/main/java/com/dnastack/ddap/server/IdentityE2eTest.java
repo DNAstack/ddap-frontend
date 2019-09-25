@@ -2,12 +2,8 @@ package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import com.dnastack.ddap.common.TestingPersona;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
-import io.restassured.config.ObjectMapperConfig;
-import io.restassured.config.RestAssuredConfig;
-import org.junit.Before;
+import dam.v1.DamService;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,30 +11,22 @@ import java.io.IOException;
 import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.hasItem;
 
 @SuppressWarnings("Duplicates")
 public class IdentityE2eTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(IdentityE2eTest.class.getSimpleName());
 
-    @Before
-    public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/accountLinkingTestRealmConfig.json");
-        setupRealmConfig(TestingPersona.ADMINISTRATOR, realmConfigString, "1", REALM);
-        RestAssured.config = RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
-                (cls, charset) -> {
-                    ObjectMapper om = new ObjectMapper().findAndRegisterModules();
-                    om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                    return om;
-                }
-        ));
+    @BeforeClass
+    public static void oneTimeSetup() throws IOException {
+        final String damConfig = loadTemplate("/com/dnastack/ddap/accountLinkingTestRealmConfig.json");
+        validateProtoBuf(damConfig, DamService.DamConfig.newBuilder());
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
     }
 
     private String ddap(String path) {
         return format("/api/v1alpha/%s%s", REALM, path);
     }
-
 
     @Test
     public void testScopes() throws Exception {

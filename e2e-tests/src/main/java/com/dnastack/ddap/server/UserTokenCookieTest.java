@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import dam.v1.DamService;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -23,14 +23,12 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(UserTokenCookieTest.class.getSimpleName());
 
-    @Before
-    public void setupRealm() throws IOException {
-        String configJson = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        DamService.DamConfig.Builder damConfigBuilder = DamService.DamConfig.newBuilder();
-        validateProtoBuf(configJson, damConfigBuilder);
-        setupRealmConfig(TestingPersona.ADMINISTRATOR, configJson, "1", REALM);
+    @BeforeClass
+    public static void oneTimeSetup() throws IOException {
+        final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
+        validateProtoBuf(damConfig, DamService.DamConfig.newBuilder());
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
     }
-
 
     @Test
     public void damResponsesShouldClearExpiredUserTokenCookies() throws Exception {

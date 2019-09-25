@@ -2,14 +2,10 @@ package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import com.dnastack.ddap.common.TestingPersona;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import io.restassured.RestAssured;
-import io.restassured.config.ObjectMapperConfig;
-import io.restassured.config.RestAssuredConfig;
 import lombok.Data;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -30,17 +26,12 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
     private static final String REALM = generateRealmName(BeaconSearchUnauthorizedBeaconExceptionHandlingTest.class.getSimpleName());
 
-    @Before
-    public void setupRealm() throws IOException {
+    @BeforeClass
+    public static void oneTimeSetup() throws IOException {
         setupRealmConfig(TestingPersona.ADMINISTRATOR, getModifiedRealmJson(), "1", REALM);
-        RestAssured.config = RestAssuredConfig.config()
-                .objectMapperConfig(new ObjectMapperConfig()
-                        .jackson2ObjectMapperFactory((cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()
-                                .findAndRegisterModules()
-                                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)));
     }
 
-    private String getModifiedRealmJson() {
+    private static String getModifiedRealmJson() {
         final String baseRealmConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         /*
          * Instead of having a mostly copy-pasted duplicate config file for this test,

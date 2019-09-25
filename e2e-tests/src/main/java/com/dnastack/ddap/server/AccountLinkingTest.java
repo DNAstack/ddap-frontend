@@ -1,16 +1,12 @@
 package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
-import com.dnastack.ddap.common.util.JwtTestUtil;
 import com.dnastack.ddap.common.TestingPersona;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
-import io.restassured.config.ObjectMapperConfig;
-import io.restassured.config.RestAssuredConfig;
+import com.dnastack.ddap.common.util.JwtTestUtil;
+import dam.v1.DamService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -28,17 +24,11 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     private static final String REALM = generateRealmName(AccountLinkingTest.class.getSimpleName());
 
-    @Before
-    public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/accountLinkingTestRealmConfig.json");
-        setupRealmConfig(TestingPersona.ADMINISTRATOR, realmConfigString, "1", REALM);
-        RestAssured.config = RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
-                (cls, charset) -> {
-                    ObjectMapper om = new ObjectMapper().findAndRegisterModules();
-                    om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                    return om;
-                }
-        ));
+    @BeforeClass
+    public static void oneTimeSetup() throws IOException {
+        final String damConfig = loadTemplate("/com/dnastack/ddap/accountLinkingTestRealmConfig.json");
+        validateProtoBuf(damConfig, DamService.DamConfig.newBuilder());
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
     }
 
     @Test

@@ -2,16 +2,13 @@ package com.dnastack.ddap.server;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import com.dnastack.ddap.common.TestingPersona;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import io.restassured.RestAssured;
-import io.restassured.config.ObjectMapperConfig;
-import io.restassured.config.RestAssuredConfig;
+import dam.v1.DamService;
 import io.restassured.response.Response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -46,17 +43,11 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
         private String damId;
     }
 
-    @Before
-    public void setupRealm() throws IOException {
-        String realmConfigString = loadTemplate("/com/dnastack/ddap/adminConfig.json");
-        setupRealmConfig(TestingPersona.ADMINISTRATOR, realmConfigString, "1", REALM);
-        RestAssured.config = RestAssuredConfig.config()
-                                              .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
-                                                      (cls, charset) -> new com.fasterxml.jackson.databind.ObjectMapper()
-                                                              .findAndRegisterModules()
-                                                              .configure(
-                                                                      DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                                                                      false)));
+    @BeforeClass
+    public static void oneTimeSetup() throws IOException {
+        final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
+        validateProtoBuf(damConfig, DamService.DamConfig.newBuilder());
+        setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
     }
 
     @Test

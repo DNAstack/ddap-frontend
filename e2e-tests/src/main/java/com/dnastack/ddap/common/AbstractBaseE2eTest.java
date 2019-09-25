@@ -1,9 +1,13 @@
 package com.dnastack.ddap.common;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 import dam.v1.DamService;
 import io.restassured.RestAssured;
+import io.restassured.config.ObjectMapperConfig;
+import io.restassured.config.RestAssuredConfig;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -17,6 +21,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.util.EntityUtils;
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,6 +62,18 @@ public abstract class AbstractBaseE2eTest {
         return nameWithoutStamp.substring(0, min(REALM_NAME_LIMIT, nameWithoutStamp.length()));
     }
 
+    @BeforeClass
+    public static void setUpRestAssured() {
+        RestAssured.config = RestAssuredConfig.config()
+                .objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
+                        (cls, charset) -> {
+                            ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+                            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                            return mapper;
+                        }
+                ));
+    }
+
     @Before
     public void setUp() {
         RestAssured.baseURI = DDAP_BASE_URL;
@@ -79,7 +96,6 @@ public abstract class AbstractBaseE2eTest {
     }
 
     protected static void validateProtoBuf(String resourceJsonString, Message.Builder builder) {
-
         try {
             JsonFormat.parser().merge(resourceJsonString, builder);
         } catch(Exception e) {
