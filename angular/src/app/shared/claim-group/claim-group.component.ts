@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as relativeTimePlugin from 'dayjs/plugin/relativeTime';
 
 import { ClaimDefinitionService } from '../../admin/dam-repository/claim-definitions/claim-definitions.service';
 import { dam } from '../proto/dam-service';
@@ -28,6 +29,7 @@ export class ClaimGroupComponent {
   ga4ghAccountClaims: { [k: string]: AccountClaimList };
 
   constructor(public claimService: ClaimDefinitionService) {
+    dayjs.extend(relativeTimePlugin);
   }
 
   getFormattedExpiresTextFromClaim({ expiresDuration }: GA4GHClaim): string {
@@ -44,9 +46,9 @@ export class ClaimGroupComponent {
       return;
     }
 
-    const timestamp = moment.unix(expires);
+    const timestamp = dayjs.unix(expires);
     const relativeTime = timestamp.fromNow();
-    return timestamp.isBefore(moment())
+    return timestamp.isBefore(dayjs())
       ? `Expired ${relativeTime}`
       : `Expires ${relativeTime}`;
   }

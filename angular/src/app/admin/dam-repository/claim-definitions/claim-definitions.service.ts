@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 
 import { environment } from '../../../../environments/environment';
 import { DamInfoService } from '../../../shared/dam/dam-info.service';
@@ -27,9 +27,8 @@ export class ClaimDefinitionService extends DamConfigService {
   }
 
   public isExpiring({ expires }: IAccountClaim | AccountClaim): boolean {
-    const timestamp = moment.unix(expires);
-    const duration = moment.duration(timestamp.diff(moment()));
-    const hoursTillExpiration = duration.asHours();
+    const timestamp = dayjs.unix(expires);
+    const hoursTillExpiration = timestamp.diff(dayjs(), 'hour');
     return hoursTillExpiration < environment.claimExpirationWarningThresholdInHours;
   }
 
