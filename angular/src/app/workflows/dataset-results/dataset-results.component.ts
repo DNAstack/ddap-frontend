@@ -1,10 +1,8 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { camelCase, isEmptyObject, isUrl } from '../../shared/util';
+import { isUrl } from '../../shared/util';
 import { Dataset } from '../dataset-form/dataset.model';
-
-import { PaginationModel } from './pagination.model';
 
 @Component({
   selector: 'ddap-dataset-results',
@@ -23,7 +21,6 @@ export class DatasetResultsComponent implements OnChanges {
 
   list: Array<object>;
   selectedRowsData: Array<object>;
-  pagination: PaginationModel = {} as PaginationModel;
   columnsToDisplay: string[];
   additionalColumns: string[] = ['select'];
   datasetColumns: string[];
@@ -36,14 +33,9 @@ export class DatasetResultsComponent implements OnChanges {
       this.list = this.dataset.objects;
       this.datasetColumns = this.getDatasetColumns();
       this.columnsToDisplay = this.additionalColumns.concat(this.datasetColumns);
-      this.pagination = this.formatPagination(this.dataset.pagination);
       this.selection.clear();
       this.selectedRowsData = [];
     }
-  }
-
-  hasPagination(): boolean {
-    return !isEmptyObject(this.pagination);
   }
 
   isUrl(columnValue): boolean {
@@ -85,21 +77,6 @@ export class DatasetResultsComponent implements OnChanges {
       schemaProperties = schemaObj.properties;
     }
     return Object.keys(schemaProperties);
-  }
-
-  private formatPagination(pagination: object): PaginationModel {
-    const updatedPagination = {} as PaginationModel;
-    if (pagination) {
-      // fallback for prev_page_url
-      if (pagination.hasOwnProperty('prev_page_url')) {
-        pagination['previous_page_url'] = pagination['prev_page_url'];
-      }
-      Object.keys(pagination)
-        .map(key => {
-          updatedPagination[camelCase(key)] = pagination[key];
-        });
-    }
-    return updatedPagination;
   }
 
   private redirectToPage(pageUrl: string) {

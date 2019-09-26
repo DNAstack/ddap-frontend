@@ -47,9 +47,9 @@
       <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
       <mat-row *matRowDef="let row; columns: columnsToDisplay;"></mat-row>
     </mat-table>
-    <ddap-paginator *ngIf="hasPagination()"
-                    [nextPage]="pagination.nextPageUrl"
-                    [previousPage]="pagination.previousPageUrl"
+    <ddap-paginator *ngIf="dataset.pagination as pagination"
+                    [nextPage]="pagination.next_page_url"
+                    [previousPage]="pagination.previous_page_url"
                     (pageChangeRequested)="redirectToPage($event)">
     </ddap-paginator>
   </mat-expansion-panel>
