@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { ClaimDefinitionService } from '../admin/dam-repository/claim-definitions/claim-definitions.service';
 

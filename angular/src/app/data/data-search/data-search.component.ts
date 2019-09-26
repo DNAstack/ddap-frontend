@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { BeaconResponse } from '../../shared/beacon-search/beacon-response.model';
 import { BeaconSearchParams } from '../../shared/beacon-search/beacon-search-params.model';

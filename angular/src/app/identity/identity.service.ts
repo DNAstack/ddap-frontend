@@ -2,8 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
-import { zip } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import { Observable, zip } from 'rxjs';
 import { flatMap, map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
@@ -69,8 +68,7 @@ export class IdentityService {
               map((personas: any[]) => personas.reduce((accum, cur) => Object.assign({}, accum, cur), {}))
             );
 
-          return this.getIdentityProviders(params)
-            .zip(mergedPersonas)
+          return zip(this.getIdentityProviders(params), mergedPersonas)
             .pipe(
               map(([idps, personas]) => {
                 return [

@@ -4,9 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import _isEqual from 'lodash.isequal';
 import _set from 'lodash.set';
-import { of } from 'rxjs/internal/observable/of';
-import { zip } from 'rxjs/internal/observable/zip';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, zip } from 'rxjs';
 import { map, take, takeWhile, tap } from 'rxjs/operators';
 
 import { pick } from '../../../../shared/autocomplete/autocomplete.util';

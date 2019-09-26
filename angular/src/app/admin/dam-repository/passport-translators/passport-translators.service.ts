@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import _get from 'lodash.get';
 import { zip } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { flatMap, map, pluck } from 'rxjs/operators';
 
 import { DamInfoService } from '../../../shared/dam/dam-info.service';

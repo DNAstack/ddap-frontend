@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 import { Account } from './account.model';
 import { Identity } from './identity.model';

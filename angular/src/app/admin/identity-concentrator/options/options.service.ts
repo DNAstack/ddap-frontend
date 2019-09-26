@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs-compat/Observable';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { ErrorHandlerService } from '../../../shared/error-handler/error-handler.service';

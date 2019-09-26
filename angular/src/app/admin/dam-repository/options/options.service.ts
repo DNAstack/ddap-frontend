@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs-compat/Observable';
+import { Observable } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
 import { DamInfoService } from '../../../shared/dam/dam-info.service';

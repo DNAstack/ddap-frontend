@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { OperatorFunction } from 'rxjs/interfaces';
-import { Observable } from 'rxjs/Observable';
+import { Observable, OperatorFunction } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({

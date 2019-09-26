@@ -2,9 +2,8 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
-import { of } from 'rxjs/internal/observable/of';
+import { of, Subject } from 'rxjs';
 import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
 
 import { ConfigModificationObject } from '../../../../shared/configModificationObject';
 import { EntityModel } from '../../../../shared/entity.model';

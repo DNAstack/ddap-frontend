@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import 'rxjs-compat/add/operator/zip'; // TODO: use static zip instead https://www.learnrxjs.io/operators/combination/zip.html
-import { Observable } from 'rxjs/Observable';
+import { interval, Observable, zip } from 'rxjs';
 import { repeatWhen } from 'rxjs/operators';
 
 import { Identity } from '../identity/identity.model';
@@ -38,8 +37,7 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit() {
     this.damInfoStore.getDamsInfo();
-    this.identityStore.getIdentity()
-      .zip(this.damInfoService.getDamsInfo())
+    zip(this.identityStore.getIdentity(), this.damInfoService.getDamsInfo())
       .subscribe(([{account, accesses, sandbox}, damsInfo]: [Identity, DamsInfo]) => {
         this.isSandbox = sandbox;
         this.profile = account.profile;
@@ -81,7 +79,7 @@ export class LayoutComponent implements OnInit {
   private periodicallyRefreshTokens(): Observable<any> {
     return this.identityService.refreshTokens()
       .pipe(
-        repeatWhen(() => Observable.interval(refreshRepeatTimeoutInMs))
+        repeatWhen(() => interval(refreshRepeatTimeoutInMs))
       );
   }
 

@@ -1,9 +1,8 @@
 import { Component, Input, OnChanges, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
-import { of } from 'rxjs/internal/observable/of';
+import { of, Subject } from 'rxjs';
 import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';

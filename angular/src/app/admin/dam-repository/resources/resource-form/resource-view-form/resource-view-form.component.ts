@@ -2,10 +2,9 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import View = dam.v1.View;
-import { Subscription } from 'rxjs/Subscription';
 
 import { dam } from '../../../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../../../shared/entity.model';

@@ -1,7 +1,7 @@
 import { OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
-import { Subscription } from 'rxjs/Subscription';
 
 import { EntityModel } from '../../../shared/entity.model';
 import { FormValidationService } from '../../../shared/form/form-validation.service';

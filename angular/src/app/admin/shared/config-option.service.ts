@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 
 import { ErrorHandlerService } from '../../shared/error-handler/error-handler.service';

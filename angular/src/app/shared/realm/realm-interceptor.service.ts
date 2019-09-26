@@ -2,7 +2,7 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { realmIdPlaceholder } from './realm.constant';
 

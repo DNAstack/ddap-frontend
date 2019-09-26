@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { dam } from '../../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';

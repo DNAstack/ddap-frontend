@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
 import { DamInfoService } from '../../../../shared/dam/dam-info.service';

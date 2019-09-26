@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs-compat';
+import { Observable, of } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { DnaChangeQueryParser } from './dna-change-query.parser';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../realm/realm.constant';
 
 import { BeaconResponse } from './beacon-response.model';
+import { DnaChangeQueryParser } from './dna-change-query.parser';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +22,7 @@ export class ResourceBeaconService {
     const {query, assembly, resource, damId, limitSearch} = queryValue;
 
     if (!DnaChangeQueryParser.validate(query)) {
-      return Observable.of([]);
+      return of([]);
     }
 
     const params = DnaChangeQueryParser.parseParams(query);

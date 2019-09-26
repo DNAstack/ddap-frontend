@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { zip } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 
 import { EntityModel } from '../../admin/shared/entity.model';

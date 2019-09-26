@@ -1,6 +1,6 @@
 import _get from 'lodash.get';
+import { Observable } from 'rxjs';
 import { concat } from 'rxjs/internal/observable/concat';
-import { Observable } from 'rxjs/Observable';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
 
 // Flattens an array of arrays: [1, [a, b], [c], d] = [1, a, b, c, d]

@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import _get from 'lodash.get';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { JsonEditorDefaults } from '../../dam-repository/shared/jsonEditorDefaults';
 import { EntityModel } from '../entity.model';

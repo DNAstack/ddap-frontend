@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { combineLatest } from 'rxjs/internal/observable/combineLatest'; // FIXME using internal, deprecated
-import { Observable } from 'rxjs/Observable';
 import { debounceTime, map, startWith, switchMap } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';

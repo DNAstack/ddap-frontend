@@ -2,10 +2,10 @@ import { Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
+import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { EMPTY } from 'rxjs/internal/observable/empty';
-import { Observable } from 'rxjs/Observable';
 import { catchError, debounceTime, map, switchMap, tap } from 'rxjs/operators';
-import { Subscription } from 'rxjs/Subscription';
 
 import { FormValidators } from '../../../../shared/form/validators';
 import { dam } from '../../../../shared/proto/dam-service';

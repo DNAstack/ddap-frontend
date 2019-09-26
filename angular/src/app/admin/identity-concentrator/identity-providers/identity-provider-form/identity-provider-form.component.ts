@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import IdentityProvider = ic.v1.IdentityProvider;
 import { FormValidators } from '../../../../shared/form/validators';

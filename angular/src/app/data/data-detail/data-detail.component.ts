@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
 
 import { EntityModel } from '../../admin/shared/entity.model';
 import { ResourceBeaconService } from '../../shared/beacon-search/resource-beacon.service';

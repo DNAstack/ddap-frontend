@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import GetTokenResponse = dam.v1.GetTokenResponse;
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { ResourceService } from '../../admin/dam-repository/resources/resources.service';

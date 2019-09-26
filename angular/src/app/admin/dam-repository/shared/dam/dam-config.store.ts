@@ -2,7 +2,7 @@ import DamConfig = dam.v1.DamConfig;
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import _isEqual from 'lodash.isequal';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 
 import { DamInfoService } from '../../../../shared/dam/dam-info.service';
