@@ -26,6 +26,9 @@ export class ServiceDefinitionManageComponent extends DamConfigEntityFormCompone
   }
 
   save() {
+    if (!this.validate(this.serviceDefinitionForm)) {
+      return;
+    }
     const serviceTemplate: EntityModel = this.serviceDefinitionForm.getModel();
     const change = new ConfigModificationObject(serviceTemplate.dto, {});
     this.serviceDefinitionService.save(this.damId, serviceTemplate.name, change)

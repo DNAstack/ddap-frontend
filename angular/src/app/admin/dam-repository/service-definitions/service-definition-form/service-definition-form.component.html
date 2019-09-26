@@ -25,7 +25,7 @@
            required
            placeholder="Description"
            formControlName="description"
-           data-se="description">
+           data-se="inp-description">
       <mat-error *ngIf="form.get('ui.description').invalid">Description must be up to 255 characters</mat-error>
     </textarea>
   </mat-form-field>
@@ -34,7 +34,7 @@
     <mat-label>Target Adapter</mat-label>
     <mat-select formControlName="targetAdapter"
                 (selectionChange)="targetAdapterChange()"
-                data-se="target-adapter"
+                data-se="inp-target-adapter"
                 required>
       <mat-option *ngFor="let targetAdapter of targetAdapters | keyvalue"
                   [value]="targetAdapter.key">
@@ -45,7 +45,7 @@
   <mat-form-field>
     <mat-label>Item Format</mat-label>
     <mat-select formControlName="itemFormat"
-                data-se="itemFormat"
+                data-se="inp-item-format"
                 required>
       <mat-option *ngFor="let itemFormat of itemFormats"
                   [value]="itemFormat">
@@ -71,6 +71,7 @@
   <mat-accordion multi displayMode="flat">
     <mat-expansion-panel *ngFor="let interfaceObj of interfaces.controls; let i=index"
                          formArrayName="interfaces"
+                         [attr.data-se]="'view-' + (interfaceObj.value.type || 'new')"
     >
       <mat-expansion-panel-header collapsedHeight="5rem"
                                   expandedHeight="5rem">
@@ -86,12 +87,14 @@
           <input matInput
                  formControlName="type"
                  placeholder="Interface Type"
+                 data-se="inp-interface-type"
           />
         </mat-form-field>
         <mat-form-field class="col">
           <input matInput
                  formControlName="value"
                  placeholder="Interface Value"
+                 data-se="inp-interface-value"
           />
         </mat-form-field>
       </div>
@@ -147,6 +150,7 @@
             <input placeholder="Name"
                    matInput
                    formControlName="name"
+                   [attr.data-se]="'inp-role-name-' + i"
             />
           </mat-form-field>
           <mat-form-field class="col"
@@ -154,7 +158,9 @@
             <input matInput
                    required
                    placeholder="Display Name"
-                   formControlName="label" />
+                   formControlName="label"
+                   [attr.data-se]="'inp-role-label-' + i"
+            />
           </mat-form-field>
         </div>
         <mat-form-field formGroupName="ui">
@@ -162,6 +168,7 @@
                     required
                     placeholder="Description"
                     formControlName="description"
+                    [attr.data-se]="'inp-role-description-' + i"
           ></textarea>
         </mat-form-field>
         <div class="row">
@@ -171,6 +178,7 @@
                        placeholder="+ Target Role"
                        editable="true"
                        [attr.required]="(requirements && requirements.targetRole) ? true : null"
+                       [attr.data-se]="'inp-target-role-' + i"
                        modelAsStrings="true"
             ></tag-input>
           </div>
@@ -182,6 +190,7 @@
                        placeholder="+ Target Scope"
                        editable="true"
                        modelAsStrings="true"
+                       [attr.data-se]="'inp-target-scope-' + i"
             ></tag-input>
           </div>
         </div>
@@ -192,6 +201,7 @@
                        placeholder="+ Dam Role Category"
                        editable="true"
                        modelAsStrings="true"
+                       [attr.data-se]="'inp-dam-role-category-' + i"
             ></tag-input>
           </div>
         </div>

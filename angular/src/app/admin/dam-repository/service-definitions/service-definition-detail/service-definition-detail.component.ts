@@ -34,6 +34,9 @@ export class ServiceDefinitionDetailComponent extends DamConfigEntityDetailCompo
   }
 
   update(): void {
+    if (!this.validate(this.serviceDefinitionForm)) {
+      return;
+    }
     const serviceTemplate: EntityModel = this.serviceDefinitionForm.getModel();
     const change = new ConfigModificationObject(serviceTemplate.dto, {});
     this.serviceDefinitionService.update(this.damId, serviceTemplate.name, change)

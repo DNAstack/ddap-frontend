@@ -36,18 +36,23 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
 
   constructor( private formBuilder: FormBuilder,
                private changeDetector: ChangeDetectorRef,
-               private serviceDefinitionService: ServiceDefinitionService) { }
+               private serviceDefinitionService: ServiceDefinitionService) {
+    this.form = this.buildServiceTemplateForm();
+  }
 
   ngOnInit() {
     this.serviceDefinitionService.getTargetAdapters(this.damId).subscribe(targetAdapters => {
       this.targetAdapters = this.formatTargetAdapters(targetAdapters);
       this.targetAdapterChange();
-
     });
+    this.form = this.buildServiceTemplateForm();
+  }
+
+  buildServiceTemplateForm() {
     const { name, dto } = this.serviceTemplate;
-    this.form = this.formBuilder.group({
+    return this.formBuilder.group({
       id: [name, [Validators.pattern(nameConstraintPattern),
-                Validators.required]],
+        Validators.required]],
       targetAdapter: [dto.targetAdapter, [Validators.required]],
       itemFormat: [dto.itemFormat, [Validators.required]],
       interfaces: this.formBuilder.array([]),
@@ -57,7 +62,6 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
         description: [dto.ui.description, [Validators.required]],
       }),
     });
-
   }
 
   ngAfterViewInit(): void {
@@ -72,10 +76,10 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
     // TODO: Refactor
     if (!roles) {
       const { name, dto } = new EntityModel( '' , ServiceRole.create());
-      this.roles.push(this.createRoleForm(name, dto));
+      this.roles.insert(0, this.createRoleForm(name, dto));
     } else {
       const {name, dto} = new EntityModel(roleId, _get(roles, roleId, null));
-      this.roles.push(this.createRoleForm(name, dto));
+      this.roles.insert(0, this.createRoleForm(name, dto));
     }
   }
 
@@ -86,10 +90,10 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   addInterface(interfaceType?, interfaces?) {
     // TODO: Refactor
     if (!interfaces) {
-      this.interfaces.push(this.createInterfacesForm('', ''));
+      this.interfaces.insert(0, this.createInterfacesForm('', ''));
     } else {
       const {name, dto} = new EntityModel(interfaceType, _get(interfaces, interfaceType, null));
-      this.interfaces.push(this.createInterfacesForm(name, dto));
+      this.interfaces.insert(0, this.createInterfacesForm(name, dto));
     }
   }
 
@@ -121,6 +125,14 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
       this.itemFormats = this.targetAdapters[selectedTargetAdapter].itemFormats;
       this.requirements = this.targetAdapters[selectedTargetAdapter].requirements;
     }
+  }
+
+  getAllForms(): FormGroup[] {
+    return [this.form];
+  }
+
+  isValid(): boolean {
+    return this.form.valid;
   }
 
   private createRoleForm(name, dto): FormGroup {
