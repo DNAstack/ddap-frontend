@@ -20,7 +20,10 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -103,14 +106,19 @@ public class IdentityController {
     }
 
     @GetMapping("/logout")
-    public Mono<? extends ResponseEntity<?>> invalidateTokens(ServerHttpRequest request, @PathVariable String realm) {
+    public Mono<? extends ResponseEntity> invalidateTokens(ServerHttpRequest request, @PathVariable String realm) {
         Optional<String> refreshToken = cookiePackager.extractToken(request, CookieKind.REFRESH);
 
+        URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
+        ResponseEntity response = ResponseEntity.noContent()
+                .header(SET_COOKIE, cookiePackager.clearToken(cookieDomainPath.getHost(), CookieKind.DAM).toString())
+                .header(SET_COOKIE, cookiePackager.clearToken(cookieDomainPath.getHost(), CookieKind.IC).toString())
+                .header(SET_COOKIE, cookiePackager.clearToken(cookieDomainPath.getHost(), CookieKind.OAUTH_STATE).toString())
+                .header(SET_COOKIE, cookiePackager.clearToken(cookieDomainPath.getHost(), CookieKind.REFRESH).toString())
+                .build();
         return oAuthClient.revokeRefreshToken(realm, refreshToken.get())
-                .map(clientResponse -> ResponseEntity.noContent().build())
-                .onErrorContinue((throwable, o) -> {
-                    log.warn("Failed to invalidate refresh token", throwable);
-                });
+                .thenReturn(response)
+                .onErrorReturn(response);
     }
 
     @GetMapping("/login")
