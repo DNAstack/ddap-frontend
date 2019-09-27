@@ -6,20 +6,17 @@ import com.dnastack.ddapfrontend.client.dataset.DatasetErrorException;
 import com.dnastack.ddapfrontend.client.dataset.ReactiveDatasetClient;
 import com.dnastack.ddapfrontend.client.dataset.model.DatasetResult;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
-
-import java.util.*;
 import com.dnastack.ddapfrontend.service.ViewsService;
+import dam.v1.DamService.GetTokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import dam.v1.DamService.GetFlatViewsResponse;
-import dam.v1.DamService.GetTokenResponse;
+
+import java.util.*;
+
+import static com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind;
 
 @RestController
 @RequestMapping("/api/v1alpha/{realm}/dataset")
@@ -61,19 +58,16 @@ public class DatasetController {
     }
 
     private Mono<DatasetResult> getAccess(String datasetUrl, ServerHttpRequest request, String realm) {
-        Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
-        Optional<String> foundRefreshToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
-        String refreshToken = foundRefreshToken.orElse(null);
-        String damToken = foundDamToken.orElse(null);
-        return getViews(damToken, realm, refreshToken, datasetUrl).flatMap(viewsForUrl -> {
+        Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request, Set.of(CookieKind.DAM, CookieKind.REFRESH));
+        return getViews(tokens.get(CookieKind.DAM), realm, tokens.get(CookieKind.REFRESH), datasetUrl).flatMap(viewsForUrl -> {
             if(!viewsForUrl.isEmpty()) {
                 List<String> uniqueViews = new ArrayList<>(new HashSet<>(viewsForUrl));
-                return viewsService.authorizeViews(uniqueViews, damToken, refreshToken, realm)
+                return viewsService.authorizeViews(uniqueViews, tokens, realm)
                     .collectList()
-                    .flatMap(tokens -> {
+                    .flatMap(viewAuthorizationResponses -> {
                         // assuming that there is only one token for a bucket
-                        if (!tokens.isEmpty()) {
-                            GetTokenResponse tokenResponse = tokens.get(0).getLocationAndToken();
+                        if (!viewAuthorizationResponses.isEmpty()) {
+                            GetTokenResponse tokenResponse = viewAuthorizationResponses.get(0).getLocationAndToken();
                             String accessToken = "";
                             if (tokenResponse != null) {
                                 accessToken = tokenResponse.getToken();

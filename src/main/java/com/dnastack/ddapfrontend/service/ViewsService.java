@@ -4,7 +4,6 @@ import com.dnastack.ddapfrontend.client.dam.DamClientFactory;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
 import com.dnastack.ddapfrontend.model.ViewAuthorization;
 import dam.v1.DamService.GetFlatViewsResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriTemplate;
@@ -14,6 +13,8 @@ import reactor.core.publisher.Mono;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind;
 
 @Component
 public class ViewsService {
@@ -59,8 +60,7 @@ public class ViewsService {
     }
 
     public Flux<ViewAuthorization.ViewAuthorizationResponse> authorizeViews(List<String> uniqueViews,
-                                                                                   String damToken,
-                                                                                   String refreshToken,
+                                                                            Map<CookieKind, String> tokens,
                                                                                    String realm) {
         Pattern viewPattern = Pattern.compile("/dam/(?<damId>[^/]+)/v1alpha/(?<realmId>[^/]+)/resources/"
                 + "(?<resourceId>[^/]+)/views/(?<viewName>[^/]+)(/.*)*");
@@ -75,7 +75,7 @@ public class ViewsService {
 
                     ReactiveDamClient reactiveDamClient = damClientFactory.getDamClient(damId);
                     return reactiveDamClient
-                            .getAccessTokenForView(realm, resourceId, viewName, damToken, refreshToken)
+                            .getAccessTokenForView(realm, resourceId, viewName, tokens.get(CookieKind.DAM), tokens.get(CookieKind.REFRESH))
                             .flatMap(locationAndToken ->
                                     Mono.just(new ViewAuthorization.ViewAuthorizationResponse(view, locationAndToken)))
                             .onErrorResume(throwable ->

@@ -84,18 +84,13 @@ public class IdentityController {
 
     @GetMapping
     public Mono<? extends ResponseEntity<?>> getIdentity(ServerHttpRequest request, @PathVariable String realm) {
-        Optional<String> icToken = cookiePackager.extractToken(request, CookieKind.IC);
-        Optional<String> damToken = cookiePackager.extractToken(request, CookieKind.DAM);
-        Optional<String> refreshToken = cookiePackager.extractToken(request, CookieKind.REFRESH);
-        if (icToken.isEmpty() || damToken.isEmpty() || refreshToken.isEmpty()) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
-        }
+        Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request, Set.of(CookieKind.IC, CookieKind.DAM, CookieKind.REFRESH));
 
-        Mono<List<IdentityModel.Access>> accessesMono = accessTesterClient.determineAccessForUser(realm, damToken.get(), icToken.get(), refreshToken.get());
-        Mono<IcAccount> accountMono = idpClient.getAccounts(realm, icToken.get(), refreshToken.get());
+        Mono<List<IdentityModel.Access>> accessesMono = accessTesterClient.determineAccessForUser(realm, tokens);
+        Mono<IcAccount> accountMono = idpClient.getAccounts(realm, tokens);
 
         return Mono.zip(accessesMono, accountMono, (accesses, account) -> {
-            Optional<JwtSubject> subject = dangerousStopgapExtractSubject(icToken.get());
+            Optional<JwtSubject> subject = dangerousStopgapExtractSubject(tokens.get(CookieKind.IC));
             return IdentityModel.builder()
                     .account(account.getAccount())
                     .scopes(subject.get().scope)
@@ -107,7 +102,7 @@ public class IdentityController {
 
     @GetMapping("/logout")
     public Mono<? extends ResponseEntity> invalidateTokens(ServerHttpRequest request, @PathVariable String realm) {
-        Optional<String> refreshToken = cookiePackager.extractToken(request, CookieKind.REFRESH);
+        String refreshToken = cookiePackager.extractRequiredToken(request, CookieKind.REFRESH);
 
         URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
         ResponseEntity response = ResponseEntity.noContent()
@@ -116,7 +111,7 @@ public class IdentityController {
                 .header(SET_COOKIE, cookiePackager.clearToken(cookieDomainPath.getHost(), CookieKind.OAUTH_STATE).toString())
                 .header(SET_COOKIE, cookiePackager.clearToken(cookieDomainPath.getHost(), CookieKind.REFRESH).toString())
                 .build();
-        return oAuthClient.revokeRefreshToken(realm, refreshToken.get())
+        return oAuthClient.revokeRefreshToken(realm, refreshToken)
                 .thenReturn(response)
                 .onErrorReturn(response);
     }
@@ -195,23 +190,16 @@ public class IdentityController {
             ServerHttpRequest request,
             @PathVariable String realm,
             @PathVariable String subjectName) {
-        final Optional<String> icToken = cookiePackager.extractToken(request, CookieKind.IC);
-        if (icToken.isEmpty()) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
-        }
-        final Optional<String> refreshToken = cookiePackager.extractToken(request, CookieKind.REFRESH);
-        if (refreshToken.isEmpty()) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
-        }
-        final String targetAccountId = dangerousStopgapExtractSubject(icToken.get()).map(JwtSubject::getSub).orElse(null);
+        Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request, Set.of(CookieKind.IC, CookieKind.REFRESH));
+        final String targetAccountId = dangerousStopgapExtractSubject(tokens.get(CookieKind.IC)).map(JwtSubject::getSub).orElse(null);
         if (targetAccountId == null) {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is invalid"));
         }
 
-        final String accountId = dangerousStopgapExtractSubject(icToken.get()).map(JwtSubject::getSub).orElse(null);
+        final String accountId = dangerousStopgapExtractSubject(tokens.get(CookieKind.IC)).map(JwtSubject::getSub).orElse(null);
 
-        Mono<String> unlinkAccountMono = idpClient.unlinkAccount(realm, accountId, icToken.get(), refreshToken.get(), subjectName);
-        Mono<TokenResponse> refreshAccessTokenMono = oAuthClient.refreshAccessToken(realm, refreshToken.get());
+        Mono<String> unlinkAccountMono = idpClient.unlinkAccount(realm, accountId, tokens.get(CookieKind.IC), tokens.get(CookieKind.REFRESH), subjectName);
+        Mono<TokenResponse> refreshAccessTokenMono = oAuthClient.refreshAccessToken(realm, tokens.get(CookieKind.REFRESH));
 
         return unlinkAccountMono.then(refreshAccessTokenMono).flatMap((tokenResponse) -> {
             URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
@@ -224,13 +212,10 @@ public class IdentityController {
 
     @GetMapping("/refresh")
     public Mono<? extends ResponseEntity<?>> refresh(ServerHttpRequest request, @PathVariable String realm) {
-        final Optional<String> refreshToken = cookiePackager.extractToken(request, CookieKind.REFRESH);
-        if (refreshToken.isEmpty()) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
-        }
+        String refreshToken = cookiePackager.extractRequiredToken(request, CookieKind.REFRESH);
 
         URI cookieDomainPath = selfLinkToApi(request, realm, "identity/token");
-        Mono<TokenResponse> refreshAccessTokenMono = oAuthClient.refreshAccessToken(realm, refreshToken.get());
+        Mono<TokenResponse> refreshAccessTokenMono = oAuthClient.refreshAccessToken(realm, refreshToken);
 
         return refreshAccessTokenMono.map((tokenResponse) -> ResponseEntity.noContent()
                 .location(UriUtil.selfLinkToUi(request, realm, "identity"))
@@ -245,16 +230,8 @@ public class IdentityController {
             @PathVariable String realm,
             @RequestParam String provider,
             @RequestParam(defaultValue = "external_idp") AccountLinkingType type) {
-
-        final Optional<String> icToken = cookiePackager.extractToken(request, CookieKind.IC);
-        if (icToken.isEmpty()) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
-        }
-        final Optional<String> refreshToken = cookiePackager.extractToken(request, CookieKind.REFRESH);
-        if (refreshToken.isEmpty()) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is required"));
-        }
-        final String targetAccountId = dangerousStopgapExtractSubject(icToken.get()).map(JwtSubject::getSub).orElse(null);
+        Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request, Set.of(CookieKind.IC, CookieKind.REFRESH));
+        final String targetAccountId = dangerousStopgapExtractSubject(tokens.get(CookieKind.IC)).map(JwtSubject::getSub).orElse(null);
         if (targetAccountId == null) {
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization is invalid"));
         }
@@ -271,11 +248,11 @@ public class IdentityController {
                         .header(SET_COOKIE, cookiePackager.packageToken(state, cookieDomainPath.getHost(), CookieKind.OAUTH_STATE).toString())
                         .build());
             case PERSONA:
-                Mono<TokenResponse> refreshAccessTokenMono = oAuthClient.refreshAccessToken(realm, refreshToken.get());
+                Mono<TokenResponse> refreshAccessTokenMono = oAuthClient.refreshAccessToken(realm, tokens.get(CookieKind.REFRESH));
                 Mono<String> linkAccountMono = idpClient.personaLogin(realm, scopes, provider, selfLinkToApi(request, realm, ""))
                         .doOnError(exception -> log.info("Failed to negotiate persona token at beginning of account linking", exception))
                         .flatMap(tokenResponse -> finishAccountLinking(
-                                request, tokenResponse.getAccessToken(), request.getCookies().getFirst("ic_token").getValue(), realm, refreshToken.get()
+                                request, tokenResponse.getAccessToken(), request.getCookies().getFirst("ic_token").getValue(), realm, tokens.get(CookieKind.REFRESH)
                         ));
                 return linkAccountMono.then(refreshAccessTokenMono).flatMap((tokenResponse) -> Mono.just(ResponseEntity.status(307)
                         .location(UriUtil.selfLinkToUi(request, realm, "identity"))

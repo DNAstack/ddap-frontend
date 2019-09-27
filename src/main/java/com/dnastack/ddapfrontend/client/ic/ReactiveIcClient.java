@@ -15,6 +15,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind;
 import static java.lang.String.format;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -58,7 +59,7 @@ public class ReactiveIcClient {
                 .bodyToMono(Object.class);
     }
 
-    public Mono<IcAccount> getAccounts(String realm, String icToken, String refreshToken) {
+    public Mono<IcAccount> getAccounts(String realm, Map<CookieKind, String> tokens) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/accounts/-" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
@@ -67,10 +68,10 @@ public class ReactiveIcClient {
         variables.put("clientId", idpClientId);
         variables.put("clientSecret", idpClientSecret);
 
-        return webClientFactory.getWebClient(realm, refreshToken, OAuthFilter.Audience.IC)
+        return webClientFactory.getWebClient(realm, tokens.get(CookieKind.REFRESH), OAuthFilter.Audience.IC)
                 .get()
                 .uri(idpBaseUrl.resolve(template.expand(variables)))
-                .header(AUTHORIZATION, "Bearer " + icToken)
+                .header(AUTHORIZATION, "Bearer " + tokens.get(CookieKind.IC))
                 .retrieve()
                 .bodyToMono(IcAccount.class);
     }

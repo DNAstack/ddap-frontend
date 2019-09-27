@@ -1,16 +1,9 @@
 package com.dnastack.ddapfrontend;
 
-import static com.dnastack.ddapfrontend.http.XForwardUtil.getExternalHost;
-import static com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind.OAUTH_STATE;
-import static org.springframework.http.HttpHeaders.SET_COOKIE;
-
 import com.dnastack.ddapfrontend.cli.CliSessionNotFound;
 import com.dnastack.ddapfrontend.client.dataset.DatasetErrorException;
 import com.dnastack.ddapfrontend.client.ic.AccountLinkingFailedException;
-import com.dnastack.ddapfrontend.security.BadCredentialsException;
-import com.dnastack.ddapfrontend.security.InvalidOAuthStateException;
-import com.dnastack.ddapfrontend.security.InvalidTokenException;
-import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
+import com.dnastack.ddapfrontend.security.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +11,13 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import static com.dnastack.ddapfrontend.http.XForwardUtil.getExternalHost;
+import static com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind.OAUTH_STATE;
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
+
 @Slf4j
 @ControllerAdvice
-public class GlobalControllerExceptionHandler {
+public class GlobalExceptionHandler {
 
     @Autowired
     private UserTokenCookiePackager cookiePackager;
@@ -46,6 +43,11 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<DdapErrorResponse> handle(InvalidTokenException ex) {
+        return ResponseEntity.status(401).body(new DdapErrorResponse(ex.getMessage(), 401));
+    }
+
+    @ExceptionHandler(AuthCookieNotPresentInRequestException.class)
+    public ResponseEntity<DdapErrorResponse> handle(AuthCookieNotPresentInRequestException ex) {
         return ResponseEntity.status(401).body(new DdapErrorResponse(ex.getMessage(), 401));
     }
 

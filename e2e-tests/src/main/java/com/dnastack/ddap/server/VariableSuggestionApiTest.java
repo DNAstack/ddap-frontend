@@ -26,7 +26,8 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldFindBigQueryVariables() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
+        String damToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.ADMINISTRATOR, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -35,7 +36,8 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
                 .log().uri()
                 .when()
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
-                .cookie("dam_token", validPersonaToken)
+                .cookie("dam_token", damToken)
+                .cookie("refresh_token", refreshToken)
                 .pathParam("realm", REALM)
                 .pathParam("damId", DAM_ID)
                 .queryParam("serviceTemplate", "bigquery")
@@ -53,7 +55,8 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldFindGCSVariables() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
+        String damToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.ADMINISTRATOR, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -62,7 +65,8 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
                 .log().uri()
                 .when()
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
-                .cookie("dam_token", validPersonaToken)
+                .cookie("dam_token", damToken)
+                .cookie("refresh_token", refreshToken)
                 .pathParam("realm", REALM)
                 .pathParam("damId", DAM_ID)
                 .queryParam("serviceTemplate", "gcs")
@@ -80,7 +84,8 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldGetBadRequest() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
+        String damToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.ADMINISTRATOR, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -89,7 +94,8 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
                 .log().uri()
                 .when()
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
-                .cookie("dam_token", validPersonaToken)
+                .cookie("dam_token", damToken)
+                .cookie("refresh_token", refreshToken)
                 .pathParam("realm", REALM)
                 .pathParam("damId", DAM_ID)
                 .queryParam("serviceTemplate", "invalid")

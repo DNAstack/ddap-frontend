@@ -7,7 +7,10 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class UserTokenCookiePackager {
@@ -29,6 +32,17 @@ public class UserTokenCookiePackager {
     public Optional<String> extractToken(ServerHttpRequest request, CookieKind audience) {
         return Optional.ofNullable(request.getCookies().getFirst(audience.cookieName()))
                 .map(HttpCookie::getValue);
+    }
+
+    public String extractRequiredToken(ServerHttpRequest request, CookieKind audience) {
+        return extractToken(request, audience)
+                .orElseThrow(() -> new AuthCookieNotPresentInRequestException(audience.cookieName()));
+    }
+
+    public Map<CookieKind, String> extractRequiredTokens(ServerHttpRequest request, Set<CookieKind> audiences) {
+        return audiences.stream()
+                .map(audience -> Map.entry(audience, extractRequiredToken(request, audience)))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     /**

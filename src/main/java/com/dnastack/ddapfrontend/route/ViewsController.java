@@ -1,30 +1,19 @@
 package com.dnastack.ddapfrontend.route;
 
-import com.dnastack.ddapfrontend.client.dam.DamAuthorizationException;
 import com.dnastack.ddapfrontend.client.dam.DamClientFactory;
 import com.dnastack.ddapfrontend.client.dam.ReactiveDamClient;
 import com.dnastack.ddapfrontend.model.ViewAuthorization;
 import com.dnastack.ddapfrontend.security.UserTokenCookiePackager;
 import com.dnastack.ddapfrontend.service.ViewsService;
-import dam.v1.DamService.GetFlatViewsResponse;
-import dam.v1.DamService.GetTokenResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.*;
+
+import static com.dnastack.ddapfrontend.security.UserTokenCookiePackager.CookieKind;
 
 @RestController
 @RequestMapping("/api/v1alpha/{realm}/views")
@@ -46,46 +35,34 @@ public class ViewsController {
 
     @PostMapping(path = "/tokens")
     public Flux<ViewAuthorization.ViewAuthorizationResponse> authorizeMultipleViews(@PathVariable String realm,
-                                                                                    @RequestBody List<String> views, ServerHttpRequest request) {
+                                                                                    @RequestBody List<String> views,
+                                                                                    ServerHttpRequest request) {
         if (views == null || views.isEmpty()) {
             throw new IllegalArgumentException("Urls cannot be empty or null");
         }
 
         final List<String> uniqueViews = new ArrayList<>(new HashSet<>(views));
-        Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
-        Optional<String> foundRefreshToken = cookiePackager
-            .extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
-        String refreshToken = foundRefreshToken.orElse(null);
+        Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request, Set.of(CookieKind.DAM, CookieKind.REFRESH));
 
-        String foundDamToken = damToken
-            .orElseThrow(() -> new DamAuthorizationException(401, "User has not authenticated with the DAM to perform"
-                + " this action"));
-
-        return viewsService.authorizeViews(uniqueViews, foundDamToken, refreshToken, realm);
+        return viewsService.authorizeViews(uniqueViews, tokens, realm);
     }
 
     @PostMapping(path = "/lookup")
-    public Mono<Map<String, Set<String>>> lookupViews(@PathVariable String realm, @RequestBody List<String> urls,
-        ServerHttpRequest request) {
-
+    public Mono<Map<String, Set<String>>> lookupViews(@PathVariable String realm,
+                                                      @RequestBody List<String> urls,
+                                                      ServerHttpRequest request) {
         if (urls == null || urls.isEmpty()) {
             throw new IllegalArgumentException("Urls cannot be empty or null");
         }
-
         final List<String> uniqueUrls = new ArrayList<>(new HashSet<>(urls));
 
-        Optional<String> damToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
-        Optional<String> foundRefreshToken = cookiePackager
-            .extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
-        String refreshToken = foundRefreshToken.orElse(null);
+        Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request, Set.of(CookieKind.DAM, CookieKind.REFRESH));
         return Flux.fromStream(damClientFactory.allDamClients()).flatMap(clientEntry -> {
             String damId = clientEntry.getKey();
             ReactiveDamClient damClient = clientEntry.getValue();
-            String token = damToken.get();
             // TODO: Handle error when token is empty
-            return damClient.getFlattenedViews(realm, token, refreshToken).flatMap(flatViews ->
-                    viewsService.getRelevantViewsForUrlsInDam(damId, realm, flatViews, uniqueUrls));
-
+            return damClient.getFlattenedViews(realm, tokens.get(CookieKind.DAM), tokens.get(CookieKind.REFRESH))
+                    .flatMap(flatViews -> viewsService.getRelevantViewsForUrlsInDam(damId, realm, flatViews, uniqueUrls));
         }).collectList().flatMap(viewsForAllDams -> {
             final Map<String, Set<String>> finalViewListing = new HashMap<>();
 

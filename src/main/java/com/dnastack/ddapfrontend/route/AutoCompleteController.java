@@ -8,25 +8,18 @@ import dam.v1.DamService;
 import dam.v1.DamService.Condition;
 import dam.v1.DamService.DamConfig;
 import dam.v1.DamService.Policy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.dnastack.ddapfrontend.security.UserTokenCookiePackager.*;
 
 @Slf4j
 @RestController
@@ -70,18 +63,11 @@ public class AutoCompleteController {
         List<String> result = new ArrayList<>();
 
         // find beacons under resourceId in DAM config
-        Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
-        Optional<String> foundRefreshToken = cookiePackager
-            .extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
-
-        String damToken = foundDamToken
-            .orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
-        String refreshToken = foundRefreshToken
-            .orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
+        Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request, Set.of(CookieKind.DAM, CookieKind.REFRESH));
 
         final ReactiveDamClient damClient = damClientFactory.getDamClient(damId);
 
-        return damClient.getConfig(realm, damToken, refreshToken)
+        return damClient.getConfig(realm, tokens.get(CookieKind.DAM), tokens.get(CookieKind.REFRESH))
             .flatMap((damConfig) -> {
                 Map<String, Policy> policies = damConfig.getPoliciesMap();
                 for (Map.Entry<String, Policy> policy : policies.entrySet()) {
