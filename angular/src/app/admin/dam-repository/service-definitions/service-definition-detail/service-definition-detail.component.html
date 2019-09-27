@@ -12,8 +12,8 @@
     </ddap-service-definition-form>
   </div>
   <div class="ddap-form-toolbar">
-    <ddap-form-footer-error [showError]=""
-                            [message]="">
+    <ddap-form-footer-error [showError]="!isFormValid && isFormValidated"
+                            [message]="formErrorMessage">
     </ddap-form-footer-error>
     <button mat-flat-button
             (click)="delete()"

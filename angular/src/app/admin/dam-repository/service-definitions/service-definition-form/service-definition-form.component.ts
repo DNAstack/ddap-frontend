@@ -73,7 +73,6 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   }
 
   addRole(roleId?: string, roles?): void {
-    // TODO: Refactor
     if (!roles) {
       const { name, dto } = new EntityModel( '' , ServiceRole.create());
       this.roles.insert(0, this.createRoleForm(name, dto));
@@ -88,7 +87,6 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   }
 
   addInterface(interfaceType?, interfaces?) {
-    // TODO: Refactor
     if (!interfaces) {
       this.interfaces.insert(0, this.createInterfacesForm('', ''));
     } else {
@@ -155,7 +153,6 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   private updateRolesForm(roles: any) {
     if (!roles) {
       return;
@@ -171,7 +168,6 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   }
 
   private formatInterfaces(interfaces) {
-    // TODO: Refactor
     const modifiedInterfaces = {};
     interfaces.forEach(interfaceObj => {
       if (!modifiedInterfaces.hasOwnProperty(interfaceObj.type)) {
@@ -183,7 +179,6 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   }
 
   private formatRoles(roles) {
-    // TODO: Refactor
     const modifiedRoles = {};
     const roleObj = {
       targetRoles: [],

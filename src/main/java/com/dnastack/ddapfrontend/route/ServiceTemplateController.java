@@ -62,22 +62,16 @@ public class ServiceTemplateController {
                 .map(ItemFormat::getVariablesMap));
     }
 
-
     @GetMapping(value = "{damId}/targetAdapters")
     public Mono<Map<String, TargetAdapter>> targetAdapters( @PathVariable String realm,
                                                             @PathVariable String damId,
                                                             ServerHttpRequest request) {
-        Optional<String> foundDamToken = cookiePackager.extractToken(request, UserTokenCookiePackager.CookieKind.DAM);
-        Optional<String> foundRefreshToken = cookiePackager
-                .extractToken(request, UserTokenCookiePackager.CookieKind.REFRESH);
-        String damToken = foundDamToken
-                .orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
-        String refreshToken = foundRefreshToken
-                .orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
+        Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request,
+                Set.of(CookieKind.DAM, CookieKind.REFRESH));
 
         final ReactiveDamClient damClient = damClientFactory.getDamClient(damId);
 
-        return damClient.getTargetAdapters(realm, damToken, refreshToken)
+        return damClient.getTargetAdapters(realm, tokens.get(CookieKind.DAM), tokens.get(CookieKind.REFRESH))
                 .map(targetAdaptersResponse ->
                         targetAdaptersResponse.getTargetAdaptersMap()
                 );
