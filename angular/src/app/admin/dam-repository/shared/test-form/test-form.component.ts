@@ -47,47 +47,10 @@ export class TestFormComponent implements OnChanges, Form {
     if (_isEqual(changes.resource.currentValue, changes.resource.previousValue)) {
       return;
     }
+    this.populateViews();
 
-    const resourceViews = _get(this.resource, 'dto.views', {});
-    const viewNames = Object.keys(resourceViews);
-
-    this.views = viewNames.reduce((access, viewName) => {
-      const view = _get(this.resource, `dto.views[${viewName}]`);
-      const roles = _get(view, 'roles', {});
-      const roleNames = Object.keys(roles);
-
-      const newAccess = roleNames.map((roleName) => `${viewName}/${roleName}`);
-
-      return [...access, ...newAccess];
-    }, []);
-
-    const reducer = (personas) => (sum, view) => {
-      personas.forEach((persona) => {
-        if (!sum[persona]) {
-          sum[persona] = this.formBuilder.group({});
-        }
-
-        sum[persona].addControl(view, this.formBuilder.control(null));
-      });
-      return sum;
-    };
-
-    zip(this.personas$, of(this.views)).pipe(
-      takeWhile(([personas, views]) => !!views.length),
-      map(([personas, views]) => {
-        return [views, personas, views.reduce(reducer(personas), {})];
-      }),
-      take(1)
-    ).subscribe(([views, personas, form]) => {
-      this.form = this.formBuilder.group(form);
-
-      this.form.valueChanges.pipe(
-        tap((valueChange) => this.change.emit(valueChange))
-      );
-
-      this.views = views;
+    this.personas$.subscribe(personas => {
       this.personas = personas;
-
       if (this.resource.dto) {
         const change = personas.reduce((sum, persona) => {
           _set(sum, `modification.testPersonas[${persona}].resources[${this.resource.name}].access`, []);
@@ -101,22 +64,57 @@ export class TestFormComponent implements OnChanges, Form {
           : this.resourceService.update(this.routeDamId(), this.resource.name, change);
         action$.subscribe(
           () => true,
-          (dryRunDto) => this.maybeFillInValues(this.form, personas, views, dryRunDto)
+          (dryRunDto) => this.maybeFillInValues(personas, this.views, dryRunDto)
         );
       }
     });
   }
 
-  maybeFillInValues(form: FormGroup, personas: string[], views: string[], {error}: any) {
+  populateViews() {
+    const resourceViews = _get(this.resource, 'dto.views', {});
+    const viewNames = Object.keys(resourceViews);
+    this.views = viewNames.reduce((access, viewName) => {
+      const view = _get(this.resource, `dto.views[${viewName}]`);
+      const roles = _get(view, 'roles', {});
+      const roleNames = Object.keys(roles);
+      const newAccess = roleNames.map((roleName) => `${viewName}/${roleName}`);
+      return [...access, ...newAccess];
+    }, []);
+  }
+
+  maybeFillInValues(personas: string[], views: string[], {error}: any) {
     if (this.isConfigModificationObject(error)) {
       this.originalTest = error;
+      this.populateTestForm(personas, views);
       personas.forEach((persona) => {
         const accesses = _get(error, `testPersonas[${persona}].resources[${this.resource.name}].access`, []);
         accesses.forEach((access) => {
-          form.get(persona).get(access).setValue(true);
+          this.form.get(persona).get(access).setValue(true);
         });
       });
     }
+  }
+
+  populateTestForm(personas, views) {
+    const reducer = (personasArray) => (sum, view) => {
+      personasArray.forEach((persona) => {
+        if (!sum[persona]) {
+          sum[persona] = this.formBuilder.group({});
+        }
+
+        sum[persona].addControl(view, this.formBuilder.control(null));
+      });
+      return sum;
+    };
+
+    const form = views.reduce(reducer(personas), {});
+
+
+    this.form = this.formBuilder.group(form);
+
+    this.form.valueChanges.pipe(
+      tap((valueChange) => this.change.emit(valueChange))
+    );
   }
 
   toApplyDto() {
