@@ -19,7 +19,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String damConfig = loadTemplate("/com/dnastack/ddap/accountLinkingTestRealmConfig.json");
+        final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         validateProtoBuf(damConfig, DamService.DamConfig.newBuilder());
         setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
     }
@@ -31,9 +31,9 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
     @Test
     public void testScopes() throws Exception {
         String requestedScope = "link";
-        String icToken = fetchRealPersonaIcToken("mr_hyde", REALM, "openid");
-        String damToken = fetchRealPersonaDamToken("mr_hyde", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("mr_hyde", REALM);
+        String icToken = fetchRealPersonaIcToken(TestingPersona.USER_WITH_ACCESS, REALM, "openid");
+        String damToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()
@@ -43,7 +43,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .redirects().follow(false)
                 .when()
-                .get(ddap("/identity/login?persona=nci_researcher"))
+                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getValue()))
                 .then()
                 .log().body()
                 .log().ifValidationFails()
@@ -83,7 +83,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .redirects().follow(false)
                 .when()
-                .get(ddap("/identity/login?persona=nci_researcher&scope=openid " + requestedScope))
+                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getValue() + "&scope=openid " + requestedScope))
                 .then()
                 .log().body()
                 .log().ifValidationFails()
@@ -92,8 +92,8 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .extract();
         // @formatter:on
 
-        icToken = fetchRealPersonaIcToken("mr_hyde", REALM, "openid", requestedScope);
-        damToken = fetchRealPersonaDamToken("mr_hyde", REALM);
+        icToken = fetchRealPersonaIcToken(TestingPersona.USER_WITH_ACCESS, REALM, "openid", requestedScope);
+        damToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()
@@ -119,10 +119,9 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
 
     @Test
     public void testAccount() throws Exception {
-        String username = "mr_hyde";
-        String icToken = fetchRealPersonaIcToken("mr_hyde", REALM, "");
-        String danToken = fetchRealPersonaDamToken("mr_hyde", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("mr_hyde", REALM);
+        String icToken = fetchRealPersonaIcToken(TestingPersona.USER_WITH_ACCESS, REALM, "");
+        String danToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()
@@ -132,7 +131,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .redirects().follow(false)
                 .when()
-                .get(ddap("/identity/login?persona=nci_researcher"))
+                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getValue()))
                 .then()
                 .log().body()
                 .log().ifValidationFails()
@@ -163,7 +162,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .body("scopes", not(empty()))
                 .body("accesses", not(empty()))
                 .body("account.connectedAccounts", not(empty()))
-                .body("account.profile.username", is(username));
+                .body("account.profile.username", is(TestingPersona.USER_WITH_ACCESS.getValue()));
         // @formatter:on
     }
 
@@ -217,9 +216,9 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
 
     @Test
     public void testAccessesAsNonAdmin() throws Exception {
-        String icToken = fetchRealPersonaIcToken("mr_hyde", REALM, "");
-        String danToken = fetchRealPersonaDamToken("mr_hyde", REALM);
-        String refreshToken = fetchRealPersonaRefreshToken("mr_hyde", REALM);
+        String icToken = fetchRealPersonaIcToken(TestingPersona.USER_WITH_ACCESS, REALM, "");
+        String danToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()
@@ -229,7 +228,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .redirects().follow(false)
                 .when()
-                .get(ddap("/identity/login?persona=nci_researcher"))
+                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getValue()))
                 .then()
                 .log().body()
                 .log().ifValidationFails()

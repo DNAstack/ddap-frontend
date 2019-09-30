@@ -149,6 +149,7 @@ public abstract class AbstractBaseE2eTest {
     }
 
     protected static String loadTemplate(String resourcePath) {
+        assertThat("Given config was null", resourcePath, notNullValue());
         final String resourceTemplate;
         try (InputStream is = AbstractBaseE2eTest.class.getResourceAsStream(resourcePath)) {
             final StringWriter writer = new StringWriter();
