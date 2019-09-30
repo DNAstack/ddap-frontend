@@ -49,7 +49,7 @@
     </mat-table>
     <ddap-paginator *ngIf="dataset.pagination as pagination"
                     [nextPage]="pagination.next_page_url"
-                    [previousPage]="pagination.previous_page_url"
+                    [previousPage]="pagination.prev_page_url ? pagination.prev_page_url : pagination.previous_page_url"
                     (pageChangeRequested)="redirectToPage($event)">
     </ddap-paginator>
   </mat-expansion-panel>
