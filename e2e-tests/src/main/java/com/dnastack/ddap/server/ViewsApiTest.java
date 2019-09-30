@@ -28,8 +28,8 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldReturnViewForBucket() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()
@@ -56,8 +56,8 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldNotReturnViewForPartialSubset() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()
@@ -82,8 +82,8 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldReturnEmptyViewsForNonExistantResource() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()
@@ -108,8 +108,8 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldReturnListOfAuthorizedViews() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
         String view = "/dam/1/v1alpha/" + REALM + "/resources/ga4gh-apis/views/gcs_read";
 
         // @formatter:off
@@ -139,8 +139,8 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldReturnListOfAuthorizedViewsWithError() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
         String view = "/dam/1/v1alpha/" + REALM + "/resources/ga4gh-apis/views/invalid";
 
         // @formatter:off

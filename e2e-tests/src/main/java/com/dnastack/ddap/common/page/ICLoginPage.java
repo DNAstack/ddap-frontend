@@ -24,15 +24,15 @@ public class ICLoginPage {
         this.driver = driver;
         log.info("Testing if {} is an IC login page", driver.getCurrentUrl());
         new WebDriverWait(driver, 5)
-                .until(ExpectedConditions.visibilityOfElementLocated(personaLoginButton(NCI_RESEARCHER)));
+                .until(ExpectedConditions.visibilityOfElementLocated(personaLoginButton(USER_WITH_ACCESS)));
     }
 
     private By personaLoginButton(TestingPersona persona) {
         return By.xpath(format("//a[contains(@href, '%s')]", persona.getValue()));
     }
 
-    public <T extends AnyDdapPage> T loginAsNciResearcher(Function<WebDriver, T> pageConstructor) {
-        return loginAsPersona(NCI_RESEARCHER, pageConstructor);
+    public <T extends AnyDdapPage> T loginAsUserWithAccess(Function<WebDriver, T> pageConstructor) {
+        return loginAsPersona(USER_WITH_ACCESS, pageConstructor);
     }
 
     public <T extends AdminDdapPage> T loginAsAdministrator(Function<WebDriver, T> pageConstructor) {

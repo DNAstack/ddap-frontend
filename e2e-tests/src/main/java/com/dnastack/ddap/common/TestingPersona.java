@@ -3,9 +3,8 @@ package com.dnastack.ddap.common;
 public enum TestingPersona {
 
     ADMINISTRATOR("administrator"),
-    NCI_RESEARCHER("nci_researcher"),
-    DR_JOE_ELIXIR("dr_joe_elixir"),
-    JOHN("john");
+    USER_WITH_ACCESS("test_user_with_access"),
+    USER_WITHOUT_ACCESS("test_user_without_access");
 
     private String value;
 

@@ -114,7 +114,7 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldBeAbleToAccessICWithAppropriateCookie() throws IOException {
-        String validPersonaToken = fetchRealPersonaIcToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaIcToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()

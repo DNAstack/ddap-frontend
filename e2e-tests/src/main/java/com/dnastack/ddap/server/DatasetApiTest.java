@@ -31,8 +31,8 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldGetSingleDatasetFromFetch() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()
@@ -55,8 +55,8 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldGetSingleDatasetFromFetchAndResolveRemoteSchema() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()
@@ -81,8 +81,8 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldGetErrorMessageFromNonexistantDataset() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()

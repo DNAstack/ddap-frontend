@@ -41,7 +41,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
                 .assertAdminNavBar();
 
         icLoginPage = ddapPage.getNavBar().logOut();
-        icLoginPage.loginAsPersona(TestingPersona.JOHN, AnyDdapPage::new);
+        icLoginPage.loginAsPersona(TestingPersona.USER_WITHOUT_ACCESS, AnyDdapPage::new);
 
         ddapPage.getNavBar()
                 .assertNonAdminNavBar();

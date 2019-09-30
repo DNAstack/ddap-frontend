@@ -1,10 +1,9 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.util.DdapBy;
 import com.dnastack.ddap.common.page.AdminListPage;
 import com.dnastack.ddap.common.page.AdminManagePage;
+import com.dnastack.ddap.common.util.DdapBy;
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 import static com.dnastack.ddap.common.fragments.NavBar.damTestPersonaLink;
 import static junit.framework.TestCase.assertTrue;
@@ -89,54 +88,6 @@ public class AdminPersonaE2eTest extends AbstractAdminFrontendE2eTest {
     }
 
     @Test
-    public void deleteAndAddPersona() {
-        AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(damTestPersonaLink(DAM_ID));
-
-        adminListPage.assertListItemExists("Dr. Joe (eRA Commons)");
-        AdminManagePage adminManagePage = adminListPage.clickView("Dr. Joe (eRA Commons)", "Edit Persona");
-        adminListPage = adminManagePage.deleteEntity();
-        adminListPage.assertListItemDoNotExist("Dr. Joe (eRA Commons)");
-
-        adminListPage.clickManage();
-
-        adminManagePage.fillField(DdapBy.se("inp-id"), "dr_joe_era_commons");
-        adminManagePage.fillField(DdapBy.se("inp-label"), "Dr. Joe (eRA Commons)");
-
-        adminManagePage.fillField(DdapBy.se("inp-iss"), "https://login.nih.gov/oidc");
-        adminManagePage.fillField(DdapBy.se("inp-sub"), "dr_joe@era.nih.gov");
-
-        adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
-        adminManagePage.toggleExpansionPanel("claim-0");
-        adminManagePage.fillField(DdapBy.se("inp-claimName"), "AffiliationAndRole");
-        adminManagePage.fillField(DdapBy.se("inp-source"), "https://uni-heidelberg.de");
-        adminManagePage.fillField(DdapBy.se("inp-value"), "faculty@uni-heidelberg.de");
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "1d");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "30d");
-        adminManagePage.closeAutocompletes();
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "so");
-
-        adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
-        adminManagePage.toggleExpansionPanel("claim-0");
-        adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
-        adminManagePage.fillField(DdapBy.se("inp-source"), "https://dbgap.nlm.nih.gov/aa");
-        adminManagePage.fillField(DdapBy.se("inp-value"), "https://dac.nih.gov/datasets/phs000710");
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "1d");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "30d");
-        adminManagePage.closeAutocompletes();
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "dac");
-
-        adminManagePage.clickCheckbox(By.id("dataset_example/bq_read/viewer"));
-        adminManagePage.clickCheckbox(By.id("dataset_example/gcs_read/viewer"));
-        adminManagePage.clickCheckbox(By.id("ga4gh-apis/gcs_read/viewer"));
-        adminManagePage.clickCheckbox(By.id("thousand-genomes/gcs-file-access/viewer"));
-
-        adminListPage = adminManagePage.saveEntity();
-
-        adminListPage.assertListItemExists("Dr. Joe (eRA Commons)");
-    }
-
-    @Test
     public void verifyFormErrorsWithInvalidIdentifier() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damTestPersonaLink(DAM_ID));
@@ -161,7 +112,7 @@ public class AdminPersonaE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.toggleExpansionPanel("claim-0");
 
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-value"), "https://dac.nih.gov/datasets/phs000710");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-value"), "https://dnastack.com/used/value");
         adminManagePage.closeAutocompletes();
 
         adminManagePage.clearField(DdapBy.se("inp-claimName"));

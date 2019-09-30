@@ -28,7 +28,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         setupRealmConfig(TestingPersona.ADMINISTRATOR, testConfig, "1", REALM);
 
         ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsNciResearcher(AdminDdapPage::new);
+        ddapPage = icLoginPage.loginAsUserWithAccess(AdminDdapPage::new);
     }
 
     @Test

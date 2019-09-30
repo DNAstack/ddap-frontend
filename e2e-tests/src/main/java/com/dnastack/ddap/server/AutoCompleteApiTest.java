@@ -19,7 +19,7 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String damConfig = loadTemplate("/com/dnastack/ddap/autoCompleteConfig.json");
+        final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         validateProtoBuf(damConfig, DamService.DamConfig.newBuilder());
         setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
     }
@@ -65,15 +65,16 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
                     .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
                     .cookie("refresh_token", refreshToken)
-                    .get("/api/v1alpha/" + REALM + "/autocomplete/claimValue/"+ DAM_ID + "?claimName=ga4gh.ControlledAccessGrants")
+                    .get("/api/v1alpha/" + REALM + "/autocomplete/claimValue/"+ DAM_ID + "?claimName=ControlledAccessGrants")
                     .then()
                     .log().ifValidationFails()
                     .contentType(JSON)
                     .statusCode(200)
-                    .body("[0]", equalTo("https://dac.nih.gov/datasets/phs000711"))
-                    .body("[1]", equalTo("https://dac.nih.gov/datasets/phs000712"))
-                    .body("[2]", equalTo("https://dac.nih.gov/datasets/phs000713"))
-                    .body("[3]", equalTo("https://www.foobar.com"));
+                    .body("[0]", equalTo("https://dnastack.com/datasets/1"))
+                    .body("[1]", equalTo("https://dnastack.com/datasets/2"))
+                    .body("[2]", equalTo("https://dnastack.com/datasets/3"))
+                    .body("[3]", equalTo("https://dnastack.com/used/value"))
+                    .body("[4]", equalTo("https://www.foobar.com"));
         // @formatter:on
     }
 

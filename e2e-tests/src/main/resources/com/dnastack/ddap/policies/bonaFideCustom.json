@@ -9,11 +9,7 @@
           "http://www.ga4gh.org/beacon/bonafide/ver1.0"
         ],
         "from": [
-          "elixir_institutes",
-          "nih_institutes",
-          "eu_universities",
-          "us_universities",
-          "research_companies"
+          "test_whitelist_source"
         ]
       },
       {
@@ -22,15 +18,9 @@
           "https://librarycard.broadinstitute.org/v1"
         ],
         "from": [
-          "the_broad"
+          "test_whitelist_source"
         ]
       }
-    ]
-  },
-  "disallow": {
-    "claim": "nih.Blacklisted",
-    "values": [
-      "true"
     ]
   },
   "ui": {

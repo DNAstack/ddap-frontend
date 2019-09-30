@@ -52,8 +52,8 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldGetTwoResultsForAggregateSearch() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
@@ -92,8 +92,8 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void shouldGetOneResultForSingleResourceSearch() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()
@@ -128,8 +128,8 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
 
     @Test
     public void missingResourceUiLabel() throws IOException {
-        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String validPersonaToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
+        String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
         given()

@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static com.dnastack.ddap.common.TestingPersona.USER_WITHOUT_ACCESS;
+import static com.dnastack.ddap.common.TestingPersona.USER_WITH_ACCESS;
 import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,7 +28,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     @BeforeClass
     public static void oneTimeSetup() throws IOException {
-        final String damConfig = loadTemplate("/com/dnastack/ddap/accountLinkingTestRealmConfig.json");
+        final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         validateProtoBuf(damConfig, DamService.DamConfig.newBuilder());
         setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
     }
@@ -43,7 +45,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
             .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .redirects().follow(false)
         .when()
-            .get(ddap("/identity/login?persona=nci_researcher&scope=" + requestedScope))
+            .get(ddap(format("/identity/login?persona=%s&scope=%s", USER_WITHOUT_ACCESS.getValue(), requestedScope)))
         .then()
             .log().body()
             .log().ifValidationFails()
@@ -80,8 +82,8 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     @Test
     public void linkIcLoginExternalAccountShouldPassLinkScopeForAccountInIcToken() throws Exception {
-        String icTokenJwt = fetchRealPersonaIcToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String refreshTokenJwt = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
+        String icTokenJwt = fetchRealPersonaIcToken(USER_WITH_ACCESS, REALM);
+        String refreshTokenJwt = fetchRealPersonaRefreshToken(USER_WITH_ACCESS, REALM);
         String baseAccountId = JwtTestUtil.getSubject(icTokenJwt);
         String requestedScope = "link:" + baseAccountId;
 
@@ -107,9 +109,8 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     @Test
     public void linkAndUnlinkAccount() throws Exception {
-        String icTokenJwtBeforeLinking = fetchRealPersonaIcToken("mr_hyde", REALM, "openid", "identities", "link");
-        String refreshTokenJwt = fetchRealPersonaRefreshToken(TestingPersona.NCI_RESEARCHER, REALM);
-        String baseAccountId = JwtTestUtil.getSubject(icTokenJwtBeforeLinking);
+        String icTokenJwtBeforeLinking = fetchRealPersonaIcToken(USER_WITH_ACCESS, REALM, "openid", "identities", "link");
+        String refreshTokenJwt = fetchRealPersonaRefreshToken(USER_WITH_ACCESS, REALM);
 
         // Link account
         // @formatter:off
@@ -122,7 +123,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
                 .cookie("refresh_token", refreshTokenJwt)
             .redirects().follow(false)
         .when()
-            .get(ddap("/identity/link?provider=dr_jekyll&type=persona"))
+            .get(ddap(format("/identity/link?provider=%s&type=persona", USER_WITHOUT_ACCESS.getValue())))
         .then()
             .log().body()
             .log().ifValidationFails()
@@ -149,11 +150,11 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
             .jsonPath().getList("account.connectedAccounts", IcConnectedAccount.class);
         // @formatter:on
 
-        assertAccountsContainSubject(connectedAccounts, "mr_hyde@era.nih.gov");
-        assertAccountsContainSubject(connectedAccounts, "dr_jekyll@faculty.uni-heidelberg.de");
+        assertAccountsContainSubject(connectedAccounts, "test-user-access@dnastack.com");
+        assertAccountsContainSubject(connectedAccounts, "test-user-no-access@dnastack.com");
 
         // Unlink account
-        String icTokenAfterLinking = fetchRealPersonaIcToken("mr_hyde", REALM);
+        String icTokenAfterLinking = fetchRealPersonaIcToken(USER_WITHOUT_ACCESS, REALM);
         // @formatter:off
         given().log().method()
                .log().cookies()
@@ -163,7 +164,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
                 .cookie("refresh_token", refreshTokenJwt)
                .redirects().follow(false)
                .when()
-               .delete(ddap("/identity/link/mr_hyde@era.nih.gov"))
+               .delete(ddap("/identity/link/test-user-no-access@dnastack.com"))
                .then()
                .log().body()
                .log().ifValidationFails()
@@ -189,8 +190,8 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
                 .jsonPath().getList("account.connectedAccounts", IcConnectedAccount.class);
         // @formatter:on
 
-        assertAccountsContainSubject(connectedAccounts, "dr_jekyll@faculty.uni-heidelberg.de");
-        assertAccountsDoesNotContainSubject(connectedAccounts, "mr_hyde@era.nih.gov");
+        assertAccountsContainSubject(connectedAccounts, "test-user-access@dnastack.com");
+        assertAccountsDoesNotContainSubject(connectedAccounts, "test-user-no-access@dnastack.com");
     }
 
     private void assertAccountsDoesNotContainSubject(List<IcConnectedAccount> connectedAccounts, String subject) {

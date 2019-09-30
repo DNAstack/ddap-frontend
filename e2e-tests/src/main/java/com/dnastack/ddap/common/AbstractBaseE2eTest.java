@@ -48,11 +48,12 @@ public abstract class AbstractBaseE2eTest {
     protected static final String TEST_PROJECT = requiredEnv("E2E_TEST_PROJECT");
     protected static final String TEST_BUCKET = requiredEnv("E2E_TEST_BUCKET");
     protected static final String NAMESPACE =  requiredEnv("E2E_TEST_NAMESPACE");
+    protected static final String TRUSTED_SOURCE =  optionalEnv("E2E_TRUSTED_SOURCE", "https://ddap.test.source.dnastack.com");
+    protected static final String PASSPORT_ISSUER = requiredEnv("E2E_PASSPORT_ISSUER");
 
     // Current size limit on realm names in DAM
     public static final int REALM_NAME_LIMIT = 40;
     private static final String SERVICE_ACCOUNT_PROJECT = requiredEnv("E2E_SERVICE_ACCOUNT_PROJECT");
-    private static final String PASSPORT_ISSUER = requiredEnv("E2E_PASSPORT_ISSUER");
 
     protected static String generateRealmName(String testClassName) {
         /*
@@ -137,10 +138,12 @@ public abstract class AbstractBaseE2eTest {
         request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
         request.setEntity(new StringEntity(modificationPayload));
 
+        System.out.printf("Sending setup realm request to URI [%s]\n", request.getURI());
+
         final HttpResponse response = httpclient.execute(request);
         String responseBody = EntityUtils.toString(response.getEntity());
 
-        assertThat("Unable to set realm config. Response:\n" + responseBody,
+        assertThat(format("Unable to set realm config. Response:\n%s\nConfig:\n%s", responseBody, config),
                    response.getStatusLine().getStatusCode(),
                    allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
@@ -161,7 +164,8 @@ public abstract class AbstractBaseE2eTest {
                 .replace("$$E2E_PASSPORT_ISSUER$$", PASSPORT_ISSUER)
                 .replace("$$E2E_TEST_BUCKET$$", TEST_BUCKET)
                 .replace("$$E2E_TEST_PROJECT$$",TEST_PROJECT)
-                .replaceAll("\\$\\$E2E_TEST_NAMESPACE\\$\\$",NAMESPACE);
+                .replace("$$E2E_TEST_NAMESPACE$$", NAMESPACE)
+                .replace("$$E2E_TRUSTED_SOURCE$$", TRUSTED_SOURCE);
     }
 
     private static String stripTrailingSlash(String url) {
