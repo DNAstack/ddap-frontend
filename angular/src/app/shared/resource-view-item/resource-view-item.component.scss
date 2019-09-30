@@ -15,6 +15,7 @@ h4 {
   ::ng-deep mat-card {
     background: transparent;
     padding: 0;
+    box-shadow: none;
 
     & > .mat-card-actions,
     & > .mat-card-actions:last-child {
