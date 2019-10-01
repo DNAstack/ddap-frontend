@@ -6,13 +6,13 @@ public enum TestingPersona {
     USER_WITH_ACCESS("test_user_with_access"),
     USER_WITHOUT_ACCESS("test_user_without_access");
 
-    private String value;
+    private String id;
 
-    public String getValue() {
-        return value;
+    public String getId() {
+        return id;
     }
 
-    TestingPersona(String value) {
-        this.value = value;
+    TestingPersona(String id) {
+        this.id = id;
     }
 }

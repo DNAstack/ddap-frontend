@@ -43,7 +43,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .redirects().follow(false)
                 .when()
-                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getValue()))
+                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getId()))
                 .then()
                 .log().body()
                 .log().ifValidationFails()
@@ -83,7 +83,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .redirects().follow(false)
                 .when()
-                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getValue() + "&scope=openid " + requestedScope))
+                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getId() + "&scope=openid " + requestedScope))
                 .then()
                 .log().body()
                 .log().ifValidationFails()
@@ -131,7 +131,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .redirects().follow(false)
                 .when()
-                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getValue()))
+                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getId()))
                 .then()
                 .log().body()
                 .log().ifValidationFails()
@@ -162,7 +162,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .body("scopes", not(empty()))
                 .body("accesses", not(empty()))
                 .body("account.connectedAccounts", not(empty()))
-                .body("account.profile.username", is(TestingPersona.USER_WITH_ACCESS.getValue()));
+                .body("account.profile.username", is(TestingPersona.USER_WITH_ACCESS.getId()));
         // @formatter:on
     }
 
@@ -228,7 +228,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .redirects().follow(false)
                 .when()
-                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getValue()))
+                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getId()))
                 .then()
                 .log().body()
                 .log().ifValidationFails()

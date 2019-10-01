@@ -1,17 +1,18 @@
 package com.dnastack.ddap.frontend;
 
+import com.dnastack.ddap.common.TestingPersona;
 import com.dnastack.ddap.common.fragments.ExpandedAccessibleViewItem;
 import com.dnastack.ddap.common.fragments.ViewAccessMenu;
-import com.dnastack.ddap.common.page.*;
-import com.dnastack.ddap.common.TestingPersona;
+import com.dnastack.ddap.common.page.AnyDdapPage;
+import com.dnastack.ddap.common.page.DataDetailPage;
+import com.dnastack.ddap.common.page.DataListPage;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static io.restassured.RestAssured.given;
-import static org.junit.Assert.assertFalse;
+import static com.dnastack.ddap.common.TestingPersona.USER_WITHOUT_ACCESS;
 import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("Duplicates")
@@ -24,8 +25,7 @@ public class DataExploreNoAccessE2eTest extends AbstractFrontendE2eTest {
         final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
 
-        ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsPersona(TestingPersona.USER_WITHOUT_ACCESS, AdminDdapPage::new);
+        ddapPage = doBrowserLogin(REALM, USER_WITHOUT_ACCESS, AnyDdapPage::new);
     }
 
     private String basicUsername;

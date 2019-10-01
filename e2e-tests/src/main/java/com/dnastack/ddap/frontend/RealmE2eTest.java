@@ -1,10 +1,9 @@
 package com.dnastack.ddap.frontend;
 
+import com.dnastack.ddap.common.TestingPersona;
+import com.dnastack.ddap.common.fragments.ConfirmationRealmChangeDialog;
 import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AnyDdapPage;
-import com.dnastack.ddap.common.fragments.ConfirmationRealmChangeDialog;
-import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.common.TestingPersona;
 import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.TestingPersona.ADMINISTRATOR;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -29,8 +29,7 @@ public class RealmE2eTest extends AbstractFrontendE2eTest {
         final String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig(TestingPersona.ADMINISTRATOR, testConfig, "1", REALM);
 
-        ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+        ddapPage = doBrowserLogin(REALM, ADMINISTRATOR, AdminDdapPage::new);
     }
 
     @Test

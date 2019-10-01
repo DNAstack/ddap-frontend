@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dnastack.ddap.common.TestingPersona.USER_WITH_ACCESS;
 import static com.dnastack.ddap.common.fragments.NavBar.dataLink;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -30,8 +31,7 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
 
-        ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsUserWithAccess(AdminDdapPage::new);
+        ddapPage = doBrowserLogin(REALM, USER_WITH_ACCESS, AdminDdapPage::new);
     }
 
     @Test

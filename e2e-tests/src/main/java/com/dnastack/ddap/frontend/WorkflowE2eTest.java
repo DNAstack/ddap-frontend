@@ -1,14 +1,15 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.util.DdapBy;
-import com.dnastack.ddap.common.page.*;
 import com.dnastack.ddap.common.TestingPersona;
+import com.dnastack.ddap.common.page.*;
+import com.dnastack.ddap.common.util.DdapBy;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.TestingPersona.USER_WITH_ACCESS;
 import static com.dnastack.ddap.common.WorkflowRunState.*;
 import static java.util.Arrays.asList;
 
@@ -27,8 +28,7 @@ public class WorkflowE2eTest extends AbstractFrontendE2eTest {
         String testConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig(TestingPersona.ADMINISTRATOR, testConfig, "1", REALM);
 
-        ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsUserWithAccess(AdminDdapPage::new);
+        ddapPage = doBrowserLogin(REALM, USER_WITH_ACCESS, AnyDdapPage::new);
     }
 
     @Test

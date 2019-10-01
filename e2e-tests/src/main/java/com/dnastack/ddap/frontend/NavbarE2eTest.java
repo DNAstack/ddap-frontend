@@ -4,7 +4,6 @@ import com.dnastack.ddap.common.TestingPersona;
 import com.dnastack.ddap.common.fragments.NavBar;
 import com.dnastack.ddap.common.page.AdminDdapPage;
 import com.dnastack.ddap.common.page.AdminListPage;
-import com.dnastack.ddap.common.page.AnyDdapPage;
 import com.dnastack.ddap.common.page.ICLoginPage;
 import com.dnastack.ddap.common.util.DdapBy;
 import org.junit.BeforeClass;
@@ -16,6 +15,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.TestingPersona.ADMINISTRATOR;
+import static com.dnastack.ddap.common.TestingPersona.USER_WITHOUT_ACCESS;
 import static com.dnastack.ddap.common.fragments.NavBar.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -34,14 +35,13 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void verifyAdminAccess() {
-        ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+        ddapPage = doBrowserLogin(REALM, ADMINISTRATOR, AdminDdapPage::new);
 
         ddapPage.getNavBar()
                 .assertAdminNavBar();
 
-        icLoginPage = ddapPage.getNavBar().logOut();
-        icLoginPage.loginAsPersona(TestingPersona.USER_WITHOUT_ACCESS, AnyDdapPage::new);
+        ddapPage.getNavBar().logOut();
+        ddapPage = doBrowserLogin(REALM, USER_WITHOUT_ACCESS, AdminDdapPage::new);
 
         ddapPage.getNavBar()
                 .assertNonAdminNavBar();
@@ -50,15 +50,14 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void logoutShouldGoToIcLoginForCurrentRealmAndRemoveCookies() {
-        ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+        ddapPage = doBrowserLogin(REALM, ADMINISTRATOR, AdminDdapPage::new);
 
         // check if cookies are present on landing page
         assertThat(driver.manage().getCookieNamed("dam_token"), notNullValue());
         assertThat(driver.manage().getCookieNamed("ic_token"), notNullValue());
         assertThat(driver.manage().getCookieNamed("refresh_token"), notNullValue());
 
-        icLoginPage = ddapPage.getNavBar().logOut();
+        ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
         assertThat(icLoginPage.getRealm(), is(REALM));
 
         // check if cookies are not present on landing page without logging in
@@ -70,8 +69,7 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
 
     @Test
     public void testProfileNameAndDescriptionLinkNavigation() {
-        ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+        ddapPage = doBrowserLogin(REALM, ADMINISTRATOR, AdminDdapPage::new);
 
         // check profile name
         final String usernameXpath = "//*[@data-se='nav-account']//h4[contains(text(), 'Administrator')]";

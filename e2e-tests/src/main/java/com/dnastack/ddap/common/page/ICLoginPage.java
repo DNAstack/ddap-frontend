@@ -28,15 +28,7 @@ public class ICLoginPage {
     }
 
     private By personaLoginButton(TestingPersona persona) {
-        return By.xpath(format("//a[contains(@href, '%s')]", persona.getValue()));
-    }
-
-    public <T extends AnyDdapPage> T loginAsUserWithAccess(Function<WebDriver, T> pageConstructor) {
-        return loginAsPersona(USER_WITH_ACCESS, pageConstructor);
-    }
-
-    public <T extends AdminDdapPage> T loginAsAdministrator(Function<WebDriver, T> pageConstructor) {
-        return loginAsPersona(ADMINISTRATOR, pageConstructor);
+        return By.xpath(format("//a[contains(@href, '%s')]", persona.getId()));
     }
 
     public <T extends AnyDdapPage> T loginAsPersona(TestingPersona persona, Function<WebDriver, T> pageConstructor) {

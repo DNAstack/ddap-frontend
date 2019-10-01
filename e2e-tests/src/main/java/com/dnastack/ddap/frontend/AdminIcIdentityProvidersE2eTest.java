@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.dnastack.ddap.common.TestingPersona.ADMINISTRATOR;
 import static com.dnastack.ddap.common.fragments.NavBar.icIdentityProvidersLink;
 
 @SuppressWarnings("Duplicates")
@@ -25,8 +26,7 @@ public class AdminIcIdentityProvidersE2eTest extends AbstractFrontendE2eTest {
         setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
         setupIcConfig(TestingPersona.ADMINISTRATOR, icConfig, REALM);
 
-        ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+        ddapPage = doBrowserLogin(REALM, ADMINISTRATOR, AdminDdapPage::new);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.dnastack.ddap.frontend;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
+import com.dnastack.ddap.common.TestingPersona;
 import com.dnastack.ddap.common.util.RetryRule;
 import com.dnastack.ddap.common.util.ScreenshotUtil;
 import com.dnastack.ddap.common.page.AnyDdapPage;
@@ -18,6 +19,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,6 +65,11 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
         driver.manage().deleteAllCookies();
         driver.quit();
         driver = null;
+    }
+
+    protected static <T extends AnyDdapPage> T doBrowserLogin(String realm, TestingPersona persona, Function<WebDriver, T> pageFactory) {
+        ICLoginPage icLoginPage = startLogin(realm);
+        return icLoginPage.loginAsPersona(persona, pageFactory);
     }
 
     @After
