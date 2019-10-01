@@ -30,15 +30,12 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     public static void oneTimeSetup() throws IOException {
         final String damConfig = loadTemplate("/com/dnastack/ddap/adminConfig.json");
         setupRealmConfig(TestingPersona.ADMINISTRATOR, damConfig, "1", REALM);
-
-        ICLoginPage icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
     }
 
     @Test
     public void verifyAdminAccess() {
-        ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
-        icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+        ICLoginPage icLoginPage = startLogin(REALM);
+        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
 
         ddapPage.getNavBar()
                 .assertAdminNavBar();
@@ -52,19 +49,16 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void checkForProfileName() {
-        final String usernameXpath = "//*[@data-se='nav-account']//h4[contains(text(), 'Administrator')]";
-        driver.findElement(By.xpath(usernameXpath)).getText();
-    }
-
-    @Test
     public void logoutShouldGoToIcLoginForCurrentRealmAndRemoveCookies() {
+        ICLoginPage icLoginPage = startLogin(REALM);
+        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+
         // check if cookies are present on landing page
         assertThat(driver.manage().getCookieNamed("dam_token"), notNullValue());
         assertThat(driver.manage().getCookieNamed("ic_token"), notNullValue());
         assertThat(driver.manage().getCookieNamed("refresh_token"), notNullValue());
 
-        ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
+        icLoginPage = ddapPage.getNavBar().logOut();
         assertThat(icLoginPage.getRealm(), is(REALM));
 
         // check if cookies are not present on landing page without logging in
@@ -72,16 +66,16 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         assertThat(driver.manage().getCookieNamed("dam_token"), nullValue());
         assertThat(driver.manage().getCookieNamed("ic_token"), nullValue());
         assertThat(driver.manage().getCookieNamed("refresh_token"), nullValue());
-
-        // go back to login page and log in again -> needs to be there for other tests
-        icLoginPage = startLogin(REALM);
-        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
     }
 
     @Test
-    public void testDescriptionLinkNavigation() {
-        ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
-        icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+    public void testProfileNameAndDescriptionLinkNavigation() {
+        ICLoginPage icLoginPage = startLogin(REALM);
+        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
+
+        // check profile name
+        final String usernameXpath = "//*[@data-se='nav-account']//h4[contains(text(), 'Administrator')]";
+        driver.findElement(By.xpath(usernameXpath)).getText();
 
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damResourceLink(DAM_ID));
