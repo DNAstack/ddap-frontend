@@ -941,7 +941,7 @@
         "standardClaims": {
           "iss": "$$E2E_PASSPORT_ISSUER$$",
           "picture": "https://pbs.twimg.com/profile_images/3443048571/ef5062acfce64a7aef1d75b4934fbee6_400x400.png",
-          "sub": "test-user-access@dnastack.com"
+          "sub": "test-user-with-access@dnastack.com"
         },
         "ga4ghClaims": [
           {

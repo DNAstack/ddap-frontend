@@ -150,7 +150,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
             .jsonPath().getList("account.connectedAccounts", IcConnectedAccount.class);
         // @formatter:on
 
-        assertAccountsContainSubject(connectedAccounts, "test-user-access@dnastack.com");
+        assertAccountsContainSubject(connectedAccounts, "test-user-with-access@dnastack.com");
         assertAccountsContainSubject(connectedAccounts, "test-user-no-access@dnastack.com");
 
         // Unlink account
@@ -190,7 +190,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
                 .jsonPath().getList("account.connectedAccounts", IcConnectedAccount.class);
         // @formatter:on
 
-        assertAccountsContainSubject(connectedAccounts, "test-user-access@dnastack.com");
+        assertAccountsContainSubject(connectedAccounts, "test-user-with-access@dnastack.com");
         assertAccountsDoesNotContainSubject(connectedAccounts, "test-user-no-access@dnastack.com");
     }
 
