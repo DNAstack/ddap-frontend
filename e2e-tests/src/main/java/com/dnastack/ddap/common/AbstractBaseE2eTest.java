@@ -61,7 +61,7 @@ public abstract class AbstractBaseE2eTest {
     public static final String WALLET_LOGIN_STRATEGY = "WalletLoginStrategy";
     public static final String LOGIN_STRATEGY_NAME = optionalEnv("E2E_LOGIN_STRATEGY", PERSONA_LOGIN_STRATEGY);
 
-    private static LoginStrategy loginStrategy;
+    protected static LoginStrategy loginStrategy;
 
     protected static String generateRealmName(String testClassName) {
         /*

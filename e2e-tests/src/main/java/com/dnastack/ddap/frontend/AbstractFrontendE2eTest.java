@@ -2,10 +2,9 @@ package com.dnastack.ddap.frontend;
 
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import com.dnastack.ddap.common.TestingPersona;
+import com.dnastack.ddap.common.page.AnyDdapPage;
 import com.dnastack.ddap.common.util.RetryRule;
 import com.dnastack.ddap.common.util.ScreenshotUtil;
-import com.dnastack.ddap.common.page.AnyDdapPage;
-import com.dnastack.ddap.common.page.ICLoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -17,7 +16,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.net.URI;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -68,19 +67,17 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
     }
 
     protected static <T extends AnyDdapPage> T doBrowserLogin(String realm, TestingPersona persona, Function<WebDriver, T> pageFactory) {
-        ICLoginPage icLoginPage = startLogin(realm);
-        return icLoginPage.loginAsPersona(persona, pageFactory);
+        try {
+            return loginStrategy.performPersonaLogin(driver, persona, realm, pageFactory);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to login", e);
+        }
     }
 
     @After
     public void afterEach() {
         String testName = this.getClass().getSimpleName() + "." + name.getMethodName() + ".png";
         ScreenshotUtil.capture(testName, driver);
-    }
-
-    protected static ICLoginPage startLogin(String realm) {
-        driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));
-        return new ICLoginPage(driver);
     }
 
     protected static String getUrlWithBasicCredentials(String original) {
