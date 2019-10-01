@@ -162,7 +162,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .body("scopes", not(empty()))
                 .body("accesses", not(empty()))
                 .body("account.connectedAccounts", not(empty()))
-                .body("account.profile.username", is(TestingPersona.USER_WITH_ACCESS.getId()));
+                .body("account.properties.email", is(TestingPersona.USER_WITH_ACCESS.getEmail()));
         // @formatter:on
     }
 
