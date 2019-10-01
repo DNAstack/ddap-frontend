@@ -2,6 +2,7 @@ package com.dnastack.ddap.common;
 
 import com.dnastack.ddap.common.page.AnyDdapPage;
 import com.dnastack.ddap.common.page.ICLoginPage;
+import com.dnastack.ddap.common.util.WebDriverUtil;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
@@ -15,17 +16,14 @@ import org.openqa.selenium.WebDriver;
 import java.io.IOException;
 import java.net.URI;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.dnastack.ddap.common.AbstractBaseE2eTest.*;
+import static com.dnastack.ddap.common.util.WebDriverUtil.getUrlWithBasicCredentials;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class PersonaLoginStrategy implements LoginStrategy {
-
-    protected static final Pattern URL_PARSE_PATTERN = Pattern.compile("^(https?)://(.*)$");
 
     @Override
     public CookieStore performPersonaLogin(String personaName, String realmName, String... scopes) throws IOException {
@@ -45,17 +43,9 @@ public class PersonaLoginStrategy implements LoginStrategy {
 
     @Override
     public <T extends AnyDdapPage> T performPersonaLogin(WebDriver driver, TestingPersona persona, String realm, Function<WebDriver, T> pageFactory) {
-        driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString()));
+        driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/api/v1alpha/%s/identity/login", realm)).toString(), DDAP_USERNAME, DDAP_PASSWORD));
         ICLoginPage icLoginPage = new ICLoginPage(driver);
         return icLoginPage.loginAsPersona(persona, pageFactory);
     }
 
-    protected static String getUrlWithBasicCredentials(String original) {
-        final Matcher matcher = URL_PARSE_PATTERN.matcher(original);
-        if (matcher.find()) {
-            return format("%s://%s:%s@%s", matcher.group(1), DDAP_USERNAME, DDAP_PASSWORD, matcher.group(2));
-        } else {
-            throw new IllegalArgumentException("Could not parse url: " + original);
-        }
-    }
 }

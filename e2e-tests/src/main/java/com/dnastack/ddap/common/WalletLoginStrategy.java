@@ -28,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.dnastack.ddap.common.AbstractBaseE2eTest.*;
+import static com.dnastack.ddap.common.util.WebDriverUtil.getUrlWithBasicCredentials;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -108,13 +109,14 @@ public class WalletLoginStrategy implements LoginStrategy {
         final Set<String> cookieNames = new HashSet<>(Arrays.asList("dam_token", "ic_token", "refresh_token"));
 
         // Need to navigate to site before setting cookie
-        driver.get(URI.create(DDAP_BASE_URL).resolve(format("/%s/data", realmName)).toString());
+        driver.get(getUrlWithBasicCredentials(URI.create(DDAP_BASE_URL).resolve(format("/%s/data", realmName)).toString(), DDAP_USERNAME, DDAP_PASSWORD));
         cookieStore.getCookies()
                    .stream()
                    .filter(c -> cookieNames.contains(c.getName()))
                    .forEach(cookie -> {
+                       driver.manage().deleteCookieNamed(cookie.getName());
+                       System.out.printf("Adding cookie to selenium: Cookie(name=%s, domain=%s, path=%s, expiry=%s, secure=%b", cookie.getName(), cookie.getDomain(), cookie.getPath(), cookie.getExpiryDate(), cookie.isSecure());
                        final Cookie browserCookie = new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(), cookie.getExpiryDate(), cookie.isSecure());
-                       System.out.println("Adding cookie to selenium: " + browserCookie);
                        driver.manage().addCookie(browserCookie);
                    });
         driver.navigate().refresh();
