@@ -72,6 +72,10 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
         assertThat(driver.manage().getCookieNamed("dam_token"), nullValue());
         assertThat(driver.manage().getCookieNamed("ic_token"), nullValue());
         assertThat(driver.manage().getCookieNamed("refresh_token"), nullValue());
+
+        // go back to login page and log in again -> needs to be there for other tests
+        icLoginPage = startLogin(REALM);
+        ddapPage = icLoginPage.loginAsAdministrator(AdminDdapPage::new);
     }
 
     @Test
