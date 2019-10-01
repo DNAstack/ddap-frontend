@@ -47,21 +47,35 @@ export class TestFormComponent implements OnChanges, Form {
     if (_isEqual(changes.resource.currentValue, changes.resource.previousValue)) {
       return;
     }
-    this.populateViews();
+    this.setViews();
+    this.updatePersonaAccess();
+  }
 
+  setViews() {
+    const resourceViews = _get(this.resource, 'dto.views', {});
+    this.views = Object.keys(resourceViews).reduce((access, viewName) => {
+      const view = _get(this.resource, `dto.views[${viewName}]`);
+      const roles = _get(view, 'roles', {});
+      const newAccess = Object.keys(roles).map((roleName) => `${viewName}/${roleName}`);
+      return [...access, ...newAccess];
+    }, []);
+  }
+
+  updatePersonaAccess() {
     this.personas$.subscribe(personas => {
       this.personas = personas;
-      if (this.resource.dto) {
+      const { name, dto } = this.resource;
+      if (dto) {
         const change = personas.reduce((sum, persona) => {
-          _set(sum, `modification.testPersonas[${persona}].resources[${this.resource.name}].access`, []);
+          _set(sum, `modification.testPersonas[${persona}].resources[${name}].access`, []);
           return sum;
-        }, new ConfigModificationObject(this.resource.dto, {
+        }, new ConfigModificationObject(dto, {
           dry_run: true,
         }));
 
         const action$ = this.isNewResource
-          ? this.resourceService.save(this.routeDamId(), this.resource.name, change)
-          : this.resourceService.update(this.routeDamId(), this.resource.name, change);
+          ? this.resourceService.save(this.routeDamId(), name, change)
+          : this.resourceService.update(this.routeDamId(), name, change);
         action$.subscribe(
           () => true,
           (dryRunDto) => this.maybeFillInValues(personas, this.views, dryRunDto)
@@ -70,22 +84,10 @@ export class TestFormComponent implements OnChanges, Form {
     });
   }
 
-  populateViews() {
-    const resourceViews = _get(this.resource, 'dto.views', {});
-    const viewNames = Object.keys(resourceViews);
-    this.views = viewNames.reduce((access, viewName) => {
-      const view = _get(this.resource, `dto.views[${viewName}]`);
-      const roles = _get(view, 'roles', {});
-      const roleNames = Object.keys(roles);
-      const newAccess = roleNames.map((roleName) => `${viewName}/${roleName}`);
-      return [...access, ...newAccess];
-    }, []);
-  }
-
   maybeFillInValues(personas: string[], views: string[], {error}: any) {
     if (this.isConfigModificationObject(error)) {
       this.originalTest = error;
-      this.populateTestForm(personas, views);
+      this.buildTestForm(personas, views);
       personas.forEach((persona) => {
         const accesses = _get(error, `testPersonas[${persona}].resources[${this.resource.name}].access`, []);
         accesses.forEach((access) => {
@@ -95,23 +97,19 @@ export class TestFormComponent implements OnChanges, Form {
     }
   }
 
-  populateTestForm(personas, views) {
+  buildTestForm(personas, views) {
     const reducer = (personasArray) => (sum, view) => {
       personasArray.forEach((persona) => {
         if (!sum[persona]) {
           sum[persona] = this.formBuilder.group({});
         }
-
         sum[persona].addControl(view, this.formBuilder.control(null));
       });
       return sum;
     };
 
     const form = views.reduce(reducer(personas), {});
-
-
     this.form = this.formBuilder.group(form);
-
     this.form.valueChanges.pipe(
       tap((valueChange) => this.change.emit(valueChange))
     );
@@ -195,4 +193,5 @@ export class TestFormComponent implements OnChanges, Form {
       .paramMap
       .get('damId');
   }
+
 }
