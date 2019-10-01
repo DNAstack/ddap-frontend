@@ -76,7 +76,7 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
         return new ICLoginPage(driver);
     }
 
-    private static String getUrlWithBasicCredentials(String original) {
+    protected static String getUrlWithBasicCredentials(String original) {
         final Matcher matcher = URL_PARSE_PATTERN.matcher(original);
         if (matcher.find()) {
             return format("%s://%s:%s@%s", matcher.group(1), DDAP_USERNAME, DDAP_PASSWORD, matcher.group(2));

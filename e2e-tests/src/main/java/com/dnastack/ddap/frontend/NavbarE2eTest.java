@@ -1,9 +1,12 @@
 package com.dnastack.ddap.frontend;
 
-import com.dnastack.ddap.common.util.DdapBy;
-import com.dnastack.ddap.common.fragments.NavBar;
-import com.dnastack.ddap.common.page.*;
 import com.dnastack.ddap.common.TestingPersona;
+import com.dnastack.ddap.common.fragments.NavBar;
+import com.dnastack.ddap.common.page.AdminDdapPage;
+import com.dnastack.ddap.common.page.AdminListPage;
+import com.dnastack.ddap.common.page.AnyDdapPage;
+import com.dnastack.ddap.common.page.ICLoginPage;
+import com.dnastack.ddap.common.util.DdapBy;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,7 +18,7 @@ import java.io.IOException;
 
 import static com.dnastack.ddap.common.fragments.NavBar.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertFalse;
 
 @SuppressWarnings("Duplicates")
@@ -55,10 +58,20 @@ public class NavbarE2eTest extends AbstractFrontendE2eTest {
     }
 
     @Test
-    public void logoutButtonShouldGoToIcLoginForCurrentRealm() {
-        ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
+    public void logoutShouldGoToIcLoginForCurrentRealmAndRemoveCookies() {
+        // check if cookies are present on landing page
+        assertThat(driver.manage().getCookieNamed("dam_token"), notNullValue());
+        assertThat(driver.manage().getCookieNamed("ic_token"), notNullValue());
+        assertThat(driver.manage().getCookieNamed("refresh_token"), notNullValue());
 
+        ICLoginPage icLoginPage = ddapPage.getNavBar().logOut();
         assertThat(icLoginPage.getRealm(), is(REALM));
+
+        // check if cookies are not present on landing page without logging in
+        driver.get(getUrlWithBasicCredentials(DDAP_BASE_URL));
+        assertThat(driver.manage().getCookieNamed("dam_token"), nullValue());
+        assertThat(driver.manage().getCookieNamed("ic_token"), nullValue());
+        assertThat(driver.manage().getCookieNamed("refresh_token"), nullValue());
     }
 
     @Test
