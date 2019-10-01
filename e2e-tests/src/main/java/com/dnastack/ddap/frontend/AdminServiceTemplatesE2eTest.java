@@ -15,62 +15,44 @@ import static com.dnastack.ddap.common.fragments.NavBar.damServiceDefinitionLink
 public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
 
     @Test
-    public void addServiceTemplate() {
+    public void addServiceTemplate(){
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damServiceDefinitionLink(DAM_ID));
-        String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-1";
-        String serviceTemplateName = "discovery_test_1";
+        String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-3";
         adminListPage.assertListItemDoNotExist(serviceTemplateLabel);
-        AdminManagePage adminManagePage = createSimpleServiceTemplate(adminListPage,
-                serviceTemplateLabel,
-                serviceTemplateName);
+        AdminManagePage adminManagePage = adminListPage.clickManage();
 
-        adminListPage = adminManagePage.saveEntity();
-        adminListPage.assertListItemExists(serviceTemplateLabel);
-    }
+        adminManagePage.fillField(DdapBy.se("id-field"), "discovery_test_3");
+        adminManagePage.fillField(DdapBy.se("inp-label"), serviceTemplateLabel);
+        adminManagePage.fillField(DdapBy.se("inp-description"), "Copy of Beacon Discovery");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-target-adapter"),
+                "token:jwt:gatekeeper");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-item-format"), "url");
 
-    @Test
-    public void addServiceTemplateWithInterface() {
-        AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(damServiceDefinitionLink(DAM_ID));
-        String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-2";
-        String serviceTemplateName = "discovery_test_2";
-        adminListPage.assertListItemDoNotExist(serviceTemplateLabel);
-        AdminManagePage adminManagePage = createSimpleServiceTemplate(adminListPage,
-                serviceTemplateLabel,
-                serviceTemplateName);
-
+        // Add interface
         adminManagePage.enterButton(DdapBy.se("btn-add-interface"));
         adminManagePage.toggleExpansionPanel("view-new");
         adminManagePage.fillField(DdapBy.se("inp-interface-type"), "http:beacon");
         adminManagePage.fillField(DdapBy.se("inp-interface-value"), "${url}");
 
-        adminListPage = adminManagePage.saveEntity();
-        adminListPage.assertListItemExists(serviceTemplateLabel);
-    }
-
-    @Test
-    public void addServiceTemplateWithRoles(){
-        AdminListPage adminListPage = ddapPage.getNavBar()
-                .goToAdmin(damServiceDefinitionLink(DAM_ID));
-        String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-3";
-        String serviceTemplateName = "discovery_test_3";
-        adminListPage.assertListItemDoNotExist(serviceTemplateLabel);
-        AdminManagePage adminManagePage = createSimpleServiceTemplate(adminListPage,
-                serviceTemplateLabel,
-                serviceTemplateName);
-
-        fillRoleDetails(adminManagePage,
-                "basic_discovery",
-                "Discovery Beacon Search without Metadata",
+        // Add role
+        adminManagePage.enterButton(DdapBy.se("btn-add-role"));
+        adminManagePage.toggleExpansionPanel("role-0");
+        adminManagePage.fillField(DdapBy.se("inp-role-name-0"), "basic_discovery");
+        adminManagePage.fillField(DdapBy.se("inp-role-label-0"),
+                "Discovery Beacon Search without Metadata");
+        adminManagePage.fillField(DdapBy.se("inp-role-description-0"),
                 "Query genome data and return 'found' or 'not found' status");
         adminManagePage.fillTagField(DdapBy.se("inp-target-scope-0"), "registered");
         adminManagePage.fillTagField(DdapBy.se("inp-dam-role-category-0"), "exists");
 
-
-        fillRoleDetails(adminManagePage,
-                "discovery",
-                "Discovery Beacon Search with Metadata",
+        // Add role
+        adminManagePage.enterButton(DdapBy.se("btn-add-role"));
+        adminManagePage.toggleExpansionPanel("role-0");
+        adminManagePage.fillField(DdapBy.se("inp-role-name-0"), "discovery");
+        adminManagePage.fillField(DdapBy.se("inp-role-label-0"),
+                "Discovery Beacon Search with Metadata");
+        adminManagePage.fillField(DdapBy.se("inp-role-description-0"),
                 "Query genome data and receive metadata results");
         adminManagePage.fillTagField(DdapBy.se("inp-target-scope-0"), "registered");
         adminManagePage.fillTagField(DdapBy.se("inp-target-scope-0"), "controlled");
@@ -85,11 +67,15 @@ public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damServiceDefinitionLink(DAM_ID));
         String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-4";
-        String serviceTemplateName = "discovery_test_4";
         adminListPage.assertListItemDoNotExist(serviceTemplateLabel);
-        AdminManagePage adminManagePage = createSimpleServiceTemplate(adminListPage,
-                serviceTemplateLabel,
-                serviceTemplateName);
+
+        AdminManagePage adminManagePage = adminListPage.clickManage();
+
+        adminManagePage.fillField(DdapBy.se("id-field"), "discovery_test_4");
+        adminManagePage.fillField(DdapBy.se("inp-label"), serviceTemplateLabel);
+        adminManagePage.fillField(DdapBy.se("inp-description"), "Copy of Beacon Discovery");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-target-adapter"), "token:jwt:gatekeeper");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-item-format"), "url");
 
         adminManagePage.enterButton(DdapBy.se("btn-add-interface"));
         adminManagePage.toggleExpansionPanel("view-new");
@@ -114,11 +100,16 @@ public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damServiceDefinitionLink(DAM_ID));
         String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-5";
-        String serviceTemplateName = "discovery_test_5";
         adminListPage.assertListItemDoNotExist(serviceTemplateLabel);
-        AdminManagePage adminManagePage = createSimpleServiceTemplate(adminListPage,
-                serviceTemplateLabel,
-                serviceTemplateName);
+
+        AdminManagePage adminManagePage = adminListPage.clickManage();
+
+        adminManagePage.fillField(DdapBy.se("id-field"), "discovery_test_5");
+        adminManagePage.fillField(DdapBy.se("inp-label"), serviceTemplateLabel);
+        adminManagePage.fillField(DdapBy.se("inp-description"), "Copy of Beacon Discovery");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-target-adapter"),
+                "token:jwt:gatekeeper");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-item-format"), "url");
 
         adminListPage = adminManagePage.saveEntity();
         adminListPage.assertListItemExists(serviceTemplateLabel);
@@ -128,29 +119,4 @@ public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
         adminListPage.assertListItemDoNotExist(serviceTemplateLabel);
     }
 
-
-    private AdminManagePage createSimpleServiceTemplate(AdminListPage adminListPage,
-                                                        String serviceTemplateLabel,
-                                                        String serviceTemplateName) {
-        AdminManagePage adminManagePage = adminListPage.clickManage();
-
-        adminManagePage.fillField(DdapBy.se("id-field"), serviceTemplateName);
-        adminManagePage.fillField(DdapBy.se("inp-label"), serviceTemplateLabel);
-        adminManagePage.fillField(DdapBy.se("inp-description"), "Copy of Beacon Discovery");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-target-adapter"), "token:jwt:gatekeeper");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-item-format"), "url");
-        return adminManagePage;
-    }
-
-    private void fillRoleDetails(AdminManagePage adminManagePage,
-                                 String roleName,
-                                 String roleLabel,
-                                 String roleDescription) {
-        adminManagePage.enterButton(DdapBy.se("btn-add-role"));
-        adminManagePage.toggleExpansionPanel("role-0");
-        adminManagePage.fillField(DdapBy.se("inp-role-name-0"), roleName);
-        adminManagePage.fillField(DdapBy.se("inp-role-label-0"), roleLabel);
-        adminManagePage.fillField(DdapBy.se("inp-role-description-0"), roleDescription);
-    }
-    
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 import { dam } from 'src/app/shared/proto/dam-service';
@@ -27,15 +27,14 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   serviceTemplate?: EntityModel = new EntityModel( '' , ServiceTemplate.create());
 
   @Input()
-  damId?: string;
+  damId: string;
 
   form: FormGroup;
   targetAdapters: object;
   requirements: object;
-  itemFormats: Array<string> = [];
+  itemFormats: string[];
 
   constructor( private formBuilder: FormBuilder,
-               private changeDetector: ChangeDetectorRef,
                private serviceDefinitionService: ServiceDefinitionService) {
     this.form = this.buildServiceTemplateForm();
   }
@@ -59,7 +58,7 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
       roles: this.formBuilder.array([]),
       ui: this.formBuilder.group({
         label: [dto.ui.label, [Validators.required]],
-        description: [dto.ui.description, [Validators.required]],
+        description: [dto.ui.description, [Validators.required, Validators.maxLength(255)]],
       }),
     });
   }
@@ -69,17 +68,14 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
     const interfaces = _get(this.serviceTemplate, 'dto.interfaces', {});
     this.updateRolesForm(roles);
     this.updateInterfacesForm(interfaces);
-    this.changeDetector.detectChanges();
   }
 
   addRole(roleId?: string, roles?): void {
-    if (!roles) {
-      const { name, dto } = new EntityModel( '' , ServiceRole.create());
-      this.roles.insert(0, this.createRoleForm(name, dto));
-    } else {
-      const {name, dto} = new EntityModel(roleId, _get(roles, roleId, null));
-      this.roles.insert(0, this.createRoleForm(name, dto));
-    }
+    const {name, dto} = new EntityModel(
+      roleId ? roleId : '',
+      roles ? _get(roles, roleId, null) : ServiceRole.create()
+    );
+    this.roles.insert(0, this.createRoleForm(name, dto));
   }
 
   removeRole(index: number): void {
@@ -87,12 +83,11 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   }
 
   addInterface(interfaceType?, interfaces?) {
-    if (!interfaces) {
-      this.interfaces.insert(0, this.createInterfacesForm('', ''));
-    } else {
-      const {name, dto} = new EntityModel(interfaceType, _get(interfaces, interfaceType, null));
-      this.interfaces.insert(0, this.createInterfacesForm(name, dto));
-    }
+    const {name, dto} = new EntityModel(
+      interfaceType ? interfaceType : '',
+      interfaces ? _get(interfaces, interfaceType, null) : ''
+    );
+    this.interfaces.insert(0, this.createInterfacesForm(name, dto));
   }
 
   removeInterface(index: number) {
@@ -103,17 +98,13 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
     const {
       id,
       interfaces,
-      itemFormat,
       roles,
-      targetAdapter,
-      ui,
+      ...rest
     } = this.form.value;
     return new EntityModel(id, {
-      interfaces: this.formatInterfaces(interfaces),
-      itemFormat,
-      roles: this.formatRoles(roles),
-      targetAdapter,
-      ui,
+      interfaces: this.getInterfacesModel(interfaces),
+      roles: this.getRolesModel(roles),
+      ...rest,
     });
   }
 
@@ -135,21 +126,21 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
 
   private createRoleForm(name, dto): FormGroup {
     return this.formBuilder.group({
-      name: [name, []],
+      name: [name, [Validators.pattern(nameConstraintPattern), Validators.required]],
       targetRoles: [dto.targetRoles, []],
       targetScopes: [dto.targetScopes, []],
       damRoleCategories: [dto.damRoleCategories, []],
       ui: this.formBuilder.group({
         label: [ dto.ui.label, [Validators.required]],
-        description: [dto.ui.description, [Validators.required]],
+        description: [dto.ui.description, [Validators.required, Validators.maxLength(255)]],
       }),
     });
   }
 
-  private createInterfacesForm(name, dto): FormGroup {
+  private createInterfacesForm(name = '', dto= ''): FormGroup {
     return this.formBuilder.group({
-      type: [name],
-      value: [dto],
+      name: [name, [Validators.required]],
+      value: [dto, [Validators.required]],
     });
   }
 
@@ -167,33 +158,23 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
     Object.keys(interfaces).forEach(interfaceType => this.addInterface(interfaceType, interfaces));
   }
 
-  private formatInterfaces(interfaces) {
+  private getInterfacesModel(interfaces) {
     const modifiedInterfaces = {};
-    interfaces.forEach(interfaceObj => {
-      if (!modifiedInterfaces.hasOwnProperty(interfaceObj.type)) {
-        modifiedInterfaces[interfaceObj.type] = '';
-      }
-      modifiedInterfaces[interfaceObj.type] = interfaceObj.value;
-    });
+    interfaces.forEach(interfaceObj =>
+      modifiedInterfaces[interfaceObj.name] = interfaceObj.value
+    );
     return modifiedInterfaces;
   }
 
-  private formatRoles(roles) {
-    const modifiedRoles = {};
-    const roleObj = {
-      targetRoles: [],
-      targetScopes: [],
-      damRoleCategories: [],
-      ui: {
-        label: '',
-        description: '',
-      },
-    };
-    roles.forEach(role => {
-      modifiedRoles[role.name] = Object.keys(roleObj)
-        .reduce((a, key) => ({ ...a, [key]: role[key]}), {});
+  private getRolesModel(roles) {
+
+    const rolesModel: object = {};
+    roles.map(role => {
+      const { name } = role;
+      delete role.name;
+      Object.assign(rolesModel, { [name] : ServiceRole.create(role) });
     });
-    return modifiedRoles;
+    return rolesModel;
   }
 
   private formatTargetAdapters(targetAdapters: Object) {

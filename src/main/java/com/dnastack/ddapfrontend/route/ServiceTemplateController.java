@@ -68,13 +68,10 @@ public class ServiceTemplateController {
                                                             ServerHttpRequest request) {
         Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request,
                 Set.of(CookieKind.DAM, CookieKind.REFRESH));
-
         final ReactiveDamClient damClient = damClientFactory.getDamClient(damId);
 
         return damClient.getTargetAdapters(realm, tokens.get(CookieKind.DAM), tokens.get(CookieKind.REFRESH))
-                .map(targetAdaptersResponse ->
-                        targetAdaptersResponse.getTargetAdaptersMap()
-                );
+                .map(TargetAdaptersResponse::getTargetAdaptersMap);
     }
 
     private Mono<ServiceTemplate> getServiceTemplate(ReactiveDamClient damClient,
