@@ -27,7 +27,7 @@ public class AdminPersonaE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
         adminManagePage.toggleExpansionPanel("claim-0");
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
-        adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
+        adminManagePage.fillField(DdapBy.se("inp-source"), "https://institute1.test");
         adminManagePage.closeAutocompletes();
         adminManagePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-value"));
         adminManagePage.fillField(DdapBy.se("inp-iat"), "1d");
@@ -60,7 +60,7 @@ public class AdminPersonaE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
         adminManagePage.toggleExpansionPanel("claim-0");
         adminManagePage.fillField(DdapBy.se("inp-claimName"), "test-claimName");
-        adminManagePage.fillField(DdapBy.se("inp-source"), "test-source");
+        adminManagePage.fillField(DdapBy.se("inp-source"), "https://institute1.test");
         adminManagePage.fillField(DdapBy.se("inp-value"), "test-value");
         adminManagePage.fillField(DdapBy.se("inp-iat"), "1d");
         adminManagePage.fillField(DdapBy.se("inp-exp"), "30d");
