@@ -23,7 +23,7 @@ export class DamConfigEntityStore extends Store<DamConfigEntity> {
       });
   }
 
-  public getAsList(damId: string, innerMapFn?): Observable<EntityModel[]> {
+  public getAsList(damId: string, innerMapFn?): Observable<any[]> {
     return this.state$
       .pipe(
         pluck(damId),

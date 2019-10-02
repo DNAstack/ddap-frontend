@@ -9,6 +9,7 @@ import { environment } from '../../../../environments/environment';
 import {
   filterBy,
   filterSource,
+  flatten,
   includes,
   makeDistinct,
   pick
@@ -48,6 +49,7 @@ export class PersonaAutocompleteService {
 
   buildTrustedSourcesAutocomplete(damId: string, formGroup: FormGroup): Observable<string[]> {
     const trustedSources$ = this.trustedSourcesStore.getAsList(damId, pick('dto.sources')).pipe(
+      map(flatten),
       map(makeDistinct)
     );
 
