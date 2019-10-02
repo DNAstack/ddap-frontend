@@ -26,8 +26,8 @@ public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-label"), serviceTemplateLabel);
         adminManagePage.fillField(DdapBy.se("inp-description"), "Copy of Beacon Discovery");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-target-adapter"),
-                "token:jwt:gatekeeper");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-item-format"), "url");
+                "Gatekeeper Token");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-item-format"), "Proxy URL");
 
         // Add interface
         adminManagePage.enterButton(DdapBy.se("btn-add-interface"));
@@ -74,8 +74,9 @@ public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("id-field"), "discovery_test_4");
         adminManagePage.fillField(DdapBy.se("inp-label"), serviceTemplateLabel);
         adminManagePage.fillField(DdapBy.se("inp-description"), "Copy of Beacon Discovery");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-target-adapter"), "token:jwt:gatekeeper");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-item-format"), "url");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-target-adapter"),
+                "Gatekeeper Token");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-item-format"), "Proxy URL");
 
         adminManagePage.enterButton(DdapBy.se("btn-add-interface"));
         adminManagePage.toggleExpansionPanel("view-new");
@@ -108,8 +109,8 @@ public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-label"), serviceTemplateLabel);
         adminManagePage.fillField(DdapBy.se("inp-description"), "Copy of Beacon Discovery");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-target-adapter"),
-                "token:jwt:gatekeeper");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-item-format"), "url");
+                "Gatekeeper Token");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-item-format"), "Proxy URL");
 
         adminListPage = adminManagePage.saveEntity();
         adminListPage.assertListItemExists(serviceTemplateLabel);
