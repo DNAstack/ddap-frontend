@@ -51,6 +51,7 @@ public abstract class AbstractBaseE2eTest {
     public static final String NAMESPACE =  requiredEnv("E2E_TEST_NAMESPACE");
     public static final String TRUSTED_SOURCE =  optionalEnv("E2E_TRUSTED_SOURCE", "https://ddap.test.source.dnastack.com");
     public static final String PASSPORT_ISSUER = requiredEnv("E2E_PASSPORT_ISSUER");
+    public static final String TEST_WHITELIST_VALUE = optionalEnv("E2E_TEST_WHITELIST_VALUE", DDAP_BASE_URL.replaceFirst("-candidate\\.", "."));
 
     // Current size limit on realm names in DAM
     public static final int REALM_NAME_LIMIT = 40;
@@ -188,7 +189,8 @@ public abstract class AbstractBaseE2eTest {
                 .replace("$$E2E_TEST_BUCKET$$", TEST_BUCKET)
                 .replace("$$E2E_TEST_PROJECT$$",TEST_PROJECT)
                 .replace("$$E2E_TEST_NAMESPACE$$", NAMESPACE)
-                .replace("$$E2E_TRUSTED_SOURCE$$", TRUSTED_SOURCE);
+                .replace("$$E2E_TRUSTED_SOURCE$$", TRUSTED_SOURCE)
+                .replace("$$E2E_TEST_WHITELIST_VALUE$$", TEST_WHITELIST_VALUE);
     }
 
     private static String stripTrailingSlash(String url) {

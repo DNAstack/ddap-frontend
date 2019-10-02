@@ -72,7 +72,7 @@
       "allow": {
         "claim": "testing.only.Whitelist",
         "values": [
-          "$$E2E_BASE_URI$$"
+          "$$E2E_TEST_WHITELIST_VALUE$$"
         ],
         "from": [
           "test_whitelist_source"
@@ -947,7 +947,7 @@
           {
             "claimName": "testing.only.Whitelist",
             "source": "$$E2E_TRUSTED_SOURCE$$",
-            "value": "$$E2E_BASE_URI$$",
+            "value": "$$E2E_TEST_WHITELIST_VALUE$$",
             "assertedDuration": "1d",
             "expiresDuration": "30d",
             "by": "so"
