@@ -184,9 +184,9 @@
                        secondaryPlaceholder="Add Target Role"
                        placeholder="+ Target Role"
                        editable="true"
-                       [attr.required]="requirements && requirements.targetRole"
                        [attr.data-se]="'inp-target-role-' + i"
                        modelAsStrings="true">
+              <mat-hint *ngIf="requirements && requirements.targetRole">*required</mat-hint>
             </tag-input>
           </div>
         </div>
@@ -198,6 +198,7 @@
                        editable="true"
                        modelAsStrings="true"
                        [attr.data-se]="'inp-target-scope-' + i">
+              <mat-hint *ngIf="requirements && requirements.targetScope">*required</mat-hint>
             </tag-input>
           </div>
         </div>

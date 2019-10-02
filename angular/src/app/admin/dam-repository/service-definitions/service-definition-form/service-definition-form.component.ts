@@ -76,6 +76,7 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
       roles ? _get(roles, roleId, null) : ServiceRole.create()
     );
     this.roles.insert(0, this.createRoleForm(name, dto));
+    this.updateRoleValidations();
   }
 
   removeRole(index: number): void {
@@ -113,6 +114,7 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
     if (selectedTargetAdapter) {
       this.itemFormats = this.targetAdapters[selectedTargetAdapter].itemFormats;
       this.requirements = this.targetAdapters[selectedTargetAdapter].requirements;
+      this.updateRoleValidations();
     }
   }
 
@@ -175,5 +177,19 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
       Object.assign(rolesModel, { [name] : ServiceRole.create(role) });
     });
     return rolesModel;
+  }
+
+  private updateRoleValidations() {
+    const roleFormControls: any[] = this.roles.controls;
+    roleFormControls.forEach(roleFormGroup => {
+      const roleValidators = (this.requirements && this.requirements['targetRole']) ? [Validators.required] : [];
+      const scopeValidators = (this.requirements && this.requirements['targetScope']) ? [Validators.required] : [];
+
+      roleFormGroup.controls['targetRoles'].setValidators(roleValidators);
+      roleFormGroup.controls['targetScopes'].setValidators(scopeValidators);
+
+      roleFormGroup.controls['targetRoles'].updateValueAndValidity();
+      roleFormGroup.controls['targetScopes'].updateValueAndValidity();
+    });
   }
 }
