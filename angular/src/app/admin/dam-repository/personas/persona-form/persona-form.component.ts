@@ -119,9 +119,9 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
 
     const ga4ghClaimForm: FormGroup = this.formBuilder.group({
       _autocompleteId: autocompleteId,
-      claimName: [claimName, Validators.required],
-      source: [source, Validators.required],
-      value: [value, Validators.required],
+      claimName: [claimName, [Validators.required]],
+      source: [source, [Validators.required, FormValidators.url]],
+      value: [value, [Validators.required]],
       assertedDuration: [assertedDuration, [Validators.required, FormValidators.duration]],
       expiresDuration: [expiresDuration, [Validators.required, FormValidators.duration]],
       by: [by],
