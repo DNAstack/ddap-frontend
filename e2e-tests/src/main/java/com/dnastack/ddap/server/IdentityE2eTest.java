@@ -162,7 +162,8 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .body("scopes", not(empty()))
                 .body("accesses", not(empty()))
                 .body("account.connectedAccounts", not(empty()))
-                .body("account.properties.email", is(TestingPersona.USER_WITH_ACCESS.getEmail()));
+                // Where the email is in the payload depends on if we use personas or wallet for test users
+                .body(containsString(TestingPersona.USER_WITH_ACCESS.getEmail()));
         // @formatter:on
     }
 
