@@ -7,19 +7,19 @@ import _set from 'lodash.set';
 import { Observable, of, zip } from 'rxjs';
 import { map, take, takeWhile, tap } from 'rxjs/operators';
 
-import { pick } from '../../../../shared/autocomplete/autocomplete.util';
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
-import { EntityModel } from '../../../shared/entity.model';
-import Form from '../../../shared/form/form';
-import { PersonasStore } from '../../personas/personas.store';
-import { ResourceService } from '../../resources/resources.service';
+import { pick } from '../../../../../../shared/autocomplete/autocomplete.util';
+import { ConfigModificationObject } from '../../../../../shared/configModificationObject';
+import { EntityModel } from '../../../../../shared/entity.model';
+import Form from '../../../../../shared/form/form';
+import { PersonasStore } from '../../../../personas/personas.store';
+import { ResourceService } from '../../../resources.service';
 
 @Component({
-  selector: 'ddap-test-form',
-  templateUrl: './test-form.component.html',
-  styleUrls: ['./test-form.component.scss'],
+  selector: 'ddap-persona-resource-access-form',
+  templateUrl: './persona-access-form.component.html',
+  styleUrls: ['./persona-access-form.component.scss'],
 })
-export class TestFormComponent implements OnChanges, Form {
+export class PersonaAccessFormComponent implements OnChanges, Form {
 
   @Input()
   resource: EntityModel;

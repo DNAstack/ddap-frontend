@@ -8,8 +8,9 @@ import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
 import { ConfigModificationObject } from '../../../../shared/configModificationObject';
 import { EntityModel } from '../../../../shared/entity.model';
 import Form from '../../../../shared/form/form';
-import { TestFormComponent } from '../../../shared/test-form/test-form.component';
 import { ResourceService } from '../../resources.service';
+
+import { PersonaAccessFormComponent } from './persona-access-form/persona-access-form.component';
 
 @Component({
   selector: 'ddap-persona-resource-access',
@@ -23,8 +24,8 @@ export class PersonaResourceAccessComponent implements Form {
   @Input()
   isNewResource: boolean;
 
-  @ViewChild(TestFormComponent, { static: false })
-  testForm: TestFormComponent;
+  @ViewChild(PersonaAccessFormComponent, { static: false })
+  testForm: PersonaAccessFormComponent;
   error: any = null;
   save$: Subject<any> = new Subject();
 
