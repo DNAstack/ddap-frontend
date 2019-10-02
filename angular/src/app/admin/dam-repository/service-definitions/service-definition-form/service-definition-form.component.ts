@@ -41,7 +41,7 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.serviceDefinitionService.getTargetAdapters(this.damId).subscribe(targetAdapters => {
-      this.targetAdapters = this.formatTargetAdapters(targetAdapters);
+      this.targetAdapters = targetAdapters;
       this.targetAdapterChange();
     });
     this.form = this.buildServiceTemplateForm();
@@ -175,15 +175,5 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
       Object.assign(rolesModel, { [name] : ServiceRole.create(role) });
     });
     return rolesModel;
-  }
-
-  private formatTargetAdapters(targetAdapters: Object) {
-    const modifiedTargetAdapters = {};
-    for (const targetAdapter in targetAdapters) {
-      modifiedTargetAdapters[targetAdapter] = {};
-      modifiedTargetAdapters[targetAdapter]['itemFormats'] = Object.keys(targetAdapters[targetAdapter].itemFormats);
-      modifiedTargetAdapters[targetAdapter]['requirements'] = targetAdapters[targetAdapter].requirements;
-    }
-    return modifiedTargetAdapters;
   }
 }

@@ -37,7 +37,7 @@
                 required>
       <mat-option *ngFor="let targetAdapter of targetAdapters | keyvalue"
                   [value]="targetAdapter.key">
-        {{targetAdapter.key}}
+        {{targetAdapter.value.ui.label}}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -46,9 +46,9 @@
     <mat-select formControlName="itemFormat"
                 data-se="inp-item-format"
                 required>
-      <mat-option *ngFor="let itemFormat of itemFormats"
-                  [value]="itemFormat">
-        {{itemFormat}}
+      <mat-option *ngFor="let itemFormat of itemFormats | keyvalue"
+                  [value]="itemFormat.key">
+        {{itemFormat.value.ui.label}}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -75,11 +75,11 @@
         <ng-container *ngIf="interfaceObj">
           <mat-panel-title>
             <mat-icon class="icon icon-views"></mat-icon>
-            <span>{{interfaceObj.value.name || 'Interface Type'}}</span>
+            <span>{{interfaceObj.value.name || 'Interface Name'}}</span>
           </mat-panel-title>
           <div class="invalid-warning" *ngIf="interfaceObj.invalid">
             <mat-icon class="icon icon-warning"
-                      matTooltip="Role is invalid">
+                      matTooltip="Interface is invalid">
             </mat-icon>
           </div>
         </ng-container>
