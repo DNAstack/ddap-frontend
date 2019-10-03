@@ -33,6 +33,8 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   targetAdapters: object;
   requirements: object;
   itemFormats: string[];
+  roleSecondaryPlaceholder: string;
+  scopeSecondaryPlaceholder: string;
 
   constructor( private formBuilder: FormBuilder,
                private serviceDefinitionService: ServiceDefinitionService) {
@@ -147,14 +149,15 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   }
 
   private updateRolesForm(roles: any) {
-    if (!roles) {
+    if (!Object.keys(roles).length) {
+      this.addRole();
       return;
     }
     Object.keys(roles).forEach(roleId => this.addRole(roleId, roles));
   }
 
   private updateInterfacesForm(interfaces: any) {
-    if (!interfaces) {
+    if (!Object.keys(interfaces).length) {
       return;
     }
     Object.keys(interfaces).forEach(interfaceType => this.addInterface(interfaceType, interfaces));
@@ -182,9 +185,20 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   private updateRoleValidations() {
     const roleFormControls: any[] = this.roles.controls;
     roleFormControls.forEach(roleFormGroup => {
-      const roleValidators = (this.requirements && this.requirements['targetRole']) ? [Validators.required] : [];
-      const scopeValidators = (this.requirements && this.requirements['targetScope']) ? [Validators.required] : [];
-
+      let roleValidators = [];
+      let scopeValidators = [];
+      this.roleSecondaryPlaceholder = 'Add Target Role';
+      this.scopeSecondaryPlaceholder = 'Add Target Scope';
+      if (this.requirements) {
+        if (this.requirements['targetRole']) {
+          roleValidators = [Validators.required];
+          this.roleSecondaryPlaceholder = 'Add Target Role *';
+        }
+        if (this.requirements['targetScope']) {
+          scopeValidators = [Validators.required];
+          this.scopeSecondaryPlaceholder = 'Add Target Scope *';
+        }
+      }
       roleFormGroup.controls['targetRoles'].setValidators(roleValidators);
       roleFormGroup.controls['targetScopes'].setValidators(scopeValidators);
 
