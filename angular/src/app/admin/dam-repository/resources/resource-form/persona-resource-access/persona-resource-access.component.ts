@@ -1,6 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { of, Subject } from 'rxjs';
 import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
@@ -22,14 +21,15 @@ export class PersonaResourceAccessComponent implements Form {
   resource: EntityModel;
   @Input()
   isNewResource: boolean;
+  @Input()
+  damId: string;
 
   @ViewChild(TestFormComponent, { static: false })
   testForm: TestFormComponent;
   error: any = null;
   save$: Subject<any> = new Subject();
 
-  constructor(private resourceService: ResourceService,
-              private route: ActivatedRoute) {
+  constructor(private resourceService: ResourceService) {
     this.save$.pipe(
       debounceTime(800),
       switchMap(({changes, isDryRun}) => this.saveResource(changes, isDryRun))
@@ -69,8 +69,8 @@ export class PersonaResourceAccessComponent implements Form {
     const change = new ConfigModificationObject(_get(changes, 'dto', this.resource.dto), applyModel);
 
     const action$ = this.isNewResource
-      ? this.resourceService.save(this.routeDamId(), this.resource.name, change)
-      : this.resourceService.update(this.routeDamId(), this.resource.name, change);
+      ? this.resourceService.save(this.damId, this.resource.name, change)
+      : this.resourceService.update(this.damId, this.resource.name, change);
     return action$.pipe(
       catchError((e) => {
         this.error = e.error;
@@ -89,12 +89,5 @@ export class PersonaResourceAccessComponent implements Form {
         }
       })
     );
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 }

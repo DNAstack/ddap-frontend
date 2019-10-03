@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -21,6 +20,8 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
 
   @Input()
   view: EntityModel;
+  @Input()
+  damId: string;
 
   viewForm: FormGroup;
   templates: EntityModel[];
@@ -30,8 +31,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   constructor(private formBuilder: FormBuilder,
               private serviceDefinitionService: ServiceDefinitionService,
               private serviceDefinitionsStore: ServiceDefinitionsStore,
-              private accessPoliciesStore: AccessPoliciesStore,
-              private route: ActivatedRoute) {
+              private accessPoliciesStore: AccessPoliciesStore) {
   }
 
   get serviceTemplate(): string {
@@ -72,7 +72,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
       }),
     });
 
-    this.templatesSubscription = this.serviceDefinitionsStore.getAsList(this.routeDamId()).subscribe((templates) => {
+    this.templatesSubscription = this.serviceDefinitionsStore.getAsList(this.damId).subscribe((templates) => {
       this.templates = templates;
       if (this.selectedTemplate) {
         this.rebuildPoliciesForRolesForm();
@@ -80,7 +80,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.policyValues$ = this.accessPoliciesStore.getAsList(this.routeDamId())
+    this.policyValues$ = this.accessPoliciesStore.getAsList(this.damId)
       .pipe(
         map((policies: EntityModel[]) => {
           return policies.map((policy) => policy.name);
@@ -137,7 +137,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   }
 
   getVariablesBySelectedTemplate(): Observable<any> {
-    return this.serviceDefinitionService.getTargetAdapterVariables(this.routeDamId(),
+    return this.serviceDefinitionService.getTargetAdapterVariables(this.damId,
       {serviceTemplate: this.viewForm.get('serviceTemplate').value});
   }
 
@@ -150,11 +150,4 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   }
 
   private equalToSelectedTemplateName = (template) => template.name === this.viewForm.get('serviceTemplate').value;
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
-  }
 }

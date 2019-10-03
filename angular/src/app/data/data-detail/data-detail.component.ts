@@ -20,6 +20,7 @@ export class DataDetailComponent implements OnInit {
   views: any;
   resource: EntityModel;
   limitSearch = true;
+  damId: string;
 
   constructor(private route: ActivatedRoute,
               private dataService: DataService) {
@@ -27,10 +28,10 @@ export class DataDetailComponent implements OnInit {
 
   ngOnInit() {
     const resourceName = this.route.snapshot.params.resourceName;
-    const damId = this.route.snapshot.params.damId;
     const realmId = this.route.root.firstChild.snapshot.params.realmId;
+    this.damId = this.route.snapshot.params.damId;
 
-    this.dataService.getResource(damId, resourceName, realmId)
+    this.dataService.getResource(this.damId, resourceName, realmId)
       .subscribe((resource) => {
         this.resource = resource;
         this.resourceLabel$ = of(this.resource.dto.ui.label);

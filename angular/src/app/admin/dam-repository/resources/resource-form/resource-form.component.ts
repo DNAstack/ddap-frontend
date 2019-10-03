@@ -32,6 +32,8 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
 
   @Input()
   resource?: EntityModel = new EntityModel('', Resource.create());
+  @Input()
+  damId: string;
 
   form: FormGroup;
 

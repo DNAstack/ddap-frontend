@@ -32,7 +32,8 @@
         <mat-list class="ddap-resource-views">
           <mat-list-item *ngFor="let view of views">
             <ddap-resource-view-item [view]="view"
-                                     [resource]="resource">
+                                     [resource]="resource"
+                                     [damId]="damId">
             </ddap-resource-view-item>
           </mat-list-item>
         </mat-list>

@@ -34,11 +34,15 @@
   </ng-container>
 
   <ddap-access-table *ngIf="isResource && state === ViewState.Viewing"
-                     [resource]="entity"></ddap-access-table>
+                     [resource]="entity"
+                     [damId]="routeDamId">
+  </ddap-access-table>
 
   <ddap-test-form *ngIf="isResource && state !== ViewState.Viewing"
                   (change)="validateTest()"
-                  [resource]="entity"></ddap-test-form>
+                  [resource]="entity"
+                  [damId]="routeDamId"
+  ></ddap-test-form>
 
   <mat-action-row *ngIf="state !== ViewState.Viewing">
     <button mat-flat-button

@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { combineLatest, Observable } from 'rxjs';
 import { Subscription } from 'rxjs';
@@ -32,6 +31,9 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
 
   @Input()
   persona?: EntityModel = new EntityModel('', TestPersona.create());
+
+  @Input()
+  damId: string;
 
   @ViewChild(PersonaAccessFormComponent, { static: false })
   accessForm: PersonaAccessFormComponent;
@@ -65,12 +67,11 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
               private claimDefService: ClaimDefinitionService,
               private claimDefinitionsStore: ClaimDefinitionsStore,
               private passportIssuersStore: PassportIssuersStore,
-              private trustedSourcesStore: TrustedSourcesStore,
-              private route: ActivatedRoute) {
+              private trustedSourcesStore: TrustedSourcesStore) {
   }
 
   ngOnInit(): void {
-    this.resourceAccess$ = this.resourcesStore.getAsList(this.routeDamId()).pipe(
+    this.resourceAccess$ = this.resourcesStore.getAsList(this.damId).pipe(
       map((resourceList) => this.generateAllAccessModel(resourceList))
     );
 
@@ -161,16 +162,16 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
   }
 
   private getAutocompleteValues() {
-    this.claimDefinitions = this.claimDefinitionsStore.getAsList(this.routeDamId(), pick('name'))
+    this.claimDefinitions = this.claimDefinitionsStore.getAsList(this.damId, pick('name'))
       .pipe(
         map(makeDistinct)
       );
-    this.trustedSources = this.trustedSourcesStore.getAsList(this.routeDamId(), pick('dto.sources'))
+    this.trustedSources = this.trustedSourcesStore.getAsList(this.damId, pick('dto.sources'))
       .pipe(
         map(flatten),
         map(makeDistinct)
       );
-    this.passportIssuers = this.passportIssuersStore.getAsList(this.routeDamId(), pick('dto.issuer'))
+    this.passportIssuers = this.passportIssuersStore.getAsList(this.damId, pick('dto.issuer'))
       .pipe(
         map(makeDistinct)
       );
@@ -183,12 +184,11 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
     const value$ = formGroup.get('value').valueChanges.pipe(
       startWith('')
     );
-
     return combineLatest(claimName$, value$).pipe(
       debounceTime(300),
       switchMap(([claimName, value]) => {
         const currentClaimName = formGroup.get('type').value;
-        return this.claimDefService.getClaimDefinitionSuggestions(this.routeDamId(), claimName || currentClaimName).pipe(
+        return this.claimDefService.getClaimDefinitionSuggestions(this.damId, claimName || currentClaimName).pipe(
           map(filterBy(includes(value)))
         );
       })
@@ -196,7 +196,7 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
   }
 
   private executeDryRunRequest(personaId: string, change: ConfigModificationObject) {
-    return this.personaService.update(this.routeDamId(), personaId, change).pipe(
+    return this.personaService.update(this.damId, personaId, change).pipe(
       tap(() => this.accessForm.makeAccessFieldsValid()),
       catchError((error) => {
         this.accessForm.validateAccessFields(personaId, error);
@@ -267,12 +267,5 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
         return this.executeDryRunRequest(personaId, change);
       })
     ).subscribe();
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 }
