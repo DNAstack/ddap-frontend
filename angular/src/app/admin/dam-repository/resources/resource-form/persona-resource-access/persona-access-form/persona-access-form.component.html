@@ -6,13 +6,13 @@
       <h3>{{ view }}</h3>
       <ul>
         <li *ngFor="let persona of personas">
-          <ng-container *ngIf="form.get(persona) && form.get(persona).get(view)">
-            <ng-container [formGroupName]="persona">
+          <ng-container *ngIf="form.get(persona.name) && form.get(persona.name).get(view)">
+            <ng-container [formGroupName]="persona.name">
               <mat-checkbox [formControlName]="view"
                             color="primary"
                             (change)="emitChange()"
-                            id="{{ view }}/{{ persona }}">
-                {{ persona }}
+                            id="{{ view }}/{{ persona.name }}">
+                {{ persona.name }}
               </mat-checkbox>
             </ng-container>
           </ng-container>

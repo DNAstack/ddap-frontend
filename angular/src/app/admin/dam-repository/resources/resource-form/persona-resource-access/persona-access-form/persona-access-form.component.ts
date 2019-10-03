@@ -29,7 +29,7 @@ export class PersonaAccessFormComponent implements OnChanges, Form {
   change: EventEmitter<any> = new EventEmitter();
 
   views: string[];
-  personas: string[];
+  personas: EntityModel[];
   form: FormGroup;
 
   private personas$: Observable<any>;
@@ -40,18 +40,19 @@ export class PersonaAccessFormComponent implements OnChanges, Form {
               private formBuilder: FormBuilder,
               private route: ActivatedRoute) {
     this.personas$ = this.personasStore
-      .getAsList(this.routeDamId(), pick('name'));
+      .getAsList(this.routeDamId());
   }
+
 
   ngOnChanges(changes: SimpleChanges): void {
     if (_isEqual(changes.resource.currentValue, changes.resource.previousValue)) {
       return;
     }
-    this.setViews();
-    this.updatePersonaAccess();
+    this.setResourceViews();
+    this.buildPersonaForm();
   }
 
-  setViews() {
+  setResourceViews() {
     const resourceViews = _get(this.resource, 'dto.views', {});
     this.views = Object.keys(resourceViews).reduce((access, viewName) => {
       const view = _get(this.resource, `dto.views[${viewName}]`);
@@ -61,58 +62,65 @@ export class PersonaAccessFormComponent implements OnChanges, Form {
     }, []);
   }
 
-  updatePersonaAccess() {
+  buildPersonaForm() {
     this.personas$.subscribe(personas => {
-      this.personas = personas;
-      const { name, dto } = this.resource;
-      if (dto) {
-        const change = personas.reduce((sum, persona) => {
-          _set(sum, `modification.testPersonas[${persona}].resources[${name}].access`, []);
-          return sum;
-        }, new ConfigModificationObject(dto, {
-          dry_run: true,
-        }));
+      const reducer = (personasArray) => (sum, view) => {
+        personasArray.forEach((persona) => {
+          if (!sum[persona]) {
+            sum[persona] = this.formBuilder.group({});
+          }
+          sum[persona].addControl(view, this.formBuilder.control(null));
+        });
+        return sum;
+      };
 
-        const action$ = this.isNewResource
-          ? this.resourceService.save(this.routeDamId(), name, change)
-          : this.resourceService.update(this.routeDamId(), name, change);
-        action$.subscribe(
-          () => true,
-          (dryRunDto) => this.maybeFillInValues(personas, this.views, dryRunDto)
-        );
-      }
+      this.personas = personas;
+      const personaNames = [];
+      const resourceViewAccess = {};
+      this.personas.map(persona => {
+        const { name, dto } = persona;
+        if (dto.resources) {
+          resourceViewAccess[name] = dto;
+        }
+        personaNames.push(name);
+      });
+
+      const form = this.views.reduce(reducer(personaNames), {});
+      this.form = this.formBuilder.group(form);
+      this.form.valueChanges.pipe(
+        tap((valueChange) => this.change.emit(valueChange))
+      );
+      this.updateAccess(resourceViewAccess);
     });
+  }
+
+  updateAccess(resourceViewAccess) {
+    for (const persona in resourceViewAccess) {
+      if (resourceViewAccess.hasOwnProperty(persona)) {
+        const accesses = _get(resourceViewAccess[persona], `resources[${this.resource.name}].access`, []);
+        accesses.forEach((access) => {
+          if (this.form.get(persona)) {
+            this.form.get(persona).get(access).setValue(true);
+          }
+        });
+      }
+    }
   }
 
   maybeFillInValues(personas: string[], views: string[], {error}: any) {
     if (this.isConfigModificationObject(error)) {
       this.originalTest = error;
-      this.buildTestForm(personas, views);
+      // this.buildPersonaForm(personas, views);
       personas.forEach((persona) => {
         const accesses = _get(error, `testPersonas[${persona}].resources[${this.resource.name}].access`, []);
         accesses.forEach((access) => {
           this.form.get(persona).get(access).setValue(true);
+        //  access: bq_read/viewer
+        //  persona: nci_researcher
+        //  accesses: ["bq_read/viewer", "gcs_read/viewer"]
         });
       });
     }
-  }
-
-  buildTestForm(personas, views) {
-    const reducer = (personasArray) => (sum, view) => {
-      personasArray.forEach((persona) => {
-        if (!sum[persona]) {
-          sum[persona] = this.formBuilder.group({});
-        }
-        sum[persona].addControl(view, this.formBuilder.control(null));
-      });
-      return sum;
-    };
-
-    const form = views.reduce(reducer(personas), {});
-    this.form = this.formBuilder.group(form);
-    this.form.valueChanges.pipe(
-      tap((valueChange) => this.change.emit(valueChange))
-    );
   }
 
   toApplyDto() {
@@ -193,5 +201,6 @@ export class PersonaAccessFormComponent implements OnChanges, Form {
       .paramMap
       .get('damId');
   }
+
 
 }

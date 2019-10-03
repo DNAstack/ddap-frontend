@@ -25,7 +25,7 @@ export class PersonaResourceAccessComponent implements Form {
   isNewResource: boolean;
 
   @ViewChild(PersonaAccessFormComponent, { static: false })
-  testForm: PersonaAccessFormComponent;
+  personaAccessForm: PersonaAccessFormComponent;
   error: any = null;
   save$: Subject<any> = new Subject();
 
@@ -38,7 +38,7 @@ export class PersonaResourceAccessComponent implements Form {
   }
 
   getApplyModel() {
-    return this.testForm.toApplyDto();
+    return this.personaAccessForm.toApplyDto();
   }
 
   dryRun(changes?: EntityModel) {
@@ -53,11 +53,11 @@ export class PersonaResourceAccessComponent implements Form {
   }
 
   getAllForms(): FormGroup[] {
-    return this.testForm.getAllForms();
+    return this.personaAccessForm.getAllForms();
   }
 
   isValid(): boolean {
-    return this.testForm.isValid();
+    return this.personaAccessForm.isValid();
   }
 
   private saveResource(changes: object, isDryRun = true) {
@@ -75,7 +75,7 @@ export class PersonaResourceAccessComponent implements Form {
     return action$.pipe(
       catchError((e) => {
         this.error = e.error;
-        this.testForm.validatePersonaFields(e);
+        this.personaAccessForm.validatePersonaFields(e);
 
         return of(true);
       }),
@@ -86,7 +86,7 @@ export class PersonaResourceAccessComponent implements Form {
         this.error = null;
 
         if (isDryRun) {
-          return this.testForm.makeFieldsValid();
+          return this.personaAccessForm.makeFieldsValid();
         }
       })
     );

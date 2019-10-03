@@ -35,8 +35,8 @@ export class ResourceDetailComponent extends DamConfigEntityDetailComponentBase<
   }
 
   update() {
-    const aggregateForm = combine(this.resourceForm, this.accessForm.testForm);
-    if (!this.validate(this.accessForm.testForm.form ? aggregateForm : this.resourceForm)) {
+    const aggregateForm = combine(this.resourceForm, this.accessForm.personaAccessForm);
+    if (!this.validate(this.accessForm.personaAccessForm.form ? aggregateForm : this.resourceForm)) {
       return;
     }
 
