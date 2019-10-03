@@ -6,6 +6,7 @@ import com.dnastack.ddap.common.util.JwtTestUtil;
 import dam.v1.DamService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -35,6 +36,9 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     @Test
     public void personaLoginShouldHonourRequestedScopes() throws Exception {
+        // TODO DISCO-2449 make test work with wallet users
+        Assume.assumeThat(LOGIN_STRATEGY_NAME, equalTo("PersonaLoginStrategy"));
+
         String requestedScope = "openid link:ic_" + System.currentTimeMillis();
 
         // @formatter:off
@@ -109,6 +113,9 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
     @Test
     public void linkAndUnlinkAccount() throws Exception {
+        // TODO DISCO-2449 make test work with wallet users
+        Assume.assumeThat(LOGIN_STRATEGY_NAME, equalTo("PersonaLoginStrategy"));
+
         String icTokenJwtBeforeLinking = fetchRealPersonaIcToken(USER_WITH_ACCESS, REALM, "openid", "identities", "link");
         String refreshTokenJwt = fetchRealPersonaRefreshToken(USER_WITH_ACCESS, REALM);
 

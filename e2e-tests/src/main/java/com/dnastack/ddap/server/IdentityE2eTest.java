@@ -41,25 +41,6 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .log().cookies()
                 .log().uri()
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
-                .redirects().follow(false)
-                .when()
-                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getId()))
-                .then()
-                .log().body()
-                .log().ifValidationFails()
-                .statusCode(307)
-                .cookie("ic_token")
-                .cookie("dam_token")
-                .cookie("refresh_token")
-                .extract();
-        // @formatter:on
-
-        // @formatter:off
-        given()
-                .log().method()
-                .log().cookies()
-                .log().uri()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
                 .cookie("dam_token", damToken)
                 .cookie("refresh_token", refreshToken)
@@ -73,23 +54,6 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .assertThat()
                 .body("scopes", not(empty()))
                 .body("scopes", not(contains("link")));
-        // @formatter:on
-
-        // @formatter:off
-        given()
-                .log().method()
-                .log().cookies()
-                .log().uri()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
-                .redirects().follow(false)
-                .when()
-                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getId() + "&scope=openid " + requestedScope))
-                .then()
-                .log().body()
-                .log().ifValidationFails()
-                .statusCode(307)
-                .cookie("ic_token")
-                .extract();
         // @formatter:on
 
         icToken = fetchRealPersonaIcToken(TestingPersona.USER_WITH_ACCESS, REALM, "openid", requestedScope);
@@ -129,25 +93,6 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .log().cookies()
                 .log().uri()
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
-                .redirects().follow(false)
-                .when()
-                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getId()))
-                .then()
-                .log().body()
-                .log().ifValidationFails()
-                .statusCode(307)
-                .cookie("ic_token")
-                .cookie("dam_token")
-                .cookie("refresh_token")
-                .extract();
-        // @formatter:on
-
-        // @formatter:off
-        given()
-                .log().method()
-                .log().cookies()
-                .log().uri()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
                 .cookie("dam_token", danToken)
                 .cookie("refresh_token", refreshToken)
@@ -179,25 +124,6 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .log().cookies()
                 .log().uri()
                 .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
-                .redirects().follow(false)
-                .when()
-                .get(ddap("/identity/login?persona=administrator"))
-                .then()
-                .log().body()
-                .log().ifValidationFails()
-                .statusCode(307)
-                .cookie("ic_token")
-                .cookie("dam_token")
-                .cookie("refresh_token")
-                .extract();
-        // @formatter:on
-
-        // @formatter:off
-        given()
-                .log().method()
-                .log().cookies()
-                .log().uri()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
                 .cookie("dam_token", danToken)
                 .cookie("refresh_token", refreshToken)
@@ -220,25 +146,6 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
         String icToken = fetchRealPersonaIcToken(TestingPersona.USER_WITH_ACCESS, REALM, "");
         String danToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
-
-        // @formatter:off
-        given()
-                .log().method()
-                .log().cookies()
-                .log().uri()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
-                .redirects().follow(false)
-                .when()
-                .get(ddap("/identity/login?persona=" + TestingPersona.USER_WITH_ACCESS.getId()))
-                .then()
-                .log().body()
-                .log().ifValidationFails()
-                .statusCode(307)
-                .cookie("ic_token")
-                .cookie("dam_token")
-                .cookie("refresh_token")
-                .extract();
-        // @formatter:on
 
         // @formatter:off
         given()
