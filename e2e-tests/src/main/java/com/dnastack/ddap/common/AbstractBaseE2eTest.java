@@ -1,6 +1,9 @@
 package com.dnastack.ddap.common;
 
 import com.dnastack.ddap.common.WalletLoginStrategy.LoginInfo;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.Message;
@@ -9,11 +12,13 @@ import dam.v1.DamService;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
+import lombok.Data;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -127,21 +132,60 @@ public abstract class AbstractBaseE2eTest {
         }
     }
 
+    @Data
+    static class IcConfig {
+        @JsonAnySetter
+        private Map<String, Object> others = new HashMap<>();
+
+        private Map<String, Map<String, Object>> identityProviders;
+
+        @JsonAnyGetter
+        public Map<String, Object> getOthers() {
+            return others;
+        }
+    }
+
     protected static void setupIcConfig(TestingPersona persona, String config, String realmName) throws IOException {
-        final String modificationPayload = format("{ \"item\": %s }", config);
         final CookieStore cookieStore = loginStrategy.performPersonaLogin(persona.getId(), realmName);
 
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-        HttpPut request = new HttpPut(format("%s/identity/v1alpha/%s/config?persona=%s", DDAP_BASE_URL, realmName, persona.getId()));
-        request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
-        request.setEntity(new StringEntity(modificationPayload));
+        final ObjectMapper mapper = new ObjectMapper();
 
-        final HttpResponse response = httpclient.execute(request);
-        String responseBody = EntityUtils.toString(response.getEntity());
+        // Don't clobber wallet config in case we are using wallet test user login
+        final Map<String, Object> walletConfig;
+        {
+            HttpGet request = new HttpGet(format("%s/identity/v1alpha/%s/config/identityProviders/wallet", DDAP_BASE_URL, realmName));
+            request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
 
-        assertThat("Unable to set realm config. Response:\n" + responseBody,
-                response.getStatusLine().getStatusCode(),
-                allOf(greaterThanOrEqualTo(200), lessThan(300)));
+            final HttpResponse response = httpclient.execute(request);
+            final int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode == 200) {
+                final String responseBody = EntityUtils.toString(response.getEntity());
+                walletConfig = mapper.readValue(responseBody, new TypeReference<Map<String, Object>>() {});
+            } else {
+                walletConfig = null;
+            }
+        }
+
+        if (walletConfig != null) {
+            final IcConfig parsedConfig = mapper.readValue(config, IcConfig.class);
+            parsedConfig.getIdentityProviders().put("wallet", walletConfig);
+            config = mapper.writeValueAsString(parsedConfig);
+        }
+        final String modificationPayload = format("{ \"item\": %s }", config);
+
+        {
+            HttpPut request = new HttpPut(format("%s/identity/v1alpha/%s/config", DDAP_BASE_URL, realmName));
+            request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
+            request.setEntity(new StringEntity(modificationPayload));
+
+            final HttpResponse response = httpclient.execute(request);
+            final String responseBody = EntityUtils.toString(response.getEntity());
+
+            assertThat("Unable to set realm config. Response:\n" + responseBody,
+                       response.getStatusLine().getStatusCode(),
+                       allOf(greaterThanOrEqualTo(200), lessThan(300)));
+        }
     }
 
     protected static void setupRealmConfig(TestingPersona persona, String config, String damId, String realmName) throws IOException {
