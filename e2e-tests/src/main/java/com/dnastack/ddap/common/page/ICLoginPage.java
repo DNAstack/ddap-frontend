@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 
 import static com.dnastack.ddap.common.TestingPersona.*;
 import static java.lang.String.format;
+import static org.openqa.selenium.support.ui.ExpectedConditions.or;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 @Slf4j
 public class ICLoginPage {
@@ -24,7 +26,9 @@ public class ICLoginPage {
         this.driver = driver;
         log.info("Testing if {} is an IC login page", driver.getCurrentUrl());
         new WebDriverWait(driver, 5)
-                .until(ExpectedConditions.visibilityOfElementLocated(personaLoginButton(USER_WITH_ACCESS)));
+                .until(or(visibilityOfElementLocated(personaLoginButton(USER_WITH_ACCESS)),
+                          // If persona login is disabled, check that there is a wallet login
+                          visibilityOfElementLocated(By.xpath("//a[contains(@href, '/login/wallet')]"))));
     }
 
     private By personaLoginButton(TestingPersona persona) {
