@@ -226,7 +226,7 @@ public class ReactiveDamClient {
         return webClientFactory.getWebClient(realm, refreshToken, OAuthFilter.Audience.IC)
             .get()
             .uri(damBaseUrl.resolve(template.expand(variables)))
-            .header(AUTHORIZATION, "Bearer" + damToken)
+            .header(AUTHORIZATION, "Bearer " + damToken)
             .retrieve()
             .bodyToMono(String.class)
             .flatMap(jsonString -> {
