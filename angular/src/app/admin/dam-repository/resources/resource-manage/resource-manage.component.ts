@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -41,7 +42,15 @@ export class ResourceManageComponent extends DamConfigEntityFormComponentBase {
     const change = new ConfigModificationObject(resourceModel.dto, applyModel);
 
     return this.resourceService.save(this.damId, resourceModel.name, change)
-      .subscribe(() => this.navigateUp('../..'), this.showError);
+      .subscribe(() => this.navigateUp('../..'), this.handleError);
+  }
+
+  handleError = (error: HttpErrorResponse ) => {
+    if (error.status === 424) {
+      this.accessForm.personaAccessForm.validatePersonaFields(error);
+    } else {
+      this.showError(error);
+    }
   }
 
 }

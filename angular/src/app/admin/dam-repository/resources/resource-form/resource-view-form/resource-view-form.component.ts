@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
@@ -21,6 +21,8 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
 
   @Input()
   view: EntityModel;
+  @Output()
+  change: EventEmitter;
 
   viewForm: FormGroup;
   templates: EntityModel[];

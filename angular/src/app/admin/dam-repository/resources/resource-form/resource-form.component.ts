@@ -155,6 +155,10 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
     return [...this.getViewChildrenForms(), this.form];
   }
 
+  dryRun() {
+    this.executeDryrunRequest();
+  }
+
   private getViewChildrenForms(): FormGroup[] {
     if (!this.viewChildComponents) {
       return [];
@@ -177,6 +181,9 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
     emptyRoles.forEach((role) => delete roles[role]);
 
     return roles;
+  }
+
+  private executeDryrunRequest() {
   }
 
 }
