@@ -81,12 +81,20 @@ export class WorkflowFormComponent implements Form, OnInit, OnChanges {
   generateForm() {
     this.workflowService.getJsonSchemaFromWdl(this.form.get('wdl').value)
       .subscribe(({ input_schema: inputSchema }) => {
-        this.inputSchema = inputSchema;
+        this.inputSchema = this.getInputSchemaModel(inputSchema);
       });
   }
 
   inputFormChange(inputs) {
     this.form.get('inputs').setValue(inputs);
+  }
+
+  private getInputSchemaModel(inputSchema) {
+    const { properties, ...rest } = inputSchema;
+    for (const key in properties) {
+      properties[key].title = key + ' (' + properties[key].title + ')';
+    }
+    return { properties , ...rest};
   }
 
 }
