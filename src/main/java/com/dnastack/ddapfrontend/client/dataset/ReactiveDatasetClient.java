@@ -46,26 +46,32 @@ public class ReactiveDatasetClient {
     }
 
     public Mono<DatasetResult> fetchSingleDataset(String datasetUrl, String viewAccessToken) {
+        log.info("Attempting to fetch dataset {}", datasetUrl);
         return webClient.get()
             .uri(datasetUrl)
             .headers(h -> {
                 if (viewAccessToken != null) {
+                    log.info("Attaching bearer token to dataset request");
                     h.setBearerAuth(viewAccessToken);
                 }
             })
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .flatMap(clientResponse -> {
+                log.debug("Received response from dataset request");
                 if (clientResponse.statusCode().is2xxSuccessful()) {
+                    log.info("Received 2xx response from dataset request");
                     return clientResponse.bodyToMono(DatasetResult.class)
                         .flatMap(result -> {
+                            log.trace("Content of dataset response: {}", result);
                             if (result.getSchema() == null) {
                                 return Mono.error(new DatasetErrorException(null, "DatasetModel schema is not defined"));
                             } else {
+                                log.debug("Attempting to in-line schema");
                                 return materializeInLineSchema(datasetUrl, result);
                             }
                         })
-                        .onErrorMap(ex -> new DatasetErrorException(clientResponse.statusCode().value(), ex.getMessage()));
+                        .onErrorMap(ex -> new DatasetErrorException(clientResponse.statusCode().value(), ex.getMessage(), ex));
                 } else {
                     return clientResponse.bodyToMono(String.class)
                         .flatMap(body -> Mono
@@ -77,22 +83,30 @@ public class ReactiveDatasetClient {
 
     private Mono<DatasetResult> materializeInLineSchema(String datasetUrl, DatasetResult datasetResult) {
         Map<String, Object> schema = datasetResult.getSchema();
-        return resolveSchemaObject(URI.create(datasetUrl), schema).flatMap(resolvedSchema ->
-            Mono.just(new DatasetResult(datasetResult.getObjects(), datasetResult.getPagination(),
-                resolvedSchema))
+        return resolveSchemaObject(URI.create(datasetUrl), schema)
+                .flatMap(resolvedSchema -> {
+                    log.trace("Resolved schema: {}", resolvedSchema);
+                    return Mono.just(new DatasetResult(datasetResult.getObjects(),
+                                                       datasetResult.getPagination(),
+                                                       resolvedSchema));
+                }
         );
     }
 
 
     private Mono<Map<String, Object>> resolveSchemaObject(URI context, Map<String, Object> schema) {
         if (schema.isEmpty()) {
+            log.debug("Empty schema; not in-lining");
             return Mono.just(schema);
         }
 
-        if (schema.containsKey("$ref")) {
-            return resolveReferencedSchema(context, (String) schema.get("$ref"));
+        final Object ref = schema.get("$ref");
+        if (ref != null) {
+            log.debug("Attempting to resolve $ref [{}] in schema", ref);
+            return resolveReferencedSchema(context, (String) ref);
         }
 
+        log.debug("$ref was null");
         List<Mono<Tuple<String, Object>>> monos = new ArrayList<>();
         for (Map.Entry<String, Object> entry : schema.entrySet()) {
 
