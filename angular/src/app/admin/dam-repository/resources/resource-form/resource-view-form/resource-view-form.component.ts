@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { debounce, debounceTime, map, switchMap, tap } from 'rxjs/operators';
 import View = dam.v1.View;
 
 import { dam } from '../../../../../shared/proto/dam-service';
@@ -71,6 +71,13 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
         description: [dto.ui.description, [Validators.required, Validators.maxLength(255)]],
       }),
     });
+
+    // this.viewForm.valueChanges.pipe(
+    //   debounceTime(300),
+    //   switchMap(() => {
+    //
+    //   })
+    // )
 
     this.templatesSubscription = this.serviceDefinitionsStore.getAsList(this.routeDamId()).subscribe((templates) => {
       this.templates = templates;

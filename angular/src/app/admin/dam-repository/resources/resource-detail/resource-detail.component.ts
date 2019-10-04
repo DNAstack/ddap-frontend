@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -7,6 +8,7 @@ import { combine } from '../../../shared/form/form';
 import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
+import { PersonaAccessFormComponent } from '../resource-form/persona-resource-access/persona-access-form/persona-access-form.component';
 import { PersonaResourceAccessComponent } from '../resource-form/persona-resource-access/persona-resource-access.component';
 import { ResourceFormComponent } from '../resource-form/resource-form.component';
 import { ResourceService } from '../resources.service';
@@ -44,12 +46,20 @@ export class ResourceDetailComponent extends DamConfigEntityDetailComponentBase<
     const applyModel = this.accessForm.getApplyModel() || {};
     const change = new ConfigModificationObject(resourceModel.dto, applyModel);
     this.resourceService.update(this.damId, this.entity.name, change)
-      .subscribe(() => this.navigateUp('..'), this.showError);
+      .subscribe(() => this.navigateUp('..'), this.handleError);
   }
 
   delete() {
     this.resourceService.remove(this.damId, this.entity.name)
-      .subscribe(() => this.navigateUp('..'), this.showError);
+      .subscribe(() => this.navigateUp('..'), this.handleError);
+  }
+
+  handleError = (error: HttpErrorResponse ) => {
+    if (error.status === 424) {
+      this.accessForm.personaAccessForm.validatePersonaFields(error);
+    } else {
+      this.showError(error);
+    }
   }
 
 }
