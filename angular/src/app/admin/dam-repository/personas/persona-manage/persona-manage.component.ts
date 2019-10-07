@@ -1,12 +1,11 @@
-import TestPersona = dam.v1.TestPersona;
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { dam } from '../../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { FormValidationService } from '../../../shared/form/form-validation.service';
-import { DamConfigEntityFormComponentBase } from '../../shared/dam/dam-config-entity-form-component.base';
+import { DamConfigEntityManageComponentBase } from '../../shared/dam/dam-config-entity-manage-component.base';
+import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';
 import { PersonaService } from '../personas.service';
 
@@ -16,22 +15,17 @@ import { PersonaService } from '../personas.service';
   styleUrls: ['./persona-manage.component.scss'],
   providers: [FormValidationService],
 })
-export class PersonaManageComponent extends DamConfigEntityFormComponentBase implements OnInit {
+export class PersonaManageComponent extends DamConfigEntityManageComponentBase {
 
   @ViewChild(PersonaFormComponent, { static: false })
   personaForm: PersonaFormComponent;
 
-  persona: TestPersona;
-
   constructor(protected route: ActivatedRoute,
               protected router: Router,
               protected validationService: FormValidationService,
+              protected damConfigStore: DamConfigStore,
               private personaService: PersonaService) {
-    super(route, router, validationService);
-  }
-
-  ngOnInit(): void {
-    this.persona = TestPersona.create({});
+    super(route, router, validationService, damConfigStore);
   }
 
   save() {

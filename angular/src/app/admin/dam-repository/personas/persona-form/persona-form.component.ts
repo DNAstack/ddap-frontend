@@ -1,21 +1,25 @@
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { EMPTY } from 'rxjs/internal/observable/empty';
-import { catchError, debounceTime, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
 
+import { filterBy, flatten, includes, makeDistinct, pick } from '../../../../shared/autocomplete/autocomplete.util';
 import { FormValidators } from '../../../../shared/form/validators';
 import { dam } from '../../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 import Form from '../../../shared/form/form';
+import { ClaimDefinitionService } from '../../claim-definitions/claim-definitions.service';
+import { ClaimDefinitionsStore } from '../../claim-definitions/claim-definitions.store';
+import { PassportIssuersStore } from '../../passport-issuers/passport-issuers.store';
 import TestPersona = dam.v1.TestPersona;
 import AccessList = dam.v1.AccessList;
 import { ResourcesStore } from '../../resources/resources.store';
-import { PersonaAutocompleteService } from '../persona-autocomplete.service';
+import { TrustedSourcesStore } from '../../trusted-sources/trusted-sources.store';
 import { PersonaAccessFormComponent } from '../persona-resource-form/persona-access-form.component';
 import { PersonaService } from '../personas.service';
 
@@ -24,54 +28,85 @@ import { PersonaService } from '../personas.service';
   templateUrl: './persona-form.component.html',
   styleUrls: ['./persona-form.component.scss'],
 })
-export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
+export class PersonaFormComponent implements OnInit, OnDestroy, Form {
 
   @Input()
-  persona?: TestPersona = TestPersona.create();
+  persona?: EntityModel = new EntityModel('', TestPersona.create());
 
   @ViewChild(PersonaAccessFormComponent, { static: false })
   accessForm: PersonaAccessFormComponent;
 
   form: FormGroup;
-
-  get ga4ghClaims() {
-    return this.form.get('ga4ghClaims') as FormArray;
-  }
-
-  get resources() {
-    return this.form.get('resources') as FormGroup;
-  }
-
-  get standardClaims() {
-    return this.form.get('standardClaims') as FormArray;
-  }
-
   resourcesList = [];
 
-  passportIssuers$: Observable<any>;
-  policyValues$: { [s: string]: Observable<any>; } = {};
-  claimDefinitions$: { [s: string]: Observable<any>; } = {};
-  trustedSources$: { [s: string]: Observable<any>; } = {};
+  passportIssuers: Observable<string[]>;
+  claimDefinitions: Observable<string[]>;
+  trustedSources: Observable<string[]>;
+  claimSuggestedValues: string[];
 
   private validatorSubscription: Subscription = new Subscription();
   private resourceAccess$: Observable<any>;
 
+  get standardClaims() {
+    return this.form.get('idToken.standardClaims') as FormArray;
+  }
+
+  get ga4ghClaims() {
+    return this.form.get('idToken.ga4ghClaims') as FormArray;
+  }
+
+  get resourceAccess() {
+    return this.form.get('resourceAccess') as FormGroup;
+  }
+
   constructor(private formBuilder: FormBuilder,
               private personaService: PersonaService,
               private resourcesStore: ResourcesStore,
-              private personaAutocompleteService: PersonaAutocompleteService,
+              private claimDefService: ClaimDefinitionService,
+              private claimDefinitionsStore: ClaimDefinitionsStore,
+              private passportIssuersStore: PassportIssuersStore,
+              private trustedSourcesStore: TrustedSourcesStore,
               private route: ActivatedRoute) {
+  }
 
+  ngOnInit(): void {
     this.resourceAccess$ = this.resourcesStore.getAsList(this.routeDamId()).pipe(
       map((resourceList) => this.generateAllAccessModel(resourceList))
     );
-  }
 
-  ngOnChanges({persona}: SimpleChanges): void {
-    const personaId: string = _get(persona, 'currentValue.name', '');
-    const personaDto: TestPersona = _get(persona, 'currentValue.dto', TestPersona.create({}));
+    const { idToken } = _get(this.persona, 'dto', {});
+    this.form = this.formBuilder.group({
+      id: [_get(this.persona, 'name', ''), [Validators.pattern(nameConstraintPattern)]],
+      ui: this.formBuilder.group({
+        label: [_get(this.persona, 'dto.ui.label', ''), [Validators.required]],
+      }),
+      idToken: this.formBuilder.group({
+        standardClaims: this.formBuilder.group({
+          iss: [_get(idToken, 'standardClaims.iss', ''), Validators.required],
+          sub: [_get(idToken, 'standardClaims.sub', ''), Validators.required],
+        }),
+        ga4ghClaims: this.formBuilder.array(
+          idToken && idToken.ga4ghClaims
+          ? idToken.ga4ghClaims.map((claim) => this.buildGa4GhClaimGroup(claim))
+          : []
+        ),
+      }),
+      resourceAccess: this.formBuilder.group({}),
+    });
 
-    this.buildForm(personaId, personaDto);
+    if (this.persona && this.persona.dto) {
+      this.buildAccessForm(this.persona.dto);
+    }
+
+    if (!this.resourcesList) {
+      this.form.disable();
+    }
+    if (this.persona && this.persona.name) {
+      this.validatorSubscription.unsubscribe();
+      this.validatorSubscription = this.setUpAccessValidator(this.persona.name);
+    }
+
+    this.getAutocompleteValues();
   }
 
   ngOnDestroy(): void {
@@ -95,19 +130,11 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
   }
 
   getModel(): EntityModel {
-    const { id, iss, sub, ga4ghClaims, label } = this.form.value;
+    const { id, idToken, ui } = this.form.value;
     const resources = this.accessForm.getModel();
     const testPersona: TestPersona = TestPersona.create({
-      idToken: {
-        standardClaims: {
-          iss,
-          sub,
-        },
-        ga4ghClaims: ga4ghClaims.map(this.getGa4ghClaimModel),
-      },
-      ui: {
-        label,
-      },
+      ui,
+      idToken,
       resources,
     });
 
@@ -115,10 +142,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
   }
 
   private buildGa4GhClaimGroup({claimName, source, value, assertedDuration, expiresDuration, by}: TestPersona.IGA4GHClaim): FormGroup {
-    const autocompleteId = new Date().getTime().toString();
-
     const ga4ghClaimForm: FormGroup = this.formBuilder.group({
-      _autocompleteId: autocompleteId,
       claimName: [claimName, [Validators.required]],
       source: [source, [Validators.required, FormValidators.url]],
       value: [value, [Validators.required]],
@@ -127,31 +151,47 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
       by: [by],
     });
 
-    this.buildGa4GhClaimGroupAutocomplete(autocompleteId, ga4ghClaimForm);
+    this.buildSuggestedAutocompleteValuesForClaim(ga4ghClaimForm)
+      .subscribe((policies) => {
+        this.claimSuggestedValues = policies;
+      });
 
     return ga4ghClaimForm;
   }
 
-  private buildGa4GhClaimGroupAutocomplete(autocompleteId: string, formGroup: FormGroup) {
-    this.claimDefinitions$[autocompleteId] = this.personaAutocompleteService.buildClaimDefinitionAutocomplete(this.routeDamId(), formGroup);
-    this.trustedSources$[autocompleteId] = this.personaAutocompleteService.buildTrustedSourcesAutocomplete(this.routeDamId(), formGroup);
-    this.policyValues$[autocompleteId] = this.personaAutocompleteService.buildValuesAutocomplete(this.routeDamId(), formGroup);
+  private getAutocompleteValues() {
+    this.claimDefinitions = this.claimDefinitionsStore.getAsList(this.routeDamId(), pick('name'))
+      .pipe(
+        map(makeDistinct)
+      );
+    this.trustedSources = this.trustedSourcesStore.getAsList(this.routeDamId(), pick('dto.sources'))
+      .pipe(
+        map(flatten),
+        map(makeDistinct)
+      );
+    this.passportIssuers = this.passportIssuersStore.getAsList(this.routeDamId(), pick('dto.issuer'))
+      .pipe(
+        map(makeDistinct)
+      );
   }
 
-  private buildForm(personaId: string, personaDto: TestPersona) {
-    this.form = this.buildMainForm(personaId, personaDto);
-    this.buildAccessForm(personaDto);
+  private buildSuggestedAutocompleteValuesForClaim(formGroup: FormGroup): Observable<any> {
+    const claimName$ = formGroup.get('claimName').valueChanges.pipe(
+      startWith('')
+    );
+    const value$ = formGroup.get('value').valueChanges.pipe(
+      startWith('')
+    );
 
-    if (!this.resourcesList) {
-      this.form.disable();
-    }
-
-    this.passportIssuers$ = this.personaAutocompleteService.buildIssuerAutocomplete(this.routeDamId(), this.form);
-
-    if (personaId) {
-      this.validatorSubscription.unsubscribe();
-      this.validatorSubscription = this.setUpAccessValidator(personaId);
-    }
+    return combineLatest(claimName$, value$).pipe(
+      debounceTime(300),
+      switchMap(([claimName, value]) => {
+        const currentClaimName = formGroup.get('claimName').value;
+        return this.claimDefService.getClaimDefinitionSuggestions(this.routeDamId(), claimName || currentClaimName).pipe(
+          map(filterBy(includes(value)))
+        );
+      })
+    );
   }
 
   private executeDryRunRequest(personaId: string, change: ConfigModificationObject) {
@@ -177,17 +217,6 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
     };
   }
 
-  private getGa4ghClaimModel({claimName, source, value, assertedDuration, expiresDuration, by}): TestPersona.IGA4GHClaim {
-    return {
-      claimName,
-      source,
-      value,
-      assertedDuration,
-      expiresDuration,
-      by,
-    };
-  }
-
   private getViewRolesCombinations(view: object) {
     const viewEntries = Object.entries(view);
 
@@ -195,24 +224,6 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
       const roles = Object.keys(viewDto.roles);
       return [...sum, ...roles.map((role) => `${viewName}/${role}`)];
     }, []);
-  }
-
-  private buildMainForm(personaId, personaDto) {
-    const standardClaims = _get(personaDto, 'idToken.standardClaims', {});
-    const ga4ghClaims: TestPersona.IGA4GHClaim[] = _get(personaDto, 'idToken.ga4ghClaims', []);
-
-    return this.formBuilder.group({
-      id: [{value: personaId, disabled: !!personaId}, [
-        Validators.pattern(nameConstraintPattern),
-      ]],
-      label: [personaDto.ui.label],
-      iss: [standardClaims.iss, Validators.required],
-      sub: [standardClaims.sub, Validators.required],
-      ga4ghClaims: this.formBuilder.array(
-        ga4ghClaims.map((claim) => this.buildGa4GhClaimGroup(claim))
-      ),
-      resources: this.formBuilder.group({}),
-    });
   }
 
   private buildAccessForm(personaDto: TestPersona): Subscription {
@@ -240,7 +251,7 @@ export class PersonaFormComponent implements OnChanges, OnDestroy, Form {
         return result;
       }, {});
 
-      this.resources.registerControl(name, this.formBuilder.group(resourceAccessFormGroup));
+      this.resourceAccess.setControl(name, this.formBuilder.group(resourceAccessFormGroup));
     });
   }
 

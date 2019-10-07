@@ -7,10 +7,12 @@
              placeholder="Name"
              formControlName="id"
              data-se="inp-id"
+             [readonly]="persona && persona.name.length > 0"
              required>
       <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
     </mat-form-field>
-    <mat-form-field class="col">
+    <mat-form-field class="col"
+                    formGroupName="ui">
       <input matInput
              placeholder="Display Name"
              formControlName="label"
@@ -19,186 +21,175 @@
     </mat-form-field>
   </div>
 
-  <h3>
-    <mat-icon class="icon icon-claims"></mat-icon>
-    <span>Standard Claims</span>
-  </h3>
-
-  <mat-card>
-    <div class="row">
-      <mat-form-field class="col">
-        <mat-autocomplete #issuers="matAutocomplete">
-          <ng-container *ngIf="issuerInput.isTouched">
-            <mat-option *ngFor="let option of passportIssuers$ | async"
-                        [value]="option">
-              {{ option }}
-            </mat-option>
-          </ng-container>
-        </mat-autocomplete>
-
-        <input matInput
-               placeholder="Issuer"
-               formControlName="iss"
-               data-se="inp-iss"
-               #issuerInput="ddapInputState"
-               [matAutocomplete]="issuers"
-               required>
-      </mat-form-field>
-
-      <mat-form-field class="col">
-        <input matInput
-               formControlName="sub"
-               placeholder="Subject"
-               data-se="inp-sub"
-               required>
-      </mat-form-field>
-    </div>
-  </mat-card>
-
-  <h3>
-    <span>Global Alliance for Genomics and Health Claims</span>
-    <div>
-      <button mat-button
-              color="primary"
-              class="uppercase"
-              type="button"
-              data-se="btn-add-claim"
-              (click)="addGa4ghClaims()">
-        Add Claim
-      </button>
-    </div>
-  </h3>
-
-  <mat-accordion multi displayMode="flat">
-    <mat-expansion-panel *ngFor="let ga4ghClaim of ga4ghClaims.controls; let i=index"
-                         formArrayName="ga4ghClaims"
-                         [attr.data-se]="'claim-' + i">
-      <mat-expansion-panel-header collapsedHeight="5rem"
-                                  expandedHeight="5rem">
-        <mat-panel-title>
-          <mat-icon class="icon icon-claims"></mat-icon>
-          <span>{{ ga4ghClaim.get('claimName').value || 'Claim' }}</span>
-        </mat-panel-title>
-        <div class="invalid-warning" *ngIf="ga4ghClaim.invalid">
-          <mat-icon class="icon icon-warning"
-                    matTooltip="Claim is invalid">
-          </mat-icon>
+  <ng-container formGroupName="idToken">
+    <ng-container formGroupName="standardClaims">
+      <h3>
+        <mat-icon class="icon icon-claims"></mat-icon>
+        <span>Standard Claims</span>
+      </h3>
+      <mat-card>
+        <div class="row">
+          <mat-form-field class="col">
+            <input matInput
+                   placeholder="Issuer"
+                   formControlName="iss"
+                   data-se="inp-iss"
+                   [matAutocomplete]="issuers"
+                   required>
+            <mat-autocomplete #issuers="matAutocomplete">
+              <mat-option *ngFor="let option of passportIssuers | async"
+                          [value]="option">
+                {{ option }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field class="col">
+            <input matInput
+                   formControlName="sub"
+                   placeholder="Subject"
+                   data-se="inp-sub"
+                   required>
+          </mat-form-field>
         </div>
-     </mat-expansion-panel-header>
-    <mat-autocomplete #claims="matAutocomplete">
-      <ng-container *ngIf="claimInput.isTouched">
-        <mat-option *ngFor="let option of claimDefinitions$[ga4ghClaim.value._autocompleteId] | async"
-                    [value]="option">
-          {{ option }}
-        </mat-option>
-      </ng-container>
-    </mat-autocomplete>
-    <mat-autocomplete #sources="matAutocomplete">
-      <ng-container *ngIf="sourceInput.isTouched">
-        <mat-option *ngFor="let option of trustedSources$[ga4ghClaim.value._autocompleteId] | async"
-                    [value]="option">
-          {{ option }}
-        </mat-option>
-      </ng-container>
-    </mat-autocomplete>
-    <mat-autocomplete #values="matAutocomplete">
-      <ng-container *ngIf="valueInput.isTouched">
-        <mat-option *ngFor="let option of policyValues$[ga4ghClaim.value._autocompleteId] | async"
-                    [value]="option">
-          {{ option }}
-        </mat-option>
-      </ng-container>
-    </mat-autocomplete>
+      </mat-card>
+    </ng-container>
 
-    <ng-container [formGroupName]="i">
-      <div class="row">
-        <mat-form-field class="col">
-          <input matInput
-                 #claimInput="ddapInputState"
-                 [matAutocomplete]="claims"
-                 formControlName="claimName"
-                 placeholder="Claim Name"
-                 data-se="inp-claimName"
-                 required>
-        </mat-form-field>
-        <mat-form-field class="col">
-          <input matInput
-                 #sourceInput="ddapInputState"
-                 [matAutocomplete]="sources"
-                 formControlName="source"
-                 placeholder="Source"
-                 data-se="inp-source"
-                 required>
-          <mat-error *ngIf="ga4ghClaim.get('source').hasError('url')">Must start with http:// or https://</mat-error>
-        </mat-form-field>
-      </div>
-
-      <mat-form-field class="col">
-        <input matInput
-               #valueInput="ddapInputState"
-               [matAutocomplete]="values"
-               formControlName="value"
-               placeholder="Value"
-               data-se="inp-value"
-               required>
-      </mat-form-field>
-
-      <div class="row">
-        <mat-form-field class="col">
-          <input matInput
-                 required
-                 formControlName="assertedDuration"
-                 placeholder="Asserted Duration"
-                 data-se="inp-iat">
-          <mat-error *ngIf="ga4ghClaim.get('assertedDuration').hasError('required')">
-            Duration is required
-          </mat-error>
-          <mat-error *ngIf="ga4ghClaim.get('assertedDuration').hasError('duration')">
-            Duration must be in form <i>(number)(s|m|h|d|w)</i> (e.g. 30d)
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="col">
-          <input matInput
-                 required
-                 formControlName="expiresDuration"
-                 placeholder="Expires Duration"
-                 data-se="inp-exp">
-          <mat-error *ngIf="ga4ghClaim.get('expiresDuration').hasError('required')">
-            Duration is required
-          </mat-error>
-          <mat-error *ngIf="ga4ghClaim.get('expiresDuration').hasError('duration')">
-            Duration must be in form (number)(s|m|h|d|w), e.g. <i>30d</i>
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="row">
-        <mat-form-field class="col w-50">
-          <mat-label>By</mat-label>
-          <mat-select formControlName="by"
-                      data-se="inp-by">
-            <mat-option>None</mat-option>
-            <mat-option value="self">self</mat-option>
-            <mat-option value="peer">peer</mat-option>
-            <mat-option value="so">so</mat-option>
-            <mat-option value="dac">dac</mat-option>
-            <mat-option value="system">system</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <div class="footer">
+    <ng-container formArrayName="ga4ghClaims">
+    <h3>
+      <span>Global Alliance for Genomics and Health Claims</span>
+      <div>
         <button mat-button
-                type="button"
-                color="warn"
+                color="primary"
                 class="uppercase"
-                (click)="removeGa4ghClaim(i)">
-          Remove Claim
+                type="button"
+                data-se="btn-add-claim"
+                (click)="addGa4ghClaims()">
+          Add Claim
         </button>
       </div>
+    </h3>
+      <mat-accordion multi displayMode="flat">
+        <mat-expansion-panel *ngFor="let ga4ghClaim of ga4ghClaims.controls; let i=index"
+                             [attr.data-se]="'claim-' + i">
+          <mat-expansion-panel-header collapsedHeight="5rem"
+                                      expandedHeight="5rem">
+            <mat-panel-title>
+              <mat-icon class="icon icon-claims"></mat-icon>
+              <span>{{ ga4ghClaim.get('claimName').value || 'Claim' }}</span>
+            </mat-panel-title>
+            <div class="invalid-warning" *ngIf="ga4ghClaim.invalid">
+              <mat-icon class="icon icon-warning"
+                        matTooltip="Claim is invalid">
+              </mat-icon>
+            </div>
+          </mat-expansion-panel-header>
+
+          <ng-container [formGroupName]="i">
+            <div class="row">
+              <mat-form-field class="col">
+                <input matInput
+                       [matAutocomplete]="claims"
+                       formControlName="claimName"
+                       placeholder="Claim Name"
+                       data-se="inp-claimName"
+                       required>
+                <mat-autocomplete #claims="matAutocomplete">
+                  <mat-option *ngFor="let option of claimDefinitions | async"
+                              [value]="option">
+                    {{ option }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-form-field class="col">
+                <input matInput
+                       [matAutocomplete]="sources"
+                       formControlName="source"
+                       placeholder="Source"
+                       data-se="inp-source"
+                       required>
+                <mat-error *ngIf="ga4ghClaim.get('source').hasError('url')">Must start with http:// or https://</mat-error>
+                <mat-autocomplete #sources="matAutocomplete">
+                  <mat-option *ngFor="let option of trustedSources | async"
+                              [value]="option">
+                    {{ option }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field class="col">
+              <input matInput
+                     [matAutocomplete]="values"
+                     formControlName="value"
+                     placeholder="Value"
+                     data-se="inp-value"
+                     required>
+              <mat-autocomplete #values="matAutocomplete">
+                <mat-option *ngFor="let option of claimSuggestedValues"
+                            [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <div class="row">
+              <mat-form-field class="col">
+                <input matInput
+                       required
+                       formControlName="assertedDuration"
+                       placeholder="Asserted Duration"
+                       data-se="inp-iat">
+                <mat-error *ngIf="ga4ghClaim.get('assertedDuration').hasError('required')">
+                  Duration is required
+                </mat-error>
+                <mat-error *ngIf="ga4ghClaim.get('assertedDuration').hasError('duration')">
+                  Duration must be in form <i>(number)(s|m|h|d|w)</i> (e.g. 30d)
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="col">
+                <input matInput
+                       required
+                       formControlName="expiresDuration"
+                       placeholder="Expires Duration"
+                       data-se="inp-exp">
+                <mat-error *ngIf="ga4ghClaim.get('expiresDuration').hasError('required')">
+                  Duration is required
+                </mat-error>
+                <mat-error *ngIf="ga4ghClaim.get('expiresDuration').hasError('duration')">
+                  Duration must be in form (number)(s|m|h|d|w), e.g. <i>30d</i>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <mat-form-field class="col w-50">
+                <mat-label>By</mat-label>
+                <mat-select formControlName="by"
+                            data-se="inp-by">
+                  <mat-option>None</mat-option>
+                  <mat-option value="self">self</mat-option>
+                  <mat-option value="peer">peer</mat-option>
+                  <mat-option value="so">so</mat-option>
+                  <mat-option value="dac">dac</mat-option>
+                  <mat-option value="system">system</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="footer">
+              <button mat-button
+                      type="button"
+                      color="warn"
+                      class="uppercase"
+                      (click)="removeGa4ghClaim(i)">
+                Remove Claim
+              </button>
+            </div>
+          </ng-container>
+        </mat-expansion-panel>
+      </mat-accordion>
     </ng-container>
-    </mat-expansion-panel>
-  </mat-accordion>
+  </ng-container>
 
   <h3>
     <mat-icon class="icon icon-resources"></mat-icon>
@@ -221,7 +212,7 @@
       </p>
     </div>
     <ddap-persona-access-form [resources]="resourcesList"
-                              [form]="resources">
+                              [form]="resourceAccess">
     </ddap-persona-access-form>
   </ng-container>
 

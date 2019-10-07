@@ -27,6 +27,12 @@ export class DamConfigEntityStore extends Store<DamConfigEntity> {
     return this.state$
       .pipe(
         pluck(damId),
+        map((values) => {
+          if (!values) {
+            return [];
+          }
+          return values;
+        }),
         map(EntityModel.arrayFromMap),
         map(issuerList => innerMapFn ? issuerList.map(innerMapFn) : issuerList)
       );

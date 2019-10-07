@@ -21,7 +21,7 @@ public class AdminPersonaE2eTest extends AbstractAdminFrontendE2eTest {
 
         adminManagePage.fillField(DdapBy.se("inp-id"), "test-persona");
         adminManagePage.fillField(DdapBy.se("inp-label"), "test-persona-name");
-        adminManagePage.fillField(DdapBy.se("inp-iss"), "test-issuer");
+        adminManagePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-iss"));
         adminManagePage.fillField(DdapBy.se("inp-sub"), "test-subject");
 
         adminManagePage.clickButton(DdapBy.se("btn-add-claim"));

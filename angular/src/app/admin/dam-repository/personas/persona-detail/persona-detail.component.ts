@@ -17,7 +17,7 @@ import { PersonasStore } from '../personas.store';
   styleUrls: ['./persona-detail.component.scss'],
   providers: [FormValidationService],
 })
-export class PersonaDetailComponent extends DamConfigEntityDetailComponentBase<PersonasStore> implements OnInit {
+export class PersonaDetailComponent extends DamConfigEntityDetailComponentBase<PersonasStore> {
 
   @ViewChild(PersonaFormComponent, { static: false })
   personaForm: PersonaFormComponent;

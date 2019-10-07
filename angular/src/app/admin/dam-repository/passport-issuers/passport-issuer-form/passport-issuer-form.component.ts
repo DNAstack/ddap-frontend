@@ -4,12 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs';
 
+import { pick } from '../../../../shared/autocomplete/autocomplete.util';
 import { dam } from '../../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 import Form from '../../../shared/form/form';
 import TrustedPassportIssuer = dam.v1.TrustedPassportIssuer;
 import { PassportTranslatorsService } from '../../passport-translators/passport-translators.service';
-import { PersonaAutocompleteService } from '../../personas/persona-autocomplete.service';
+import { PassportIssuersStore } from '../passport-issuers.store';
 
 @Component({
   selector: 'ddap-passport-issuer-form',
@@ -29,7 +30,7 @@ export class PassportIssuerFormComponent implements OnInit, Form {
 
   constructor(private formBuilder: FormBuilder,
               private passportTranslators: PassportTranslatorsService,
-              private personaAutocomplete: PersonaAutocompleteService,
+              private passportIssuersStore: PassportIssuersStore,
               private route: ActivatedRoute) {
 
   }
@@ -48,7 +49,8 @@ export class PassportIssuerFormComponent implements OnInit, Form {
       issuer: [issuer, Validators.required],
       translateUsing: [translateUsing],
     });
-    this.passportIssuers$ = this.personaAutocomplete.buildIssuerAutocomplete(this.routeDamId(), this.form, 'issuer');
+
+    this.passportIssuers$ = this.passportIssuersStore.getAsList(this.routeDamId(), pick('dto.issuer'));
   }
 
   getModel(): EntityModel {
