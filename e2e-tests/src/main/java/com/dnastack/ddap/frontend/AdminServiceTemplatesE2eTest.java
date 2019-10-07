@@ -18,11 +18,11 @@ public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
     public void addServiceTemplate(){
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damServiceDefinitionLink(DAM_ID));
-        String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-3";
+        String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-1";
         adminListPage.assertListItemDoNotExist(serviceTemplateLabel);
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
-        adminManagePage.fillField(DdapBy.se("id-field"), "discovery_test_3");
+        adminManagePage.fillField(DdapBy.se("id-field"), "discovery_test_1");
         adminManagePage.fillField(DdapBy.se("inp-label"), serviceTemplateLabel);
         adminManagePage.fillField(DdapBy.se("inp-description"), "Copy of Beacon Discovery");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-target-adapter"),
@@ -36,7 +36,7 @@ public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-interface-value"), "${url}");
 
         // Add role
-        adminManagePage.enterButton(DdapBy.se("btn-add-role"));
+//        adminManagePage.enterButton(DdapBy.se("btn-add-role"));
         adminManagePage.toggleExpansionPanel("role-0");
         adminManagePage.fillField(DdapBy.se("inp-role-name-0"), "basic_discovery");
         adminManagePage.fillField(DdapBy.se("inp-role-label-0"),
@@ -66,12 +66,12 @@ public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
     public void editServiceTemplate() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damServiceDefinitionLink(DAM_ID));
-        String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-4";
+        String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-2";
         adminListPage.assertListItemDoNotExist(serviceTemplateLabel);
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
-        adminManagePage.fillField(DdapBy.se("id-field"), "discovery_test_4");
+        adminManagePage.fillField(DdapBy.se("id-field"), "discovery_test_2");
         adminManagePage.fillField(DdapBy.se("inp-label"), serviceTemplateLabel);
         adminManagePage.fillField(DdapBy.se("inp-description"), "Copy of Beacon Discovery");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-target-adapter"),
@@ -82,6 +82,15 @@ public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.toggleExpansionPanel("view-new");
         adminManagePage.fillField(DdapBy.se("inp-interface-type"), "http:beacon");
         adminManagePage.fillField(DdapBy.se("inp-interface-value"), "${url}");
+
+        adminManagePage.toggleExpansionPanel("role-0");
+        adminManagePage.fillField(DdapBy.se("inp-role-name-0"), "basic_discovery");
+        adminManagePage.fillField(DdapBy.se("inp-role-label-0"),
+                "Discovery Beacon Search without Metadata");
+        adminManagePage.fillField(DdapBy.se("inp-role-description-0"),
+                "Query genome data and return 'found' or 'not found' status");
+        adminManagePage.fillTagField(DdapBy.se("inp-target-scope-0"), "registered");
+        adminManagePage.fillTagField(DdapBy.se("inp-dam-role-category-0"), "exists");
 
         adminListPage = adminManagePage.saveEntity();
         adminListPage.assertListItemExists(serviceTemplateLabel);
@@ -100,17 +109,26 @@ public class AdminServiceTemplatesE2eTest extends AbstractAdminFrontendE2eTest {
     public void deleteServiceTemplate() {
         AdminListPage adminListPage = ddapPage.getNavBar()
                 .goToAdmin(damServiceDefinitionLink(DAM_ID));
-        String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-5";
+        String serviceTemplateLabel = "Beacon Discovery Search CUSTOM-3";
         adminListPage.assertListItemDoNotExist(serviceTemplateLabel);
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
 
-        adminManagePage.fillField(DdapBy.se("id-field"), "discovery_test_5");
+        adminManagePage.fillField(DdapBy.se("id-field"), "discovery_test_3");
         adminManagePage.fillField(DdapBy.se("inp-label"), serviceTemplateLabel);
         adminManagePage.fillField(DdapBy.se("inp-description"), "Copy of Beacon Discovery");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-target-adapter"),
                 "Gatekeeper Token");
         adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-item-format"), "Proxy URL");
+
+        adminManagePage.toggleExpansionPanel("role-0");
+        adminManagePage.fillField(DdapBy.se("inp-role-name-0"), "basic_discovery");
+        adminManagePage.fillField(DdapBy.se("inp-role-label-0"),
+                "Discovery Beacon Search without Metadata");
+        adminManagePage.fillField(DdapBy.se("inp-role-description-0"),
+                "Query genome data and return 'found' or 'not found' status");
+        adminManagePage.fillTagField(DdapBy.se("inp-target-scope-0"), "registered");
+        adminManagePage.fillTagField(DdapBy.se("inp-dam-role-category-0"), "exists");
 
         adminListPage = adminManagePage.saveEntity();
         adminListPage.assertListItemExists(serviceTemplateLabel);
