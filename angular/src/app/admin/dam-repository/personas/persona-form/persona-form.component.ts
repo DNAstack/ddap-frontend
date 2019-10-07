@@ -74,11 +74,11 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
       map((resourceList) => this.generateAllAccessModel(resourceList))
     );
 
-    const { idToken } = _get(this.persona, 'dto', {});
+    const { ui, idToken } = _get(this.persona, 'dto', {});
     this.form = this.formBuilder.group({
-      id: [_get(this.persona, 'name', ''), [Validators.pattern(nameConstraintPattern)]],
+      id: [this.persona.name || '', [Validators.pattern(nameConstraintPattern)]],
       ui: this.formBuilder.group({
-        label: [_get(this.persona, 'dto.ui.label', ''), [Validators.required]],
+        label: [ui.label || '', [Validators.required]],
       }),
       idToken: this.formBuilder.group({
         standardClaims: this.formBuilder.group({
