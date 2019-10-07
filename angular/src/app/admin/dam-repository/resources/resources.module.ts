@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 
 import { DamRepositorySharedModule } from '../shared/shared.module';
 
+import { ResourceAccessComponent } from './resource-access/resource-access.component';
 import { ResourceDetailComponent } from './resource-detail/resource-detail.component';
-import { PersonaResourceAccessComponent } from './resource-form/persona-resource-access/persona-resource-access.component';
 import { ResourceFormComponent } from './resource-form/resource-form.component';
 import { ResourceViewFormComponent } from './resource-form/resource-view-form/resource-view-form.component';
 import { ResourceListComponent } from './resource-list/resource-list.component';
@@ -17,7 +17,7 @@ import { ResourcesRoutingModule } from './resources-routing.module';
     ResourceDetailComponent,
     ResourceFormComponent,
     ResourceViewFormComponent,
-    PersonaResourceAccessComponent,
+    ResourceAccessComponent,
   ],
   imports: [
     DamRepositorySharedModule,

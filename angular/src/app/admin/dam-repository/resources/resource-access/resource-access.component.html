@@ -1,0 +1,40 @@
+<form *ngIf="form"
+      novalidate
+      class="ddap-form"
+      [formGroup]="form">
+  <div class="ddap-personas-access">
+    <h3>
+      <mat-icon class="icon icon-access"></mat-icon>
+      <span>Access</span>
+    </h3>
+  </div>
+  <div class="description">
+    <p>
+      Headings are role names (qualified by view). Checkboxes represent the expected access of each test persona on a view.
+      A box is checked if and only if the labelled persona is expected to have access.
+    </p>
+    <p>
+      If a box is red, the changes you are making have altered the expected state. Please either modify your changes
+      to maintain the expected state, or click the checkbox to explicitly change the expected access.
+    </p>
+  </div>
+  <ul>
+    <li *ngFor="let view of views">
+      <h3>{{ view }}</h3>
+      <ul>
+        <li *ngFor="let persona of personas">
+          <ng-container *ngIf="form.get(persona.name) && form.get(persona.name).get(view)">
+            <ng-container [formGroupName]="persona.name">
+              <mat-checkbox [formControlName]="view"
+                            color="primary"
+                            (change)="emitChange()"
+                            id="{{ view }}/{{ persona.name }}">
+                {{ persona.name }}
+              </mat-checkbox>
+            </ng-container>
+          </ng-container>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</form>

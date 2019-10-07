@@ -10,20 +10,15 @@
   <div *ngIf="entity">
     <ddap-resource-form #resourceForm
                         [resource]="entity"
-                        [damId]="damId">
-      <div class="ddap-personas-access">
-        <h3>
-          <mat-icon class="icon icon-access"></mat-icon>
-          <span>Access</span>
-        </h3>
-        <ddap-persona-resource-access #accessForm
-                                      [isNewResource]="false"
-                                      [resource]="resourceForm.getModel()"
-                                      [damId]="damId"
-        >
-        </ddap-persona-resource-access>
-      </div>
+                        [damId]="damId"
+                        (formChange)="executeDryRun()">
     </ddap-resource-form>
+    <ddap-resource-access #accessForm
+                          [isNewResource]="false"
+                          [damId]="damId"
+                          [resource]="resourceForm.getModel()"
+                          (formChange)="executeDryRun()">
+    </ddap-resource-access>
   </div>
 </ddap-main>
 

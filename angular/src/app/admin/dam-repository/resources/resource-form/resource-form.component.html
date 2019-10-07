@@ -140,7 +140,8 @@
       <ng-template #viewTemplate
                    let-view>
         <ddap-resource-view-form [view]="view"
-                                 [damId]="damId">
+                                 [damId]="damId"
+                                 (formChange)="viewFormChange()">
           <div class="footer">
             <button mat-button
                     type="button"

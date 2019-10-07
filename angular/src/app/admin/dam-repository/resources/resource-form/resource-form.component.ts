@@ -3,8 +3,10 @@ import {
   ChangeDetectorRef,
   Component,
   EmbeddedViewRef,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   QueryList,
   TemplateRef,
   ViewChild,
@@ -13,7 +15,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
-import Resource = dam.v1.Resource;
+import { tap } from 'rxjs/operators';
 
 import { FormValidators } from '../../../../shared/form/validators';
 import { dam } from '../../../../shared/proto/dam-service';
@@ -21,6 +23,8 @@ import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model
 import Form from '../../../shared/form/form';
 
 import { ResourceViewFormComponent } from './resource-view-form/resource-view-form.component';
+import Resource = dam.v1.Resource;
+
 
 @Component({
   selector: 'ddap-resource-form',
@@ -34,6 +38,8 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
   resource?: EntityModel = new EntityModel('', Resource.create());
   @Input()
   damId: string;
+  @Output()
+  formChange: EventEmitter<any> = new EventEmitter<any>();
 
   form: FormGroup;
 
@@ -73,6 +79,9 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
         infoUrl: [dto.ui.infoUrl, [FormValidators.url]],
       }),
     });
+    this.form.valueChanges.pipe(
+      tap(this.formChange.emit)
+    ).subscribe();
   }
 
   ngAfterViewInit(): void {
@@ -96,6 +105,7 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
   removeView({ _id }: any) {
     const embeddedView = this.viewRefs.find((component) => component.context['$implicit']._id === _id);
     embeddedView.destroy();
+    this.viewFormChange();
   }
 
   getModel(): EntityModel {
@@ -155,6 +165,10 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
 
   getAllForms(): FormGroup[] {
     return [...this.getViewChildrenForms(), this.form];
+  }
+
+  viewFormChange() {
+    this.formChange.emit();
   }
 
   private getViewChildrenForms(): FormGroup[] {

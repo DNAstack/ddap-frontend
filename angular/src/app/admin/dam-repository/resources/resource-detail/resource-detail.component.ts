@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -7,7 +8,7 @@ import { combine } from '../../../shared/form/form';
 import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
-import { PersonaResourceAccessComponent } from '../resource-form/persona-resource-access/persona-resource-access.component';
+import { ResourceAccessComponent } from '../resource-access/resource-access.component';
 import { ResourceFormComponent } from '../resource-form/resource-form.component';
 import { ResourceService } from '../resources.service';
 import { ResourcesStore } from '../resources.store';
@@ -23,7 +24,8 @@ export class ResourceDetailComponent extends DamConfigEntityDetailComponentBase<
   @ViewChild(ResourceFormComponent, { static: false })
   resourceForm: ResourceFormComponent;
   @ViewChild('accessForm', { static: false })
-  accessForm: PersonaResourceAccessComponent;
+  accessForm: ResourceAccessComponent;
+  isDryRun: boolean;
 
   constructor(protected route: ActivatedRoute,
               protected router: Router,
@@ -34,22 +36,40 @@ export class ResourceDetailComponent extends DamConfigEntityDetailComponentBase<
     super(route, router, validationService, damConfigStore, resourcesStore);
   }
 
-  update() {
-    const aggregateForm = combine(this.resourceForm, this.accessForm.testForm);
-    if (!this.validate(this.accessForm.testForm.form ? aggregateForm : this.resourceForm)) {
+  update(isDryRun?: boolean) {
+    const aggregateForm = combine(this.resourceForm, this.accessForm);
+    this.isDryRun = isDryRun;
+    if (!isDryRun && !this.validate(this.accessForm.form ? aggregateForm : this.resourceForm)) {
       return;
     }
 
     const resourceModel: EntityModel = this.resourceForm.getModel();
-    const applyModel = this.accessForm.getApplyModel() || {};
+    const applyModel = this.accessForm.getApplyModel(isDryRun) || {};
     const change = new ConfigModificationObject(resourceModel.dto, applyModel);
     this.resourceService.update(this.damId, this.entity.name, change)
-      .subscribe(() => this.navigateUp('..'), this.showError);
+      .subscribe(() => {
+        if (!isDryRun) {
+          this.navigateUp('..');
+        }
+      }, this.handleError);
   }
 
   delete() {
     this.resourceService.remove(this.damId, this.entity.name)
       .subscribe(() => this.navigateUp('..'), this.showError);
+  }
+
+  handleError = (error: HttpErrorResponse) => {
+    if (error.status === 424 && this.accessForm.isConfigModificationObject(error)) {
+      this.accessForm.makeFieldsValid();
+      this.accessForm.validatePersonaFields(error);
+    } else if (!this.isDryRun) {
+      this.showError(error);
+    }
+  }
+
+  executeDryRun() {
+    this.update(true);
   }
 
 }
