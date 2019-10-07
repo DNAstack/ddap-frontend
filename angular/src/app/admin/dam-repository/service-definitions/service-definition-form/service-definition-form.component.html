@@ -181,7 +181,8 @@
         <div class="row">
           <div class="col">
             <tag-input formControlName="targetRoles"
-                       secondaryPlaceholder="{{roleSecondaryPlaceholder}}"
+                       [secondaryPlaceholder]="isRequired('targetRole')
+                                                ? 'Add Target Role *' : 'Target Role'"
                        placeholder="+ Target Role"
                        editable="true"
                        [attr.data-se]="'inp-target-role-' + i"
@@ -192,7 +193,8 @@
         <div class="row">
           <div class="col">
             <tag-input formControlName="targetScopes"
-                       secondaryPlaceholder="{{scopeSecondaryPlaceholder}}"
+                       [secondaryPlaceholder]="isRequired('targetScope')
+                                                ? 'Add Target Scope *' : 'Target Scope'"
                        placeholder="+ Target Scope"
                        editable="true"
                        modelAsStrings="true"

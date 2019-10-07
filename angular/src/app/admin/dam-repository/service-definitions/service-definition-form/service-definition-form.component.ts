@@ -128,6 +128,10 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
     return this.form.valid;
   }
 
+  isRequired(fieldName: string): boolean {
+    return this.requirements && this.requirements[fieldName];
+  }
+
   private createRoleForm(name, dto): FormGroup {
     return this.formBuilder.group({
       name: [name, [Validators.pattern(nameConstraintPattern), Validators.required]],
@@ -185,20 +189,9 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   private updateRoleValidations() {
     const roleFormControls: any[] = this.roles.controls;
     roleFormControls.forEach(roleFormGroup => {
-      let roleValidators = [];
-      let scopeValidators = [];
-      this.roleSecondaryPlaceholder = 'Add Target Role';
-      this.scopeSecondaryPlaceholder = 'Add Target Scope';
-      if (this.requirements) {
-        if (this.requirements['targetRole']) {
-          roleValidators = [Validators.required];
-          this.roleSecondaryPlaceholder = 'Add Target Role *';
-        }
-        if (this.requirements['targetScope']) {
-          scopeValidators = [Validators.required];
-          this.scopeSecondaryPlaceholder = 'Add Target Scope *';
-        }
-      }
+      const roleValidators = (this.requirements && this.requirements['targetRole']) ? [Validators.required] : [];
+      const scopeValidators = (this.requirements && this.requirements['targetScope']) ? [Validators.required] : [];
+
       roleFormGroup.controls['targetRoles'].setValidators(roleValidators);
       roleFormGroup.controls['targetScopes'].setValidators(scopeValidators);
 
