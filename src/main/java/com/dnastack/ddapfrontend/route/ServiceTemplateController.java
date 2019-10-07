@@ -20,16 +20,16 @@ import static java.lang.String.format;
 
 @RestController
 @RequestMapping(value = "/api/v1alpha/{realm}/serviceTemplates")
-public class ServiceTemplateVariableResolutionController {
+public class ServiceTemplateController {
 
     private UserTokenCookiePackager cookiePackager;
     private DamClientFactory damClientFactory;
     private Map<String, Dam> dams;
 
     @Autowired
-    public ServiceTemplateVariableResolutionController(UserTokenCookiePackager cookiePackager,
-        DamClientFactory damClientFactory,
-        @Qualifier("dams") Map<String, Dam> dams) {
+    public ServiceTemplateController(UserTokenCookiePackager cookiePackager,
+                                     DamClientFactory damClientFactory,
+                                     @Qualifier("dams") Map<String, Dam> dams) {
         this.cookiePackager = cookiePackager;
         this.damClientFactory = damClientFactory;
         this.dams = dams;
@@ -60,6 +60,18 @@ public class ServiceTemplateVariableResolutionController {
         return getServiceTemplate(damClient, realm, tokens, serviceTemplateId)
             .flatMap(serviceTemplate -> getItemFormatForServiceTemplate(damClient, realm, tokens, serviceTemplate)
                 .map(ItemFormat::getVariablesMap));
+    }
+
+    @GetMapping(value = "{damId}/targetAdapters")
+    public Mono<Map<String, TargetAdapter>> targetAdapters( @PathVariable String realm,
+                                                            @PathVariable String damId,
+                                                            ServerHttpRequest request) {
+        Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request,
+                Set.of(CookieKind.DAM, CookieKind.REFRESH));
+        final ReactiveDamClient damClient = damClientFactory.getDamClient(damId);
+
+        return damClient.getTargetAdapters(realm, tokens.get(CookieKind.DAM), tokens.get(CookieKind.REFRESH))
+                .map(TargetAdaptersResponse::getTargetAdaptersMap);
     }
 
     private Mono<ServiceTemplate> getServiceTemplate(ReactiveDamClient damClient,

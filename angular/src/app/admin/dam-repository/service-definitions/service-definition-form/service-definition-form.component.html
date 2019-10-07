@@ -1,0 +1,230 @@
+<form class="ddap-form"
+      novalidate
+      [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput
+             required
+             placeholder="Name"
+             data-se="id-field"
+             formControlName="id"/>
+      <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
+    </mat-form-field>
+    <mat-form-field class="col"
+    formGroupName="ui">
+      <input matInput
+             required
+             placeholder="Display Name"
+             formControlName="label"
+             data-se="inp-label"/>
+    </mat-form-field>
+  </div>
+  <mat-form-field formGroupName="ui">
+    <textarea matInput
+              required
+              placeholder="Description"
+              formControlName="description"
+              data-se="inp-description">
+    </textarea>
+    <mat-error *ngIf="form.get('ui.description').invalid">Description must be up to 255 characters</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Target Adapter</mat-label>
+    <mat-select formControlName="targetAdapter"
+                (selectionChange)="targetAdapterChange()"
+                data-se="inp-target-adapter"
+                required>
+      <mat-option *ngFor="let targetAdapter of targetAdapters | keyvalue"
+                  [value]="targetAdapter.key">
+        {{targetAdapter.value.ui.label}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Item Format</mat-label>
+    <mat-select formControlName="itemFormat"
+                data-se="inp-item-format"
+                required>
+      <mat-option *ngFor="let itemFormat of itemFormats | keyvalue"
+                  [value]="itemFormat.key">
+        {{itemFormat.value.ui.label}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <h3>
+    <span>Interfaces</span>
+    <div>
+      <button mat-button
+              color="primary"
+              class="uppercase"
+              data-se="btn-add-interface"
+              type="button"
+              (click)="addInterface()">
+        Add Interface
+      </button>
+    </div>
+  </h3>
+  <mat-accordion multi displayMode="flat">
+    <mat-expansion-panel *ngFor="let interfaceObj of interfaces.controls; let i=index"
+                         formArrayName="interfaces"
+                         [attr.data-se]="'view-' + (interfaceObj.value.name || 'new')">
+      <mat-expansion-panel-header collapsedHeight="5rem"
+                                  expandedHeight="5rem">
+        <ng-container *ngIf="interfaceObj">
+          <mat-panel-title>
+            <mat-icon class="icon icon-views"></mat-icon>
+            <span>{{interfaceObj.value.name || 'Interface Name'}}</span>
+          </mat-panel-title>
+          <div class="invalid-warning" *ngIf="interfaceObj.invalid">
+            <mat-icon class="icon icon-warning"
+                      matTooltip="Interface is invalid">
+            </mat-icon>
+          </div>
+        </ng-container>
+      </mat-expansion-panel-header>
+      <div class="row" [formGroupName]="i">
+        <mat-form-field class="col">
+          <input matInput
+                 required
+                 formControlName="name"
+                 placeholder="Interface Name"
+                 data-se="inp-interface-type"/>
+          <mat-hint>Example: <i>http:gcp:gs</i></mat-hint>
+        </mat-form-field>
+        <mat-form-field class="col">
+          <input matInput
+                 required
+                 formControlName="value"
+                 placeholder="Interface Value"
+                 data-se="inp-interface-value"/>
+        </mat-form-field>
+      </div>
+      <div class="footer">
+        <button mat-button
+                type="button"
+                class="uppercase"
+                color="warn"
+                [attr.data-se]="'btn-remove-interface-' + interfaceObj.value.name"
+                (click)="removeInterface(i)">
+          Remove Interface
+        </button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <h3>
+    <span>Roles</span>
+    <div>
+      <button mat-button
+              type="button"
+              color="primary"
+              class="uppercase"
+              data-se="btn-add-role"
+              (click)="addRole()">
+        Add Role
+      </button>
+    </div>
+  </h3>
+  <mat-accordion multi displayMode="flat">
+    <mat-expansion-panel *ngFor="let role of roles.controls; let i=index"
+                         formArrayName="roles"
+                         [attr.data-se]="'role-'+i">
+      <mat-expansion-panel-header collapsedHeight="5rem"
+                                  expandedHeight="5rem">
+        <ng-container *ngIf="role">
+          <mat-panel-title>
+            <mat-icon class="icon icon-identity"></mat-icon>
+            <span>{{role.value.name || 'Role' }}</span>
+          </mat-panel-title>
+          <div class="invalid-warning" *ngIf="role.invalid">
+            <mat-icon class="icon icon-warning"
+                      matTooltip="Role is invalid">
+            </mat-icon>
+          </div>
+        </ng-container>
+      </mat-expansion-panel-header>
+
+      <div [formGroupName]="i">
+        <div class="row">
+          <mat-form-field class="col">
+            <input placeholder="Name"
+                   required
+                   matInput
+                   formControlName="name"
+                   [attr.data-se]="'inp-role-name-' + i"/>
+            <mat-error *ngIf="form.get('roles').controls[i].get('name').invalid">
+              Name must be 3-46 characters and alphanumeric
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="col"
+                          formGroupName="ui">
+            <input matInput
+                   required
+                   placeholder="Display Name"
+                   formControlName="label"
+                   [attr.data-se]="'inp-role-label-' + i"/>
+          </mat-form-field>
+        </div>
+        <mat-form-field formGroupName="ui">
+          <textarea matInput
+                    required
+                    placeholder="Description"
+                    formControlName="description"
+                    [attr.data-se]="'inp-role-description-' + i">
+          </textarea>
+          <mat-error *ngIf="form.get('roles').controls[i].get('ui.description').invalid">
+            Description must be up to 255 characters
+          </mat-error>
+        </mat-form-field>
+        <div class="row">
+          <div class="col">
+            <tag-input formControlName="targetRoles"
+                       [secondaryPlaceholder]="isRequired('targetRole')
+                                                ? 'Add Target Role *' : 'Target Role'"
+                       placeholder="+ Target Role"
+                       editable="true"
+                       [attr.data-se]="'inp-target-role-' + i"
+                       modelAsStrings="true">
+            </tag-input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <tag-input formControlName="targetScopes"
+                       [secondaryPlaceholder]="isRequired('targetScope')
+                                                ? 'Add Target Scope *' : 'Target Scope'"
+                       placeholder="+ Target Scope"
+                       editable="true"
+                       modelAsStrings="true"
+                       [attr.data-se]="'inp-target-scope-' + i">
+            </tag-input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <tag-input formControlName="damRoleCategories"
+                       secondaryPlaceholder="Add Dam Role Categories"
+                       placeholder="+ Dam Role Category"
+                       editable="true"
+                       modelAsStrings="true"
+                       [attr.data-se]="'inp-dam-role-category-' + i">
+            </tag-input>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <button mat-button
+                type="button"
+                class="uppercase"
+                color="warn"
+                [disabled]="roles.length === 1"
+                [attr.data-se]="'btn-remove-role-' + role.value.name"
+                (click)="removeRole(i)">
+          Remove Role
+        </button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>

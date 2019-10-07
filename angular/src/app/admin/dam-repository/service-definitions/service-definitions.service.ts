@@ -29,4 +29,10 @@ export class ServiceDefinitionService extends DamConfigService {
       );
   }
 
+  getTargetAdapters(damId: string): Observable<Object> {
+    return this.http.get(
+      `${environment.ddapApiUrl}/${realmIdPlaceholder}/serviceTemplates/${damId}/targetAdapters`
+    );
+  }
+
 }

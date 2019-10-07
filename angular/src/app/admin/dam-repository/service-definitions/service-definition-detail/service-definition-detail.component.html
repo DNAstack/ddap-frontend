@@ -2,8 +2,36 @@
 </ddap-header>
 
 <ddap-main>
-  <ddap-json-panel [entityService]="serviceDefinitionService"
-                   [routeDamId]="damId"
-                   [entity]="entity">
-  </ddap-json-panel>
+  <mat-progress-bar *ngIf="!entity"
+                    class="ddap-card-loader"
+                    mode="indeterminate">
+  </mat-progress-bar>
+  <div *ngIf="entity">
+    <ddap-service-definition-form [serviceTemplate] = "entity"
+                                  [damId]="damId">
+    </ddap-service-definition-form>
+  </div>
+  <div class="ddap-form-toolbar">
+    <ddap-form-footer-error [showError]="!isFormValid && isFormValidated"
+                            [message]="formErrorMessage">
+    </ddap-form-footer-error>
+    <button mat-flat-button
+            (click)="delete()"
+            [disabled]="!entity"
+            data-se="btn-delete"
+            type="button"
+            color="warn"
+            class="uppercase">
+      Delete
+    </button>
+    <button mat-flat-button
+            (click)="update()"
+            [disabled]="!entity"
+            data-se="btn-update"
+            type="submit"
+            color="primary"
+            class="uppercase">
+      Save
+    </button>
+  </div>
 </ddap-main>
