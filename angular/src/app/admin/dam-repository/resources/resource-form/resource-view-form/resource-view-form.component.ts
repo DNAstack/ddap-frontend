@@ -1,8 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import View = dam.v1.View;
 
 import { dam } from '../../../../../shared/proto/dam-service';
@@ -22,6 +22,8 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   view: EntityModel;
   @Input()
   damId: string;
+  @Output()
+  formChange: EventEmitter<any> = new EventEmitter<any>();
 
   viewForm: FormGroup;
   templates: EntityModel[];
@@ -78,6 +80,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
         this.rebuildPoliciesForRolesForm();
         this.rebuildVariablesForItemsForm();
       }
+      this.subscribeToFormChanges();
     });
 
     this.policyValues$ = this.accessPoliciesStore.getAsList(this.damId)
@@ -86,6 +89,12 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
           return policies.map((policy) => policy.name);
         })
       );
+  }
+
+  subscribeToFormChanges() {
+    this.viewForm.valueChanges.pipe(
+      tap(changed => this.formChange.emit(changed))
+    ).subscribe();
   }
 
   ngOnDestroy(): void {

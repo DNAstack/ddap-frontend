@@ -9,7 +9,6 @@ import { EntityModel } from '../../../shared/entity.model';
 import { ResourceService } from '../../resources/resources.service';
 import { DamConfigService } from '../dam/dam-config.service';
 import { JsonEditorDefaults } from '../jsonEditorDefaults';
-import { TestFormComponent } from '../test-form/test-form.component';
 
 enum ViewState {
   Editing,
@@ -46,9 +45,6 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
 
   @ViewChild('errorEditor', { static: false })
   errorEditor: JsonEditorComponent;
-
-  @ViewChild(TestFormComponent, { static: false })
-  testForm: TestFormComponent;
 
   entityEditorOptions: JsonEditorOptions;
   testEditorOptions: JsonEditorOptions;
@@ -123,11 +119,6 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
       catchError((e) => {
         this.state = ViewState.Editing;
         this.error = e.error;
-
-        if (this.isResource) {
-          this.testForm.validatePersonaFields(e);
-        }
-
         return of(true);
       }),
       tap((wasError) => {
@@ -139,10 +130,6 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
 
         if (isDryRun) {
           this.state = ViewState.Editing;
-
-          if (this.isResource) {
-            return this.testForm.makeFieldsValid();
-          }
         }
 
         this.state = ViewState.Viewing;
@@ -184,8 +171,6 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
     if (!this.isResource) {
       return this.testDto;
     }
-
-    return this.testForm.toApplyDto();
   }
 
   private setEditorMode(mode) {

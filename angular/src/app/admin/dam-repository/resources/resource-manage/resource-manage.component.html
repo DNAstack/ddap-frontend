@@ -3,18 +3,15 @@
 
 <ddap-main>
   <ddap-resource-form #resourceForm
-                      [damId]="damId">
-    <div class="ddap-personas-access">
-      <h3>
-        <mat-icon class="icon icon-access"></mat-icon>
-        <span>Access</span>
-      </h3>
-      <ddap-persona-resource-access #accessForm
-                                    [isNewResource]="true"
-                                    [resource]="resourceForm.getModel()">
-      </ddap-persona-resource-access>
-    </div>
+                      [damId]="damId"
+                      (formChange)="executeDryRun()">
   </ddap-resource-form>
+  <ddap-resource-access #accessForm
+                        [isNewResource]="true"
+                        [damId]="damId"
+                        [resource]="resourceForm.getModel()"
+                        (formChange)="executeDryRun()">
+  </ddap-resource-access>
 </ddap-main>
 
 <div class="ddap-form-toolbar">

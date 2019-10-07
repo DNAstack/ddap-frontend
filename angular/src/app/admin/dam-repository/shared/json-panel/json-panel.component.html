@@ -38,12 +38,6 @@
                               [resource]="entity">
   </ddap-personas-access-table>
 
-  <ddap-test-form *ngIf="isResource && state !== ViewState.Viewing"
-                  (change)="validateTest()"
-                  [resource]="entity"
-                  [damId]="routeDamId"
-  ></ddap-test-form>
-
   <mat-action-row *ngIf="state !== ViewState.Viewing">
     <button mat-flat-button
             color="primary"
