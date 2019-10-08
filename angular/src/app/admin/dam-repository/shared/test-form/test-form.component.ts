@@ -90,7 +90,7 @@ export class TestFormComponent implements OnChanges, Form {
 
       if (this.resource.dto) {
         const change = personas.reduce((sum, persona) => {
-          _set(sum, `modification.testPersonas[${persona}].resources[${this.resource.name}].access`, []);
+          _set(sum, `modification.testPersonas[${persona}].access`, []);
           return sum;
         }, new ConfigModificationObject(this.resource.dto, {
           dry_run: true,
@@ -111,9 +111,12 @@ export class TestFormComponent implements OnChanges, Form {
     if (this.isConfigModificationObject(error)) {
       this.originalTest = error;
       personas.forEach((persona) => {
-        const accesses = _get(error, `testPersonas[${persona}].resources[${this.resource.name}].access`, []);
+        const accesses: string[] = _get(error, `testPersonas[${persona}].access`, []);
         accesses.forEach((access) => {
-          form.get(persona).get(access).setValue(true);
+          if (access.includes(this.resource.name)) {
+            const accessViewRole = access.replace(`${this.resource.name}/`, '');
+            form.get(persona).get(accessViewRole).setValue(true);
+          }
         });
       });
     }
@@ -131,10 +134,15 @@ export class TestFormComponent implements OnChanges, Form {
       const personaAccess = this.form.value[persona];
       const accesses = Object.keys(personaAccess);
 
-      const toAdd = accesses.filter((access) => personaAccess[access] === true);
-      _set(result, `testPersonas[${persona}]['resources'][${this.resource.name}]['access']`, toAdd);
-      _set(result, `testPersonas[${persona}]['addResources']`, undefined);
-      _set(result, `testPersonas[${persona}]['removeResources']`, undefined);
+      const accessForNonRelevantViews: string[] = _get(result, `testPersonas[${persona}].access`, [])
+        .filter((access) => !access.includes(this.resource.name));
+
+      const toAdd: string[] = accesses
+        .filter((access) => personaAccess[access] === true)
+        .map((access) => `${this.resource.name}/${access}`);
+      _set(result, `testPersonas[${persona}].access`, toAdd.length > 0 ? [...toAdd, ...accessForNonRelevantViews] : []);
+      _set(result, `testPersonas[${persona}].addAccess`, undefined);
+      _set(result, `testPersonas[${persona}].removeAccess`, undefined);
     });
 
     return result;
@@ -147,20 +155,21 @@ export class TestFormComponent implements OnChanges, Form {
   validatePersonaFields({error}) {
     const testPersonasCorrect = _get(error, 'testPersonas', {});
 
-    const setError = ([persona, { access }]) => {
+    const setError = ([persona, access]) => {
       access.forEach((accessRole) => {
-        const accessRoleCheckbox = this.form.get(persona).get(accessRole);
+        const resourceName = accessRole.substr(0, accessRole.indexOf('/'));
+        const accessViewRole = accessRole.replace(`${resourceName}/`, '');
+        const accessRoleCheckbox = this.form.get(persona).get(accessViewRole);
         accessRoleCheckbox.setErrors({'Doesn\'t match role criteria': true});
       });
     };
 
     Object.entries(testPersonasCorrect)
-      .forEach(([persona, {addResources, removeResources}]: any) => {
-        const toAdd = _get(addResources, `${this.resource.name}`, {access: []});
-        setError([persona, toAdd]);
-
-        const toRemove = _get(removeResources, `${this.resource.name}`, {access: []});
-        setError([persona, toRemove]);
+      .forEach(([persona, {addAccess, removeAccess}]: any) => {
+        const resourceRelevantAddAccess = addAccess.filter((access) => access.includes(this.resource.name));
+        setError([persona, resourceRelevantAddAccess]);
+        const resourceRelevantRemoveAccess = removeAccess.filter((access) => access.includes(this.resource.name));
+        setError([persona, resourceRelevantRemoveAccess]);
     });
   }
 
