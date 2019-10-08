@@ -7,6 +7,7 @@
              required
              placeholder="Name"
              data-se="id-field"
+             [readonly]="serviceTemplate.name.length > 0"
              formControlName="id"/>
       <mat-error *ngIf="form.get('id').invalid">Name must be 3-46 characters and alphanumeric</mat-error>
     </mat-form-field>
