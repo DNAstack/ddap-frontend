@@ -31,9 +31,17 @@
   <mat-accordion>
     <ng-container *ngFor="let persona of entities$ | async">
       <mat-expansion-panel>
-        <mat-expansion-panel-header collapsedHeight="5rem">
+        <mat-expansion-panel-header collapsedHeight="5rem"
+                                    expandedHeight="5rem">
           <mat-panel-title>
-            <mat-icon class="icon icon-identity"></mat-icon>
+            <ng-container *ngIf="persona.dto.passport.standardClaims.picture as picture; else imagePlaceholder">
+              <div class="persona-picture">
+                <img [src]="picture"/>
+              </div>
+            </ng-container>
+            <ng-template #imagePlaceholder>
+              <mat-icon class="icon icon-identity"></mat-icon>
+            </ng-template>
             <h3 data-se="entity-title">{{ persona.dto.ui.label }}</h3>
           </mat-panel-title>
         </mat-expansion-panel-header>

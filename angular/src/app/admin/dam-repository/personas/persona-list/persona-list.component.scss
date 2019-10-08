@@ -7,7 +7,6 @@ mat-expansion-panel {
     justify-content: center;
     width: 3rem;
     height: 3rem;
-    margin-right: 1rem;
     border-radius: 50%;
   }
 
@@ -21,4 +20,19 @@ mat-expansion-panel {
     }
   }
 
+  .persona-picture,
+  .icon {
+    margin-right: 1rem;
+  }
+
+  .persona-picture {
+    width: 3.5rem;
+    height: 3.5rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+  }
 }
