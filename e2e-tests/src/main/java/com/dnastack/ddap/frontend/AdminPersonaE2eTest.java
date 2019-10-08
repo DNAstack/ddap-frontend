@@ -22,18 +22,19 @@ public class AdminPersonaE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-id"), "test-persona");
         adminManagePage.fillField(DdapBy.se("inp-label"), "test-persona-name");
         adminManagePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-iss"));
-        adminManagePage.fillField(DdapBy.se("inp-sub"), "test-subject");
+        adminManagePage.fillField(DdapBy.se("inp-email"), "test-subject@test-ddap.com");
+        adminManagePage.fillField(DdapBy.se("inp-picture"), "https://pbs.twimg.com/profile_images/3443048571/ef5062acfce64a7aef1d75b4934fbee6_400x400.png");
 
-        adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
-        adminManagePage.toggleExpansionPanel("claim-0");
-        adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
-        adminManagePage.fillField(DdapBy.se("inp-source"), "https://institute1.test");
+        adminManagePage.clickButton(DdapBy.se("btn-add-passport"));
+        adminManagePage.toggleExpansionPanel("passport-0");
+        adminManagePage.fillField(DdapBy.se("inp-passport-type"), "ControlledAccessGrants");
+        adminManagePage.fillField(DdapBy.se("inp-passport-source"), "https://institute1.test");
         adminManagePage.closeAutocompletes();
-        adminManagePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-value"));
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "1d");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "30d");
+        adminManagePage.fillFieldWithFirstValueFromDropdown(DdapBy.se("inp-passport-value"));
+        adminManagePage.fillField(DdapBy.se("inp-passport-asserted"), "1d");
+        adminManagePage.fillField(DdapBy.se("inp-passport-expired"), "30d");
         adminManagePage.closeAutocompletes();
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "peer");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-passport-by"), "peer");
 
         adminListPage = adminManagePage.saveEntity();
 
@@ -54,18 +55,18 @@ public class AdminPersonaE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-label"), "Cooler John");
         adminManagePage.clearField(DdapBy.se("inp-iss"));
         adminManagePage.fillField(DdapBy.se("inp-iss"), "test-issuer");
-        adminManagePage.clearField(DdapBy.se("inp-sub"));
-        adminManagePage.fillField(DdapBy.se("inp-sub"), "test-subject");
+        adminManagePage.clearField(DdapBy.se("inp-email"));
+        adminManagePage.fillField(DdapBy.se("inp-email"), "test-subject@test-ddap.com");
 
-        adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
-        adminManagePage.toggleExpansionPanel("claim-0");
-        adminManagePage.fillField(DdapBy.se("inp-claimName"), "test-claimName");
-        adminManagePage.fillField(DdapBy.se("inp-source"), "https://institute1.test");
-        adminManagePage.fillField(DdapBy.se("inp-value"), "test-value");
-        adminManagePage.fillField(DdapBy.se("inp-iat"), "1d");
-        adminManagePage.fillField(DdapBy.se("inp-exp"), "30d");
+        adminManagePage.clickButton(DdapBy.se("btn-add-passport"));
+        adminManagePage.toggleExpansionPanel("passport-0");
+        adminManagePage.fillField(DdapBy.se("inp-passport-type"), "test-claimName");
+        adminManagePage.fillField(DdapBy.se("inp-passport-source"), "https://institute1.test");
+        adminManagePage.fillField(DdapBy.se("inp-passport-value"), "test-value");
+        adminManagePage.fillField(DdapBy.se("inp-passport-asserted"), "1d");
+        adminManagePage.fillField(DdapBy.se("inp-passport-expired"), "30d");
         adminManagePage.closeAutocompletes();
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-by"), "so");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-passport-by"), "so");
 
         adminListPage = adminManagePage.updateEntity();
 
@@ -97,7 +98,7 @@ public class AdminPersonaE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.fillField(DdapBy.se("inp-id"), "123 invalid name");
         adminManagePage.fillField(DdapBy.se("inp-label"), "test-persona-name");
         adminManagePage.fillField(DdapBy.se("inp-iss"), "test-issuer");
-        adminManagePage.fillField(DdapBy.se("inp-sub"), "test-subject");
+        adminManagePage.fillField(DdapBy.se("inp-email"), "test-subject@test-ddap.com");
 
         assertTrue(adminManagePage.hasErrors());
     }
@@ -108,18 +109,18 @@ public class AdminPersonaE2eTest extends AbstractAdminFrontendE2eTest {
                 .goToAdmin(damTestPersonaLink(DAM_ID));
 
         AdminManagePage adminManagePage = adminListPage.clickManage();
-        adminManagePage.clickButton(DdapBy.se("btn-add-claim"));
-        adminManagePage.toggleExpansionPanel("claim-0");
+        adminManagePage.clickButton(DdapBy.se("btn-add-passport"));
+        adminManagePage.toggleExpansionPanel("passport-0");
 
-        adminManagePage.fillField(DdapBy.se("inp-claimName"), "ControlledAccessGrants");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-value"), "https://dnastack.com/used/value");
+        adminManagePage.fillField(DdapBy.se("inp-passport-type"), "ControlledAccessGrants");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-passport-value"), "https://dnastack.com/used/value");
         adminManagePage.closeAutocompletes();
 
-        adminManagePage.clearField(DdapBy.se("inp-claimName"));
-        adminManagePage.clearField(DdapBy.se("inp-value"));
+        adminManagePage.clearField(DdapBy.se("inp-passport-type"));
+        adminManagePage.clearField(DdapBy.se("inp-passport-value"));
 
-        adminManagePage.fillField(DdapBy.se("inp-claimName"), "ResearcherStatus");
-        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-value"), "https://www.nature.com/articles/s99999-999-9999-z");
+        adminManagePage.fillField(DdapBy.se("inp-passport-type"), "ResearcherStatus");
+        adminManagePage.fillFieldFromDropdown(DdapBy.se("inp-passport-value"), "https://www.nature.com/articles/s99999-999-9999-z");
         adminManagePage.closeAutocompletes();
     }
 

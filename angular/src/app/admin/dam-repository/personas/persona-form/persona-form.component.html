@@ -70,7 +70,7 @@
                 color="primary"
                 class="uppercase"
                 type="button"
-                data-se="btn-add-claim"
+                data-se="btn-add-passport"
                 (click)="addGa4ghAssertion()">
           Add Passport Visa
         </button>
@@ -78,7 +78,7 @@
     </h3>
       <mat-accordion multi displayMode="flat">
         <mat-expansion-panel *ngFor="let ga4ghAssertion of ga4ghAssertions.controls; let i=index"
-                             [attr.data-se]="'claim-' + i">
+                             [attr.data-se]="'passport-' + i">
           <mat-expansion-panel-header collapsedHeight="5rem"
                                       expandedHeight="5rem">
             <mat-panel-title>
@@ -99,7 +99,7 @@
                        [matAutocomplete]="claims"
                        formControlName="type"
                        placeholder="Passport Visa Type"
-                       data-se="inp-claimName"
+                       data-se="inp-passport-type"
                        required>
                 <mat-autocomplete #claims="matAutocomplete">
                   <mat-option *ngFor="let option of claimDefinitions | async"
@@ -113,7 +113,7 @@
                        [matAutocomplete]="sources"
                        formControlName="source"
                        placeholder="Source"
-                       data-se="inp-source"
+                       data-se="inp-passport-source"
                        required>
                 <mat-error *ngIf="ga4ghAssertion.get('source').hasError('url')">Must start with http:// or https://</mat-error>
                 <mat-autocomplete #sources="matAutocomplete">
@@ -130,7 +130,7 @@
                      [matAutocomplete]="values"
                      formControlName="value"
                      placeholder="Value"
-                     data-se="inp-value"
+                     data-se="inp-passport-value"
                      required>
               <mat-autocomplete #values="matAutocomplete">
                 <mat-option *ngFor="let option of claimSuggestedValues"
@@ -146,7 +146,7 @@
                        required
                        formControlName="assertedDuration"
                        placeholder="Asserted Duration"
-                       data-se="inp-iat">
+                       data-se="inp-passport-asserted">
                 <mat-error *ngIf="ga4ghAssertion.get('assertedDuration').hasError('required')">
                   Duration is required
                 </mat-error>
@@ -159,7 +159,7 @@
                        required
                        formControlName="expiresDuration"
                        placeholder="Expires Duration"
-                       data-se="inp-exp">
+                       data-se="inp-passport-expired">
                 <mat-error *ngIf="ga4ghAssertion.get('expiresDuration').hasError('required')">
                   Duration is required
                 </mat-error>
@@ -173,7 +173,7 @@
               <mat-form-field class="col w-50">
                 <mat-label>By</mat-label>
                 <mat-select formControlName="by"
-                            data-se="inp-by">
+                            data-se="inp-passport-by">
                   <mat-option>None</mat-option>
                   <mat-option value="self">self</mat-option>
                   <mat-option value="peer">peer</mat-option>
