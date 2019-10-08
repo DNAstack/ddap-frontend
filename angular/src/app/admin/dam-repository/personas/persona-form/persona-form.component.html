@@ -21,7 +21,7 @@
     </mat-form-field>
   </div>
 
-  <ng-container formGroupName="idToken">
+  <ng-container formGroupName="passport">
     <ng-container formGroupName="standardClaims">
       <h3>
         <mat-icon class="icon icon-claims"></mat-icon>
@@ -45,41 +45,50 @@
           </mat-form-field>
           <mat-form-field class="col">
             <input matInput
-                   formControlName="sub"
-                   placeholder="Subject"
-                   data-se="inp-sub"
+                   formControlName="email"
+                   placeholder="Email"
+                   data-se="inp-email"
+                   required>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field class="col">
+            <input matInput
+                   placeholder="Picture URL"
+                   formControlName="picture"
+                   data-se="inp-picture"
                    required>
           </mat-form-field>
         </div>
       </mat-card>
     </ng-container>
 
-    <ng-container formArrayName="ga4ghClaims">
+    <ng-container formArrayName="ga4ghAssertions">
     <h3>
-      <span>Global Alliance for Genomics and Health Claims</span>
+      <span>Global Alliance for Genomics and Health Passport Visas</span>
       <div>
         <button mat-button
                 color="primary"
                 class="uppercase"
                 type="button"
                 data-se="btn-add-claim"
-                (click)="addGa4ghClaims()">
-          Add Claim
+                (click)="addGa4ghAssertion()">
+          Add Passport Visa
         </button>
       </div>
     </h3>
       <mat-accordion multi displayMode="flat">
-        <mat-expansion-panel *ngFor="let ga4ghClaim of ga4ghClaims.controls; let i=index"
+        <mat-expansion-panel *ngFor="let ga4ghAssertion of ga4ghAssertions.controls; let i=index"
                              [attr.data-se]="'claim-' + i">
           <mat-expansion-panel-header collapsedHeight="5rem"
                                       expandedHeight="5rem">
             <mat-panel-title>
               <mat-icon class="icon icon-claims"></mat-icon>
-              <span>{{ ga4ghClaim.get('claimName').value || 'Claim' }}</span>
+              <span>{{ ga4ghAssertion.get('type').value || 'Passport' }}</span>
             </mat-panel-title>
-            <div class="invalid-warning" *ngIf="ga4ghClaim.invalid">
+            <div class="invalid-warning" *ngIf="ga4ghAssertion.invalid">
               <mat-icon class="icon icon-warning"
-                        matTooltip="Claim is invalid">
+                        matTooltip="Passport Visa is invalid">
               </mat-icon>
             </div>
           </mat-expansion-panel-header>
@@ -89,8 +98,8 @@
               <mat-form-field class="col">
                 <input matInput
                        [matAutocomplete]="claims"
-                       formControlName="claimName"
-                       placeholder="Claim Name"
+                       formControlName="type"
+                       placeholder="Passport Visa Type"
                        data-se="inp-claimName"
                        required>
                 <mat-autocomplete #claims="matAutocomplete">
@@ -107,7 +116,7 @@
                        placeholder="Source"
                        data-se="inp-source"
                        required>
-                <mat-error *ngIf="ga4ghClaim.get('source').hasError('url')">Must start with http:// or https://</mat-error>
+                <mat-error *ngIf="ga4ghAssertion.get('source').hasError('url')">Must start with http:// or https://</mat-error>
                 <mat-autocomplete #sources="matAutocomplete">
                   <mat-option *ngFor="let option of trustedSources | async"
                               [value]="option">
@@ -139,10 +148,10 @@
                        formControlName="assertedDuration"
                        placeholder="Asserted Duration"
                        data-se="inp-iat">
-                <mat-error *ngIf="ga4ghClaim.get('assertedDuration').hasError('required')">
+                <mat-error *ngIf="ga4ghAssertion.get('assertedDuration').hasError('required')">
                   Duration is required
                 </mat-error>
-                <mat-error *ngIf="ga4ghClaim.get('assertedDuration').hasError('duration')">
+                <mat-error *ngIf="ga4ghAssertion.get('assertedDuration').hasError('duration')">
                   Duration must be in form <i>(number)(s|m|h|d|w)</i> (e.g. 30d)
                 </mat-error>
               </mat-form-field>
@@ -152,10 +161,10 @@
                        formControlName="expiresDuration"
                        placeholder="Expires Duration"
                        data-se="inp-exp">
-                <mat-error *ngIf="ga4ghClaim.get('expiresDuration').hasError('required')">
+                <mat-error *ngIf="ga4ghAssertion.get('expiresDuration').hasError('required')">
                   Duration is required
                 </mat-error>
-                <mat-error *ngIf="ga4ghClaim.get('expiresDuration').hasError('duration')">
+                <mat-error *ngIf="ga4ghAssertion.get('expiresDuration').hasError('duration')">
                   Duration must be in form (number)(s|m|h|d|w), e.g. <i>30d</i>
                 </mat-error>
               </mat-form-field>
@@ -181,8 +190,8 @@
                       type="button"
                       color="warn"
                       class="uppercase"
-                      (click)="removeGa4ghClaim(i)">
-                Remove Claim
+                      (click)="removeGa4ghAssertion(i)">
+                Remove Passport Visa
               </button>
             </div>
           </ng-container>

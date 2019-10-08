@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import _get from 'lodash.get';
 
+import { flatten } from '../../../../shared/util';
+
 @Component({
   selector: 'ddap-persona-access-form',
   templateUrl: './persona-access-form.component.html',
@@ -14,41 +16,23 @@ export class PersonaAccessFormComponent {
   @Input()
   form: FormGroup;
 
-  getModel() {
-    const isViewAllowed = ([_, isAllowed]) => isAllowed;
-    const getAccessName = ([accessName, _]) => accessName;
-
-    return Object.entries(this.form.value)
-      .reduce((sum, [resource, views]) => {
-        const access = Object.entries(views)
-          .filter(isViewAllowed)
-          .map(getAccessName);
-
-        if (access.length) {
-          sum[resource] = {access};
-        }
-
-        return sum;
-      }, {});
+  getModel(): string[] {
+    return flatten(Object.entries(this.form.value)
+      .map(([resource, viewAccess]) => {
+        return flatten(Object.entries(viewAccess)
+          .filter(([_, hasAccess]) => hasAccess)
+          .map(([viewRole, _]) => {
+            return [`${resource}/${viewRole}`];
+          }));
+    }));
   }
 
   validateAccessFields(personaId, {error}) {
-    const resourcesFormGroup = this.form;
-    const fieldsToAdd: object = _get(error, `testPersonas[${personaId}].addResources`, []);
-    const fieldsToRemove: object = _get(error, `testPersonas[${personaId}].removeResources`, []);
+    const fieldsToAdd: string[] = _get(error, `testPersonas[${personaId}].addAccess`, []);
+    const fieldsToRemove: string[] = _get(error, `testPersonas[${personaId}].removeAccess`, []);
 
-    const setError = ([resourceName, { access }]) => {
-      access.forEach((accessRole) => {
-        const accessRoleCheckbox = resourcesFormGroup.get(resourceName).get(accessRole);
-        accessRoleCheckbox.setErrors({'Doesn\'t match role criteria': true});
-      });
-    };
-
-    Object.entries(fieldsToAdd)
-      .forEach(setError);
-
-    Object.entries(fieldsToRemove)
-      .forEach(setError);
+    fieldsToAdd.forEach(this.setError);
+    fieldsToRemove.forEach(this.setError);
   }
 
   makeAccessFieldsValid() {
@@ -62,9 +46,15 @@ export class PersonaAccessFormComponent {
     Object.keys(resourcesFormGroup.controls)
       .forEach((resourceName) => {
         const resource = resourcesFormGroup.get(resourceName) as FormGroup;
-
         Object.keys(resource.controls)
           .forEach((accessName) => clearError(accessName, resource));
       });
+  }
+
+  private setError = (resourceAccess: string) => {
+    const resourceName = resourceAccess.substr(0, resourceAccess.indexOf('/'));
+    const accessViewRole = resourceAccess.replace(`${resourceName}/`, '');
+    const accessRoleCheckbox = this.form.get(resourceName).get(accessViewRole);
+    accessRoleCheckbox.setErrors({ 'Doesn\'t match role criteria': true });
   }
 }

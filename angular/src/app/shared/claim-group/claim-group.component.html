@@ -16,7 +16,7 @@
       <li *ngFor="let claim of ga4ghClaims"
           class="event">
         <div class="line"></div>
-        <h4>{{ claim.claimName }}: <span>{{ claim.value }}</span></h4>
+        <h4>{{ claim.type }}: <span>{{ claim.value }}</span></h4>
         <p class="flex vertical-center">
           <span>{{ getFormattedExpiresTextFromClaim(claim) }}</span>
         </p>

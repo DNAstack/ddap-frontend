@@ -5,7 +5,7 @@ import * as relativeTimePlugin from 'dayjs/plugin/relativeTime';
 import { ClaimDefinitionService } from '../../admin/dam-repository/claim-definitions/claim-definitions.service';
 import { dam } from '../proto/dam-service';
 import { ic } from '../proto/ic-service';
-import GA4GHClaim = dam.v1.TestPersona.GA4GHClaim;
+import TestAssertion = dam.v1.TestPersona.TestAssertion;
 import { TimeDurationParser } from '../time-duration.parser';
 import AccountClaim = ic.v1.AccountClaim;
 import AccountClaimList = ic.v1.AccountClaimList;
@@ -24,7 +24,7 @@ export class ClaimGroupComponent {
   @Input()
   standardClaims: ({ [k: string]: string } | null);
   @Input()
-  ga4ghClaims: GA4GHClaim[];
+  ga4ghClaims: TestAssertion[];
   @Input()
   ga4ghAccountClaims: { [k: string]: AccountClaimList };
 
@@ -32,7 +32,7 @@ export class ClaimGroupComponent {
     dayjs.extend(relativeTimePlugin);
   }
 
-  getFormattedExpiresTextFromClaim({ expiresDuration }: GA4GHClaim): string {
+  getFormattedExpiresTextFromClaim({ expiresDuration }: TestAssertion): string {
     if (!expiresDuration) {
       return;
     }

@@ -48,11 +48,11 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
   private resourceAccess$: Observable<any>;
 
   get standardClaims() {
-    return this.form.get('idToken.standardClaims') as FormArray;
+    return this.form.get('passport.standardClaims') as FormArray;
   }
 
-  get ga4ghClaims() {
-    return this.form.get('idToken.ga4ghClaims') as FormArray;
+  get ga4ghAssertions() {
+    return this.form.get('passport.ga4ghAssertions') as FormArray;
   }
 
   get resourceAccess() {
@@ -74,20 +74,21 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
       map((resourceList) => this.generateAllAccessModel(resourceList))
     );
 
-    const { ui, idToken } = _get(this.persona, 'dto', {});
+    const { ui, passport } = _get(this.persona, 'dto', {});
     this.form = this.formBuilder.group({
       id: [this.persona.name || '', [Validators.pattern(nameConstraintPattern)]],
       ui: this.formBuilder.group({
         label: [ui.label || '', [Validators.required]],
       }),
-      idToken: this.formBuilder.group({
+      passport: this.formBuilder.group({
         standardClaims: this.formBuilder.group({
-          iss: [_get(idToken, 'standardClaims.iss', ''), Validators.required],
-          sub: [_get(idToken, 'standardClaims.sub', ''), Validators.required],
+          iss: [_get(passport, 'standardClaims.iss', ''), Validators.required],
+          email: [_get(passport, 'standardClaims.email', ''), Validators.required],
+          picture: [_get(passport, 'standardClaims.picture', ''), FormValidators.url],
         }),
-        ga4ghClaims: this.formBuilder.array(
-          idToken && idToken.ga4ghClaims
-          ? idToken.ga4ghClaims.map((claim) => this.buildGa4GhClaimGroup(claim))
+        ga4ghAssertions: this.formBuilder.array(
+          passport && passport.ga4ghAssertions
+          ? passport.ga4ghAssertions.map((claim) => this.buildGa4GhClaimGroup(claim))
           : []
         ),
       }),
@@ -113,12 +114,12 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
     this.validatorSubscription.unsubscribe();
   }
 
-  addGa4ghClaims() {
-    this.ga4ghClaims.insert(0, this.buildGa4GhClaimGroup({}));
+  addGa4ghAssertion() {
+    this.ga4ghAssertions.insert(0, this.buildGa4GhClaimGroup({}));
   }
 
-  removeGa4ghClaim(index) {
-    this.ga4ghClaims.removeAt(index);
+  removeGa4ghAssertion(index) {
+    this.ga4ghAssertions.removeAt(index);
   }
 
   getAllForms(): FormGroup[] {
@@ -130,20 +131,20 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
   }
 
   getModel(): EntityModel {
-    const { id, idToken, ui } = this.form.value;
-    const resources = this.accessForm.getModel();
+    const { id, passport, ui } = this.form.value;
+    const access = this.accessForm.getModel();
     const testPersona: TestPersona = TestPersona.create({
       ui,
-      idToken,
-      resources,
+      passport,
+      access,
     });
 
     return new EntityModel(id, testPersona);
   }
 
-  private buildGa4GhClaimGroup({claimName, source, value, assertedDuration, expiresDuration, by}: TestPersona.IGA4GHClaim): FormGroup {
+  private buildGa4GhClaimGroup({type, source, value, assertedDuration, expiresDuration, by}: TestPersona.ITestAssertion): FormGroup {
     const ga4ghClaimForm: FormGroup = this.formBuilder.group({
-      claimName: [claimName, [Validators.required]],
+      type: [type, [Validators.required]],
       source: [source, [Validators.required, FormValidators.url]],
       value: [value, [Validators.required]],
       assertedDuration: [assertedDuration, [Validators.required, FormValidators.duration]],
@@ -176,7 +177,7 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
   }
 
   private buildSuggestedAutocompleteValuesForClaim(formGroup: FormGroup): Observable<any> {
-    const claimName$ = formGroup.get('claimName').valueChanges.pipe(
+    const claimName$ = formGroup.get('type').valueChanges.pipe(
       startWith('')
     );
     const value$ = formGroup.get('value').valueChanges.pipe(
@@ -186,7 +187,7 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
     return combineLatest(claimName$, value$).pipe(
       debounceTime(300),
       switchMap(([claimName, value]) => {
-        const currentClaimName = formGroup.get('claimName').value;
+        const currentClaimName = formGroup.get('type').value;
         return this.claimDefService.getClaimDefinitionSuggestions(this.routeDamId(), claimName || currentClaimName).pipe(
           map(filterBy(includes(value)))
         );
@@ -235,16 +236,15 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
   }
 
   private registerAccessControls(allResourceList, personaDto) {
-    const personaResources = personaDto.resources;
+    const personaAccess: string[] = _get(personaDto, 'access', []);
 
-    allResourceList.forEach(({name, access}) => {
-      if (!access) {
+    allResourceList.forEach(({name, access: resourceAccess}) => {
+      if (!resourceAccess) {
         return;
       }
-
-      const resourceAccessFormGroup = access.reduce((result, view) => {
-        const currentResourceAccess = _get(personaResources, `[${name}].access`, []);
-        const isInCurrentResource = currentResourceAccess.indexOf(view) > -1;
+      const resourceAccessFormGroup = resourceAccess.reduce((result, view) => {
+        const currentResourceAccess = personaAccess.filter((access) => access.includes(name));
+        const isInCurrentResource = currentResourceAccess.some((access) => access.includes(view));
 
         result[view] = [isInCurrentResource];
 
