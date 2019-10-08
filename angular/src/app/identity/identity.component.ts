@@ -105,7 +105,7 @@ export class IdentityComponent implements OnInit {
   }
 
   private getLoginUrl(): string {
-    const loginUrlSuffix = `login?scope=link+openid+account_admin+ga4gh+identities&redirectUri=/${this.realm}/identity`;
+    const loginUrlSuffix = `login?scope=link+openid+account_admin+ga4gh_passport_v1+identities&redirectUri=/${this.realm}/identity`;
     return `/api/v1alpha/${this.realm}/identity/${loginUrlSuffix}`;
   }
 

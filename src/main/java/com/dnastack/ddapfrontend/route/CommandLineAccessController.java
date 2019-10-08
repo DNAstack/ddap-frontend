@@ -38,7 +38,7 @@ import static java.lang.String.format;
 @RestController
 @RequestMapping("/api/v1alpha/{realm}/cli")
 public class CommandLineAccessController {
-    private static final String DEFAULT_SCOPES = "openid ga4gh account_admin identities";
+    private static final String DEFAULT_SCOPES = "openid ga4gh_passport_v1 account_admin identities";
 
     private final ReactiveOAuthClient oAuthClient;
     private final OAuthStateHandler stateHandler;

@@ -52,7 +52,7 @@ import static org.springframework.http.HttpStatus.TEMPORARY_REDIRECT;
 @RequestMapping("/api/v1alpha/{realm}/identity")
 public class IdentityController {
 
-    private static final String DEFAULT_SCOPES = "openid ga4gh account_admin identities";
+    private static final String DEFAULT_SCOPES = "openid ga4gh_passport_v1 account_admin identities";
 
     @Autowired
     private ReactiveOAuthClient oAuthClient;
