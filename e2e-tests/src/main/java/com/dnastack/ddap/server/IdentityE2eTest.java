@@ -3,6 +3,7 @@ package com.dnastack.ddap.server;
 import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import com.dnastack.ddap.common.TestingPersona;
 import dam.v1.DamService;
+import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -118,6 +119,13 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
         String danToken = fetchRealPersonaDamToken(TestingPersona.ADMINISTRATOR, REALM);
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.ADMINISTRATOR, REALM);
 
+        JSONObject expectedIcAccess = new JSONObject();
+        expectedIcAccess.put("isAdmin", true);
+        expectedIcAccess.put("target", new JSONObject().put("service", "IC"));
+        JSONObject expectedDamAccess = new JSONObject();
+        expectedDamAccess.put("isAdmin", true);
+        expectedDamAccess.put("target", new JSONObject().put("service", "DAM").put("id", "1"));
+
         // @formatter:off
         given()
                 .log().method()
@@ -136,8 +144,7 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
                 .statusCode(200)
                 .assertThat()
                 .body("accesses", not(empty()))
-                .body("accesses[0].isAdmin", is(true))
-                .body("accesses[1].isAdmin", is(true));
+                .body("accesses", hasItems(expectedIcAccess.toMap(), expectedDamAccess.toMap()));
         // @formatter:on
     }
 
