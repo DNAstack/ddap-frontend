@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assume;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -111,6 +112,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
     }
 
 
+    @Ignore // TODO: DISCO-2465
     @Test
     public void linkAndUnlinkAccount() throws Exception {
         // TODO DISCO-2449 make test work with wallet users
@@ -157,8 +159,8 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
             .jsonPath().getList("account.connectedAccounts", IcConnectedAccount.class);
         // @formatter:on
 
-        assertAccountsContainSubject(connectedAccounts, "test-user-with-access@dnastack.com");
-        assertAccountsContainSubject(connectedAccounts, "test-user-no-access@dnastack.com");
+        assertAccountsContainSubject(connectedAccounts, "test_user_with_access");
+        assertAccountsContainSubject(connectedAccounts, "test_user_without_access");
 
         // Unlink account
         String icTokenAfterLinking = fetchRealPersonaIcToken(USER_WITHOUT_ACCESS, REALM);
@@ -197,8 +199,8 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
                 .jsonPath().getList("account.connectedAccounts", IcConnectedAccount.class);
         // @formatter:on
 
-        assertAccountsContainSubject(connectedAccounts, "test-user-with-access@dnastack.com");
-        assertAccountsDoesNotContainSubject(connectedAccounts, "test-user-no-access@dnastack.com");
+        assertAccountsContainSubject(connectedAccounts, "test_user_with_access");
+        assertAccountsDoesNotContainSubject(connectedAccounts, "test_user_without_access");
     }
 
     private void assertAccountsDoesNotContainSubject(List<IcConnectedAccount> connectedAccounts, String subject) {
