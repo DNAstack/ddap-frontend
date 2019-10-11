@@ -18,6 +18,16 @@ import { FileViewToken, ViewToken } from './view.token.model';
 })
 export class DatasetFormComponent implements OnInit {
 
+  get datasetUrl() {
+    return this.currentDatasetUrl
+      ? this.currentDatasetUrl
+      : this.form.get('url').value;
+  }
+
+  get selectedColumns() {
+    return this.form.get('selectedColumns').value;
+  }
+
   @Output()
   datasetColumnsChanged: EventEmitter<string[]> = new EventEmitter<string[]>();
 
@@ -32,16 +42,6 @@ export class DatasetFormComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private datasetService: DatasetService) {
-  }
-
-  get datasetUrl() {
-    return this.currentDatasetUrl
-      ? this.currentDatasetUrl
-      : this.form.get('url').value;
-  }
-
-  get selectedColumns() {
-    return this.form.get('selectedColumns').value;
   }
 
   ngOnInit() {
@@ -102,14 +102,15 @@ export class DatasetFormComponent implements OnInit {
       .subscribe((viewTokens: ViewToken[]) => {
         viewTokens.map((viewToken) => {
           const { locationAndToken, exception, view } = viewToken;
+          if (exception) {
+            this.accessErrors.push(`${view} : ${exception.message}`);
+            return;
+          }
           // Add as many time access token as there is file -> 1 token per file
           columnData.forEach((extractedColumnData) => {
-            const columnDataView = this.columnDataMappedToViews[extractedColumnData][0];
-            if (locationAndToken && columnDataView === view) {
+            const columnDataHasView = this.hasColumnDataView(this.columnDataMappedToViews[extractedColumnData], view);
+            if (locationAndToken && columnDataHasView) {
               this.accessTokens.push({ file: extractedColumnData, token: viewToken });
-            }
-            if (exception) {
-              this.accessErrors.push(`${view} : ${exception.message}`);
             }
           });
         });
@@ -135,6 +136,10 @@ export class DatasetFormComponent implements OnInit {
   chipSelect(datasetUrl: string) {
     this.form.patchValue({url: datasetUrl});
     this.fetchDataset(datasetUrl);
+  }
+
+  private hasColumnDataView = (columnData: string[], viewId: string) => {
+    return columnData.includes(viewId);
   }
 
   private getDatasetColumns() {
