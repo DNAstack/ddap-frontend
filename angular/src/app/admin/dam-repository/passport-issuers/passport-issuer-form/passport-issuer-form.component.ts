@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs';
 
@@ -22,6 +21,8 @@ export class PassportIssuerFormComponent implements OnInit, Form {
 
   @Input()
   passportIssuer?: EntityModel = new EntityModel('', TrustedPassportIssuer.create());
+  @Input()
+  damId: string;
 
   form: FormGroup;
 
@@ -30,15 +31,14 @@ export class PassportIssuerFormComponent implements OnInit, Form {
 
   constructor(private formBuilder: FormBuilder,
               private passportTranslators: PassportTranslatorsService,
-              private passportIssuersStore: PassportIssuersStore,
-              private route: ActivatedRoute) {
+              private passportIssuersStore: PassportIssuersStore) {
 
   }
 
   ngOnInit(): void {
     const { ui, issuer, translateUsing } = _get(this.passportIssuer, 'dto', {});
 
-    this.translators$ = this.passportTranslators.get(this.routeDamId());
+    this.translators$ = this.passportTranslators.get(this.damId);
 
     this.form = this.formBuilder.group({
       id: [this.passportIssuer.name || '', [Validators.required, Validators.pattern(nameConstraintPattern)]],
@@ -50,7 +50,7 @@ export class PassportIssuerFormComponent implements OnInit, Form {
       translateUsing: [translateUsing],
     });
 
-    this.passportIssuers$ = this.passportIssuersStore.getAsList(this.routeDamId(), pick('dto.issuer'));
+    this.passportIssuers$ = this.passportIssuersStore.getAsList(this.damId, pick('dto.issuer'));
   }
 
   getModel(): EntityModel {
@@ -70,13 +70,6 @@ export class PassportIssuerFormComponent implements OnInit, Form {
 
   isValid(): boolean {
     return this.form.valid;
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 
 }

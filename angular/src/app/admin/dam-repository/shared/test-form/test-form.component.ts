@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import _isEqual from 'lodash.isequal';
 import _set from 'lodash.set';
@@ -25,6 +24,8 @@ export class TestFormComponent implements OnChanges, Form {
   resource: EntityModel;
   @Input()
   isNewResource: boolean;
+  @Input()
+  damId: string;
   @Output()
   change: EventEmitter<any> = new EventEmitter();
 
@@ -37,10 +38,9 @@ export class TestFormComponent implements OnChanges, Form {
 
   constructor(private personasStore: PersonasStore,
               private resourceService: ResourceService,
-              private formBuilder: FormBuilder,
-              private route: ActivatedRoute) {
+              private formBuilder: FormBuilder) {
     this.personas$ = this.personasStore
-      .getAsList(this.routeDamId(), pick('name'));
+      .getAsList(this.damId, pick('name'));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -97,8 +97,8 @@ export class TestFormComponent implements OnChanges, Form {
         }));
 
         const action$ = this.isNewResource
-          ? this.resourceService.save(this.routeDamId(), this.resource.name, change)
-          : this.resourceService.update(this.routeDamId(), this.resource.name, change);
+          ? this.resourceService.save(this.damId, this.resource.name, change)
+          : this.resourceService.update(this.damId, this.resource.name, change);
         action$.subscribe(
           () => true,
           (dryRunDto) => this.maybeFillInValues(this.form, personas, views, dryRunDto)
@@ -200,10 +200,4 @@ export class TestFormComponent implements OnChanges, Form {
     return error instanceof Object && error.testPersonas;
   }
 
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
-  }
 }

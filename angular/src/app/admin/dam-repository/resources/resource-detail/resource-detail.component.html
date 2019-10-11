@@ -9,7 +9,8 @@
 
   <div *ngIf="entity">
     <ddap-resource-form #resourceForm
-                       [resource]="entity">
+                        [resource]="entity"
+                        [damId]="damId">
       <div class="ddap-personas-access">
         <h3>
           <mat-icon class="icon icon-access"></mat-icon>
@@ -17,7 +18,9 @@
         </h3>
         <ddap-persona-resource-access #accessForm
                                       [isNewResource]="false"
-                                      [resource]="resourceForm.getModel()">
+                                      [resource]="resourceForm.getModel()"
+                                      [damId]="damId"
+        >
         </ddap-persona-resource-access>
       </div>
     </ddap-resource-form>

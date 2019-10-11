@@ -1,5 +1,4 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import { Observable, of, Subscription, zip } from 'rxjs';
@@ -19,6 +18,8 @@ export class AccessTableComponent implements OnInit, OnDestroy {
 
   @Input()
   resource: EntityModel;
+  @Input()
+  damId: string;
 
   accessDatatable: any[] = [];
   displayedColumns = [];
@@ -29,10 +30,9 @@ export class AccessTableComponent implements OnInit, OnDestroy {
   private readonly personas$: Observable<any>;
 
   constructor(private personasStore: PersonasStore,
-              private resourceService: ResourceService,
-              private route: ActivatedRoute) {
+              private resourceService: ResourceService) {
     this.personas$ = this.personasStore
-      .getAsList(this.routeDamId());
+      .getAsList(this.damId);
   }
 
   ngOnInit(): void {
@@ -124,19 +124,11 @@ export class AccessTableComponent implements OnInit, OnDestroy {
           dry_run: true,
         }));
 
-        return this.resourceService.update(this.routeDamId(), this.resource.name, change);
+        return this.resourceService.update(this.damId, this.resource.name, change);
       }),
       catchError((errorDto) => {
         return of(errorDto);
       })
     );
   }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
-  }
-
 }

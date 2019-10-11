@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import GetTokenResponse = dam.v1.GetTokenResponse;
-import { ActivatedRoute } from '@angular/router';
 import _get from 'lodash.get';
 import { Subscription } from 'rxjs';
 
@@ -21,6 +20,8 @@ export class ResourceViewItemComponent {
   resource: EntityModel;
   @Input()
   view: EntityModel;
+  @Input()
+  damId: string;
 
   accessSubscription: Subscription;
   access: GetTokenResponse;
@@ -31,7 +32,7 @@ export class ResourceViewItemComponent {
   // Downloads the same zip file regardless of realm
   downloadCliUrl = `${environment.ddapApiUrl}/master/cli/download`;
 
-  constructor(private resourceService: ResourceService, private route: ActivatedRoute) {
+  constructor(private resourceService: ResourceService) {
 
   }
 
@@ -44,7 +45,7 @@ export class ResourceViewItemComponent {
     const viewName = this.view.name;
     const ttl = `${this.ttlForm.value}${this.selectedTimeUnit}`;
     this.accessSubscription = this.resourceService
-      .getAccessRequestToken(this.routeDamId(), this.resource.name, viewName, { ttl })
+      .getAccessRequestToken(this.damId, this.resource.name, viewName, { ttl })
       .subscribe((access) => {
         this.access = access;
         this.url = this.getUrlIfApplicable(viewName, access.token);
@@ -65,13 +66,6 @@ export class ResourceViewItemComponent {
 
     const viewAccessUrl = _get(interfaces, `[${httpInterfaces[0]}].uri[0]`);
     return `${viewAccessUrl}/o?access_token=${token}`;
-  }
-
-  private routeDamId() {
-    return this.route
-      .snapshot
-      .paramMap
-      .get('damId');
   }
 
 }
