@@ -62,8 +62,9 @@
         <div class="row">
           <mat-form-field class="col">
             <mat-label>Choose column to fetch views</mat-label>
-            <mat-select formControlName="selectedColumn"
-                        data-se="select-column">
+            <mat-select formControlName="selectedColumns"
+                        data-se="select-column"
+                        multiple>
               <mat-option *ngFor="let column of columns"
                           [value]=column>
                 {{ column }}
@@ -75,7 +76,7 @@
                     class="uppercase"
                     color="primary"
                     (click)="requestAccessTokens()"
-                    [disabled]="!selectedColumn || !selectedData || selectedData.length < 1"
+                    [disabled]="!selectedColumns || !selectedData || selectedData.length < 1"
                     data-se="btn-get-access">
               Access
             </button>
@@ -106,13 +107,13 @@
                                  data-se="access-token">
               <mat-expansion-panel-header collapsedHeight="4rem">
                 <mat-panel-title>
-                  {{ access.locationAndToken.name }}
+                  {{ access.token.locationAndToken.name }}
                 </mat-panel-title>
                 <mat-panel-description>
-                  {{ getColumnDataByView(access.view) }}
+                  {{ access.file }}
                 </mat-panel-description>
               </mat-expansion-panel-header>
-              <ddap-view-access [access]=access.locationAndToken>
+              <ddap-view-access [access]=access.token.locationAndToken>
               </ddap-view-access>
             </mat-expansion-panel>
           </div>

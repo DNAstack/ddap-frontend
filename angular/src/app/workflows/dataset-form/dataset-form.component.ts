@@ -5,11 +5,11 @@ import { of } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
 import { FormValidators } from '../../shared/form/validators';
-import { isEmptyObject, unique } from '../../shared/util';
+import { flatten, isEmptyObject, unique } from '../../shared/util';
 import { DatasetService } from '../dataset.service';
 
 import { Dataset } from './dataset.model';
-import { ViewToken } from './view.token.model';
+import { FileViewToken, ViewToken } from './view.token.model';
 
 @Component({
   selector: 'ddap-dataset-form',
@@ -26,7 +26,7 @@ export class DatasetFormComponent implements OnInit {
   currentDatasetUrl: string;
   selectedData: object[];
   columnDataMappedToViews: any[];
-  accessTokens: ViewToken[];
+  accessTokens: FileViewToken[];
   accessErrors: string[];
   error: string;
 
@@ -40,14 +40,14 @@ export class DatasetFormComponent implements OnInit {
       : this.form.get('url').value;
   }
 
-  get selectedColumn() {
-    return this.form.get('selectedColumn').value;
+  get selectedColumns() {
+    return this.form.get('selectedColumns').value;
   }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       url: ['', [Validators.required, FormValidators.url]],
-      selectedColumn: ['', [Validators.required]],
+      selectedColumns: ['', [Validators.required]],
     });
   }
 
@@ -86,7 +86,7 @@ export class DatasetFormComponent implements OnInit {
   requestAccessTokens() {
     this.accessTokens = [];
     this.accessErrors = [];
-    const columnData: string[] = this.extractColumnData(this.selectedColumn);
+    const columnData: string[] = this.extractColumnData(this.selectedColumns);
 
     this.datasetService.getViews(columnData)
       .pipe(
@@ -102,19 +102,18 @@ export class DatasetFormComponent implements OnInit {
       .subscribe((viewTokens: ViewToken[]) => {
         viewTokens.map((viewToken) => {
           const { locationAndToken, exception, view } = viewToken;
-          if (locationAndToken) {
-            this.accessTokens.push(viewToken);
-          }
-          if (exception) {
-            this.accessErrors.push(`${view} : ${exception.message}`);
-          }
+          // Add as many time access token as there is file -> 1 token per file
+          columnData.forEach((extractedColumnData) => {
+            const columnDataView = this.columnDataMappedToViews[extractedColumnData][0];
+            if (locationAndToken && columnDataView === view) {
+              this.accessTokens.push({ file: extractedColumnData, token: viewToken });
+            }
+            if (exception) {
+              this.accessErrors.push(`${view} : ${exception.message}`);
+            }
+          });
         });
       });
-  }
-
-  getColumnDataByView(viewId: string) {
-    const entries = Object.entries(this.columnDataMappedToViews);
-    return entries.find(([_, value]) => value.find((view) => view === viewId))[0];
   }
 
   getTokensModel(): object {
@@ -123,7 +122,7 @@ export class DatasetFormComponent implements OnInit {
       return tokensModel;
     }
 
-    this.accessTokens.forEach((token) => {
+    this.accessTokens.forEach(({ token }) => {
       const entries = Object.entries(this.columnDataMappedToViews);
       entries.filter(([_, value]) => value.some((view) => view === token.view))
         .forEach(([key, _]) => {
@@ -149,10 +148,10 @@ export class DatasetFormComponent implements OnInit {
     return Object.keys(schemaProperties);
   }
 
-  private extractColumnData(columnName): string[] {
-    return this.selectedData
-      .map((rowData) => rowData[columnName])
-      .filter((columnData) => columnData);
+  private extractColumnData(columnNames: []): string[] {
+    return flatten(this.selectedData
+      .map((rowData) => columnNames.map((columnName) => rowData[columnName]))
+    ).filter((columnData) => columnData);
   }
 
 }

@@ -6,3 +6,8 @@ export interface ViewToken {
   locationAndToken?: GetTokenResponse;
   exception?: {[key: string]: any};
 }
+
+export interface FileViewToken {
+  file: string;
+  token: ViewToken;
+}

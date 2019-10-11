@@ -2,10 +2,7 @@ package com.dnastack.ddap.common.page;
 
 import com.dnastack.ddap.common.util.DdapBy;
 import com.dnastack.ddap.common.util.WebPageScroller;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -94,6 +91,8 @@ public class WorkflowManagePage extends AnyDdapPage {
 
     public List<WebElement> getAccessTokens(String columnName) {
         fillFieldFromDropdown(DdapBy.se("select-column"), columnName);
+        closeDropdown();
+        new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(DdapBy.se("btn-get-access")));
         WebElement access = driver.findElement(DdapBy.se("btn-get-access"));
         WebPageScroller.scrollTo(driver, access);
         access.click();
@@ -108,5 +107,9 @@ public class WorkflowManagePage extends AnyDdapPage {
         WebPageScroller.scrollTo(driver, checkbox);
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(checkbox));
         checkbox.click();
+    }
+
+    public void closeDropdown() {
+        driver.switchTo().activeElement().sendKeys(Keys.ESCAPE);
     }
 }
