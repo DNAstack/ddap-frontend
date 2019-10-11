@@ -12,9 +12,11 @@ import dam.v1.DamService;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
+import io.restassured.specification.RequestSpecification;
 import lombok.Data;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
@@ -36,6 +38,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import static io.restassured.RestAssured.given;
 import static java.lang.Math.min;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -45,8 +48,8 @@ import static org.junit.Assert.fail;
 @SuppressWarnings("Duplicates")
 public abstract class AbstractBaseE2eTest {
 
-    public static final String DDAP_USERNAME = requiredEnv("E2E_BASIC_USERNAME");
-    public static final String DDAP_PASSWORD = requiredEnv("E2E_BASIC_PASSWORD");
+    public static final String DDAP_USERNAME = optionalEnv("E2E_BASIC_USERNAME",null);
+    public static final String DDAP_PASSWORD = optionalEnv("E2E_BASIC_PASSWORD", null);
     public static final String DDAP_BASE_URL = requiredEnv("E2E_BASE_URI");
     public static final String DAM_ID = requiredEnv("E2E_DAM_ID");
     public static final String DDAP_TEST_REALM_NAME_PREFIX = requiredEnv("E2E_TEST_REALM");
@@ -108,6 +111,14 @@ public abstract class AbstractBaseE2eTest {
         RestAssured.baseURI = DDAP_BASE_URL;
     }
 
+    protected static RequestSpecification getRequestSpecification(){
+        if(DDAP_USERNAME == null && DDAP_PASSWORD == null) {
+            return given();
+        }else{
+            return given().auth().basic(DDAP_USERNAME, DDAP_PASSWORD);
+        }
+    }
+
     protected static String requiredEnv(String name) {
         String val = System.getenv(name);
         if (val == null) {
@@ -155,7 +166,7 @@ public abstract class AbstractBaseE2eTest {
         final Map<String, Object> walletConfig;
         {
             HttpGet request = new HttpGet(format("%s/identity/v1alpha/%s/config/identityProviders/wallet", DDAP_BASE_URL, realmName));
-            request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
+            addDdapBasicAuthHeader(request);
 
             final HttpResponse response = httpclient.execute(request);
             final int statusCode = response.getStatusLine().getStatusCode();
@@ -176,7 +187,7 @@ public abstract class AbstractBaseE2eTest {
 
         {
             HttpPut request = new HttpPut(format("%s/identity/v1alpha/%s/config", DDAP_BASE_URL, realmName));
-            request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
+            addDdapBasicAuthHeader(request);
             request.setEntity(new StringEntity(modificationPayload));
 
             final HttpResponse response = httpclient.execute(request);
@@ -202,7 +213,7 @@ public abstract class AbstractBaseE2eTest {
 
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
         HttpPut request = new HttpPut(format("%s/dam/%s/v1alpha/%s/config", DDAP_BASE_URL, damId, realmName));
-        request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
+        addDdapBasicAuthHeader(request);
         request.setEntity(new StringEntity(modificationPayload));
 
         System.out.printf("Sending setup realm request to URI [%s]\n", request.getURI());
@@ -290,9 +301,9 @@ public abstract class AbstractBaseE2eTest {
         return tokenCookie.getValue();
     }
 
-    public static String ddapBasicAuthHeader() {
+    public static void addDdapBasicAuthHeader(HttpRequest request) {
         String auth = DDAP_USERNAME + ":" + DDAP_PASSWORD;
         byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.ISO_8859_1));
-        return "Basic " + new String(encodedAuth);
+        request.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + new String(encodedAuth));
     }
 }

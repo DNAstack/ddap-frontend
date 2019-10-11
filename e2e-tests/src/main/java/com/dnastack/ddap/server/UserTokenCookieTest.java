@@ -35,11 +35,10 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
         String expiredUserTokenCookie = fakeUserToken(Instant.now().minusSeconds(10));
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", expiredUserTokenCookie)
         .when()
             .get(damViaDdap("/resources/resource-name/views/view-name"))
@@ -60,11 +59,10 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
         String unexpiredUserTokenCookie = fakeUserToken(Instant.now().plusSeconds(10));
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", unexpiredUserTokenCookie)
         .when()
             .get(damViaDdap("/resources/resource-name/views/view-name"))
@@ -80,11 +78,10 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
         String expiredUserTokenCookie = fakeUserToken(Instant.now().minusSeconds(10));
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", expiredUserTokenCookie)
         .when()
             .get(damViaDdap("/resources/resource-name/views/view-name"))
@@ -98,11 +95,10 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
     @Test
     public void shouldIncludeMissingAuthStatusInResponseHeader() throws Exception {
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
         .when()
             .get(damViaDdap("/resources/resource-name/views/view-name"))
         .then()
@@ -117,11 +113,10 @@ public class UserTokenCookieTest extends AbstractBaseE2eTest {
         String validPersonaToken = fetchRealPersonaIcToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("ic_token", validPersonaToken)
         .when()
             .get(icViaDdap("/accounts/-"))

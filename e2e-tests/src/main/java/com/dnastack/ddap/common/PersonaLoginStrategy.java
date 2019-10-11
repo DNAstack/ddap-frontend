@@ -2,8 +2,6 @@ package com.dnastack.ddap.common;
 
 import com.dnastack.ddap.common.page.AnyDdapPage;
 import com.dnastack.ddap.common.page.ICLoginPage;
-import com.dnastack.ddap.common.util.WebDriverUtil;
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
@@ -31,7 +29,7 @@ public class PersonaLoginStrategy implements LoginStrategy {
         final HttpClient httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
         final String scopeString = (scopes.length == 0) ? "" : "&scope=" + String.join("+", scopes);
         HttpGet request = new HttpGet(String.format("%s/api/v1alpha/%s/identity/login?persona=%s%s", DDAP_BASE_URL, realmName, personaName, scopeString));
-        request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
+        addDdapBasicAuthHeader(request);
 
         HttpResponse response = httpclient.execute(request);
 

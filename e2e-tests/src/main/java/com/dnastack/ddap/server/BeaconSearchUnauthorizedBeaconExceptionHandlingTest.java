@@ -69,11 +69,10 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        BeaconQueryResult[] allResults = given()
+        BeaconQueryResult[] allResults = getRequestSpecification()
                     .log().method()
                     .log().uri()
                 .when()
-                    .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
                     .cookie("refresh_token", refreshToken)
                     .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
@@ -110,11 +109,10 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        BeaconQueryResult[] allResults = given()
+        BeaconQueryResult[] allResults = getRequestSpecification()
                 .log().method()
                 .log().uri()
                 .when()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
                 .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
@@ -151,11 +149,10 @@ public class BeaconSearchUnauthorizedBeaconExceptionHandlingTest extends Abstrac
     public void shouldGet401InBeaconResponsesWhenUnauthenticated() {
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        BeaconQueryResult[] allResults = given()
+        BeaconQueryResult[] allResults = getRequestSpecification()
                 .log().method()
                 .log().uri()
                 .when()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C")
                 .then()
                 .log().body()

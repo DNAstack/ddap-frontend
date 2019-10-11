@@ -35,11 +35,10 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
             .queryParam("dataset_url",DATASET_URL_WITH_INLINE_SCHEMA)
@@ -59,11 +58,10 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
             .queryParam("dataset_url",DATASET_URL_WITH_RESOLVED_SCHEMA)
@@ -85,11 +83,10 @@ public class DatasetApiTest extends AbstractBaseE2eTest {
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
             .queryParam("dataset_url","https://storage.googleapis.com/ga4gh-dataset-sample/dataset/non-existant")

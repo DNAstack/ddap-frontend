@@ -31,11 +31,10 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        given()
+        getRequestSpecification()
                 .log().method()
                 .log().uri()
                 .when()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("dam_token", damToken)
                 .cookie("refresh_token", refreshToken)
                 .pathParam("realm", REALM)
@@ -60,11 +59,10 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        given()
+        getRequestSpecification()
                 .log().method()
                 .log().uri()
                 .when()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("dam_token", damToken)
                 .cookie("refresh_token", refreshToken)
                 .pathParam("realm", REALM)
@@ -89,11 +87,10 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        given()
+        getRequestSpecification()
                 .log().method()
                 .log().uri()
                 .when()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("dam_token", damToken)
                 .cookie("refresh_token", refreshToken)
                 .pathParam("realm", REALM)

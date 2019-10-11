@@ -32,11 +32,10 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
             .contentType("application/json")
@@ -60,11 +59,10 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
             .contentType("application/json")
@@ -86,11 +84,10 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
             .contentType("application/json")
@@ -113,11 +110,10 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
         String view = "/dam/1/v1alpha/" + REALM + "/resources/ga4gh-apis/views/gcs_read";
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
             .contentType("application/json")
@@ -144,11 +140,10 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
         String view = "/dam/1/v1alpha/" + REALM + "/resources/ga4gh-apis/views/invalid";
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
             .contentType("application/json")

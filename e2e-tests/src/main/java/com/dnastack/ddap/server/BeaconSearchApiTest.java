@@ -57,11 +57,10 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        final Response response = given()
+        final Response response = getRequestSpecification()
                 .log().method()
                 .log().uri()
                 .when()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
                 .get("/api/v1alpha/" + REALM + "/resources/search?type=beacon&assemblyId=GRCh37&referenceName=1&start=156105028&referenceBases=T&alternateBases=C");
@@ -96,11 +95,10 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
         .when()
@@ -132,11 +130,10 @@ public class BeaconSearchApiTest extends AbstractBaseE2eTest {
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("dam_token", validPersonaToken)
                 .cookie("refresh_token", refreshToken)
         .when()

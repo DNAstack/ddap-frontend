@@ -10,10 +10,15 @@ public class WebDriverUtil {
 
     public static String getUrlWithBasicCredentials(String original, String username, String password) {
         final Matcher matcher = URL_PARSE_PATTERN.matcher(original);
-        if (matcher.find()) {
-            return format("%s://%s:%s@%s", matcher.group(1), username, password, matcher.group(2));
+        if (username != null && password != null) {
+            if (matcher.find()) {
+                return format("%s://%s:%s@%s", matcher.group(1), username, password, matcher.group(2));
+
+            } else {
+                throw new IllegalArgumentException("Could not parse url: " + original);
+            }
         } else {
-            throw new IllegalArgumentException("Could not parse url: " + original);
+            return original;
         }
     }
 }

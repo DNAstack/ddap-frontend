@@ -37,11 +37,10 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
                 .log().method()
                 .log().cookies()
                 .log().uri()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
                 .cookie("dam_token", damToken)
                 .cookie("refresh_token", refreshToken)
@@ -61,11 +60,10 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
         damToken = fetchRealPersonaDamToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
                 .log().method()
                 .log().cookies()
                 .log().uri()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
                 .cookie("dam_token", damToken)
                 .cookie("refresh_token", refreshToken)
@@ -89,11 +87,10 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
                 .log().method()
                 .log().cookies()
                 .log().uri()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
                 .cookie("dam_token", danToken)
                 .cookie("refresh_token", refreshToken)
@@ -127,11 +124,10 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
         expectedDamAccess.put("target", new JSONObject().put("service", "DAM").put("id", "1"));
 
         // @formatter:off
-        given()
+        getRequestSpecification()
                 .log().method()
                 .log().cookies()
                 .log().uri()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
                 .cookie("dam_token", danToken)
                 .cookie("refresh_token", refreshToken)
@@ -155,11 +151,10 @@ public class IdentityE2eTest extends AbstractBaseE2eTest {
         String refreshToken = fetchRealPersonaRefreshToken(TestingPersona.USER_WITH_ACCESS, REALM);
 
         // @formatter:off
-        given()
+        getRequestSpecification()
                 .log().method()
                 .log().cookies()
                 .log().uri()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icToken)
                 .cookie("dam_token", danToken)
                 .cookie("refresh_token", refreshToken)

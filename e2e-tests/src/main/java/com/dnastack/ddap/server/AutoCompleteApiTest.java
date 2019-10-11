@@ -31,11 +31,10 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        given()
+        getRequestSpecification()
                     .log().method()
                     .log().uri()
                     .when()
-                    .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
                     .cookie("refresh_token", refreshToken)
                     .get("/api/v1alpha/" + REALM + "/autocomplete/claimValue/" + DAM_ID + "?claimName=com.dnastack.test.claim")
@@ -58,11 +57,10 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
 
         /* Run the aggregate search query on the realm */
         // @formatter:off
-        given()
+        getRequestSpecification()
                     .log().method()
                     .log().uri()
                     .when()
-                    .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                     .cookie("dam_token", validPersonaToken)
                     .cookie("refresh_token", refreshToken)
                     .get("/api/v1alpha/" + REALM + "/autocomplete/claimValue/"+ DAM_ID + "?claimName=ControlledAccessGrants")

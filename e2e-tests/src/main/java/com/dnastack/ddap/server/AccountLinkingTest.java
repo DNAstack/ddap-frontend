@@ -4,6 +4,8 @@ import com.dnastack.ddap.common.AbstractBaseE2eTest;
 import com.dnastack.ddap.common.TestingPersona;
 import com.dnastack.ddap.common.util.JwtTestUtil;
 import dam.v1.DamService;
+import io.restassured.RestAssured;
+import io.restassured.specification.RequestSpecification;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assume;
@@ -17,7 +19,7 @@ import java.util.Map;
 
 import static com.dnastack.ddap.common.TestingPersona.USER_WITHOUT_ACCESS;
 import static com.dnastack.ddap.common.TestingPersona.USER_WITH_ACCESS;
-import static io.restassured.RestAssured.given;
+//import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -43,11 +45,10 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
         String requestedScope = "openid link:ic_" + System.currentTimeMillis();
 
         // @formatter:off
-        String icTokenJwt = given()
+        String icTokenJwt = getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .redirects().follow(false)
         .when()
             .get(ddap(format("/identity/login?persona=%s&scope=%s", USER_WITHOUT_ACCESS.getId(), requestedScope)))
@@ -69,11 +70,10 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
         String requestedScope = "link:ic_" + System.currentTimeMillis();
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .redirects().follow(false)
         .when()
             .get(ddap("/identity/login?scope=" + requestedScope))
@@ -93,11 +93,10 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
         String requestedScope = "link:" + baseAccountId;
 
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("ic_token", icTokenJwt)
             .cookie("refresh_token", refreshTokenJwt)
             .redirects().follow(false)
@@ -123,11 +122,10 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
         // Link account
         // @formatter:off
-        given()
+        getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("ic_token", icTokenJwtBeforeLinking)
                 .cookie("refresh_token", refreshTokenJwt)
             .redirects().follow(false)
@@ -143,11 +141,10 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
         // check that we can query my account, and that accounts were linked
         // @formatter:off
-        List<IcConnectedAccount> connectedAccounts = given()
+        List<IcConnectedAccount> connectedAccounts = getRequestSpecification()
             .log().method()
             .log().cookies()
             .log().uri()
-            .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
             .cookie("ic_token", icTokenJwtBeforeLinking)
         .when()
             .get(icViaDdap("/accounts/-"))
@@ -165,10 +162,9 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
         // Unlink account
         String icTokenAfterLinking = fetchRealPersonaIcToken(USER_WITHOUT_ACCESS, REALM);
         // @formatter:off
-        given().log().method()
+        getRequestSpecification().log().method()
                .log().cookies()
                .log().uri()
-               .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                .cookie("ic_token", icTokenAfterLinking)
                 .cookie("refresh_token", refreshTokenJwt)
                .redirects().follow(false)
@@ -183,11 +179,10 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
 
         // check that we can query my account, and that accounts are no-longer linked
         // @formatter:off
-        connectedAccounts = given()
+        connectedAccounts = getRequestSpecification()
                 .log().method()
                 .log().cookies()
                 .log().uri()
-                .auth().basic(DDAP_USERNAME, DDAP_PASSWORD)
                 .cookie("ic_token", icTokenAfterLinking)
                 .when()
                 .get(icViaDdap("/accounts/-"))

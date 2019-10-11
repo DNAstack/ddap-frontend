@@ -82,6 +82,9 @@ public abstract class AbstractFrontendE2eTest extends AbstractBaseE2eTest {
 
     protected static String getUrlWithBasicCredentials(String original) {
         final Matcher matcher = URL_PARSE_PATTERN.matcher(original);
+        if(DDAP_USERNAME == null && DDAP_PASSWORD == null){
+            return original;
+        }
         if (matcher.find()) {
             return format("%s://%s:%s@%s", matcher.group(1), DDAP_USERNAME, DDAP_PASSWORD, matcher.group(2));
         } else {

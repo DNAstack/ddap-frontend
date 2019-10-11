@@ -3,7 +3,6 @@ package com.dnastack.ddap.common;
 import com.dnastack.ddap.common.page.AnyDdapPage;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -49,8 +48,12 @@ public class WalletLoginStrategy implements LoginStrategy {
     public CookieStore performPersonaLogin(String personaName, String realmName, String... scopes) throws IOException {
         final LoginInfo loginInfo = personalAccessTokens.get(personaName);
         final CookieStore cookieStore = new BasicCookieStore();
-        final BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(DDAP_USERNAME, DDAP_PASSWORD));
+        BasicCredentialsProvider credentialsProvider = null;
+        if(DDAP_USERNAME != null && DDAP_PASSWORD != null) {
+            credentialsProvider = new BasicCredentialsProvider();
+            credentialsProvider.setCredentials(AuthScope.ANY,
+                                               new UsernamePasswordCredentials(DDAP_USERNAME, DDAP_PASSWORD));
+        }
         final HttpClient httpclient = HttpClientBuilder.create()
                                                        .setDefaultCookieStore(cookieStore)
                                                        .setDefaultCredentialsProvider(credentialsProvider)
@@ -58,7 +61,7 @@ public class WalletLoginStrategy implements LoginStrategy {
         {
             final String scopeString = (scopes.length == 0) ? "" : "&scope=" + String.join("+", scopes);
             HttpGet request = new HttpGet(String.format("%s/api/v1alpha/%s/identity/login?loginHint=wallet:%s%s", DDAP_BASE_URL, realmName, loginInfo.getEmail(), scopeString));
-            request.setHeader(HttpHeaders.AUTHORIZATION, ddapBasicAuthHeader());
+            addDdapBasicAuthHeader(request);
 
             final HttpResponse response = httpclient.execute(request);
             String responseBody = EntityUtils.toString(response.getEntity());
