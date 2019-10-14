@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 import { Observable, Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { debounceTime, map, tap } from 'rxjs/operators';
 import View = dam.v1.View;
 
 import { dam } from '../../../../../shared/proto/dam-service';
@@ -23,7 +23,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   @Input()
   damId: string;
   @Output()
-  formChange: EventEmitter<any> = new EventEmitter<any>();
+  readonly formChange: EventEmitter<any> = new EventEmitter<any>();
 
   viewForm: FormGroup;
   templates: EntityModel[];
@@ -91,12 +91,6 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
       );
   }
 
-  subscribeToFormChanges() {
-    this.viewForm.valueChanges.pipe(
-      tap(changed => this.formChange.emit(changed))
-    ).subscribe();
-  }
-
   ngOnDestroy(): void {
     this.templatesSubscription.unsubscribe();
   }
@@ -159,4 +153,12 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   }
 
   private equalToSelectedTemplateName = (template) => template.name === this.viewForm.get('serviceTemplate').value;
+
+  private subscribeToFormChanges() {
+    this.viewForm.valueChanges.pipe(
+      debounceTime(300),
+      tap((changed) => this.formChange.emit(changed))
+    ).subscribe();
+  }
+
 }
