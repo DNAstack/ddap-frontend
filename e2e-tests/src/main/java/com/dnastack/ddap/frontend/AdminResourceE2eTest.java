@@ -80,7 +80,7 @@ public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + role));
         adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + role), "test_whitelist");
 
-        adminManagePage.findCheckedCheckbox(viewId + "/" + role + "/test_user_with_access");
+        adminManagePage.clickCheckbox(By.id(viewId + "/" + role + "/test_user_with_access"));
 
         adminListPage = adminManagePage.saveEntity();
 
@@ -132,8 +132,8 @@ public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + view2Role));
         adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + view2Role), "test_whitelist");
 
-        adminManagePage.findCheckedCheckbox(view1Id + "/" + view1Role + "/test_user_with_access");
-        adminManagePage.findCheckedCheckbox(view2Id + "/" + view2Role + "/test_user_with_access");
+        adminManagePage.clickCheckbox(By.id(view1Id + "/" + view1Role + "/test_user_with_access"));
+        adminManagePage.clickCheckbox(By.id(view2Id + "/" + view2Role + "/test_user_with_access"));
 
         adminListPage = adminManagePage.saveEntity();
 
@@ -172,6 +172,7 @@ public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + role), "NONEXISTENT_POLICY");
 
         adminManagePage.clickSave();
+        adminListPage.waitForInflightRequests();
         adminManagePage.assertError(containsString("NONEXISTENT_POLICY"));
         adminManagePage.assertError(Matchers.not(startsWith("{")));
     }
@@ -235,7 +236,7 @@ public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + newDefaultRole));
         adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + newDefaultRole), "test_whitelist");
 
-        adminManagePage.findCheckedCheckbox("discovery-access/" + newDefaultRole + "/test_user_with_access");
+        adminManagePage.clickCheckbox(By.id("discovery-access/" + newDefaultRole + "/test_user_with_access"));
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/test_user_with_access");
         adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/test_user_with_access");
 
@@ -261,11 +262,8 @@ public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
 
         adminManagePage.enterButton(DdapBy.se("btn-remove-view-gcs-file-access"));
 
-        // workaround to rebuild matrix, matrix is not rebuilt on view removal/addition
-        adminManagePage.clickCheckbox(By.id("discovery-access/discovery/test_user_with_access"));
-        // Wait until matrix refreshes before submitting
-        adminManagePage.findCheckedCheckbox("discovery-access/discovery/test_user_with_access");
         adminManagePage.waitForInflightRequests();
+        adminManagePage.findCheckedCheckbox("discovery-access/discovery/test_user_with_access");
 
         adminListPage = adminManagePage.updateEntity();
 
