@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.startsWith;
 public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
 
     private void waitForAccessTablesToLoad() {
-        new WebDriverWait(driver, 60)
+        new WebDriverWait(driver, 15)
                 .until(ExpectedConditions.numberOfElementsToBeMoreThan(By.tagName("mat-table"), 3));
     }
 

@@ -2,13 +2,13 @@ import { NgModule } from '@angular/core';
 
 import { AdminSharedModule } from '../../shared/shared.module';
 
-import { AccessTableComponent } from './access-table/access-table.component';
 import { JsonPanelComponent } from './json-panel/json-panel.component';
+import { PersonasAccessTableComponent } from './personas-access-table/personas-access-table.component';
 import { TestFormComponent } from './test-form/test-form.component';
 
 @NgModule({
   declarations: [
-    AccessTableComponent,
+    PersonasAccessTableComponent,
     JsonPanelComponent,
     TestFormComponent,
   ],
@@ -18,7 +18,7 @@ import { TestFormComponent } from './test-form/test-form.component';
   exports: [
     AdminSharedModule,
 
-    AccessTableComponent,
+    PersonasAccessTableComponent,
     JsonPanelComponent,
     TestFormComponent,
   ],

@@ -29,9 +29,9 @@
                                 [includeFields]="['owner']">
             </ddap-metadata-list>
           </ng-container>
-          <ddap-access-table [resource]="resource"
-                             [damId]="damId">
-          </ddap-access-table>
+          <ddap-personas-access-table [damId]="damId"
+                                      [resource]="resource">
+          </ddap-personas-access-table>
         </div>
         <mat-action-row>
           <button mat-button

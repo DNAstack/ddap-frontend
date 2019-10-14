@@ -1,0 +1,46 @@
+<mat-table [dataSource]="personas$">
+  <!-- Persona column -->
+  <ng-container matColumnDef="persona">
+    <mat-header-cell *matHeaderCellDef>
+      <div>
+        <mat-icon class="icon icon-identity"></mat-icon>
+        <span>Access</span>
+      </div>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let persona">
+      {{ persona.dto.ui.label || persona.name }}
+    </mat-cell>
+  </ng-container>
+  <!-- View-Role column -->
+  <ng-container *ngFor="let viewRole of viewRoles"
+                [matColumnDef]="viewRole.viewRoleId">
+    <mat-header-cell *matHeaderCellDef>
+      <span matTooltip="View">{{ viewRole.view.ui.label }}</span>
+      <span matTooltip="Role">{{ viewRole.role }}</span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let persona">
+      <mat-icon *ngIf="hasAccess(persona, viewRole)"
+                matTooltip="Access Granted"
+                class="tick"
+                color="primary">
+        done
+      </mat-icon>
+      <mat-icon *ngIf="!hasAccess(persona, viewRole)"
+                matTooltip="Access Denied"
+                class="lock">
+        lock
+      </mat-icon>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns">
+  </mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;">
+  </mat-row>
+</mat-table>
+<ng-template #emptyState>
+  <div class="empty-state">
+    <mat-icon class="icon icon-views"></mat-icon>
+    <p>No views to display. Add some while editing resource.</p>
+  </div>
+</ng-template>
