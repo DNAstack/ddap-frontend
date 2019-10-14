@@ -31,7 +31,7 @@ export class ResourceManageComponent extends DamConfigEntityFormComponentBase {
     super(route, router, validationService);
   }
 
-  save(isDryRun?: boolean) {
+  save(isDryRun = false) {
     const aggregateForm = combine(this.resourceForm, this.accessForm);
     if (!isDryRun && !this.validate(this.accessForm.form ? aggregateForm : this.resourceForm)) {
       return;
@@ -46,14 +46,14 @@ export class ResourceManageComponent extends DamConfigEntityFormComponentBase {
         if (!isDryRun) {
           this.navigateUp('../..');
         }
-      }, this.handleError);
+      }, (error) => this.handleError(isDryRun, error));
   }
 
-  handleError = (error: HttpErrorResponse) => {
+  handleError = (isDryRun: boolean, error: HttpErrorResponse) => {
     if (error.status === 424 && this.accessForm.isConfigModificationObject(error)) {
       this.accessForm.makeFieldsValid();
       this.accessForm.validatePersonaFields(error);
-    } else {
+    } else if (!isDryRun) {
       this.showError(error);
     }
   }

@@ -25,7 +25,6 @@ export class ResourceDetailComponent extends DamConfigEntityDetailComponentBase<
   resourceForm: ResourceFormComponent;
   @ViewChild('accessForm', { static: false })
   accessForm: ResourceAccessComponent;
-  isDryRun: boolean;
 
   constructor(protected route: ActivatedRoute,
               protected router: Router,
@@ -36,9 +35,8 @@ export class ResourceDetailComponent extends DamConfigEntityDetailComponentBase<
     super(route, router, validationService, damConfigStore, resourcesStore);
   }
 
-  update(isDryRun?: boolean) {
+  update(isDryRun = false) {
     const aggregateForm = combine(this.resourceForm, this.accessForm);
-    this.isDryRun = isDryRun;
     if (!isDryRun && !this.validate(this.accessForm.form ? aggregateForm : this.resourceForm)) {
       return;
     }
@@ -51,7 +49,7 @@ export class ResourceDetailComponent extends DamConfigEntityDetailComponentBase<
         if (!isDryRun) {
           this.navigateUp('..');
         }
-      }, this.handleError);
+      }, (error) => this.handleError(isDryRun, error));
   }
 
   delete() {
@@ -59,11 +57,11 @@ export class ResourceDetailComponent extends DamConfigEntityDetailComponentBase<
       .subscribe(() => this.navigateUp('..'), this.showError);
   }
 
-  handleError = (error: HttpErrorResponse) => {
+  handleError = (isDryRun: boolean, error: HttpErrorResponse) => {
     if (error.status === 424 && this.accessForm.isConfigModificationObject(error)) {
       this.accessForm.makeFieldsValid();
       this.accessForm.validatePersonaFields(error);
-    } else if (!this.isDryRun) {
+    } else if (!isDryRun) {
       this.showError(error);
     }
   }
