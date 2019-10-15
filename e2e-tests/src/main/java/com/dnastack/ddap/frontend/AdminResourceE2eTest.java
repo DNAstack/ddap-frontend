@@ -80,7 +80,9 @@ public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + role));
         adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + role), "test_whitelist");
 
+        adminManagePage.waitForInflightRequests();
         adminManagePage.clickCheckbox(By.id(viewId + "/" + role + "/test_user_with_access"));
+        adminManagePage.waitForInflightRequests();
 
         adminListPage = adminManagePage.saveEntity();
 
@@ -132,8 +134,11 @@ public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + view2Role));
         adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + view2Role), "test_whitelist");
 
+        adminManagePage.waitForInflightRequests();
         adminManagePage.clickCheckbox(By.id(view1Id + "/" + view1Role + "/test_user_with_access"));
+        adminManagePage.waitForInflightRequests();
         adminManagePage.clickCheckbox(By.id(view2Id + "/" + view2Role + "/test_user_with_access"));
+        adminManagePage.waitForInflightRequests();
 
         adminListPage = adminManagePage.saveEntity();
 
@@ -195,6 +200,7 @@ public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + newDefaultRole), "NONEXISTENT_POLICY");
 
         adminManagePage.clickUpdate();
+        adminManagePage.waitForInflightRequests();
         adminManagePage.assertError(containsString("NONEXISTENT_POLICY"));
         adminManagePage.assertError(Matchers.not(startsWith("{")));
     }
@@ -236,7 +242,9 @@ public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.enterButton(DdapBy.se("btn-make-default-role-" + newDefaultRole));
         adminManagePage.fillTagField(DdapBy.se("view-role-policies-" + newDefaultRole), "test_whitelist");
 
+        adminManagePage.waitForInflightRequests();
         adminManagePage.clickCheckbox(By.id("discovery-access/" + newDefaultRole + "/test_user_with_access"));
+        adminManagePage.waitForInflightRequests();
         adminManagePage.findCheckedCheckbox("discovery-access/discovery/test_user_with_access");
         adminManagePage.findCheckedCheckbox("gcs-file-access/viewer/test_user_with_access");
 
@@ -284,6 +292,7 @@ public class AdminResourceE2eTest extends AbstractAdminFrontendE2eTest {
         adminManagePage.clearField(DdapBy.se("inp-label"));
         adminManagePage.fillField(DdapBy.se("inp-label"), "Cool edited resource");
 
+        adminManagePage.waitForInflightRequests();
         adminManagePage.findCheckedCheckbox("beacon/discovery/test_user_with_access");
         adminManagePage.findCheckedCheckbox("gcs_read/viewer/test_user_with_access");
 
