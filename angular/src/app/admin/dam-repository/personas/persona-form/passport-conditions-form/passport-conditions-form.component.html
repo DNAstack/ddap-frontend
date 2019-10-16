@@ -75,11 +75,12 @@
                       {{ authorityLevel }}
                     </mat-option>
                   </mat-autocomplete>
-                  <mat-hint>Must be prefixed with any of
+                  <mat-error *ngIf="clause.get('by').hasError('prefix')">
+                    Must be prefixed with any of
                     <b *ngFor="let prefix of prefixes; let k=index">
                       <i>{{ prefix }}:{{ k < prefixes.length - 1 ? ', ' : '' }}</i>
                     </b>
-                  </mat-hint>
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="row">
@@ -88,11 +89,12 @@
                          placeholder="Source"
                          formControlName="source"
                          data-se="inp-condition-source">
-                  <mat-hint>Must be prefixed with any of
+                  <mat-error *ngIf="clause.get('source').hasError('prefix')">
+                    Must be prefixed with any of
                     <b *ngFor="let prefix of prefixes; let k=index">
                       <i>{{ prefix }}:{{ k < prefixes.length - 1 ? ', ' : '' }}</i>
                     </b>
-                  </mat-hint>
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="row">
@@ -101,11 +103,12 @@
                          placeholder="Value"
                          formControlName="value"
                          data-se="inp-condition-value">
-                  <mat-hint>Must be prefixed with any of
+                  <mat-error *ngIf="clause.get('value').hasError('prefix')">
+                    Must be prefixed with any of
                     <b *ngFor="let prefix of prefixes; let k=index">
                       <i>{{ prefix }}:{{ k < prefixes.length - 1 ? ', ' : '' }}</i>
                     </b>
-                  </mat-hint>
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="footer">

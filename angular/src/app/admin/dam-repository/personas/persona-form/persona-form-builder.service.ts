@@ -5,6 +5,9 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 
 import { FormValidators } from '../../../../shared/form/validators';
+import ConditionPrefix = PassportVisa.ConditionPrefix;
+import { PassportVisaValidators } from '../../../../shared/passport-visa/passport-visa-validators';
+import { PassportVisa } from '../../../../shared/passport-visa/passport-visa.constant';
 import { dam } from '../../../../shared/proto/dam-service';
 import TestPersona = dam.v1.TestPersona;
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
@@ -59,9 +62,9 @@ export class PersonaFormBuilder {
         clauses: this.formBuilder.array(condition.clauses.map((conditionClause: IConditionClause) => {
           return this.formBuilder.group({
             type: [conditionClause.type, [Validators.required]],
-            source: [conditionClause.source],
-            value: [conditionClause.value],
-            by: [conditionClause.by],
+            source: [conditionClause.source, [PassportVisaValidators.hasPrefix]],
+            value: [conditionClause.value, [PassportVisaValidators.hasPrefix]],
+            by: [conditionClause.by, [PassportVisaValidators.hasPrefix]],
           });
         })),
       });
