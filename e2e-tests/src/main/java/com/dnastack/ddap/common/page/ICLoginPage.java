@@ -26,7 +26,7 @@ public class ICLoginPage {
         this.driver = driver;
         log.info("Testing if {} is an IC login page", driver.getCurrentUrl());
         new WebDriverWait(driver, 5)
-                .until(or(visibilityOfElementLocated(personaLoginButton(USER_WITH_ACCESS)),
+                .until(or(visibilityOfElementLocated(By.xpath("//a[contains(@href, '/login/persona')]")),
                           // If persona login is disabled, check that there is a wallet login
                           visibilityOfElementLocated(By.xpath("//a[contains(@href, '/login/wallet')]"))));
     }
@@ -36,7 +36,14 @@ public class ICLoginPage {
     }
 
     public <T extends AnyDdapPage> T loginAsPersona(TestingPersona persona, Function<WebDriver, T> pageConstructor) {
+        driver.findElement(By.xpath("//a[contains(@href, '/login/persona')]")).click();
+        new WebDriverWait(driver, 5)
+                .until(visibilityOfElementLocated(personaLoginButton(persona)));
         driver.findElement(personaLoginButton(persona)).click();
+
+        new WebDriverWait(driver, 5)
+                .until(visibilityOfElementLocated(By.id("agree")));
+        driver.findElement(By.id("agree")).click();
         return pageConstructor.apply(driver);
     }
 

@@ -60,7 +60,7 @@ public abstract class AbstractBaseE2eTest {
     public static final String TRUSTED_SOURCE =  optionalEnv("E2E_TRUSTED_SOURCE", "https://ddap.test.source.dnastack.com");
     public static final String PASSPORT_ISSUER = requiredEnv("E2E_PASSPORT_ISSUER");
     public static final String TEST_WHITELIST_VALUE = optionalEnv("E2E_TEST_WHITELIST_VALUE", stripTrailingSlash(DDAP_BASE_URL).replaceFirst("-candidate\\.", "."));
-
+    public static final String IC_BASE_URL = requiredEnv("IC_BASE_URL");
     // Current size limit on realm names in DAM
     public static final int REALM_NAME_LIMIT = 40;
     public static final String SERVICE_ACCOUNT_PROJECT = requiredEnv("E2E_SERVICE_ACCOUNT_PROJECT");
