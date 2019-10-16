@@ -175,14 +175,17 @@
                 <mat-select formControlName="by"
                             data-se="inp-passport-by">
                   <mat-option>None</mat-option>
-                  <mat-option value="self">self</mat-option>
-                  <mat-option value="peer">peer</mat-option>
-                  <mat-option value="so">so</mat-option>
-                  <mat-option value="dac">dac</mat-option>
-                  <mat-option value="system">system</mat-option>
+                  <mat-option *ngFor="let authorityLevel of authorityLevels"
+                              [value]="authorityLevel">
+                    {{ authorityLevel }}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
+
+            <ddap-passport-conditions-form [damId]="damId"
+                                           [form]="getGa4ghAssertionAsFormGroup(ga4ghAssertion)">
+            </ddap-passport-conditions-form>
 
             <div class="footer">
               <button mat-button

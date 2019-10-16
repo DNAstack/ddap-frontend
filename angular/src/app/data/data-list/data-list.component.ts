@@ -30,7 +30,7 @@ export class DataListComponent implements OnInit {
 
   ngOnInit() {
     // FIXME I think this should be a piped Observable and not a subscription
-    // Needed to reload the data every time the realm in the URL changes (i.e. using the realm selector)
+    // Needed to reload the data every time the realm in the URL changes (conditionIndex.e. using the realm selector)
     this.route.parent.params.subscribe(() => {
       this.qualifiedResources$ =
         this.damInfoService.getDamUrls()

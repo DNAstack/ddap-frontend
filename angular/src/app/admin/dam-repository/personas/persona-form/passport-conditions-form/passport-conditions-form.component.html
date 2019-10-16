@@ -1,0 +1,143 @@
+<ng-container [formGroup]="form">
+  <h3>
+    <span>Conditions</span>
+    <div>
+      <button mat-button
+              color="primary"
+              class="uppercase"
+              type="button"
+              data-se="btn-add-condition"
+              (click)="addCondition()">
+        Add Condition
+      </button>
+    </div>
+  </h3>
+
+  <p *ngIf="conditions.controls.length < 1; else conditionsInfo">
+    No conditions are applied to the passport visa.
+  </p>
+  <ng-template #conditionsInfo>
+    <p>
+      Multiple conditions act like "OR" clauses, while inner set of conditions act like "AND" clauses.
+    </p>
+  </ng-template>
+
+  <mat-accordion multi displayMode="flat"
+                 formArrayName="conditions">
+    <mat-expansion-panel *ngFor="let condition of conditions.controls; let conditionIndex=index"
+                         [attr.data-se]="'passport-condition-' + conditionIndex">
+      <mat-expansion-panel-header collapsedHeight="5rem"
+                                  expandedHeight="5rem">
+        <mat-panel-title *ngIf="getClauses(condition).controls.length as numberOfConditions">
+          {{ numberOfConditions }} {{ numberOfConditions > 1 ? 'Condition Clauses' : 'Condition Clause' }}
+        </mat-panel-title>
+        <div class="invalid-warning" *ngIf="condition.invalid">
+          <mat-icon class="icon icon-warning"
+                    matTooltip="Condition is invalid">
+          </mat-icon>
+        </div>
+      </mat-expansion-panel-header>
+      <ul class="timeline"
+          [formGroupName]="conditionIndex">
+        <ng-container formArrayName="clauses">
+          <li class="event"
+              *ngFor="let clause of getClauses(condition).controls; let clauseIndex=index">
+            <ng-container [formGroupName]="clauseIndex">
+              <div class="line first"></div>
+              <div class="line-text">AND</div>
+              <div class="line last"></div>
+              <div class="row">
+                <mat-form-field class="col">
+                  <input matInput
+                         [matAutocomplete]="passportVisaTypesAutocomplete"
+                         placeholder="Passport Visa Type"
+                         formControlName="type"
+                         data-se="inp-condition-type"
+                         required>
+                  <mat-autocomplete #passportVisaTypesAutocomplete="matAutocomplete">
+                    <mat-option *ngFor="let type of passportVisaTypes$ | async"
+                                [value]="type">
+                      {{ type }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field class="col">
+                  <input matInput
+                         [matAutocomplete]="authorityLevelsAutocomplete"
+                         formControlName="by"
+                         placeholder="By"
+                         data-se="inp-condition-by">
+                  <mat-autocomplete #authorityLevelsAutocomplete="matAutocomplete">
+                    <mat-option *ngFor="let authorityLevel of authorityLevels"
+                                [value]="authorityLevel">
+                      {{ authorityLevel }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-hint>Must be prefixed with any of
+                    <b *ngFor="let prefix of prefixes; let k=index">
+                      <i>{{ prefix }}:{{ k < prefixes.length - 1 ? ', ' : '' }}</i>
+                    </b>
+                  </mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field class="col">
+                  <input matInput
+                         placeholder="Source"
+                         formControlName="source"
+                         data-se="inp-condition-source">
+                  <mat-hint>Must be prefixed with any of
+                    <b *ngFor="let prefix of prefixes; let k=index">
+                      <i>{{ prefix }}:{{ k < prefixes.length - 1 ? ', ' : '' }}</i>
+                    </b>
+                  </mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field class="col">
+                  <input matInput
+                         placeholder="Value"
+                         formControlName="value"
+                         data-se="inp-condition-value">
+                  <mat-hint>Must be prefixed with any of
+                    <b *ngFor="let prefix of prefixes; let k=index">
+                      <i>{{ prefix }}:{{ k < prefixes.length - 1 ? ', ' : '' }}</i>
+                    </b>
+                  </mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="footer">
+                <button mat-button
+                        type="button"
+                        color="warn"
+                        class="uppercase"
+                        (click)="removeClauseCondition(condition, clauseIndex, conditionIndex)">
+                  Remove Clause
+                </button>
+              </div>
+            </ng-container>
+          </li>
+        </ng-container>
+      </ul>
+      <mat-action-row>
+        <button mat-button
+                color="primary"
+                class="uppercase"
+                type="button"
+                data-se="btn-add-clause-condition"
+                (click)="addClauseCondition(condition)">
+          Add Clause
+        </button>
+        <button mat-button
+                type="button"
+                color="warn"
+                class="uppercase"
+                (click)="removeCondition(conditionIndex)">
+          Remove Condition
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ng-container>

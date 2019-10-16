@@ -39,11 +39,20 @@ $timeline-line: 0.1rem;
       height: 107%;
     }
 
+    .line-text {
+      position: absolute;
+      left: -2.4rem;
+      top: 50%;
+      font-weight: 200;
+      font-size: 0.8rem;
+    }
+
     &:last-of-type {
       padding-bottom: 0;
       margin-bottom: 0;
 
-      .line {
+      .line,
+      .line-text {
         display: none;
       }
     }

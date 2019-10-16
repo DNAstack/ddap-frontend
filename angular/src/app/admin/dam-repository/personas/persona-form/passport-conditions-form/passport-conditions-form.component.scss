@@ -1,0 +1,19 @@
+@import "../../../../../../styles/modules/colors";
+
+.timeline {
+  .event {
+    .line {
+      top: 5%;
+    }
+    .line.first {
+      height: 45%;
+    }
+    .line.last {
+      top: 56%;
+      height: 48%;
+    }
+  }
+  .event:after {
+    top: 5%;
+  }
+}
