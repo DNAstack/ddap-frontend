@@ -10,6 +10,7 @@ import { EntityModel, nameConstraintPattern } from '../../../../shared/entity.mo
 import { AccessPoliciesStore } from '../../../access-policies/access-policies.store';
 import { ServiceDefinitionService } from '../../../service-definitions/service-definitions.service';
 import { ServiceDefinitionsStore } from '../../../service-definitions/service-definitions.store';
+import { ResourceFormBuilder } from '../resource-form-builder.service';
 
 @Component({
   selector: 'ddap-resource-view-form',
@@ -31,6 +32,7 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   policyValues$: Observable<string[]>;
 
   constructor(private formBuilder: FormBuilder,
+              private resourceFormBuilder: ResourceFormBuilder,
               private serviceDefinitionService: ServiceDefinitionService,
               private serviceDefinitionsStore: ServiceDefinitionsStore,
               private accessPoliciesStore: AccessPoliciesStore) {
@@ -55,24 +57,8 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
     if (!this.view || !this.view.name) {
       this.view = new EntityModel('', View.create());
     }
-    const { name, dto } = this.view;
 
-    this.viewForm = this.formBuilder.group({
-      id: [name, [Validators.pattern(nameConstraintPattern)]],
-      serviceTemplate: [dto.serviceTemplate, [Validators.required]],
-      defaultRole: [dto.defaultRole, [Validators.required]],
-      version: [dto.version, [Validators.required]],
-      topic: [dto.topic, []],
-      partition: [dto.partition, []],
-      fidelity: [dto.fidelity, []],
-      geoLocation: [dto.geoLocation, []],
-      aud: [dto.aud, []],
-      contentTypes: [dto.contentTypes, []],
-      ui: this.formBuilder.group({
-        label: [dto.ui.label, [Validators.required]],
-        description: [dto.ui.description, [Validators.required, Validators.maxLength(255)]],
-      }),
-    });
+    this.viewForm = this.resourceFormBuilder.buildViewForm(this.view);
 
     this.templatesSubscription = this.serviceDefinitionsStore.getAsList(this.damId).subscribe((templates) => {
       this.templates = templates;

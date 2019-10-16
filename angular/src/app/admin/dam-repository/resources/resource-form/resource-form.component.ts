@@ -13,17 +13,17 @@ import {
   ViewChildren,
   ViewContainerRef
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import _get from 'lodash.get';
 import { debounceTime, tap } from 'rxjs/operators';
 
-import { FormValidators } from '../../../../shared/form/validators';
 import { dam } from '../../../../shared/proto/dam-service';
-import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
+import { EntityModel } from '../../../shared/entity.model';
 import Form from '../../../shared/form/form';
 
-import { ResourceViewFormComponent } from './resource-view-form/resource-view-form.component';
 import Resource = dam.v1.Resource;
+import { ResourceFormBuilder } from './resource-form-builder.service';
+import { ResourceViewFormComponent } from './resource-view-form/resource-view-form.component';
 
 
 @Component({
@@ -52,6 +52,7 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
   viewChildComponents: QueryList<ResourceViewFormComponent>;
 
   constructor(private formBuilder: FormBuilder,
+              private resourceFormBuilder: ResourceFormBuilder,
               private cd: ChangeDetectorRef) {
   }
 
@@ -60,26 +61,7 @@ export class ResourceFormComponent implements OnInit, AfterViewInit, Form {
   }
 
   ngOnInit(): void {
-    const { name, dto } = this.resource;
-
-    this.form = this.formBuilder.group({
-      id: [name, [Validators.pattern(nameConstraintPattern)]],
-      maxTokenTtl: [dto.maxTokenTtl, []],
-      ui: this.formBuilder.group({
-        access: [dto.ui.access, []],
-        description: [dto.ui.description, [Validators.required, Validators.maxLength(255)]],
-        label: [dto.ui.label, [Validators.required]],
-        owner: [dto.ui.owner, []],
-        size: [dto.ui.size, []],
-        year: [dto.ui.year, []],
-        tags: [dto.ui.tags, []],
-        applyUrl: [dto.ui.applyUrl, [FormValidators.url]],
-        troubleshootUrl: [dto.ui.troubleshootUrl, [FormValidators.url]],
-        imageUrl: [dto.ui.imageUrl, [FormValidators.url]],
-        infoUrl: [dto.ui.infoUrl, [FormValidators.url]],
-      }),
-    });
-
+    this.form = this.resourceFormBuilder.buildForm(this.resource);
     this.subscribeToFormChanges();
   }
 
