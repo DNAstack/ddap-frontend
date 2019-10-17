@@ -51,7 +51,7 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
             .log().uri()
             .redirects().follow(false)
         .when()
-            .get(ddap(format("/identity/login?persona=%s&scope=%s", USER_WITHOUT_ACCESS.getId(), requestedScope)))
+            .get(ddap(format("/identity/login?loginHint=persona:=%s&scope=%s", USER_WITHOUT_ACCESS.getId(), requestedScope)))
         .then()
             .log().body()
             .log().ifValidationFails()

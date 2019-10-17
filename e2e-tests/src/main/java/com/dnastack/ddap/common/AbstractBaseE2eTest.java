@@ -163,26 +163,20 @@ public abstract class AbstractBaseE2eTest {
         final ObjectMapper mapper = new ObjectMapper();
 
         // Don't clobber wallet config in case we are using wallet test user login
-        final Map<String, Object> walletConfig;
-        {
-            HttpGet request = new HttpGet(format("%s/identity/v1alpha/%s/config/identityProviders/wallet", DDAP_BASE_URL, realmName));
-            addDdapBasicAuthHeader(request);
-
-            final HttpResponse response = httpclient.execute(request);
-            final int statusCode = response.getStatusLine().getStatusCode();
-            if (statusCode == 200) {
-                final String responseBody = EntityUtils.toString(response.getEntity());
-                walletConfig = mapper.readValue(responseBody, new TypeReference<Map<String, Object>>() {});
-            } else {
-                walletConfig = null;
-            }
-        }
-
+        final Map<String, Object> walletConfig = getIdentityProviderConfig(realmName, "wallet", httpclient);
         if (walletConfig != null) {
             final IcConfig parsedConfig = mapper.readValue(config, IcConfig.class);
             parsedConfig.getIdentityProviders().put("wallet", walletConfig);
             config = mapper.writeValueAsString(parsedConfig);
         }
+
+        final Map<String, Object> personaConfig = getIdentityProviderConfig(realmName, "persona", httpclient);;
+        if(personaConfig !=null) {
+            final IcConfig parsedConfig = mapper.readValue(config, IcConfig.class);
+            parsedConfig.getIdentityProviders().put("persona", personaConfig);
+            config = mapper.writeValueAsString(parsedConfig);
+        }
+
         final String modificationPayload = format("{ \"item\": %s }", config);
 
         {
@@ -305,5 +299,26 @@ public abstract class AbstractBaseE2eTest {
         String auth = DDAP_USERNAME + ":" + DDAP_PASSWORD;
         byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.ISO_8859_1));
         request.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + new String(encodedAuth));
+    }
+
+    private static Map<String, Object> getIdentityProviderConfig(String realmName,
+                                                          String provider,
+                                                          HttpClient httpclient) throws IOException {
+        final Map<String, Object> providerConfig;
+        final ObjectMapper mapper = new ObjectMapper();
+
+        HttpGet request = new HttpGet(format("%s/identity/v1alpha/%s/config/identityProviders/%s",
+                DDAP_BASE_URL, realmName, provider));
+        addDdapBasicAuthHeader(request);
+
+        final HttpResponse response = httpclient.execute(request);
+        final int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode == 200) {
+            final String responseBody = EntityUtils.toString(response.getEntity());
+            providerConfig = mapper.readValue(responseBody, new TypeReference<Map<String, Object>>() {});
+        } else {
+            providerConfig = null;
+        }
+        return providerConfig;
     }
 }
