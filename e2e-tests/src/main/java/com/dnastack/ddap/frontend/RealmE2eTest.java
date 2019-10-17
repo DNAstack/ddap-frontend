@@ -7,6 +7,7 @@ import com.dnastack.ddap.common.page.AnyDdapPage;
 import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -46,6 +47,9 @@ public class RealmE2eTest extends AbstractFrontendE2eTest {
         ConfirmationRealmChangeDialog confirmationRealmChangeDialog = ddapPage.getNavBar().setRealm(otherRealm);
         // Login happens automatically because we are using personas and we hint to the IC how to log us in to the new realm.
         AnyDdapPage anyPage = confirmationRealmChangeDialog.confirmChangeRealmDialog();
+
+        // New persona playground
+        driver.findElement(By.id("agree")).click();
 
         // Wrap this with large timeout because redirect to IC and back happens here
         new WebDriverWait(driver, 10)
