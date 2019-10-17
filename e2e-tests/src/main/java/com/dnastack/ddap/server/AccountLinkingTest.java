@@ -38,34 +38,6 @@ public class AccountLinkingTest extends AbstractBaseE2eTest {
     }
 
     @Test
-    public void personaLoginShouldHonourRequestedScopes() throws Exception {
-        // TODO DISCO-2449 make test work with wallet users
-        Assume.assumeThat(LOGIN_STRATEGY_NAME, equalTo("PersonaLoginStrategy"));
-
-        String requestedScope = "openid link:ic_" + System.currentTimeMillis();
-
-        // @formatter:off
-        String icTokenJwt = getRequestSpecification()
-            .log().method()
-            .log().cookies()
-            .log().uri()
-            .redirects().follow(false)
-        .when()
-            .get(ddap(format("/identity/login?loginHint=persona:=%s&scope=%s", USER_WITHOUT_ACCESS.getId(), requestedScope)))
-        .then()
-            .log().body()
-            .log().ifValidationFails()
-            .statusCode(307)
-            .cookie("ic_token")
-        .extract()
-            .cookie("ic_token");
-        // @formatter:on
-
-        Map<String, Object> icToken = JwtTestUtil.getBody(icTokenJwt);
-        assertThat(icToken, hasEntry("scope", requestedScope));
-    }
-
-    @Test
     public void redirectToIcLoginPageShouldPassRequestedScopes() throws Exception {
         String requestedScope = "link:ic_" + System.currentTimeMillis();
 
