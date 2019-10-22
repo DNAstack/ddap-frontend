@@ -1,5 +1,6 @@
 package com.dnastack.ddap.dam.admin.client;
 
+import com.dnastack.ddap.common.client.AuthAwareWebClientFactory;
 import com.dnastack.ddap.common.client.OAuthFilter;
 import com.dnastack.ddap.common.client.WebClientFactory;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -23,14 +24,12 @@ public class ReactiveDamClient {
     private URI damBaseUrl;
     private String damClientId;
     private String damClientSecret;
-
-    private WebClientFactory webClientFactory;
-
+    private AuthAwareWebClientFactory webClientFactory;
 
     public ReactiveDamClient(URI damBaseUrl,
-        String damClientId,
-        String damClientSecret,
-        WebClientFactory webClientFactory) {
+                             String damClientId,
+                             String damClientSecret,
+                             AuthAwareWebClientFactory webClientFactory) {
         this.damBaseUrl = damBaseUrl;
         this.damClientId = damClientId;
         this.damClientSecret = damClientSecret;
@@ -64,7 +63,7 @@ public class ReactiveDamClient {
     }
 
     public Mono<GetInfoResponse> getDamInfo() {
-        return webClientFactory.getWebClient()
+        return WebClientFactory.getWebClient()
                 .get()
                 .uri(damBaseUrl.resolve("/dam"))
                 .retrieve()
@@ -90,7 +89,7 @@ public class ReactiveDamClient {
         variables.put("clientId", damClientId);
         variables.put("clientSecret", damClientSecret);
 
-        return webClientFactory.getWebClient()
+        return WebClientFactory.getWebClient()
             .get()
             .uri(damBaseUrl.resolve(template.expand(variables)))
             .retrieve()
@@ -116,7 +115,7 @@ public class ReactiveDamClient {
         variables.put("clientId", damClientId);
         variables.put("clientSecret", damClientSecret);
 
-        return webClientFactory.getWebClient()
+        return WebClientFactory.getWebClient()
             .get()
             .uri(damBaseUrl.resolve(template.expand(variables)))
             .retrieve()

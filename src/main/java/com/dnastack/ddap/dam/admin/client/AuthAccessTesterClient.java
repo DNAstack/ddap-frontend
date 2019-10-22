@@ -1,7 +1,7 @@
 package com.dnastack.ddap.dam.admin.client;
 
-import com.dnastack.ddap.ic.account.client.ReactiveIcClient;
-import com.dnastack.ddap.ic.account.model.IdentityModel;
+import com.dnastack.ddap.ic.account.controller.model.IdentityModel;
+import com.dnastack.ddap.ic.admin.client.ReactiveAdminIcClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class AuthAccessTesterClient {
     @Autowired
     private DamClientFactory damClientFactory;
     @Autowired
-    private ReactiveIcClient icClient;
+    private ReactiveAdminIcClient icClient;
 
     public Mono<List<IdentityModel.Access>> determineAccessForUser(String realm, Map<CookieKind, String> tokens) {
 
@@ -51,6 +51,7 @@ public class AuthAccessTesterClient {
                 .onErrorReturn(damAccess);
     }
 
+    // TODO: refactor to decouple with IC
     private Mono<IdentityModel.Access> determineIcAccess(String realm, Map<CookieKind, String> tokens) {
         IdentityModel.Access icAccess = new IdentityModel.Access();
         icAccess.setTarget(new IdentityModel.Target(IdentityModel.Service.IC, null));

@@ -24,14 +24,11 @@ public class ReactiveWdlValidatorClient {
 
     private URI wdlValidatorUrl;
     private String wdlValidatorToken;
-    private WebClientFactory webClientFactory;
 
     public ReactiveWdlValidatorClient(@Value("${ddap.wdl-validator.url}") URI wdlValidatorUrl,
-                                      @Value("${ddap.wdl-validator.token}") String wdlValidatorToken,
-                                      WebClientFactory webClientFactory) {
+                                      @Value("${ddap.wdl-validator.token}") String wdlValidatorToken) {
         this.wdlValidatorUrl = wdlValidatorUrl;
         this.wdlValidatorToken = wdlValidatorToken;
-        this.webClientFactory = webClientFactory;
     }
 
     public Mono<Object> getJsonSchema(String wdl) {
@@ -45,7 +42,7 @@ public class ReactiveWdlValidatorClient {
                         .content(wdl)
                         .build()))
                 .build();
-        return webClientFactory.getWebClient()
+        return WebClientFactory.getWebClient()
                 .post()
                 .uri(wdlValidatorUrl.resolve(template.expand(variables)))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
