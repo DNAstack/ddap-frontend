@@ -22,17 +22,11 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Component
 public class ReactiveWesClient {
 
-    private WebClientFactory webClientFactory;
-
-    public ReactiveWesClient(WebClientFactory webClientFactory) {
-        this.webClientFactory = webClientFactory;
-    }
-
     public Mono<WorkflowExecutionRunsResponseModel> getRuns(URI wesServerUrl, String wesToken, String nextPage) {
         final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs?page_size=20&page_token=" + nextPage);
         final Map<String, Object> variables = new HashMap<>();
 
-        return webClientFactory.getWebClient()
+        return WebClientFactory.getWebClient()
                 .get()
                 .uri(wesServerUrl.resolve(template.expand(variables)))
                 .header(AUTHORIZATION, "Bearer " + wesToken)
@@ -44,7 +38,7 @@ public class ReactiveWesClient {
         final UriTemplate template = new UriTemplate("/ga4gh/wes/v1/runs");
         final Map<String, Object> variables = new HashMap<>();
 
-        return webClientFactory.getWebClient()
+        return WebClientFactory.getWebClient()
                 .post()
                 .uri(wesServerUrl.resolve(template.expand(variables)))
                 .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -59,7 +53,7 @@ public class ReactiveWesClient {
         final Map<String, String> variables = new HashMap<>();
         variables.put("runId", runId);
 
-        return webClientFactory.getWebClient()
+        return WebClientFactory.getWebClient()
                 .get()
                 .uri(wesServerUrl.resolve(template.expand(variables)))
                 .header(AUTHORIZATION, "Bearer " + wesToken)

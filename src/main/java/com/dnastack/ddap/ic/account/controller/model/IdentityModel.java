@@ -1,4 +1,4 @@
-package com.dnastack.ddap.ic.account.model;
+package com.dnastack.ddap.ic.account.controller.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
