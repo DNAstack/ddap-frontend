@@ -3,13 +3,9 @@ import * as dayjs from 'dayjs';
 import * as relativeTimePlugin from 'dayjs/plugin/relativeTime';
 
 import { ClaimDefinitionService } from '../../admin/dam-repository/claim-definitions/claim-definitions.service';
-import { dam } from '../proto/dam-service';
-import { ic } from '../proto/ic-service';
-import TestAssertion = dam.v1.TestPersona.TestAssertion;
+import { common } from '../proto/dam-service';
+import Assertion = common.Assertion;
 import { TimeDurationParser } from '../time-duration.parser';
-import AccountClaim = ic.v1.AccountClaim;
-import AccountClaimList = ic.v1.AccountClaimList;
-import IAccountClaim = ic.v1.IAccountClaim;
 
 @Component({
   selector: 'ddap-claim-group',
@@ -24,15 +20,15 @@ export class ClaimGroupComponent {
   @Input()
   standardClaims: ({ [k: string]: string } | null);
   @Input()
-  ga4ghClaims: TestAssertion[];
+  ga4ghClaims: Assertion[];
   @Input()
-  ga4ghAccountClaims: { [k: string]: AccountClaimList };
+  ga4ghAccountClaims: { [k: string]: any }; // TODO: DISCO-2475
 
   constructor(public claimService: ClaimDefinitionService) {
     dayjs.extend(relativeTimePlugin);
   }
 
-  getFormattedExpiresTextFromClaim({ expiresDuration }: TestAssertion): string {
+  getFormattedExpiresTextFromClaim({ expiresDuration }: Assertion): string {
     if (!expiresDuration) {
       return;
     }
@@ -41,7 +37,8 @@ export class ClaimGroupComponent {
     return `Expires every ${duration.value} ${duration.unitOfTime}`;
   }
 
-  getFormattedExpiresTextFromAccountClaim({ expires }: IAccountClaim | AccountClaim): string {
+  // TODO: DISCO-2475
+  getFormattedExpiresTextFromAccountClaim({ expires }: any): string {
     if (!expires) {
       return;
     }
