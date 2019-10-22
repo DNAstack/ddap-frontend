@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import _get from 'lodash.get';
 import { combineLatest, Observable } from 'rxjs';
 import { Subscription } from 'rxjs';
@@ -7,19 +7,15 @@ import { EMPTY } from 'rxjs/internal/observable/empty';
 import { catchError, debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 import { filterBy, flatten, includes, makeDistinct, pick } from '../../../../shared/autocomplete/autocomplete.util';
-import { FormValidators } from '../../../../shared/form/validators';
-import ICondition = dam.v1.ICondition;
-import IConditionClause = dam.v1.TestPersona.TestAssertion.IConditionClause;
 import { PassportVisa } from '../../../../shared/passport-visa/passport-visa.constant';
-import { dam } from '../../../../shared/proto/dam-service';
+import { common } from '../../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
-import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
+import { EntityModel } from '../../../shared/entity.model';
 import Form from '../../../shared/form/form';
 import { ClaimDefinitionService } from '../../claim-definitions/claim-definitions.service';
 import { ClaimDefinitionsStore } from '../../claim-definitions/claim-definitions.store';
 import { PassportIssuersStore } from '../../passport-issuers/passport-issuers.store';
-import TestPersona = dam.v1.TestPersona;
-import AccessList = dam.v1.AccessList;
+import TestPersona = common.TestPersona;
 import { ResourcesStore } from '../../resources/resources.store';
 import { TrustedSourcesStore } from '../../trusted-sources/trusted-sources.store';
 import { PersonaAccessFormComponent } from '../persona-resource-form/persona-access-form.component';
@@ -136,7 +132,7 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
     return assertionControl as FormGroup;
   }
 
-  private buildGa4GhClaimGroup(ga4ghAssertion: TestPersona.ITestAssertion): FormGroup {
+  private buildGa4GhClaimGroup(ga4ghAssertion: common.IAssertion): FormGroup {
     const ga4ghClaimForm: FormGroup = this.personaFormBuilder.buildGa4ghAssertionForm(ga4ghAssertion);
 
     this.buildSuggestedAutocompleteValuesForClaim(ga4ghClaimForm)
@@ -190,7 +186,7 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
       }));
   }
 
-  private generateAllAccessModel(resourceList): AccessList {
+  private generateAllAccessModel(resourceList): any {
     return resourceList.map((resource) => this.generateAccessModel(resource));
   }
 

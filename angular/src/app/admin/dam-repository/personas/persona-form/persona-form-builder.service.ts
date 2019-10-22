@@ -1,15 +1,13 @@
-import IConditionClause = dam.v1.TestPersona.TestAssertion.IConditionClause;
-import ICondition = dam.v1.TestPersona.TestAssertion.ICondition;
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import _get from 'lodash.get';
 
 import { FormValidators } from '../../../../shared/form/validators';
-import ConditionPrefix = PassportVisa.ConditionPrefix;
 import { PassportVisaValidators } from '../../../../shared/passport-visa/passport-visa-validators';
-import { PassportVisa } from '../../../../shared/passport-visa/passport-visa.constant';
-import { dam } from '../../../../shared/proto/dam-service';
-import TestPersona = dam.v1.TestPersona;
+import { common } from '../../../../shared/proto/dam-service';
+import IAssertion = common.IAssertion;
+import ICondition = common.Assertion.ICondition;
+import IConditionClause = common.Assertion.IConditionClause;
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 
 @Injectable({
@@ -37,14 +35,14 @@ export class PersonaFormBuilder {
     });
   }
 
-  buildGa4ghAssertionsForm(ga4ghAssertions?: TestPersona.ITestAssertion[]): FormArray {
+  buildGa4ghAssertionsForm(ga4ghAssertions?: IAssertion[]): FormArray {
     return this.formBuilder.array(ga4ghAssertions
-      ? ga4ghAssertions.map((assertion: TestPersona.ITestAssertion) => this.buildGa4ghAssertionForm(assertion))
+      ? ga4ghAssertions.map((assertion: common.IAssertion) => this.buildGa4ghAssertionForm(assertion))
       : []
     );
   }
 
-  buildGa4ghAssertionForm(ga4fhAssertion?: TestPersona.ITestAssertion): FormGroup {
+  buildGa4ghAssertionForm(ga4fhAssertion?: IAssertion): FormGroup {
     return this.formBuilder.group({
       type: [_get(ga4fhAssertion, 'type'), [Validators.required]],
       source: [_get(ga4fhAssertion, 'source'), [Validators.required, FormValidators.url]],

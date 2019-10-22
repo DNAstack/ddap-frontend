@@ -7,14 +7,9 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { DamInfoService } from '../../../shared/dam/dam-info.service';
 import { ErrorHandlerService } from '../../../shared/error-handler/error-handler.service';
-import { ic } from '../../../shared/proto/ic-service';
 import { realmIdPlaceholder } from '../../../shared/realm/realm.constant';
 import { DamConfigEntityType } from '../shared/dam/dam-config-entity-type.enum';
 import { DamConfigService } from '../shared/dam/dam-config.service';
-
-
-import AccountClaim = ic.v1.AccountClaim;
-import IAccountClaim = ic.v1.IAccountClaim;
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +23,8 @@ export class ClaimDefinitionService extends DamConfigService {
     super(DamConfigEntityType.claimDefinitions, http, damInfoService);
   }
 
-  public isExpiring({ expires }: IAccountClaim | AccountClaim): boolean {
+  // TODO: DISCO-2475
+  public isExpiring({ expires }: any): boolean {
     const timestamp = dayjs.unix(expires);
     const hoursTillExpiration = timestamp.diff(dayjs(), 'hour');
     return hoursTillExpiration < environment.claimExpirationWarningThresholdInHours;
