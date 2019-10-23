@@ -7,7 +7,7 @@ import com.dnastack.ddap.common.util.http.UriUtil;
 import com.dnastack.ddap.ic.account.service.AccountLinkingService;
 import com.dnastack.ddap.ic.oauth.client.ReactiveOAuthClient;
 import com.dnastack.ddap.ic.oauth.client.TokenExchangeException;
-import com.dnastack.ddap.ic.oauth.client.model.TokenResponse;
+import com.dnastack.ddap.ic.oauth.model.TokenResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseCookie;
