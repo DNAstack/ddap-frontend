@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { interval, Observable, zip } from 'rxjs';
-import { repeatWhen } from 'rxjs/operators';
+import { forkJoin, interval, Observable, zip } from 'rxjs';
+import { flatMap, map, merge, mergeAll, repeatWhen, zipAll } from 'rxjs/operators';
 
 import { Identity } from '../identity/identity.model';
 import { IdentityService } from '../identity/identity.service';
 import { IdentityStore } from '../identity/identity.store';
 import { Profile } from '../identity/profile.model';
+import { UserAccess } from '../identity/user-access.model';
 import { DamInfoService } from '../shared/dam/dam-info.service';
 import { DamInfoStore } from '../shared/dam/dam-info.store';
 import { DamInfo, DamsInfo } from '../shared/dam/dams-info';
@@ -37,15 +38,13 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit() {
     this.damInfoStore.getDamsInfo();
-    zip(this.identityStore.getIdentity(), this.damInfoService.getDamsInfo())
-      .subscribe(([{account, accesses, sandbox}, damsInfo]: [Identity, DamsInfo]) => {
+    this.identityStore.getIdentity()
+      .subscribe(({ account, sandbox }) => {
         this.isSandbox = sandbox;
         this.profile = account.profile;
-        this.isIcAdmin = accesses.find(access => access.target.service === 'IC').isAdmin;
-        accesses.filter(access => access.target.service === 'DAM' && access.isAdmin)
-          .map(access => access.target.id)
-          .forEach(damId => this.adminDamInfos.push(damsInfo[damId]));
       });
+
+    this.determineAdminAccessForDamAndIc();
 
     this.activatedRoute.root.firstChild.params.subscribe((params) => {
       this.realm = params.realmId;
@@ -73,6 +72,23 @@ export class LayoutComponent implements OnInit {
     this.identityService.invalidateTokens()
       .subscribe(() => {
         window.location.href = `${this.loginPath}`;
+      });
+  }
+
+  private determineAdminAccessForDamAndIc() {
+    const damAccess$: Observable<UserAccess[]> = this.damInfoService.getDamInfos()
+      .pipe(
+        flatMap((dams: DamInfo[]) => forkJoin(dams.map(({ id }) => {
+          return this.damInfoService.getDamUserAccess(id);
+        })))
+      );
+    const icAccess$: Observable<UserAccess> = this.identityService.getIcUserAccess();
+    zip(damAccess$, icAccess$, this.damInfoService.getDamsInfo())
+      .subscribe(([damAccesses, icAccess, damsInfo]: [UserAccess[], UserAccess, DamsInfo]) => {
+        this.isIcAdmin = icAccess.isAdmin;
+        damAccesses.filter(access => access.isAdmin)
+          .map(access => access.damId)
+          .forEach(damId => this.adminDamInfos.push(damsInfo[damId]));
       });
   }
 

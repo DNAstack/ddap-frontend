@@ -1,4 +1,4 @@
-package com.dnastack.ddap.dam.admin.client.model;
+package com.dnastack.ddap.dam.common.config;
 
 import lombok.Data;
 

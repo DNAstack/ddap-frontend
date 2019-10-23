@@ -8,7 +8,7 @@ import com.dnastack.ddap.explore.beacon.client.model.BeaconQueryError;
 import com.dnastack.ddap.explore.beacon.client.model.BeaconQueryResult;
 import com.dnastack.ddap.dam.admin.client.DamClientFactory;
 import com.dnastack.ddap.dam.admin.client.ReactiveDamClient;
-import com.dnastack.ddap.dam.admin.client.model.Dam;
+import com.dnastack.ddap.dam.common.config.Dam;
 import com.dnastack.ddap.common.security.UserTokenCookiePackager;
 import dam.v1.DamService.GetTokenResponse;
 import dam.v1.DamService.Resource;
