@@ -1,6 +1,6 @@
 package com.dnastack.ddap.dam.admin.client;
 
-import com.dnastack.ddap.ic.account.controller.model.IdentityModel;
+import com.dnastack.ddap.ic.account.model.IdentityModel;
 import com.dnastack.ddap.ic.admin.client.ReactiveAdminIcClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

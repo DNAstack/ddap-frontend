@@ -3,7 +3,7 @@ package com.dnastack.ddap.ic.oauth.client;
 import com.dnastack.ddap.common.client.WebClientFactory;
 import com.dnastack.ddap.common.security.InvalidTokenException;
 import com.dnastack.ddap.ic.common.config.IdpProperties;
-import com.dnastack.ddap.ic.oauth.client.model.TokenResponse;
+import com.dnastack.ddap.ic.oauth.model.TokenResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -165,8 +165,7 @@ public class ReactiveOAuthClient {
     private static boolean contentTypeIsApplicationJson(ClientResponse response) {
         return response.headers()
                 .contentType()
-                .filter(mediaType -> mediaType.isCompatibleWith(
-                        APPLICATION_JSON))
+                .filter(mediaType -> mediaType.isCompatibleWith(APPLICATION_JSON))
                 .isPresent();
     }
 

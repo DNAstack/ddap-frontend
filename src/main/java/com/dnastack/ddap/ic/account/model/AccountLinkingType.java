@@ -1,4 +1,4 @@
-package com.dnastack.ddap.ic.account.controller.model;
+package com.dnastack.ddap.ic.account.model;
 
 public enum AccountLinkingType {
 

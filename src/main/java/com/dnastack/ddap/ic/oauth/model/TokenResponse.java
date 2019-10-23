@@ -1,4 +1,4 @@
-package com.dnastack.ddap.ic.oauth.client.model;
+package com.dnastack.ddap.ic.oauth.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;

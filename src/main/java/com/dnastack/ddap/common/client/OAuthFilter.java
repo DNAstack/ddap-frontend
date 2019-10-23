@@ -1,6 +1,6 @@
 package com.dnastack.ddap.common.client;
 
-import com.dnastack.ddap.ic.oauth.client.model.TokenResponse;
+import com.dnastack.ddap.ic.oauth.model.TokenResponse;
 import com.dnastack.ddap.ic.oauth.client.ReactiveOAuthClient;
 import com.dnastack.ddap.common.security.UserTokenCookiePackager;
 import lombok.extern.slf4j.Slf4j;
