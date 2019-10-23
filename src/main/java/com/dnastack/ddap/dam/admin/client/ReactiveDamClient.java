@@ -2,11 +2,9 @@ package com.dnastack.ddap.dam.admin.client;
 
 import com.dnastack.ddap.common.client.AuthAwareWebClientFactory;
 import com.dnastack.ddap.common.client.OAuthFilter;
+import com.dnastack.ddap.common.client.ProtobufDeserializer;
 import com.dnastack.ddap.common.client.WebClientFactory;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.util.JsonFormat;
 import dam.v1.DamService.*;
-import dam.v1.DamService.GetFlatViewsResponse.Builder;
 import dam.v1.DamService.GetFlatViewsResponse.FlatView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.util.UriTemplate;
@@ -38,45 +36,29 @@ public class ReactiveDamClient {
 
     public Mono<DamConfig> getConfig(String realm, String damToken, String refreshToken) {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/config" +
-                "?client_id={clientId}" +
-                "&client_secret={clientSecret}");
+            "?client_id={clientId}" +
+            "&client_secret={clientSecret}");
         final Map<String, Object> variables = new HashMap<>();
         variables.put("realm", realm);
         variables.put("clientId", damClientId);
         variables.put("clientSecret", damClientSecret);
 
         return webClientFactory.getWebClient(realm, refreshToken, OAuthFilter.Audience.IC)
-                .get()
-                .uri(damBaseUrl.resolve(template.expand(variables)))
-                .header(AUTHORIZATION, "Bearer " + damToken)
-                .retrieve()
-                .bodyToMono(String.class)
-                .flatMap(jsonString -> {
-                    try {
-                        DamConfig.Builder builder = DamConfig.newBuilder();
-                        JsonFormat.parser().merge(jsonString, builder);
-                        return Mono.just(builder.build());
-                    } catch (InvalidProtocolBufferException e) {
-                        return Mono.error(e);
-                    }
-                });
+            .get()
+            .uri(damBaseUrl.resolve(template.expand(variables)))
+            .header(AUTHORIZATION, "Bearer " + damToken)
+            .retrieve()
+            .bodyToMono(String.class)
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, DamConfig.getDefaultInstance()));
     }
 
     public Mono<GetInfoResponse> getDamInfo() {
         return WebClientFactory.getWebClient()
-                .get()
-                .uri(damBaseUrl.resolve("/dam"))
-                .retrieve()
-                .bodyToMono(String.class)
-                .flatMap(jsonString -> {
-                    try {
-                        GetInfoResponse.Builder builder = GetInfoResponse.newBuilder();
-                        JsonFormat.parser().merge(jsonString, builder);
-                        return Mono.just(builder.build());
-                    } catch (InvalidProtocolBufferException e) {
-                        return Mono.error(e);
-                    }
-                });
+            .get()
+            .uri(damBaseUrl.resolve("/dam"))
+            .retrieve()
+            .bodyToMono(String.class)
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetInfoResponse.getDefaultInstance()));
     }
 
     public Mono<Resource> getResource(String realm, String resourceId) {
@@ -94,15 +76,7 @@ public class ReactiveDamClient {
             .uri(damBaseUrl.resolve(template.expand(variables)))
             .retrieve()
             .bodyToMono(String.class)
-            .flatMap(jsonString -> {
-                try {
-                    GetResourceResponse.Builder builder = GetResourceResponse.newBuilder();
-                    JsonFormat.parser().merge(jsonString, builder);
-                    return Mono.just(builder.build());
-                } catch (InvalidProtocolBufferException e) {
-                    return Mono.error(e);
-                }
-            })
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetResourceResponse.getDefaultInstance()))
             .map(GetResourceResponse::getResource);
     }
 
@@ -120,18 +94,13 @@ public class ReactiveDamClient {
             .uri(damBaseUrl.resolve(template.expand(variables)))
             .retrieve()
             .bodyToMono(String.class)
-            .flatMap(jsonString -> {
-                try {
-                    GetResourcesResponse.Builder builder = GetResourcesResponse.newBuilder();
-                    JsonFormat.parser().merge(jsonString, builder);
-                    return Mono.just(builder.build());
-                } catch (InvalidProtocolBufferException e) {
-                    return Mono.error(e);
-                }
-            });
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetResourcesResponse.getDefaultInstance()));
     }
 
-    public Mono<GetViewsResponse> getResourceViews(String realm, String resourceId, String damToken, String refreshToken) {
+    public Mono<GetViewsResponse> getResourceViews(String realm,
+                                                   String resourceId,
+                                                   String damToken,
+                                                   String refreshToken) {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources/{resourceId}/views" +
             "?client_id={clientId}" +
             "&client_secret={clientSecret}");
@@ -147,19 +116,14 @@ public class ReactiveDamClient {
             .header(AUTHORIZATION, "Bearer " + damToken)
             .retrieve()
             .bodyToMono(String.class)
-            .flatMap(jsonString -> {
-                try {
-                    GetViewsResponse.Builder builder = GetViewsResponse.newBuilder();
-                    JsonFormat.parser().merge(jsonString, builder);
-                    return Mono.just(builder.build());
-                } catch (InvalidProtocolBufferException e) {
-                    return Mono.error(e);
-                }
-            });
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetViewsResponse.getDefaultInstance()));
     }
 
-    public Mono<GetTokenResponse> getAccessTokenForView(String realm, String resourceId, String viewId, String damToken,
-        String refreshToken) {
+    public Mono<GetTokenResponse> getAccessTokenForView(String realm,
+                                                        String resourceId,
+                                                        String viewId,
+                                                        String damToken,
+                                                        String refreshToken) {
         final UriTemplate template = new UriTemplate(
             "/dam/v1alpha/{realm}/resources/{resourceId}/views/{viewId}/token" +
                 "?client_id={clientId}" +
@@ -177,15 +141,7 @@ public class ReactiveDamClient {
             .header(AUTHORIZATION, "Bearer " + damToken)
             .retrieve()
             .bodyToMono(String.class)
-            .flatMap(jsonString -> {
-                try {
-                    GetTokenResponse.Builder builder = GetTokenResponse.newBuilder();
-                    JsonFormat.parser().merge(jsonString, builder);
-                    return Mono.just(builder.build());
-                } catch (InvalidProtocolBufferException e) {
-                    return Mono.error(e);
-                }
-            });
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetTokenResponse.getDefaultInstance()));
     }
 
     public Mono<TargetAdaptersResponse> getTargetAdapters(String realm, String damToken, String refreshToken) {
@@ -203,15 +159,7 @@ public class ReactiveDamClient {
             .header(AUTHORIZATION, "Bearer " + damToken)
             .retrieve()
             .bodyToMono(String.class)
-            .flatMap(jsonString -> {
-                try {
-                    TargetAdaptersResponse.Builder builder = TargetAdaptersResponse.newBuilder();
-                    JsonFormat.parser().merge(jsonString, builder);
-                    return Mono.just(builder.build());
-                } catch (InvalidProtocolBufferException e) {
-                    return Mono.error(e);
-                }
-            });
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, TargetAdaptersResponse.getDefaultInstance()));
     }
 
     public Mono<Map<String, FlatView>> getFlattenedViews(String realm, String damToken, String refreshToken) {
@@ -228,15 +176,8 @@ public class ReactiveDamClient {
             .header(AUTHORIZATION, "Bearer " + damToken)
             .retrieve()
             .bodyToMono(String.class)
-            .flatMap(jsonString -> {
-                try {
-                    Builder builder = GetFlatViewsResponse.newBuilder();
-                    JsonFormat.parser().merge(jsonString, builder);
-                    return Mono.just(builder.build().getViewsMap());
-                } catch (InvalidProtocolBufferException e) {
-                    return Mono.error(e);
-                }
-            });
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetFlatViewsResponse.getDefaultInstance()))
+            .map(GetFlatViewsResponse::getViewsMap);
 
     }
 }
