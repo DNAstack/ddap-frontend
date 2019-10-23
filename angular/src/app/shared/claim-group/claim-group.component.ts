@@ -41,12 +41,12 @@ export class ClaimGroupComponent {
     return `Expires every ${duration.value} ${duration.unitOfTime}`;
   }
 
-  getFormattedExpiresTextFromAccountClaim({ expires }: IAccountClaim | AccountClaim): string {
-    if (!expires) {
+  getFormattedExpiresTextFromAccountClaim({ exp }: IAccountClaim | AccountClaim): string {
+    if (!exp) {
       return;
     }
 
-    const timestamp = dayjs.unix(expires);
+    const timestamp = dayjs.unix(exp);
     const relativeTime = timestamp.fromNow();
     return timestamp.isBefore(dayjs())
       ? `Expired ${relativeTime}`

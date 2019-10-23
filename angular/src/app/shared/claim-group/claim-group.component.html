@@ -26,9 +26,9 @@
   <ng-template #ga4ghAccountClaimsSection>
     <ul class="timeline">
       <ng-container *ngFor="let accountClaim of ga4ghAccountClaims | keyvalue">
-        <li class="event" *ngFor="let claim of accountClaim.value.list">
+        <li class="event" *ngFor="let claim of accountClaim.value">
           <div class="line"></div>
-          <h4>{{ accountClaim.key }}: <span>{{ claim.value }}</span></h4>
+          <h4>{{ claim.type }}: <span>{{ claim.value }}</span></h4>
           <p class="flex vertical-center">
             <mat-icon *ngIf="claimService.isExpiring(claim)"
                       class="icon icon-warning"

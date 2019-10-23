@@ -28,8 +28,8 @@ export class ClaimDefinitionService extends DamConfigService {
     super(DamConfigEntityType.claimDefinitions, http, damInfoService);
   }
 
-  public isExpiring({ expires }: IAccountClaim | AccountClaim): boolean {
-    const timestamp = dayjs.unix(expires);
+  public isExpiring({ exp }: IAccountClaim | AccountClaim): boolean {
+    const timestamp = dayjs.unix(exp);
     const hoursTillExpiration = timestamp.diff(dayjs(), 'hour');
     return hoursTillExpiration < environment.claimExpirationWarningThresholdInHours;
   }
