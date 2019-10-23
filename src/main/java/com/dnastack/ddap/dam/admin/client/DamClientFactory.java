@@ -1,7 +1,7 @@
 package com.dnastack.ddap.dam.admin.client;
 
 import com.dnastack.ddap.common.client.AuthAwareWebClientFactory;
-import com.dnastack.ddap.dam.admin.client.model.Dam;
+import com.dnastack.ddap.dam.common.config.Dam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

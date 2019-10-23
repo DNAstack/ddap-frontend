@@ -1,6 +1,5 @@
-package com.dnastack.ddap.dam.config;
+package com.dnastack.ddap.dam.common.config;
 
-import com.dnastack.ddap.dam.admin.client.model.Dam;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

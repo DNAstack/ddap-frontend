@@ -5,7 +5,6 @@ import com.dnastack.ddap.common.security.OAuthStateHandler;
 import com.dnastack.ddap.common.security.UserTokenCookiePackager;
 import com.dnastack.ddap.common.security.UserTokenCookiePackager.CookieKind;
 import com.dnastack.ddap.common.util.http.UriUtil;
-import com.dnastack.ddap.dam.admin.client.AuthAccessTesterClient;
 import com.dnastack.ddap.ic.account.client.ReactiveIcAccountClient;
 import com.dnastack.ddap.ic.account.model.AccountLinkingType;
 import com.dnastack.ddap.ic.account.model.IdentityModel;
@@ -26,7 +25,6 @@ import reactor.core.publisher.Mono;
 
 import java.beans.PropertyEditorSupport;
 import java.net.URI;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -45,7 +43,6 @@ public class AccountController {
     private ReactiveIcAccountClient idpClient;
     private UserTokenCookiePackager cookiePackager;
     private OAuthStateHandler stateHandler;
-    private AuthAccessTesterClient accessTesterClient;
     private ProfileService profileService;
     private AccountLinkingService accountLinkingService;
 
@@ -54,14 +51,12 @@ public class AccountController {
                              ReactiveIcAccountClient idpClient,
                              UserTokenCookiePackager cookiePackager,
                              OAuthStateHandler stateHandler,
-                             AuthAccessTesterClient accessTesterClient,
                              ProfileService profileService,
                              AccountLinkingService accountLinkingService) {
         this.oAuthClient = oAuthClient;
         this.idpClient = idpClient;
         this.cookiePackager = cookiePackager;
         this.stateHandler = stateHandler;
-        this.accessTesterClient = accessTesterClient;
         this.profileService = profileService;
         this.accountLinkingService = accountLinkingService;
     }
@@ -83,15 +78,13 @@ public class AccountController {
     public Mono<? extends ResponseEntity<?>> getIdentity(ServerHttpRequest request, @PathVariable String realm) {
         Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request, Set.of(CookieKind.IC, CookieKind.DAM, CookieKind.REFRESH));
 
-        Mono<List<IdentityModel.Access>> accessesMono = accessTesterClient.determineAccessForUser(realm, tokens);
         Mono<IcService.AccountResponse> accountMono = idpClient.getAccounts(realm, tokens);
 
-        return Mono.zip(accessesMono, accountMono, (accesses, account) -> {
+        return accountMono.map(account -> {
             Optional<JwtUtil.JwtSubject> subject = JwtUtil.dangerousStopgapExtractSubject(tokens.get(CookieKind.IC));
             return IdentityModel.builder()
                     .account(account.getAccount())
                     .scopes(subject.get().getScope())
-                    .accesses(accesses)
                     .sandbox(profileService.isSandboxProfileActive())
                     .build();
         }).flatMap(account -> Mono.just(ResponseEntity.ok().body(account)));

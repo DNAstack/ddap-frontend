@@ -13,6 +13,7 @@ import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 import { AccountLink } from './account-link.model';
 import { Account } from './account.model';
 import { Identity } from './identity.model';
+import { UserAccess } from './user-access.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,10 @@ export class IdentityService {
               private errorHandler: ErrorHandlerService,
               private activatedRoute: ActivatedRoute,
               private damInfoService: DamInfoService) {
+  }
+
+  getIcUserAccess(params = {}): Observable<UserAccess> {
+    return this.http.get<UserAccess>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/identity/access`, {params});
   }
 
   getIdentity(params = {}): Observable<Identity> {

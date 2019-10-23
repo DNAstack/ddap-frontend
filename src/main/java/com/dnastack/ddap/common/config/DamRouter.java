@@ -1,6 +1,6 @@
 package com.dnastack.ddap.common.config;
 
-import com.dnastack.ddap.dam.admin.client.model.Dam;
+import com.dnastack.ddap.dam.common.config.Dam;
 import com.dnastack.ddap.common.proxy.LoggingGatewayFilterFactory;
 import com.dnastack.ddap.common.proxy.SetBearerTokenFromCookieGatewayFilterFactory;
 import com.dnastack.ddap.common.proxy.TimeoutAndRetryGatewayFilterFactory;

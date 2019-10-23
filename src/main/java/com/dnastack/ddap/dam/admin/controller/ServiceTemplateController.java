@@ -2,7 +2,7 @@ package com.dnastack.ddap.dam.admin.controller;
 
 import com.dnastack.ddap.dam.admin.client.DamClientFactory;
 import com.dnastack.ddap.dam.admin.client.ReactiveDamClient;
-import com.dnastack.ddap.dam.admin.client.model.Dam;
+import com.dnastack.ddap.dam.common.config.Dam;
 import com.dnastack.ddap.common.security.UserTokenCookiePackager;
 import dam.v1.DamService;
 import dam.v1.DamService.*;
