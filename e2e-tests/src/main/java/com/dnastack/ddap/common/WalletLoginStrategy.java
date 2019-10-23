@@ -38,7 +38,7 @@ public class WalletLoginStrategy implements LoginStrategy {
 
     private static final Pattern STATE_PATTERN = Pattern.compile("\\s*let\\s+state\\s*=\\s*\"([^\"]+)\"");
     private static final Pattern PATH_PATTERN = Pattern.compile("\\s*let\\s+path\\s*=\\s*\"([^\"]+)\"");
-    private static final String[] DEFAULT_SCOPES = new String[] {"openid",  "ga4gh", "account_admin", "identities"};
+    private static final String[] DEFAULT_SCOPES = new String[] {"openid",  "ga4gh_passport_v1", "account_admin", "identities"};
 
     private Map<String, LoginInfo> personalAccessTokens;
     private String walletUrl;
