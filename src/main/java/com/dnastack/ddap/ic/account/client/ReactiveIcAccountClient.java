@@ -2,8 +2,10 @@ package com.dnastack.ddap.ic.account.client;
 
 import com.dnastack.ddap.common.client.AuthAwareWebClientFactory;
 import com.dnastack.ddap.common.client.OAuthFilter;
-import com.dnastack.ddap.ic.account.client.model.IcAccount;
 import com.dnastack.ddap.ic.common.config.IdpProperties;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.util.JsonFormat;
+import ic.v1.IcService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriTemplate;
@@ -28,7 +30,7 @@ public class ReactiveIcAccountClient {
         this.webClientFactory = webClientFactory;
     }
 
-    public Mono<IcAccount> getAccounts(String realm, Map<CookieKind, String> tokens) {
+    public Mono<IcService.AccountResponse> getAccounts(String realm, Map<CookieKind, String> tokens) {
         final UriTemplate template = new UriTemplate("/identity/v1alpha/{realm}/accounts/-" +
                 "?client_id={clientId}" +
                 "&client_secret={clientSecret}");
@@ -42,7 +44,16 @@ public class ReactiveIcAccountClient {
                 .uri(idpProperties.getBaseUrl().resolve(template.expand(variables)))
                 .header(AUTHORIZATION, "Bearer " + tokens.get(CookieKind.IC))
                 .retrieve()
-                .bodyToMono(IcAccount.class);
+                .bodyToMono(String.class)
+                .flatMap(jsonString -> {
+                    try {
+                        IcService.AccountResponse.Builder builder = IcService.AccountResponse.newBuilder();
+                        JsonFormat.parser().merge(jsonString, builder);
+                        return Mono.just(builder.build());
+                    } catch (InvalidProtocolBufferException e) {
+                        return Mono.error(e);
+                    }
+                });
     }
 
     public Mono<String> linkAccounts(String realm,

@@ -7,13 +7,13 @@ import com.dnastack.ddap.common.security.UserTokenCookiePackager.CookieKind;
 import com.dnastack.ddap.common.util.http.UriUtil;
 import com.dnastack.ddap.dam.admin.client.AuthAccessTesterClient;
 import com.dnastack.ddap.ic.account.client.ReactiveIcAccountClient;
-import com.dnastack.ddap.ic.account.client.model.IcAccount;
 import com.dnastack.ddap.ic.account.controller.model.AccountLinkingType;
 import com.dnastack.ddap.ic.account.controller.model.IdentityModel;
 import com.dnastack.ddap.ic.account.service.AccountLinkingService;
 import com.dnastack.ddap.ic.common.security.JwtUtil;
 import com.dnastack.ddap.ic.oauth.client.ReactiveOAuthClient;
 import com.dnastack.ddap.ic.oauth.client.model.TokenResponse;
+import ic.v1.IcService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -84,7 +84,7 @@ public class AccountController {
         Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request, Set.of(CookieKind.IC, CookieKind.DAM, CookieKind.REFRESH));
 
         Mono<List<IdentityModel.Access>> accessesMono = accessTesterClient.determineAccessForUser(realm, tokens);
-        Mono<IcAccount> accountMono = idpClient.getAccounts(realm, tokens);
+        Mono<IcService.AccountResponse> accountMono = idpClient.getAccounts(realm, tokens);
 
         return Mono.zip(accessesMono, accountMono, (accesses, account) -> {
             Optional<JwtUtil.JwtSubject> subject = JwtUtil.dangerousStopgapExtractSubject(tokens.get(CookieKind.IC));
