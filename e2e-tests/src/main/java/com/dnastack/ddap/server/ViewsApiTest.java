@@ -10,7 +10,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Arrays;
 
-import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.*;
 
@@ -115,7 +114,7 @@ public class ViewsApiTest extends AbstractBaseE2eTest {
             .log().cookies()
             .log().uri()
             .cookie("dam_token", validPersonaToken)
-                .cookie("refresh_token", refreshToken)
+            .cookie("refresh_token", refreshToken)
             .contentType("application/json")
             .body(Arrays.asList(view))
         .when()

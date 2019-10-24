@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -39,8 +38,7 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
                 .cookie("refresh_token", refreshToken)
                 .pathParam("realm", REALM)
                 .pathParam("damId", DAM_ID)
-                .queryParam("serviceTemplate", "bigquery")
-                .get("/api/v1alpha/{realm}/serviceTemplates/{damId}/variables")
+                .get("/api/v1alpha/{realm}/dam/{damId}/service-templates/bigquery/variables")
                 .then()
                 .log().ifValidationFails()
                 .contentType(JSON)
@@ -67,8 +65,7 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
                 .cookie("refresh_token", refreshToken)
                 .pathParam("realm", REALM)
                 .pathParam("damId", DAM_ID)
-                .queryParam("serviceTemplate", "gcs")
-                .get("/api/v1alpha/{realm}/serviceTemplates/{damId}/variables")
+                .get("/api/v1alpha/{realm}/dam/{damId}/service-templates/gcs/variables")
                 .then()
                 .log().ifValidationFails()
                 .contentType(JSON)
@@ -95,8 +92,7 @@ public class VariableSuggestionApiTest extends AbstractBaseE2eTest {
                 .cookie("refresh_token", refreshToken)
                 .pathParam("realm", REALM)
                 .pathParam("damId", DAM_ID)
-                .queryParam("serviceTemplate", "invalid")
-                .get("/api/v1alpha/{realm}/serviceTemplates/{damId}/variables")
+                .get("/api/v1alpha/{realm}/dam/{damId}/service-templates/invalid/variables")
                 .then()
                 .log().ifValidationFails()
                 .contentType(JSON)

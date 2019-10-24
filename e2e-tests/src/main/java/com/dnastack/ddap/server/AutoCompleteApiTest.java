@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.CoreMatchers.equalTo;
 
@@ -37,7 +36,7 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
                     .when()
                     .cookie("dam_token", validPersonaToken)
                     .cookie("refresh_token", refreshToken)
-                    .get("/api/v1alpha/" + REALM + "/autocomplete/claimValue/" + DAM_ID + "?claimName=com.dnastack.test.claim")
+                    .get("/api/v1alpha/" + REALM + "/dam/" + DAM_ID + "/autocomplete/claim-value?claimName=com.dnastack.test.claim")
                     .then()
                     .log().ifValidationFails()
                     .contentType(JSON)
@@ -63,7 +62,7 @@ public class AutoCompleteApiTest extends AbstractBaseE2eTest {
                     .when()
                     .cookie("dam_token", validPersonaToken)
                     .cookie("refresh_token", refreshToken)
-                    .get("/api/v1alpha/" + REALM + "/autocomplete/claimValue/"+ DAM_ID + "?claimName=ControlledAccessGrants")
+                    .get("/api/v1alpha/" + REALM + "/dam/" + DAM_ID + "/autocomplete/claim-value?claimName=ControlledAccessGrants")
                     .then()
                     .log().ifValidationFails()
                     .contentType(JSON)
