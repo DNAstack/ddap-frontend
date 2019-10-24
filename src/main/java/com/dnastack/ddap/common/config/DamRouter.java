@@ -1,6 +1,5 @@
 package com.dnastack.ddap.common.config;
 
-import com.dnastack.ddap.dam.common.config.Dam;
 import com.dnastack.ddap.common.proxy.LoggingGatewayFilterFactory;
 import com.dnastack.ddap.common.proxy.SetBearerTokenFromCookieGatewayFilterFactory;
 import com.dnastack.ddap.common.proxy.TimeoutAndRetryGatewayFilterFactory;
@@ -22,7 +21,7 @@ public class DamRouter {
 
     @Autowired
     @Qualifier("dams")
-    private Map<String, Dam> dams;
+    private Map<String, DamProperties> dams;
 
     @Autowired
     private TimeoutAndRetryGatewayFilterFactory timeoutAndRetryFilterFactory;
@@ -51,9 +50,9 @@ public class DamRouter {
         final GatewayFilter bearerTokenFilter = bearerTokenFilterFactory.apply(bearerTokenConfig);
 
         RouteLocatorBuilder.Builder routesBuilder = builder.routes();
-        for (Map.Entry<String, Dam> entry : dams.entrySet()) {
+        for (Map.Entry<String, DamProperties> entry : dams.entrySet()) {
             final String id = entry.getKey();
-            final Dam dam = entry.getValue();
+            final DamProperties dam = entry.getValue();
             routesBuilder =
                     routesBuilder
                             .route(id,

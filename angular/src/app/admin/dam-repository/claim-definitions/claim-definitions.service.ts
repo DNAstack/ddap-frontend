@@ -32,7 +32,8 @@ export class ClaimDefinitionService extends DamConfigService {
 
   public getClaimDefinitionSuggestions(damId: string, claimName: string): Observable<string[]> {
     return this.http.get<string[]>(
-      `${environment.ddapApiUrl}/${realmIdPlaceholder}/autocomplete/claimValue/${damId}?claimName=${claimName}`, {}
+      `${environment.ddapApiUrl}/${realmIdPlaceholder}/dam/${damId}/autocomplete/claim-value?claimName=${claimName}`,
+      {}
     );
   }
 

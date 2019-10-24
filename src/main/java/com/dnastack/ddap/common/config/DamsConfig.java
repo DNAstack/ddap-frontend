@@ -1,4 +1,4 @@
-package com.dnastack.ddap.dam.common.config;
+package com.dnastack.ddap.common.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -9,9 +9,11 @@ import java.util.Map;
 
 @Configuration
 public class DamsConfig {
+
     @Bean("dams")
     @ConfigurationProperties("dams")
-    public Map<String, Dam> getStaticDamsConfig() {
+    public Map<String, DamProperties> getStaticDamsConfig() {
         return new HashMap<>();
     }
+
 }

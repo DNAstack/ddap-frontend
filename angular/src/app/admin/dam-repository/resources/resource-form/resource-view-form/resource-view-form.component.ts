@@ -126,8 +126,8 @@ export class ResourceViewFormComponent implements OnInit, OnDestroy {
   }
 
   getVariablesBySelectedTemplate(): Observable<any> {
-    return this.serviceDefinitionService.getTargetAdapterVariables(this.damId,
-      {serviceTemplate: this.viewForm.get('serviceTemplate').value});
+    const serviceTemplateId = this.viewForm.get('serviceTemplate').value;
+    return this.serviceDefinitionService.getTargetAdapterVariables(this.damId, serviceTemplateId);
   }
 
   private getPoliciesForRole(roleId: string): string[] {

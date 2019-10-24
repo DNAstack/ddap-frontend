@@ -1,13 +1,12 @@
 package com.dnastack.ddap.explore.wes.controller;
 
-import com.dnastack.ddap.dam.admin.client.DamClientFactory;
-import com.dnastack.ddap.dam.admin.client.ReactiveDamClient;
+import com.dnastack.ddap.common.security.UserTokenCookiePackager;
+import com.dnastack.ddap.explore.dam.client.ReactiveDamClient;
 import com.dnastack.ddap.explore.wes.client.ReactiveWdlValidatorClient;
 import com.dnastack.ddap.explore.wes.model.WesResourceViews;
 import com.dnastack.ddap.explore.wes.model.WorkflowExecutionRunModel;
 import com.dnastack.ddap.explore.wes.model.WorkflowExecutionRunRequestModel;
 import com.dnastack.ddap.explore.wes.model.WorkflowExecutionRunsResponseModel;
-import com.dnastack.ddap.common.security.UserTokenCookiePackager;
 import com.dnastack.ddap.explore.wes.service.WesResourceService;
 import com.dnastack.ddap.explore.wes.service.WesService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +18,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,19 +31,19 @@ public class WorkflowController {
     private WesService wesService;
 
     private ReactiveWdlValidatorClient wdlValidatorClient;
-    private Supplier<Stream<Map.Entry<String, ReactiveDamClient>>> damClients;
+    private Map<String, ReactiveDamClient> damClients;
 
     @Autowired
     public WorkflowController(UserTokenCookiePackager cookiePackager,
                               ReactiveWdlValidatorClient wdlValidatorClient,
-                              DamClientFactory damClientFactory,
+                              Map<String, ReactiveDamClient> damClients,
                               WesResourceService wesResourceService,
                               WesService wesService) {
         this.cookiePackager = cookiePackager;
         this.wdlValidatorClient = wdlValidatorClient;
         this.wesResourceService = wesResourceService;
         this.wesService = wesService;
-        this.damClients = damClientFactory::allDamClients;
+        this.damClients = damClients;
     }
 
     @PostMapping(value = "/describe")
@@ -56,7 +53,7 @@ public class WorkflowController {
 
     @GetMapping(value = "/views")
     public Flux<WesResourceViews> getWesResources(@PathVariable String realm) {
-        return Flux.merge(damClients.get()
+        return Flux.merge(damClients.entrySet().stream()
                 .map(damClient -> wesResourceService.getResources(damClient, realm))
                 .collect(toList())
         );
@@ -73,7 +70,8 @@ public class WorkflowController {
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
         String refreshToken = foundRefreshToken.orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
 
-        Map.Entry<String, ReactiveDamClient> damClient = damClients.get()
+        // TODO: use damClientFactory
+        Map.Entry<String, ReactiveDamClient> damClient = damClients.entrySet().stream()
                 .filter(damClientEntry -> damClientEntry.getKey().equals(damId))
                 .findFirst()
                 .get();
@@ -91,7 +89,8 @@ public class WorkflowController {
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
         String refreshToken = foundRefreshToken.orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
 
-        Map.Entry<String, ReactiveDamClient> damClient = damClients.get()
+        // TODO: use damClientFactory
+        Map.Entry<String, ReactiveDamClient> damClient = damClients.entrySet().stream()
                 .filter(damClientEntry -> damClientEntry.getKey().equals(damId))
                 .findFirst()
                 .get();
@@ -110,7 +109,8 @@ public class WorkflowController {
         String damToken = foundDamToken.orElseThrow(() -> new IllegalArgumentException("Authorization dam token is required."));
         String refreshToken = foundRefreshToken.orElseThrow(() -> new IllegalArgumentException("Authorization refresh token is required."));
 
-        Map.Entry<String, ReactiveDamClient> damClient = damClients.get()
+        // TODO: use damClientFactory
+        Map.Entry<String, ReactiveDamClient> damClient = damClients.entrySet().stream()
                 .filter(damClientEntry -> damClientEntry.getKey().equals(damId))
                 .findFirst()
                 .get();

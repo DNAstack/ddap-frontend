@@ -1,12 +1,11 @@
 package com.dnastack.ddap.explore.dataset.controller;
 
-import com.dnastack.ddap.dam.admin.client.DamClientFactory;
-import com.dnastack.ddap.explore.wes.service.ViewsService;
-import com.dnastack.ddap.dam.admin.client.ReactiveDamClient;
+import com.dnastack.ddap.common.security.UserTokenCookiePackager;
+import com.dnastack.ddap.explore.dam.client.ReactiveDamClient;
 import com.dnastack.ddap.explore.dataset.client.DatasetErrorException;
 import com.dnastack.ddap.explore.dataset.client.ReactiveDatasetClient;
 import com.dnastack.ddap.explore.dataset.client.model.DatasetResult;
-import com.dnastack.ddap.common.security.UserTokenCookiePackager;
+import com.dnastack.ddap.explore.wes.service.ViewsService;
 import dam.v1.DamService.GetTokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -23,16 +22,16 @@ import static com.dnastack.ddap.common.security.UserTokenCookiePackager.CookieKi
 public class DatasetController {
 
     private final ReactiveDatasetClient datasetClient;
-    private final DamClientFactory damClientFactory;
+    private Map<String, ReactiveDamClient> damClients;
     private final UserTokenCookiePackager cookiePackager;
     private final ViewsService viewsService;
 
     @Autowired
-    public DatasetController(DamClientFactory damClientFactory, UserTokenCookiePackager cookiePackager,
+    public DatasetController(Map<String, ReactiveDamClient> damClients, UserTokenCookiePackager cookiePackager,
                              ReactiveDatasetClient datasetClient, ViewsService viewsService) {
         this.datasetClient = datasetClient;
         this.cookiePackager = cookiePackager;
-        this.damClientFactory = damClientFactory;
+        this.damClients = damClients;
         this.viewsService = viewsService;
     }
 
@@ -88,7 +87,7 @@ public class DatasetController {
                      String realm,
                      String refreshToken,
                      String datasetUrl){
-        return Flux.fromStream(damClientFactory.allDamClients()).flatMap(clientEntry -> {
+        return Flux.fromStream(damClients.entrySet().stream()).flatMap(clientEntry -> {
             String damId = clientEntry.getKey();
             ReactiveDamClient damClient = clientEntry.getValue();
             return damClient.getFlattenedViews(realm, damToken, refreshToken).flatMap(flatViews ->

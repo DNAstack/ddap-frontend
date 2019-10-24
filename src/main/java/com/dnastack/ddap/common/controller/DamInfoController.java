@@ -1,8 +1,7 @@
 package com.dnastack.ddap.common.controller;
 
-import com.dnastack.ddap.dam.admin.client.DamClientFactory;
-import com.dnastack.ddap.dam.admin.client.ReactiveDamClient;
 import com.dnastack.ddap.common.util.http.UriUtil;
+import com.dnastack.ddap.dam.admin.client.ReactiveAdminDamClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -20,19 +20,19 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1alpha/{realm}/dam")
 public class DamInfoController {
 
-    private final DamClientFactory damClientFactory;
+    private Map<String, ReactiveAdminDamClient> damClients;
 
     @Autowired
-    public DamInfoController(DamClientFactory damClientFactory) {
-        this.damClientFactory = damClientFactory;
+    public DamInfoController(Map<String, ReactiveAdminDamClient> damClients) {
+        this.damClients = damClients;
     }
 
     @GetMapping
     public Mono<DamsInfo> getDamInfo(ServerHttpRequest request, @PathVariable String realm) {
-        return Flux.fromStream(damClientFactory.allDamClients())
+        return Flux.fromStream(damClients.entrySet().stream())
                    .flatMap(e -> {
                        final String damId = e.getKey();
-                       final ReactiveDamClient damClient = e.getValue();
+                       final ReactiveAdminDamClient damClient = e.getValue();
                        return damClient.getDamInfo()
                                        .map(damInfoResponse -> {
 

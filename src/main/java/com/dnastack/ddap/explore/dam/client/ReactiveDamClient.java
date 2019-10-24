@@ -1,11 +1,10 @@
-package com.dnastack.ddap.dam.admin.client;
+package com.dnastack.ddap.explore.dam.client;
 
 import com.dnastack.ddap.common.client.AuthAwareWebClientFactory;
 import com.dnastack.ddap.common.client.OAuthFilter;
 import com.dnastack.ddap.common.client.ProtobufDeserializer;
 import com.dnastack.ddap.common.client.WebClientFactory;
-import dam.v1.DamService.*;
-import dam.v1.DamService.GetFlatViewsResponse.FlatView;
+import dam.v1.DamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
@@ -34,8 +33,17 @@ public class ReactiveDamClient {
         this.webClientFactory = webClientFactory;
     }
 
-    public Mono<DamConfig> getConfig(String realm, String damToken, String refreshToken) {
-        final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/config" +
+    public Mono<DamService.GetInfoResponse> getDamInfo() {
+        return WebClientFactory.getWebClient()
+            .get()
+            .uri(damBaseUrl.resolve("/dam"))
+            .retrieve()
+            .bodyToMono(String.class)
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, DamService.GetInfoResponse.getDefaultInstance()));
+    }
+
+    public Mono<DamService.GetResourcesResponse> getResources(String realm) {
+        final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources" +
             "?client_id={clientId}" +
             "&client_secret={clientSecret}");
         final Map<String, Object> variables = new HashMap<>();
@@ -43,25 +51,15 @@ public class ReactiveDamClient {
         variables.put("clientId", damClientId);
         variables.put("clientSecret", damClientSecret);
 
-        return webClientFactory.getWebClient(realm, refreshToken, OAuthFilter.Audience.IC)
-            .get()
-            .uri(damBaseUrl.resolve(template.expand(variables)))
-            .header(AUTHORIZATION, "Bearer " + damToken)
-            .retrieve()
-            .bodyToMono(String.class)
-            .flatMap(json -> ProtobufDeserializer.fromJson(json, DamConfig.getDefaultInstance()));
-    }
-
-    public Mono<GetInfoResponse> getDamInfo() {
         return WebClientFactory.getWebClient()
             .get()
-            .uri(damBaseUrl.resolve("/dam"))
+            .uri(damBaseUrl.resolve(template.expand(variables)))
             .retrieve()
             .bodyToMono(String.class)
-            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetInfoResponse.getDefaultInstance()));
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, DamService.GetResourcesResponse.getDefaultInstance()));
     }
 
-    public Mono<Resource> getResource(String realm, String resourceId) {
+    public Mono<DamService.Resource> getResource(String realm, String resourceId) {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources/{resourceId}" +
             "?client_id={clientId}" +
             "&client_secret={clientSecret}");
@@ -76,31 +74,14 @@ public class ReactiveDamClient {
             .uri(damBaseUrl.resolve(template.expand(variables)))
             .retrieve()
             .bodyToMono(String.class)
-            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetResourceResponse.getDefaultInstance()))
-            .map(GetResourceResponse::getResource);
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, DamService.GetResourceResponse.getDefaultInstance()))
+            .map(DamService.GetResourceResponse::getResource);
     }
 
-    public Mono<GetResourcesResponse> getResources(String realm) {
-        final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources" +
-            "?client_id={clientId}" +
-            "&client_secret={clientSecret}");
-        final Map<String, Object> variables = new HashMap<>();
-        variables.put("realm", realm);
-        variables.put("clientId", damClientId);
-        variables.put("clientSecret", damClientSecret);
-
-        return WebClientFactory.getWebClient()
-            .get()
-            .uri(damBaseUrl.resolve(template.expand(variables)))
-            .retrieve()
-            .bodyToMono(String.class)
-            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetResourcesResponse.getDefaultInstance()));
-    }
-
-    public Mono<GetViewsResponse> getResourceViews(String realm,
-                                                   String resourceId,
-                                                   String damToken,
-                                                   String refreshToken) {
+    public Mono<DamService.GetViewsResponse> getResourceViews(String realm,
+                                                              String resourceId,
+                                                              String damToken,
+                                                              String refreshToken) {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/resources/{resourceId}/views" +
             "?client_id={clientId}" +
             "&client_secret={clientSecret}");
@@ -116,14 +97,14 @@ public class ReactiveDamClient {
             .header(AUTHORIZATION, "Bearer " + damToken)
             .retrieve()
             .bodyToMono(String.class)
-            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetViewsResponse.getDefaultInstance()));
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, DamService.GetViewsResponse.getDefaultInstance()));
     }
 
-    public Mono<GetTokenResponse> getAccessTokenForView(String realm,
-                                                        String resourceId,
-                                                        String viewId,
-                                                        String damToken,
-                                                        String refreshToken) {
+    public Mono<DamService.GetTokenResponse> getAccessTokenForView(String realm,
+                                                                   String resourceId,
+                                                                   String viewId,
+                                                                   String damToken,
+                                                                   String refreshToken) {
         final UriTemplate template = new UriTemplate(
             "/dam/v1alpha/{realm}/resources/{resourceId}/views/{viewId}/token" +
                 "?client_id={clientId}" +
@@ -141,28 +122,10 @@ public class ReactiveDamClient {
             .header(AUTHORIZATION, "Bearer " + damToken)
             .retrieve()
             .bodyToMono(String.class)
-            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetTokenResponse.getDefaultInstance()));
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, DamService.GetTokenResponse.getDefaultInstance()));
     }
 
-    public Mono<TargetAdaptersResponse> getTargetAdapters(String realm, String damToken, String refreshToken) {
-        final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/targetAdapters" +
-            "?client_id={clientId}" +
-            "&client_secret={clientSecret}");
-        final Map<String, Object> variables = new HashMap<>();
-        variables.put("realm", realm);
-        variables.put("clientId", damClientId);
-        variables.put("clientSecret", damClientSecret);
-
-        return webClientFactory.getWebClient(realm, refreshToken, OAuthFilter.Audience.IC)
-            .get()
-            .uri(damBaseUrl.resolve(template.expand(variables)))
-            .header(AUTHORIZATION, "Bearer " + damToken)
-            .retrieve()
-            .bodyToMono(String.class)
-            .flatMap(json -> ProtobufDeserializer.fromJson(json, TargetAdaptersResponse.getDefaultInstance()));
-    }
-
-    public Mono<Map<String, FlatView>> getFlattenedViews(String realm, String damToken, String refreshToken) {
+    public Mono<Map<String, DamService.GetFlatViewsResponse.FlatView>> getFlattenedViews(String realm, String damToken, String refreshToken) {
         final UriTemplate template = new UriTemplate("/dam/v1alpha/{realm}/flatViews" +
             "?client_id={clientId}" +
             "&client_secret={clientSecret}");
@@ -176,8 +139,9 @@ public class ReactiveDamClient {
             .header(AUTHORIZATION, "Bearer " + damToken)
             .retrieve()
             .bodyToMono(String.class)
-            .flatMap(json -> ProtobufDeserializer.fromJson(json, GetFlatViewsResponse.getDefaultInstance()))
-            .map(GetFlatViewsResponse::getViewsMap);
+            .flatMap(json -> ProtobufDeserializer.fromJson(json, DamService.GetFlatViewsResponse.getDefaultInstance()))
+            .map(DamService.GetFlatViewsResponse::getViewsMap);
 
     }
+
 }

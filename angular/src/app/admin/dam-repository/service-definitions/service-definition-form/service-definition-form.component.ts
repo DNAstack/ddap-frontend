@@ -4,6 +4,7 @@ import _get from 'lodash.get';
 import { dam } from 'src/app/shared/proto/dam-service';
 
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
+import { TargetAdaptersService } from '../../target-adapters/target-adapters.service';
 import ServiceTemplate = dam.v1.ServiceTemplate;
 import ServiceRole = dam.v1.ServiceRole;
 import { ServiceDefinitionService } from '../service-definitions.service';
@@ -37,12 +38,13 @@ export class ServiceDefinitionFormComponent implements OnInit, AfterViewInit {
   scopeSecondaryPlaceholder: string;
 
   constructor( private formBuilder: FormBuilder,
-               private serviceDefinitionService: ServiceDefinitionService) {
+               private serviceDefinitionService: ServiceDefinitionService,
+               private targetAdaptersService: TargetAdaptersService) {
     this.form = this.buildServiceTemplateForm();
   }
 
   ngOnInit() {
-    this.serviceDefinitionService.getTargetAdapters(this.damId).subscribe(targetAdapters => {
+    this.targetAdaptersService.getTargetAdapters(this.damId).subscribe(targetAdapters => {
       this.targetAdapters = targetAdapters;
       this.targetAdapterChange();
     });
