@@ -61,27 +61,12 @@ export class IdentityService {
 
   getAccountLinks(params?): Observable<AccountLink[]> {
     const realmId = this.activatedRoute.root.firstChild.snapshot.params.realmId;
-    return this.damInfoService.getDamUrls()
+    return this.getIdentityProviders(params)
       .pipe(
-        flatMap(damApiUrls => {
-          const damIds: string[] = Array.from(damApiUrls.keys());
-          const personasFromAllDams: Observable<any>[] = damIds
-            .map((damId: string) => this.getPersonas(damId, params));
-          // Important: zip doesn't take an array directly. Need to spread the array into separate arguments.
-          const mergedPersonas: Observable<any> = zip(...personasFromAllDams)
-            .pipe(
-              map((personas: any[]) => personas.reduce((accum, cur) => Object.assign({}, accum, cur), {}))
-            );
-
-          return zip(this.getIdentityProviders(params), mergedPersonas)
-            .pipe(
-              map(([idps, personas]) => {
-                return [
-                  ...this.getAccountLinksFromProviders(idps, realmId),
-                  ...this.getAccountLinksFromPersonas(personas, realmId),
-                ];
-              })
-            );
+        map((idps) => {
+          return [
+            ...this.getAccountLinksFromProviders(idps, realmId),
+          ];
         })
       );
   }
@@ -107,20 +92,6 @@ export class IdentityService {
           provider: idpKey,
           label: _get(idpValue, 'ui.label', idpKey),
           linkUrl: `${environment.ddapApiUrl}/${realm}/identity/link?provider=${idpKey}`,
-        };
-      });
-  }
-
-  private getAccountLinksFromPersonas(personas: object, realm: string): AccountLink[] {
-    return Object.entries(personas)
-      .map(([personaKey, personaValue]) => {
-        return {
-          provider: '<persona>',
-          profile: {
-            username: personaKey,
-          },
-          label: _get(personaValue, 'ui.label', personaKey),
-          linkUrl: `${environment.ddapApiUrl}/${realm}/identity/link?provider=${personaKey}&type=persona`,
         };
       });
   }
