@@ -53,12 +53,12 @@ export class IdentityComponent implements OnInit {
   }
 
   hasExpiringClaims(account: Account): boolean {
-    if (!account || !account.claims) {
+    if (!account || !account.passport) {
       return false;
     }
 
-    return Object.entries(account.claims).some(([_, value]: any) => {
-      return value.list.some(this.claimService.isExpiring);
+    return Object.entries(account.passport).some(([_, value]: any) => {
+      return value.some(this.claimService.isExpiring);
     });
   }
 

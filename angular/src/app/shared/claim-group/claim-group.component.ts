@@ -22,7 +22,7 @@ export class ClaimGroupComponent {
   @Input()
   ga4ghClaims: Assertion[];
   @Input()
-  ga4ghAccountClaims: { [k: string]: any }; // TODO: DISCO-2475
+  ga4ghAccountPassport: { [k: string]: any };
 
   constructor(public claimService: ClaimDefinitionService) {
     dayjs.extend(relativeTimePlugin);
@@ -37,13 +37,12 @@ export class ClaimGroupComponent {
     return `Expires every ${duration.value} ${duration.unitOfTime}`;
   }
 
-  // TODO: DISCO-2475
-  getFormattedExpiresTextFromAccountClaim({ expires }: any): string {
-    if (!expires) {
+  getFormattedExpiresTextFromAccountClaim({ exp }: any): string {
+    if (!exp) {
       return;
     }
 
-    const timestamp = dayjs.unix(expires);
+    const timestamp = dayjs.unix(exp);
     const relativeTime = timestamp.fromNow();
     return timestamp.isBefore(dayjs())
       ? `Expired ${relativeTime}`

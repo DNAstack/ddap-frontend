@@ -11,6 +11,6 @@ export interface Account {
       label: string;
     }
   };
-  claims?: any;
+  passport?: any;
   loginHint: string;
 }
