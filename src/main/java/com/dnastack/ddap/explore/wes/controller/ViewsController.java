@@ -1,10 +1,9 @@
 package com.dnastack.ddap.explore.wes.controller;
 
-import com.dnastack.ddap.dam.admin.client.DamClientFactory;
+import com.dnastack.ddap.common.security.UserTokenCookiePackager;
+import com.dnastack.ddap.explore.dam.client.ReactiveDamClient;
 import com.dnastack.ddap.explore.dataset.model.ViewAuthorization;
 import com.dnastack.ddap.explore.wes.service.ViewsService;
-import com.dnastack.ddap.dam.admin.client.ReactiveDamClient;
-import com.dnastack.ddap.common.security.UserTokenCookiePackager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +18,16 @@ import static com.dnastack.ddap.common.security.UserTokenCookiePackager.CookieKi
 @RequestMapping("/api/v1alpha/{realm}/views")
 public class ViewsController {
 
-    private final DamClientFactory damClientFactory;
     private final UserTokenCookiePackager cookiePackager;
     private final ViewsService viewsService;
+    private Map<String, ReactiveDamClient> damClients;
 
     @Autowired
-    public ViewsController(DamClientFactory damClientFactory,
+    public ViewsController(Map<String, ReactiveDamClient> damClients,
                            UserTokenCookiePackager cookiePackager,
                            ViewsService viewsService) {
         this.cookiePackager = cookiePackager;
-        this.damClientFactory = damClientFactory;
+        this.damClients = damClients;
         this.viewsService = viewsService;
     }
 
@@ -57,7 +56,7 @@ public class ViewsController {
         final List<String> uniqueUrls = new ArrayList<>(new HashSet<>(urls));
 
         Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request, Set.of(CookieKind.DAM, CookieKind.REFRESH));
-        return Flux.fromStream(damClientFactory.allDamClients()).flatMap(clientEntry -> {
+        return Flux.fromStream(damClients.entrySet().stream()).flatMap(clientEntry -> {
             String damId = clientEntry.getKey();
             ReactiveDamClient damClient = clientEntry.getValue();
             // TODO: Handle error when token is empty

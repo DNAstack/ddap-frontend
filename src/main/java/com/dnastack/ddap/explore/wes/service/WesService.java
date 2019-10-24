@@ -1,11 +1,11 @@
 package com.dnastack.ddap.explore.wes.service;
 
+import com.dnastack.ddap.explore.dam.client.ReactiveDamClient;
 import com.dnastack.ddap.explore.wes.client.ReactiveWesClient;
 import com.dnastack.ddap.explore.wes.model.WesResourceViews;
-import com.dnastack.ddap.explore.wes.model.WorkflowExecutionRunsResponseModel;
-import com.dnastack.ddap.dam.admin.client.ReactiveDamClient;
 import com.dnastack.ddap.explore.wes.model.WorkflowExecutionRunModel;
 import com.dnastack.ddap.explore.wes.model.WorkflowExecutionRunRequestModel;
+import com.dnastack.ddap.explore.wes.model.WorkflowExecutionRunsResponseModel;
 import dam.v1.DamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

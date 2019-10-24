@@ -22,7 +22,6 @@ import java.util.*;
 @Component
 public class ReactiveDatasetClient {
 
-
     private static final WebClient webClient = WebClient.builder()
         .filter(ReactiveDatasetClient.modifyContentType())
         .filter(LoggingFilter.logRequest())

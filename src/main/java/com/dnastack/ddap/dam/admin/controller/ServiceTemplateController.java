@@ -1,13 +1,11 @@
 package com.dnastack.ddap.dam.admin.controller;
 
-import com.dnastack.ddap.dam.admin.client.DamClientFactory;
-import com.dnastack.ddap.dam.admin.client.ReactiveDamClient;
-import com.dnastack.ddap.dam.common.config.Dam;
 import com.dnastack.ddap.common.security.UserTokenCookiePackager;
+import com.dnastack.ddap.dam.admin.client.DamAdminClientFactory;
+import com.dnastack.ddap.dam.admin.client.ReactiveAdminDamClient;
 import dam.v1.DamService;
 import dam.v1.DamService.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -19,62 +17,33 @@ import static com.dnastack.ddap.common.security.UserTokenCookiePackager.CookieKi
 import static java.lang.String.format;
 
 @RestController
-@RequestMapping(value = "/api/v1alpha/{realm}/serviceTemplates")
+@RequestMapping(value = "/api/v1alpha/{realm}/dam/{damId}/service-templates")
 public class ServiceTemplateController {
 
     private UserTokenCookiePackager cookiePackager;
-    private DamClientFactory damClientFactory;
-    private Map<String, Dam> dams;
+    private DamAdminClientFactory damClientFactory;
 
     @Autowired
     public ServiceTemplateController(UserTokenCookiePackager cookiePackager,
-                                     DamClientFactory damClientFactory,
-                                     @Qualifier("dams") Map<String, Dam> dams) {
+                                     DamAdminClientFactory damClientFactory) {
         this.cookiePackager = cookiePackager;
         this.damClientFactory = damClientFactory;
-        this.dams = dams;
     }
 
-    /*
-     * Temporary hack while we work on DISCO-2276
-     */
-    @GetMapping(value = "variables")
-    public Mono<Map<String, VariableFormat>> resolveVariables(@PathVariable String realm,
-        @RequestParam(name = "serviceTemplate") String serviceTemplateId,
-        ServerHttpRequest request) {
-        if (dams.size() != 1) {
-            throw new IllegalArgumentException("Must specify DAM ID when more than one DAM is configured.");
-        }
-
-        return resolveVariables(realm, dams.keySet().iterator().next(), serviceTemplateId, request);
-    }
-
-    @GetMapping(value = "{damId}/variables")
-    public Mono<Map<String, VariableFormat>> resolveVariables(@PathVariable String realm,
-        @PathVariable String damId,
-        @RequestParam(name = "serviceTemplate") String serviceTemplateId,
-        ServerHttpRequest request) {
+    @GetMapping(value = "/{serviceTemplateId}/variables")
+    public Mono<Map<String, VariableFormat>> resolveVariables(ServerHttpRequest request,
+                                                              @PathVariable String realm,
+                                                              @PathVariable String damId,
+                                                              @PathVariable String serviceTemplateId) {
         Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request, Set.of(CookieKind.DAM, CookieKind.REFRESH));
-        final ReactiveDamClient damClient = damClientFactory.getDamClient(damId);
+        final ReactiveAdminDamClient damClient = damClientFactory.getDamClient(damId);
 
         return getServiceTemplate(damClient, realm, tokens, serviceTemplateId)
             .flatMap(serviceTemplate -> getItemFormatForServiceTemplate(damClient, realm, tokens, serviceTemplate)
                 .map(ItemFormat::getVariablesMap));
     }
 
-    @GetMapping(value = "{damId}/targetAdapters")
-    public Mono<Map<String, TargetAdapter>> targetAdapters( @PathVariable String realm,
-                                                            @PathVariable String damId,
-                                                            ServerHttpRequest request) {
-        Map<CookieKind, String> tokens = cookiePackager.extractRequiredTokens(request,
-                Set.of(CookieKind.DAM, CookieKind.REFRESH));
-        final ReactiveDamClient damClient = damClientFactory.getDamClient(damId);
-
-        return damClient.getTargetAdapters(realm, tokens.get(CookieKind.DAM), tokens.get(CookieKind.REFRESH))
-                .map(TargetAdaptersResponse::getTargetAdaptersMap);
-    }
-
-    private Mono<ServiceTemplate> getServiceTemplate(ReactiveDamClient damClient,
+    private Mono<ServiceTemplate> getServiceTemplate(ReactiveAdminDamClient damClient,
                                                      String realm,
                                                      Map<CookieKind, String> tokens,
                                                      String serviceTemplateId) {
@@ -88,7 +57,7 @@ public class ServiceTemplateController {
             });
     }
 
-    private Mono<ItemFormat> getItemFormatForServiceTemplate(ReactiveDamClient damClient,
+    private Mono<ItemFormat> getItemFormatForServiceTemplate(ReactiveAdminDamClient damClient,
                                                              String realm,
                                                              Map<CookieKind, String> tokens,
                                                              ServiceTemplate serviceTemplate) {

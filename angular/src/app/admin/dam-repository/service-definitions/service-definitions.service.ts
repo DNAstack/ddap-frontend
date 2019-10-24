@@ -8,8 +8,7 @@ import { ErrorHandlerService } from '../../../shared/error-handler/error-handler
 import { realmIdPlaceholder } from '../../../shared/realm/realm.constant';
 import { DamConfigEntityType } from '../shared/dam/dam-config-entity-type.enum';
 import { DamConfigService } from '../shared/dam/dam-config.service';
-
-import { TargetAdapterVariables } from './target-adapter-variables.model';
+import { TargetAdapterVariables } from '../target-adapters/target-adapter-variables.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,16 +21,10 @@ export class ServiceDefinitionService extends DamConfigService {
     super(DamConfigEntityType.serviceTemplates, http, damInfoService);
   }
 
-  getTargetAdapterVariables(damId: string, params: {} = {}): Observable<TargetAdapterVariables> {
+  getTargetAdapterVariables(damId: string, serviceTemplateId: string, params: {} = {}): Observable<TargetAdapterVariables> {
     return this.http.get<TargetAdapterVariables>(
-      `${environment.ddapApiUrl}/${realmIdPlaceholder}/serviceTemplates/${damId}/variables`,
+      `${environment.ddapApiUrl}/${realmIdPlaceholder}/dam/${damId}/service-templates/${serviceTemplateId}/variables`,
       {params}
-      );
-  }
-
-  getTargetAdapters(damId: string): Observable<Object> {
-    return this.http.get(
-      `${environment.ddapApiUrl}/${realmIdPlaceholder}/serviceTemplates/${damId}/targetAdapters`
     );
   }
 
