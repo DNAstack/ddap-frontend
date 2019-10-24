@@ -23,9 +23,8 @@ export class ClaimDefinitionService extends DamConfigService {
     super(DamConfigEntityType.claimDefinitions, http, damInfoService);
   }
 
-  // TODO: DISCO-2475
-  public isExpiring({ expires }: any): boolean {
-    const timestamp = dayjs.unix(expires);
+  public isExpiring({ exp }: any): boolean {
+    const timestamp = dayjs.unix(exp);
     const hoursTillExpiration = timestamp.diff(dayjs(), 'hour');
     return hoursTillExpiration < environment.claimExpirationWarningThresholdInHours;
   }
