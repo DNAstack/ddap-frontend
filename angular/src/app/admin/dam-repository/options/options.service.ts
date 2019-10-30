@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ErrorHandlerService } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
 import { DamInfoService } from '../../../shared/dam/dam-info.service';
-import { ErrorHandlerService } from '../../../shared/error-handler/error-handler.service';
 import { AbstractConfigOptionService } from '../../shared/config-option.service';
 
 @Injectable({

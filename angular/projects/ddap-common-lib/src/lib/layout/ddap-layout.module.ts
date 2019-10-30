@@ -4,9 +4,13 @@ import { MainComponent } from './main/main.component';
 
 
 @NgModule({
-  declarations: [MainComponent],
+  declarations: [
+    MainComponent
+  ],
   imports: [
   ],
-  exports: [MainComponent]
+  exports: [
+    MainComponent
+  ]
 })
-export class DdapCommonLibModule { }
+export class DdapLayoutModule { }

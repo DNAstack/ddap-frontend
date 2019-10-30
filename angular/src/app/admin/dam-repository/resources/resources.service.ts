@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ErrorHandlerService } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 import { flatMap, map, pluck } from 'rxjs/operators';
 
 import { DamInfoService } from '../../../shared/dam/dam-info.service';
-import { ErrorHandlerService } from '../../../shared/error-handler/error-handler.service';
 import { HttpParamsService } from '../../../shared/http-params.service';
 import { dam } from '../../../shared/proto/dam-service';
 import { realmIdPlaceholder } from '../../../shared/realm/realm.constant';

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ErrorHandlerService } from 'ddap-common-lib';
 import { Observable, of } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../realm/realm.constant';
 
 import { BeaconResponse } from './beacon-response.model';

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
+import { ErrorHandlerService } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../../../../environments/environment';
-import { ErrorHandlerService } from '../../../../shared/error-handler/error-handler.service';
 import { realmIdPlaceholder } from '../../../../shared/realm/realm.constant';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';

@@ -3,4 +3,5 @@
  */
 
 // export * from './lib/ddap-ui-common-lib.component';
-export * from './lib/ddap-common-lib.module';
+export * from './lib/layout/ddap-layout.module';
+export * from './lib/error-handler/error-handler.service';

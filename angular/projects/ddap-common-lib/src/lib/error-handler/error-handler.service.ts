@@ -12,7 +12,7 @@ export class ErrorHandlerService {
 
   }
 
-  notifyOnError<T>(message?: string): OperatorFunction<T, T> {
+  public notifyOnError<T>(message?: string): OperatorFunction<T, T> {
     return catchError<T, Observable<T>>((error) => {
       this.openSnackBar(error, message);
       throw error;
@@ -25,4 +25,5 @@ export class ErrorHandlerService {
       panelClass: 'ddap-error',
     });
   }
+
 }

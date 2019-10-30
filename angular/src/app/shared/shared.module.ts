@@ -23,7 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
-import { DdapCommonLibModule } from 'ddap-common-lib';
+import { DdapLayoutModule } from 'ddap-common-lib';
 import { TagInputModule } from 'ngx-chips';
 import { ClipboardModule } from 'ngx-clipboard';
 
@@ -99,7 +99,7 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     MatTooltipModule,
     MatSlideToggleModule,
 
-    DdapCommonLibModule,
+    DdapLayoutModule,
   ],
   exports: [
     CommonModule,
@@ -131,7 +131,7 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     MatTooltipModule,
     MatSlideToggleModule,
 
-    DdapCommonLibModule,
+    DdapLayoutModule,
 
     HeaderComponent,
     HeaderBtnComponent,
