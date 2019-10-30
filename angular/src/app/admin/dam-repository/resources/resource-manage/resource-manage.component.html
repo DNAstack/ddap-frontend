@@ -1,7 +1,7 @@
 <ddap-header [backLink]="['../..']" label="Add Resource">
 </ddap-header>
 
-<ddap-main>
+<ddaplib-main>
   <ddap-resource-form #resourceForm
                       [damId]="damId"
                       (formChange)="executeDryRun()">
@@ -12,7 +12,7 @@
                         [resource]="resourceForm.getModel()"
                         (formChange)="executeDryRun()">
   </ddap-resource-access>
-</ddap-main>
+</ddaplib-main>
 
 <div class="ddap-form-toolbar">
   <ddap-form-footer-error [showError]="!isFormValid && isFormValidated"

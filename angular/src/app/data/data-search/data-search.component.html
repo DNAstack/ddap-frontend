@@ -3,7 +3,7 @@
              label="Search Results">
 </ddap-header>
 
-<ddap-main>
+<ddaplib-main>
   <ddap-limit-search *ngIf="resource"
                      (change)="limitSearchChange($event)"
                      [checked]="limitSearch"
@@ -32,4 +32,4 @@
                         [beacon]="beaconResult">
     </ddap-beacon-result>
   </ng-template>
-</ddap-main>
+</ddaplib-main>

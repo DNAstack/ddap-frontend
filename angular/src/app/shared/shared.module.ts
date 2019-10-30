@@ -23,6 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
+import { DdapCommonLibModule } from 'ddap-common-lib';
 import { TagInputModule } from 'ngx-chips';
 import { ClipboardModule } from 'ngx-clipboard';
 
@@ -34,7 +35,6 @@ import { FocusedDirective } from './focused.directive';
 import { FormFooterErrorComponent } from './form/form-footer-error/form-footer-error.component';
 import { HeaderBtnComponent } from './header/header-btn/header-btn.component';
 import { HeaderComponent } from './header/header.component';
-import { MainComponent } from './main/main.component';
 import { MetadataFilterPipe } from './metadata-list/metadata-filter.pipe';
 import { MetadataListComponent } from './metadata-list/metadata-list.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
@@ -52,7 +52,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
   declarations: [
     HeaderComponent,
     HeaderBtnComponent,
-    MainComponent,
     NavBackComponent,
     ResourceLogoComponent,
     ResourceViewItemComponent,
@@ -99,6 +98,8 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     MatTableModule,
     MatTooltipModule,
     MatSlideToggleModule,
+
+    DdapCommonLibModule,
   ],
   exports: [
     CommonModule,
@@ -130,9 +131,10 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     MatTooltipModule,
     MatSlideToggleModule,
 
+    DdapCommonLibModule,
+
     HeaderComponent,
     HeaderBtnComponent,
-    MainComponent,
     NavBackComponent,
     ClaimGroupComponent,
     BeaconSearchBarComponent,

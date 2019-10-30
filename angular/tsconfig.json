@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ddap-common-lib": [
+        "dist/ddap-common-lib"
+      ],
+      "ddap-common-lib/*": [
+        "dist/ddap-common-lib/*"
+      ]
+    }
   }
 }

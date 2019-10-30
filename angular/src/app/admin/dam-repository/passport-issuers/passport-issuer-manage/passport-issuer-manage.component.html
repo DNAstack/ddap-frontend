@@ -2,12 +2,12 @@
              label="Add Passport Issuer">
 </ddap-header>
 
-<ddap-main>
+<ddaplib-main>
   <ddap-passport-issuer-form #passportIssuerForm
                              [passportIssuer]="passportIssuer"
                              [damId]="damId">
   </ddap-passport-issuer-form>
-</ddap-main>
+</ddaplib-main>
 
 <div class="ddap-form-toolbar">
   <ddap-form-footer-error [showError]="!isFormValid && isFormValidated"

@@ -1,7 +1,7 @@
 <ddap-header [backLink]="['..']" [label]="entity?.dto.ui.label">
 </ddap-header>
 
-<ddap-main>
+<ddaplib-main>
   <mat-progress-bar *ngIf="!entity"
                     class="ddap-card-loader"
                     mode="indeterminate">
@@ -20,7 +20,7 @@
                           (formChange)="executeDryRun()">
     </ddap-resource-access>
   </div>
-</ddap-main>
+</ddaplib-main>
 
 <div class="ddap-form-toolbar">
   <ddap-form-footer-error [showError]="!isFormValid && isFormValidated"

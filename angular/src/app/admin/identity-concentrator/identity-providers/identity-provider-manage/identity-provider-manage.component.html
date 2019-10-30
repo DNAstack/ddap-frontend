@@ -2,11 +2,11 @@
              label="Add Identity Provider">
 </ddap-header>
 
-<ddap-main>
+<ddaplib-main>
   <ddap-identity-provider-form #identityProviderForm
                                [model]="identityProvider">
   </ddap-identity-provider-form>
-</ddap-main>
+</ddaplib-main>
 
 <div class="ddap-form-toolbar">
   <ddap-form-footer-error [showError]="!isFormValid && isFormValidated"

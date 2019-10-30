@@ -87,6 +87,32 @@
           }
         }
       }
+    },
+    "ddap-common-lib": {
+      "projectType": "library",
+      "root": "projects/ddap-common-lib",
+      "sourceRoot": "projects/ddap-common-lib/src",
+      "prefix": "ddaplib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ddap-common-lib/tsconfig.lib.json",
+            "project": "projects/ddap-common-lib/ng-package.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ddap-common-lib/tsconfig.lib.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ddapfrontend"

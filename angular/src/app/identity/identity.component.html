@@ -2,7 +2,7 @@
              [icon]="'identity'">
 </ddap-header>
 
-<ddap-main>
+<ddaplib-main>
   <mat-accordion class="ddap-connected-accounts">
     <h2>Connected Accounts</h2>
     <mat-progress-bar *ngIf="!identity; else connectedAccountsSection"
@@ -88,4 +88,4 @@
       </a>
     </ng-template>
   </mat-accordion>
-</ddap-main>
+</ddaplib-main>

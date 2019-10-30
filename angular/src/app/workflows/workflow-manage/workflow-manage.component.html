@@ -2,7 +2,7 @@
 
 </ddap-header>
 
-<ddap-main>
+<ddaplib-main>
   <ddap-dataset-form #datasetForm (datasetColumnsChanged)="datasetColumnsChange($event)"></ddap-dataset-form>
   <ddap-workflow-form #workflowForm [datasetColumns]="datasetColumns"></ddap-workflow-form>
   <div class="ddap-form-toolbar">
@@ -23,4 +23,4 @@
       </ng-template>
     </button>
   </div>
-</ddap-main>
+</ddaplib-main>
