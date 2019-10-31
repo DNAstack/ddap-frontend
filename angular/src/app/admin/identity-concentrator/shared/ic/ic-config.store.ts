@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Store } from 'ddap-common-lib';
 import IcConfig = ic.v1.IcConfig;
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -7,7 +8,6 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { ic } from '../../../../shared/proto/ic-service';
 import { realmIdPlaceholder } from '../../../../shared/realm/realm.constant';
-import { Store } from '../../../../shared/store/store';
 
 @Injectable({
   providedIn: 'root',

@@ -1,6 +1,7 @@
 import DamConfig = dam.v1.DamConfig;
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Store } from 'ddap-common-lib';
 import _isEqual from 'lodash.isequal';
 import { Observable } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
@@ -8,7 +9,6 @@ import { flatMap, map } from 'rxjs/operators';
 import { DamInfoService } from '../../../../shared/dam/dam-info.service';
 import { dam } from '../../../../shared/proto/dam-service';
 import { realmIdPlaceholder } from '../../../../shared/realm/realm.constant';
-import { Store } from '../../../../shared/store/store';
 
 import { DamConfigs } from './dam-configs.model';
 

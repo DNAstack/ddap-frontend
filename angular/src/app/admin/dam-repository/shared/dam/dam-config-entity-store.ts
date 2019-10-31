@@ -1,8 +1,8 @@
+import { Store } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
 import { DamInfoService } from '../../../../shared/dam/dam-info.service';
-import { Store } from '../../../../shared/store/store';
 import { EntityModel } from '../../../shared/entity.model';
 
 import { DamConfigEntityType } from './dam-config-entity-type.enum';
