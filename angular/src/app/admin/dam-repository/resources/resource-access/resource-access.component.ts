@@ -6,11 +6,11 @@ import _set from 'lodash.set';
 import { Observable, of, Subject, zip } from 'rxjs';
 import { catchError, debounceTime, map, switchMap, take, takeWhile, tap } from 'rxjs/operators';
 
-import { pick } from '../../../../shared/autocomplete/autocomplete.util';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import Form from '../../../shared/form/form';
 import { PersonasStore } from '../../personas/personas.store';
+import { pick } from '../../shared/autocomplete.util';
 import { ResourceService } from '../resources.service';
 
 @Component({

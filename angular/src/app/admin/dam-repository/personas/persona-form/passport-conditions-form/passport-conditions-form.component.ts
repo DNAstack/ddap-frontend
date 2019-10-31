@@ -3,8 +3,8 @@ import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { makeDistinct, pick } from '../../../../../shared/autocomplete/autocomplete.util';
 import { ClaimDefinitionsStore } from '../../../claim-definitions/claim-definitions.store';
+import { makeDistinct, pick } from '../../../shared/autocomplete.util';
 import { PassportVisa } from '../../../shared/passport-visa/passport-visa.constant';
 import ConditionPrefix = PassportVisa.ConditionPrefix;
 import AuthorityLevel = PassportVisa.AuthorityLevel;

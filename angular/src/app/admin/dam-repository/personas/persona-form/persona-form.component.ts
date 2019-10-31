@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs';
 import { EMPTY } from 'rxjs/internal/observable/empty';
 import { catchError, debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
 
-import { filterBy, flatten, includes, makeDistinct, pick } from '../../../../shared/autocomplete/autocomplete.util';
 import { common } from '../../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
@@ -16,6 +15,7 @@ import { ClaimDefinitionsStore } from '../../claim-definitions/claim-definitions
 import { PassportIssuersStore } from '../../passport-issuers/passport-issuers.store';
 import TestPersona = common.TestPersona;
 import { ResourcesStore } from '../../resources/resources.store';
+import { filterBy, flatten, includes, makeDistinct, pick } from '../../shared/autocomplete.util';
 import { PassportVisa } from '../../shared/passport-visa/passport-visa.constant';
 import { TrustedSourcesStore } from '../../trusted-sources/trusted-sources.store';
 import { PersonaAccessFormComponent } from '../persona-resource-form/persona-access-form.component';
