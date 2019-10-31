@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormValidationService } from 'ddap-common-lib';
 
-import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { AccessPolicyService } from '../access-policies.service';

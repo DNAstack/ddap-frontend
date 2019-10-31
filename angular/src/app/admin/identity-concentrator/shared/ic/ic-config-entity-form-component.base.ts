@@ -1,8 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-
-import Form from '../../../shared/form/form';
-import { FormValidationService } from '../../../shared/form/form-validation.service';
+import { Form } from 'ddap-common-lib';
+import { FormValidationService } from 'ddap-common-lib';
 
 import { IcConfigEntityComponentBase } from './ic-config-entity-component.base';
 

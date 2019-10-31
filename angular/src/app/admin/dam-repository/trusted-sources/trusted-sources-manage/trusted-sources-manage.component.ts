@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormValidationService } from 'ddap-common-lib';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { DamConfigEntityFormComponentBase } from '../../shared/dam/dam-config-entity-form-component.base';
 import { TrustedSourcesFormComponent } from '../trusted-sources-form/trusted-sources-form.component';
 import { TrustedSourcesService } from '../trusted-sources.service';

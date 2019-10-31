@@ -4,12 +4,12 @@ import { MAT_CHECKBOX_CLICK_ACTION } from '@angular/material/checkbox';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 import { SharedModule } from '../../shared/shared.module';
+import { EntityManageFormComponent } from '../dam-repository/shared/entity-manage-form/entity-manage-form.component';
 
 import { EntityAddComponent } from './entity-add/entity-add.component';
 import { EntityDescriptionLinkComponent } from './entity-description/entity-description-link.component';
 import { EntityDescriptionComponent } from './entity-description/entity-description.component';
 import { EntityListComponent } from './entity-list/entity-list.component';
-import { EntityManageFormComponent } from './entity-manage-form/entity-manage-form.component';
 import {
   EntityRemovalConfirmationDialogComponent
 } from './entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';

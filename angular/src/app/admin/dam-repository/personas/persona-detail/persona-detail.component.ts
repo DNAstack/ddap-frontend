@@ -1,10 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormValidationService } from 'ddap-common-lib';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';

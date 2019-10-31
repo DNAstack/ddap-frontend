@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
-import Form from './form';
+import { Form } from './form';
 
 @Injectable({
   providedIn: 'root',

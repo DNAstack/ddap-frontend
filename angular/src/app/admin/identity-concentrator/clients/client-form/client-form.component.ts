@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormValidators } from 'ddap-common-lib';
+import Client = ic.v1.Client;
+import { Form } from 'ddap-common-lib';
 import _get from 'lodash.get';
 
 import { ic } from '../../../../shared/proto/ic-service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
-import Client = ic.v1.Client;
-import Form from '../../../shared/form/form';
 
 @Component({
   selector: 'ddap-client-form',

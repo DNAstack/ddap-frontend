@@ -2,9 +2,9 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation }
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NoneComponent } from 'angular7-json-schema-form';
+import { Form } from 'ddap-common-lib';
 import _set from 'lodash.set';
 
-import Form from '../../admin/shared/form/form';
 import { SimplifiedWesResourceViews } from '../workflow.model';
 import { WorkflowService } from '../workflows.service';
 

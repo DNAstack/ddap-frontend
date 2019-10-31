@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Form } from 'ddap-common-lib';
+import { FormValidationService } from 'ddap-common-lib';
 import _cloneDeep from 'lodash.clonedeep';
 import _get from 'lodash.get';
 import { Observable, zip } from 'rxjs';
 
-import Form from '../../admin/shared/form/form';
-import { FormValidationService } from '../../admin/shared/form/form-validation.service';
 import { DatasetFormComponent } from '../dataset-form/dataset-form.component';
 import { WorkflowFormComponent } from '../workflow-form/workflow-form.component';
 import { WorkflowService } from '../workflows.service';

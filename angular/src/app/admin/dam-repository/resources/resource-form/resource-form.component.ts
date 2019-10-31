@@ -14,16 +14,17 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Form } from 'ddap-common-lib';
 import _get from 'lodash.get';
 import { debounceTime, tap } from 'rxjs/operators';
 
 import { dam } from '../../../../shared/proto/dam-service';
 import { EntityModel } from '../../../shared/entity.model';
-import Form from '../../../shared/form/form';
 
-import Resource = dam.v1.Resource;
 import { ResourceFormBuilder } from './resource-form-builder.service';
 import { ResourceViewFormComponent } from './resource-view-form/resource-view-form.component';
+
+import Resource = dam.v1.Resource;
 
 
 @Component({

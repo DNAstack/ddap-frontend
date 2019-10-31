@@ -1,11 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { combineForms, FormValidationService } from 'ddap-common-lib';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { combine } from '../../../shared/form/form';
-import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { ResourceAccessComponent } from '../resource-access/resource-access.component';
@@ -36,7 +35,7 @@ export class ResourceDetailComponent extends DamConfigEntityDetailComponentBase<
   }
 
   update(isDryRun = false) {
-    const aggregateForm = combine(this.resourceForm, this.accessForm);
+    const aggregateForm = combineForms(this.resourceForm, this.accessForm);
     if (!isDryRun && !this.validate(this.accessForm.form ? aggregateForm : this.resourceForm)) {
       return;
     }

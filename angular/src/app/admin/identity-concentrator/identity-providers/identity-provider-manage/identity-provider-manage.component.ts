@@ -1,11 +1,11 @@
 import IdentityProvider = ic.v1.IdentityProvider;
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormValidationService } from 'ddap-common-lib';
 
 import { ic } from '../../../../shared/proto/ic-service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { IcConfigEntityFormComponentBase } from '../../shared/ic/ic-config-entity-form-component.base';
 import { IdentityProviderFormComponent } from '../identity-provider-form/identity-provider-form.component';
 import { IdentityProviderService } from '../identity-providers.service';

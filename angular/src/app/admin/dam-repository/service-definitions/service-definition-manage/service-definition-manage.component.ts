@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormValidationService } from 'ddap-common-lib';
 
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { DamConfigEntityFormComponentBase } from '../../shared/dam/dam-config-entity-form-component.base';
 import { ServiceDefinitionFormComponent } from '../service-definition-form/service-definition-form.component';
 import { ServiceDefinitionService } from '../service-definitions.service';

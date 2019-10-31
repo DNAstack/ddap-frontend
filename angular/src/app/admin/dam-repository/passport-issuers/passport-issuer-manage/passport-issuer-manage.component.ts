@@ -1,11 +1,11 @@
 import TrustedPassportIssuer = dam.v1.TrustedPassportIssuer;
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormValidationService } from 'ddap-common-lib';
 
 import { dam } from '../../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import { FormValidationService } from '../../../shared/form/form-validation.service';
 import { DamConfigEntityFormComponentBase } from '../../shared/dam/dam-config-entity-form-component.base';
 import { PassportIssuerFormComponent } from '../passport-issuer-form/passport-issuer-form.component';
 import { PassportIssuerService } from '../passport-issuers.service';

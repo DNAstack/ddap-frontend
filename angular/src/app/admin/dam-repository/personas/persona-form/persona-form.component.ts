@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Form } from 'ddap-common-lib';
 import _get from 'lodash.get';
 import { combineLatest, Observable } from 'rxjs';
 import { Subscription } from 'rxjs';
@@ -9,7 +10,6 @@ import { catchError, debounceTime, map, startWith, switchMap, tap } from 'rxjs/o
 import { common } from '../../../../shared/proto/dam-service';
 import { ConfigModificationObject } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
-import Form from '../../../shared/form/form';
 import { ClaimDefinitionService } from '../../claim-definitions/claim-definitions.service';
 import { ClaimDefinitionsStore } from '../../claim-definitions/claim-definitions.store';
 import { PassportIssuersStore } from '../../passport-issuers/passport-issuers.store';
@@ -21,8 +21,9 @@ import { TrustedSourcesStore } from '../../trusted-sources/trusted-sources.store
 import { PersonaAccessFormComponent } from '../persona-resource-form/persona-access-form.component';
 import { PersonaService } from '../personas.service';
 
-import AuthorityLevel = PassportVisa.AuthorityLevel;
 import { PersonaFormBuilder } from './persona-form-builder.service';
+
+import AuthorityLevel = PassportVisa.AuthorityLevel;
 
 @Component({
   selector: 'ddap-persona-form',

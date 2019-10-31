@@ -1,11 +1,11 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import TrustedSource = dam.v1.TrustedSource;
+import { Form } from 'ddap-common-lib';
 import _get from 'lodash.get';
 
 import { dam } from '../../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
-import TrustedSource = dam.v1.TrustedSource;
-import Form from '../../../shared/form/form';
 
 @Component({
   selector: 'ddap-trusted-sources-form',

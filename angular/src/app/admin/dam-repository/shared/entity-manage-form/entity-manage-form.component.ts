@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { ConfigModificationObject } from '../configModificationObject';
-import { nameConstraintPattern } from '../entity.model';
+import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { nameConstraintPattern } from '../../../shared/entity.model';
 
 @Component({
   selector: 'ddap-entity-manage-form',
