@@ -17,7 +17,8 @@ export class DatasetService {
               private errorHandler: ErrorHandlerService) { }
 
   fetchDataset(url: string): Observable<Dataset> {
-    return this.http.get<Dataset>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/dataset?dataset_url=${url}`)
+    const base64Url = btoa(url);
+    return this.http.get<Dataset>(`${environment.ddapApiUrl}/${realmIdPlaceholder}/dataset?dataset_url=${base64Url}`)
       .pipe(
         this.errorHandler.notifyOnError(`Can't fetch dataset list.`)
       );
