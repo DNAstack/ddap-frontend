@@ -3,12 +3,12 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormValidators } from 'ddap-common-lib';
 import _get from 'lodash.get';
 
-import { PassportVisaValidators } from '../../../../shared/passport-visa/passport-visa-validators';
 import { common } from '../../../../shared/proto/dam-service';
 import IAssertion = common.IAssertion;
 import ICondition = common.Assertion.ICondition;
 import IConditionClause = common.Assertion.IConditionClause;
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
+import { PassportVisaValidators } from '../../shared/passport-visa/passport-visa-validators';
 
 @Injectable({
   providedIn: 'root',

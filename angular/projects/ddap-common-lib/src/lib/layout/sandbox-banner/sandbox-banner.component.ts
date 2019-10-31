@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { SandboxBannerStateService } from './sandbox-banner-state.service';
 
 @Component({
-  selector: 'ddap-sandbox-banner',
+  selector: 'ddaplib-sandbox-banner',
   templateUrl: './sandbox-banner.component.html',
   styleUrls: ['./sandbox-banner.component.scss'],
 })

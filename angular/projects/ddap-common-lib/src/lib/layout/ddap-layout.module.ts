@@ -7,6 +7,7 @@ import { MainComponent } from './main/main.component';
 import { HeaderComponent } from "./header/header.component";
 import { HeaderBtnComponent } from "./header/header-btn/header-btn.component";
 import { HeaderAddBtnComponent } from "./header/header-add-btn/header-add-btn.component";
+import { SandboxBannerComponent } from "./sandbox-banner/sandbox-banner.component";
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { HeaderAddBtnComponent } from "./header/header-add-btn/header-add-btn.co
     HeaderBtnComponent,
     HeaderAddBtnComponent,
     MainComponent,
+    SandboxBannerComponent,
   ],
   imports: [
     CommonModule,
@@ -26,6 +28,7 @@ import { HeaderAddBtnComponent } from "./header/header-add-btn/header-add-btn.co
     HeaderBtnComponent,
     HeaderAddBtnComponent,
     MainComponent,
+    SandboxBannerComponent,
   ]
 })
 export class DdapLayoutModule { }

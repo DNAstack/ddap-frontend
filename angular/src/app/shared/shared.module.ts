@@ -40,7 +40,6 @@ import {
 import { RealmInputComponent } from './realm/realm-input/realm-input.component';
 import { ResourceLogoComponent } from './resource-logo/resource-logo.component';
 import { ResourceViewItemComponent } from './resource-view-item/resource-view-item.component';
-import { SandboxBannerComponent } from './sandbox-banner/sandbox-banner.component';
 import { ViewAccessComponent } from './view-access/view-access.component';
 
 @NgModule({
@@ -56,7 +55,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     RealmChangeConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
-    SandboxBannerComponent,
     PaginatorComponent,
   ],
   imports: [
@@ -136,7 +134,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     RealmChangeConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
-    SandboxBannerComponent,
     PaginatorComponent,
   ],
 })

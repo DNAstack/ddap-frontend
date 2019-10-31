@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { forkJoin, interval, Observable, zip } from 'rxjs';
-import { flatMap, map, merge, mergeAll, repeatWhen, zipAll } from 'rxjs/operators';
+import { flatMap, repeatWhen } from 'rxjs/operators';
 
-import { Identity } from '../identity/identity.model';
 import { IdentityService } from '../identity/identity.service';
 import { IdentityStore } from '../identity/identity.store';
 import { Profile } from '../identity/profile.model';
