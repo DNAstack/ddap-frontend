@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static com.dnastack.ddap.common.security.UserTokenCookiePackager.CookieKind;
@@ -41,7 +44,8 @@ public class DatasetController {
                                             @RequestParam(value = "access_token", required = false) String accessToken,
                                             ServerHttpRequest request,
                                             @PathVariable String realm) {
-        return getDatasetResult(datasetUrl, accessToken, request, realm);
+        String decodedDatasetUrl = new String(Base64.getUrlDecoder().decode(datasetUrl));
+        return getDatasetResult(decodedDatasetUrl, accessToken, request, realm);
     }
 
     private Mono<DatasetResult> getDatasetResult(String datasetUrl, String token, ServerHttpRequest request, String realm) {
