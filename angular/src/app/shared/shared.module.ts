@@ -35,7 +35,6 @@ import { FocusedDirective } from './focused.directive';
 import { FormFooterErrorComponent } from './form/form-footer-error/form-footer-error.component';
 import { MetadataFilterPipe } from './metadata-list/metadata-filter.pipe';
 import { MetadataListComponent } from './metadata-list/metadata-list.component';
-import { NavBackComponent } from './nav-back/nav-back.component';
 import { PaginatorComponent } from './paginator/paginator.component';
 import {
   RealmChangeConfirmationDialogComponent
@@ -48,7 +47,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
 
 @NgModule({
   declarations: [
-    NavBackComponent,
     ResourceLogoComponent,
     ResourceViewItemComponent,
     ViewAccessComponent,
@@ -129,7 +127,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
 
     DdapLayoutModule,
 
-    NavBackComponent,
     ClaimGroupComponent,
     BeaconSearchBarComponent,
     BeaconResultComponent,
