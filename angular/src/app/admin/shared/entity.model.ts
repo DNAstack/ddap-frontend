@@ -1,6 +1,7 @@
 export const nameConstraintPattern = '^[A-Za-z][-_A-Za-z0-9\.]{1,46}[A-Za-z0-9]$';
 
 export class EntityModel {
+
   constructor(public name: string, public dto: any) {}
 
   static objectToMap(models: object): Map<string, EntityModel> {
@@ -16,4 +17,5 @@ export class EntityModel {
       return Array.from(models.values());
     }
   }
+
 }

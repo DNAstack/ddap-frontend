@@ -4,7 +4,7 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { of, Subject } from 'rxjs';
 import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
 
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { ResourceService } from '../../resources/resources.service';
 import { DamConfigService } from '../dam/dam-config.service';
@@ -113,7 +113,7 @@ export class JsonPanelComponent implements OnChanges, OnDestroy {
       testDto['dry_run'] = true;
     }
 
-    const change = new ConfigModificationObject(this.entityDto, testDto);
+    const change = new ConfigModificationModel(this.entityDto, testDto);
 
     return this.entityService.update(this.routeDamId, this.entity.name, change).pipe(
       catchError((e) => {

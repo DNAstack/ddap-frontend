@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
 
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import {
   EntityRemovalConfirmationDialogComponent
 } from '../../../shared/entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';
@@ -42,7 +42,7 @@ export class PassportIssuerDetailComponent extends DamConfigEntityDetailComponen
     }
 
     const passportIssuer: EntityModel = this.passportIssuerForm.getModel();
-    const change = new ConfigModificationObject(passportIssuer.dto, {});
+    const change = new ConfigModificationModel(passportIssuer.dto, {});
     this.passportIssuerService.update(this.damId, this.entity.name, change)
       .subscribe(() => this.navigateUp('..'), this.showErrorMessage);
   }
@@ -69,7 +69,7 @@ export class PassportIssuerDetailComponent extends DamConfigEntityDetailComponen
       if (!acknowledged) {
         return;
       }
-      const change = new ConfigModificationObject(this.passportIssuerForm.getModel().dto, accessChange);
+      const change = new ConfigModificationModel(this.passportIssuerForm.getModel().dto, accessChange);
       this.passportIssuerService.remove(this.damId, this.entity.name, change)
         .subscribe(() => this.navigateUp('..'));
     });

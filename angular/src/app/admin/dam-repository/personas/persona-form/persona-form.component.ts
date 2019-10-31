@@ -8,7 +8,7 @@ import { EMPTY } from 'rxjs/internal/observable/empty';
 import { catchError, debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 import { common } from '../../../../shared/proto/dam-service';
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { ClaimDefinitionService } from '../../claim-definitions/claim-definitions.service';
 import { ClaimDefinitionsStore } from '../../claim-definitions/claim-definitions.store';
@@ -178,7 +178,7 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
     );
   }
 
-  private executeDryRunRequest(personaId: string, change: ConfigModificationObject) {
+  private executeDryRunRequest(personaId: string, change: ConfigModificationModel) {
     return this.personaService.update(this.damId, personaId, change).pipe(
       tap(() => this.accessForm.makeAccessFieldsValid()),
       catchError((error) => {
@@ -243,7 +243,7 @@ export class PersonaFormComponent implements OnInit, OnDestroy, Form {
       debounceTime(300),
       switchMap( () => {
         const personaModel: EntityModel = this.getModel();
-        const change = new ConfigModificationObject(personaModel.dto, {
+        const change = new ConfigModificationModel(personaModel.dto, {
           dry_run: true,
         });
 

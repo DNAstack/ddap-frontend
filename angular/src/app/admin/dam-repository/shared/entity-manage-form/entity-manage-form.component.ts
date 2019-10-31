@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { nameConstraintPattern } from '../../../shared/entity.model';
 
 @Component({
@@ -34,7 +34,7 @@ export class EntityManageFormComponent implements OnInit {
 
   submitChange() {
     const { id, dto } = this.form.value;
-    const change = new ConfigModificationObject(JSON.parse(dto), {});
+    const change = new ConfigModificationModel(JSON.parse(dto), {});
 
     this.submitted.emit({ id, change });
   }

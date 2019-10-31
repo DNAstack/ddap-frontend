@@ -5,7 +5,7 @@ import { map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../../../../environments/environment';
 import { realmIdPlaceholder } from '../../../../shared/realm/realm.constant';
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 
 import { IcConfigEntityType } from './ic-config-entity-type.enum';
@@ -26,7 +26,7 @@ export abstract class IcConfigService {
     );
   }
 
-  save(id: string, change: ConfigModificationObject): Observable<any> {
+  save(id: string, change: ConfigModificationModel): Observable<any> {
     return this.http.post(`${environment.idpApiUrl}/${realmIdPlaceholder}/config/${this.entityType}/${id}`,
       change
     ).pipe(
@@ -34,7 +34,7 @@ export abstract class IcConfigService {
     );
   }
 
-  update(id: string, change: ConfigModificationObject): Observable<any> {
+  update(id: string, change: ConfigModificationModel): Observable<any> {
     return this.http.put(`${environment.idpApiUrl}/${realmIdPlaceholder}/config/${this.entityType}/${id}`,
       change
     ).pipe(

@@ -7,7 +7,7 @@ import _set from 'lodash.set';
 import { Observable, of, Subject, zip } from 'rxjs';
 import { catchError, debounceTime, map, switchMap, take, takeWhile, tap } from 'rxjs/operators';
 
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { PersonasStore } from '../../personas/personas.store';
 import { pick } from '../../shared/autocomplete.util';
@@ -213,7 +213,7 @@ export class ResourceAccessComponent implements Form, OnChanges {
       applyModel['dry_run'] = true;
     }
 
-    const change = new ConfigModificationObject(_get(changes, 'dto', this.resource.dto), applyModel);
+    const change = new ConfigModificationModel(_get(changes, 'dto', this.resource.dto), applyModel);
 
     const action$ = this.isNewResource
       ? this.resourceService.save(this.damId, this.resource.name, change)

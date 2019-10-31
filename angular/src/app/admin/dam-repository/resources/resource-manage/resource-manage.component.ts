@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineForms, FormValidationService } from 'ddap-common-lib';
 
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { DamConfigEntityFormComponentBase } from '../../shared/dam/dam-config-entity-form-component.base';
 import { ResourceAccessComponent } from '../resource-access/resource-access.component';
@@ -38,7 +38,7 @@ export class ResourceManageComponent extends DamConfigEntityFormComponentBase {
 
     const resourceModel: EntityModel = this.resourceForm.getModel();
     const applyModel = this.accessForm.getApplyModel(isDryRun) || {};
-    const change = new ConfigModificationObject(resourceModel.dto, applyModel);
+    const change = new ConfigModificationModel(resourceModel.dto, applyModel);
 
     return this.resourceService.save(this.damId, resourceModel.name, change)
       .subscribe(() => {

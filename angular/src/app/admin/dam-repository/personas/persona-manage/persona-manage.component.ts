@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
 
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { DamConfigEntityManageComponentBase } from '../../shared/dam/dam-config-entity-manage-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
@@ -34,7 +34,7 @@ export class PersonaManageComponent extends DamConfigEntityManageComponentBase {
     }
 
     const personaModel: EntityModel = this.personaForm.getModel();
-    const change = new ConfigModificationObject(personaModel.dto, {});
+    const change = new ConfigModificationModel(personaModel.dto, {});
     this.personaService.save(this.damId, personaModel.name, change)
       .subscribe(
         () => this.navigateUp('../..'),

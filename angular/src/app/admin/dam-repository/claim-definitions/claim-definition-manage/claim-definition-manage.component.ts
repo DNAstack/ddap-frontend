@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
 
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { DamConfigEntityFormComponentBase } from '../../shared/dam/dam-config-entity-form-component.base';
 import { ClaimDefinitionFormComponent } from '../claim-definition-form/claim-definition-form.component';
@@ -32,7 +32,7 @@ export class ClaimDefinitionManageComponent extends DamConfigEntityFormComponent
     }
 
     const claimDefinition: EntityModel = this.claimDefinitionForm.getModel();
-    const change = new ConfigModificationObject(claimDefinition.dto, {});
+    const change = new ConfigModificationModel(claimDefinition.dto, {});
     this.claimDefinitionService.save(this.damId, claimDefinition.name, change)
       .subscribe(() => this.navigateUp('../..'), this.showError);
   }

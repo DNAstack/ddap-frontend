@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
 
 import { ic } from '../../../../shared/proto/ic-service';
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { IcConfigEntityFormComponentBase } from '../../shared/ic/ic-config-entity-form-component.base';
 import { IdentityProviderFormComponent } from '../identity-provider-form/identity-provider-form.component';
@@ -41,7 +41,7 @@ export class IdentityProviderManageComponent extends IcConfigEntityFormComponent
     }
 
     const personaModel: EntityModel = this.identityProviderForm.getModel();
-    const change = new ConfigModificationObject(personaModel.dto, {});
+    const change = new ConfigModificationModel(personaModel.dto, {});
     this.identityProviderService.save(personaModel.name, change)
       .subscribe(() => this.navigateUp('../..'), this.showError);
   }

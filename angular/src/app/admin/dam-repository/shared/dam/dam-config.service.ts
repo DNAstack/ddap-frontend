@@ -5,7 +5,7 @@ import { flatMap, map } from 'rxjs/operators';
 import { DamInfoService } from '../../../../shared/dam/dam-info.service';
 import { dam } from '../../../../shared/proto/dam-service';
 import { realmIdPlaceholder } from '../../../../shared/realm/realm.constant';
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 
 import { DamConfigEntityType } from './dam-config-entity-type.enum';
 
@@ -31,7 +31,7 @@ export abstract class DamConfigService {
       );
   }
 
-  save(damId: string, entityId: string, change: ConfigModificationObject): Observable<any> {
+  save(damId: string, entityId: string, change: ConfigModificationModel): Observable<any> {
     return this.damInfoService.getDamUrls()
       .pipe(
         flatMap(damApiUrls => {
@@ -43,7 +43,7 @@ export abstract class DamConfigService {
       );
   }
 
-  update(damId: string, entityId: string, change: ConfigModificationObject): Observable<any> {
+  update(damId: string, entityId: string, change: ConfigModificationModel): Observable<any> {
     return this.damInfoService.getDamUrls()
       .pipe(
         flatMap(damApiUrls => {
@@ -55,7 +55,7 @@ export abstract class DamConfigService {
       );
   }
 
-  remove(damId: string, entityId: string, change: ConfigModificationObject = null): Observable<any> {
+  remove(damId: string, entityId: string, change: ConfigModificationModel = null): Observable<any> {
     return this.damInfoService.getDamUrls()
       .pipe(
         flatMap(damApiUrls => {

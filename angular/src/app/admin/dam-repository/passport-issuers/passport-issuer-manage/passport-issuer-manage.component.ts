@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
 
 import { dam } from '../../../../shared/proto/dam-service';
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { DamConfigEntityFormComponentBase } from '../../shared/dam/dam-config-entity-form-component.base';
 import { PassportIssuerFormComponent } from '../passport-issuer-form/passport-issuer-form.component';
@@ -40,7 +40,7 @@ export class PassportIssuerManageComponent extends DamConfigEntityFormComponentB
     }
 
     const personaModel: EntityModel = this.passportIssuerForm.getModel();
-    const change = new ConfigModificationObject(personaModel.dto, {});
+    const change = new ConfigModificationModel(personaModel.dto, {});
     this.passportIssuerService.save(this.damId, personaModel.name, change)
       .subscribe(() => this.navigateUp('../..'), this.showError);
   }

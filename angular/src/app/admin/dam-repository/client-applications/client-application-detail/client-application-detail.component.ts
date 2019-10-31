@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
 
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
@@ -36,7 +36,7 @@ export class ClientApplicationDetailComponent extends DamConfigEntityDetailCompo
     }
 
     const clientApplication: EntityModel = this.clientApplicationForm.getModel();
-    const change = new ConfigModificationObject(clientApplication.dto, {});
+    const change = new ConfigModificationModel(clientApplication.dto, {});
     this.clientApplicationService.update(this.damId, this.entity.name, change)
       .subscribe(() => this.navigateUp('..'), this.showError);
   }

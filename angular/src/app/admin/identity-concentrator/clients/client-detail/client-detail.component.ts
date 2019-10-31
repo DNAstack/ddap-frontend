@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
 
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { IcConfigEntityDetailComponentBase } from '../../shared/ic/ic-config-entity-detail-component.base';
 import { IcConfigStore } from '../../shared/ic/ic-config.store';
@@ -36,7 +36,7 @@ export class ClientDetailComponent extends IcConfigEntityDetailComponentBase<Cli
     }
 
     const clientApplication: EntityModel = this.clientForm.getModel();
-    const change = new ConfigModificationObject(clientApplication.dto, {});
+    const change = new ConfigModificationModel(clientApplication.dto, {});
     this.clientService.update(this.entity.name, change)
       .subscribe(() => this.navigateUp('..'), this.showError);
   }

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
 
-import { ConfigModificationObject } from '../../../shared/configModificationObject';
+import { ConfigModificationModel } from '../../../shared/configModificationObject';
 import { EntityModel } from '../../../shared/entity.model';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
@@ -36,7 +36,7 @@ export class TrustedSourcesDetailComponent extends DamConfigEntityDetailComponen
     }
 
     const trustedSources: EntityModel = this.trustedSourcesForm.getModel();
-    const change = new ConfigModificationObject(trustedSources.dto, {});
+    const change = new ConfigModificationModel(trustedSources.dto, {});
     this.trustedSourcesService.update(this.damId, this.entity.name, change)
       .subscribe(() => this.navigateUp('..'), this.showError);
   }
