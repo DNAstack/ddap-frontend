@@ -1,11 +1,12 @@
 <ng-container *ngIf="resource">
-  <ddap-header class="no-border"
-               [backLink]="'../..'"
-               [label]="resource.dto.ui.label"
-               [searchButton]="true"
-               [limitSearch]="limitSearch"
-               (searchOpenChange)="searchOpenedChange($event)">
-  </ddap-header>
+  <ddaplib-header class="no-border"
+                  [backLink]="'../..'"
+                  [label]="resource.dto.ui.label"
+                  [searchable]="true"
+                  (searchOpenChange)="searchOpenedChange($event)">
+    <ddap-beacon-search-bar [limitSearch]="limitSearch">
+    </ddap-beacon-search-bar>
+  </ddaplib-header>
 
   <ddap-resource-logo [imageUrl]="resource.dto.ui.imageUrl">
     <ddap-limit-search *ngIf="searchOpened"

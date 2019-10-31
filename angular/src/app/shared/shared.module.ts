@@ -33,8 +33,6 @@ import { LimitSearchComponent } from './beacon-search/beacon-search-bar/limit-se
 import { ClaimGroupComponent } from './claim-group/claim-group.component';
 import { FocusedDirective } from './focused.directive';
 import { FormFooterErrorComponent } from './form/form-footer-error/form-footer-error.component';
-import { HeaderBtnComponent } from './header/header-btn/header-btn.component';
-import { HeaderComponent } from './header/header.component';
 import { MetadataFilterPipe } from './metadata-list/metadata-filter.pipe';
 import { MetadataListComponent } from './metadata-list/metadata-list.component';
 import { NavBackComponent } from './nav-back/nav-back.component';
@@ -50,8 +48,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
 
 @NgModule({
   declarations: [
-    HeaderComponent,
-    HeaderBtnComponent,
     NavBackComponent,
     ResourceLogoComponent,
     ResourceViewItemComponent,
@@ -133,8 +129,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
 
     DdapLayoutModule,
 
-    HeaderComponent,
-    HeaderBtnComponent,
     NavBackComponent,
     ClaimGroupComponent,
     BeaconSearchBarComponent,

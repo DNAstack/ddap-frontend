@@ -1,7 +1,9 @@
-<ddap-header icon="explore"
-             [searchButton]="true"
-             label="Explore Data">
-</ddap-header>
+<ddaplib-header icon="explore"
+                label="Explore Data"
+                [searchable]="true">
+  <ddap-beacon-search-bar>
+  </ddap-beacon-search-bar>
+</ddaplib-header>
 
 <div class="ddap-data-pane">
 <mat-card class="ddap-card"

@@ -1,10 +1,9 @@
-<ddap-header icon="rules"
-             label="WES Servers">
-  <ddap-header-btn
-    [navigateTo]="['manage', 'add']"
-    [label]="'execute workflow'">
-  </ddap-header-btn>
-</ddap-header>
+<ddaplib-header icon="rules"
+                label="WES Servers">
+  <ddaplib-header-add-btn [navigateTo]="['manage', 'add']"
+                          [label]="'execute workflow'">
+  </ddaplib-header-add-btn>
+</ddaplib-header>
 
 <ddaplib-main>
   <ng-container *ngFor="let resourceViews of wesResourceViews">

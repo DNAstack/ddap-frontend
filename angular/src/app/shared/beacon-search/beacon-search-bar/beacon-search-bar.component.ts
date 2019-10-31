@@ -16,7 +16,7 @@ import { VariantValidators } from './variant.validator';
 export class BeaconSearchBarComponent implements OnInit {
 
   @Input()
-  placeholder: string;
+  placeholder = '1 : 156105028 T > C';
   @Input()
   disabled: boolean;
   @Input()

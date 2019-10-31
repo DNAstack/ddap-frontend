@@ -1,10 +1,10 @@
-<ddap-header [backLink]="['../../../..']"
+<ddaplib-header [backLink]="['../../../..']"
              label="Workflow Runs">
-  <ddap-header-btn
+  <ddaplib-header-add-btn
     [navigateTo]="['manage', 'add']"
     [label]="'execute workflow'">
-  </ddap-header-btn>
-</ddap-header>
+  </ddaplib-header-add-btn>
+</ddaplib-header>
 
 <ddaplib-main>
   <ng-container *ngIf="newlyCreatedWorkflows">

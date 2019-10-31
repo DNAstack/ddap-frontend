@@ -1,7 +1,9 @@
-<ddap-header [isSearchPage]="true"
-             [searchOpen]="true"
-             label="Search Results">
-</ddap-header>
+<ddaplib-header [isSearchPage]="true"
+                [searchInputVisible]="true"
+                label="Search Results">
+  <ddap-beacon-search-bar [limitSearch]="limitSearch">
+  </ddap-beacon-search-bar>
+</ddaplib-header>
 
 <ddaplib-main>
   <ddap-limit-search *ngIf="resource"

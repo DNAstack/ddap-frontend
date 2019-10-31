@@ -1,5 +1,5 @@
 <header>
-  <ng-template [ngIf]="!searchOpen">
+  <ng-template #baseHeader>
     <button *ngIf="backLink"
             data-se="back-link"
             mat-icon-button>
@@ -16,7 +16,7 @@
     <ng-content></ng-content>
   </ng-template>
 
-  <ng-template [ngIf]="searchOpen">
+  <ng-container *ngIf="searchInputVisible; else baseHeader">
     <button *ngIf="isSearchPage"
             mat-icon-button
             data-se="search-back-link"
@@ -30,15 +30,11 @@
       <mat-icon class="icon icon-close"></mat-icon>
     </button>
 
-    <ddap-beacon-search-bar
-      [placeholder]="['1 : 156105028 T > C']"
-      [limitSearch]="limitSearch"
-      [replaceUrl]="isSearchPage">
-    </ddap-beacon-search-bar>
-  </ng-template>
+    <ng-content></ng-content>
+  </ng-container>
 
-  <button *ngIf="searchButton && !searchOpen"
-          (click)="openSearch()"
+  <button *ngIf="searchable && !searchInputVisible"
+          (click)="displaySearchInput()"
           mat-icon-button
           data-se="search-reveal">
     <mat-icon class="icon icon-search"></mat-icon>

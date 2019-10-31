@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'ddap-header-btn',
+  selector: 'ddaplib-header-btn',
   templateUrl: './header-btn.component.html',
   styleUrls: ['./header-btn.component.scss'],
 })
@@ -11,7 +11,7 @@ export class HeaderBtnComponent {
   label: string;
   @Input()
   navigateTo: string[];
-
-  constructor() { }
+  @Input()
+  dataSe: string; // For E2E purposes
 
 }

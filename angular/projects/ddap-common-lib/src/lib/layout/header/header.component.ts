@@ -2,7 +2,7 @@ import { Location } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'ddap-header',
+  selector: 'ddaplib-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
@@ -11,17 +11,15 @@ export class HeaderComponent {
   @Input()
   label: string;
   @Input()
-  icon: string = null;
+  icon: string;
+  @Input()
+  searchable: boolean;
+  @Input()
+  searchInputVisible = false;
   @Input()
   isSearchPage = false;
   @Input()
-  backLink: any = null;
-  @Input()
-  searchButton = false;
-  @Input()
-  searchOpen = false;
-  @Input()
-  limitSearch = false;
+  backLink: string;
 
   @Output()
   readonly searchOpenChange = new EventEmitter<boolean>();
@@ -30,16 +28,20 @@ export class HeaderComponent {
   }
 
   closeSearch() {
-    this.searchOpen = false;
-    this.searchOpenChange.emit(this.searchOpen);
+    this.toggleSearchInputVisibility();
   }
 
-  openSearch() {
-    this.searchOpen = true;
-    this.searchOpenChange.emit(this.searchOpen);
+  displaySearchInput() {
+    this.toggleSearchInputVisibility();
   }
 
   back() {
     this.location.back();
   }
+
+  private toggleSearchInputVisibility() {
+    this.searchInputVisible = !this.searchInputVisible;
+    this.searchOpenChange.emit(this.searchInputVisible);
+  }
+
 }

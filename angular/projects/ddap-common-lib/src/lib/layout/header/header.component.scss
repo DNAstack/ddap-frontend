@@ -1,5 +1,5 @@
-@import "../../../styles/modules/colors";
-@import "../../../styles/modules/layout";
+@import "../../../../../../src/styles/modules/colors";
+@import "../../../../../../src/styles/modules/layout";
 
 header {
   display: flex;
@@ -9,14 +9,15 @@ header {
   min-height: $sidenav-header-height;
   border-bottom: 1px solid $color-faded-grey;
 
-  h2, ddap-beacon-search-bar {
+  h2, ::ng-deep ddap-beacon-search-bar {
     margin: 0;
     display: inline-block;
     line-height: 2rem;
     vertical-align: middle;
   }
 
-  ddap-beacon-search-bar {
+  ::ng-deep ddap-beacon-search-bar {
+    flex-grow: 1;
     width: 100%;
     margin-left: 0.5rem;
   }
