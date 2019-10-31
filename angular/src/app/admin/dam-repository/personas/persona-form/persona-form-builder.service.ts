@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormValidators } from 'ddap-common-lib';
 import _get from 'lodash.get';
 
-import { FormValidators } from '../../../../shared/form/validators';
 import { PassportVisaValidators } from '../../../../shared/passport-visa/passport-visa-validators';
 import { common } from '../../../../shared/proto/dam-service';
 import IAssertion = common.IAssertion;

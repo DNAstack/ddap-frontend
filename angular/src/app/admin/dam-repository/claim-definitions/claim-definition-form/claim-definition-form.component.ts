@@ -1,12 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormValidators } from 'ddap-common-lib';
 import _get from 'lodash.get';
 
-import ClaimDefinition = dam.v1.ClaimDefinition;
-import { FormValidators } from '../../../../shared/form/validators';
 import { dam } from '../../../../shared/proto/dam-service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 import Form from '../../../shared/form/form';
+
+import ClaimDefinition = dam.v1.ClaimDefinition;
 
 @Component({
   selector: 'ddap-claim-definition-form',

@@ -1,4 +1,4 @@
-
+// @dynamic
 export class TimeDurationParser {
 
   // example of valid string: "10d"

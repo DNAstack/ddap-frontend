@@ -1,10 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormValidators } from 'ddap-common-lib';
 import _sampleSize from 'lodash.samplesize';
 import { of } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
-import { FormValidators } from '../../shared/form/validators';
 import { flatten, isEmptyObject, unique } from '../../shared/util';
 import { DatasetService } from '../dataset.service';
 

@@ -25,7 +25,7 @@ import { HeaderAddBtnComponent } from "./header/header-add-btn/header-add-btn.co
     HeaderComponent,
     HeaderBtnComponent,
     HeaderAddBtnComponent,
-    MainComponent
+    MainComponent,
   ]
 })
 export class DdapLayoutModule { }

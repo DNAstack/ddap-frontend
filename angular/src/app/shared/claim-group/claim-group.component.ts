@@ -2,10 +2,10 @@ import { Component, Input } from '@angular/core';
 import * as dayjs from 'dayjs';
 import * as relativeTimePlugin from 'dayjs/plugin/relativeTime';
 
+import Assertion = common.Assertion;
+import { TimeDurationParser } from '../../../../projects/ddap-common-lib/src/lib/time-duration.parser';
 import { ClaimDefinitionService } from '../../admin/dam-repository/claim-definitions/claim-definitions.service';
 import { common } from '../proto/dam-service';
-import Assertion = common.Assertion;
-import { TimeDurationParser } from '../time-duration.parser';
 
 @Component({
   selector: 'ddap-claim-group',

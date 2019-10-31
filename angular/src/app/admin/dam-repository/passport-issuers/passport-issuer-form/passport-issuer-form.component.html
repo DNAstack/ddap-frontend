@@ -33,22 +33,18 @@
   </div>
   <div class="row">
     <mat-form-field class="col">
-      <mat-autocomplete #issuers="matAutocomplete">
-        <ng-container *ngIf="issuerInput.isTouched">
-          <mat-option *ngFor="let option of passportIssuers$ | async"
-                      [value]="option">
-            {{ option }}
-          </mat-option>
-        </ng-container>
-      </mat-autocomplete>
-
       <input matInput
-             placeholder="Issuer"
-             formControlName="issuer"
-             data-se="inp-issuer"
-             #issuerInput="ddapInputState"
              [matAutocomplete]="issuers"
+             formControlName="issuer"
+             placeholder="Issuer"
+             data-se="inp-issuer"
              required>
+      <mat-autocomplete #issuers="matAutocomplete">
+        <mat-option *ngFor="let option of passportIssuers$ | async"
+                    [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
   </div>
   <div class="row">

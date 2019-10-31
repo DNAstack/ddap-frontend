@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormValidators } from 'ddap-common-lib';
 import _get from 'lodash.get';
 
-import { FormValidators } from '../../../../shared/form/validators';
 import { ic } from '../../../../shared/proto/ic-service';
 import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 import Client = ic.v1.Client;

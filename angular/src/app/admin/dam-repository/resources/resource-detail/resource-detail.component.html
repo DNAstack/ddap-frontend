@@ -23,9 +23,9 @@
 </ddaplib-main>
 
 <div class="ddap-form-toolbar">
-  <ddap-form-footer-error [showError]="!isFormValid && isFormValidated"
+  <ddaplib-form-footer-error [showError]="!isFormValid && isFormValidated"
                           [message]="formErrorMessage">
-  </ddap-form-footer-error>
+  </ddaplib-form-footer-error>
   <button mat-flat-button
           (click)="delete()"
           [disabled]="!entity"

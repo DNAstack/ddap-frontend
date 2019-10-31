@@ -23,7 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
-import { DdapLayoutModule } from 'ddap-common-lib';
+import { DdapFormModule, DdapLayoutModule } from 'ddap-common-lib';
 import { TagInputModule } from 'ngx-chips';
 import { ClipboardModule } from 'ngx-clipboard';
 
@@ -31,7 +31,6 @@ import { BeaconResultComponent } from './beacon-search/beacon-result/beacon-resu
 import { BeaconSearchBarComponent } from './beacon-search/beacon-search-bar/beacon-search-bar.component';
 import { LimitSearchComponent } from './beacon-search/beacon-search-bar/limit-search/limit-search.component';
 import { ClaimGroupComponent } from './claim-group/claim-group.component';
-import { FormFooterErrorComponent } from './form/form-footer-error/form-footer-error.component';
 import { MetadataFilterPipe } from './metadata-list/metadata-filter.pipe';
 import { MetadataListComponent } from './metadata-list/metadata-list.component';
 import { PaginatorComponent } from './paginator/paginator.component';
@@ -58,7 +57,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     MetadataListComponent,
     MetadataFilterPipe,
     SandboxBannerComponent,
-    FormFooterErrorComponent,
     PaginatorComponent,
   ],
   imports: [
@@ -92,6 +90,7 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     MatSlideToggleModule,
 
     DdapLayoutModule,
+    DdapFormModule,
   ],
   exports: [
     CommonModule,
@@ -124,6 +123,7 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     MatSlideToggleModule,
 
     DdapLayoutModule,
+    DdapFormModule,
 
     ClaimGroupComponent,
     BeaconSearchBarComponent,
@@ -137,7 +137,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     MetadataListComponent,
     MetadataFilterPipe,
     SandboxBannerComponent,
-    FormFooterErrorComponent,
     PaginatorComponent,
   ],
 })
