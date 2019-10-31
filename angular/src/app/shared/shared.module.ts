@@ -31,7 +31,6 @@ import { BeaconResultComponent } from './beacon-search/beacon-result/beacon-resu
 import { BeaconSearchBarComponent } from './beacon-search/beacon-search-bar/beacon-search-bar.component';
 import { LimitSearchComponent } from './beacon-search/beacon-search-bar/limit-search/limit-search.component';
 import { ClaimGroupComponent } from './claim-group/claim-group.component';
-import { FocusedDirective } from './focused.directive';
 import { FormFooterErrorComponent } from './form/form-footer-error/form-footer-error.component';
 import { MetadataFilterPipe } from './metadata-list/metadata-filter.pipe';
 import { MetadataListComponent } from './metadata-list/metadata-list.component';
@@ -54,7 +53,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     BeaconSearchBarComponent,
     BeaconResultComponent,
     LimitSearchComponent,
-    FocusedDirective,
     RealmInputComponent,
     RealmChangeConfirmationDialogComponent,
     MetadataListComponent,
@@ -134,7 +132,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     ResourceViewItemComponent,
     ViewAccessComponent,
     LimitSearchComponent,
-    FocusedDirective,
     RealmInputComponent,
     RealmChangeConfirmationDialogComponent,
     MetadataListComponent,
