@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Client = dam.v1.Client;
 import { Form } from 'ddap-common-lib';
+import { EntityModel, nameConstraintPattern } from 'ddap-common-lib';
 
 import { dam } from '../../../../shared/proto/dam-service';
-import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 
 @Component({
   selector: 'ddap-client-application-form',

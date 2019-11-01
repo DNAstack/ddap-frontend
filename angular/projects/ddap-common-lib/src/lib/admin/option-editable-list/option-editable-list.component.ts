@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'ddap-option-editable-list',
+  selector: 'ddaplib-option-editable-list',
   templateUrl: './option-editable-list.component.html',
   styleUrls: ['./option-editable-list.component.scss'],
 })
@@ -15,7 +15,7 @@ export class OptionEditableListComponent {
   error: string;
 
   @Output()
-  submitted: EventEmitter<any> = new EventEmitter<any>();
+  readonly submitted: EventEmitter<any> = new EventEmitter<any>();
 
   getDescriptorFor(optionKey) {
     return this.options.descriptors[optionKey];

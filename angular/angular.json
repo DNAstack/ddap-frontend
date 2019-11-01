@@ -93,6 +93,11 @@
       "root": "projects/ddap-common-lib",
       "sourceRoot": "projects/ddap-common-lib/src",
       "prefix": "ddaplib",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { EntityModel } from 'ddap-common-lib';
 import { Observable, of } from 'rxjs';
 
-import { EntityModel } from '../../admin/shared/entity.model';
 import { ResourceBeaconService } from '../../shared/beacon-search/resource-beacon.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 import { DataService } from '../data.service';

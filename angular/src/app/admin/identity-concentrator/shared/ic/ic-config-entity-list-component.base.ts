@@ -1,8 +1,7 @@
 import { OnInit } from '@angular/core';
+import { EntityModel } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { EntityModel } from '../../../shared/entity.model';
 
 import { IcConfigEntityComponentBase } from './ic-config-entity-component.base';
 import { IcConfigEntityStore } from './ic-config-entity-store';

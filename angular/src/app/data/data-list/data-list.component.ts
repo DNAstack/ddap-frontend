@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { EntityModel } from 'ddap-common-lib';
 import { zip } from 'rxjs';
 import { Observable } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 
-import { EntityModel } from '../../admin/shared/entity.model';
 import { DamInfoService } from '../../shared/dam/dam-info.service';
 import { ImagePlaceholderRetriever } from '../../shared/image-placeholder.service';
 import { DataService } from '../data.service';

@@ -1,44 +1,6 @@
+//Temporally workaround, once library is extracted to separate repo, it will be imported as
+// @import '~ddap-common-lib/styles/core.scss';
+@import '../../projects/ddap-common-lib/styles/core.scss';
+
 @import 'base';
 
-html, body {
-  height: 100%;
-}
-body {
-  margin: 0;
-  font-family: $primary-font-family;
-}
-
-.flex {
-  display: flex;
-}
-
-.flex--column {
-  flex-direction: column;
-}
-
-.flex--row {
-  flex-direction: row;
-}
-
-.vertical-center {
-  align-items: center;
-}
-
-.stretch {
-  flex-grow: 1;
-}
-
-.warning-section {
-  display: flex;
-  align-items: center;
-  color: $warn-font-color-alert;
-  border: 0;
-  border-radius: 0;
-  background-color: $warn-background-color-alert;
-  padding: .75rem 1.25rem;
-  margin-bottom: 2rem;
-
-  span {
-    margin-left: 0.5rem;
-  }
-}

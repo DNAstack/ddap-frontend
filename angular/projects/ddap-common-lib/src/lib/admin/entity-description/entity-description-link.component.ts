@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'ddap-entity-description-link',
+  selector: 'ddaplib-entity-description-link',
   templateUrl: './entity-description-link.component.html',
   styleUrls: ['./entity-description-link.component.scss'],
 })

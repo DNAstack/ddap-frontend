@@ -2,12 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormValidators } from 'ddap-common-lib';
 import { Form } from 'ddap-common-lib';
+import { EntityModel, nameConstraintPattern } from 'ddap-common-lib';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs';
 
 import { ic } from '../../../../shared/proto/ic-service';
 import { PassportTranslatorsService } from '../../../dam-repository/passport-translators/passport-translators.service';
-import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 
 import IdentityProvider = ic.v1.IdentityProvider;
 

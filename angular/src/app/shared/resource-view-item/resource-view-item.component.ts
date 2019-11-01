@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { EntityModel } from 'ddap-common-lib';
 import GetTokenResponse = dam.v1.GetTokenResponse;
 import _get from 'lodash.get';
 import { Subscription } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { ResourceService } from '../../admin/dam-repository/resources/resources.service';
-import { EntityModel } from '../../admin/shared/entity.model';
 import { dam } from '../proto/dam-service';
 
 @Component({

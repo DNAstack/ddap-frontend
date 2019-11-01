@@ -1,10 +1,9 @@
 import { OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
+import { EntityModel } from 'ddap-common-lib';
 import { Subscription } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
-
-import { EntityModel } from '../../../shared/entity.model';
 
 import { DamConfigEntityFormComponentBase } from './dam-config-entity-form-component.base';
 import { DamConfigEntityStore } from './dam-config-entity-store';

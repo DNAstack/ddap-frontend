@@ -3,14 +3,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
+import { ConfigModificationModel, EntityModel } from 'ddap-common-lib';
 
-import { ConfigModificationModel } from '../../../shared/configModificationObject';
-import {
-  EntityRemovalConfirmationDialogComponent
-} from '../../../shared/entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';
-import { EntityModel } from '../../../shared/entity.model';
 import { DamConfigEntityDetailComponentBase } from '../../shared/dam/dam-config-entity-detail-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
+import {
+  EntityRemovalConfirmationDialogComponent
+} from '../../shared/entity-removal-confirmation-dialog/entity-removal-confirmation-dialog.component';
 import { PassportIssuerFormComponent } from '../passport-issuer-form/passport-issuer-form.component';
 import { PassportIssuerService } from '../passport-issuers.service';
 import { PassportIssuersStore } from '../passport-issuers.store';

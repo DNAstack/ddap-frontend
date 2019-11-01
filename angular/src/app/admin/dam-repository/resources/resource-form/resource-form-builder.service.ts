@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormValidators } from 'ddap-common-lib';
+import { EntityModel, nameConstraintPattern } from 'ddap-common-lib';
 import _get from 'lodash.get';
-
-import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 
 @Injectable({
   providedIn: 'root',

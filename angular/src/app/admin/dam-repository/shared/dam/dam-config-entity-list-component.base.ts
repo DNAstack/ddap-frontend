@@ -1,9 +1,8 @@
 import { OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { EntityModel } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
-
-import { EntityModel } from '../../../shared/entity.model';
 
 import { DamConfigEntityComponentBase } from './dam-config-entity-component.base';
 import { DamConfigEntityStore } from './dam-config-entity-store';

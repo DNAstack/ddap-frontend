@@ -5,12 +5,13 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:dev": "ng build ddap-common-lib && ng build --watch --output-path=\"../target/classes/static/\"",
-    "build:prod": "ng build ddap-common-lib && ng build --prod",
+    "build:dev": "ng build ddap-common-lib && npm run copyStyles && ng build --watch --output-path=\"../target/classes/static/\"",
+    "build:prod": "ng build ddap-common-lib && npm run copyStyles && ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
-    "proto": "./scripts/generate_proto.sh"
+    "proto": "./scripts/generate_proto.sh",
+    "copyStyles": "cp -r ./projects/ddap-common-lib/styles ./dist/ddap-common-lib/"
   },
   "private": true,
   "dependencies": {

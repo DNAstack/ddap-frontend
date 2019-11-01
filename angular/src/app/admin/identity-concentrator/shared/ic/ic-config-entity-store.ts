@@ -1,7 +1,6 @@
 import { Store } from 'ddap-common-lib';
+import { EntityModel } from 'ddap-common-lib';
 import { map, pluck } from 'rxjs/operators';
-
-import { EntityModel } from '../../../shared/entity.model';
 
 import { IcConfigEntityType } from './ic-config-entity-type.enum';
 import { IcConfigStore } from './ic-config.store';

@@ -2,6 +2,9 @@
  * Public API Surface of ddap-common-lib
  */
 
+export * from './lib/admin/ddap-admin.module';
+export * from './lib/admin/config-modification.model';
+export * from './lib/admin/entity.model';
 export * from './lib/layout/ddap-layout.module';
 export * from './lib/layout/sandbox-banner/sandbox-banner-state.service';
 export * from './lib/form/ddap-form.module';

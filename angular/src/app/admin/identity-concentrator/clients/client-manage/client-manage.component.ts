@@ -1,9 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
+import { ConfigModificationModel, EntityModel } from 'ddap-common-lib';
 
-import { ConfigModificationModel } from '../../../shared/configModificationObject';
-import { EntityModel } from '../../../shared/entity.model';
 import { IcConfigEntityFormComponentBase } from '../../shared/ic/ic-config-entity-form-component.base';
 import { ClientFormComponent } from '../client-form/client-form.component';
 import { ClientService } from '../clients.service';

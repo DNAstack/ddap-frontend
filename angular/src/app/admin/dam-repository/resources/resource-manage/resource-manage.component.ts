@@ -2,9 +2,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineForms, FormValidationService } from 'ddap-common-lib';
+import { ConfigModificationModel, EntityModel } from 'ddap-common-lib';
 
-import { ConfigModificationModel } from '../../../shared/configModificationObject';
-import { EntityModel } from '../../../shared/entity.model';
 import { DamConfigEntityFormComponentBase } from '../../shared/dam/dam-config-entity-form-component.base';
 import { ResourceAccessComponent } from '../resource-access/resource-access.component';
 import { ResourceFormComponent } from '../resource-form/resource-form.component';

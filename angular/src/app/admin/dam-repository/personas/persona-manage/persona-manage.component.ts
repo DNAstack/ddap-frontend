@@ -1,9 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidationService } from 'ddap-common-lib';
+import { ConfigModificationModel, EntityModel } from 'ddap-common-lib';
 
-import { ConfigModificationModel } from '../../../shared/configModificationObject';
-import { EntityModel } from '../../../shared/entity.model';
 import { DamConfigEntityManageComponentBase } from '../../shared/dam/dam-config-entity-manage-component.base';
 import { DamConfigStore } from '../../shared/dam/dam-config.store';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';

@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EntityModel, nameConstraintPattern } from 'ddap-common-lib';
 import _get from 'lodash.get';
 import { dam } from 'src/app/shared/proto/dam-service';
 
-import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 import { TargetAdaptersService } from '../../target-adapters/target-adapters.service';
 import ServiceTemplate = dam.v1.ServiceTemplate;
 import ServiceRole = dam.v1.ServiceRole;

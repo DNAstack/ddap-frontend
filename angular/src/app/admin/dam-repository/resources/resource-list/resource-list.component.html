@@ -5,12 +5,12 @@
 </ddaplib-header>
 
 <ddaplib-main>
-  <ddap-entity-description>
+  <ddaplib-entity-description>
     Resources are datasets and derived services. Here is where you can add datasets to DDAP so that they are available
     to researchers, and map
-    <ddap-entity-description-link [path]="'../access-policies'">access policies</ddap-entity-description-link>
+    <ddaplib-entity-description-link [path]="'../access-policies'">access policies</ddaplib-entity-description-link>
     onto them to declare which researchers can access the data.
-  </ddap-entity-description>
+  </ddaplib-entity-description>
   <mat-accordion class="ddap-resource-list">
     <ng-container *ngFor="let resource of entities$ | async">
       <mat-expansion-panel>

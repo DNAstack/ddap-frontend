@@ -1,14 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Form } from 'ddap-common-lib';
+import { ConfigModificationModel, EntityModel } from 'ddap-common-lib';
 import _get from 'lodash.get';
 import _isEqual from 'lodash.isequal';
 import _set from 'lodash.set';
 import { Observable, of, Subject, zip } from 'rxjs';
 import { catchError, debounceTime, map, switchMap, take, takeWhile, tap } from 'rxjs/operators';
 
-import { ConfigModificationModel } from '../../../shared/configModificationObject';
-import { EntityModel } from '../../../shared/entity.model';
 import { PersonasStore } from '../../personas/personas.store';
 import { pick } from '../../shared/autocomplete.util';
 import { ResourceService } from '../resources.service';

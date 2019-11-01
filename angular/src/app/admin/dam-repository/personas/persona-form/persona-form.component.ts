@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Form } from 'ddap-common-lib';
+import { ConfigModificationModel, EntityModel } from 'ddap-common-lib';
 import _get from 'lodash.get';
 import { combineLatest, Observable } from 'rxjs';
 import { Subscription } from 'rxjs';
@@ -8,8 +9,6 @@ import { EMPTY } from 'rxjs/internal/observable/empty';
 import { catchError, debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 import { common } from '../../../../shared/proto/dam-service';
-import { ConfigModificationModel } from '../../../shared/configModificationObject';
-import { EntityModel } from '../../../shared/entity.model';
 import { ClaimDefinitionService } from '../../claim-definitions/claim-definitions.service';
 import { ClaimDefinitionsStore } from '../../claim-definitions/claim-definitions.store';
 import { PassportIssuersStore } from '../../passport-issuers/passport-issuers.store';

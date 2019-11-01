@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { ErrorHandlerService } from 'ddap-common-lib';
+import { ConfigModificationModel, EntityModel } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../../../../environments/environment';
 import { realmIdPlaceholder } from '../../../../shared/realm/realm.constant';
-import { ConfigModificationModel } from '../../../shared/configModificationObject';
-import { EntityModel } from '../../../shared/entity.model';
 
 import { IcConfigEntityType } from './ic-config-entity-type.enum';
 

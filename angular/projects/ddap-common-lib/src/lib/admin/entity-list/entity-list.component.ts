@@ -3,8 +3,8 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs';
 
-import { JsonEditorDefaults } from '../../../../../../src/app/admin/dam-repository/shared/jsonEditorDefaults';
-import { EntityModel } from '../../../../../../src/app/admin/shared/entity.model';
+import { JsonEditorDefaults } from '../jsonEditorDefaults';
+import { EntityModel } from '../entity.model';
 
 @Component({
   selector: 'ddaplib-entity-list',

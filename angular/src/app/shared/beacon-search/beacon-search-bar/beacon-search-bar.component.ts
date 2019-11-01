@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EntityModel } from 'ddap-common-lib';
 
-import { EntityModel } from '../../../admin/shared/entity.model';
 import { assemblyIds } from '../assembly.model';
 import { BeaconSearchParams } from '../beacon-search-params.model';
 

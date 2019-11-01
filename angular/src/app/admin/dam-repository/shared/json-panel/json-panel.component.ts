@@ -1,11 +1,10 @@
 import { Component, Input, OnChanges, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { ConfigModificationModel, EntityModel } from 'ddap-common-lib';
 import { of, Subject } from 'rxjs';
 import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
 
-import { ConfigModificationModel } from '../../../shared/configModificationObject';
-import { EntityModel } from '../../../shared/entity.model';
 import { ResourceService } from '../../resources/resources.service';
 import { DamConfigService } from '../dam/dam-config.service';
 import { JsonEditorDefaults } from '../jsonEditorDefaults';

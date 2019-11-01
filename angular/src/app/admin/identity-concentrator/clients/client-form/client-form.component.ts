@@ -3,10 +3,10 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormValidators } from 'ddap-common-lib';
 import Client = ic.v1.Client;
 import { Form } from 'ddap-common-lib';
+import { EntityModel, nameConstraintPattern } from 'ddap-common-lib';
 import _get from 'lodash.get';
 
 import { ic } from '../../../../shared/proto/ic-service';
-import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 
 @Component({
   selector: 'ddap-client-form',

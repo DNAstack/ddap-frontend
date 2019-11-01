@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { EntityModel } from 'ddap-common-lib';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs';
 
 import { flatten } from '../../../../shared/util';
-import { EntityModel } from '../../../shared/entity.model';
 import { PersonasStore } from '../../personas/personas.store';
 
 import { ViewRole } from './view-role.model';

@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Form } from 'ddap-common-lib';
+import { EntityModel, nameConstraintPattern } from 'ddap-common-lib';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs';
 
 import { dam } from '../../../../shared/proto/dam-service';
-import { EntityModel, nameConstraintPattern } from '../../../shared/entity.model';
 import TrustedPassportIssuer = dam.v1.TrustedPassportIssuer;
 import { PassportTranslatorsService } from '../../passport-translators/passport-translators.service';
 import { pick } from '../../shared/autocomplete.util';

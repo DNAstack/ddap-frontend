@@ -1,16 +1,17 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EntityModel } from 'ddap-common-lib';
 import _get from 'lodash.get';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, map, tap } from 'rxjs/operators';
-import View = dam.v1.View;
 
 import { dam } from '../../../../../shared/proto/dam-service';
-import { EntityModel, nameConstraintPattern } from '../../../../shared/entity.model';
 import { AccessPoliciesStore } from '../../../access-policies/access-policies.store';
 import { ServiceDefinitionService } from '../../../service-definitions/service-definitions.service';
 import { ServiceDefinitionsStore } from '../../../service-definitions/service-definitions.store';
 import { ResourceFormBuilder } from '../resource-form-builder.service';
+import View = dam.v1.View;
+
 
 @Component({
   selector: 'ddap-resource-view-form',
