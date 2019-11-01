@@ -169,6 +169,8 @@ public class BeaconSearchE2eTest extends AbstractFrontendE2eTest {
         // Go back to data list page
 
         searchPage.clickBack();
+        searchPage.waitForInflightRequests();
+        searchPage.clickBack();
 
         driver.findElement(DdapBy.text("Explore Data","h2"));
     }
