@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'ddaplib-header',
@@ -13,35 +13,13 @@ export class HeaderComponent {
   @Input()
   icon: string;
   @Input()
-  searchable: boolean;
-  @Input()
-  searchInputVisible = false;
-  @Input()
-  isSearchPage = false;
-  @Input()
   backLink: string;
-
-  @Output()
-  readonly searchOpenChange = new EventEmitter<boolean>();
 
   constructor(private location: Location) {
   }
 
-  closeSearch() {
-    this.toggleSearchInputVisibility();
-  }
-
-  displaySearchInput() {
-    this.toggleSearchInputVisibility();
-  }
-
   back() {
     this.location.back();
-  }
-
-  private toggleSearchInputVisibility() {
-    this.searchInputVisible = !this.searchInputVisible;
-    this.searchOpenChange.emit(this.searchInputVisible);
   }
 
 }

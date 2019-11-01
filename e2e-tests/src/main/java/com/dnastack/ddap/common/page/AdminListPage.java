@@ -35,7 +35,7 @@ public class AdminListPage extends AdminDdapPage {
     }
 
     public AdminListPage clickDescriptionLink() {
-        driver.findElement(By.tagName("ddap-entity-description-link")).click();
+        driver.findElement(By.tagName("ddaplib-entity-description-link")).click();
         return new AdminListPage(driver);
     }
 
