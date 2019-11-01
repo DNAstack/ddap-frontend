@@ -3,11 +3,11 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import _get from 'lodash.get';
 import { Observable } from 'rxjs';
 
-import { JsonEditorDefaults } from '../../dam-repository/shared/jsonEditorDefaults';
-import { EntityModel } from '../entity.model';
+import { JsonEditorDefaults } from '../../../../../../src/app/admin/dam-repository/shared/jsonEditorDefaults';
+import { EntityModel } from '../../../../../../src/app/admin/shared/entity.model';
 
 @Component({
-  selector: 'ddap-entity-list',
+  selector: 'ddaplib-entity-list',
   templateUrl: './entity-list.component.html',
   styleUrls: ['./entity-list.component.scss'],
 })
