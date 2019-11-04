@@ -25,7 +25,7 @@ cp ~/.m2/*.xml ${docker_context_dir}/.m2
 cp -rp shared ${docker_context_dir}
 
 mkdir -p ${docker_context_dir}/angular
-cp -rp angular/*.json angular/scripts angular/src angular/projects ${docker_context_dir}/angular
+cp -rp angular/*.json angular/scripts angular/src ${docker_context_dir}/angular
 
 docker build \
   --build-arg APP_NAME=${app_name} \
