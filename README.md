@@ -79,3 +79,7 @@ Then visit http://localhost:8085/index.html
 
 TODO: figure out how to get Spring Webflux to serve the static
 `index.html` at `/`.
+
+## Working with DDAP Library
+
+Follow instructions for `ddap-common-lib` https://github.com/DNAstack/ddap-libraries then run `npm link ddap-common-lib` in `angular` project folder.

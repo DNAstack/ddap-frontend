@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { nameConstraintPattern } from 'ddap-common-lib';
 
-import { nameConstraintPattern } from '../../../../../projects/ddap-common-lib/src/lib/admin/entity.model';
 import { RealmChangeConfirmationDialogComponent } from '../realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
 
 @Component({
