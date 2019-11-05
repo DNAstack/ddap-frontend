@@ -1,7 +1,7 @@
 package com.dnastack.ddap.common.page;
 
-import com.dnastack.ddap.common.util.DdapBy;
 import com.dnastack.ddap.common.WorkflowRunState;
+import com.dnastack.ddap.common.util.DdapBy;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -50,7 +50,8 @@ public class WorkflowListPage extends AnyDdapPage {
         List<WebElement> runs = driver.findElements(DdapBy.se("run"));
         runs.get(0).click();
         driver.findElement(DdapBy.se("view-btn")).click();
-        return new WorkflowDetailPage(driver);
+        // Fixes failure where detail page hadn't loaded yet
+        return new WebDriverWait(driver, 10).until(WorkflowDetailPage::new);
     }
 
     public void assertNewRunsInState(List<WorkflowRunState> acceptedStates) {
