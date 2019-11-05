@@ -45,14 +45,14 @@
             <h3 data-se="entity-title">{{ persona.dto.ui.label }}</h3>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <ddap-claim-group *ngIf="persona.dto.passport.standardClaims as standardClaims"
+        <ddaplib-claim-group *ngIf="persona.dto.passport.standardClaims as standardClaims"
                           [claimGroupLabel]="'Standard Claims'"
                           [standardClaims]="standardClaims">
-        </ddap-claim-group>
-        <ddap-claim-group *ngIf="persona.dto.passport.ga4ghAssertions as ga4ghClaims"
+        </ddaplib-claim-group>
+        <ddaplib-claim-group *ngIf="persona.dto.passport.ga4ghAssertions as ga4ghClaims"
                           [claimGroupLabel]="'Global Alliance for Genomics and Health Claims'"
                           [ga4ghClaims]="ga4ghClaims">
-        </ddap-claim-group>
+        </ddaplib-claim-group>
         <mat-action-row>
           <button mat-button
                   [routerLink]="[persona.name]"

@@ -28,10 +28,10 @@
             </mat-icon>
           </div>
         </mat-expansion-panel-header>
-        <ddap-claim-group *ngIf="account.passport as ga4ghAccountPassport"
+        <ddaplib-claim-group *ngIf="account.passport as ga4ghAccountPassport"
                           [claimGroupLabel]="'Global Alliance for Genomics and Health Claims'"
                           [ga4ghAccountPassport]="ga4ghAccountPassport">
-        </ddap-claim-group>
+        </ddaplib-claim-group>
         <button mat-button
                 *ngIf="hasExpiringClaims(account)"
                 color="primary"
