@@ -5,7 +5,6 @@ import com.dnastack.ddap.common.util.DdapBy;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
@@ -14,6 +13,8 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBeMoreThan;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 @Slf4j
 public class WorkflowListPage extends AnyDdapPage {
@@ -46,10 +47,10 @@ public class WorkflowListPage extends AnyDdapPage {
 
     public WorkflowDetailPage viewRunDetails() {
         new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.numberOfElementsToBeMoreThan(DdapBy.se("run"), 0));
+                .until(numberOfElementsToBeMoreThan(DdapBy.se("run"), 0));
         List<WebElement> runs = driver.findElements(DdapBy.se("run"));
         runs.get(0).click();
-        driver.findElement(DdapBy.se("view-btn")).click();
+        new WebDriverWait(driver, 2).until(visibilityOfElementLocated(DdapBy.se("view-btn"))).click();
         // Fixes failure where detail page hadn't loaded yet
         return new WebDriverWait(driver, 10).until(WorkflowDetailPage::new);
     }
