@@ -2,12 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as dayjs from 'dayjs';
-import { ErrorHandlerService } from 'ddap-common-lib';
+import { ErrorHandlerService, realmIdPlaceholder } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { DamInfoService } from '../../../shared/dam/dam-info.service';
-import { realmIdPlaceholder } from '../../../shared/realm/realm.constant';
 import { DamConfigEntityType } from '../shared/dam/dam-config-entity-type.enum';
 import { DamConfigService } from '../shared/dam/dam-config.service';
 

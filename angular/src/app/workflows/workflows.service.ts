@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ErrorHandlerService } from 'ddap-common-lib';
+import { ErrorHandlerService, realmIdPlaceholder } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 import { SimplifiedWesResourceViews, WesResourceViews, WorkflowRunsResponse } from './workflow.model';
 

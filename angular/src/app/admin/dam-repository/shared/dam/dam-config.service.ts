@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { ConfigModificationModel } from 'ddap-common-lib';
+import { ConfigModificationModel, realmIdPlaceholder } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 
 import { DamInfoService } from '../../../../shared/dam/dam-info.service';
 import { dam } from '../../../../shared/proto/dam-service';
-import { realmIdPlaceholder } from '../../../../shared/realm/realm.constant';
 
 import { DamConfigEntityType } from './dam-config-entity-type.enum';
 

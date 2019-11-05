@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { DdapVisaPassportModule } from 'ddap-common-lib';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -12,6 +13,7 @@ import { IdentityComponent } from './identity.component';
   imports: [
     SharedModule,
     IdentityRoutingModule,
+    DdapVisaPassportModule,
   ],
 })
 export class IdentityModule { }

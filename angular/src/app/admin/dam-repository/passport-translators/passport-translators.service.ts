@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ErrorHandlerService } from 'ddap-common-lib';
+import { ErrorHandlerService, realmIdPlaceholder } from 'ddap-common-lib';
 import _get from 'lodash.get';
 import { zip } from 'rxjs';
 import { Observable } from 'rxjs';
 import { flatMap, map, pluck } from 'rxjs/operators';
 
 import { DamInfoService } from '../../../shared/dam/dam-info.service';
-import { realmIdPlaceholder } from '../../../shared/realm/realm.constant';
 import { flatten } from '../../../shared/util';
 
 @Injectable({

@@ -1,14 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ErrorHandlerService } from 'ddap-common-lib';
+import { ErrorHandlerService, realmIdPlaceholder } from 'ddap-common-lib';
 import _get from 'lodash.get';
-import { Observable, zip } from 'rxjs';
+import { Observable } from 'rxjs';
 import { flatMap, map, pluck } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { DamInfoService } from '../shared/dam/dam-info.service';
-import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 import { AccountLink } from './account-link.model';
 import { Account } from './account.model';

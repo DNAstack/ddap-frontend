@@ -30,7 +30,6 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { BeaconResultComponent } from './beacon-search/beacon-result/beacon-result.component';
 import { BeaconSearchBarComponent } from './beacon-search/beacon-search-bar/beacon-search-bar.component';
 import { LimitSearchComponent } from './beacon-search/beacon-search-bar/limit-search/limit-search.component';
-import { ClaimGroupComponent } from './claim-group/claim-group.component';
 import { MetadataFilterPipe } from './metadata-list/metadata-filter.pipe';
 import { MetadataListComponent } from './metadata-list/metadata-list.component';
 import { PaginatorComponent } from './paginator/paginator.component';
@@ -47,7 +46,6 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     ResourceLogoComponent,
     ResourceViewItemComponent,
     ViewAccessComponent,
-    ClaimGroupComponent,
     BeaconSearchBarComponent,
     BeaconResultComponent,
     LimitSearchComponent,
@@ -123,18 +121,16 @@ import { ViewAccessComponent } from './view-access/view-access.component';
     DdapLayoutModule,
     DdapFormModule,
 
-    ClaimGroupComponent,
     BeaconSearchBarComponent,
     BeaconResultComponent,
     ResourceLogoComponent,
     ResourceViewItemComponent,
     ViewAccessComponent,
     LimitSearchComponent,
-    RealmInputComponent,
-    RealmChangeConfirmationDialogComponent,
     MetadataListComponent,
     MetadataFilterPipe,
     PaginatorComponent,
+    RealmInputComponent,
   ],
 })
 export class SharedModule {

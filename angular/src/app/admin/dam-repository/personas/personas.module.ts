@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { DdapVisaPassportModule } from 'ddap-common-lib';
 
 import { DamRepositorySharedModule } from '../shared/shared.module';
 
@@ -22,6 +23,7 @@ import { PersonasRoutingModule } from './personas-routing.module';
   imports: [
     DamRepositorySharedModule,
     PersonasRoutingModule,
+    DdapVisaPassportModule,
   ],
 })
 export class PersonasModule { }

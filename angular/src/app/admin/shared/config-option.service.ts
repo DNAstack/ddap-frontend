@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { ErrorHandlerService } from 'ddap-common-lib';
+import { ErrorHandlerService, realmIdPlaceholder } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 import { pluck } from 'rxjs/operators';
-
-import { realmIdPlaceholder } from '../../shared/realm/realm.constant';
 
 export abstract class AbstractConfigOptionService {
 

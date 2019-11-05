@@ -1,4 +1,4 @@
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,7 +10,6 @@ import { LayoutComponent } from './layout/layout.component';
 import {
   RealmChangeConfirmationDialogComponent
 } from './shared/realm/realm-change-confirmation-dialog/realm-change-confirmation-dialog.component';
-import { RealmInterceptor } from './shared/realm/realm-interceptor.service';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -29,9 +28,6 @@ import { SharedModule } from './shared/shared.module';
   ],
   entryComponents: [
     RealmChangeConfirmationDialogComponent,
-  ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: RealmInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })

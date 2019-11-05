@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ErrorHandlerService } from 'ddap-common-lib';
+import { ErrorHandlerService, realmIdPlaceholder } from 'ddap-common-lib';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { realmIdPlaceholder } from '../shared/realm/realm.constant';
 
 import { Dataset } from './dataset-form/dataset.model';
 import { ViewToken } from './dataset-form/view.token.model';
