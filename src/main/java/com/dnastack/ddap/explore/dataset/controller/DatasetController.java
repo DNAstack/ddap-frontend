@@ -44,13 +44,7 @@ public class DatasetController {
                                             @RequestParam(value = "access_token", required = false) String accessToken,
                                             ServerHttpRequest request,
                                             @PathVariable String realm) {
-        String urlEncodedAsciiDatasetUrl = new String(Base64.getDecoder().decode(datasetUrl));
-        String decodedDatasetUrl;
-        try {
-            decodedDatasetUrl = URLDecoder.decode(urlEncodedAsciiDatasetUrl, StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            throw new DatasetErrorException(400, e.getMessage());
-        }
+        String decodedDatasetUrl = new String(Base64.getUrlDecoder().decode(datasetUrl));
         return getDatasetResult(decodedDatasetUrl, accessToken, request, realm);
     }
 
