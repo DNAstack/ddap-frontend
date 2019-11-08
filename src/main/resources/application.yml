@@ -8,13 +8,13 @@ server:
 
 dams:
   1:
-    base-url: http://localhost:3000/
-    client-id: local-dam-client-id
-    client-secret: local-dam-client-secret
+    base-url: http://localhost:8083/
+    client-id: 812c1319-fef5-4aa6-9393-beb5ec8facdf
+    client-secret: 0000-0000-0000-0000-0000
 idp:
-  base-url: http://localhost:3001/
-  client-id: local-dam-client-id
-  client-secret: local-dam-client-secret
+  base-url: http://localhost:8082/
+  client-id: 812c1319-fef5-4aa6-9393-beb5ec8facdf
+  client-secret: 0000-0000-0000-0000-0000
 ddap:
   public-uri: http://localhost:8085
   default-realm: dnastack
