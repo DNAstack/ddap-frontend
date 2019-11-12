@@ -3,6 +3,7 @@ package com.dnastack.ddap.common;
 import com.dnastack.ddap.common.security.*;
 import com.dnastack.ddap.common.util.http.XForwardUtil;
 import com.dnastack.ddap.explore.dataset.client.DatasetErrorException;
+import com.dnastack.ddap.explore.wes.client.AccessErrorException;
 import com.dnastack.ddap.ic.account.client.AccountLinkingFailedException;
 import com.dnastack.ddap.ic.cli.controller.CliSessionNotFoundException;
 import lombok.Value;
@@ -54,6 +55,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DatasetErrorException.class)
     public ResponseEntity<DdapErrorResponse> handle(DatasetErrorException ex) {
+        int status = ex.getStatus() == null ? 500 : ex.getStatus();
+        return ResponseEntity.status(status).body(new DdapErrorResponse(ex.getMessage(), status));
+    }
+
+    @ExceptionHandler(AccessErrorException.class)
+    public ResponseEntity<DdapErrorResponse> handle(AccessErrorException ex) {
         int status = ex.getStatus() == null ? 500 : ex.getStatus();
         return ResponseEntity.status(status).body(new DdapErrorResponse(ex.getMessage(), status));
     }
