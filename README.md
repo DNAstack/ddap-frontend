@@ -1,4 +1,4 @@
-# Data Discovery AccessModel Portal Frontend
+# Data Discovery Access Portal Frontend
 
 This repository is no longer maintaned. The repository was split into three differrent repositories:
 
